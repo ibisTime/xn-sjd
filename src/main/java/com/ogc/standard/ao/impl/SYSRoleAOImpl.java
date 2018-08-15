@@ -11,7 +11,6 @@ import com.ogc.standard.bo.ISYSMenuRoleBO;
 import com.ogc.standard.bo.ISYSRoleBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.SYSRole;
-import com.ogc.standard.domain.User;
 import com.ogc.standard.exception.BizException;
 
 @Service
@@ -39,8 +38,8 @@ public class SYSRoleAOImpl implements ISYSRoleAO {
         if (!sysRoleBO.isSYSRoleExist(roleCode)) {
             throw new BizException("lh4000", "角色编号不存在！");
         }
-        User condition = new User();
-        condition.setRoleCode(roleCode);
+        // User condition = new User();
+        // condition.setRoleCode(roleCode);
         // List<User> list = userBO.queryUserList(condition);
         // if (!CollectionUtils.sizeIsEmpty(list)) {
         // throw new BizException("lh4000", "该角色已在使用，无法删除！");
