@@ -5,23 +5,21 @@ import java.util.Date;
 import com.ogc.standard.dao.base.ABaseDO;
 
 /**
- * 系统角色
- * @author: Gejin 
- * @since: 2016年4月16日 下午9:02:40 
+ * 角色
+ * @author: dl 
+ * @since: 2018年8月18日 下午2:53:51 
  * @history:
  */
 public class SYSRole extends ABaseDO {
 
     private static final long serialVersionUID = 5092189990777896572L;
+    // ***********db properties***********
 
     // 角色编号
     private String code;
 
     // 角色名称
     private String name;
-
-    // 角色等级
-    private String level;
 
     // 更新人
     private String updater;
@@ -34,6 +32,8 @@ public class SYSRole extends ABaseDO {
 
     // 系统编号
     private String systemCode;
+
+    // ***********db properties***********
 
     public String getSystemCode() {
         return systemCode;
@@ -57,14 +57,6 @@ public class SYSRole extends ABaseDO {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getLevel() {
-        return level;
-    }
-
-    public void setLevel(String level) {
-        this.level = level;
     }
 
     public String getUpdater() {

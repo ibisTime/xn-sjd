@@ -12,17 +12,16 @@ import java.util.Date;
 
 import com.ogc.standard.dao.base.ABaseDO;
 
-/** 
- * @author: haiqingzheng 
- * @since: 2016年4月16日 下午9:45:46 
+/**
+ *  系统配置
+ * @author: dl 
+ * @since: 2018年8月18日 下午2:46:18 
  * @history:
  */
 public class SYSConfig extends ABaseDO {
-    /** 
-     * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
-     */
     private static final long serialVersionUID = -6136818068168453506L;
 
+    // ***********db properties***********
     // 编号（自增长）
     private Long id;
 
@@ -44,13 +43,8 @@ public class SYSConfig extends ABaseDO {
     // 备注
     private String remark;
 
-    // 所属公司编号
-    private String companyCode;
+    // ***********db properties***********
 
-    // 所属系统编号
-    private String systemCode;
-
-    // ************* 模糊查询 *****************
     private String ckeyForQuery;
 
     public Long getId() {
@@ -107,22 +101,6 @@ public class SYSConfig extends ABaseDO {
 
     public void setRemark(String remark) {
         this.remark = remark;
-    }
-
-    public String getCompanyCode() {
-        return companyCode;
-    }
-
-    public void setCompanyCode(String companyCode) {
-        this.companyCode = companyCode;
-    }
-
-    public String getSystemCode() {
-        return systemCode;
-    }
-
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
     }
 
     public String getCkeyForQuery() {

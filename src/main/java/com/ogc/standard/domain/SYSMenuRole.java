@@ -7,8 +7,8 @@ import com.ogc.standard.dao.base.ABaseDO;
 
 /**
  * 菜单角色
- * @author: Gejin 
- * @since: 2016年4月16日 下午9:59:06 
+ * @author: dl 
+ * @since: 2018年8月18日 下午2:53:03 
  * @history:
  */
 public class SYSMenuRole extends ABaseDO {

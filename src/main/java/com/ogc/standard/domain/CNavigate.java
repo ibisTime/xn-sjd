@@ -3,14 +3,16 @@ package com.ogc.standard.domain;
 import com.ogc.standard.dao.base.ABaseDO;
 
 /**
- * @author: xieyj 
- * @since: 2016年11月19日 下午12:29:45 
+ * 导航
+ * @author: dl 
+ * @since: 2018年8月18日 下午2:54:24 
  * @history:
  */
 public class CNavigate extends ABaseDO {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 7704492196281165271L;
 
+    // ***********db properties***********
     // 编号
     private String code;
 
@@ -20,23 +22,20 @@ public class CNavigate extends ABaseDO {
     // 类型
     private String type;
 
-    // url
+    // 访问Url
     private String url;
 
-    // pic
+    // 图片
     private String pic;
 
     // 状态(1 启用 0 不启用)
     private String status;
 
-    // UI 位置
+    // 位置
     private String location;
 
-    // 序号
+    // 相对位置编号
     private Integer orderNo;
-
-    // 属于
-    private String belong;
 
     // 父编号
     private String parentCode;
@@ -44,30 +43,12 @@ public class CNavigate extends ABaseDO {
     // 备注
     private String remark;
 
-    // 内容样式
-    private String contentType;
-
-    // 所属公司
-    private String companyCode;
-
+    // ***********db properties***********
     // 是否公司修改
     private String isCompanyEdit;
 
-    // 系统编号(必填)
-    private String systemCode;
-
-    /******************db data******************/
-
     // 是否前端查询
     private String isFront;
-
-    public String getSystemCode() {
-        return systemCode;
-    }
-
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
-    }
 
     public String getCode() {
         return code;
@@ -133,14 +114,6 @@ public class CNavigate extends ABaseDO {
         this.orderNo = orderNo;
     }
 
-    public String getBelong() {
-        return belong;
-    }
-
-    public void setBelong(String belong) {
-        this.belong = belong;
-    }
-
     public String getParentCode() {
         return parentCode;
     }
@@ -155,22 +128,6 @@ public class CNavigate extends ABaseDO {
 
     public void setRemark(String remark) {
         this.remark = remark;
-    }
-
-    public String getContentType() {
-        return contentType;
-    }
-
-    public void setContentType(String contentType) {
-        this.contentType = contentType;
-    }
-
-    public String getCompanyCode() {
-        return companyCode;
-    }
-
-    public void setCompanyCode(String companyCode) {
-        this.companyCode = companyCode;
     }
 
     public String getIsFront() {

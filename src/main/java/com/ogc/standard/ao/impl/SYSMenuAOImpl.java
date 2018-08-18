@@ -9,6 +9,7 @@ import com.ogc.standard.ao.ISYSMenuAO;
 import com.ogc.standard.bo.ISYSMenuBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.SYSMenu;
+import com.ogc.standard.dto.req.XN630010Req;
 import com.ogc.standard.exception.BizException;
 
 @Service
@@ -18,9 +19,20 @@ public class SYSMenuAOImpl implements ISYSMenuAO {
     ISYSMenuBO sysMenuBO;
 
     @Override
-    public String addSYSMenu(SYSMenu data) {
-        if (data != null) {
+    public String addSYSMenu(XN630010Req req) {
+        SYSMenu data = new SYSMenu();
+        if (req != null) {
             // 判断父编号是否存在
+
+            data.setName(req.getName());
+            data.setType(req.getType());
+            data.setUrl(req.getUrl());
+            data.setParentCode(req.getParentCode());
+            data.setOrderNo(req.getOrderNo());
+
+            data.setUpdater(req.getUpdater());
+            data.setRemark(req.getRemark());
+            data.setSystemCode(req.getSystemCode());
             if (!"0".equalsIgnoreCase(data.getParentCode())
                     && !sysMenuBO.isSYSMenuExist(data.getParentCode())) {
                 throw new BizException("lh0000", "父节点菜单编号不存在！");

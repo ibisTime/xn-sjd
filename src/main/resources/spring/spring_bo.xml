@@ -24,5 +24,33 @@
 	<bean id="sysMenuRoleBO" class="com.ogc.standard.bo.impl.SYSMenuRoleBOImpl">
 		<property name="paginableDAO" ref="sysMenuRoleDAOImpl"/>
 	</bean>
-
+	
+	<bean id="cNavigateBO" class="com.ogc.standard.bo.impl.CNavigateBOImpl">
+		<property name="paginableDAO" ref="cNavigateDAOImpl"/>
+	</bean>
+	
+	<bean id="sysDictBO" class="com.ogc.standard.bo.impl.SYSDictBOImpl">
+		<property name="paginableDAO" ref="sysDictDAOImpl"/>
+	</bean>
+	
+	<bean id="sysConfigBO" class="com.ogc.standard.bo.impl.SYSConfigBOImpl">
+		<property name="paginableDAO" ref="sysConfigDAOImpl"/>
+	</bean>
+	
+	<bean id="sysUserBO" class="com.ogc.standard.bo.impl.SYSUserBOImpl">
+		<property name="paginableDAO" ref="sysUserDAOImpl"/>
+	</bean>
+	
+	<bean id="channelBankBO" class="com.ogc.standard.bo.impl.ChannelBankBOImpl">
+		<property name="paginableDAO" ref="channelBankDAOImpl"/>
+	</bean>
+	
+	<bean id="companyBO" class="com.ogc.standard.bo.impl.CompanyBOImpl">
+		<property name="paginableDAO" ref="companyDAOImpl"/>
+	</bean>
+	
+	<bean id="departmentBO" class="com.ogc.standard.bo.impl.DepartmentBOImpl">
+		<property name="paginableDAO" ref="departmentDAOImpl"/>
+	</bean>
+	
 </beans>

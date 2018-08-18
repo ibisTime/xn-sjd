@@ -6,15 +6,19 @@ import com.ogc.standard.dao.base.ABaseDO;
 
 /**
  * 菜单
- * @author: Gejin 
- * @since: 2016年4月16日 下午6:31:22 
+ * @author: dl 
+ * @since: 2018年8月18日 下午2:51:21 
  * @history:
  */
 public class SYSMenu extends ABaseDO {
     private static final long serialVersionUID = 4733016091171187458L;
+    // ***********db properties***********
 
     // 菜单编号
     private String code;
+
+    // 父菜单编号
+    private String parentCode;
 
     // 菜单名称
     private String name;
@@ -24,9 +28,6 @@ public class SYSMenu extends ABaseDO {
 
     // 请求url
     private String url;
-
-    // 父菜单编号
-    private String parentCode;
 
     // 序号
     private String orderNo;
@@ -43,7 +44,8 @@ public class SYSMenu extends ABaseDO {
     // 系统编号（必填）
     private String systemCode;
 
-    // ************* 模糊查询 *****************
+    // ***********db properties***********
+
     // 名称模糊查询
     private String nameForQuery;
 

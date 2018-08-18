@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ogc.standard.dao.ICNavigateDAO">
+	<resultMap id="cNavigate_DB_Result" type="cNavigate">
+		<result column="code" property="code" />
+		<result column="name" property="name" />
+		<result column="type" property="type" />
+		<result column="url" property="url" />
+		<result column="pic" property="pic" />
+		<result column="status" property="status" />
+		<result column="location" property="location" />
+		<result column="order_no" property="orderNo" />
+		<result column="parent_code" property="parentCode" />
+		<result column="remark" property="remark" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="name != null and name != '' ">
+				AND t.name like "%"#{name}"%"
+			</if>
+			<if test="type != null and type != '' ">
+				AND t.type = #{type}
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+			<if test="location != null and location != '' ">
+				AND t.location = #{location}
+			</if>
+			<if test="parentCode != null and parentCode != '' ">
+				AND t.parent_code = #{parentCode}
+			</if>
+		</trim>
+	</sql>
+	<select id="select_cNavigate" parameterType="cNavigate" resultMap="cNavigate_DB_Result">
+		SELECT
+		t.code
+		,t.name
+		,t.type
+		,t.url
+		,t.pic
+		,t.status
+		,t.location
+		,t.order_no
+		,t.parent_code
+		,t.remark
+		FROM
+		tsys_cnavigate t 
+		<include refid="where_condition" />
+		ORDER BY t.type,order_no
+	</select>
+
+	<select id="select_cNavigate_count" parameterType="cNavigate"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tsys_cnavigate t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_cNavigate" parameterType="cNavigate">
+		INSERT INTO
+		tsys_cnavigate(
+		code
+		,name
+		,type
+		,url
+		,pic
+		,status
+		,location
+		,order_no
+		,parent_code
+		,remark
+		)
+		VALUES(
+		#{code}
+		,#{name}
+		,#{type}
+		,#{url}
+		,#{pic}
+		,#{status}
+		,#{location}
+		,#{orderNo}
+		,#{parentCode}
+		,#{remark}
+		)
+	</insert>
+
+	<delete id="delete_cNavigate" parameterType="cNavigate">
+		DELETE FROM
+		tsys_cnavigate
+		WHERE
+		code = #{code}
+	</delete>
+	
+	<update id="update_cNavigate" parameterType="cNavigate">
+		UPDATE tsys_cnavigate
+		SET
+		name = #{name}
+		,type = #{type}
+		,url = #{url}
+		,pic = #{pic}
+		,status = #{status}
+		,location = #{location}
+		,order_no = #{orderNo}
+		,parent_code = #{parentCode}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+</mapper>

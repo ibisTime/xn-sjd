@@ -10,8 +10,8 @@ import com.ogc.standard.dao.base.IBaseDAO;
  * @author joe.chen
  * 
  */
-public abstract class PaginableBOImpl<T extends ABaseDO> implements
-        IPaginableBO<T> {
+public abstract class PaginableBOImpl<T extends ABaseDO>
+        implements IPaginableBO<T> {
 
     private IBaseDAO<T> paginableDAO;
 
@@ -57,10 +57,5 @@ public abstract class PaginableBOImpl<T extends ABaseDO> implements
     public void setPaginableDAO(IBaseDAO<T> paginableDAO) {
         this.paginableDAO = paginableDAO;
     }
-
-    /*
-     * public void setPaginableDAO(IBaseDAO<T> paginableDAO) { this.paginableDAO
-     * = paginableDAO; }
-     */
 
 }

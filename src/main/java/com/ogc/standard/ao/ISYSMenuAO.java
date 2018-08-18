@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.SYSMenu;
+import com.ogc.standard.dto.req.XN630010Req;
 
 /**
  * @author: Gejin 
@@ -21,7 +22,7 @@ public interface ISYSMenuAO {
      * @create: 2016年4月16日 下午7:39:51 Gejin
      * @history:
      */
-    public String addSYSMenu(SYSMenu data);
+    public String addSYSMenu(XN630010Req req);
 
     /**
      * 删除菜单

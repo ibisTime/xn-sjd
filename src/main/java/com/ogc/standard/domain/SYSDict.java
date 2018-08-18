@@ -1,27 +1,18 @@
-/**
- * @Title SYSDict.java 
- * @Package com.xnjr.moom.domain 
- * @Description 
- * @author haiqingzheng  
- * @date 2016年4月16日 下午9:50:21 
- * @version V1.0   
- */
 package com.ogc.standard.domain;
 
 import java.util.Date;
 
 import com.ogc.standard.dao.base.ABaseDO;
 
-/** 
- * @author: haiqingzheng 
- * @since: 2016年4月16日 下午9:50:21 
+/**
+ *  数据字典
+ * @author: dl 
+ * @since: 2018年8月18日 下午2:42:36 
  * @history:
  */
 public class SYSDict extends ABaseDO {
-    /** 
-     * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
-     */
     private static final long serialVersionUID = -9204995364517866187L;
+    // ***********db properties***********
 
     // 编号（自增长）
     private Long id;
@@ -47,19 +38,7 @@ public class SYSDict extends ABaseDO {
     // 备注
     private String remark;
 
-    // 所属公司编号
-    private String companyCode;
-
-    // 所属系统编号
-    private String systemCode;
-
-    public String getSystemCode() {
-        return systemCode;
-    }
-
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
-    }
+    // ***********db properties***********
 
     public Long getId() {
         return id;
@@ -123,14 +102,6 @@ public class SYSDict extends ABaseDO {
 
     public void setUpdateDatetime(Date updateDatetime) {
         this.updateDatetime = updateDatetime;
-    }
-
-    public String getCompanyCode() {
-        return companyCode;
-    }
-
-    public void setCompanyCode(String companyCode) {
-        this.companyCode = companyCode;
     }
 
 }

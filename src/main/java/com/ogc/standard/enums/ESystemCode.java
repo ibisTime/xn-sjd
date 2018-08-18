@@ -1,3 +1,11 @@
+/**
+ * @Title ECurrency.java 
+ * @Package com.ibis.account.enums 
+ * @Description 
+ * @author miyb  
+ * @date 2015-3-15 下午4:41:06 
+ * @version V1.0   
+ */
 package com.ogc.standard.enums;
 
 import java.util.HashMap;
@@ -5,15 +13,16 @@ import java.util.Map;
 
 /**
  * @author: xieyj 
- * @since: 2017年2月9日 下午8:10:43 
+ * @since: 2016年12月24日 下午1:51:38 
  * @history:
  */
 public enum ESystemCode {
-    TOKEN("CD-TOKEN00018", "Token钱包");
-    public static Map<String, ESystemCode> getMap() {
+    BZ("CD-CBH000020", "标准系统");
+
+    public static Map<String, ESystemCode> getCurrencyMap() {
         Map<String, ESystemCode> map = new HashMap<String, ESystemCode>();
-        for (ESystemCode direction : ESystemCode.values()) {
-            map.put(direction.getCode(), direction);
+        for (ESystemCode currency : ESystemCode.values()) {
+            map.put(currency.getCode(), currency);
         }
         return map;
     }

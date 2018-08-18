@@ -12,6 +12,7 @@ import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.ISYSMenuDAO;
 import com.ogc.standard.domain.SYSMenu;
+import com.ogc.standard.enums.EGeneratePrefix;
 
 /**
  * @author: Gejin 
@@ -19,8 +20,8 @@ import com.ogc.standard.domain.SYSMenu;
  * @history:
  */
 @Component
-public class SYSMenuBOImpl extends PaginableBOImpl<SYSMenu> implements
-        ISYSMenuBO {
+public class SYSMenuBOImpl extends PaginableBOImpl<SYSMenu>
+        implements ISYSMenuBO {
 
     @Autowired
     private ISYSMenuDAO sysMenuDAO;
@@ -45,7 +46,8 @@ public class SYSMenuBOImpl extends PaginableBOImpl<SYSMenu> implements
     public int saveSYSMenu(SYSMenu data) {
         int count = 0;
         if (data != null) {
-            data.setCode(OrderNoGenerater.generate("SM"));
+            data.setCode(
+                OrderNoGenerater.generate(EGeneratePrefix.CD.getCode()));
             data.setUpdateDatetime(new Date());
             count = sysMenuDAO.insert(data);
         }

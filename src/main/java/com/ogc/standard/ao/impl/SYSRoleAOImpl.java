@@ -11,6 +11,8 @@ import com.ogc.standard.bo.ISYSMenuRoleBO;
 import com.ogc.standard.bo.ISYSRoleBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.SYSRole;
+import com.ogc.standard.dto.req.XN630000Req;
+import com.ogc.standard.dto.req.XN630002Req;
 import com.ogc.standard.exception.BizException;
 
 @Service
@@ -23,12 +25,15 @@ public class SYSRoleAOImpl implements ISYSRoleAO {
     ISYSMenuRoleBO sysMenuRoleBO;
 
     @Override
-    public String addSYSRole(SYSRole data) {
-        if (data != null) {
-            sysRoleBO.saveSYSRole(data);
-        } else {
-            throw new BizException("lh4000", "角色编号已经存在！");
-        }
+    public String addSYSRole(XN630000Req req) {
+        SYSRole data = new SYSRole();
+        data.setName(req.getName());
+        data.setUpdater(req.getUpdater());
+        data.setRemark(req.getRemark());
+        data.setSystemCode(req.getSystemCode());
+
+        sysRoleBO.saveSYSRole(data);
+
         return data.getCode();
     }
 
@@ -51,8 +56,13 @@ public class SYSRoleAOImpl implements ISYSRoleAO {
     }
 
     @Override
-    public boolean editSYSRole(SYSRole data) {
-        if (data != null && sysRoleBO.isSYSRoleExist(data.getCode())) {
+    public boolean editSYSRole(XN630002Req req) {
+        if (req != null && sysRoleBO.isSYSRoleExist(req.getCode())) {
+            SYSRole data = new SYSRole();
+            data.setCode(req.getCode());
+            data.setName(req.getName());
+            data.setUpdater(req.getUpdater());
+            data.setRemark(req.getRemark());
             sysRoleBO.refreshSYSRole(data);
         } else {
             throw new BizException("lh4000", "角色编号不存在！");
@@ -76,9 +86,6 @@ public class SYSRoleAOImpl implements ISYSRoleAO {
      */
     @Override
     public SYSRole getSYSRole(String code) {
-        if (!sysRoleBO.isSYSRoleExist(code)) {
-            throw new BizException("lh4000", "角色编号不存在！");
-        }
         return sysRoleBO.getSYSRole(code);
     }
 }

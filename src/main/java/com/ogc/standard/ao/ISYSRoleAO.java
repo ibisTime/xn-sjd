@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.SYSRole;
+import com.ogc.standard.dto.req.XN630000Req;
+import com.ogc.standard.dto.req.XN630002Req;
 
 /**
  * @author: Gejin 
@@ -13,11 +15,11 @@ import com.ogc.standard.domain.SYSRole;
 public interface ISYSRoleAO {
     String DEFAULT_ORDER_COLUMN = "code";
 
-    public String addSYSRole(SYSRole data);
+    public String addSYSRole(XN630000Req req);
 
     public boolean dropSYSRole(String roleCode);
 
-    public boolean editSYSRole(SYSRole data);
+    public boolean editSYSRole(XN630002Req req);
 
     public List<SYSRole> querySYSRoleList(SYSRole condition);
 

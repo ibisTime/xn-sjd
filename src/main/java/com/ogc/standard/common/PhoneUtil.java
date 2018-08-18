@@ -13,9 +13,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.google.i18n.phonenumbers.NumberParseException;
-import com.google.i18n.phonenumbers.PhoneNumberUtil;
-import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber;
+import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
 
 /** 
@@ -24,39 +22,41 @@ import com.ogc.standard.exception.ParaException;
  * @history:
  */
 public class PhoneUtil {
+
+    /** 
+     * 判断是否手机号格式 
+     * @param  mobile 
+     * @return 验证通过返回true 
+     */
+    public static boolean isMobile(String mobile) {
+        boolean result = true;
+        if (StringUtils.isBlank(mobile)) {
+            result = false;
+        } else {
+            Pattern p = Pattern.compile("^1[34578]\\d{9}$"); // 验证手机号
+            Matcher m = p.matcher(mobile);
+            if (!m.matches()) {
+                result = false;
+            }
+        }
+        return result;
+    }
+
     /** 
      * 手机号验证 
      * @param  mobile 
      * @return 验证通过返回true 
      */
     public static void checkMobile(String mobile) {
-        // if (StringUtils.isBlank(mobile)) {
-        // throw new ParaException("FA0000", "手机号格式非法");
-        // }
-        // Pattern p = Pattern.compile("^1[34578]\\d{9}$"); // 验证手机号
-        // Matcher m = p.matcher(mobile);
-        // if (!m.matches()) {
-        // throw new ParaException("FA0000", "手机号格式非法");
-        // }
-    }
-
-    /** 
-     * 国际手机号验证 
-     * @param  mobile 
-     * @return 验证通过返回true 
-     */
-    public static void checkInterMobile(String mobile) {
         if (StringUtils.isBlank(mobile)) {
-            throw new ParaException("FA0000", "手机号格式非法");
+            throw new BizException("FA0000", "手机号格式非法");
         }
-
-        PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
-        try {
-            PhoneNumber swissNumberProto = phoneUtil.parse(mobile, "CH");
-        } catch (NumberParseException e) {
-            throw new ParaException("FA0000", "手机号格式非法");
+        Pattern p = Pattern.compile("^1[34578]\\d{9}$"); // 验证手机号
+        Matcher m = p.matcher(mobile);
+        if (!m.matches()) {
+            throw new BizException("FA0000", "手机号格式非法");
+            // throw new ParaException("FA0000", "手机号格式非法");
         }
-
     }
 
     /** 
@@ -66,12 +66,12 @@ public class PhoneUtil {
      */
     public static void checkMobile(String mobile, String message) {
         if (StringUtils.isBlank(mobile)) {
-            throw new ParaException("FA0000", message);
+            throw new ParaException("FA0000", message + "格式非法");
         }
         Pattern p = Pattern.compile("^1[34578]\\d{9}$"); // 验证手机号
         Matcher m = p.matcher(mobile);
         if (!m.matches()) {
-            throw new ParaException("FA0000", message);
+            throw new ParaException("FA0000", message + "格式非法");
         }
     }
 
@@ -88,6 +88,6 @@ public class PhoneUtil {
     }
 
     public static void main(String[] args) {
-        PhoneUtil.checkInterMobile("1526850148");
+        System.out.print(PhoneUtil.hideMobile("13958092437"));
     }
 }
