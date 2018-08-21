@@ -53,4 +53,8 @@
 		<property name="paginableDAO" ref="departmentDAOImpl"/>
 	</bean>
 	
+	<bean id="matchBO" class="com.ogc.standard.bo.impl.MatchBOImpl">
+		<property name="paginableDAO" ref="matchDAOImpl"/>
+	</bean>
+	
 </beans>

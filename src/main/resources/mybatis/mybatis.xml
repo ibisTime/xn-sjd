@@ -12,7 +12,7 @@
 		<typeAlias alias="channelBank" type="com.ogc.standard.domain.ChannelBank" />
 		<typeAlias alias="company" type="com.ogc.standard.domain.Company" />
 		<typeAlias alias="department" type="com.ogc.standard.domain.Department" />
+		
+		<typeAlias alias="match" type="com.ogc.standard.domain.Match" />
 	</typeAliases>
 </configuration>
-
-
