@@ -14,5 +14,6 @@
 		<typeAlias alias="department" type="com.ogc.standard.domain.Department" />
 		
 		<typeAlias alias="match" type="com.ogc.standard.domain.Match" />
+		<typeAlias alias="matchApply" type="com.ogc.standard.domain.MatchApply" />
 	</typeAliases>
 </configuration>
