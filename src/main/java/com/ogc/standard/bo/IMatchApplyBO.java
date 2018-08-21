@@ -15,6 +15,9 @@ public interface IMatchApplyBO extends IPaginableBO<MatchApply> {
 
     public boolean isMatchApplyExist(String code);
 
+    // 战队名是否存在
+    public boolean isTeamNameExist(String name);
+
     // 添加申请
     public void saveMatchApply(MatchApply data);
 

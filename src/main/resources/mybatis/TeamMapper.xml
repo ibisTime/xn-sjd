@@ -130,6 +130,7 @@
 		UPDATE tforum_team
 		SET
 		location = #{location}
+		,order_no = #{orderNo}
 		WHERE code = #{code}
 	</update>
 	

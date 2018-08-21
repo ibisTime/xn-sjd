@@ -3,12 +3,12 @@ package com.ogc.standard.dto.req;
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
- * 参赛审核
+ * 加入战队审核
  * @author: silver 
- * @since: 2018年8月21日 下午2:47:38 
+ * @since: 2018年8月21日 下午7:24:54 
  * @history:
  */
-public class XN628301Req {
+public class XN628021Req {
     // 编号
     @NotBlank
     private String code;
@@ -55,5 +55,4 @@ public class XN628301Req {
     public void setRemark(String remark) {
         this.remark = remark;
     }
-
 }

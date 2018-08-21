@@ -1,20 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ogc.standard.dao.IMatchApplyDAO">
-	<resultMap id="matchApply_DB_Result" type="matchApply">
+<mapper namespace="com.ogc.standard.dao.ITeamMemberApplyDAO">
+	<resultMap id="teamMemberApply_DB_Result" type="teamMemberApply">
 		<result column="code" property="code" />
-		<result column="match_code" property="matchCode" />
-		<result column="team_name" property="teamName" />
-		<result column="logo" property="logo" />
-		<result column="description" property="description" />
-		
-		<result column="status" property="status" />
+		<result column="team_code" property="teamCode" />
 		<result column="apply_user" property="applyUser" />
 		<result column="apply_datetime" property="applyDatetime" />
+		<result column="status" property="status" />
+		
 		<result column="approver" property="approver" />
 		<result column="approve_datetime" property="approveDatetime" />
-		
 		<result column="remark" property="remark" />
 	</resultMap>
 	
@@ -23,17 +19,11 @@
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
 			</if>
-			<if test="matchCode != null and matchCode != '' ">
-				AND t.match_code = #{matchCode}
-			</if>
-			<if test="teamName != null and teamName != '' ">
-				AND t.team_name = #{teamName}
+			<if test="teamCode != null and teamCode != '' ">
+				AND t.team_code = #{teamCode}
 			</if>
 			<if test="applyUser != null and applyUser != '' ">
 				AND t.apply_user = #{applyUser}
-			</if>
-			<if test="approver != null and approver != '' ">
-				AND t.approver = #{approver}
 			</if>
 			<choose>
 				<when test="status != null and status != '' ">
@@ -62,23 +52,19 @@
 		</trim>
 	</sql>
 	
-	<select id="select_matchApply" parameterType="matchApply" resultMap="matchApply_DB_Result">
+	<select id="select_teamMemberApply" parameterType="teamMemberApply" resultMap="teamMemberApply_DB_Result">
 		SELECT
 		t.code
-		,t.match_code
-		,t.team_name
-		,t.logo
-		,t.description
-		
-		,t.status
+		,t.team_code
 		,t.apply_user
 		,t.apply_datetime
+		,t.status
+		
 		,t.approver
 		,t.approve_datetime
-		
 		,t.remark
 		FROM
-		tforum_match_apply t
+		tforum_team_member_apply t
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -87,42 +73,34 @@
 		</trim>
 	</select>
 
-	<select id="select_matchApply_count" parameterType="matchApply"
+	<select id="select_teamMemberApply_count" parameterType="teamMemberApply"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tforum_match_apply t
+		SELECT count(1) FROM tforum_team_member_apply t
 		<include refid="where_condition" />
 	</select>
 
-	<insert id="insert_matchApply" parameterType="matchApply">
+	<insert id="insert_teamMemberApply" parameterType="teamMemberApply">
 		INSERT INTO
-		tforum_match_apply(
+		tforum_team_member_apply(
 		code
-		,match_code
-		,team_name
-		,logo
-		,description
-		
-		,status
+		,team_code
 		,apply_user
 		,apply_datetime
+		,status
 		,remark
 		)
 		VALUES(
 		#{code}
-		,#{matchCode}
-		,#{teamName}
-		,#{logo}
-		,#{description}
-		
-		,#{status}
+		,#{teamCode}
 		,#{applyUser}
 		,#{applyDatetime}
+		,#{status}
 		,#{remark}
 		)
 	</insert>
 
-	<update id="update_approveMatchApply" parameterType="matchApply">
-		UPDATE tforum_match_apply
+	<update id="update_approveTeamMemberApply" parameterType="teamMemberApply">
+		UPDATE tforum_team_member_apply
 		SET
 		status = #{status}
 		,approver = #{approver}
@@ -130,6 +108,5 @@
 		,remark = #{remark}
 		WHERE code = #{code}
 	</update>
-
 
 </mapper>

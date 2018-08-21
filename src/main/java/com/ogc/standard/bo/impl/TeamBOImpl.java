@@ -39,16 +39,6 @@ public class TeamBOImpl extends PaginableBOImpl<Team> implements ITeamBO {
     }
 
     @Override
-    public Boolean isTeamNameExist(String name) {
-        Team condition = new Team();
-        condition.setName(name);
-        if (teamDAO.selectTotalCount(condition) > 0) {
-            return true;
-        }
-        return false;
-    }
-
-    @Override
     public String saveTeam(String matchCode, String name, String logo,
             String description, String captain) {
         Team data = new Team();

@@ -25,6 +25,9 @@ public interface ITeamAO {
 
     public List<Team> queryTeamList(Team condition);
 
+    // 若用户属于该战队，则返回战队数据
+    public Team getTeam4User(String code, String userId);
+
     public Team getTeam(String code);
 
 }

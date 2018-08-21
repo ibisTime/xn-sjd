@@ -33,10 +33,14 @@ public class MatchAOImpl implements IMatchAO {
 
     @Override
     public String addMatch(XN628290Req req) {
-        Match data = new Match();
+        if (matchBO.isMatchNameExist(req.getName())) {
+            throw new BizException("xn0000", "赛事名称已存在！");
+        }
 
+        Match data = new Match();
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.Match.getCode());
+
         data.setCode(code);
         data.setName(req.getName());
         data.setStartDatetime(DateUtil.strToDate(req.getStartDatetime(),
@@ -96,9 +100,16 @@ public class MatchAOImpl implements IMatchAO {
 
     @Override
     public void updateMatchDaily() {
+        Date today = DateUtil.getTodayStart();
+
         // 更新赛事状态
+        matchBO.startMatch(today);
+        matchBO.endMatch(today);
+
         // 更新参赛申请状态
+
         // 更新战队状态
+
         // 更新战队成员申请状态
     }
 

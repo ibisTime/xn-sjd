@@ -21,10 +21,10 @@
 				AND t.code = #{code}
 			</if>
 			<if test="name != null and name != '' ">
-				AND t.name like "%"#{name}"%"
+				AND t.name = #{name}
 			</if>
 			<if test="status != null and status != '' ">
-				AND t.name = #{status}
+				AND t.status = #{status}
 			</if>
 			<if test="startDatetime != null and startDatetime != '' ">
 				<![CDATA[AND t.start_datetime >= #{startDatetime}]]>

@@ -15,9 +15,6 @@ public interface ITeamBO extends IPaginableBO<Team> {
 
     public boolean isTeamExist(String code);
 
-    // 战队名称是否存在
-    public Boolean isTeamNameExist(String name);
-
     // 添加战队
     public String saveTeam(String matchCode, String name, String logo,
             String description, String captain);

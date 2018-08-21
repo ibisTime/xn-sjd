@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 import com.ogc.standard.bo.IMatchBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
-import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.dao.IMatchDAO;
 import com.ogc.standard.domain.Match;
 import com.ogc.standard.enums.EMatchStatus;
@@ -31,6 +30,16 @@ public class MatchBOImpl extends PaginableBOImpl<Match> implements IMatchBO {
     public boolean isMatchExist(String code) {
         Match condition = new Match();
         condition.setCode(code);
+        if (matchDAO.selectTotalCount(condition) > 0) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isMatchNameExist(String name) {
+        Match condition = new Match();
+        condition.setName(name);
         if (matchDAO.selectTotalCount(condition) > 0) {
             return true;
         }
@@ -63,18 +72,18 @@ public class MatchBOImpl extends PaginableBOImpl<Match> implements IMatchBO {
     }
 
     @Override
-    public void startMatch() {
+    public void startMatch(Date today) {
         Match condition = new Match();
-        condition.setMatchStartDatetime(DateUtil.getTodayStart());
+        condition.setMatchStartDatetime(today);
         condition.setStatus(EMatchStatus.STARTED.getCode());
 
         matchDAO.updateStartMatch(condition);
     }
 
     @Override
-    public void endMatch() {
+    public void endMatch(Date today) {
         Match condition = new Match();
-        condition.setMatchEndDatetime(DateUtil.getTodayStart());
+        condition.setMatchEndDatetime(today);
         condition.setStatus(EMatchStatus.EXPIRED.getCode());
 
         matchDAO.updateEndMatch(condition);
@@ -98,5 +107,4 @@ public class MatchBOImpl extends PaginableBOImpl<Match> implements IMatchBO {
         }
         return data;
     }
-
 }

@@ -6,37 +6,28 @@ import java.util.List;
 import com.ogc.standard.dao.base.ABaseDO;
 
 /**
-* 参赛申请表
+* 战队成员申请表
 * @author: Silver
-* @since: 2018年08月21日 下午02:15:35
+* @since: 2018年08月21日 下午06:06:21
 * @history:
 */
-public class MatchApply extends ABaseDO {
-    private static final long serialVersionUID = -3780182772018308885L;
+public class TeamMemberApply extends ABaseDO {
+    private static final long serialVersionUID = -8897194155565771041L;
 
     // 编号
     private String code;
 
-    // 赛事编号
-    private String matchCode;
+    // 战队编号
+    private String teamCode;
 
-    // 战队名称
-    private String teamName;
-
-    // logo
-    private String logo;
-
-    // 描述
-    private String description;
-
-    // 状态（1待审核，2审核通过，3审核不通过）
-    private String status;
-
-    // 申请人编号
+    // 申请人
     private String applyUser;
 
     // 申请时间
     private Date applyDatetime;
+
+    // 状态（1待审核，2审核通过，3审核不通过）
+    private String status;
 
     // 审核人
     private String approver;
@@ -61,9 +52,6 @@ public class MatchApply extends ABaseDO {
     // 审核结束时间
     private Date approveEndDatetime;
 
-    // 赛事名称
-    private String matchName;
-
     // 状态列表
     private List<String> statusList;
 
@@ -75,44 +63,12 @@ public class MatchApply extends ABaseDO {
         return code;
     }
 
-    public void setMatchCode(String matchCode) {
-        this.matchCode = matchCode;
+    public void setTeamCode(String teamCode) {
+        this.teamCode = teamCode;
     }
 
-    public String getMatchCode() {
-        return matchCode;
-    }
-
-    public void setTeamName(String teamName) {
-        this.teamName = teamName;
-    }
-
-    public String getTeamName() {
-        return teamName;
-    }
-
-    public void setLogo(String logo) {
-        this.logo = logo;
-    }
-
-    public String getLogo() {
-        return logo;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getStatus() {
-        return status;
+    public String getTeamCode() {
+        return teamCode;
     }
 
     public void setApplyUser(String applyUser) {
@@ -129,6 +85,14 @@ public class MatchApply extends ABaseDO {
 
     public Date getApplyDatetime() {
         return applyDatetime;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getStatus() {
+        return status;
     }
 
     public void setApprover(String approver) {
@@ -185,14 +149,6 @@ public class MatchApply extends ABaseDO {
 
     public void setApproveEndDatetime(Date approveEndDatetime) {
         this.approveEndDatetime = approveEndDatetime;
-    }
-
-    public String getMatchName() {
-        return matchName;
-    }
-
-    public void setMatchName(String matchName) {
-        this.matchName = matchName;
     }
 
     public List<String> getStatusList() {

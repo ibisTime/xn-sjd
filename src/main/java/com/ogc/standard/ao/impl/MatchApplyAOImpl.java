@@ -48,7 +48,7 @@ public class MatchApplyAOImpl implements IMatchApplyAO {
             throw new BizException("xn000", "参赛赛事不存在！");
         }
 
-        if (teamBO.isTeamNameExist(req.getTeamName())) {
+        if (matchApplyBO.isTeamNameExist(req.getTeamName())) {
             throw new BizException("xn000", "战队名称已存在，请重新输入！");
         }
 
@@ -66,21 +66,17 @@ public class MatchApplyAOImpl implements IMatchApplyAO {
         data.setApplyDatetime(new Date());
         matchApplyBO.saveMatchApply(data);
 
-        // 添加战队
-        teamBO.saveTeam(code, req.getTeamName(), req.getTeamLogo(),
-            req.getTeamDesc(), req.getUserId());
-
         return code;
     }
 
     @Override
+    @Transactional
     public void approveMatchApply(String code, String approveResult,
             String approver, String remark) {
         if (!matchApplyBO.isMatchApplyExist(code)) {
             throw new BizException("xn0000", "记录编号不存在");
         }
 
-        // 记录状态为【待审核】时才能审核
         MatchApply matchApply = matchApplyBO.getMatchApply(code);
         if (!EMatchApplyStatus.TO_APPROVE.getCode()
             .equals(matchApply.getStatus())) {
@@ -90,6 +86,11 @@ public class MatchApplyAOImpl implements IMatchApplyAO {
         String status = null;
         if (EBoolean.YES.getCode().equals(approveResult)) {
             status = EMatchApplyStatus.APPROVED_YES.getCode();
+
+            // 审核通过后添加战队
+            teamBO.saveTeam(code, matchApply.getTeamName(),
+                matchApply.getLogo(), matchApply.getDescription(),
+                matchApply.getApplyUser());
         } else {
             status = EMatchApplyStatus.APPROVED_NO.getCode();
         }
