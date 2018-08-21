@@ -29,7 +29,6 @@ public class SYSMenuAOImpl implements ISYSMenuAO {
             data.setUrl(req.getUrl());
             data.setParentCode(req.getParentCode());
             data.setOrderNo(req.getOrderNo());
-
             data.setUpdater(req.getUpdater());
             data.setRemark(req.getRemark());
             data.setSystemCode(req.getSystemCode());

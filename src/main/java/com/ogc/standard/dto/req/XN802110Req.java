@@ -46,6 +46,9 @@ public class XN802110Req {
     @NotBlank(message = "状态不能为空")
     private String status;
 
+    // 备注
+    private String remark;
+
     public String getChannelType() {
         return channelType;
     }
@@ -109,9 +112,6 @@ public class XN802110Req {
     public void setRemark(String remark) {
         this.remark = remark;
     }
-
-    // 备注
-    private String remark;
 
     public String getBankCode() {
         return bankCode;

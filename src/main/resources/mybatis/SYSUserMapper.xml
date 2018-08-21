@@ -134,6 +134,21 @@
 		WHERE user_id = #{userId}
 	</update>
 	
+	<update id="update_location" parameterType="sysuser">
+		UPDATE tsys_user
+		SET
+		address=#{address}
+		,area=#{area}
+		,city=#{city}
+		,province=#{province}	
+		,latitude=#{latitude}
+		,longitude=#{longitude}
+		,updater=#{updater}
+		,update_datetime=#{updateDatetime}
+		,remark=#{remark}
+		WHERE user_id = #{userId}
+	</update>
+	
 	<update id="update_photo" parameterType="sysuser">
 		UPDATE tsys_user
 		SET
@@ -165,6 +180,7 @@
 		mobile = #{mobile}
 		WHERE user_id = #{userId}
 	</update>
+	
 	<update id="update_status" parameterType="sysuser">
 		UPDATE tsys_user
 		SET

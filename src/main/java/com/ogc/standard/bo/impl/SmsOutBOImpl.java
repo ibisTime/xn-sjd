@@ -23,16 +23,16 @@ public class SmsOutBOImpl implements ISmsOutBO {
     static Logger logger = Logger.getLogger(SmsOutBOImpl.class);
 
     @Override
-    public void sendCaptcha(String mobile, String bizType, String systemCode) {
+    public void sendSmsCaptcha(String mobile, String bizType) {
         try {
             XN804081Req req = new XN804081Req();
             req.setMobile(mobile);
             req.setBizType(bizType);
-            req.setSystemCode(systemCode);
+            req.setSystemCode(ESystemCode.BZ.getCode());
             BizConnecter.getBizData("804081", JsonUtils.object2Json(req),
                 PKCodeRes.class);
         } catch (Exception e) {
-            logger.error("调用短信发送服务异常");
+            logger.error("调用内陆短信发送服务异常");
         }
     }
 
@@ -54,7 +54,6 @@ public class SmsOutBOImpl implements ISmsOutBO {
         req.setMobile(mobile);
         req.setCaptcha(captcha);
         req.setBizType(bizType);
-        req.setCompanyCode(ESystemCode.BZ.getCode());
         req.setSystemCode(ESystemCode.BZ.getCode());
         BizConnecter.getBizData("804082", JsonUtils.object2Json(req),
             BooleanRes.class);
@@ -81,8 +80,6 @@ public class SmsOutBOImpl implements ISmsOutBO {
             req.setMobile(mobile);
             req.setContent(content);
             req.setType("M");
-            req.setCompanyCode(companyCode);
-            req.setSystemCode(systemCode);
             BizConnecter.getBizData("804080", JsonUtils.object2Json(req),
                 PKCodeRes.class);
         } catch (Exception e) {
@@ -97,8 +94,6 @@ public class SmsOutBOImpl implements ISmsOutBO {
             req.setMobile(mobile);
             req.setContent(content);
             req.setType("M");
-            req.setCompanyCode(ESystemCode.BZ.getCode());
-            req.setSystemCode(ESystemCode.BZ.getCode());
             BizConnecter.getBizData("804080", JsonUtils.object2Json(req),
                 PKCodeRes.class);
         } catch (Exception e) {

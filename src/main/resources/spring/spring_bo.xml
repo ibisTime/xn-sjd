@@ -53,6 +53,7 @@
 		<property name="paginableDAO" ref="departmentDAOImpl"/>
 	</bean>
 	
+<<<<<<< HEAD
 	<bean id="groupBO" class="com.ogc.standard.bo.impl.GroupBOImpl">
 		<property name="paginableDAO" ref="groupDAOImpl"/>
 	</bean>
@@ -68,6 +69,18 @@
 	<bean id="dayBenefitBO" class="com.ogc.standard.bo.impl.DayBenefitBOImpl">
 		<property name="paginableDAO" ref="dayBenefitDAOImpl"/>
 
+	<bean id="userBO" class="com.ogc.standard.bo.impl.UserBOImpl">
+		<property name="paginableDAO" ref="userDAOImpl"/>
+	</bean>
+	
+	<bean id="blacklistBO" class="com.ogc.standard.bo.impl.BlacklistBOImpl">
+		<property name="paginableDAO" ref="blacklistDAOImpl"/>
+	</bean>
+	
+	<bean id="signLogBO" class="com.ogc.standard.bo.impl.SignLogBOImpl">
+		<property name="paginableDAO" ref="signLogDAOImpl"/>
+	</bean>
+	
 	<bean id="matchBO" class="com.ogc.standard.bo.impl.MatchBOImpl">
 		<property name="paginableDAO" ref="matchDAOImpl"/>
 	</bean>
