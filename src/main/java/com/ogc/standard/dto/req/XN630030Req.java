@@ -29,7 +29,6 @@ public class XN630030Req {
     private String updater;
 
     // 备注（选填）
-    @NotBlank
     private String remark;
 
     public String getType() {

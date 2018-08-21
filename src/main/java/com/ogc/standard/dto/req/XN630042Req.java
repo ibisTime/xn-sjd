@@ -16,10 +16,6 @@ public class XN630042Req {
     @NotBlank
     private String cvalue;
 
-    // 配置说明（必填）
-    @NotBlank
-    private String note;
-
     // 更新人（必填）
     @NotBlank
     private String updater;
@@ -42,14 +38,6 @@ public class XN630042Req {
 
     public void setCvalue(String cvalue) {
         this.cvalue = cvalue;
-    }
-
-    public String getNote() {
-        return note;
-    }
-
-    public void setNote(String note) {
-        this.note = note;
     }
 
     public String getUpdater() {

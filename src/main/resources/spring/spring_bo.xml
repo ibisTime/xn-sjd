@@ -53,4 +53,15 @@
 		<property name="paginableDAO" ref="departmentDAOImpl"/>
 	</bean>
 	
+	<bean id="userBO" class="com.ogc.standard.bo.impl.UserBOImpl">
+		<property name="paginableDAO" ref="userDAOImpl"/>
+	</bean>
+	
+	<bean id="blacklistBO" class="com.ogc.standard.bo.impl.BlacklistBOImpl">
+		<property name="paginableDAO" ref="blacklistDAOImpl"/>
+	</bean>
+	
+	<bean id="signLogBO" class="com.ogc.standard.bo.impl.SignLogBOImpl">
+		<property name="paginableDAO" ref="signLogDAOImpl"/>
+	</bean>
 </beans>
