@@ -11,7 +11,10 @@ import java.util.Map;
 public enum EGeneratePrefix {
 
     DH("DH", "导航"), JS("JS", "角色"), CD("CD", "菜单"), BM("BM", "部门"), GS("GS",
-            "公司"), RZ("RZ", "日志");
+            "公司"), RZ("RZ", "日志"),
+
+    Match("M", "赛事"), MatchApply("MA", "参赛申请"), Team("T",
+            "战队"), TeamMemberApply("TMA", "战队成员申请");
 
     public static Map<String, EGeneratePrefix> getMap() {
         Map<String, EGeneratePrefix> map = new HashMap<String, EGeneratePrefix>();

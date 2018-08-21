@@ -8,6 +8,7 @@
 		<typeAlias alias="cNavigate" type="com.ogc.standard.domain.CNavigate" />
 		<typeAlias alias="sysDict" type="com.ogc.standard.domain.SYSDict" />
 		<typeAlias alias="sysConfig" type="com.ogc.standard.domain.SYSConfig" />
+		
 		<typeAlias alias="sysUser" type="com.ogc.standard.domain.SYSUser" />
 		<typeAlias alias="channelBank" type="com.ogc.standard.domain.ChannelBank" />
 		<typeAlias alias="company" type="com.ogc.standard.domain.Company" />
@@ -15,7 +16,10 @@
 		<typeAlias alias="user" type="com.ogc.standard.domain.User" />
 		<typeAlias alias="blacklist" type="com.ogc.standard.domain.Blacklist" />
 		<typeAlias alias="signLog" type="com.ogc.standard.domain.SignLog" />
+		
+		<typeAlias alias="match" type="com.ogc.standard.domain.Match" />
+		<typeAlias alias="matchApply" type="com.ogc.standard.domain.MatchApply" />
+		<typeAlias alias="team" type="com.ogc.standard.domain.Team" />
+		<typeAlias alias="teamMemberApply" type="com.ogc.standard.domain.TeamMemberApply" />
 	</typeAliases>
 </configuration>
-
-
