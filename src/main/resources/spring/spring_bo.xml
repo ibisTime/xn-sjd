@@ -67,6 +67,17 @@
 	
 	<bean id="dayBenefitBO" class="com.ogc.standard.bo.impl.DayBenefitBOImpl">
 		<property name="paginableDAO" ref="dayBenefitDAOImpl"/>
+
+	<bean id="matchBO" class="com.ogc.standard.bo.impl.MatchBOImpl">
+		<property name="paginableDAO" ref="matchDAOImpl"/>
+	</bean>
+	
+	<bean id="matchApplyBO" class="com.ogc.standard.bo.impl.MatchApplyBOImpl">
+		<property name="paginableDAO" ref="matchApplyDAOImpl"/>
+	</bean>
+	
+	<bean id="teamBO" class="com.ogc.standard.bo.impl.TeamBOImpl">
+		<property name="paginableDAO" ref="teamDAOImpl"/>
 	</bean>
 	
 </beans>
