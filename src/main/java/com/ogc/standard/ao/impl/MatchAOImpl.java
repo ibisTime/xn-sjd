@@ -95,6 +95,14 @@ public class MatchAOImpl implements IMatchAO {
     }
 
     @Override
+    public void updateMatchDaily() {
+        // 更新赛事状态
+        // 更新参赛申请状态
+        // 更新战队状态
+        // 更新战队成员申请状态
+    }
+
+    @Override
     public Paginable<Match> queryMatchPage(int start, int limit,
             Match condition) {
         return matchBO.getPaginable(start, limit, condition);

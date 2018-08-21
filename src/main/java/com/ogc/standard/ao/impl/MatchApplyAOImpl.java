@@ -6,10 +6,12 @@ import java.util.List;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.IMatchApplyAO;
 import com.ogc.standard.bo.IMatchApplyBO;
 import com.ogc.standard.bo.IMatchBO;
+import com.ogc.standard.bo.ITeamBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.domain.Match;
@@ -35,26 +37,38 @@ public class MatchApplyAOImpl implements IMatchApplyAO {
     @Autowired
     private IMatchBO matchBO;
 
+    @Autowired
+    private ITeamBO teamBO;
+
     @Override
+    @Transactional
     public String addMatchApply(XN628300Req req) {
-        MatchApply data = new MatchApply();
 
         if (!matchBO.isMatchExist(req.getMatchCode())) {
             throw new BizException("xn000", "参赛赛事不存在！");
         }
 
+        if (teamBO.isTeamNameExist(req.getTeamName())) {
+            throw new BizException("xn000", "战队名称已存在，请重新输入！");
+        }
+
+        MatchApply data = new MatchApply();
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.MatchApply.getCode());
         data.setCode(code);
         data.setStatus(EMatchApplyStatus.TO_APPROVE.getCode());
         data.setMatchCode(req.getMatchCode());
         data.setTeamName(req.getTeamName());
-        data.setLogo(req.getTeamLogo());
 
+        data.setLogo(req.getTeamLogo());
         data.setDescription(req.getTeamDesc());
         data.setApplyUser(req.getUserId());
         data.setApplyDatetime(new Date());
         matchApplyBO.saveMatchApply(data);
+
+        // 添加战队
+        teamBO.saveTeam(code, req.getTeamName(), req.getTeamLogo(),
+            req.getTeamDesc(), req.getUserId());
 
         return code;
     }
