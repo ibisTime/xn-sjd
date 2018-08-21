@@ -53,4 +53,20 @@
 		<property name="paginableDAO" ref="departmentDAOImpl"/>
 	</bean>
 	
+	<bean id="groupBO" class="com.ogc.standard.bo.impl.GroupBOImpl">
+		<property name="paginableDAO" ref="groupDAOImpl"/>
+	</bean>
+	
+	<bean id="groupCoinBO" class="com.ogc.standard.bo.impl.GroupCoinBOImpl">
+		<property name="paginableDAO" ref="groupCoinDAOImpl"/>
+	</bean>
+	
+	<bean id="attentionBO" class="com.ogc.standard.bo.impl.AttentionBOImpl">
+		<property name="paginableDAO" ref="attentionDAOImpl"/>
+	</bean>
+	
+	<bean id="dayBenefitBO" class="com.ogc.standard.bo.impl.DayBenefitBOImpl">
+		<property name="paginableDAO" ref="dayBenefitDAOImpl"/>
+	</bean>
+	
 </beans>

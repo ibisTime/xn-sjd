@@ -12,6 +12,11 @@
 		<typeAlias alias="channelBank" type="com.ogc.standard.domain.ChannelBank" />
 		<typeAlias alias="company" type="com.ogc.standard.domain.Company" />
 		<typeAlias alias="department" type="com.ogc.standard.domain.Department" />
+		<typeAlias alias="group" type="com.ogc.standard.domain.Group" />
+		<typeAlias alias="groupCoin" type="com.ogc.standard.domain.GroupCoin" />
+		<typeAlias alias="attention" type="com.ogc.standard.domain.Attention" />
+		<typeAlias alias="dayBenefit" type="com.ogc.standard.domain.DayBenefit" />
+		
 	</typeAliases>
 </configuration>
 

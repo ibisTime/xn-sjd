@@ -9,27 +9,27 @@ import com.ogc.standard.common.DateUtil;
 
 public class SCDM_IDAO {
 
-    private static String author = "haiqingzheng";
+    private static String author = "lei";
 
     // 实体
-    private static String key = "country";
+    private static String key = "dayBenefit";
 
     // 实体名称
-    private static String keyName = "国家";
+    private static String keyName = "每日收益统计";
 
     // 包路径
-    private static String packge = "com.cdkj.core.";
+    private static String packge = "com.ogc.standard.";
 
     // 表名
-    private static String path = "/Users/haiqingzheng/Desktop/temp";
+    private static String path = "/Users/lei/Desktop/temp";
 
-    private static String dbname = "tstd_country";
+    private static String dbname = "tsimu_day_benefit";
 
-    private static String[] DBwords = { "inter_code", "inter_name",
-            "chinese_name", "inter_simple_code", "continent" };
+    private static String[] DBwords = { "group_code", "yesterday_assets",
+            "today_assets", "benefit", "benefit_rate", "createDatetime" };
 
-    private static String[] DBwordsName = { "国际代码", "国际名称", "中文名称", "国际简码",
-            "所属洲际" };
+    private static String[] DBwordsName = { "组合编号", "昨日总资产", "今日总资产", "收益",
+            "收益率", "产生日期" };
 
     private static String[] DOwords = getDOwords();
 
@@ -321,7 +321,7 @@ public class SCDM_IDAO {
                 + " select(" + Key + " condition) {\n\t\t"
                 + "return super.select(NAMESPACE.concat(\"select_" + key
                 + "\"), condition," + Key + ".class);\n\t}\n\n\n\t"
-                + "@Override\n\tpublic Long selectTotalCount(" + Key
+                + "@Override\n\tpublic long selectTotalCount(" + Key
                 + " condition) {\n\t\t"
                 + "return super.selectTotalCount(NAMESPACE.concat(\"select_"
                 + key + "_count\"),condition);\n\t}\n\n\n\t"
@@ -362,7 +362,7 @@ public class SCDM_IDAO {
                 + "import org.springframework.stereotype.Component;\n\n"
                 + "import " + packge + "bo.I" + Key + "BO;\n" + "import "
                 + packge + "bo.base.PaginableBOImpl;\n" + "import " + packge
-                + "core.EGeneratePrefix;\n" + "import " + packge
+                + "enums.EGeneratePrefix;\n" + "import " + packge
                 + "core.OrderNoGenerater;\n" + "import " + packge + "dao.I"
                 + Key + "DAO;\n" + "import " + packge + "domain." + Key + ";\n"
                 + "import " + packge + "exception.BizException;\n\n\n\n"
@@ -376,7 +376,7 @@ public class SCDM_IDAO {
                 + "return false;\n\t}\n\n\t@Override\n\t" + "public String save"
                 + Key + "(" + Key + " data) {\n\t\tString code = null;\n\t\t"
                 + "if (data != null) {\n\t\t\t"
-                + "code = OrderNoGenerater.generateM(EGeneratePrefix.CT.getCode());\n\t\t\t"
+                + "code = OrderNoGenerater.generate(EGeneratePrefix.CT.getCode());\n\t\t\t"
                 + "data.setCode(code);\n\t\t\t" + key
                 + "DAO.insert(data);\n\t\t}\n\t\treturn code;\n\t}\n\n\t"
                 + "@Override\n\tpublic int remove" + Key
@@ -400,8 +400,8 @@ public class SCDM_IDAO {
                 + "();\n\t\t\tcondition.setCode(code);\n\t\t\t" + "data = "
                 + key
                 + "DAO.select(condition);\n\t\t\tif (data == null) {\n\t\t\t\t"
-                + "throw new BizException(\"xn0000\", \"记录不存在\");\n\t\t\t"
-                + "}\n\t\t}\n\t\treturn data;\n\t}\n}";
+                + "throw new BizException(\"xn0000\", \"" + "keyName"
+                + "记录不存在\");\n\t\t\t" + "}\n\t\t}\n\t\treturn data;\n\t}\n}";
         return str;
     }
 
