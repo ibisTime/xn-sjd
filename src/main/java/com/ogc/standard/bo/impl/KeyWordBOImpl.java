@@ -3,6 +3,7 @@ package com.ogc.standard.bo.impl;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -10,6 +11,7 @@ import com.ogc.standard.bo.IKeyWordBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.dao.IKeyWordDAO;
 import com.ogc.standard.domain.KeyWord;
+import com.ogc.standard.enums.EKeyWordReaction;
 import com.ogc.standard.exception.BizException;
 
 @Component
@@ -73,6 +75,34 @@ public class KeyWordBOImpl extends PaginableBOImpl<KeyWord>
         data.setUpdater(updater);
         data.setUpdateDatetime(new Date());
         keyWordDAO.updateKeyWord(data);
+    }
+
+    @Override
+    public KeyWord checkContent(String content) {
+        KeyWord result = null;
+        if (StringUtils.isNotBlank(content)) {
+            List<KeyWord> allList = keyWordDAO.selectList(new KeyWord());
+            for (KeyWord keyWord : allList) {
+                if (content.indexOf(keyWord.getWord()) >= 0) {
+                    result = keyWord;
+                    if (keyWord.getReaction()
+                        .equals(EKeyWordReaction.REFUSE.getCode())) {
+                        break;
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public String replaceKeyword(String content, String word) {
+        String replacement = "";
+        for (int i = 0; i < word.length(); i++) {
+            replacement += "*";
+        }
+        content = content.replaceAll(word, replacement);
+        return content;
     }
 
     @Override

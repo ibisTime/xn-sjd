@@ -17,15 +17,21 @@ public interface IPostAO {
     // 添加帖子
     public String addPost(String userId, String content, String plateCode);
 
+    // 审核帖子
+    public void approvePost(String code, String approveResult, String approver,
+            String approveNote);
+
+    // 评论帖子
+    public void comment(String code, String content, String userId);
+
+    // 点赞/取消(front)
+    public void point(String code, String userId);
+
     // C端删除帖子
     public void dropPost4Front(String code, String userId);
 
     // B端删除帖子
     public void dropPost4Oss(String code, String updater);
-
-    // 审核帖子
-    public void approvePost(String code, String approveResult, String approver,
-            String approveNote);
 
     // 置顶/取消
     public void stickPost(String code, String updater);

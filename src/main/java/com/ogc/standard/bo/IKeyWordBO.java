@@ -29,6 +29,12 @@ public interface IKeyWordBO extends IPaginableBO<KeyWord> {
     public void refreshKeyWord(Integer id, String word, String level,
             String reaction, String remark, String updater);
 
+    // 检查关键字
+    public KeyWord checkContent(String content);
+
+    // 替换关键字
+    public String replaceKeyword(String content, String word);
+
     public List<KeyWord> queryKeyWordList(KeyWord condition);
 
     public KeyWord getKeyWord(Integer id);

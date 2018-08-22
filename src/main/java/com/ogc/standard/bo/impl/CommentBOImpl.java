@@ -39,7 +39,7 @@ public class CommentBOImpl extends PaginableBOImpl<Comment>
     }
 
     @Override
-    public String saveComment(String parentCode, String content,
+    public String saveComment(String parentCode, String content, String status,
             String userId) {
         Comment data = new Comment();
 
@@ -50,6 +50,7 @@ public class CommentBOImpl extends PaginableBOImpl<Comment>
         data.setContent(content);
         data.setUserId(userId);
 
+        data.setStatus(status);
         data.setCommentDatetime(new Date());
 
         commentDAO.insert(data);
