@@ -26,5 +26,7 @@
 		<typeAlias alias="matchApply" type="com.ogc.standard.domain.MatchApply" />
 		<typeAlias alias="team" type="com.ogc.standard.domain.Team" />
 		<typeAlias alias="teamMemberApply" type="com.ogc.standard.domain.TeamMemberApply" />
+		
+		<typeAlias alias="keyWord" type="com.ogc.standard.domain.KeyWord" />
 	</typeAliases>
 </configuration>
