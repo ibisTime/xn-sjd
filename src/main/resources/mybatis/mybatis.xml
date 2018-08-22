@@ -28,5 +28,6 @@
 		<typeAlias alias="teamMemberApply" type="com.ogc.standard.domain.TeamMemberApply" />
 		
 		<typeAlias alias="keyWord" type="com.ogc.standard.domain.KeyWord" />
+		<typeAlias alias="post" type="com.ogc.standard.domain.Post" />
 	</typeAliases>
 </configuration>

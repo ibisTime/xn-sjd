@@ -97,4 +97,8 @@
 		<property name="paginableDAO" ref="keyWordDAOImpl"/>
 	</bean>
 	
+	<bean id="postBO" class="com.ogc.standard.bo.impl.PostBOImpl">
+		<property name="paginableDAO" ref="postDAOImpl"/>
+	</bean>
+	
 </beans>
