@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ogc.standard.dao.IUserExtDAO">
+	<resultMap id="userExt_DB_Result" type="user">
+		<result column="user_id" property="userId" />
+		<result column="gender" property="gender" />
+		<result column="introduce" property="introduce" />
+		<result column="birthday" property="birthday" />
+		<result column="email" property="email" />
+		<result column="diploma" property="diploma" />
+		<result column="occupation" property="occupation" />
+		<result column="grad_datatime" property="gradDatetime" />
+		<result column="work_time" property="workTime" />
+		<result column="pdf" property="pdf" />
+	</resultMap>
+	
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">			
+			<if test="userId != null and userId != '' ">
+				AND t.user_id = #{userId}
+			</if>
+		</trim>
+	</sql>
+	
+	<insert id="insert_userExt" parameterType="userExt">
+		INSERT INTO tstd_user_ext(
+		user_id
+		
+		)
+		VALUES(
+		#{userId}
+		)
+	</insert>
+	
+	<update id="update_userExt" parameterType="userExt">
+		UPDATE tstd_user_ext
+		SET
+		gender=#{gender}
+		,introduce=#{introduce}
+		,birthday=#{birthday}
+		,email=#{email}
+		,diploma=#{diploma}
+		,occupation=#{occupation}
+		,grad_datetime=#{gradDatetime}
+		,work_time=#{workTime}
+		,pdf=#{pdf}
+		WHERE
+		,user_id=#{userId}
+	</update>
+</mapper>

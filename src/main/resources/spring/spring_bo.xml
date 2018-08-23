@@ -57,6 +57,10 @@
 		<property name="paginableDAO" ref="userDAOImpl"/>
 	</bean>
 	
+	<bean id="userExtBO" class="com.ogc.standard.bo.impl.UserExtBOImpl">
+		<property name="paginableDAO" ref="userExtDAOImpl"/>
+	</bean>
+	
 	<bean id="blacklistBO" class="com.ogc.standard.bo.impl.BlacklistBOImpl">
 		<property name="paginableDAO" ref="blacklistDAOImpl"/>
 	</bean>
@@ -64,6 +68,15 @@
 	<bean id="signLogBO" class="com.ogc.standard.bo.impl.SignLogBOImpl">
 		<property name="paginableDAO" ref="signLogDAOImpl"/>
 	</bean>
+	
+	<bean id="smsBO" class="com.ogc.standard.bo.impl.SmsBOImpl">
+		<property name="paginableDAO" ref="smsDAOImpl"/>
+	</bean>
+	
+	<bean id="readBO" class="com.ogc.standard.bo.impl.ReadBOImpl">
+		<property name="paginableDAO" ref="readDAOImpl"/>
+	</bean>
+	
 	<bean id="matchBO" class="com.ogc.standard.bo.impl.MatchBOImpl">
 		<property name="paginableDAO" ref="matchDAOImpl"/>
 	</bean>
@@ -75,5 +88,7 @@
 	<bean id="teamBO" class="com.ogc.standard.bo.impl.TeamBOImpl">
 		<property name="paginableDAO" ref="teamDAOImpl"/>
 	</bean>
+	
+	
 	
 </beans>

@@ -8,6 +8,8 @@
  */
 package com.ogc.standard.domain;
 
+import java.util.Date;
+
 import com.ogc.standard.dao.base.ABaseDO;
 
 /** 
@@ -39,7 +41,7 @@ public class UserExt extends ABaseDO {
     private String occupation;
 
     // 毕业年限
-    private String gradTime;
+    private Date gradDatetime;
 
     // 工作年限
     private String workTime;
@@ -115,12 +117,12 @@ public class UserExt extends ABaseDO {
         this.workTime = workTime;
     }
 
-    public String getGradTime() {
-        return gradTime;
+    public Date getGradDatetime() {
+        return gradDatetime;
     }
 
-    public void setGradTime(String gradTime) {
-        this.gradTime = gradTime;
+    public void setGradDatetime(Date gradDatetime) {
+        this.gradDatetime = gradDatetime;
     }
 
     public String getPdf() {

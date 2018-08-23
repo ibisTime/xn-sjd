@@ -21,7 +21,6 @@ public class XN630032Req {
     private String updater;
 
     // 备注（选填）
-    @NotBlank
     private String remark;
 
     public String getId() {

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ogc.standard.dao.ISmsDAO">
+	<resultMap id="sms_DB_Result" type="sms">
+		<result column="code" property="code" />
+		<result column="type" property="type" />
+		<result column="title" property="title" />
+		<result column="content" property="content" />
+		<result column="status" property="status" />
+		<result column="create_datetime" property="createDatetime" />
+		<result column="updater" property="updater" />
+		<result column="update_datetime" property="updateDatetime" />
+		<result column="remark" property="remark" />
+	</resultMap>
+	
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="type != null and type != '' ">
+				AND t.type = #{type}
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+			<if test="updater != null and updater != '' ">
+				AND t.updater = #{updater}
+			</if>
+			<if test="title != null and title != '' ">
+				AND t.title like "%"#{title}"%"
+			</if>
+		</trim>
+	</sql>
+	
+	<insert id="insert_sms" parameterType="sms">
+		INSERT INTO tstd_sms(
+		code
+		,type
+		,title
+		,content
+		,status
+		,create_datetime
+		,updater
+		,update_datetime
+		,remark
+		)
+		VALUES(
+		#{code}
+		,#{type}
+		,#{title}
+		,#{content}
+		,#{status}
+		,#{createDatetime}
+		,#{updater}
+		,#{updateDatetime}
+		,#{remark}
+		)
+	</insert>
+	
+	<update id="update_status" parameterType="sms">
+		UPDATE tstd_sms
+		SET
+		,status=#{status}
+		,updater=#{updater}
+		,update_datetime=#{updateDatetime}
+		,remark=#{remark}
+		WHERE
+		code=#{code}
+	</update>
+	
+	<update id="update_sms" parameterType="sms">
+		UPDATE tstd_sms
+		SET
+		type=#{type}
+		,title=#{title}
+		,content=#{content}
+		,status=#{status}
+		,updater=#{updater}
+		,update_datetime=#{updateDatetime}
+		,remark=#{remark}
+		WHERE
+		code=#{code}
+	</update>
+	
+	<select id="select_sms" parameterType="sms" resultMap="sms_DB_Result">
+		SELECT
+		t.code
+		,t.type
+		,t.title
+		,t.content
+		,t.status
+		,t.create_datetime
+		,t.updater
+		,t.update_datetime
+		,t.remark
+		FROM
+		tstd_sms t 
+		<include refid="where_condition" />
+	</select>
+
+	<select id="select_sms_count" parameterType="sms"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tstd_sms t
+		<include refid="where_condition" />
+	</select>
+</mapper>

@@ -36,11 +36,14 @@ public interface ISYSUserAO {
     public void resetSelfPwd(String mobile, String smsCaptcha,
             String newLoginPwd);
 
+    // 根据旧密码改新密码
+    public void editPwd(String userId, String oldPwd, String newPwd);
+
     // 修改照片
     public void doModifyPhoto(String userId, String photo);
 
     // 修改电话
-    public void doResetMoblie(String userId, String kind, String newMobile,
+    public void doResetMoblie(String userId, String remark, String newMobile,
             String smsCaptcha);
 
     // 分页查询

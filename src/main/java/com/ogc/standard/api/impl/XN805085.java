@@ -10,6 +10,8 @@ package com.ogc.standard.api.impl;
 
 import com.ogc.standard.ao.IUserExtAO;
 import com.ogc.standard.api.AProcessor;
+import com.ogc.standard.common.JsonUtil;
+import com.ogc.standard.core.ObjValidater;
 import com.ogc.standard.dto.req.XN805085Req;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
@@ -23,20 +25,21 @@ import com.ogc.standard.spring.SpringContextHolder;
  */
 public class XN805085 extends AProcessor {
 
-    private IUserExtAO userExt = SpringContextHolder.getBean(IUserExtAO.class);
+    private IUserExtAO userExtAO = SpringContextHolder
+        .getBean(IUserExtAO.class);
 
     private XN805085Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        return null;
+        return userExtAO.editUserExt(req);
     }
 
     @Override
     public void doCheck(String inputparams, String operator)
             throws ParaException {
-        // TODO Auto-generated method stub
-
+        req = JsonUtil.json2Bean(inputparams, XN805085Req.class);
+        ObjValidater.validateReq(req);
     }
 
 }

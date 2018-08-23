@@ -9,8 +9,13 @@ public interface ISignLogBO extends IPaginableBO<SignLog> {
 
     public boolean isSignLogExist(Integer id);
 
-    public String saveSignLog(SignLog data);
+    public boolean isCheckIn(String userId);
+
+    public int saveSignLog(SignLog data);
 
     public List<SignLog> querySignLogList(SignLog condition);
+
+    // List按createDatetime降序排序
+    public void sort(List<SignLog> dataList);
 
 }

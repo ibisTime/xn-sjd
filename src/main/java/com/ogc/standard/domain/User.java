@@ -132,6 +132,105 @@ public class User extends ABaseDO {
     // 用户推荐人
     private User refereeUser;
 
+    // 性别(1 男 0 女)
+    private String gender;
+
+    // 生日
+    private String birthday;
+
+    // 邮箱
+    private String email;
+
+    // 学位
+    private String diploma;
+
+    // 职业
+    private String occupation;
+
+    // 毕业年限
+    private Date gradDatetime;
+
+    // 工作年限
+    private String workTime;
+
+    // 用户资料
+    private String pdf;
+
+    // 自我介绍
+    private String introduce;
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getDiploma() {
+        return diploma;
+    }
+
+    public void setDiploma(String diploma) {
+        this.diploma = diploma;
+    }
+
+    public String getOccupation() {
+        return occupation;
+    }
+
+    public void setOccupation(String occupation) {
+        this.occupation = occupation;
+    }
+
+    public Date getGradDatetime() {
+        return gradDatetime;
+    }
+
+    public void setGradDatetime(Date gradDatetime) {
+        this.gradDatetime = gradDatetime;
+    }
+
+    public String getWorkTime() {
+        return workTime;
+    }
+
+    public void setWorkTime(String workTime) {
+        this.workTime = workTime;
+    }
+
+    public String getPdf() {
+        return pdf;
+    }
+
+    public void setPdf(String pdf) {
+        this.pdf = pdf;
+    }
+
+    public String getIntroduce() {
+        return introduce;
+    }
+
+    public void setIntroduce(String introduce) {
+        this.introduce = introduce;
+    }
+
     public String getUserId() {
         return userId;
     }

@@ -31,7 +31,8 @@ public interface IUserAO {
     // public String doApplyRegUser(XN805043Req req);
 
     // 用户登录
-    public String doLogin(String loginName, String loginPwd);
+    public String doLogin(String loginName, String loginPwd, String client,
+            String location);
 
     // 修改定位信息
     public void doChangeLocation(XN805081Req req);

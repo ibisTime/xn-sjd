@@ -14,8 +14,11 @@
 		<typeAlias alias="company" type="com.ogc.standard.domain.Company" />
 		<typeAlias alias="department" type="com.ogc.standard.domain.Department" />
 		<typeAlias alias="user" type="com.ogc.standard.domain.User" />
+		<typeAlias alias="userExt" type="com.ogc.standard.domain.UserExt" />
 		<typeAlias alias="blacklist" type="com.ogc.standard.domain.Blacklist" />
 		<typeAlias alias="signLog" type="com.ogc.standard.domain.SignLog" />
+		<typeAlias alias="sms" type="com.ogc.standard.domain.Sms" />
+		<typeAlias alias="read" type="com.ogc.standard.domain.Read" />
 		
 		<typeAlias alias="match" type="com.ogc.standard.domain.Match" />
 		<typeAlias alias="matchApply" type="com.ogc.standard.domain.MatchApply" />
