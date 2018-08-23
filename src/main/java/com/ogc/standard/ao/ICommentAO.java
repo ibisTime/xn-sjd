@@ -8,7 +8,7 @@ import com.ogc.standard.domain.Comment;
 public interface ICommentAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
-    // 评论
+    // 评论评论
     public String saveComment(String code, String content, String userId);
 
     // 删除评论

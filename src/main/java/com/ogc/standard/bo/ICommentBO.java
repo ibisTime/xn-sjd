@@ -16,8 +16,8 @@ public interface ICommentBO extends IPaginableBO<Comment> {
     public boolean isCommentExist(String code);
 
     // 添加评论
-    public String saveComment(String parentCode, String type, String content,
-            String status, String userId);
+    public String saveComment(String type, String parentCode,
+            String parentUserId, String content, String status, String userId);
 
     // 删除评论
     public void removeComment(String code, String updater);

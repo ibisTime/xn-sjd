@@ -14,6 +14,7 @@ import com.ogc.standard.dao.IPostDAO;
 import com.ogc.standard.domain.Post;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.enums.EPostLocation;
+import com.ogc.standard.enums.EPostStatus;
 import com.ogc.standard.exception.BizException;
 
 /**
@@ -53,6 +54,13 @@ public class PostBOImpl extends PaginableBOImpl<Post> implements IPostBO {
         data.setLocation(EPostLocation.NORMAL.getCode());
         data.setUpdater(userId);
         data.setUpdateDatetime(new Date());
+        data.setCommentCount(0);
+        data.setPointCount(0);
+
+        if (EPostStatus.RELEASED.getCode().equals(status)) {
+            data.setPublishDatetime(new Date());
+        }
+
         postDAO.insert(data);
         return code;
 
@@ -63,6 +71,7 @@ public class PostBOImpl extends PaginableBOImpl<Post> implements IPostBO {
         if (StringUtils.isNotBlank(code)) {
             Post data = new Post();
             data.setCode(code);
+            data.setStatus(EPostStatus.DELETED.getCode());
             data.setUpdater(updater);
             data.setUpdateDatetime(new Date());
             postDAO.delete(data);

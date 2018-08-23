@@ -61,6 +61,9 @@ public class Post extends ABaseDO {
     // 状态列表
     private List<String> statusList;
 
+    // 前端用户是否点赞(1是/0否)
+    private String isPoint;
+
     public String getCode() {
         return code;
     }
@@ -179,6 +182,14 @@ public class Post extends ABaseDO {
 
     public void setStatusList(List<String> statusList) {
         this.statusList = statusList;
+    }
+
+    public String getIsPoint() {
+        return isPoint;
+    }
+
+    public void setIsPoint(String isPoint) {
+        this.isPoint = isPoint;
     }
 
 }

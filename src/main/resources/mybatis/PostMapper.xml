@@ -97,6 +97,8 @@
 		
 		,location
 		,plate_code
+		,comment_count
+		,point_count
 		,updater
 		,update_datetime
 		)
@@ -109,6 +111,8 @@
 		
 		,#{location}
 		,#{plateCode}
+		,#{commentCount}
+		,#{pointCount}
 		,#{updater}
 		,#{updateDatetime}
 		)
@@ -126,14 +130,14 @@
 	</update>
 	
 	<update id="update_pointCount" parameterType="post">
-		UPDATE tinfo_post
+		UPDATE tforum_post
 		SET
 	 	point_count = #{pointCount}
 		WHERE code = #{code}
 	</update>
 	
 	<update id="update_commentCount" parameterType="post">
-		UPDATE tinfo_post
+		UPDATE tforum_post
 		SET
 		comment_count = #{commentCount}
 		WHERE code = #{code}

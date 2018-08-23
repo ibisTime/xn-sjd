@@ -12,6 +12,8 @@ import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.ICommentDAO;
 import com.ogc.standard.domain.Comment;
+import com.ogc.standard.enums.ECommentStatus;
+import com.ogc.standard.enums.ECommentType;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.exception.BizException;
 
@@ -39,8 +41,8 @@ public class CommentBOImpl extends PaginableBOImpl<Comment>
     }
 
     @Override
-    public String saveComment(String parentCode, String type, String content,
-            String status, String userId) {
+    public String saveComment(String type, String parentCode,
+            String parentUserId, String content, String status, String userId) {
         Comment data = new Comment();
 
         String code = OrderNoGenerater
@@ -48,11 +50,17 @@ public class CommentBOImpl extends PaginableBOImpl<Comment>
         data.setCode(code);
         data.setType(type);
         data.setParentCode(parentCode);
-        data.setContent(content);
+        data.setParentUserId(parentUserId);
 
+        data.setContent(content);
+        data.setPointCount(0);
         data.setUserId(userId);
         data.setStatus(status);
         data.setCommentDatetime(new Date());
+
+        if (ECommentType.POST.getCode().equals(type)) {
+            data.setObjectCode(parentCode);
+        }
 
         commentDAO.insert(data);
         return code;
@@ -64,6 +72,7 @@ public class CommentBOImpl extends PaginableBOImpl<Comment>
         if (StringUtils.isNotBlank(code)) {
             Comment data = new Comment();
             data.setCode(code);
+            data.setStatus(ECommentStatus.DELETED.getCode());
             commentDAO.delete(data);
         }
     }

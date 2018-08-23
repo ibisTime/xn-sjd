@@ -12,7 +12,7 @@ import java.util.Map;
 public enum ECommentStatus {
 
     TO_APPROVE("A", "待审核"), APPROVED_YES("B", "审核通过"), APPROVED_NO("C",
-            "审核不通过"), RELEASED("D", "已发布"), DELETED("E", "已删除");
+            "审核不通过"), RELEASED("D", "已发布"), DELETED("G", "已删除");
 
     ECommentStatus(String code, String value) {
         this.code = code;

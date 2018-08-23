@@ -98,6 +98,7 @@
 		,user_id
 		,comment_datetime
 		
+		,point_count
 		,parent_code
 		,parent_user_id
 		,object_code
@@ -111,6 +112,7 @@
 		,#{userId}
 		,#{commentDatetime}
 		
+		,#{pointCount}
 		,#{parentCode}
 		,#{parentUserId}
 		,#{objectCode}

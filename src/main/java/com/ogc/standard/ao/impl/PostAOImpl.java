@@ -114,8 +114,34 @@ public class PostAOImpl implements IPostAO {
     }
 
     @Override
+    public void stickPost(String code, String updater) {
+        Post post = postBO.getPost(code);
+        if (EPostStatus.TO_APPROVE.getCode().equals(post.getStatus())
+                || EPostStatus.APPROVED_NO.getCode().equals(post.getStatus())
+                || EPostStatus.DELETED.getCode().equals(post.getStatus())) {
+            throw new BizException("xn0000", "帖子不处于可置顶/取消置顶状态！");
+        }
+
+        String location = null;
+        if (EPostLocation.NORMAL.getCode().equals(post.getLocation())) {
+            location = EPostLocation.HOT.getCode();
+        } else {
+            location = EPostLocation.NORMAL.getCode();
+        }
+
+        postBO.refreshStickPost(code, location, updater);
+    }
+
+    @Override
     @Transactional
     public void commentPost(String code, String content, String userId) {
+        Post post = postBO.getPost(code);
+        if (EPostStatus.TO_APPROVE.getCode().equals(post.getStatus())
+                || EPostStatus.APPROVED_NO.getCode().equals(post.getStatus())
+                || EPostStatus.DELETED.getCode().equals(post.getStatus())) {
+            throw new BizException("xn0000", "帖子不处于可评论状态！");
+        }
+
         // 关键字过滤
         Keyword keyWord = keywordBO.checkContent(content);
         String status = EPostStatus.RELEASED.getCode();
@@ -143,21 +169,28 @@ public class PostAOImpl implements IPostAO {
         }
 
         // 更新帖子评论数量
-        Post post = postBO.getPost(code);
-        postBO.refreshCommentPost(code, post.getCommentCount() + 1);
+        if (EPostStatus.RELEASED.getCode().equals(status)) {
+            postBO.refreshCommentPost(code, post.getCommentCount() + 1);
+        }
 
         // 添加评论
-        commentBO.saveComment(code, ECommentType.POST.getCode(), content,
-            status, userId);
+        commentBO.saveComment(ECommentType.POST.getCode(), code, userId,
+            content, status, userId);
     }
 
     @Override
     @Transactional
     public void pointPost(String code, String userId) {
+        Post post = postBO.getPost(code);
+        if (EPostStatus.TO_APPROVE.getCode().equals(post.getStatus())
+                || EPostStatus.APPROVED_NO.getCode().equals(post.getStatus())
+                || EPostStatus.DELETED.getCode().equals(post.getStatus())) {
+            throw new BizException("xn0000", "当前帖子状态不可操作！");
+        }
+
         Interact interact = interactBO.getInteract(
             EInteractType.POINT.getCode(), EObjectType.POST.getCode(), code,
             userId);
-        Post post = postBO.getPost(code);
 
         // 点赞记录不存在时，添加点赞；点赞记录存在时，删除点赞
         if (null == interact) {
@@ -188,8 +221,14 @@ public class PostAOImpl implements IPostAO {
     @Override
     public void dropPost4Front(String code, String userId) {
         Post post = postBO.getPost(code);
-        if (!post.getUserId().equals(userId)) {
-            throw new BizException("xn0000", "此用户不是发帖人，无法删除该帖子！");
+        if (EPostStatus.DELETED.getCode().equals(post.getStatus())) {
+            throw new BizException("xn0000", "帖子未处于可删除状态！");
+        }
+
+        Team team = teamBO.getTeam(post.getPlateCode());
+        if (!userId.equals(post.getUserId())
+                && !userId.equals(team.getCaptain())) {
+            throw new BizException("xn0000", "此用户不是发帖人或战队队长，无法删除该帖子！");
         }
 
         postBO.removePost(code, userId);
@@ -197,25 +236,12 @@ public class PostAOImpl implements IPostAO {
 
     @Override
     public void dropPost4Oss(String code, String updater) {
-        postBO.removePost(code, updater);
-    }
-
-    @Override
-    public void stickPost(String code, String updater) {
         Post post = postBO.getPost(code);
-        if (!EPostStatus.APPROVED_YES.getCode().equals(post.getStatus())
-                || !EPostStatus.RELEASED.getCode().equals(post.getStatus())) {
-            throw new BizException("xn0000", "帖子不处于可置顶/取消置顶状态！");
+        if (EPostStatus.DELETED.getCode().equals(post.getStatus())) {
+            throw new BizException("xn0000", "帖子未处于可删除状态！");
         }
 
-        String location = null;
-        if (EPostLocation.NORMAL.getCode().equals(post.getLocation())) {
-            location = EPostLocation.HOT.getCode();
-        } else {
-            location = EPostLocation.NORMAL.getCode();
-        }
-
-        postBO.refreshStickPost(code, location, updater);
+        postBO.removePost(code, updater);
     }
 
     @Override
@@ -238,7 +264,15 @@ public class PostAOImpl implements IPostAO {
         Post post = postBO.getPost(code);
 
         if (StringUtils.isNotBlank(userId)) {
+            Interact interact = interactBO.getInteract(
+                EInteractType.POINT.getCode(), EObjectType.POST.getCode(), code,
+                userId);
 
+            if (null != interact) {
+                post.setIsPoint(EBoolean.YES.getCode());
+            } else {
+                post.setIsPoint(EBoolean.NO.getCode());
+            }
         }
 
         return post;
