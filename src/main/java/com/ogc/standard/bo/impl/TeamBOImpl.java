@@ -54,6 +54,8 @@ public class TeamBOImpl extends PaginableBOImpl<Team> implements ITeamBO {
         data.setUpdateDatetime(new Date());
         data.setStatus(ETeamStatus.TO_START.getCode());
 
+        data.setPostCount(0);
+        data.setMemberCount(0);
         teamDAO.insert(data);
         return code;
     }
@@ -97,9 +99,9 @@ public class TeamBOImpl extends PaginableBOImpl<Team> implements ITeamBO {
     }
 
     @Override
-    public void refreshTeamStatus(String code, String status) {
+    public void refreshMatchTeamStatus(String matchCode, String status) {
         Team team = new Team();
-        team.setCode(code);
+        team.setMatchCode(matchCode);
         team.setStatus(status);
         teamDAO.updateStatus(team);
     }

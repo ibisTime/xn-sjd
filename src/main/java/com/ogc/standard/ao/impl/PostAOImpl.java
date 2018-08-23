@@ -219,7 +219,7 @@ public class PostAOImpl implements IPostAO {
     }
 
     @Override
-    public void dropPost4Front(String code, String userId) {
+    public void dropPostFront(String code, String userId) {
         Post post = postBO.getPost(code);
         if (EPostStatus.DELETED.getCode().equals(post.getStatus())) {
             throw new BizException("xn0000", "帖子未处于可删除状态！");
@@ -235,7 +235,7 @@ public class PostAOImpl implements IPostAO {
     }
 
     @Override
-    public void dropPost4Oss(String code, String updater) {
+    public void dropPostOss(String code, String updater) {
         Post post = postBO.getPost(code);
         if (EPostStatus.DELETED.getCode().equals(post.getStatus())) {
             throw new BizException("xn0000", "帖子未处于可删除状态！");
@@ -255,12 +255,12 @@ public class PostAOImpl implements IPostAO {
     }
 
     @Override
-    public Post getPost4Oss(String code) {
+    public Post getPostOss(String code) {
         return postBO.getPost(code);
     }
 
     @Override
-    public Post getPost4Front(String code, String userId) {
+    public Post getPostFront(String code, String userId) {
         Post post = postBO.getPost(code);
 
         if (StringUtils.isNotBlank(userId)) {

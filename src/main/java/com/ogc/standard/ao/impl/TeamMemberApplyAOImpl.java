@@ -1,18 +1,23 @@
 package com.ogc.standard.ao.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.ITeamMemberApplyAO;
+import com.ogc.standard.bo.IGroupBO;
 import com.ogc.standard.bo.ITeamBO;
 import com.ogc.standard.bo.ITeamMemberApplyBO;
+import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Team;
 import com.ogc.standard.domain.TeamMemberApply;
+import com.ogc.standard.domain.User;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ETeamMemberApplyStatus;
 import com.ogc.standard.enums.ETeamStatus;
@@ -32,6 +37,12 @@ public class TeamMemberApplyAOImpl implements ITeamMemberApplyAO {
 
     @Autowired
     private ITeamBO teamBO;
+
+    @Autowired
+    private IUserBO userBO;
+
+    @Autowired
+    private IGroupBO groupBO;
 
     @Override
     public String addTeamMemberApply(String teamCode, String applyUser) {
@@ -55,10 +66,6 @@ public class TeamMemberApplyAOImpl implements ITeamMemberApplyAO {
     @Transactional
     public void approveTeamMemberApply(String code, String approveResult,
             String approver, String remark) {
-        if (!teamMemberApplyBO.isTeamMemberApplyExist(code)) {
-            throw new BizException("xn0000", "记录编号不存在");
-        }
-
         TeamMemberApply teamMemberApply = teamMemberApplyBO
             .getTeamMemberApply(code);
         if (!ETeamMemberApplyStatus.TO_APPROVE.getCode()
@@ -72,10 +79,12 @@ public class TeamMemberApplyAOImpl implements ITeamMemberApplyAO {
 
             // 审核成功时更新战队成员数量
             Team team = teamBO.getTeam(teamMemberApply.getTeamCode());
-            if (null != team) {
-                teamBO.refreshTeamMemberCount(team.getCode(),
-                    team.getMemberCount() + 1);
-            }
+            teamBO.refreshTeamMemberCount(team.getCode(),
+                team.getMemberCount() + 1);
+
+            // 添加组合
+            groupBO.saveGroup(team.getMatchCode(), team.getCode(),
+                teamMemberApply.getApplyUser(), new BigDecimal(0));
         } else {
             status = ETeamMemberApplyStatus.APPROVED_NO.getCode();
         }
@@ -87,7 +96,16 @@ public class TeamMemberApplyAOImpl implements ITeamMemberApplyAO {
     @Override
     public Paginable<TeamMemberApply> queryTeamMemberApplyPage(int start,
             int limit, TeamMemberApply condition) {
-        return teamMemberApplyBO.getPaginable(start, limit, condition);
+        Paginable<TeamMemberApply> page = teamMemberApplyBO.getPaginable(start,
+            limit, condition);
+
+        if (null != page && CollectionUtils.isNotEmpty(page.getList())) {
+            for (TeamMemberApply teamMemberApply : page.getList()) {
+                initTeamMemberApply(teamMemberApply);
+            }
+        }
+
+        return page;
     }
 
     @Override
@@ -98,6 +116,27 @@ public class TeamMemberApplyAOImpl implements ITeamMemberApplyAO {
 
     @Override
     public TeamMemberApply getTeamMemberApply(String code) {
-        return teamMemberApplyBO.getTeamMemberApply(code);
+        TeamMemberApply teamMemberApply = teamMemberApplyBO
+            .getTeamMemberApply(code);
+
+        initTeamMemberApply(teamMemberApply);
+
+        return teamMemberApply;
+    }
+
+    private void initTeamMemberApply(TeamMemberApply teamMemberApply) {
+        // 战队信息
+        Team team = teamBO.getTeam(teamMemberApply.getTeamCode());
+        teamMemberApply.setTeamName(team.getName());
+
+        // 申请人
+        User applyUser = userBO.getUser(teamMemberApply.getApplyUser());
+        teamMemberApply.setApplyUserName(applyUser.getRealName());
+
+        // 审核人
+        if (null != teamMemberApply.getApprover()) {
+            User approverUser = userBO.getUser(teamMemberApply.getApprover());
+            teamMemberApply.setApproverName(approverUser.getRealName());
+        }
     }
 }

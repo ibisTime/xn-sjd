@@ -23,7 +23,7 @@ public class XN628031 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        postAO.dropPost4Front(req.getCode(), req.getUserId());
+        postAO.dropPostFront(req.getCode(), req.getUserId());
         return new BooleanRes(true);
     }
 

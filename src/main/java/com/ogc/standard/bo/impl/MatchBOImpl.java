@@ -72,18 +72,18 @@ public class MatchBOImpl extends PaginableBOImpl<Match> implements IMatchBO {
     }
 
     @Override
-    public void startMatch(Date today) {
+    public void startMatch(String code) {
         Match condition = new Match();
-        condition.setMatchStartDatetime(today);
+        condition.setCode(code);
         condition.setStatus(EMatchStatus.STARTED.getCode());
 
         matchDAO.updateStartMatch(condition);
     }
 
     @Override
-    public void endMatch(Date today) {
+    public void endMatch(String code) {
         Match condition = new Match();
-        condition.setMatchEndDatetime(today);
+        condition.setCode(code);
         condition.setStatus(EMatchStatus.EXPIRED.getCode());
 
         matchDAO.updateEndMatch(condition);
@@ -102,7 +102,7 @@ public class MatchBOImpl extends PaginableBOImpl<Match> implements IMatchBO {
             condition.setCode(code);
             data = matchDAO.select(condition);
             if (data == null) {
-                throw new BizException("xn0000", "记录不存在");
+                throw new BizException("xn0000", "赛事记录不存在");
             }
         }
         return data;

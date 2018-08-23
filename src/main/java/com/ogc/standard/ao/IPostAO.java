@@ -31,10 +31,10 @@ public interface IPostAO {
     public void browerPost(String code, String userId);
 
     // C端删除帖子
-    public void dropPost4Front(String code, String userId);
+    public void dropPostFront(String code, String userId);
 
     // B端删除帖子
-    public void dropPost4Oss(String code, String updater);
+    public void dropPostOss(String code, String updater);
 
     // 置顶/取消
     public void stickPost(String code, String updater);
@@ -44,9 +44,9 @@ public interface IPostAO {
     public List<Post> queryPostList(Post condition);
 
     // 详情查询帖子(oss)
-    public Post getPost4Oss(String code);
+    public Post getPostOss(String code);
 
     // 详情查询帖子(front)
-    public Post getPost4Front(String code, String userId);
+    public Post getPostFront(String code, String userId);
 
 }

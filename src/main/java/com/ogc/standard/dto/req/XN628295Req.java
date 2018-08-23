@@ -13,11 +13,17 @@ public class XN628295Req extends APageReq {
     // 名称
     private String name;
 
-    // 开始时间
-    private String startDatetime;
+    // 赛事开始开始时间
+    private String startDatetimeStart;
 
-    // 结束时间
-    private String endDatetime;
+    // 赛事开始结束时间
+    private String startDatetimeEnd;
+
+    // 赛事结束开始时间
+    private String endDatetimeStart;
+
+    // 赛事结束结束时间
+    private String endDatetimeEnd;
 
     // 状态（1待发布，2已发布，3已开始，4已过期）
     private String status;
@@ -30,20 +36,36 @@ public class XN628295Req extends APageReq {
         this.name = name;
     }
 
-    public String getStartDatetime() {
-        return startDatetime;
+    public String getStartDatetimeStart() {
+        return startDatetimeStart;
     }
 
-    public void setStartDatetime(String startDatetime) {
-        this.startDatetime = startDatetime;
+    public void setStartDatetimeStart(String startDatetimeStart) {
+        this.startDatetimeStart = startDatetimeStart;
     }
 
-    public String getEndDatetime() {
-        return endDatetime;
+    public String getStartDatetimeEnd() {
+        return startDatetimeEnd;
     }
 
-    public void setEndDatetime(String endDatetime) {
-        this.endDatetime = endDatetime;
+    public void setStartDatetimeEnd(String startDatetimeEnd) {
+        this.startDatetimeEnd = startDatetimeEnd;
+    }
+
+    public String getEndDatetimeStart() {
+        return endDatetimeStart;
+    }
+
+    public void setEndDatetimeStart(String endDatetimeStart) {
+        this.endDatetimeStart = endDatetimeStart;
+    }
+
+    public String getEndDatetimeEnd() {
+        return endDatetimeEnd;
+    }
+
+    public void setEndDatetimeEnd(String endDatetimeEnd) {
+        this.endDatetimeEnd = endDatetimeEnd;
     }
 
     public String getStatus() {

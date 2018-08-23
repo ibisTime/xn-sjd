@@ -20,6 +20,10 @@
 			<list>
 				<!-- 红包过期扫描 -->
 				<ref bean="dayBenefitTrigger"/>
+				
+				<!-- 赛事状态扫描 -->
+				<ref bean="dailyStartMatchTirgger"/>
+				<ref bean="dailyEndMatchTirgger"/>
 			
 			</list>
 		</property>
@@ -40,6 +44,32 @@
 		<property name="targetMethod" value="scanProductToStart" />
 		<property name="concurrent" value="false" />
 		<!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程 -->
+	</bean>
+	
+	<!-- 每日开始赛事 -->
+	<bean id="dailyStartMatchTirgger"
+		  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="dayBenefit" />
+		<property name="cronExpression" value="0 0 0 * * ?" />  <!--每天 0:0:0 获取一次-->
+	</bean>
+	<bean id="dailyStartMatch"
+		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="matchAOImpl" />
+		<property name="targetMethod" value="doDailyStratMatch" />
+		<property name="concurrent" value="false" />  <!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程 -->
+	</bean>
+	
+	<!-- 每日结束赛事 -->
+	<bean id="dailyEndMatchTirgger"
+		  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="dayBenefit" />
+		<property name="cronExpression" value="0 0 0 * * ?" />  <!--每天 0:0:0 获取一次-->
+	</bean>
+	<bean id="dailyEndMatch"
+		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="matchAOImpl" />
+		<property name="targetMethod" value="doDailyEndMatch" />
+		<property name="concurrent" value="false" />  <!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程 -->
 	</bean>
 
 </beans>
