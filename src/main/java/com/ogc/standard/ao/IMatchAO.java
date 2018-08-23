@@ -25,8 +25,11 @@ public interface IMatchAO {
     // 发布赛事
     public void releaseMatch(String code, String updater, String remark);
 
+    // 定时器每天凌晨开始赛事及其他数据状态
+    public void doDailyStratMatch();
+
     // 定时器每天凌晨更新赛事及其他数据状态
-    public void updateMatchDaily();
+    public void doDailyEndMatch();
 
     public Paginable<Match> queryMatchPage(int start, int limit,
             Match condition);

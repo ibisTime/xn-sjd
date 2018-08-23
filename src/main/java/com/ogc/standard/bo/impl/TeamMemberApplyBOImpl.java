@@ -99,7 +99,7 @@ public class TeamMemberApplyBOImpl extends PaginableBOImpl<TeamMemberApply>
             condition.setCode(code);
             data = teamMemberApplyDAO.select(condition);
             if (data == null) {
-                throw new BizException("xn0000", "申请记录不存在");
+                throw new BizException("xn0000", "战队报名记录不存在");
             }
         }
         return data;

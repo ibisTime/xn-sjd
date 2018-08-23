@@ -11,7 +11,7 @@ import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
 
 /**
- * 新增赛事
+ * 修改赛事
  * @author: silver 
  * @since: 2018年8月21日 上午11:40:47 
  * @history:

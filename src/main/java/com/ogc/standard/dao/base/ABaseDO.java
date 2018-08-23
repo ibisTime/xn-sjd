@@ -28,8 +28,8 @@ public abstract class ABaseDO implements Serializable {
     private String order = null;
 
     public void setOrder(String fieldName, boolean ascending) {
-        Order orderInfo = ascending ? Order.asc(fieldName) : Order
-            .desc(fieldName);
+        Order orderInfo = ascending ? Order.asc(fieldName)
+                : Order.desc(fieldName);
         this.order = orderInfo.toSqlString();
     }
 
@@ -46,6 +46,10 @@ public abstract class ABaseDO implements Serializable {
 
     public String getOrder() {
         return this.order;
+    }
+
+    public void setOrder(String order) {
+        this.order = order;
     }
 
     public String generateId() {

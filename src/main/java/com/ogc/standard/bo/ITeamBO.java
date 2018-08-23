@@ -32,8 +32,8 @@ public interface ITeamBO extends IPaginableBO<Team> {
     // 更新战队人数
     public void refreshTeamMemberCount(String code, Integer memberCount);
 
-    // 更新战队状态
-    public void refreshTeamStatus(String code, String status);
+    // 更新赛事战队状态
+    public void refreshMatchTeamStatus(String matchCode, String status);
 
     public List<Team> queryTeamList(Team condition);
 

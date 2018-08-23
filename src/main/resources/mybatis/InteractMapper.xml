@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ogc.standard.dao.IInteractDAO">
+	<resultMap id="interact_DB_Result" type="interact">
+		<result column="code" property="code" />
+		<result column="type" property="type" />
+		<result column="object_type" property="objectType" />
+		<result column="object_code" property="objectCode" />
+		<result column="user_id" property="userId" />
+		<result column="create_datetime" property="createDatetime" />
+	</resultMap>
+	
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="type != null and type != '' ">
+				AND t.type = #{type}
+			</if>
+			<if test="objectType != null and objectType != '' ">
+				AND t.object_type = #{objectType}
+			</if>
+			<if test="objectCode != null and objectCode != '' ">
+				AND t.object_code = #{objectCode}
+			</if>
+			<if test="userId != null and userId != '' ">
+				AND t.user_id = #{userId}
+			</if>
+		</trim>
+	</sql>
+	
+	<select id="select_interact" parameterType="interact" resultMap="interact_DB_Result">
+		SELECT
+		t.code
+		,t.type
+		,t.object_type
+		,t.object_code
+		,t.user_id
+		,t.create_datetime
+		FROM
+		tforum_interact t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_interact_count" parameterType="interact"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tforum_interact t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_interact" parameterType="interact">
+		INSERT INTO
+		tforum_interact(
+		code
+		,type
+		,object_type
+		,object_code
+		,user_id
+		,create_datetime
+		)
+		VALUES(
+		#{code}
+		,#{type}
+		,#{objectType}
+		,#{objectCode}
+		,#{userId}
+		,#{createDatetime}
+		)
+	</insert>
+
+	<delete id="delete_interact" parameterType="interact">
+		DELETE FROM tforum_interact where code = #{code}
+	</delete>
+
+</mapper>

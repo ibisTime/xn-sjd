@@ -3,11 +3,14 @@ package com.ogc.standard.ao.impl;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.IMatchAO;
 import com.ogc.standard.bo.IMatchBO;
+import com.ogc.standard.bo.ITeamBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.core.OrderNoGenerater;
@@ -17,6 +20,7 @@ import com.ogc.standard.dto.req.XN628290Req;
 import com.ogc.standard.dto.req.XN628291Req;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.enums.EMatchStatus;
+import com.ogc.standard.enums.ETeamStatus;
 import com.ogc.standard.exception.BizException;
 
 /**
@@ -30,6 +34,9 @@ public class MatchAOImpl implements IMatchAO {
 
     @Autowired
     private IMatchBO matchBO;
+
+    @Autowired
+    private ITeamBO teamBO;
 
     @Override
     public String addMatch(XN628290Req req) {
@@ -60,10 +67,6 @@ public class MatchAOImpl implements IMatchAO {
 
     @Override
     public void editMatch(XN628291Req req) {
-        if (!matchBO.isMatchExist(req.getCode())) {
-            throw new BizException("xn0000", "记录编号不存在");
-        }
-
         Match match = matchBO.getMatch(req.getCode());
         if (!EMatchStatus.TO_PUBLISH.getCode().equals(match.getStatus())) {
             throw new BizException("xn0000", "赛事不在可修改状态！");
@@ -86,10 +89,6 @@ public class MatchAOImpl implements IMatchAO {
 
     @Override
     public void releaseMatch(String code, String updater, String remark) {
-        if (!matchBO.isMatchExist(code)) {
-            throw new BizException("xn0000", "记录编号不存在");
-        }
-
         Match match = matchBO.getMatch(code);
         if (!EMatchStatus.TO_PUBLISH.getCode().equals(match.getStatus())) {
             throw new BizException("xn0000", "赛事不处于待发布状态");
@@ -99,18 +98,53 @@ public class MatchAOImpl implements IMatchAO {
     }
 
     @Override
-    public void updateMatchDaily() {
-        Date today = DateUtil.getTodayStart();
+    @Transactional
+    public void doDailyStratMatch() {
+        Match matchCondition = new Match();
+        matchCondition.setMatchStartDatetime(DateUtil.getTodayStart());
 
-        // 更新赛事状态
-        matchBO.startMatch(today);
-        matchBO.endMatch(today);
+        while (true) {
+            Paginable<Match> matchPage = matchBO.getPaginable(0, 100,
+                matchCondition);
+            if (null != matchPage
+                    && CollectionUtils.isNotEmpty(matchPage.getList())) {
+                for (Match match : matchPage.getList()) {
+                    // 更新赛事状态
+                    matchBO.startMatch(match.getCode());
 
-        // 更新参赛申请状态
+                    // 更新赛事战队状态
+                    teamBO.refreshMatchTeamStatus(match.getCode(),
+                        ETeamStatus.STARTED.getCode());
+                }
+            } else {
+                break;
+            }
+        }
+    }
 
-        // 更新战队状态
+    @Override
+    @Transactional
+    public void doDailyEndMatch() {
+        Match matchCondition = new Match();
+        matchCondition.setMatchEndDatetime(DateUtil.getTodayStart());
 
-        // 更新战队成员申请状态
+        while (true) {
+            Paginable<Match> matchPage = matchBO.getPaginable(0, 100,
+                matchCondition);
+            if (null != matchPage
+                    && CollectionUtils.isNotEmpty(matchPage.getList())) {
+                for (Match match : matchPage.getList()) {
+                    // 更新赛事状态
+                    matchBO.endMatch(match.getCode());
+
+                    // 更新赛事战队状态
+                    teamBO.refreshMatchTeamStatus(match.getCode(),
+                        ETeamStatus.END.getCode());
+                }
+            } else {
+                break;
+            }
+        }
     }
 
     @Override
