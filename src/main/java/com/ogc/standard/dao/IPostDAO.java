@@ -15,6 +15,12 @@ public interface IPostDAO extends IBaseDAO<Post> {
     // 审核
     public int updateApprovePost(Post data);
 
+    // 更新评论数量
+    public int updateCommentPost(Post data);
+
+    // 更新点赞数量
+    public int updatePointPost(Post data);
+
     // 置顶/取消
     public int updateLocationPost(Post data);
 

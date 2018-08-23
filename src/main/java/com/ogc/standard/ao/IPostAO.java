@@ -22,10 +22,13 @@ public interface IPostAO {
             String approveNote);
 
     // 评论帖子
-    public void comment(String code, String content, String userId);
+    public void commentPost(String code, String content, String userId);
 
     // 点赞/取消(front)
-    public void point(String code, String userId);
+    public void pointPost(String code, String userId);
+
+    // 阅读帖子(front)
+    public void browerPost(String code, String userId);
 
     // C端删除帖子
     public void dropPost4Front(String code, String userId);

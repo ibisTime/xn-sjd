@@ -7,23 +7,23 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.ogc.standard.bo.IKeyWordBO;
+import com.ogc.standard.bo.IKeywordBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
-import com.ogc.standard.dao.IKeyWordDAO;
-import com.ogc.standard.domain.KeyWord;
+import com.ogc.standard.dao.IKeywordDAO;
+import com.ogc.standard.domain.Keyword;
 import com.ogc.standard.enums.EKeyWordReaction;
 import com.ogc.standard.exception.BizException;
 
 @Component
-public class KeyWordBOImpl extends PaginableBOImpl<KeyWord>
-        implements IKeyWordBO {
+public class KeywordBOImpl extends PaginableBOImpl<Keyword>
+        implements IKeywordBO {
 
     @Autowired
-    private IKeyWordDAO keyWordDAO;
+    private IKeywordDAO keyWordDAO;
 
     @Override
-    public boolean isKeyWordExist(Integer id) {
-        KeyWord condition = new KeyWord();
+    public boolean isKeywordExist(Integer id) {
+        Keyword condition = new Keyword();
         condition.setId(id);
         if (keyWordDAO.selectTotalCount(condition) > 0) {
             return true;
@@ -32,8 +32,8 @@ public class KeyWordBOImpl extends PaginableBOImpl<KeyWord>
     }
 
     @Override
-    public boolean isKeyWordExist(String word) {
-        KeyWord condition = new KeyWord();
+    public boolean isKeywordExist(String word) {
+        Keyword condition = new Keyword();
         condition.setWord(word);
         if (keyWordDAO.selectTotalCount(condition) > 0) {
             return true;
@@ -42,9 +42,9 @@ public class KeyWordBOImpl extends PaginableBOImpl<KeyWord>
     }
 
     @Override
-    public void saveKeyWord(String word, String level, String reaction,
+    public void saveKeyword(String word, String level, String reaction,
             String remark, String updater) {
-        KeyWord data = new KeyWord();
+        Keyword data = new Keyword();
         data.setWord(word);
         data.setLevel(level);
         data.setReaction(reaction);
@@ -56,16 +56,16 @@ public class KeyWordBOImpl extends PaginableBOImpl<KeyWord>
     }
 
     @Override
-    public void removeKeyWord(Integer id) {
-        KeyWord data = new KeyWord();
+    public void removeKeyword(Integer id) {
+        Keyword data = new Keyword();
         data.setId(id);
         keyWordDAO.delete(data);
     }
 
     @Override
-    public void refreshKeyWord(Integer id, String word, String level,
+    public void refreshKeyword(Integer id, String word, String level,
             String reaction, String remark, String updater) {
-        KeyWord data = new KeyWord();
+        Keyword data = new Keyword();
         data.setId(id);
         data.setWord(word);
         data.setLevel(level);
@@ -74,15 +74,15 @@ public class KeyWordBOImpl extends PaginableBOImpl<KeyWord>
 
         data.setUpdater(updater);
         data.setUpdateDatetime(new Date());
-        keyWordDAO.updateKeyWord(data);
+        keyWordDAO.updateKeyword(data);
     }
 
     @Override
-    public KeyWord checkContent(String content) {
-        KeyWord result = null;
+    public Keyword checkContent(String content) {
+        Keyword result = null;
         if (StringUtils.isNotBlank(content)) {
-            List<KeyWord> allList = keyWordDAO.selectList(new KeyWord());
-            for (KeyWord keyWord : allList) {
+            List<Keyword> allList = keyWordDAO.selectList(new Keyword());
+            for (Keyword keyWord : allList) {
                 if (content.indexOf(keyWord.getWord()) >= 0) {
                     result = keyWord;
                     if (keyWord.getReaction()
@@ -106,14 +106,14 @@ public class KeyWordBOImpl extends PaginableBOImpl<KeyWord>
     }
 
     @Override
-    public List<KeyWord> queryKeyWordList(KeyWord condition) {
+    public List<Keyword> queryKeywordList(Keyword condition) {
         return keyWordDAO.selectList(condition);
     }
 
     @Override
-    public KeyWord getKeyWord(Integer id) {
-        KeyWord data = null;
-        KeyWord condition = new KeyWord();
+    public Keyword getKeyword(Integer id) {
+        Keyword data = null;
+        Keyword condition = new Keyword();
         condition.setId(id);
         data = keyWordDAO.select(condition);
         if (data == null) {

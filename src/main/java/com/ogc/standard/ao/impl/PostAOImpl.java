@@ -5,19 +5,24 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.IPostAO;
 import com.ogc.standard.bo.ICommentBO;
 import com.ogc.standard.bo.IInteractBO;
-import com.ogc.standard.bo.IKeyWordBO;
+import com.ogc.standard.bo.IKeywordBO;
 import com.ogc.standard.bo.IPostBO;
 import com.ogc.standard.bo.ITeamBO;
 import com.ogc.standard.bo.base.Paginable;
-import com.ogc.standard.domain.KeyWord;
+import com.ogc.standard.domain.Interact;
+import com.ogc.standard.domain.Keyword;
 import com.ogc.standard.domain.Post;
 import com.ogc.standard.domain.Team;
 import com.ogc.standard.enums.EBoolean;
+import com.ogc.standard.enums.ECommentType;
+import com.ogc.standard.enums.EInteractType;
 import com.ogc.standard.enums.EKeyWordReaction;
+import com.ogc.standard.enums.EObjectType;
 import com.ogc.standard.enums.EPostLocation;
 import com.ogc.standard.enums.EPostStatus;
 import com.ogc.standard.exception.BizException;
@@ -38,7 +43,7 @@ public class PostAOImpl implements IPostAO {
     private ITeamBO teamBO;
 
     @Autowired
-    private IKeyWordBO keyWordBO;
+    private IKeywordBO keyWordBO;
 
     @Autowired
     private ICommentBO commentBO;
@@ -47,9 +52,10 @@ public class PostAOImpl implements IPostAO {
     private IInteractBO interactBO;
 
     @Override
+    @Transactional
     public String addPost(String userId, String content, String plateCode) {
         // 关键字过滤
-        KeyWord keyWord = keyWordBO.checkContent(content);
+        Keyword keyWord = keyWordBO.checkContent(content);
         String status = EPostStatus.RELEASED.getCode();
 
         if (null != keyWord) {
@@ -84,6 +90,7 @@ public class PostAOImpl implements IPostAO {
     }
 
     @Override
+    @Transactional
     public void approvePost(String code, String approveResult, String approver,
             String approveNote) {
         Post post = postBO.getPost(code);
@@ -107,9 +114,10 @@ public class PostAOImpl implements IPostAO {
     }
 
     @Override
-    public void comment(String code, String content, String userId) {
+    @Transactional
+    public void commentPost(String code, String content, String userId) {
         // 关键字过滤
-        KeyWord keyWord = keyWordBO.checkContent(content);
+        Keyword keyWord = keyWordBO.checkContent(content);
         String status = EPostStatus.RELEASED.getCode();
 
         if (null != keyWord) {
@@ -134,12 +142,47 @@ public class PostAOImpl implements IPostAO {
             }
         }
 
-        commentBO.saveComment(code, content, status, userId);
+        // 更新帖子评论数量
+        Post post = postBO.getPost(code);
+        postBO.refreshCommentPost(code, post.getCommentCount() + 1);
+
+        // 添加评论
+        commentBO.saveComment(code, ECommentType.POST.getCode(), content,
+            status, userId);
     }
 
     @Override
-    public void point(String code, String userId) {
+    @Transactional
+    public void pointPost(String code, String userId) {
+        Interact interact = interactBO.getInteract(
+            EInteractType.POINT.getCode(), EObjectType.POST.getCode(), code,
+            userId);
+        Post post = postBO.getPost(code);
 
+        // 点赞记录不存在时，添加点赞；点赞记录存在时，删除点赞
+        if (null == interact) {
+            interactBO.saveInteract(EInteractType.POINT.getCode(),
+                EObjectType.POST.getCode(), code, userId);
+
+            postBO.refreshPointPost(post.getCode(), post.getPointCount() + 1);
+        } else {
+            interactBO.removeInteract(interact.getCode());
+
+            postBO.refreshPointPost(post.getCode(), post.getPointCount() - 1);
+        }
+    }
+
+    @Override
+    public void browerPost(String code, String userId) {
+        Interact interact = interactBO.getInteract(
+            EInteractType.BROWES.getCode(), EObjectType.POST.getCode(), code,
+            userId);
+
+        // 添加浏览记录
+        if (null == interact) {
+            interactBO.saveInteract(EInteractType.BROWES.getCode(),
+                EObjectType.POST.getCode(), code, userId);
+        }
     }
 
     @Override
@@ -172,7 +215,7 @@ public class PostAOImpl implements IPostAO {
             location = EPostLocation.NORMAL.getCode();
         }
 
-        postBO.stickPost(code, location, updater);
+        postBO.refreshStickPost(code, location, updater);
     }
 
     @Override

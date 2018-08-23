@@ -57,6 +57,13 @@ public class InteractBOImpl extends PaginableBOImpl<Interact>
     }
 
     @Override
+    public void removeInteract(String code) {
+        Interact data = new Interact();
+        data.setCode(code);
+        interactDAO.delete(data);
+    }
+
+    @Override
     public List<Interact> queryInteractList(Interact condition) {
         return interactDAO.selectList(condition);
     }
@@ -74,4 +81,24 @@ public class InteractBOImpl extends PaginableBOImpl<Interact>
         }
         return data;
     }
+
+    @Override
+    public Interact getInteract(String type, String objectType,
+            String objectCode, String userId) {
+        Interact data = null;
+        if (StringUtils.isNotBlank(type) && StringUtils.isNotBlank(objectType)
+                && StringUtils.isNotBlank(objectCode)
+                && StringUtils.isNotBlank(userId)) {
+
+            Interact condition = new Interact();
+            condition.setType(type);
+            condition.setObjectType(objectType);
+            condition.setObjectCode(objectCode);
+            condition.setUserId(userId);
+
+            data = interactDAO.select(condition);
+        }
+        return data;
+    }
+
 }

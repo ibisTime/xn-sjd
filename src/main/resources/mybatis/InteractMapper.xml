@@ -75,16 +75,8 @@
 		)
 	</insert>
 
-	<update id="update_interact" parameterType="interact">
-		UPDATE tforum_interact
-		SET
-		type = #{type}
-		,object_type = #{objectType}
-		,object_code = #{objectCode}
-		,user_id = #{userId}
-		,create_datetime = #{createDatetime}
-		WHERE code = #{code}
-	</update>
-
+	<delete id="delete_interact" parameterType="interact">
+		DELETE FROM tforum_interact where code = #{code}
+	</delete>
 
 </mapper>

@@ -39,17 +39,18 @@ public class CommentBOImpl extends PaginableBOImpl<Comment>
     }
 
     @Override
-    public String saveComment(String parentCode, String content, String status,
-            String userId) {
+    public String saveComment(String parentCode, String type, String content,
+            String status, String userId) {
         Comment data = new Comment();
 
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.Comment.getCode());
         data.setCode(code);
+        data.setType(type);
         data.setParentCode(parentCode);
         data.setContent(content);
-        data.setUserId(userId);
 
+        data.setUserId(userId);
         data.setStatus(status);
         data.setCommentDatetime(new Date());
 

@@ -10,7 +10,7 @@ import com.ogc.standard.dao.base.ABaseDO;
 * @since: 2018年08月22日 上午10:28:38
 * @history:
 */
-public class KeyWord extends ABaseDO {
+public class Keyword extends ABaseDO {
 
     private static final long serialVersionUID = -4267033050985576742L;
 

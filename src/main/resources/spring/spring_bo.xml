@@ -93,8 +93,8 @@
 		<property name="paginableDAO" ref="teamDAOImpl"/>
 	</bean>
 	
-	<bean id="keyWordBO" class="com.ogc.standard.bo.impl.KeyWordBOImpl">
-		<property name="paginableDAO" ref="keyWordDAOImpl"/>
+	<bean id="keywordBO" class="com.ogc.standard.bo.impl.KeywordBOImpl">
+		<property name="paginableDAO" ref="keywordDAOImpl"/>
 	</bean>
 	
 	<bean id="postBO" class="com.ogc.standard.bo.impl.PostBOImpl">

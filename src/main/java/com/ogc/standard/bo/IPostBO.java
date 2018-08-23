@@ -26,8 +26,14 @@ public interface IPostBO extends IPaginableBO<Post> {
     public void approvePost(String code, String status, String approver,
             String approveNote);
 
+    // 更新评论数量
+    public void refreshCommentPost(String code, Integer commentCount);
+
+    // 更新点赞数量
+    public void refreshPointPost(String code, Integer pointCount);
+
     // 置顶/取消
-    public void stickPost(String code, String location, String updater);
+    public void refreshStickPost(String code, String location, String updater);
 
     public List<Post> queryPostList(Post condition);
 

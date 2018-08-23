@@ -125,12 +125,10 @@
 		WHERE code = #{code}
 	</update>
 	
-	<update id="update_postLocation" parameterType="post">
-		UPDATE tforum_post
+	<update id="update_pointCount" parameterType="post">
+		UPDATE tinfo_post
 		SET
-		location = #{location}
-		,updater = #{updater}
-		,update_datetime = #{updateDatetime}
+	 	point_count = #{pointCount}
 		WHERE code = #{code}
 	</update>
 	
@@ -141,10 +139,12 @@
 		WHERE code = #{code}
 	</update>
 	
-	<update id="update_pointCount" parameterType="post">
-		UPDATE tinfo_post
+	<update id="update_postLocation" parameterType="post">
+		UPDATE tforum_post
 		SET
-	 	point_count = #{pointCount}
+		location = #{location}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
 		WHERE code = #{code}
 	</update>
 	

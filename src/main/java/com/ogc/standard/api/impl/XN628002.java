@@ -1,6 +1,6 @@
 package com.ogc.standard.api.impl;
 
-import com.ogc.standard.ao.IKeyWordAO;
+import com.ogc.standard.ao.IKeywordAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.ObjValidater;
@@ -18,14 +18,14 @@ import com.ogc.standard.spring.SpringContextHolder;
  * @history:
  */
 public class XN628002 extends AProcessor {
-    private IKeyWordAO keyWordAO = SpringContextHolder
-        .getBean(IKeyWordAO.class);
+    private IKeywordAO keyWordAO = SpringContextHolder
+        .getBean(IKeywordAO.class);
 
     private XN628002Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        keyWordAO.editKeyWord(StringValidater.toInteger(req.getId()),
+        keyWordAO.editKeyword(StringValidater.toInteger(req.getId()),
             req.getWord(), req.getLevel(), req.getReaction(), req.getRemark(),
             req.getUpdater());
         return new BooleanRes(true);

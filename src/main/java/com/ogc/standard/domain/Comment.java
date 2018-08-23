@@ -56,6 +56,13 @@ public class Comment extends ABaseDO {
     // 备注
     private String remark;
 
+    /************DB Properties***************/
+    // 开始时间
+    private Date commentDateStart;
+
+    // 结束时间
+    private Date commentDateEnd;
+
     public String getCode() {
         return code;
     }
@@ -158,6 +165,22 @@ public class Comment extends ABaseDO {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public Date getCommentDateStart() {
+        return commentDateStart;
+    }
+
+    public void setCommentDateStart(Date commentDateStart) {
+        this.commentDateStart = commentDateStart;
+    }
+
+    public Date getCommentDateEnd() {
+        return commentDateEnd;
+    }
+
+    public void setCommentDateEnd(Date commentDateEnd) {
+        this.commentDateEnd = commentDateEnd;
     }
 
 }

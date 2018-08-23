@@ -27,7 +27,7 @@
 		<typeAlias alias="team" type="com.ogc.standard.domain.Team" />
 		<typeAlias alias="teamMemberApply" type="com.ogc.standard.domain.TeamMemberApply" />
 		
-		<typeAlias alias="keyWord" type="com.ogc.standard.domain.KeyWord" />
+		<typeAlias alias="keyword" type="com.ogc.standard.domain.Keyword" />
 		<typeAlias alias="post" type="com.ogc.standard.domain.Post" />
 		<typeAlias alias="comment" type="com.ogc.standard.domain.Comment" />
 		<typeAlias alias="interact" type="com.ogc.standard.domain.Interact" />

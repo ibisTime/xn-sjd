@@ -15,11 +15,18 @@ public interface IInteractBO extends IPaginableBO<Interact> {
 
     public boolean isInteractExist(String code);
 
+    // 添加点赞
     public String saveInteract(String type, String objectType,
             String objectCode, String userId);
+
+    // 删除点赞
+    public void removeInteract(String code);
 
     public List<Interact> queryInteractList(Interact condition);
 
     public Interact getInteract(String code);
 
+    // 查询对象类型
+    public Interact getInteract(String type, String objectType,
+            String objectCode, String userId);
 }

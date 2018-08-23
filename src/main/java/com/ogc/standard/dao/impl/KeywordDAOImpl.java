@@ -4,9 +4,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.ogc.standard.dao.IKeyWordDAO;
+import com.ogc.standard.dao.IKeywordDAO;
 import com.ogc.standard.dao.base.support.AMybatisTemplate;
-import com.ogc.standard.domain.KeyWord;
+import com.ogc.standard.domain.Keyword;
 
 /**
  * 关键字
@@ -15,45 +15,45 @@ import com.ogc.standard.domain.KeyWord;
  * @history:
  */
 @Repository("keyWordDAOImpl")
-public class KeyWordDAOImpl extends AMybatisTemplate implements IKeyWordDAO {
+public class KeywordDAOImpl extends AMybatisTemplate implements IKeywordDAO {
 
     @Override
-    public int insert(KeyWord data) {
+    public int insert(Keyword data) {
         return super.insert(NAMESPACE.concat("insert_keyWord"), data);
     }
 
     @Override
-    public int delete(KeyWord data) {
+    public int delete(Keyword data) {
         return super.delete(NAMESPACE.concat("delete_keyWord"), data);
     }
 
     @Override
-    public int updateKeyWord(KeyWord data) {
+    public int updateKeyword(Keyword data) {
         return super.update(NAMESPACE.concat("update_keyWord"), data);
     }
 
     @Override
-    public KeyWord select(KeyWord condition) {
+    public Keyword select(Keyword condition) {
         return super.select(NAMESPACE.concat("select_keyWord"), condition,
-            KeyWord.class);
+            Keyword.class);
     }
 
     @Override
-    public long selectTotalCount(KeyWord condition) {
+    public long selectTotalCount(Keyword condition) {
         return super.selectTotalCount(NAMESPACE.concat("select_keyWord_count"),
             condition);
     }
 
     @Override
-    public List<KeyWord> selectList(KeyWord condition) {
+    public List<Keyword> selectList(Keyword condition) {
         return super.selectList(NAMESPACE.concat("select_keyWord"), condition,
-            KeyWord.class);
+            Keyword.class);
     }
 
     @Override
-    public List<KeyWord> selectList(KeyWord condition, int start, int count) {
+    public List<Keyword> selectList(Keyword condition, int start, int count) {
         return super.selectList(NAMESPACE.concat("select_keyWord"), start,
-            count, condition, KeyWord.class);
+            count, condition, Keyword.class);
     }
 
 }

@@ -82,7 +82,23 @@ public class PostBOImpl extends PaginableBOImpl<Post> implements IPostBO {
     }
 
     @Override
-    public void stickPost(String code, String location, String updater) {
+    public void refreshCommentPost(String code, Integer commentCount) {
+        Post data = new Post();
+        data.setCode(code);
+        data.setCommentCount(commentCount);
+        postDAO.updateCommentPost(data);
+    }
+
+    @Override
+    public void refreshPointPost(String code, Integer pointCount) {
+        Post data = new Post();
+        data.setCode(code);
+        data.setPointCount(pointCount);
+        postDAO.updatePointPost(data);
+    }
+
+    @Override
+    public void refreshStickPost(String code, String location, String updater) {
         Post data = new Post();
         data.setCode(code);
         data.setLocation(location);
@@ -109,4 +125,5 @@ public class PostBOImpl extends PaginableBOImpl<Post> implements IPostBO {
         }
         return data;
     }
+
 }
