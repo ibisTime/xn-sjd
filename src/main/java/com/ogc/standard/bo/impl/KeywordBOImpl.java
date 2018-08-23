@@ -19,13 +19,13 @@ public class KeywordBOImpl extends PaginableBOImpl<Keyword>
         implements IKeywordBO {
 
     @Autowired
-    private IKeywordDAO keyWordDAO;
+    private IKeywordDAO keywordDAO;
 
     @Override
     public boolean isKeywordExist(Integer id) {
         Keyword condition = new Keyword();
         condition.setId(id);
-        if (keyWordDAO.selectTotalCount(condition) > 0) {
+        if (keywordDAO.selectTotalCount(condition) > 0) {
             return true;
         }
         return false;
@@ -35,7 +35,7 @@ public class KeywordBOImpl extends PaginableBOImpl<Keyword>
     public boolean isKeywordExist(String word) {
         Keyword condition = new Keyword();
         condition.setWord(word);
-        if (keyWordDAO.selectTotalCount(condition) > 0) {
+        if (keywordDAO.selectTotalCount(condition) > 0) {
             return true;
         }
         return false;
@@ -52,14 +52,14 @@ public class KeywordBOImpl extends PaginableBOImpl<Keyword>
 
         data.setUpdater(updater);
         data.setUpdateDatetime(new Date());
-        keyWordDAO.insert(data);
+        keywordDAO.insert(data);
     }
 
     @Override
     public void removeKeyword(Integer id) {
         Keyword data = new Keyword();
         data.setId(id);
-        keyWordDAO.delete(data);
+        keywordDAO.delete(data);
     }
 
     @Override
@@ -74,14 +74,14 @@ public class KeywordBOImpl extends PaginableBOImpl<Keyword>
 
         data.setUpdater(updater);
         data.setUpdateDatetime(new Date());
-        keyWordDAO.updateKeyword(data);
+        keywordDAO.updateKeyword(data);
     }
 
     @Override
     public Keyword checkContent(String content) {
         Keyword result = null;
         if (StringUtils.isNotBlank(content)) {
-            List<Keyword> allList = keyWordDAO.selectList(new Keyword());
+            List<Keyword> allList = keywordDAO.selectList(new Keyword());
             for (Keyword keyWord : allList) {
                 if (content.indexOf(keyWord.getWord()) >= 0) {
                     result = keyWord;
@@ -107,7 +107,7 @@ public class KeywordBOImpl extends PaginableBOImpl<Keyword>
 
     @Override
     public List<Keyword> queryKeywordList(Keyword condition) {
-        return keyWordDAO.selectList(condition);
+        return keywordDAO.selectList(condition);
     }
 
     @Override
@@ -115,9 +115,9 @@ public class KeywordBOImpl extends PaginableBOImpl<Keyword>
         Keyword data = null;
         Keyword condition = new Keyword();
         condition.setId(id);
-        data = keyWordDAO.select(condition);
+        data = keywordDAO.select(condition);
         if (data == null) {
-            throw new BizException("xn0000", "keyName记录不存在");
+            throw new BizException("xn0000", "关键字记录不存在");
         }
         return data;
     }

@@ -21,7 +21,7 @@ import com.ogc.standard.spring.SpringContextHolder;
  */
 public class XN628005 extends AProcessor {
 
-    private IKeywordAO keyWordAO = SpringContextHolder
+    private IKeywordAO keywordAO = SpringContextHolder
         .getBean(IKeywordAO.class);
 
     private XN628005Req req = null;
@@ -39,7 +39,7 @@ public class XN628005 extends AProcessor {
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
 
-        return keyWordAO.queryKeywordPage(start, limit, condition);
+        return keywordAO.queryKeywordPage(start, limit, condition);
     }
 
     @Override

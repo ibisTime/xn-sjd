@@ -18,14 +18,14 @@ import com.ogc.standard.spring.SpringContextHolder;
  */
 public class XN628006 extends AProcessor {
 
-    private IKeywordAO keyWordAO = SpringContextHolder
+    private IKeywordAO keywordAO = SpringContextHolder
         .getBean(IKeywordAO.class);
 
     private XN628006Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        return keyWordAO.getKeyword(StringValidater.toInteger(req.getId()));
+        return keywordAO.getKeyword(StringValidater.toInteger(req.getId()));
     }
 
     @Override

@@ -43,7 +43,7 @@ public class PostAOImpl implements IPostAO {
     private ITeamBO teamBO;
 
     @Autowired
-    private IKeywordBO keyWordBO;
+    private IKeywordBO keywordBO;
 
     @Autowired
     private ICommentBO commentBO;
@@ -55,7 +55,7 @@ public class PostAOImpl implements IPostAO {
     @Transactional
     public String addPost(String userId, String content, String plateCode) {
         // 关键字过滤
-        Keyword keyWord = keyWordBO.checkContent(content);
+        Keyword keyWord = keywordBO.checkContent(content);
         String status = EPostStatus.RELEASED.getCode();
 
         if (null != keyWord) {
@@ -70,7 +70,7 @@ public class PostAOImpl implements IPostAO {
             // 替换**
             if (EKeyWordReaction.REPLACE.getCode()
                 .equals(keyWord.getReaction())) {
-                content = keyWordBO.replaceKeyword(content, keyWord.getWord());
+                content = keywordBO.replaceKeyword(content, keyWord.getWord());
             }
 
             // 审核
@@ -117,7 +117,7 @@ public class PostAOImpl implements IPostAO {
     @Transactional
     public void commentPost(String code, String content, String userId) {
         // 关键字过滤
-        Keyword keyWord = keyWordBO.checkContent(content);
+        Keyword keyWord = keywordBO.checkContent(content);
         String status = EPostStatus.RELEASED.getCode();
 
         if (null != keyWord) {
@@ -132,7 +132,7 @@ public class PostAOImpl implements IPostAO {
             // 替换**
             if (EKeyWordReaction.REPLACE.getCode()
                 .equals(keyWord.getReaction())) {
-                content = keyWordBO.replaceKeyword(content, keyWord.getWord());
+                content = keywordBO.replaceKeyword(content, keyWord.getWord());
             }
 
             // 审核

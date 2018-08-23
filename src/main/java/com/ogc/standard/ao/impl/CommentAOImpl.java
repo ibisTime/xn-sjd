@@ -34,7 +34,7 @@ public class CommentAOImpl implements ICommentAO {
     private ICommentBO commentBO;
 
     @Autowired
-    private IKeywordBO keyWordBO;
+    private IKeywordBO keywordBO;
 
     @Autowired
     private IInteractBO interactBO;
@@ -42,7 +42,7 @@ public class CommentAOImpl implements ICommentAO {
     @Override
     public String saveComment(String code, String content, String userId) {
         // 关键字过滤
-        Keyword keyWord = keyWordBO.checkContent(content);
+        Keyword keyWord = keywordBO.checkContent(content);
         String status = ECommentStatus.RELEASED.getCode();
 
         if (null != keyWord) {
@@ -57,7 +57,7 @@ public class CommentAOImpl implements ICommentAO {
             // 替换**
             if (EKeyWordReaction.REPLACE.getCode()
                 .equals(keyWord.getReaction())) {
-                content = keyWordBO.replaceKeyword(content, keyWord.getWord());
+                content = keywordBO.replaceKeyword(content, keyWord.getWord());
             }
 
             // 审核
