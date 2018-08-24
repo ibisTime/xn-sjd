@@ -6,7 +6,6 @@ import java.util.List;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.IMatchAO;
 import com.ogc.standard.bo.IMatchBO;
@@ -24,7 +23,6 @@ import com.ogc.standard.enums.ETeamStatus;
 import com.ogc.standard.exception.BizException;
 
 /**
- * 赛事表
  * @author: silver 
  * @since: 2018年8月21日 上午11:00:38 
  * @history:
@@ -69,7 +67,7 @@ public class MatchAOImpl implements IMatchAO {
     public void editMatch(XN628291Req req) {
         Match match = matchBO.getMatch(req.getCode());
         if (!EMatchStatus.TO_PUBLISH.getCode().equals(match.getStatus())) {
-            throw new BizException("xn0000", "赛事不在可修改状态！");
+            throw new BizException("xn0000", "赛事未处于可修改状态！");
         }
 
         Match data = new Match();
@@ -88,24 +86,24 @@ public class MatchAOImpl implements IMatchAO {
     }
 
     @Override
-    public void releaseMatch(String code, String updater, String remark) {
+    public void publishMatch(String code, String updater, String remark) {
         Match match = matchBO.getMatch(code);
         if (!EMatchStatus.TO_PUBLISH.getCode().equals(match.getStatus())) {
-            throw new BizException("xn0000", "赛事不处于待发布状态");
+            throw new BizException("xn0000", "赛事未处于待发布状态");
         }
 
-        matchBO.releaseMatch(code, updater, remark);
+        matchBO.refreshReleaseMatch(code, updater, remark);
     }
 
     @Override
-    @Transactional
-    public void doDailyStratMatch() {
-        Match matchCondition = new Match();
-        matchCondition.setMatchStartDatetime(DateUtil.getTodayStart());
+    public void doDailyStartMatch() {
+        Match condition = new Match();
+        condition.setMatchStartDatetime(DateUtil.getTodayStart());
+        condition.setStatus(EMatchStatus.PUBLISHED.getCode());
 
         while (true) {
             Paginable<Match> matchPage = matchBO.getPaginable(0, 100,
-                matchCondition);
+                condition);
             if (null != matchPage
                     && CollectionUtils.isNotEmpty(matchPage.getList())) {
                 for (Match match : matchPage.getList()) {
@@ -123,14 +121,14 @@ public class MatchAOImpl implements IMatchAO {
     }
 
     @Override
-    @Transactional
     public void doDailyEndMatch() {
-        Match matchCondition = new Match();
-        matchCondition.setMatchEndDatetime(DateUtil.getTodayStart());
+        Match condition = new Match();
+        condition.setMatchEndDatetime(DateUtil.getTodayStart());
+        condition.setStatus(EMatchStatus.STARTED.getCode());
 
         while (true) {
             Paginable<Match> matchPage = matchBO.getPaginable(0, 100,
-                matchCondition);
+                condition);
             if (null != matchPage
                     && CollectionUtils.isNotEmpty(matchPage.getList())) {
                 for (Match match : matchPage.getList()) {

@@ -6,7 +6,6 @@ import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Team;
 
 /**
- * 战队表
  * @author: silver 
  * @since: 2018年8月21日 下午4:46:39 
  * @history:
@@ -25,8 +24,8 @@ public interface ITeamAO {
 
     public List<Team> queryTeamList(Team condition);
 
-    // 若用户属于该战队，则返回战队数据
-    public Team getTeam4User(String code, String userId);
+    // 返回用户是否加入该战队
+    public Team getFrontTeam(String code, String userId);
 
     public Team getTeam(String code);
 

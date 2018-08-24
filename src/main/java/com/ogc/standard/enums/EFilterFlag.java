@@ -4,23 +4,23 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 点赞收藏类型
+ * 帖子过滤标志
  * @author: silver 
- * @since: 2018年8月23日 上午10:17:53 
+ * @since: 2018年8月24日 上午10:34:47 
  * @history:
  */
-public enum EInteractType {
+public enum EFilterFlag {
 
-    POINT("1", "点赞"), COLLECT("2", "收藏"), READ("3", "浏览");
+    NORMAN("0", "未过滤"), REPLACED("1", "关键字被替换"), TO_APPROVE("2", "待审核");
 
-    EInteractType(String code, String value) {
+    EFilterFlag(String code, String value) {
         this.code = code;
         this.value = value;
     }
 
-    public static Map<String, EInteractType> getMap() {
-        Map<String, EInteractType> map = new HashMap<String, EInteractType>();
-        for (EInteractType userStatus : EInteractType.values()) {
+    public static Map<String, EFilterFlag> getMap() {
+        Map<String, EFilterFlag> map = new HashMap<String, EFilterFlag>();
+        for (EFilterFlag userStatus : EFilterFlag.values()) {
             map.put(userStatus.getCode(), userStatus);
         }
         return map;

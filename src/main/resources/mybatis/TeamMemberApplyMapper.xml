@@ -14,6 +14,12 @@
 		<result column="remark" property="remark" />
 	</resultMap>
 	
+	<sql id="join_condition">
+		<if test="teamStatusList != null and teamStatusList != '' ">
+			join tforum_team t1 on t.team_code = t1.code
+		</if>
+	</sql>
+	
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != '' ">
@@ -49,6 +55,13 @@
 			<if test="approveEndDatetime != null and approveEndDatetime != '' ">
 				<![CDATA[AND t.approve_datetime <= #{approveEndDatetime}]]>
 			</if>
+			
+			<if test="teamStatusList != null and teamStatusList.size() > 0 ">
+				AND t1.status IN
+				<foreach collection="teamStatusList" item="item" index="index" open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
 		</trim>
 	</sql>
 	
@@ -65,6 +78,7 @@
 		,t.remark
 		FROM
 		tforum_team_member_apply t
+		<include refid="join_condition" />
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -76,6 +90,7 @@
 	<select id="select_teamMemberApply_count" parameterType="teamMemberApply"
 		resultType="java.lang.Long">
 		SELECT count(1) FROM tforum_team_member_apply t
+		<include refid="join_condition" />
 		<include refid="where_condition" />
 	</select>
 

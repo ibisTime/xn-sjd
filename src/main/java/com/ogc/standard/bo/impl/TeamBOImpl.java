@@ -53,6 +53,7 @@ public class TeamBOImpl extends PaginableBOImpl<Team> implements ITeamBO {
         data.setCaptain(captain);
         data.setUpdateDatetime(new Date());
         data.setStatus(ETeamStatus.TO_START.getCode());
+        data.setCreateDatetime(new Date());
 
         data.setPostCount(0);
         data.setMemberCount(0);

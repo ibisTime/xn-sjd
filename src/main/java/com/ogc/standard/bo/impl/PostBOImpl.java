@@ -56,6 +56,7 @@ public class PostBOImpl extends PaginableBOImpl<Post> implements IPostBO {
         data.setUpdateDatetime(new Date());
         data.setCommentCount(0);
         data.setPointCount(0);
+        data.setReadCount(0);
 
         if (EPostStatus.RELEASED.getCode().equals(status)) {
             data.setPublishDatetime(new Date());
@@ -107,7 +108,16 @@ public class PostBOImpl extends PaginableBOImpl<Post> implements IPostBO {
     }
 
     @Override
-    public void refreshStickPost(String code, String location, String updater) {
+    public void refreshReadPost(String code, Integer readCount) {
+        Post data = new Post();
+        data.setCode(code);
+        data.setReadCount(readCount);
+        postDAO.updateReadPost(data);
+    }
+
+    @Override
+    public void refreshLocatePost(String code, String location,
+            String updater) {
         Post data = new Post();
         data.setCode(code);
         data.setLocation(location);

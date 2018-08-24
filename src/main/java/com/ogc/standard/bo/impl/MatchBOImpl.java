@@ -59,7 +59,7 @@ public class MatchBOImpl extends PaginableBOImpl<Match> implements IMatchBO {
     }
 
     @Override
-    public void releaseMatch(String code, String updater, String remark) {
+    public void refreshReleaseMatch(String code, String updater, String remark) {
         if (StringUtils.isNotBlank(code)) {
             Match data = new Match();
             data.setCode(code);

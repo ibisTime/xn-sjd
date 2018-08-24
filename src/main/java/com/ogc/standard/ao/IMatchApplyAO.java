@@ -7,7 +7,6 @@ import com.ogc.standard.domain.MatchApply;
 import com.ogc.standard.dto.req.XN628300Req;
 
 /**
- * 参赛申请表
  * @author: silver 
  * @since: 2018年8月21日 下午2:38:09 
  * @history:
@@ -15,7 +14,7 @@ import com.ogc.standard.dto.req.XN628300Req;
 public interface IMatchApplyAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
-    // 添加参赛申请
+    // 报名申请
     public String addMatchApply(XN628300Req req);
 
     // 申请审核

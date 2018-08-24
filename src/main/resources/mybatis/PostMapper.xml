@@ -13,8 +13,9 @@
 		<result column="plate_code" property="plateCode" />
 		<result column="comment_count" property="commentCount" />
 		<result column="point_count" property="pointCount" />
-		<result column="updater" property="updater" />
+		<result column="read_count" property="readCount" />
 		
+		<result column="updater" property="updater" />
 		<result column="update_datetime" property="updateDatetime" />
 		<result column="remark" property="remark" />
 	</resultMap>
@@ -66,8 +67,9 @@
 		,t.plate_code
 		,t.comment_count
 		,t.point_count
-		,t.updater
+		,t.read_count
 		
+		,t.updater
 		,t.update_datetime
 		,t.remark
 		FROM
@@ -99,6 +101,8 @@
 		,plate_code
 		,comment_count
 		,point_count
+		,read_count
+		
 		,updater
 		,update_datetime
 		)
@@ -113,6 +117,8 @@
 		,#{plateCode}
 		,#{commentCount}
 		,#{pointCount}
+		,#{readCount}
+		
 		,#{updater}
 		,#{updateDatetime}
 		)
@@ -129,6 +135,13 @@
 		WHERE code = #{code}
 	</update>
 	
+	<update id="update_commentCount" parameterType="post">
+		UPDATE tforum_post
+		SET
+		comment_count = #{commentCount}
+		WHERE code = #{code}
+	</update>
+	
 	<update id="update_pointCount" parameterType="post">
 		UPDATE tforum_post
 		SET
@@ -136,10 +149,10 @@
 		WHERE code = #{code}
 	</update>
 	
-	<update id="update_commentCount" parameterType="post">
+	<update id="update_readCount" parameterType="post">
 		UPDATE tforum_post
 		SET
-		comment_count = #{commentCount}
+	 	read_count = #{readCount}
 		WHERE code = #{code}
 	</update>
 	

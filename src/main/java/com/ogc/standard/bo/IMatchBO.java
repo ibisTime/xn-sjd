@@ -27,7 +27,7 @@ public interface IMatchBO extends IPaginableBO<Match> {
     public void refreshMatch(Match data);
 
     // 发布
-    public void releaseMatch(String code, String updater, String remark);
+    public void refreshReleaseMatch(String code, String updater, String remark);
 
     // 开始赛事(定时器)
     public void startMatch(String code);

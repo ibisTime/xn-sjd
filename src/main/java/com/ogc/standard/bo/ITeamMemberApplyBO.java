@@ -26,6 +26,9 @@ public interface ITeamMemberApplyBO extends IPaginableBO<TeamMemberApply> {
     public void refreshApproveTeamMemberApply(String code, String status,
             String approver, String remark);
 
+    // 用户加入的其他战队
+    public TeamMemberApply getJoinedTeam(String userId);
+
     public List<TeamMemberApply> queryTeamMemberApplyList(
             TeamMemberApply condition);
 

@@ -59,10 +59,10 @@ public class TeamMemberApply extends ABaseDO {
     private String teamName;
 
     // 申请人
-    private String applyUserName;
+    private User applyUserInfo;
 
-    // 审核人
-    private String approverName;
+    // 项目状态列表
+    private List<String> teamStatusList;
 
     public void setCode(String code) {
         this.code = code;
@@ -176,20 +176,20 @@ public class TeamMemberApply extends ABaseDO {
         this.teamName = teamName;
     }
 
-    public String getApplyUserName() {
-        return applyUserName;
+    public User getApplyUserInfo() {
+        return applyUserInfo;
     }
 
-    public void setApplyUserName(String applyUserName) {
-        this.applyUserName = applyUserName;
+    public void setApplyUserInfo(User applyUserInfo) {
+        this.applyUserInfo = applyUserInfo;
     }
 
-    public String getApproverName() {
-        return approverName;
+    public List<String> getTeamStatusList() {
+        return teamStatusList;
     }
 
-    public void setApproverName(String approverName) {
-        this.approverName = approverName;
+    public void setTeamStatusList(List<String> teamStatusList) {
+        this.teamStatusList = teamStatusList;
     }
 
 }

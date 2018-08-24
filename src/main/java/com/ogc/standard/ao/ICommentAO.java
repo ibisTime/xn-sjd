@@ -5,11 +5,16 @@ import java.util.List;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Comment;
 
+/**
+ * @author: silver 
+ * @since: 2018年8月24日 下午2:33:06 
+ * @history:
+ */
 public interface ICommentAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
     // 评论评论
-    public String saveComment(String code, String content, String userId);
+    public String commentComment(String code, String content, String userId);
 
     // 删除评论
     public void dropComment(String code, String updater);

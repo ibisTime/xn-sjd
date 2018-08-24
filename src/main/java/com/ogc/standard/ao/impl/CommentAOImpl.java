@@ -24,7 +24,6 @@ import com.ogc.standard.enums.EObjectType;
 import com.ogc.standard.exception.BizException;
 
 /**
- * 评论表
  * @author: silver 
  * @since: 2018年8月22日 下午8:29:21 
  * @history:
@@ -45,7 +44,7 @@ public class CommentAOImpl implements ICommentAO {
     private IPostBO postBO;
 
     @Override
-    public String saveComment(String code, String content, String userId) {
+    public String commentComment(String code, String content, String userId) {
         // 关键字过滤
         Keyword keyWord = keywordBO.checkContent(content);
         String status = ECommentStatus.RELEASED.getCode();

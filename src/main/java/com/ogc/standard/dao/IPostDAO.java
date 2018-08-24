@@ -21,6 +21,9 @@ public interface IPostDAO extends IBaseDAO<Post> {
     // 更新点赞数量
     public int updatePointPost(Post data);
 
+    // 更新阅读数量
+    public int updateReadPost(Post data);
+
     // 置顶/取消
     public int updateLocationPost(Post data);
 

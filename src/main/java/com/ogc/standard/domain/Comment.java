@@ -1,6 +1,7 @@
 package com.ogc.standard.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import com.ogc.standard.dao.base.ABaseDO;
 
@@ -12,9 +13,6 @@ import com.ogc.standard.dao.base.ABaseDO;
 */
 public class Comment extends ABaseDO {
 
-    /** 
-     * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
-     */
     private static final long serialVersionUID = -9008867735545331656L;
 
     // 编号
@@ -35,13 +33,13 @@ public class Comment extends ABaseDO {
     // 点赞量
     private Integer pointCount;
 
-    // 父级编号
+    // 父级编号（帖子/评论编号）
     private String parentCode;
 
-    // 父级评论编号
+    // 父级评论编号（评论帖子用户）
     private String parentUserId;
 
-    // 对象编号
+    // 对象编号（帖子编号）
     private String objectCode;
 
     // 状态(A=待审核 B=审核通过 C=审核不通过 D=已发布 G=已删除)
@@ -62,6 +60,27 @@ public class Comment extends ABaseDO {
 
     // 结束时间
     private Date commentDateEnd;
+
+    // 状态列表
+    private List<String> statusList;
+
+    // 昵称
+    private String nickname;
+
+    // 头像
+    private String photo;
+
+    // 上级评论
+    private String parentNickName;
+
+    // 上级评论头像
+    private String parentPhoto;
+
+    // 一级评论(1 顶级，0非顶级)
+    private String isTop;
+
+    // 是否点赞
+    private String isPoint;
 
     public String getCode() {
         return code;
@@ -181,6 +200,62 @@ public class Comment extends ABaseDO {
 
     public void setCommentDateEnd(Date commentDateEnd) {
         this.commentDateEnd = commentDateEnd;
+    }
+
+    public List<String> getStatusList() {
+        return statusList;
+    }
+
+    public void setStatusList(List<String> statusList) {
+        this.statusList = statusList;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
+
+    public String getParentNickName() {
+        return parentNickName;
+    }
+
+    public void setParentNickName(String parentNickName) {
+        this.parentNickName = parentNickName;
+    }
+
+    public String getParentPhoto() {
+        return parentPhoto;
+    }
+
+    public void setParentPhoto(String parentPhoto) {
+        this.parentPhoto = parentPhoto;
+    }
+
+    public String getIsTop() {
+        return isTop;
+    }
+
+    public void setIsTop(String isTop) {
+        this.isTop = isTop;
+    }
+
+    public String getIsPoint() {
+        return isPoint;
+    }
+
+    public void setIsPoint(String isPoint) {
+        this.isPoint = isPoint;
     }
 
 }

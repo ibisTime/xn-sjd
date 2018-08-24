@@ -12,7 +12,6 @@ import com.ogc.standard.domain.Keyword;
 import com.ogc.standard.exception.BizException;
 
 /**
- * 关键字
  * @author: silver 
  * @since: 2018年8月22日 上午10:52:40 
  * @history:

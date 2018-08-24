@@ -1,5 +1,6 @@
 package com.ogc.standard.bo.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import com.ogc.standard.dao.ITeamMemberApplyDAO;
 import com.ogc.standard.domain.TeamMemberApply;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.enums.ETeamMemberApplyStatus;
+import com.ogc.standard.enums.ETeamStatus;
 import com.ogc.standard.exception.BizException;
 
 /**
@@ -89,6 +91,26 @@ public class TeamMemberApplyBOImpl extends PaginableBOImpl<TeamMemberApply>
     public List<TeamMemberApply> queryTeamMemberApplyList(
             TeamMemberApply condition) {
         return teamMemberApplyDAO.selectList(condition);
+    }
+
+    @Override
+    public TeamMemberApply getJoinedTeam(String userId) {
+        TeamMemberApply condition = new TeamMemberApply();
+
+        // 战队报名状态
+        List<String> applyStatusList = new ArrayList<String>();
+        applyStatusList.add(ETeamMemberApplyStatus.APPROVED_YES.getCode());
+
+        // 战队状态
+        List<String> teamStatusList = new ArrayList<String>();
+        teamStatusList.add(ETeamStatus.TO_START.getCode());
+        teamStatusList.add(ETeamStatus.STARTED.getCode());
+
+        condition.setApplyUser(userId);
+        condition.setStatusList(applyStatusList);
+        condition.setTeamStatusList(teamStatusList);
+
+        return teamMemberApplyDAO.select(condition);
     }
 
     @Override
