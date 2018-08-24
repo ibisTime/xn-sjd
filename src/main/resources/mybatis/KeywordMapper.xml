@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ogc.standard.dao.IKeywordDAO">
+	<resultMap id="keyword_DB_Result" type="keyword">
+		<result column="id" property="id" />
+		<result column="word" property="word" />
+		<result column="level" property="level" />
+		<result column="reaction" property="reaction" />
+		<result column="updater" property="updater" />
+		
+		<result column="update_datetime" property="updateDatetime" />
+		<result column="remark" property="remark" />
+	</resultMap>
+	
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="id != null and id != '' ">
+				AND t.id = #{id}
+			</if>
+			<if test="word != null and word != '' ">
+				AND t.word = #{word}
+			</if>
+			<if test="level != null and level != '' ">
+				AND t.level = #{level}
+			</if>
+			<if test="reaction != null and reaction != '' ">
+				AND t.reaction = #{reaction}
+			</if>
+		</trim>
+	</sql>
+	
+	<select id="select_keyword" parameterType="keyword" resultMap="keyword_DB_Result">
+		SELECT
+		t.id
+		,t.word
+		,t.level
+		,t.reaction
+		,t.updater
+		
+		,t.update_datetime
+		,t.remark
+		FROM
+		tforum_keyword t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_keyword_count" parameterType="keyword"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tforum_keyword t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_keyword" parameterType="keyword">
+		INSERT INTO
+		tforum_keyword(
+		word
+		,level
+		,reaction
+		,updater
+		
+		,update_datetime
+		,remark
+		)
+		VALUES(
+		#{word}
+		,#{level}
+		,#{reaction}
+		,#{updater}
+		
+		,#{updateDatetime}
+		,#{remark}
+		)
+	</insert>
+
+	<update id="update_keyword" parameterType="keyword">
+		UPDATE tforum_keyword
+		SET
+		word = #{word}
+		,level = #{level}
+		,reaction = #{reaction}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE id = #{id}
+	</update>
+
+	<delete id="delete_keyword" parameterType="keyword">
+		DELETE FROM tforum_keyword where id = #{id}
+	</delete>
+
+</mapper>

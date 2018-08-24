@@ -14,8 +14,11 @@
 		<typeAlias alias="company" type="com.ogc.standard.domain.Company" />
 		<typeAlias alias="department" type="com.ogc.standard.domain.Department" />
 		<typeAlias alias="user" type="com.ogc.standard.domain.User" />
+		<typeAlias alias="userExt" type="com.ogc.standard.domain.UserExt" />
 		<typeAlias alias="blacklist" type="com.ogc.standard.domain.Blacklist" />
 		<typeAlias alias="signLog" type="com.ogc.standard.domain.SignLog" />
+		<typeAlias alias="sms" type="com.ogc.standard.domain.Sms" />
+		<typeAlias alias="read" type="com.ogc.standard.domain.Read" />
 		
 		<typeAlias alias="group" type="com.ogc.standard.domain.Group" />
 		<typeAlias alias="groupCoin" type="com.ogc.standard.domain.GroupCoin" />
@@ -30,5 +33,11 @@
 		<typeAlias alias="matchApply" type="com.ogc.standard.domain.MatchApply" />
 		<typeAlias alias="team" type="com.ogc.standard.domain.Team" />
 		<typeAlias alias="teamMemberApply" type="com.ogc.standard.domain.TeamMemberApply" />
+		
+		<typeAlias alias="keyword" type="com.ogc.standard.domain.Keyword" />
+		<typeAlias alias="post" type="com.ogc.standard.domain.Post" />
+		<typeAlias alias="comment" type="com.ogc.standard.domain.Comment" />
+		<typeAlias alias="interact" type="com.ogc.standard.domain.Interact" />
+		
 	</typeAliases>
 </configuration>

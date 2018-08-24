@@ -35,33 +35,6 @@ public class SYSUserAOImpl implements ISYSUserAO {
 
     @Autowired
     ISmsOutBO smsOutBO;
-    //
-    // @Autowired
-    // IAgentBO agentBO;
-    //
-    // @Autowired
-    // IAddressBO addressBO;
-    //
-    // @Autowired
-    // IAccountBO accountBO;
-    //
-    // @Autowired
-    // IInOrderBO inOrderBO;
-    //
-    // @Autowired
-    // IInnerOrderBO innerOrderBO;
-    //
-    // @Autowired
-    // IYxFormBO yxFormBO;
-    //
-    // @Autowired
-    // ISjFormBO sjFormBO;
-    //
-    // @Autowired
-    // ISqFormBO sqFormBO;
-    //
-    // @Autowired
-    // IAgentLevelBO agentLevelBO;
 
     // 新增用户
     @Override
@@ -167,8 +140,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
         }
 
         // 新密码验证
-        smsOutBO.checkCaptcha(mobile, smsCaptcha, "627090",
-            user.getSystemCode());
+        smsOutBO.checkCaptcha(mobile, smsCaptcha, "630053");
         sysUserBO.resetSelfPwd(user, newLoginPwd);
         // 发送短信
         smsOutBO.sendSmsOut(mobile,
@@ -177,6 +149,19 @@ public class SYSUserAOImpl implements ISYSUserAO {
                         DateUtil.DATA_TIME_PATTERN_1)
                     + "已更改登录密码" + "，请妥善保管您的账户相关信息。",
             "631072");
+    }
+
+    @Override
+    public void editPwd(String userId, String oldPwd, String newPwd) {
+        SYSUser user = sysUserBO.getSYSUser(userId);
+        if (null == user) {
+            throw new BizException("xn000000", "用户不存在！");
+        }
+        if (!user.getLoginPwd().equals(oldPwd)) {
+            throw new BizException("xn000000", "原密码不正确");
+        }
+        sysUserBO.resetSelfPwd(user, newPwd);
+
     }
 
     // 修改照片
@@ -188,7 +173,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
 
     // 更换绑定手机号
     @Override
-    public void doResetMoblie(String userId, String kind, String newMobile,
+    public void doResetMoblie(String userId, String remark, String newMobile,
             String smsCaptcha) {
         SYSUser user = sysUserBO.getSYSUser(userId);
         String oldMobile = user.getMobile();
@@ -198,8 +183,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
         // 判断手机号是否存在
         sysUserBO.isMobileExist(newMobile);
         // 新手机号验证
-        smsOutBO.checkCaptcha(newMobile, smsCaptcha, "627090",
-            user.getSystemCode());
+        smsOutBO.checkCaptcha(newMobile, smsCaptcha, "630052");
         sysUserBO.resetBindMobile(user, newMobile);
         // 发送短信
         smsOutBO.sendSmsOut(oldMobile,

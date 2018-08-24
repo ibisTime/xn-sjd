@@ -1,5 +1,7 @@
 package com.ogc.standard.bo.impl;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -10,8 +12,6 @@ import com.ogc.standard.bo.ISignLogBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.dao.ISignLogDAO;
 import com.ogc.standard.domain.SignLog;
-import com.ogc.standard.enums.ESignLogClient;
-import com.ogc.standard.enums.ESignLogType;
 
 @Component
 public class SignLogBOImpl extends PaginableBOImpl<SignLog>
@@ -31,21 +31,59 @@ public class SignLogBOImpl extends PaginableBOImpl<SignLog>
     }
 
     @Override
-    public String saveSignLog(SignLog data) {
-        String code = null;
-
-        data.setType(ESignLogType.LOGIN.getCode());
-        data.setIp("");
-        data.setClient(ESignLogClient.ANDROID.getCode());
+    public int saveSignLog(SignLog data) {
+        // 获取用户ip
+        // HttpServletRequest request = ((ServletRequestAttributes)
+        // RequestContextHolder
+        // .getRequestAttributes()).getRequest();
+        // data.setIp(request.getRemoteAddr());
         data.setLocation("location");
         data.setCreateDatetime(new Date());
-        signLogDAO.insert(data);
-        return code;
+
+        return signLogDAO.insert(data);
     }
 
     @Override
     public List<SignLog> querySignLogList(SignLog condition) {
         return signLogDAO.selectList(condition);
+    }
+
+    @Override
+    public boolean isCheckIn(String userId) {
+        SignLog condition = new SignLog();
+        condition.setUserId(userId);
+        List<SignLog> signLogList = querySignLogList(condition);
+        ListSort(signLogList);
+        if (signLogList.get(0) == null) {
+            return false;
+        }
+        Date now = new Date();
+        long day = signLogList.get(0).getCreateDatetime().getTime() / 86400000;
+        long nowDay = now.getTime() / 86400000;
+        if (day == nowDay) {
+            return true;
+        }
+        return false;
+    }
+
+    // 将List按照日期排序
+    @Override
+    public void ListSort(List<SignLog> list) {
+        Collections.sort(list, new Comparator<SignLog>() {
+            @Override
+            public int compare(SignLog o1, SignLog o2) {
+
+                if (o1.getCreateDatetime().getTime() > o2.getCreateDatetime()
+                    .getTime()) {
+                    return -1;
+                } else if (o1.getCreateDatetime().getTime() < o2
+                    .getCreateDatetime().getTime()) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            }
+        });
     }
 
 }

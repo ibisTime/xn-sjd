@@ -4,7 +4,6 @@ import org.hibernate.validator.constraints.NotBlank;
 
 public class XN805050Req {
 
-
     // 登陆名（必填）
     @NotBlank
     private String loginName;
@@ -13,6 +12,27 @@ public class XN805050Req {
     @NotBlank
     private String loginPwd;
 
+    // 客户端（选填）
+    private String client;
+
+    // 定位（选填）
+    private String location;
+
+    public String getClient() {
+        return client;
+    }
+
+    public void setClient(String client) {
+        this.client = client;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
 
     public String getLoginName() {
         return loginName;

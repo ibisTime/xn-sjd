@@ -14,10 +14,6 @@ public class XN630052Req {
     @NotBlank(message = "用户编号不能为空")
     private String userId;
 
-    // （必填)用户类型
-    @NotBlank(message = "用户类型不能为空")
-    private String kind;
-
     // （必填）新手机号
     @NotBlank(message = "新手机号不能为空")
     private String newMobile;
@@ -26,20 +22,23 @@ public class XN630052Req {
     @NotBlank(message = "新手机号验证码不能为空")
     private String smsCaptcha;
 
+    // 备注
+    private String remark;
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
     public String getUserId() {
         return userId;
     }
 
     public void setUserId(String userId) {
         this.userId = userId;
-    }
-
-    public String getKind() {
-        return kind;
-    }
-
-    public void setKind(String kind) {
-        this.kind = kind;
     }
 
     public String getNewMobile() {

@@ -65,6 +65,16 @@ public class Team extends ABaseDO {
     // 备注
     private String remark;
 
+    /*************DB Properties****************/
+    // 前端用户是否属于此战队
+    private String isUserBelongTeam;
+
+    // 赛事名称
+    private String matchName;
+
+    // 队长信息
+    private User captainInfo;
+
     public String getCode() {
         return code;
     }
@@ -199,6 +209,30 @@ public class Team extends ABaseDO {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getIsUserBelongTeam() {
+        return isUserBelongTeam;
+    }
+
+    public void setIsUserBelongTeam(String isUserBelongTeam) {
+        this.isUserBelongTeam = isUserBelongTeam;
+    }
+
+    public String getMatchName() {
+        return matchName;
+    }
+
+    public void setMatchName(String matchName) {
+        this.matchName = matchName;
+    }
+
+    public User getCaptainInfo() {
+        return captainInfo;
+    }
+
+    public void setCaptainInfo(User captainInfo) {
+        this.captainInfo = captainInfo;
     }
 
 }

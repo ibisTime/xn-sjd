@@ -48,6 +48,18 @@ public class Match extends ABaseDO {
     // 结束时间(用于定时器)
     private Date matchEndDatetime;
 
+    // 赛事开始开始时间
+    private Date startDatetimeStart;
+
+    // 赛事开始结束时间
+    private Date startDatetimeEnd;
+
+    // 赛事结束开始时间
+    private Date endDatetimeStart;
+
+    // 赛事结束结束时间
+    private Date endDatetimeEnd;
+
     public void setCode(String code) {
         this.code = code;
     }
@@ -134,6 +146,38 @@ public class Match extends ABaseDO {
 
     public void setMatchEndDatetime(Date matchEndDatetime) {
         this.matchEndDatetime = matchEndDatetime;
+    }
+
+    public Date getStartDatetimeStart() {
+        return startDatetimeStart;
+    }
+
+    public void setStartDatetimeStart(Date startDatetimeStart) {
+        this.startDatetimeStart = startDatetimeStart;
+    }
+
+    public Date getStartDatetimeEnd() {
+        return startDatetimeEnd;
+    }
+
+    public void setStartDatetimeEnd(Date startDatetimeEnd) {
+        this.startDatetimeEnd = startDatetimeEnd;
+    }
+
+    public Date getEndDatetimeStart() {
+        return endDatetimeStart;
+    }
+
+    public void setEndDatetimeStart(Date endDatetimeStart) {
+        this.endDatetimeStart = endDatetimeStart;
+    }
+
+    public Date getEndDatetimeEnd() {
+        return endDatetimeEnd;
+    }
+
+    public void setEndDatetimeEnd(Date endDatetimeEnd) {
+        this.endDatetimeEnd = endDatetimeEnd;
     }
 
 }

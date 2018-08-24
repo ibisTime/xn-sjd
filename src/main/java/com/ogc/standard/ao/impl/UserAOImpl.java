@@ -18,9 +18,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.IUserAO;
+import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.ISignLogBO;
 import com.ogc.standard.bo.ISmsOutBO;
 import com.ogc.standard.bo.IUserBO;
+import com.ogc.standard.bo.IUserExtBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.common.MD5Util;
@@ -29,12 +31,14 @@ import com.ogc.standard.common.PwdUtil;
 import com.ogc.standard.common.SysConstants;
 import com.ogc.standard.domain.SignLog;
 import com.ogc.standard.domain.User;
+import com.ogc.standard.domain.UserExt;
 import com.ogc.standard.dto.req.XN805041Req;
 import com.ogc.standard.dto.req.XN805042Req;
 import com.ogc.standard.dto.req.XN805081Req;
 import com.ogc.standard.dto.res.XN805041Res;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECaptchaType;
+import com.ogc.standard.enums.ESignLogType;
 import com.ogc.standard.enums.EUser;
 import com.ogc.standard.enums.EUserLevel;
 import com.ogc.standard.enums.EUserPwd;
@@ -57,6 +61,12 @@ public class UserAOImpl implements IUserAO {
     @Autowired
     private ISignLogBO signLogBO;
 
+    @Autowired
+    private IUserExtBO userExtBO;
+
+    @Autowired
+    private ISYSUserBO sysUserBO;
+
     @Override
     public void doCheckMobile(String mobile) {
         userBO.isMobileExist(mobile);
@@ -76,6 +86,8 @@ public class UserAOImpl implements IUserAO {
         String userId = userBO.doRegister(req.getMobile(), req.getNickname(),
             req.getLoginPwd(), refereeUser, req.getProvince(), req.getCity(),
             req.getArea());
+        // ext中添加数据
+        userExtBO.addUserExt(userId);
         String refereeUserId = refereeUser.getUserId();
 
         return new XN805041Res(userId, true, refereeUserId);
@@ -111,12 +123,15 @@ public class UserAOImpl implements IUserAO {
         user.setUpdateDatetime(date);
         user.setRemark(req.getRemark());
         userId = userBO.doAddUser(user);
+        // 在userExt中添加一条数据
+        userExtBO.addUserExt(userId);
         return userId;
     }
 
     @Override
     @Transactional
-    public String doLogin(String loginName, String loginPwd) {
+    public String doLogin(String loginName, String loginPwd, String client,
+            String location) {
         User condition = new User();
 
         condition.setLoginName(loginName);
@@ -139,6 +154,9 @@ public class UserAOImpl implements IUserAO {
         // 增加登陆日志
         SignLog data = new SignLog();
         data.setUserId(user.getUserId());
+        data.setType(ESignLogType.LOGIN.getCode());
+        data.setClient(client);
+        data.setLocation(location);
         signLogBO.saveSignLog(data);
 
         return user.getUserId();
@@ -252,7 +270,7 @@ public class UserAOImpl implements IUserAO {
     public void doResetLoginPwdByOss(String userId, String loginPwd,
             String adminUserId, String adminPwd) {
         // 验证当前登录密码是否正确
-        userBO.checkLoginPwd(adminUserId, adminPwd, "管理员密码");
+        sysUserBO.checkLoginPwd(adminUserId, adminPwd);
         userBO.refreshLoginPwd(userId, loginPwd);
     }
 
@@ -403,25 +421,35 @@ public class UserAOImpl implements IUserAO {
         User user = userBO.getUser(userId);
         if (user == null) {
             throw new BizException("li01004", userId + "用户不存在");
-        } else {
-            // 拉取推荐人信息
-            User refereeUser = userBO.getUser(user.getUserReferee());
-            user.setRefereeUser(refereeUser);
-
-            // 是否设置过交易密码
-            if (StringUtils.isNotBlank(user.getTradePwdStrength())) {
-                user.setTradepwdFlag(true);
-            } else {
-                user.setTradepwdFlag(false);
-            }
-            // 是否设置过登录密码
-            if (StringUtils.isNotBlank(user.getLoginPwdStrength())) {
-                user.setLoginPwdFlag(true);
-            } else {
-                user.setLoginPwdFlag(false);
-            }
-
         }
+        // 拉取推荐人信息
+        User refereeUser = userBO.getUser(user.getUserReferee());
+        user.setRefereeUser(refereeUser);
+
+        // 是否设置过交易密码
+        if (StringUtils.isNotBlank(user.getTradePwdStrength())) {
+            user.setTradepwdFlag(true);
+        } else {
+            user.setTradepwdFlag(false);
+        }
+        // 是否设置过登录密码
+        if (StringUtils.isNotBlank(user.getLoginPwdStrength())) {
+            user.setLoginPwdFlag(true);
+        } else {
+            user.setLoginPwdFlag(false);
+        }
+        // 拉取ext数据
+        UserExt data = userExtBO.getUserExt(userId);
+        user.setGender(data.getGender());
+        user.setBirthday(data.getBirthday());
+        user.setEmail(data.getEmail());
+        user.setDiploma(data.getDiploma());
+        user.setIntroduce(data.getIntroduce());
+        user.setOccupation(data.getOccupation());
+        user.setPdf(data.getPdf());
+        user.setWorkTime(data.getWorkTime());
+        user.setGradDatetime(data.getGradDatetime());
+
         return user;
     }
 

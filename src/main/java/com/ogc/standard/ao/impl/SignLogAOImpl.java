@@ -10,6 +10,9 @@ import com.ogc.standard.bo.ISignLogBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.SignLog;
 import com.ogc.standard.dto.req.XN805140Req;
+import com.ogc.standard.enums.ESignLogClient;
+import com.ogc.standard.enums.ESignLogType;
+import com.ogc.standard.exception.BizException;
 
 @Service
 public class SignLogAOImpl implements ISignLogAO {
@@ -18,12 +21,17 @@ public class SignLogAOImpl implements ISignLogAO {
     private ISignLogBO signLogBO;
 
     @Override
-    public String addSignLog(XN805140Req req) {
+    public int addSignLog(XN805140Req req) {
+        if (signLogBO.isCheckIn(req.getUserId())) {
+            throw new BizException("3", "今日已签到");
+        }
         SignLog data = new SignLog();
         data.setClient(req.getClient());
         data.setIp(req.getIp());
         data.setLocation(req.getLocation());
         data.setUserId(req.getUserId());
+        data.setType(ESignLogType.SIGN_IN.getCode());
+        data.setClient(ESignLogClient.ANDROID.getCode());
         return signLogBO.saveSignLog(data);
     }
 
@@ -36,6 +44,40 @@ public class SignLogAOImpl implements ISignLogAO {
     @Override
     public List<SignLog> querySignLogList(SignLog condition) {
         return signLogBO.querySignLogList(condition);
+    }
+
+    @Override
+    public long keepCheckIn(String userId) {
+        SignLog condition = new SignLog();
+        condition.setUserId(userId);
+        List<SignLog> signLogList = signLogBO.querySignLogList(condition);
+        // 排序
+        signLogBO.ListSort(signLogList);
+        // 没有签到数据返回0
+        if (signLogList.size() == 0) {
+            return 0;
+        }
+        // 今天没签到返回0
+        if (!signLogBO.isCheckIn(userId)) {
+            return 0;
+        } else {
+            long count = 1;
+            long dayNum = 0;
+            for (int i = 0; i < signLogList.size() - 1; i++) {
+                // 获取连续数据的天数差（24*60*60*1000=86400000ms）
+                dayNum = signLogList.get(i).getCreateDatetime().getTime()
+                        / 86400000
+                        - signLogList.get(i + 1).getCreateDatetime().getTime()
+                                / 86400000;
+                if (dayNum == 1) {
+                    count++;
+                } else {
+                    break;
+                }
+            }
+
+            return count;
+        }
     }
 
 }

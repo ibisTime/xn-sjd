@@ -30,11 +30,16 @@ public class XN628295 extends AProcessor {
     public Object doBusiness() throws BizException {
         Match condition = new Match();
         condition.setName(req.getName());
-        condition.setStartDatetime(DateUtil.strToDate(req.getStartDatetime(),
-            DateUtil.FRONT_DATE_FORMAT_STRING));
-        condition.setEndDatetime(DateUtil.strToDate(req.getEndDatetime(),
-            DateUtil.FRONT_DATE_FORMAT_STRING));
         condition.setStatus(req.getStatus());
+
+        condition.setStartDatetimeStart(DateUtil.strToDate(
+            req.getStartDatetimeStart(), DateUtil.FRONT_DATE_FORMAT_STRING));
+        condition.setStartDatetimeEnd(DateUtil.strToDate(
+            req.getStartDatetimeEnd(), DateUtil.FRONT_DATE_FORMAT_STRING));
+        condition.setEndDatetimeStart(DateUtil.strToDate(
+            req.getEndDatetimeStart(), DateUtil.FRONT_DATE_FORMAT_STRING));
+        condition.setEndDatetimeEnd(DateUtil.strToDate(req.getEndDatetimeEnd(),
+            DateUtil.FRONT_DATE_FORMAT_STRING));
 
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {

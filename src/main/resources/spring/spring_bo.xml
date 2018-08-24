@@ -72,6 +72,7 @@
 	<bean id="dayBenefitBO" class="com.ogc.standard.bo.impl.DayBenefitBOImpl">
 		<property name="paginableDAO" ref="dayBenefitDAOImpl"/>
 	</bean>
+<<<<<<< HEAD
 	
 	<bean id="simuOrderBO" class="com.ogc.standard.bo.impl.SimuOrderBOImpl">
 		<property name="paginableDAO" ref="simuOrderDAOImpl"/>
@@ -80,9 +81,15 @@
 	<bean id="simuOrderDetailBO" class="com.ogc.standard.bo.impl.SimuOrderDetailBOImpl">
 		<property name="paginableDAO" ref="simuOrderDetailDAOImpl"/>
 	</bean>
+=======
+>>>>>>> refs/remotes/origin/master
 
 	<bean id="userBO" class="com.ogc.standard.bo.impl.UserBOImpl">
 		<property name="paginableDAO" ref="userDAOImpl"/>
+	</bean>
+	
+	<bean id="userExtBO" class="com.ogc.standard.bo.impl.UserExtBOImpl">
+		<property name="paginableDAO" ref="userExtDAOImpl"/>
 	</bean>
 	
 	<bean id="blacklistBO" class="com.ogc.standard.bo.impl.BlacklistBOImpl">
@@ -91,6 +98,14 @@
 	
 	<bean id="signLogBO" class="com.ogc.standard.bo.impl.SignLogBOImpl">
 		<property name="paginableDAO" ref="signLogDAOImpl"/>
+	</bean>
+	
+	<bean id="smsBO" class="com.ogc.standard.bo.impl.SmsBOImpl">
+		<property name="paginableDAO" ref="smsDAOImpl"/>
+	</bean>
+	
+	<bean id="readBO" class="com.ogc.standard.bo.impl.ReadBOImpl">
+		<property name="paginableDAO" ref="readDAOImpl"/>
 	</bean>
 	
 	<bean id="matchBO" class="com.ogc.standard.bo.impl.MatchBOImpl">
@@ -103,6 +118,23 @@
 	
 	<bean id="teamBO" class="com.ogc.standard.bo.impl.TeamBOImpl">
 		<property name="paginableDAO" ref="teamDAOImpl"/>
+	</bean>
+	
+	
+	<bean id="keywordBO" class="com.ogc.standard.bo.impl.KeywordBOImpl">
+		<property name="paginableDAO" ref="keywordDAOImpl"/>
+	</bean>
+	
+	<bean id="postBO" class="com.ogc.standard.bo.impl.PostBOImpl">
+		<property name="paginableDAO" ref="postDAOImpl"/>
+	</bean>
+	
+	<bean id="commentBO" class="com.ogc.standard.bo.impl.CommentBOImpl">
+		<property name="paginableDAO" ref="commentDAOImpl"/>
+	</bean>
+	
+	<bean id="interactBO" class="com.ogc.standard.bo.impl.InteractBOImpl">
+		<property name="paginableDAO" ref="interactDAOImpl"/>
 	</bean>
 	
 </beans>

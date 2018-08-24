@@ -1,6 +1,5 @@
 package com.ogc.standard.bo;
 
-import java.util.Date;
 import java.util.List;
 
 import com.ogc.standard.bo.base.IPaginableBO;
@@ -28,13 +27,13 @@ public interface IMatchBO extends IPaginableBO<Match> {
     public void refreshMatch(Match data);
 
     // 发布
-    public void releaseMatch(String code, String updater, String remark);
+    public void refreshReleaseMatch(String code, String updater, String remark);
 
     // 开始赛事(定时器)
-    public void startMatch(Date today);
+    public void startMatch(String code);
 
     // 结束赛事(定时器)
-    public void endMatch(Date today);
+    public void endMatch(String code);
 
     public List<Match> queryMatchList(Match condition);
 

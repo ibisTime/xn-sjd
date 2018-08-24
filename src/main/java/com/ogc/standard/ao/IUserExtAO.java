@@ -16,6 +16,6 @@ import com.ogc.standard.dto.req.XN805085Req;
  * @history:
  */
 public interface IUserExtAO {
-    public String addUserExt(XN805085Req req);
+    public String editUserExt(XN805085Req req);
 
 }

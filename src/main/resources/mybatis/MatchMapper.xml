@@ -26,11 +26,24 @@
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
 			</if>
-			<if test="startDatetime != null and startDatetime != '' ">
-				<![CDATA[AND t.start_datetime >= #{startDatetime}]]>
+			
+			<if test="matchStartDatetime != null and matchStartDatetime != '' ">
+				<![CDATA[AND t.start_datetime = #{matchStartDatetime}]]>
 			</if>
-			<if test="endDatetime != null and endDatetime != '' ">
-				<![CDATA[AND t.end_datetime <= #{endDatetime}]]>
+			<if test="matchEndDatetime != null and matchEndDatetime != '' ">
+				<![CDATA[AND t.end_datetime = #{matchEndDatetime}]]>
+			</if>
+			<if test="startDatetimeStart != null and startDatetimeStart != '' ">
+				<![CDATA[AND t.start_datetime >= #{startDatetimeStart}]]>
+			</if>
+			<if test="startDatetimeEnd != null and startDatetimeEnd != '' ">
+				<![CDATA[AND t.start_datetime <= #{startDatetimeEnd}]]>
+			</if>
+			<if test="endDatetimeStart != null and endDatetimeStart != '' ">
+				<![CDATA[AND t.end_datetime >= #{endDatetimeStart}]]>
+			</if>
+			<if test="endDatetimeEnd != null and endDatetimeEnd != '' ">
+				<![CDATA[AND t.end_datetime <= #{endDatetimeEnd}]]>
 			</if>
 		</trim>
 	</sql>
@@ -118,14 +131,14 @@
 		UPDATE tforum_match
 		SET
 		status = #{status}
-		WHERE start_datetime = #{matchStartDatetime}
+		WHERE code = #{code}
 	</update>
 	
 	<update id="update_endMatch" parameterType="match">
 		UPDATE tforum_match
 		SET
 		status = #{status}
-		WHERE end_datetime = #{matchEndDatetime}
+		WHERE code = #{code}
 	</update>
 
 </mapper>

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ogc.standard.dao.IReadDAO">
+	<resultMap id="read_DB_Result" type="read">
+		<result column="id" property="id" />
+		<result column="user_id" property="userId" />
+		<result column="sms_code" property="smsCode" />
+		<result column="receive_way" property="receiveWay" />
+		<result column="status" property="status" />
+		<result column="create_datetime" property="createDatetime" />
+		<result column="read_datetime" property="readDatetime" />
+		<result column="delete_datetime" property="deleteDatetime" />
+	</resultMap>
+	
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="id != null and id != '' ">
+				AND t.id = #{id}
+			</if>
+			<if test="userId != null and userId != '' ">
+				AND t.user_id = #{userId}
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+			<if test="receiveWay != null and receiveWay != '' ">
+				AND t.receive_way = #{receiveWay}
+			</if>
+		</trim>
+	</sql>
+	
+	<insert id="insert_read" parameterType="read">
+		INSERT INTO tstd_read(
+		user_id
+		,sms_code
+		,receive_way
+		,status
+		,create_datetime
+		,read_datetime
+		,delete_datetime
+		)
+		VALUES(
+		#{userId}
+		,#{smsCode}
+		,#{receiveWay}
+		,#{status}
+		,#{createDatetime}
+		,#{readDatetime}
+		,#{deleteDatetime}
+		)
+	</insert>
+	
+	
+	
+	<update id="update_status_read" parameterType="read">
+		UPDATE tstd_read
+		SET
+		status=#{status}
+		,read_datetime=#{readDatetime}
+		WHERE
+		id=#{id}
+	
+	</update>
+	
+	<update id="update_status_delete" parameterType="read">
+		UPDATE tstd_read
+		SET
+		status=#{status}
+		,delete_datetime=#{deleteDatetime}
+		WHERE
+		id=#{id}
+	
+	</update>
+	
+	
+	<select id="select_read" parameterType="read" resultMap="read_DB_Result">
+		SELECT
+		t.id
+		,t.user_id
+		,t.sms_code
+		,t.receive_way
+		,t.status
+		,t.create_datetime
+		,t.read_datetime
+		,t.delete_datetime
+		FROM
+		tstd_read t 
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_read_list" parameterType="java.util.List">
+		INSERT INTO tstd_read(
+		user_id
+		,sms_code
+		,receive_way
+		,status
+		,create_datetime
+		,read_datetime
+		,delete_datetime
+		)
+		VALUES
+		
+		<foreach collection="list" item="read" separator=",">
+		(
+		#{read.userId}
+		,#{read.smsCode}
+		,#{read.receiveWay}
+		,#{read.status}
+		,#{read.createDatetime}
+		,#{read.readDatetime}
+		,#{read.deleteDatetime}
+		)
+		</foreach>
+		
+	</insert>
+
+	<select id="select_read_count" parameterType="read"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tstd_read t
+		<include refid="where_condition" />
+	</select>
+</mapper>

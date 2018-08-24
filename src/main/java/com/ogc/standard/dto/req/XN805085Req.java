@@ -41,9 +41,9 @@ public class XN805085Req {
     @NotBlank
     private String occupation;
 
-    // 毕业年限
+    // 毕业日期（yyyy-MM-dd）
     @NotBlank
-    private String gradTime;
+    private String gradDatetime;
 
     // 工作年限
     @NotBlank
@@ -105,12 +105,12 @@ public class XN805085Req {
         this.occupation = occupation;
     }
 
-    public String getGradTime() {
-        return gradTime;
+    public String getGradDatetime() {
+        return gradDatetime;
     }
 
-    public void setGradTime(String gradTime) {
-        this.gradTime = gradTime;
+    public void setGradDatetime(String gradDatetime) {
+        this.gradDatetime = gradDatetime;
     }
 
     public String getWorkTime() {

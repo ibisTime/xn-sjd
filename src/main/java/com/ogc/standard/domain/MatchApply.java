@@ -67,6 +67,9 @@ public class MatchApply extends ABaseDO {
     // 状态列表
     private List<String> statusList;
 
+    // 申请人
+    private User applyUserInfo;
+
     public void setCode(String code) {
         this.code = code;
     }
@@ -201,6 +204,14 @@ public class MatchApply extends ABaseDO {
 
     public void setStatusList(List<String> statusList) {
         this.statusList = statusList;
+    }
+
+    public User getApplyUserInfo() {
+        return applyUserInfo;
+    }
+
+    public void setApplyUserInfo(User applyUserInfo) {
+        this.applyUserInfo = applyUserInfo;
     }
 
 }
