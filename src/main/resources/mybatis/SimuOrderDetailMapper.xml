@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cdkj.info.dao.ISimuOrderDetailDAO">
+	<resultMap id="simuOrderDetail_DB_Result" type="simuOrderDetail">
+		<result column="code" property="code" />
+		<result column="order_code" property="orderCode" />
+		<result column="group_code" property="groupCode" />
+		<result column="traded_price" property="tradedPrice" />
+		<result column="traded_count" property="tradedCount" />
+		
+		<result column="traded_amount" property="tradedAmount" />
+		<result column="pre_count" property="preCount" />
+		<result column="post_count" property="postCount" />
+		<result column="traded_fee" property="tradedFee" />
+		<result column="create_datetime" property="createDatetime" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="orderCode != null and orderCode != '' ">
+				AND t.order_code = #{orderCode}
+			</if>
+			<if test="groupCode != null and groupCode != '' ">
+				AND t.group_code = #{groupCode}
+			</if>
+		</trim>
+	</sql>
+	<select id="select_simuOrderDetail" parameterType="simuOrderDetail" resultMap="simuOrderDetail_DB_Result">
+		SELECT
+		t.code
+		,t.order_code
+		,t.group_code
+		,t.traded_price
+		,t.traded_count
+		
+		,t.traded_amount
+		,t.pre_count
+		,t.post_count
+		,t.traded_fee
+		,t.create_datetime
+		FROM
+		tsimu_order_detail t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_simuOrderDetail_count" parameterType="simuOrderDetail"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tsimu_order_detail t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_simuOrderDetail" parameterType="simuOrderDetail">
+		INSERT INTO
+		tsimu_order_detail(
+		code
+		,order_code
+		,t.group_code
+		,traded_price
+		,traded_count
+		
+		,traded_amount
+		,t.pre_count
+		,t.post_count
+		,traded_fee
+		,create_datetime
+		)
+		VALUES(
+		#{code}
+		,#{orderCode}
+		,#{groupCode}
+		,#{tradedPrice}
+		,#{tradedCount}
+		
+		,#{tradedAmount}
+		,#{preCount}
+		,#{postCount}
+		,#{tradedFee}
+		,#{createDatetime}
+		)
+	</insert>
+
+</mapper>

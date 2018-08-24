@@ -22,8 +22,12 @@
 		
 		<typeAlias alias="group" type="com.ogc.standard.domain.Group" />
 		<typeAlias alias="groupCoin" type="com.ogc.standard.domain.GroupCoin" />
+		<typeAlias alias="groupCoinJour" type="com.ogc.standard.domain.GroupCoinJour" />
 		<typeAlias alias="attention" type="com.ogc.standard.domain.Attention" />
 		<typeAlias alias="dayBenefit" type="com.ogc.standard.domain.DayBenefit" />
+		<typeAlias alias="exchangePair" type="com.ogc.standard.domain.ExchangePair" />
+		<typeAlias alias="simuOrder" type="com.ogc.standard.domain.SimuOrder" />
+		<typeAlias alias="simuOrderDetail" type="com.ogc.standard.domain.SimuOrderDetail" />
 		
 		<typeAlias alias="match" type="com.ogc.standard.domain.Match" />
 		<typeAlias alias="matchApply" type="com.ogc.standard.domain.MatchApply" />

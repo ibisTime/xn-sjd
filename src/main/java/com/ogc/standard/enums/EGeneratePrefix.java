@@ -11,7 +11,11 @@ import java.util.Map;
 public enum EGeneratePrefix {
 
     DH("DH", "导航"), JS("JS", "角色"), CD("CD", "菜单"), BM("BM", "部门"), GS("GS",
-            "公司"), RZ("RZ", "日志"), XX("XX", "信息"),
+            "公司"), XX("XX",
+                    "信息"), RZ("RZ", "日志"), SIMU_ORDER("MNWT", "模拟交易委托单"),
+
+    SIMU_ORDER_DETAIL("MNWTMX", "模拟交易委托单明细"), Account("A", "账户"), AJour("AJ",
+            "账户流水"),
 
     Match("M", "赛事"), MatchApply("MA", "参赛申请"), Team("T",
             "战队"), TeamMemberApply("TMA", "战队成员申请"), GROUP("GP",

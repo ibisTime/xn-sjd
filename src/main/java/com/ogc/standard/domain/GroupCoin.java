@@ -1,6 +1,7 @@
 package com.ogc.standard.domain;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 import com.ogc.standard.dao.base.ABaseDO;
 
@@ -14,8 +15,11 @@ public class GroupCoin extends ABaseDO {
 
     private static final long serialVersionUID = 8922342810194925778L;
 
-    // 序号（自增长）
-    private long id;
+    // 账户编号
+    private String accountNumber;
+
+    // 用户编号
+    private String userId;
 
     // 组合编号
     private String groupCode;
@@ -26,60 +30,99 @@ public class GroupCoin extends ABaseDO {
     // 数量
     private BigDecimal count;
 
+    // 冻结数量
+    private BigDecimal frozenCount;
+
     // 币种资产
     private BigDecimal assets;
 
     // 占比
     private Double rate;
 
-    // ******************db properties**************
+    // 最近一次变动对应的流水编号
+    private String lastOrder;
 
-    public long getId() {
-        return id;
+    // 创建时间
+    private Date createDatetime;
+
+    public String getAccountNumber() {
+        return accountNumber;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
     }
 
-    public void setGroupCode(String groupCode) {
-        this.groupCode = groupCode;
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getGroupCode() {
         return groupCode;
     }
 
-    public void setSymbol(String symbol) {
-        this.symbol = symbol;
+    public void setGroupCode(String groupCode) {
+        this.groupCode = groupCode;
     }
 
     public String getSymbol() {
         return symbol;
     }
 
-    public void setCount(BigDecimal count) {
-        this.count = count;
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
     }
 
     public BigDecimal getCount() {
         return count;
     }
 
-    public void setAssets(BigDecimal assets) {
-        this.assets = assets;
+    public void setCount(BigDecimal count) {
+        this.count = count;
+    }
+
+    public BigDecimal getFrozenCount() {
+        return frozenCount;
+    }
+
+    public void setFrozenCount(BigDecimal frozenCount) {
+        this.frozenCount = frozenCount;
     }
 
     public BigDecimal getAssets() {
         return assets;
     }
 
-    public void setRate(Double rate) {
-        this.rate = rate;
+    public void setAssets(BigDecimal assets) {
+        this.assets = assets;
     }
 
     public Double getRate() {
         return rate;
+    }
+
+    public void setRate(Double rate) {
+        this.rate = rate;
+    }
+
+    public String getLastOrder() {
+        return lastOrder;
+    }
+
+    public void setLastOrder(String lastOrder) {
+        this.lastOrder = lastOrder;
+    }
+
+    public Date getCreateDatetime() {
+        return createDatetime;
+    }
+
+    public void setCreateDatetime(Date createDatetime) {
+        this.createDatetime = createDatetime;
     }
 
 }

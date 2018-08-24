@@ -9,7 +9,7 @@ import com.ogc.standard.domain.Group;
 public interface IGroupBO extends IPaginableBO<Group> {
 
     public String saveGroup(String matchCode, String teamCode, String userId,
-            BigDecimal initAmount);
+            BigDecimal initAmount, String symbol);
 
     public void editGroupFollowNumber(String code, int followNumber);
 

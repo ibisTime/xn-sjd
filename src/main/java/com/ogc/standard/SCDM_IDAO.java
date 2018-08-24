@@ -12,10 +12,10 @@ public class SCDM_IDAO {
     private static String author = "lei";
 
     // 实体
-    private static String key = "dayBenefit";
+    private static String key = "groupCoinJour";
 
     // 实体名称
-    private static String keyName = "每日收益统计";
+    private static String keyName = "币种配置账户流水";
 
     // 包路径
     private static String packge = "com.ogc.standard.";
@@ -23,13 +23,14 @@ public class SCDM_IDAO {
     // 表名
     private static String path = "/Users/lei/Desktop/temp";
 
-    private static String dbname = "tsimu_day_benefit";
+    private static String dbname = "tsimu_group_coin_jour";
 
-    private static String[] DBwords = { "group_code", "yesterday_assets",
-            "today_assets", "benefit", "benefit_rate", "createDatetime" };
+    private static String[] DBwords = { "code", "pay_group", "ref_no",
+            "account_number", "trans_amount", "user_id", "symbol", "biz_type",
+            "biz_note", "pre_amount", "post_amount", "create_datetime" };
 
-    private static String[] DBwordsName = { "组合编号", "昨日总资产", "今日总资产", "收益",
-            "收益率", "产生日期" };
+    private static String[] DBwordsName = { "编号", "订单分组组号", "参考订单号", "账户编号",
+            "变动金额", "用户编号", "币种", "业务类型", "业务类型", "变动前金额", "变动后金额", "创建时间" };
 
     private static String[] DOwords = getDOwords();
 
