@@ -3,11 +3,17 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ogc.standard.dao.IGroupCoinDAO">
 	<resultMap id="groupCoin_DB_Result" type="groupCoin">
+		<result column="account_number" property="accountNumber" />
+		<result column="user_id" property="userId" />
 		<result column="group_code" property="groupCode" />
 		<result column="symbol" property="symbol" />
 		<result column="count" property="count" />
+		
+		<result column="frozen_count" property="frozenCount" />
 		<result column="assets" property="assets" />
 		<result column="rate" property="rate" />
+		<result column="last_order" property="lastOrder" />
+		<result column="create_datetime" property="createDatetime" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
@@ -18,11 +24,17 @@
 	</sql>
 	<select id="select_groupCoin" parameterType="groupCoin" resultMap="groupCoin_DB_Result">
 		SELECT
-		t.group_code
+		t.account_number
+		,t.group_code
+		,t.user_id
 		,t.symbol
 		,t.count
+		
+		,t.frozen_count
 		,t.assets
 		,t.rate
+		,t.last_order
+		,t.create_datetime
 		FROM
 		tsimu_group_coin t
 		<include refid="where_condition" />
@@ -42,29 +54,59 @@
 	<insert id="insert_groupCoin" parameterType="groupCoin">
 		INSERT INTO
 		tsimu_group_coin(
-		group_code
+		account_number
+		,group_code
+		,user_id
 		,symbol
 		,count
+		
+		,frozen_count
 		,assets
 		,rate
+		,last_order
+		,create_datetime
 		)
 		VALUES(
-		#{groupCode}
+		#{accountNumber}
+		,#{groupCode}
+		,#{userId}
 		,#{symbol}
 		,#{count}
+		
+		,#{frozenCount}
 		,#{assets}
 		,#{rate}
+		,#{lastOrder}
+		,#{createDatetime}
 		)
 	</insert>
 
-	<update id="update_groupCoin" parameterType="groupCoin">
+	<update id="update_account_amount" parameterType="groupCoin">
+		UPDATE
+		tsimu_account
+		SET
+		count= #{count}
+		,last_order = #{lastOrder}
+		WHERE
+		account_number = #{accountNumber}
+	</update>
+	
+	<update id="update_frozenAmount" parameterType="groupCoin">
 		UPDATE tsimu_group_coin
 		SET
-		symbol = #{symbol}
-		,count = #{count}
-		,assets = #{assets}
-		,rate = #{rate}
-		WHERE code = #{code}
+		frozen_amount = #{frozenAmount}
+		,last_order = #{lastOrder}
+		WHERE
+		account_number = #{accountNumber}
+	</update>
+
+	<update id="update_unfrozenAmount" parameterType="groupCoin">
+		UPDATE tsimu_group_coin
+		SET
+		frozen_amount = #{frozenAmount}
+		,last_order = #{lastOrder}
+		WHERE
+		account_number = #{accountNumber}
 	</update>
 
 

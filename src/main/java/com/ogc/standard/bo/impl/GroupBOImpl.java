@@ -37,7 +37,7 @@ public class GroupBOImpl extends PaginableBOImpl<Group> implements IGroupBO {
 
     @Override
     public String saveGroup(String matchCode, String teamCode, String userId,
-            BigDecimal initAmount) {
+            BigDecimal initAmount, String symbol) {
         String code = null;
         if (StringUtils.isNotBlank(matchCode)
                 && StringUtils.isNotBlank(teamCode)
@@ -69,8 +69,9 @@ public class GroupBOImpl extends PaginableBOImpl<Group> implements IGroupBO {
             groupDAO.insert(group);
 
             // 初始化基础币种配置
-            initGroupCoin(group.getCode(), group.getSymbol(),
-                group.getInitAmount(), group.getTotalAssets());
+            groupCoinBO.distributeAccount(userId, group.getCode(),
+                group.getSymbol(), group.getInitAmount(),
+                group.getTotalAssets(), 1.0);
         }
         return code;
     }
@@ -147,29 +148,6 @@ public class GroupBOImpl extends PaginableBOImpl<Group> implements IGroupBO {
 
         }
         return data;
-    }
-
-    /**
-     * 初始化基础组合币种配置
-     * @param code
-     * @param symbol
-     * @param initAmount
-     * @param totalAssets 
-     * @create: 2018年8月21日 下午7:51:52 lei
-     * @history:
-     */
-    private void initGroupCoin(String code, String symbol,
-            BigDecimal initAmount, BigDecimal totalAssets) {
-
-        GroupCoin groupCoin = new GroupCoin();
-        groupCoin.setGroupCode(code);
-        groupCoin.setSymbol(symbol);
-        groupCoin.setCount(initAmount);
-        groupCoin.setAssets(totalAssets);
-
-        groupCoin.setRate(1.0);
-        groupCoinBO.saveGroupCoin(groupCoin);
-
     }
 
 }
