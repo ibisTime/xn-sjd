@@ -1,5 +1,7 @@
 package com.ogc.standard.bo.impl;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -51,7 +53,7 @@ public class SignLogBOImpl extends PaginableBOImpl<SignLog>
         SignLog condition = new SignLog();
         condition.setUserId(userId);
         List<SignLog> signLogList = querySignLogList(condition);
-        sort(signLogList);
+        ListSort(signLogList);
         if (signLogList.get(0) == null) {
             return false;
         }
@@ -66,21 +68,22 @@ public class SignLogBOImpl extends PaginableBOImpl<SignLog>
 
     // 将List按照日期排序
     @Override
-    public void sort(List<SignLog> dataList) {
-        int l = dataList.size();
-        SignLog t1 = null;
-        SignLog t2 = null;
-        for (int i = 0; i < l; i++) {
-            for (int j = 0; j < i; j++) {
-                if (dataList.get(j).getCreateDatetime()
-                    .before(dataList.get(j + 1).getCreateDatetime())) {
-                    t1 = dataList.get(j);
-                    t2 = dataList.get(j + 1);
-                    dataList.set(j, t2);
-                    dataList.set(j + 1, t1);
+    public void ListSort(List<SignLog> list) {
+        Collections.sort(list, new Comparator<SignLog>() {
+            @Override
+            public int compare(SignLog o1, SignLog o2) {
+
+                if (o1.getCreateDatetime().getTime() > o2.getCreateDatetime()
+                    .getTime()) {
+                    return -1;
+                } else if (o1.getCreateDatetime().getTime() < o2
+                    .getCreateDatetime().getTime()) {
+                    return 1;
+                } else {
+                    return 0;
                 }
             }
-        }
+        });
     }
 
 }

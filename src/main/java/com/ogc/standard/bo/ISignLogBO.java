@@ -16,6 +16,6 @@ public interface ISignLogBO extends IPaginableBO<SignLog> {
     public List<SignLog> querySignLogList(SignLog condition);
 
     // List按createDatetime降序排序
-    public void sort(List<SignLog> dataList);
+    public void ListSort(List<SignLog> list);
 
 }

@@ -52,7 +52,7 @@ public class SignLogAOImpl implements ISignLogAO {
         condition.setUserId(userId);
         List<SignLog> signLogList = signLogBO.querySignLogList(condition);
         // 排序
-        signLogBO.sort(signLogList);
+        signLogBO.ListSort(signLogList);
         // 没有签到数据返回0
         if (signLogList.size() == 0) {
             return 0;
@@ -65,9 +65,9 @@ public class SignLogAOImpl implements ISignLogAO {
             long dayNum = 0;
             for (int i = 0; i < signLogList.size() - 1; i++) {
                 // 获取连续数据的天数差（24*60*60*1000=86400000ms）
-                dayNum = signLogList.get(i + 1).getCreateDatetime().getTime()
+                dayNum = signLogList.get(i).getCreateDatetime().getTime()
                         / 86400000
-                        - signLogList.get(i).getCreateDatetime().getTime()
+                        - signLogList.get(i + 1).getCreateDatetime().getTime()
                                 / 86400000;
                 if (dayNum == 1) {
                     count++;

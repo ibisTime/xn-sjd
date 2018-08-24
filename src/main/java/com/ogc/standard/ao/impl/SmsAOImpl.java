@@ -86,7 +86,7 @@ public class SmsAOImpl implements ISmsAO {
                 OrderNoGenerater.generate(EGeneratePrefix.XX.getCode()));
             smsBO.saveSms(data);
         }
-        // read表中添加数据（待改进）
+        // read表中添加数据
         List<User> userList = userBO.queryUserList(null);
         List<Read> dataList = new ArrayList<Read>();
         Date date = new Date();
