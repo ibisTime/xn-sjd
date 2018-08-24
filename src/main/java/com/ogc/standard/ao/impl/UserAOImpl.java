@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.IUserAO;
+import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.ISignLogBO;
 import com.ogc.standard.bo.ISmsOutBO;
 import com.ogc.standard.bo.IUserBO;
@@ -62,6 +63,9 @@ public class UserAOImpl implements IUserAO {
 
     @Autowired
     private IUserExtBO userExtBO;
+
+    @Autowired
+    private ISYSUserBO sysUserBO;
 
     @Override
     public void doCheckMobile(String mobile) {
@@ -266,7 +270,7 @@ public class UserAOImpl implements IUserAO {
     public void doResetLoginPwdByOss(String userId, String loginPwd,
             String adminUserId, String adminPwd) {
         // 验证当前登录密码是否正确
-        userBO.checkLoginPwd(adminUserId, adminPwd, "管理员密码");
+        sysUserBO.checkLoginPwd(adminUserId, adminPwd);
         userBO.refreshLoginPwd(userId, loginPwd);
     }
 
