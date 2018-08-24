@@ -82,6 +82,9 @@ public class Comment extends ABaseDO {
     // 是否点赞
     private String isPoint;
 
+    // 关键字过滤状态（0=未过滤，1=关键字被替换，2=待审核）
+    private String filterFlag;
+
     public String getCode() {
         return code;
     }
@@ -256,6 +259,14 @@ public class Comment extends ABaseDO {
 
     public void setIsPoint(String isPoint) {
         this.isPoint = isPoint;
+    }
+
+    public String getFilterFlag() {
+        return filterFlag;
+    }
+
+    public void setFilterFlag(String filterFlag) {
+        this.filterFlag = filterFlag;
     }
 
 }

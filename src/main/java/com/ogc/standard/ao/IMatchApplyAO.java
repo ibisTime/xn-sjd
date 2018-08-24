@@ -15,7 +15,7 @@ public interface IMatchApplyAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
     // 报名申请
-    public String addMatchApply(XN628300Req req);
+    public String matchApply(XN628300Req req);
 
     // 申请审核
     public void approveMatchApply(String code, String approveResult,

@@ -25,7 +25,7 @@ public class XN628020 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         return new PKCodeRes(teamMemberApplyAO
-            .addTeamMemberApply(req.getTeamCode(), req.getApplyUser()));
+            .teamMemberApply(req.getTeamCode(), req.getApplyUser()));
     }
 
     @Override

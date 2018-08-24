@@ -1,6 +1,5 @@
 package com.ogc.standard.ao.impl;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +23,6 @@ import com.ogc.standard.enums.ETeamStatus;
 import com.ogc.standard.exception.BizException;
 
 /**
- * 战队成员申请表
  * @author: silver 
  * @since: 2018年8月21日 下午7:13:58 
  * @history:
@@ -45,10 +43,10 @@ public class TeamMemberApplyAOImpl implements ITeamMemberApplyAO {
     private IGroupBO groupBO;
 
     @Override
-    public String addTeamMemberApply(String teamCode, String applyUser) {
+    public String teamMemberApply(String teamCode, String applyUser) {
         Team team = teamBO.getTeam(teamCode);
         if (!ETeamStatus.TO_START.getCode().equals(team.getStatus())) {
-            throw new BizException("xn000", "当前战队不在可申请加入状态！");
+            throw new BizException("xn000", "当前战队未处于可申请加入状态！");
         }
 
         // 判断是否已申请加入该战队
@@ -89,8 +87,8 @@ public class TeamMemberApplyAOImpl implements ITeamMemberApplyAO {
                 team.getMemberCount() + 1);
 
             // 添加组合
-            groupBO.saveGroup(team.getMatchCode(), team.getCode(),
-                teamMemberApply.getApplyUser(), new BigDecimal(0));
+            // groupBO.saveGroup(team.getMatchCode(), team.getCode(),
+            // teamMemberApply.getApplyUser(), new BigDecimal(0));
         } else {
             status = ETeamMemberApplyStatus.APPROVED_NO.getCode();
         }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.ICommentAO;
 import com.ogc.standard.bo.ICommentBO;
@@ -15,9 +16,11 @@ import com.ogc.standard.domain.Comment;
 import com.ogc.standard.domain.Interact;
 import com.ogc.standard.domain.Keyword;
 import com.ogc.standard.domain.Post;
+import com.ogc.standard.dto.res.XN628271Res;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECommentStatus;
 import com.ogc.standard.enums.ECommentType;
+import com.ogc.standard.enums.EFilterFlag;
 import com.ogc.standard.enums.EInteractType;
 import com.ogc.standard.enums.EKeyWordReaction;
 import com.ogc.standard.enums.EObjectType;
@@ -44,10 +47,12 @@ public class CommentAOImpl implements ICommentAO {
     private IPostBO postBO;
 
     @Override
-    public String commentComment(String code, String content, String userId) {
+    public XN628271Res commentComment(String commentCode, String content,
+            String userId) {
         // 关键字过滤
         Keyword keyWord = keywordBO.checkContent(content);
         String status = ECommentStatus.RELEASED.getCode();
+        String filterFlag = null;
 
         if (null != keyWord) {
 
@@ -62,6 +67,7 @@ public class CommentAOImpl implements ICommentAO {
             if (EKeyWordReaction.REPLACE.getCode()
                 .equals(keyWord.getReaction())) {
                 content = keywordBO.replaceKeyword(content, keyWord.getWord());
+                filterFlag = EFilterFlag.REPLACED.getCode();
             }
 
             // 审核
@@ -71,8 +77,16 @@ public class CommentAOImpl implements ICommentAO {
             }
         }
 
-        return commentBO.saveComment(ECommentType.COMMENT.getCode(), code,
-            userId, content, status, userId);
+        if (ECommentStatus.RELEASED.getCode().equals(status)) {
+            filterFlag = EFilterFlag.NORMAN.getCode();
+        } else if (ECommentStatus.TO_APPROVE.getCode().equals(status)) {
+            filterFlag = EFilterFlag.TO_APPROVE.getCode();
+        }
+
+        String code = commentBO.saveComment(ECommentType.COMMENT.getCode(),
+            commentCode, userId, content, status, userId);
+
+        return new XN628271Res(code, filterFlag);
     }
 
     @Override
@@ -102,18 +116,28 @@ public class CommentAOImpl implements ICommentAO {
     }
 
     @Override
+    @Transactional
     public void pointComment(String code, String userId) {
         Interact interact = interactBO.getInteract(
             EInteractType.POINT.getCode(), EObjectType.COMMENT.getCode(), code,
             userId);
+        Comment comment = commentBO.getComment(code);
+        Integer pointCount = comment.getPointCount();
 
         // 点赞记录不存在时，添加点赞；点赞记录存在时，删除点赞
         if (null == interact) {
             interactBO.saveInteract(EInteractType.POINT.getCode(),
                 EObjectType.COMMENT.getCode(), code, userId);
+
+            pointCount += 1;
         } else {
             interactBO.removeInteract(interact.getCode());
+
+            pointCount -= 1;
         }
+
+        // 更新帖子点赞量
+        commentBO.refreshPoingComment(code, pointCount);
     }
 
     @Override

@@ -26,6 +26,9 @@ public interface ICommentBO extends IPaginableBO<Comment> {
     public void refreshApproveComment(String code, String status,
             String approver, String approveNote);
 
+    // 更新点赞量
+    public void refreshPoingComment(String code, Integer pointCount);
+
     public List<Comment> queryCommentList(Comment condition);
 
     // 获取帖子评论列表

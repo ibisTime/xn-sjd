@@ -105,6 +105,14 @@ public class CommentBOImpl extends PaginableBOImpl<Comment>
     }
 
     @Override
+    public void refreshPoingComment(String code, Integer pointCount) {
+        Comment data = new Comment();
+        data.setCode(code);
+        data.setPointCount(pointCount);
+        commentDAO.updatePointComment(data);
+    }
+
+    @Override
     public List<Comment> queryCommentList(Comment condition) {
         return commentDAO.selectList(condition);
     }
@@ -171,4 +179,5 @@ public class CommentBOImpl extends PaginableBOImpl<Comment>
             }
         }
     }
+
 }

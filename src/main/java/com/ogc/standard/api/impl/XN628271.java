@@ -5,7 +5,6 @@ import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.ObjValidater;
 import com.ogc.standard.dto.req.XN628271Req;
-import com.ogc.standard.dto.res.BooleanRes;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
@@ -24,8 +23,8 @@ public class XN628271 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        commentAO.commentComment(req.getCode(), req.getContent(), req.getUserId());
-        return new BooleanRes(true);
+        return commentAO.commentComment(req.getCode(), req.getContent(),
+            req.getUserId());
     }
 
     @Override

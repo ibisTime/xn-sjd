@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Comment;
+import com.ogc.standard.dto.res.XN628271Res;
 
 /**
  * @author: silver 
@@ -14,7 +15,8 @@ public interface ICommentAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
     // 评论评论
-    public String commentComment(String code, String content, String userId);
+    public XN628271Res commentComment(String code, String content,
+            String userId);
 
     // 删除评论
     public void dropComment(String code, String updater);

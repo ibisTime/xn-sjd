@@ -24,7 +24,7 @@ public interface ITeamAO {
 
     public List<Team> queryTeamList(Team condition);
 
-    // 返回用户是否加入该战队
+    // C端查询战队，返回用户是否加入该战队字段
     public Team getFrontTeam(String code, String userId);
 
     public Team getTeam(String code);

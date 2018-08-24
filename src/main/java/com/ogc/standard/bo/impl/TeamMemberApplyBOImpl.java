@@ -99,6 +99,7 @@ public class TeamMemberApplyBOImpl extends PaginableBOImpl<TeamMemberApply>
 
         // 战队报名状态
         List<String> applyStatusList = new ArrayList<String>();
+        applyStatusList.add(ETeamMemberApplyStatus.TO_APPROVE.getCode());
         applyStatusList.add(ETeamMemberApplyStatus.APPROVED_YES.getCode());
 
         // 战队状态

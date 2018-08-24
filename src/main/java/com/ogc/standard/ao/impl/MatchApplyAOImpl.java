@@ -51,7 +51,7 @@ public class MatchApplyAOImpl implements IMatchApplyAO {
 
     @Override
     @Transactional
-    public String addMatchApply(XN628300Req req) {
+    public String matchApply(XN628300Req req) {
         Match match = matchBO.getMatch(req.getMatchCode());
         if (!EMatchStatus.PUBLISHED.getCode().equals(match.getStatus())) {
             throw new BizException("xn000", "当前赛事未处于可报名状态！");
@@ -59,6 +59,10 @@ public class MatchApplyAOImpl implements IMatchApplyAO {
 
         if (matchApplyBO.isTeamNameExist(req.getTeamName())) {
             throw new BizException("xn000", "战队名称已存在，请重新输入！");
+        }
+
+        if (matchApplyBO.isApplyUserExist(req.getUserId())) {
+            throw new BizException("xn000", "该用户已报名赛事，无法再次报名！");
         }
 
         MatchApply data = new MatchApply();
@@ -98,9 +102,9 @@ public class MatchApplyAOImpl implements IMatchApplyAO {
             status = EMatchApplyStatus.APPROVED_YES.getCode();
 
             // 审核通过后添加战队
-            String teamCode = teamBO.saveTeam(code, matchApply.getTeamName(),
-                matchApply.getLogo(), matchApply.getDescription(),
-                matchApply.getApplyUser());
+            String teamCode = teamBO.saveTeam(matchApply.getMatchCode(),
+                matchApply.getTeamName(), matchApply.getLogo(),
+                matchApply.getDescription(), matchApply.getApplyUser());
 
             // 添加组合
             // groupBO.saveGroup(match.getCode(), teamCode,

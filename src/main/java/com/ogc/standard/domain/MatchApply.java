@@ -70,6 +70,9 @@ public class MatchApply extends ABaseDO {
     // 申请人
     private User applyUserInfo;
 
+    // 赛事状态列表
+    private List<String> matchStatusList;
+
     public void setCode(String code) {
         this.code = code;
     }
@@ -212,6 +215,14 @@ public class MatchApply extends ABaseDO {
 
     public void setApplyUserInfo(User applyUserInfo) {
         this.applyUserInfo = applyUserInfo;
+    }
+
+    public List<String> getMatchStatusList() {
+        return matchStatusList;
+    }
+
+    public void setMatchStatusList(List<String> matchStatusList) {
+        this.matchStatusList = matchStatusList;
     }
 
 }

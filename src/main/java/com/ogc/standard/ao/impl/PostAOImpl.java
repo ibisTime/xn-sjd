@@ -3,6 +3,7 @@ package com.ogc.standard.ao.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,12 +16,14 @@ import com.ogc.standard.bo.IKeywordBO;
 import com.ogc.standard.bo.IPostBO;
 import com.ogc.standard.bo.ITeamBO;
 import com.ogc.standard.bo.ITeamMemberApplyBO;
+import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Comment;
 import com.ogc.standard.domain.Interact;
 import com.ogc.standard.domain.Keyword;
 import com.ogc.standard.domain.Post;
 import com.ogc.standard.domain.Team;
+import com.ogc.standard.domain.User;
 import com.ogc.standard.dto.res.XN628030Res;
 import com.ogc.standard.dto.res.XN628035Res;
 import com.ogc.standard.enums.EBoolean;
@@ -60,6 +63,9 @@ public class PostAOImpl implements IPostAO {
 
     @Autowired
     private ITeamMemberApplyBO teamMemberApplyBO;
+
+    @Autowired
+    private IUserBO userBO;
 
     @Override
     @Transactional
@@ -149,7 +155,7 @@ public class PostAOImpl implements IPostAO {
     public void modifyLocation(String code, String updater) {
         Post post = postBO.getPost(code);
         if (!EPostStatus.APPROVED_YES.getCode().equals(post.getStatus())
-                && EPostStatus.RELEASED.getCode().equals(post.getStatus())) {
+                && !EPostStatus.RELEASED.getCode().equals(post.getStatus())) {
             throw new BizException("xn0000", "帖子未处于可置顶/取消置顶状态！");
         }
 
@@ -168,7 +174,7 @@ public class PostAOImpl implements IPostAO {
     public XN628035Res commentPost(String code, String content, String userId) {
         Post post = postBO.getPost(code);
         if (!EPostStatus.APPROVED_YES.getCode().equals(post.getStatus())
-                && EPostStatus.RELEASED.getCode().equals(post.getStatus())) {
+                && !EPostStatus.RELEASED.getCode().equals(post.getStatus())) {
             throw new BizException("xn0000", "帖子未处于可评论状态！");
         }
 
@@ -226,7 +232,7 @@ public class PostAOImpl implements IPostAO {
     public void pointPost(String code, String userId) {
         Post post = postBO.getPost(code);
         if (!EPostStatus.APPROVED_YES.getCode().equals(post.getStatus())
-                && EPostStatus.RELEASED.getCode().equals(post.getStatus())) {
+                && !EPostStatus.RELEASED.getCode().equals(post.getStatus())) {
             throw new BizException("xn0000", "当前帖子状态不可操作！");
         }
 
@@ -287,17 +293,24 @@ public class PostAOImpl implements IPostAO {
 
     @Override
     public Paginable<Post> queryPostPage(int start, int limit, Post condition) {
-        return postBO.getPaginable(start, limit, condition);
-    }
+        Paginable<Post> page = postBO.getPaginable(start, limit, condition);
 
-    @Override
-    public List<Post> queryPostList(Post condition) {
-        return postBO.queryPostList(condition);
+        if (null != page && CollectionUtils.isNotEmpty(page.getList())) {
+            for (Post post : page.getList()) {
+                initPost(post);
+            }
+        }
+
+        return page;
     }
 
     @Override
     public Post getPostOss(String code) {
-        return postBO.getPost(code);
+        Post post = postBO.getPost(code);
+
+        initPost(post);
+
+        return post;
     }
 
     @Override
@@ -321,7 +334,15 @@ public class PostAOImpl implements IPostAO {
             userId);
         post.setCommentList(commentList);
 
+        initPost(post);
+
         return post;
+    }
+
+    private void initPost(Post post) {
+        // 发布人信息
+        User userInfo = userBO.getUser(post.getUserId());
+        post.setUserInfo(userInfo);
     }
 
 }

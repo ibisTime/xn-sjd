@@ -1,7 +1,5 @@
 package com.ogc.standard.ao;
 
-import java.util.List;
-
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Post;
 import com.ogc.standard.dto.res.XN628030Res;
@@ -42,8 +40,6 @@ public interface IPostAO {
     public void modifyLocation(String code, String updater);
 
     public Paginable<Post> queryPostPage(int start, int limit, Post condition);
-
-    public List<Post> queryPostList(Post condition);
 
     // 详情查询帖子(oss)
     public Post getPostOss(String code);
