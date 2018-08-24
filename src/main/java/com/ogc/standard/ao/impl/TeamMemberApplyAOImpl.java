@@ -51,12 +51,18 @@ public class TeamMemberApplyAOImpl implements ITeamMemberApplyAO {
             throw new BizException("xn000", "当前战队不在可申请加入状态！");
         }
 
+        // 判断是否已申请加入该战队
         List<String> statusList = new ArrayList<String>();
         statusList.add(ETeamMemberApplyStatus.TO_APPROVE.getCode());
         statusList.add(ETeamMemberApplyStatus.APPROVED_YES.getCode());
         if (teamMemberApplyBO.isTeamMemberApplyExist(teamCode, applyUser,
             statusList)) {
             throw new BizException("xn000", "当前用户已申请加入该战队，请勿重复申请！");
+        }
+
+        // 用户是否已加入其他战队
+        if (null != teamMemberApplyBO.getJoinedTeam(applyUser)) {
+            throw new BizException("xn000", "用户已加入其他战队！");
         }
 
         return teamMemberApplyBO.saveTeamMemberApply(teamCode, applyUser);
@@ -130,13 +136,7 @@ public class TeamMemberApplyAOImpl implements ITeamMemberApplyAO {
         teamMemberApply.setTeamName(team.getName());
 
         // 申请人
-        User applyUser = userBO.getUser(teamMemberApply.getApplyUser());
-        teamMemberApply.setApplyUserName(applyUser.getRealName());
-
-        // 审核人
-        if (null != teamMemberApply.getApprover()) {
-            User approverUser = userBO.getUser(teamMemberApply.getApprover());
-            teamMemberApply.setApproverName(approverUser.getRealName());
-        }
+        User applyUserInfo = userBO.getUser(teamMemberApply.getApplyUser());
+        teamMemberApply.setApplyUserInfo(applyUserInfo);
     }
 }

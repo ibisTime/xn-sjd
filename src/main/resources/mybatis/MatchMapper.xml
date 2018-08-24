@@ -26,6 +26,13 @@
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
 			</if>
+			
+			<if test="matchStartDatetime != null and matchStartDatetime != '' ">
+				<![CDATA[AND t.start_datetime = #{matchStartDatetime}]]>
+			</if>
+			<if test="matchEndDatetime != null and matchEndDatetime != '' ">
+				<![CDATA[AND t.end_datetime = #{matchEndDatetime}]]>
+			</if>
 			<if test="startDatetimeStart != null and startDatetimeStart != '' ">
 				<![CDATA[AND t.start_datetime >= #{startDatetimeStart}]]>
 			</if>

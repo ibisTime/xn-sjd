@@ -32,8 +32,11 @@ public interface IPostBO extends IPaginableBO<Post> {
     // 更新点赞数量
     public void refreshPointPost(String code, Integer pointCount);
 
+    // 更新阅读数量
+    public void refreshReadPost(String code, Integer readCount);
+
     // 置顶/取消
-    public void refreshStickPost(String code, String location, String updater);
+    public void refreshLocatePost(String code, String location, String updater);
 
     public List<Post> queryPostList(Post condition);
 

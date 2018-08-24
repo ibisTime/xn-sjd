@@ -21,7 +21,6 @@ import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ETeamMemberApplyStatus;
 
 /**
- * 战队表
  * @author: silver 
  * @since: 2018年8月21日 下午9:44:16 
  * @history:
@@ -70,7 +69,7 @@ public class TeamAOImpl implements ITeamAO {
     }
 
     @Override
-    public Team getTeam4User(String code, String userId) {
+    public Team getFrontTeam(String code, String userId) {
         Team team = teamBO.getTeam(code);
 
         if (StringUtils.isNotBlank(userId)) {
@@ -78,9 +77,9 @@ public class TeamAOImpl implements ITeamAO {
             statusList.add(ETeamMemberApplyStatus.APPROVED_YES.getCode());
             if (teamMemberApplyBO.isTeamMemberApplyExist(code, userId,
                 statusList)) {
-                team.setUserBelongTeam(EBoolean.YES.getCode());
+                team.setIsUserBelongTeam(EBoolean.YES.getCode());
             } else {
-                team.setUserBelongTeam(EBoolean.NO.getCode());
+                team.setIsUserBelongTeam(EBoolean.NO.getCode());
             }
         }
 
@@ -104,8 +103,8 @@ public class TeamAOImpl implements ITeamAO {
         team.setMatchName(match.getName());
 
         // 队长信息
-        User captain = userBO.getUser(team.getCaptain());
-        team.setCaptainName(captain.getRealName());
+        User captainInfo = userBO.getUser(team.getCaptain());
+        team.setCaptainInfo(captainInfo);
     }
 
 }

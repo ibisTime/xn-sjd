@@ -23,7 +23,7 @@ public class XN628292 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        matchAO.releaseMatch(req.getCode(), req.getUpdater(), req.getRemark());
+        matchAO.publishMatch(req.getCode(), req.getUpdater(), req.getRemark());
         return new BooleanRes(true);
     }
 

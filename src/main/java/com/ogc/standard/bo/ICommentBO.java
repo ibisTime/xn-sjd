@@ -28,6 +28,10 @@ public interface ICommentBO extends IPaginableBO<Comment> {
 
     public List<Comment> queryCommentList(Comment condition);
 
+    // 获取帖子评论列表
+    public List<Comment> queryCommentListByObjectCode(String objectCode,
+            String userId);
+
     public Comment getComment(String code);
 
 }

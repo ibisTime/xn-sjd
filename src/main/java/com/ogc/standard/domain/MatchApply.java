@@ -68,10 +68,7 @@ public class MatchApply extends ABaseDO {
     private List<String> statusList;
 
     // 申请人
-    private String applyUserName;
-
-    // 审核人
-    private String approverName;
+    private User applyUserInfo;
 
     public void setCode(String code) {
         this.code = code;
@@ -209,20 +206,12 @@ public class MatchApply extends ABaseDO {
         this.statusList = statusList;
     }
 
-    public String getApplyUserName() {
-        return applyUserName;
+    public User getApplyUserInfo() {
+        return applyUserInfo;
     }
 
-    public void setApplyUserName(String applyUserName) {
-        this.applyUserName = applyUserName;
-    }
-
-    public String getApproverName() {
-        return approverName;
-    }
-
-    public void setApproverName(String approverName) {
-        this.approverName = approverName;
+    public void setApplyUserInfo(User applyUserInfo) {
+        this.applyUserInfo = applyUserInfo;
     }
 
 }

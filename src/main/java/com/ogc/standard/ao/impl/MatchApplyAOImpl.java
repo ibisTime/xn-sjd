@@ -1,6 +1,5 @@
 package com.ogc.standard.ao.impl;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -28,7 +27,6 @@ import com.ogc.standard.enums.EMatchStatus;
 import com.ogc.standard.exception.BizException;
 
 /**
- * 参赛申请
  * @author: silver 
  * @since: 2018年8月21日 下午2:39:54 
  * @history:
@@ -85,15 +83,14 @@ public class MatchApplyAOImpl implements IMatchApplyAO {
     public void approveMatchApply(String code, String approveResult,
             String approver, String remark) {
         MatchApply matchApply = matchApplyBO.getMatchApply(code);
-        Match match = matchBO.getMatch(matchApply.getCode());
-
-        if (!EMatchStatus.PUBLISHED.getCode().equals(match.getStatus())) {
-            throw new BizException("xn000", "赛事未处于可审核状态！");
-        }
-
         if (!EMatchApplyStatus.TO_APPROVE.getCode()
             .equals(matchApply.getStatus())) {
-            throw new BizException("xn0000", "赛事报名记录不处于待审核状态！");
+            throw new BizException("xn0000", "报名申请未处于待审核状态！");
+        }
+
+        Match match = matchBO.getMatch(matchApply.getMatchCode());
+        if (!EMatchStatus.PUBLISHED.getCode().equals(match.getStatus())) {
+            throw new BizException("xn000", "赛事未处于待审核状态！");
         }
 
         String status = null;
@@ -106,8 +103,8 @@ public class MatchApplyAOImpl implements IMatchApplyAO {
                 matchApply.getApplyUser());
 
             // 添加组合
-            groupBO.saveGroup(match.getCode(), teamCode,
-                matchApply.getApplyUser(), new BigDecimal(0));
+            // groupBO.saveGroup(match.getCode(), teamCode,
+            // matchApply.getApplyUser(), new BigDecimal(0));
         } else {
             status = EMatchApplyStatus.APPROVED_NO.getCode();
         }
@@ -159,14 +156,8 @@ public class MatchApplyAOImpl implements IMatchApplyAO {
         matchApply.setMatchName(match.getName());
 
         // 申请人
-        User applyUser = userBO.getUser(matchApply.getApplyUser());
-        matchApply.setApplyUserName(applyUser.getRealName());
-
-        // 审核人
-        if (null != matchApply.getApprover()) {
-            User approverUser = userBO.getUser(matchApply.getApprover());
-            matchApply.setApproverName(approverUser.getRealName());
-        }
+        User applyUserInfo = userBO.getUser(matchApply.getApplyUser());
+        matchApply.setApplyUserInfo(applyUserInfo);
 
     }
 }

@@ -41,6 +41,9 @@ public class Post extends ABaseDO {
     // 点赞数
     private Integer pointCount;
 
+    // 阅读数
+    private Integer readCount;
+
     // 更新人
     private String updater;
 
@@ -63,6 +66,12 @@ public class Post extends ABaseDO {
 
     // 前端用户是否点赞(1是/0否)
     private String isPoint;
+
+    // 关键字过滤状态（0=未过滤，1=关键字被替换，2=待审核）
+    private String filterFlag;
+
+    // 评论列表
+    private List<Comment> commentList;
 
     public String getCode() {
         return code;
@@ -190,6 +199,30 @@ public class Post extends ABaseDO {
 
     public void setIsPoint(String isPoint) {
         this.isPoint = isPoint;
+    }
+
+    public String getFilterFlag() {
+        return filterFlag;
+    }
+
+    public void setFilterFlag(String filterFlag) {
+        this.filterFlag = filterFlag;
+    }
+
+    public Integer getReadCount() {
+        return readCount;
+    }
+
+    public void setReadCount(Integer readCount) {
+        this.readCount = readCount;
+    }
+
+    public List<Comment> getCommentList() {
+        return commentList;
+    }
+
+    public void setCommentList(List<Comment> commentList) {
+        this.commentList = commentList;
     }
 
 }

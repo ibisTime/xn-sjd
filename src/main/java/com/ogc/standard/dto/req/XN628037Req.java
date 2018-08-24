@@ -14,7 +14,6 @@ public class XN628037Req {
     private String code;
 
     // 用户编号人
-    @NotBlank
     private String userId;
 
     public String getCode() {

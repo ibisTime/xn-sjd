@@ -6,7 +6,6 @@ import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Keyword;
 
 /**
- * 关键字
  * @author: silver 
  * @since: 2018年8月22日 上午10:49:33 
  * @history:

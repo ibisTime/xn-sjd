@@ -5,7 +5,6 @@ import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.ObjValidater;
 import com.ogc.standard.dto.req.XN628030Req;
-import com.ogc.standard.dto.res.PKCodeRes;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
@@ -23,8 +22,8 @@ public class XN628030 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return new PKCodeRes(postAO.addPost(req.getUserId(), req.getContent(),
-            req.getPlateCode()));
+        return postAO.publishPost(req.getUserId(), req.getContent(),
+            req.getPlateCode());
     }
 
     @Override

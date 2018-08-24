@@ -23,7 +23,7 @@ public class XN628033 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        postAO.stickPost(req.getCode(), req.getUpdater());
+        postAO.modifyLocation(req.getCode(), req.getUpdater());
         return new BooleanRes(true);
     }
 

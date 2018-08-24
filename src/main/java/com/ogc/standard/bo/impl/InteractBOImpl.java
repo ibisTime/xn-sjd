@@ -50,6 +50,7 @@ public class InteractBOImpl extends PaginableBOImpl<Interact>
         data.setObjectType(objectType);
         data.setObjectCode(objectCode);
         data.setUserId(userId);
+
         data.setCreateDatetime(new Date());
         interactDAO.insert(data);
         return code;

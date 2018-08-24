@@ -40,12 +40,21 @@
 			<if test="objectCode != null and objectCode != '' ">
 				AND t.object_code = #{objectCode}
 			</if>
-			<if test="status != null and status != '' ">
-				AND t.status = #{status}
-			</if>
 			<if test="content != null and content != '' ">
 				AND t.content like "%"#{content}#"%"
 			</if>
+			
+			<choose>
+				<when test="status != null and status != '' ">
+					AND t.status = #{status}
+				</when>
+				<when test="statusList != null and statusList.size() > 0 ">
+					AND t.status IN
+					<foreach collection="statusList" item="item" index="index" open="(" separator="," close=")">
+						#{item}
+					</foreach>
+				</when>
+			</choose>
 			
 			<if test="commentDateStart != null and commentDateStart != '' ">
 				<![CDATA[AND t.comment_datetime >= #{commentDateStart}]]>

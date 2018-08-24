@@ -43,6 +43,11 @@ public class PostDAOImpl extends AMybatisTemplate implements IPostDAO {
     }
 
     @Override
+    public int updateReadPost(Post data) {
+        return super.update(NAMESPACE.concat("update_readCount"), data);
+    }
+
+    @Override
     public int updateLocationPost(Post data) {
         return super.update(NAMESPACE.concat("update_postLocation"), data);
     }
