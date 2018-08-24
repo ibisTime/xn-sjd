@@ -72,8 +72,7 @@
 	<bean id="dayBenefitBO" class="com.ogc.standard.bo.impl.DayBenefitBOImpl">
 		<property name="paginableDAO" ref="dayBenefitDAOImpl"/>
 	</bean>
-<<<<<<< HEAD
-	
+
 	<bean id="simuOrderBO" class="com.ogc.standard.bo.impl.SimuOrderBOImpl">
 		<property name="paginableDAO" ref="simuOrderDAOImpl"/>
 	</bean>
@@ -81,8 +80,6 @@
 	<bean id="simuOrderDetailBO" class="com.ogc.standard.bo.impl.SimuOrderDetailBOImpl">
 		<property name="paginableDAO" ref="simuOrderDetailDAOImpl"/>
 	</bean>
-=======
->>>>>>> refs/remotes/origin/master
 
 	<bean id="userBO" class="com.ogc.standard.bo.impl.UserBOImpl">
 		<property name="paginableDAO" ref="userDAOImpl"/>
