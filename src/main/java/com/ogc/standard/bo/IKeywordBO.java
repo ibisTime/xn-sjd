@@ -30,7 +30,7 @@ public interface IKeywordBO extends IPaginableBO<Keyword> {
             String reaction, String remark, String updater);
 
     // 检查关键字
-    public Keyword checkContent(String content);
+    public List<Keyword> checkContent(String content);
 
     // 替换关键字
     public String replaceKeyword(String content, String word);

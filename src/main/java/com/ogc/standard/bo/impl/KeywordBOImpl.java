@@ -1,5 +1,6 @@
 package com.ogc.standard.bo.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -78,21 +79,28 @@ public class KeywordBOImpl extends PaginableBOImpl<Keyword>
     }
 
     @Override
-    public Keyword checkContent(String content) {
-        Keyword result = null;
+    public List<Keyword> checkContent(String content) {
+        List<Keyword> keywordList = new ArrayList<Keyword>();
+
         if (StringUtils.isNotBlank(content)) {
             List<Keyword> allList = keywordDAO.selectList(new Keyword());
+
             for (Keyword keyWord : allList) {
                 if (content.indexOf(keyWord.getWord()) >= 0) {
-                    result = keyWord;
-                    if (keyWord.getReaction()
-                        .equals(EKeyWordReaction.REFUSE.getCode())) {
+                    keywordList.add(keyWord);
+
+                    if (EKeyWordReaction.REFUSE.getCode()
+                        .equals(keyWord.getReaction())
+                            || EKeyWordReaction.APPROVE.getCode()
+                                .equals(keyWord.getReaction())) {
+                        keywordList.clear();
+                        keywordList.add(keyWord);
                         break;
                     }
                 }
             }
         }
-        return result;
+        return keywordList;
     }
 
     @Override

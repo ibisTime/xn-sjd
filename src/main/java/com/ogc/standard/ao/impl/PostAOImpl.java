@@ -80,29 +80,33 @@ public class PostAOImpl implements IPostAO {
         }
 
         // 关键字过滤
-        Keyword keyWord = keywordBO.checkContent(content);
+        List<Keyword> keywordList = keywordBO.checkContent(content);
         String status = EPostStatus.RELEASED.getCode();
         String filterFlag = null;
 
-        if (null != keyWord) {
+        if (CollectionUtils.isNotEmpty(keywordList)) {
 
             // 直接拦截
             if (EKeyWordReaction.REFUSE.getCode()
-                .equals(keyWord.getReaction())) {
-                throw new BizException("xn000",
-                    "发帖内容存在关键字：【" + keyWord.getWord() + "】,请删除关键字后重新发帖！");
+                .equals(keywordList.get(0).getReaction())) {
+                throw new BizException("xn000", "发帖内容存在关键字：【"
+                        + keywordList.get(0).getWord() + "】,请删除关键字后重新发帖！");
             }
 
             // 替换**
             if (EKeyWordReaction.REPLACE.getCode()
-                .equals(keyWord.getReaction())) {
-                content = keywordBO.replaceKeyword(content, keyWord.getWord());
+                .equals(keywordList.get(0).getReaction())) {
+                for (Keyword keyword : keywordList) {
+                    content = keywordBO.replaceKeyword(content,
+                        keyword.getWord());
+                }
+
                 filterFlag = EFilterFlag.REPLACED.getCode();
             }
 
             // 审核
             if (EKeyWordReaction.APPROVE.getCode()
-                .equals(keyWord.getReaction())) {
+                .equals(keywordList.get(0).getReaction())) {
                 status = EPostStatus.TO_APPROVE.getCode();
             }
         }
@@ -116,7 +120,8 @@ public class PostAOImpl implements IPostAO {
 
         String code = postBO.savePost(userId, content, plateCode, status);
 
-        if (EPostStatus.RELEASED.getCode().equals(status)) {
+        if (EPostStatus.RELEASED.getCode().equals(status)
+                && null == filterFlag) {
             filterFlag = EFilterFlag.NORMAN.getCode();
         } else if (EPostStatus.TO_APPROVE.getCode().equals(status)) {
             filterFlag = EFilterFlag.TO_APPROVE.getCode();
@@ -179,29 +184,33 @@ public class PostAOImpl implements IPostAO {
         }
 
         // 关键字过滤
-        Keyword keyWord = keywordBO.checkContent(content);
+        List<Keyword> keywordList = keywordBO.checkContent(content);
         String status = ECommentStatus.RELEASED.getCode();
         String filterFlag = null;
 
-        if (null != keyWord) {
+        if (CollectionUtils.isNotEmpty(keywordList)) {
 
             // 直接拦截
             if (EKeyWordReaction.REFUSE.getCode()
-                .equals(keyWord.getReaction())) {
-                throw new BizException("xn000",
-                    "发帖内容存在关键字：【" + keyWord.getWord() + "】,请删除关键字后重新发帖！");
+                .equals(keywordList.get(0).getReaction())) {
+                throw new BizException("xn000", "发帖内容存在关键字：【"
+                        + keywordList.get(0).getWord() + "】,请删除关键字后重新发帖！");
             }
 
             // 替换**
             if (EKeyWordReaction.REPLACE.getCode()
-                .equals(keyWord.getReaction())) {
-                content = keywordBO.replaceKeyword(content, keyWord.getWord());
+                .equals(keywordList.get(0).getReaction())) {
+                for (Keyword keyword : keywordList) {
+                    content = keywordBO.replaceKeyword(content,
+                        keyword.getWord());
+                }
+
                 filterFlag = EFilterFlag.REPLACED.getCode();
             }
 
             // 审核
             if (EKeyWordReaction.APPROVE.getCode()
-                .equals(keyWord.getReaction())) {
+                .equals(keywordList.get(0).getReaction())) {
                 status = ECommentStatus.TO_APPROVE.getCode();
             }
         }
@@ -216,7 +225,8 @@ public class PostAOImpl implements IPostAO {
         commentBO.saveComment(ECommentType.POST.getCode(), code, userId,
             content, status, userId);
 
-        if (ECommentStatus.RELEASED.getCode().equals(status)) {
+        if (ECommentStatus.RELEASED.getCode().equals(status)
+                && null == filterFlag) {
             filterFlag = EFilterFlag.NORMAN.getCode();
         } else if (ECommentStatus.TO_APPROVE.getCode().equals(status)) {
             filterFlag = EFilterFlag.TO_APPROVE.getCode();
