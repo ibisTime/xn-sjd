@@ -20,14 +20,14 @@ public interface ICommentBO extends IPaginableBO<Comment> {
             String parentUserId, String content, String status, String userId);
 
     // 删除评论
-    public void removeComment(String code, String updater);
+    public void removeComment(String code);
 
     // 审核评论
     public void refreshApproveComment(String code, String status,
             String approver, String approveNote);
 
     // 更新点赞量
-    public void refreshPoingComment(String code, Integer pointCount);
+    public void refreshPointComment(String code, Integer pointCount);
 
     public List<Comment> queryCommentList(Comment condition);
 
@@ -36,5 +36,11 @@ public interface ICommentBO extends IPaginableBO<Comment> {
             String userId);
 
     public Comment getComment(String code);
+
+    public void searchCycleComment(String parentCode, List<Comment> list);
+
+    public void initComment(String userId, Comment comment);
+
+    public void orderCommentList(List<Comment> commentList, String userId);
 
 }

@@ -33,8 +33,8 @@ import com.ogc.standard.exception.BizException;
  * @history:
  */
 @Component
-public class CommentBOImpl extends PaginableBOImpl<Comment>
-        implements ICommentBO {
+public class CommentBOImpl extends PaginableBOImpl<Comment> implements
+        ICommentBO {
 
     @Autowired
     private ICommentDAO commentDAO;
@@ -60,8 +60,8 @@ public class CommentBOImpl extends PaginableBOImpl<Comment>
             String parentUserId, String content, String status, String userId) {
         Comment data = new Comment();
 
-        String code = OrderNoGenerater
-            .generate(EGeneratePrefix.Comment.getCode());
+        String code = OrderNoGenerater.generate(EGeneratePrefix.Comment
+            .getCode());
         data.setCode(code);
         data.setType(type);
         data.setParentCode(parentCode);
@@ -83,7 +83,7 @@ public class CommentBOImpl extends PaginableBOImpl<Comment>
     }
 
     @Override
-    public void removeComment(String code, String updater) {
+    public void removeComment(String code) {
         if (StringUtils.isNotBlank(code)) {
             Comment data = new Comment();
             data.setCode(code);
@@ -105,7 +105,7 @@ public class CommentBOImpl extends PaginableBOImpl<Comment>
     }
 
     @Override
-    public void refreshPoingComment(String code, Integer pointCount) {
+    public void refreshPointComment(String code, Integer pointCount) {
         Comment data = new Comment();
         data.setCode(code);
         data.setPointCount(pointCount);
@@ -152,6 +152,25 @@ public class CommentBOImpl extends PaginableBOImpl<Comment>
         return data;
     }
 
+    @Override
+    public void searchCycleComment(String parentCode, List<Comment> list) {
+        Comment condition = new Comment();
+        condition.setParentCode(parentCode);
+        List<String> statusList = new ArrayList<String>();
+        statusList.add(ECommentStatus.RELEASED.getCode());
+        statusList.add(ECommentStatus.APPROVED_YES.getCode());
+        condition.setStatusList(statusList);
+        condition.setOrder("comment_datetime", "asc");
+        List<Comment> nextList = queryCommentList(condition);
+        if (CollectionUtils.isNotEmpty(nextList)) {
+            list.addAll(nextList);
+            for (int i = 0; i < nextList.size(); i++) {
+                searchCycleComment(nextList.get(i).getCode(), list);
+            }
+        }
+    }
+
+    @Override
     public void initComment(String userId, Comment comment) {
         User user = userBO.getUser(comment.getUserId());
         comment.setNickname(user.getNickname());
@@ -167,6 +186,8 @@ public class CommentBOImpl extends PaginableBOImpl<Comment>
             comment.setIsTop(EBoolean.YES.getCode());
         } else {
             comment.setIsTop(EBoolean.NO.getCode());
+            Comment parentComment = getComment(comment.getParentCode());
+            comment.setParentComment(parentComment);
         }
 
         comment.setIsPoint(EBoolean.NO.getCode());
@@ -177,6 +198,25 @@ public class CommentBOImpl extends PaginableBOImpl<Comment>
             if (data != null) {
                 comment.setIsPoint(EBoolean.YES.getCode());
             }
+        }
+    }
+
+    @Override
+    public void orderCommentList(List<Comment> commentList, String userId) {
+        for (int i = 0; i < commentList.size(); i++) {
+            for (int j = i + 1; j < commentList.size(); j++) {
+                if (commentList.get(i).getCommentDatetime()
+                    .after(commentList.get(j).getCommentDatetime())) {
+                    Comment temp = new Comment();
+                    temp = commentList.get(i);
+                    commentList.set(i, commentList.get(j));
+                    commentList.set(j, temp);
+                }
+            }
+        }
+        // 初始化参数
+        for (Comment comment : commentList) {
+            initComment(userId, comment);
         }
     }
 

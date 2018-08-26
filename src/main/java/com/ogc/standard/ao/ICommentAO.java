@@ -1,7 +1,5 @@
 package com.ogc.standard.ao;
 
-import java.util.List;
-
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Comment;
 import com.ogc.standard.dto.res.XN628271Res;
@@ -15,11 +13,13 @@ public interface ICommentAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
     // 评论评论
-    public XN628271Res commentComment(String code, String content,
-            String userId);
+    public XN628271Res commentComment(String code, String content, String userId);
 
     // 删除评论
-    public void dropComment(String code, String updater);
+    public void dropOssComment(String code, String updater);
+
+    // 前端删除评论
+    public void dropFrontComment(String code, String updater);
 
     // 审核评论
     public void approveComment(String code, String approveResult,
@@ -31,7 +31,10 @@ public interface ICommentAO {
     public Paginable<Comment> queryCommentPage(int start, int limit,
             Comment condition);
 
-    public List<Comment> queryCommentList(Comment condition);
+    public Paginable<Comment> queryMyCommentPage(int start, int limit,
+            Comment condition, String userId);
+
+    public Comment getFrontComment(String code, String userId);
 
     public Comment getComment(String code);
 

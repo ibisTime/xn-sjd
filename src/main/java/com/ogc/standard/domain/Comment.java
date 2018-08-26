@@ -85,6 +85,39 @@ public class Comment extends ABaseDO {
     // 关键字过滤状态（0=未过滤，1=关键字被替换，2=待审核）
     private String filterFlag;
 
+    // 帖子信息
+    private Post post;
+
+    // 父级别评论
+    private Comment parentComment;
+
+    // 子集评论
+    private List<Comment> nextCommentList;
+
+    public List<Comment> getNextCommentList() {
+        return nextCommentList;
+    }
+
+    public void setNextCommentList(List<Comment> nextCommentList) {
+        this.nextCommentList = nextCommentList;
+    }
+
+    public Comment getParentComment() {
+        return parentComment;
+    }
+
+    public void setParentComment(Comment parentComment) {
+        this.parentComment = parentComment;
+    }
+
+    public Post getPost() {
+        return post;
+    }
+
+    public void setPost(Post post) {
+        this.post = post;
+    }
+
     public String getCode() {
         return code;
     }
