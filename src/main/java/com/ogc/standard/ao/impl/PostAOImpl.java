@@ -192,8 +192,8 @@ public class PostAOImpl implements IPostAO {
             // 直接拦截
             if (EKeyWordReaction.REFUSE.getCode().equals(
                 keywordList.get(0).getReaction())) {
-                throw new BizException("xn000", "发帖内容存在关键字：【"
-                        + keywordList.get(0).getWord() + "】,请删除关键字后重新发帖！");
+                throw new BizException("xn000", "评论内容存在关键字：【"
+                        + keywordList.get(0).getWord() + "】,请删除关键字后再评论！");
             }
 
             // 替换**

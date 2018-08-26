@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Keyword;
+import com.ogc.standard.dto.req.XN628000Req;
 
 /**
  * @author: silver 
@@ -12,6 +13,9 @@ import com.ogc.standard.domain.Keyword;
  */
 public interface IKeywordAO {
     static final String DEFAULT_ORDER_COLUMN = "id";
+
+    // 批量增加关键字
+    public void addKeywords(List<XN628000Req> reqList, String updater);
 
     // 添加关键字
     public void addKeyword(String word, String level, String reaction,

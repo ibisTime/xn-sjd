@@ -4,11 +4,13 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.IKeywordAO;
 import com.ogc.standard.bo.IKeywordBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Keyword;
+import com.ogc.standard.dto.req.XN628000Req;
 import com.ogc.standard.exception.BizException;
 
 /**
@@ -21,6 +23,15 @@ public class KeywordAOImpl implements IKeywordAO {
 
     @Autowired
     private IKeywordBO keywordBO;
+
+    @Override
+    @Transactional
+    public void addKeywords(List<XN628000Req> reqList, String updater) {
+        for (XN628000Req req : reqList) {
+            keywordBO.saveKeyword(req.getWord(), req.getLevel(),
+                req.getReaction(), req.getRemark(), updater);
+        }
+    }
 
     @Override
     public void addKeyword(String word, String level, String reaction,
