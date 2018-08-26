@@ -25,35 +25,33 @@ CREATE TABLE `tcoin_coin` (
 CREATE TABLE `tcoin_eth_xaddress` (
   `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `address` varchar(255) NOT NULL COMMENT '以太坊地址',
-  `password` varchar(255) NOT NULL COMMENT 'keystore密码',
+  `keystore_pwd` varchar(255) NOT NULL COMMENT 'keystore密码',
   `keystore_name` text COMMENT 'keystore文件名',
   `keystore_content` text COMMENT 'keystore文件内容',
   `user_id` varchar(32) DEFAULT NULL COMMENT '用户编号',
   `create_datetime` datetime DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`code`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='ETH用户分发地址';
 
 CREATE TABLE `tcoin_eth_maddress` (
   `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `address` varchar(255) DEFAULT NULL COMMENT '以太坊地址',
-  `password` varchar(255) NOT NULL COMMENT 'keystore密码',
+  `keystore_pwd` varchar(255) NOT NULL COMMENT 'keystore密码',
   `keystore_name` text COMMENT 'keystore文件名',
   `keystore_content` text COMMENT 'keystore文件内容',
-  `user_id` varchar(32) DEFAULT NULL COMMENT '用户编号',
   `status` varchar(32) DEFAULT NULL COMMENT '状态',
   `create_datetime` datetime DEFAULT NULL COMMENT '创建时间',
   `abandon_datetime` datetime DEFAULT NULL COMMENT '弃用时间',
-  PRIMARY KEY (`code`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='ETH平台散取地址';
 
 CREATE TABLE `tcoin_eth_waddress` (
   `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `address` varchar(255) DEFAULT NULL COMMENT '以太坊地址',
-  `user_id` varchar(32) DEFAULT NULL COMMENT '用户编号',
   `status` varchar(32) DEFAULT NULL COMMENT '状态',
   `create_datetime` datetime DEFAULT NULL COMMENT '创建时间',
   `abandon_datetime` datetime DEFAULT NULL COMMENT '弃用时间',
-  PRIMARY KEY (`code`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='ETH平台归集地址';
 
 CREATE TABLE `tcoin_eth_transaction` (
@@ -61,13 +59,13 @@ CREATE TABLE `tcoin_eth_transaction` (
   `hash` varchar(255) NOT NULL COMMENT '交易哈希',
   `nonce` bigint(32) NOT NULL COMMENT '交易次数',
   `block_hash` varchar(255) NOT NULL COMMENT '区块哈希',
+  `block_number` bigint(32) NOT NULL COMMENT '区块号',
+  `block_create_datetime` datetime NOT NULL COMMENT '区块形成时间',
   `transaction_index` bigint(32) NOT NULL COMMENT '交易index',
   `from` varchar(255) NOT NULL COMMENT '转出地址',
   `to` varchar(255) NOT NULL COMMENT '转入地址',
   `value` decimal(64,0) NOT NULL COMMENT '交易额',
-  `block_create_datetime` datetime NOT NULL COMMENT '区块形成时间',
   `sync_datetime` datetime NOT NULL COMMENT '同步时间',
-  `block_number` bigint(32) NOT NULL COMMENT '区块号',
   `gas_price` decimal(64,0) NOT NULL COMMENT 'gas价格',
   `gas_limit` bigint(20) NOT NULL COMMENT 'gas最大使用限制',
   `gas_used` bigint(20) NOT NULL COMMENT 'gas实际使用量',
@@ -93,7 +91,7 @@ CREATE TABLE `tcoin_token_event` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='ETHtoken交易event';
 
 CREATE TABLE `tcoin_personal_address` (
-  `code` varchar(32) NOT NULL DEFAULT '' COMMENT '编号',
+  `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `symbol` varchar(32) DEFAULT NULL COMMENT '币种',
   `address` varchar(255) DEFAULT NULL COMMENT '提现地址',
   `label` varchar(64) DEFAULT NULL COMMENT '标签',
@@ -103,7 +101,7 @@ CREATE TABLE `tcoin_personal_address` (
   `updater` varchar(32) DEFAULT NULL COMMENT '最后操作人',
   `update_datetime` datetime DEFAULT NULL COMMENT '最后一次更时间',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
-  PRIMARY KEY (`code`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户取现地址';
 
 CREATE TABLE `tstd_account` (
@@ -124,21 +122,21 @@ CREATE TABLE `tstd_account` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='账户';
 
 CREATE TABLE `tstd_jour` (
-  `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `code` varchar(32) NOT NULL COMMENT '编号',
   `type` varchar(32) DEFAULT NULL COMMENT '流水类型（余额流水、冻结流水）',
   `user_id` varchar(32) DEFAULT NULL COMMENT '用户编号',
   `account_number` varchar(32) DEFAULT NULL COMMENT '账户编号',
   `account_type` varchar(4) DEFAULT NULL COMMENT '账户类型',
   `currency` varchar(8) DEFAULT NULL COMMENT '币种',
   `biz_type` varchar(32) DEFAULT NULL COMMENT '业务类型',
-  `biz_note` varchar(255) DEFAULT NULL COMMENT '业务类型',
+  `biz_note` varchar(255) DEFAULT NULL COMMENT '业务说明',
   `trans_amount` decimal(64,0) DEFAULT NULL COMMENT '变动金额',
   `pre_amount` decimal(64,0) DEFAULT NULL COMMENT '变动前金额',
   `post_amount` decimal(64,0) DEFAULT NULL COMMENT '变动后金额',
   `status` varchar(4) DEFAULT NULL COMMENT '状态',
   `channel_type` varchar(32) DEFAULT NULL COMMENT '支付渠道类型',
   `channel_order` varchar(255) DEFAULT NULL COMMENT '支付渠道单号',
-  `ref_no` varchar(255) DEFAULT NULL COMMENT '参考订单号',
+  `ref_no` varchar(255) DEFAULT NULL COMMENT '系统内部参考订单号',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   `create_datetime` datetime DEFAULT NULL COMMENT '创建时间',
   `work_date` varchar(8) DEFAULT NULL COMMENT '拟对账时间',
@@ -200,7 +198,7 @@ CREATE TABLE `tstd_withdraw` (
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT '取现订单';
 
-CREATE TABLE `tstd_collection` (
+CREATE TABLE `tstd_collect` (
   `code` varchar(32) NOT NULL COMMENT '编号',
   `currency` varchar(32) DEFAULT NULL COMMENT '币种',
   `from_address` text COMMENT '被归集地址',
@@ -212,7 +210,7 @@ CREATE TABLE `tstd_collection` (
   `create_datetime` datetime DEFAULT NULL COMMENT '发起时间',
   `confirm_datetime` datetime DEFAULT NULL COMMENT '网络记账时间',
   `finish_datetime` datetime DEFAULT NULL COMMENT '完成时间',
-  `ref_no` varchar(32) DEFAULT NULL COMMENT '关联交易hash',
+  `ref_no` varchar(32) DEFAULT NULL COMMENT '关联订单号',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT '归集订单';
 
@@ -225,8 +223,8 @@ CREATE TABLE `tstd_deposit` (
   `tx_hash` varchar(255) DEFAULT NULL COMMENT '交易hash',
   `tx_fee` decimal(64,0) DEFAULT NULL COMMENT '矿工费',
   `confirm_datetime` datetime DEFAULT NULL COMMENT '网络记账时间',
-  `create_datetime` datetime DEFAULT NULL COMMENT '发起时间',
-  `ref_no` varchar(32) DEFAULT NULL COMMENT '关联交易hash',
+  `create_datetime` datetime DEFAULT NULL COMMENT '创建时间',
+  `ref_no` varchar(32) DEFAULT NULL COMMENT '关联订单号',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT '定存订单';
 
