@@ -58,15 +58,15 @@ public class CommentAOImpl implements ICommentAO {
         if (CollectionUtils.isNotEmpty(keywordList)) {
 
             // 直接拦截
-            if (EKeyWordReaction.REFUSE.getCode()
-                .equals(keywordList.get(0).getReaction())) {
-                throw new BizException("xn000", "发帖内容存在关键字：【"
-                        + keywordList.get(0).getWord() + "】,请删除后重新发帖！");
+            if (EKeyWordReaction.REFUSE.getCode().equals(
+                keywordList.get(0).getReaction())) {
+                throw new BizException("xn000", "评论内容存在关键字：【"
+                        + keywordList.get(0).getWord() + "】,请删除后再评论！");
             }
 
             // 替换**
-            if (EKeyWordReaction.REPLACE.getCode()
-                .equals(keywordList.get(0).getReaction())) {
+            if (EKeyWordReaction.REPLACE.getCode().equals(
+                keywordList.get(0).getReaction())) {
                 for (Keyword keyword : keywordList) {
                     content = keywordBO.replaceKeyword(content,
                         keyword.getWord());
@@ -76,8 +76,8 @@ public class CommentAOImpl implements ICommentAO {
             }
 
             // 审核
-            if (EKeyWordReaction.APPROVE.getCode()
-                .equals(keywordList.get(0).getReaction())) {
+            if (EKeyWordReaction.APPROVE.getCode().equals(
+                keywordList.get(0).getReaction())) {
                 status = ECommentStatus.TO_APPROVE.getCode();
             }
         }
@@ -96,11 +96,12 @@ public class CommentAOImpl implements ICommentAO {
     }
 
     @Override
+    @Transactional
     public void approveComment(String code, String approveResult,
             String approver, String approveNote) {
         Comment comment = commentBO.getComment(code);
         if (!ECommentStatus.TO_APPROVE.getCode().equals(comment.getStatus())) {
-            throw new BizException("xn000", "帖子不处于可审核状态！");
+            throw new BizException("xn000", "评论不处于可审核状态！");
         }
 
         String status = null;
@@ -149,8 +150,8 @@ public class CommentAOImpl implements ICommentAO {
     @Override
     public void dropComment(String code, String updater) {
         Comment comment = commentBO.getComment(code);
-        if (ECommentStatus.DELETED.getCode().equals(comment.getStatus())) {
-            throw new BizException("xn000", "帖子不处于可删除状态！");
+        if (!ECommentStatus.DELETED.getCode().equals(comment.getStatus())) {
+            throw new BizException("xn000", "评论不处于可删除状态！");
         }
 
         commentBO.removeComment(code, updater);

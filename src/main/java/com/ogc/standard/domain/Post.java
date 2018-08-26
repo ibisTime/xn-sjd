@@ -76,6 +76,17 @@ public class Post extends ABaseDO {
     // 发布人信息
     private User userInfo;
 
+    // 战队信息
+    private Team team;
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
+    }
+
     public String getCode() {
         return code;
     }

@@ -100,7 +100,7 @@ public class TeamAOImpl implements ITeamAO {
     private void initTeam(Team team) {
         // 赛事信息
         Match match = matchBO.getMatch(team.getMatchCode());
-        team.setMatchName(match.getName());
+        team.setMatch(match);
 
         // 队长信息
         User captainInfo = userBO.getUser(team.getCaptain());

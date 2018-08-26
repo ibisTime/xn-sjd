@@ -42,7 +42,7 @@ public interface IPostAO {
     public Paginable<Post> queryPostPage(int start, int limit, Post condition);
 
     // 详情查询帖子(oss)
-    public Post getPostOss(String code);
+    public Post getOssPost(String code);
 
     // 详情查询帖子(front)
     public Post getFrontPost(String code, String userId);

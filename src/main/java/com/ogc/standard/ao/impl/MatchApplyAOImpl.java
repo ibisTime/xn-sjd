@@ -66,8 +66,8 @@ public class MatchApplyAOImpl implements IMatchApplyAO {
         }
 
         MatchApply data = new MatchApply();
-        String code = OrderNoGenerater
-            .generate(EGeneratePrefix.MatchApply.getCode());
+        String code = OrderNoGenerater.generate(EGeneratePrefix.MatchApply
+            .getCode());
         data.setCode(code);
         data.setStatus(EMatchApplyStatus.TO_APPROVE.getCode());
         data.setMatchCode(req.getMatchCode());
@@ -87,8 +87,8 @@ public class MatchApplyAOImpl implements IMatchApplyAO {
     public void approveMatchApply(String code, String approveResult,
             String approver, String remark) {
         MatchApply matchApply = matchApplyBO.getMatchApply(code);
-        if (!EMatchApplyStatus.TO_APPROVE.getCode()
-            .equals(matchApply.getStatus())) {
+        if (!EMatchApplyStatus.TO_APPROVE.getCode().equals(
+            matchApply.getStatus())) {
             throw new BizException("xn0000", "报名申请未处于待审核状态！");
         }
 
@@ -157,7 +157,7 @@ public class MatchApplyAOImpl implements IMatchApplyAO {
     private void initMatchApply(MatchApply matchApply) {
         // 赛事信息
         Match match = matchBO.getMatch(matchApply.getMatchCode());
-        matchApply.setMatchName(match.getName());
+        matchApply.setMatch(match);
 
         // 申请人
         User applyUserInfo = userBO.getUser(matchApply.getApplyUser());

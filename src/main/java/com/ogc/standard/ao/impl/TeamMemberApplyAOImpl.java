@@ -72,8 +72,8 @@ public class TeamMemberApplyAOImpl implements ITeamMemberApplyAO {
             String approver, String remark) {
         TeamMemberApply teamMemberApply = teamMemberApplyBO
             .getTeamMemberApply(code);
-        if (!ETeamMemberApplyStatus.TO_APPROVE.getCode()
-            .equals(teamMemberApply.getStatus())) {
+        if (!ETeamMemberApplyStatus.TO_APPROVE.getCode().equals(
+            teamMemberApply.getStatus())) {
             throw new BizException("xn000", "当前记录不处于可审核状态！");
         }
 
@@ -131,7 +131,7 @@ public class TeamMemberApplyAOImpl implements ITeamMemberApplyAO {
     private void initTeamMemberApply(TeamMemberApply teamMemberApply) {
         // 战队信息
         Team team = teamBO.getTeam(teamMemberApply.getTeamCode());
-        teamMemberApply.setTeamName(team.getName());
+        teamMemberApply.setTeam(team);
 
         // 申请人
         User applyUserInfo = userBO.getUser(teamMemberApply.getApplyUser());

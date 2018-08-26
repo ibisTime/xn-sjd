@@ -23,7 +23,7 @@ public class XN628056 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return postAO.getPostOss(req.getCode());
+        return postAO.getOssPost(req.getCode());
     }
 
     @Override
