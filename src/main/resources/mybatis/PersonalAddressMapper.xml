@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cdkj.coin.wallet.dao.IPersonalAddressDAO">
+	<resultMap id="personalAddress_DB_Result" type="personalAddress">
+		<result column="code" property="code" />
+		<result column="currency" property="currency" />
+		<result column="address" property="address" />
+		<result column="label" property="label" />
+		<result column="user_id" property="userId" />
+		<result column="status" property="status" />
+		<result column="create_datetime" property="createDatetime" />
+		<result column="updater" property="updater" />
+		<result column="update_datetime" property="updateDatetime" />
+		<result column="remark" property="remark" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="userId != null and userId != '' ">
+				AND t.user_id = #{userId}
+			</if>
+			<if test="address != null and address != '' ">
+				AND t.address = #{address}
+			</if>
+			<if test="currency != null and currency != '' ">
+				AND t.currency = #{currency}
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+		</trim>
+	</sql>
+	<select id="select_personalAddress" parameterType="personalAddress" resultMap="personalAddress_DB_Result">
+		SELECT
+		t.code
+		,t.currency
+		,t.address
+		,t.label
+		,t.user_id
+		,t.status
+		,t.create_datetime
+		,t.updater
+		,t.update_datetime
+		,t.remark
+		FROM
+		tcoin_withdraw_address t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_personalAddress_count" parameterType="personalAddress"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tcoin_withdraw_address t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_personalAddress" parameterType="personalAddress">
+		INSERT INTO
+		tcoin_withdraw_address(
+		code
+		,currency
+		,address
+		,label
+		,user_id
+		,status
+		,create_datetime
+		,updater
+		,update_datetime
+		,remark
+		)
+		VALUES(
+		#{code}
+		,#{currency}
+		,#{address}
+		,#{label}
+		,#{userId}
+		,#{status}
+		,#{createDatetime}
+		,#{updater}
+		,#{updateDatetime}
+		,#{remark}
+		)
+	</insert>
+
+	<update id="update_personalAddress" parameterType="personalAddress">
+		UPDATE tcoin_withdraw_address
+		SET
+		currency = #{currency}
+		,address = #{address}
+		,label = #{label}
+		,user_id = #{userId}
+		,status = #{status}
+		,create_datetime = #{createDatetime}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+	
+	<delete id="delete_personalAddress" parameterType="personalAddress">
+		DELETE FROM tcoin_withdraw_address
+		WHERE
+		code = #{code}			
+	</delete>
+
+
+</mapper>

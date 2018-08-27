@@ -4,13 +4,13 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.cdkj.coin.wallet.dao.IEthTransactionDAO;
-import com.cdkj.coin.wallet.dao.base.support.AMybatisTemplate;
-import com.cdkj.coin.wallet.ethereum.EthTransaction;
+import com.ogc.standard.dao.IEthTransactionDAO;
+import com.ogc.standard.dao.base.support.AMybatisTemplate;
+import com.ogc.standard.domain.EthTransaction;
 
 @Repository("ethTransactionDAOImpl")
-public class EthTransactionDAOImpl extends AMybatisTemplate implements
-        IEthTransactionDAO {
+public class EthTransactionDAOImpl extends AMybatisTemplate
+        implements IEthTransactionDAO {
 
     @Override
     public int insert(EthTransaction data) {

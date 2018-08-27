@@ -1,13 +1,13 @@
 package com.ogc.standard.dao;
 
-import com.cdkj.coin.wallet.dao.base.IBaseDAO;
-import com.cdkj.coin.wallet.domain.Charge;
-import com.cdkj.coin.wallet.ethereum.EthAddress;
+import com.ogc.standard.dao.base.IBaseDAO;
+import com.ogc.standard.domain.Charge;
+import com.ogc.standard.domain.EthWAddress;
 
 public interface IChargeDAO extends IBaseDAO<Charge> {
     String NAMESPACE = IChargeDAO.class.getName().concat(".");
 
     void payOrder(Charge data);
 
-    public EthAddress selectAddressUseInfo(Charge data);
+    public EthWAddress selectAddressUseInfo(Charge data);
 }

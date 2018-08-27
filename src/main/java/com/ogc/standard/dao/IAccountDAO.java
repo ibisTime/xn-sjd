@@ -8,8 +8,8 @@
  */
 package com.ogc.standard.dao;
 
-import com.cdkj.coin.wallet.dao.base.IBaseDAO;
-import com.cdkj.coin.wallet.domain.Account;
+import com.ogc.standard.dao.base.IBaseDAO;
+import com.ogc.standard.domain.Account;
 
 /** 
  * @author: miyb 

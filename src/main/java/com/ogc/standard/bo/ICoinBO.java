@@ -2,9 +2,9 @@ package com.ogc.standard.bo;
 
 import java.util.List;
 
-import com.cdkj.coin.wallet.bo.base.IPaginableBO;
-import com.cdkj.coin.wallet.domain.Coin;
-import com.cdkj.coin.wallet.enums.ECoinStatus;
+import com.ogc.standard.bo.base.IPaginableBO;
+import com.ogc.standard.domain.Coin;
+import com.ogc.standard.enums.ECoinStatus;
 
 public interface ICoinBO extends IPaginableBO<Coin> {
 

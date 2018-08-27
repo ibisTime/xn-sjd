@@ -5,10 +5,10 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.cdkj.coin.wallet.dao.IWithdrawDAO;
-import com.cdkj.coin.wallet.dao.base.support.AMybatisTemplate;
-import com.cdkj.coin.wallet.domain.Withdraw;
-import com.cdkj.coin.wallet.ethereum.EthAddress;
+import com.ogc.standard.dao.IWithdrawDAO;
+import com.ogc.standard.dao.base.support.AMybatisTemplate;
+import com.ogc.standard.domain.EthMAddress;
+import com.ogc.standard.domain.Withdraw;
 
 @Repository("withdrawDAOImpl")
 public class WithdrawDAOImpl extends AMybatisTemplate implements IWithdrawDAO {
@@ -64,9 +64,9 @@ public class WithdrawDAOImpl extends AMybatisTemplate implements IWithdrawDAO {
     }
 
     @Override
-    public EthAddress selectAddressUseInfo(Withdraw data) {
+    public EthMAddress selectAddressUseInfo(Withdraw data) {
         return super.select(NAMESPACE.concat("select_addressUseInfo"), data,
-            EthAddress.class);
+            EthMAddress.class);
     }
 
     @Override

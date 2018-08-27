@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cdkj.coin.wallet.dao.ICoinDAO">
+	<resultMap id="coin_DB_Result" type="coin">
+		<result column="symbol" property="symbol" />
+		<result column="ename" property="ename" />
+		<result column="cname" property="cname" />
+		<result column="type" property="type" />
+		<result column="unit" property="unit" />
+		<result column="icon" property="icon" />
+		<result column="pic1" property="pic1" />
+		<result column="pic2" property="pic2" />
+		<result column="pic3" property="pic3" />
+		<result column="order_no" property="orderNo" />
+		<result column="collect_start" property="collectStart" />
+		<result column="withdraw_fee" property="withdrawFee" />
+		<result column="contract_address" property="contractAddress" />
+		<result column="contract_abi" property="contractABI" />
+		<result column="status" property="status" />
+		<result column="updater" property="updater" />
+		<result column="update_datetime" property="updateDatetime" />
+		<result column="remark" property="remark" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="symbol != null and symbol != '' ">
+				AND t.symbol = #{symbol}
+			</if>
+			<if test="symbolForQuery != null and symbolForQuery != '' ">
+				AND t.symbol like "%"#{symbolForQuery}"%"
+			</if>
+			<if test="ename != null and ename != '' ">
+				AND t.ename like "%"#{ename}"%"
+			</if>
+			<if test="cname != null and cname != '' ">
+				AND t.cname like "%"#{cname}"%"
+			</if>
+			<if test="type != null and type != '' ">
+				AND t.type = #{type}
+			</if>
+			<if test="contractAddress != null and contractAddress != '' ">
+				AND t.contract_address = #{contractAddress}
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+		</trim>
+	</sql>
+	<select id="select_coin" parameterType="coin" resultMap="coin_DB_Result">
+		SELECT
+		t.symbol
+		,t.ename
+		,t.cname
+		,t.type
+		,t.unit
+		,t.icon
+		,t.pic1
+		,t.pic2
+		,t.pic3
+		,t.order_no
+		,t.collect_start
+		,t.withdraw_fee
+		,t.contract_address
+		,t.contract_abi
+		,t.status
+		,t.updater
+		,t.update_datetime
+		,t.remark
+		FROM
+		tcoin_coin t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+	
+	<select id="select_coin_list" parameterType="coin" resultMap="coin_DB_Result">
+		SELECT
+		t.symbol
+		,t.ename
+		,t.cname
+		,t.type
+		,t.unit
+		,t.icon
+		,t.pic1
+		,t.pic2
+		,t.pic3
+		,t.order_no
+		,t.withdraw_fee
+		,t.contract_address
+		,t.status
+		FROM
+		tcoin_coin t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_coin_count" parameterType="coin"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tcoin_coin t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_coin" parameterType="coin">
+		INSERT INTO
+		tcoin_coin(
+		symbol
+		,ename
+		,cname
+		,type
+		,unit
+		,icon
+		,pic1
+		,pic2
+		,pic3
+		,order_no
+		,collect_start
+		,withdraw_fee
+		,contract_address
+		,contract_abi
+		,status
+		,updater
+		,update_datetime
+		,remark
+		)
+		VALUES(
+		#{symbol}
+		,#{ename}
+		,#{cname}
+		,#{type}
+		,#{unit}
+		,#{icon}
+		,#{pic1}
+		,#{pic2}
+		,#{pic3}
+		,#{orderNo}
+		,#{collectStart}
+		,#{withdrawFee}
+		,#{contractAddress}
+		,#{contractABI}
+		,#{status}
+		,#{updater}
+		,#{updateDatetime}
+		,#{remark}
+		)
+	</insert>
+
+	<update id="update_coin" parameterType="coin">
+		UPDATE tcoin_coin
+		SET
+		ename = #{ename}
+		,cname = #{cname}
+		,icon = #{icon}
+		,pic1 = #{pic1}
+		,pic2 = #{pic2}
+		,pic3 = #{pic3}
+		,order_no = #{orderNo}
+		,collect_start = #{collectStart}
+		,withdraw_fee = #{withdrawFee}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE symbol = #{symbol}
+	</update>
+	
+	<update id="update_status" parameterType="coin">
+		UPDATE tcoin_coin
+		SET
+        status = #{status}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE symbol = #{symbol}
+	</update>
+
+</mapper>

@@ -4,9 +4,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.cdkj.coin.wallet.dao.ICoinDAO;
-import com.cdkj.coin.wallet.dao.base.support.AMybatisTemplate;
-import com.cdkj.coin.wallet.domain.Coin;
+import com.ogc.standard.dao.ICoinDAO;
+import com.ogc.standard.dao.base.support.AMybatisTemplate;
+import com.ogc.standard.domain.Coin;
 
 @Repository("coinDAOImpl")
 public class CoinDAOImpl extends AMybatisTemplate implements ICoinDAO {

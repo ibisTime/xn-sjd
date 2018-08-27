@@ -2,18 +2,16 @@ package com.ogc.standard.ao;
 
 import java.util.List;
 
-import com.cdkj.coin.wallet.bo.base.Paginable;
-import com.cdkj.coin.wallet.domain.Coin;
-import com.cdkj.coin.wallet.dto.req.XN802250Req;
-import com.cdkj.coin.wallet.dto.req.XN802252Req;
-import com.cdkj.coin.wallet.dto.req.XN802270Req;
-import com.cdkj.coin.wallet.dto.res.XN802270Res;
+import com.ogc.standard.bo.base.Paginable;
+import com.ogc.standard.domain.Coin;
+import com.ogc.standard.dto.req.XN802000Req;
+import com.ogc.standard.dto.req.XN802252Req;
 
 public interface ICoinAO {
     static final String DEFAULT_ORDER_COLUMN = "order_no";
 
     // 新增token币种
-    public void addCoinAndPublish(XN802250Req req);
+    public void addCoinAndPublish(XN802000Req req);
 
     // 编辑币种基本信息
     public int editCoin(XN802252Req req);
@@ -34,6 +32,6 @@ public interface ICoinAO {
     public Coin getCoin(String symbol);
 
     // 查询币种余额
-    public XN802270Res queryCoinBalance(XN802270Req req);
+    // public XN802270Res queryCoinBalance(XN802270Req req);
 
 }

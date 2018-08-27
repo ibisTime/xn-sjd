@@ -1,0 +1,79 @@
+package com.ogc.standard.ao.impl;
+
+import org.springframework.stereotype.Service;
+
+import com.ogc.standard.ao.IPersonalAddressAO;
+
+@Service
+public class PersonalAddressAOImpl implements IPersonalAddressAO {
+
+    // @Autowired
+    // private IPersonalAddressBO withdrawAddressBO;
+    //
+    // @Autowired
+    // private IEthXAddressBO ethXAddressBO;
+    //
+    // @Autowired
+    // private ICoinBO coinBO;
+    //
+    // @Override
+    // public String addPersonalAddress(String symbol, String address,
+    // String label, String userId, String isCerti) {
+    //
+    // // 地址有效性校验
+    // Coin coin = coinBO.getCoin(symbol);
+    // verifyAddress(coin, address);
+    //
+    // // 地址是否已经存在
+    // PersonalAddress condition = new PersonalAddress();
+    // condition.setSymbol(symbol);
+    // condition.setUserId(userId);
+    // condition.setAddress(address);
+    // if (withdrawAddressBO.getTotalCount(condition) > 0) {
+    // throw new BizException(EBizErrorCode.DEFAULT.getCode(), "请勿重复添加地址");
+    // }
+    //
+    // // 是否设置为认证地址
+    // String status = EPersonalAddressStatus.NORMAL.getCode();
+    // if (EBoolean.YES.getCode().equals(isCerti)) {
+    // status = EPersonalAddressStatus.CERTI.getCode();
+    // }
+    //
+    // return withdrawAddressBO.savePersonalAddress(symbol, address, label,
+    // userId, status);
+    // }
+    //
+    // private void verifyAddress(Coin coin, String address) {
+    // if (ECoinType.ETH.getCode().equals(coin.getType())
+    // || ECoinType.ETH_TOKEN.getCode().equals(coin.getType())) {
+    // // 地址有效性校验
+    // if (!WalletUtils.isValidAddress(address)) {
+    // throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+    // "地址" + address + "不符合" + ECoinType.ETH.getCode()
+    // + "规则，请仔细核对");
+    // }
+    // }
+    // }
+    //
+    // @Override
+    // public int dropPersonalAddress(String code) {
+    // return withdrawAddressBO.removePersonalAddress(code);
+    // }
+    //
+    // @Override
+    // public Paginable<PersonalAddress> queryPersonalAddressPage(int start,
+    // int limit, PersonalAddress condition) {
+    // return withdrawAddressBO.getPaginable(start, limit, condition);
+    // }
+    //
+    // @Override
+    // public List<PersonalAddress> queryPersonalAddressList(
+    // PersonalAddress condition) {
+    // return withdrawAddressBO.queryPersonalAddressList(condition);
+    // }
+    //
+    // @Override
+    // public PersonalAddress getPersonalAddress(String code) {
+    // return withdrawAddressBO.getPersonalAddress(code);
+    // }
+}

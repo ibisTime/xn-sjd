@@ -4,9 +4,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.cdkj.coin.wallet.dao.IHLOrderDAO;
-import com.cdkj.coin.wallet.dao.base.support.AMybatisTemplate;
-import com.cdkj.coin.wallet.domain.HLOrder;
+import com.ogc.standard.dao.IHLOrderDAO;
+import com.ogc.standard.dao.base.support.AMybatisTemplate;
+import com.ogc.standard.domain.HLOrder;
 
 @Repository("hlOrderDAOImpl")
 public class HLOrderDAOImpl extends AMybatisTemplate implements IHLOrderDAO {

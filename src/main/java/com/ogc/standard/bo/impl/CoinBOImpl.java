@@ -7,13 +7,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.cdkj.coin.wallet.bo.ICoinBO;
-import com.cdkj.coin.wallet.bo.base.PaginableBOImpl;
-import com.cdkj.coin.wallet.dao.ICoinDAO;
-import com.cdkj.coin.wallet.domain.Coin;
-import com.cdkj.coin.wallet.enums.ECoinStatus;
-import com.cdkj.coin.wallet.exception.BizException;
-import com.cdkj.coin.wallet.exception.EBizErrorCode;
+import com.ogc.standard.bo.ICoinBO;
+import com.ogc.standard.bo.base.PaginableBOImpl;
+import com.ogc.standard.dao.ICoinDAO;
+import com.ogc.standard.domain.Coin;
+import com.ogc.standard.enums.ECoinStatus;
+import com.ogc.standard.exception.BizException;
+import com.ogc.standard.exception.EBizErrorCode;
 
 @Component
 public class CoinBOImpl extends PaginableBOImpl<Coin> implements ICoinBO {

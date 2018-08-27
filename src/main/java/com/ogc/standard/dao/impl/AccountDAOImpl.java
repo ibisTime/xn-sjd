@@ -12,9 +12,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.cdkj.coin.wallet.dao.IAccountDAO;
-import com.cdkj.coin.wallet.dao.base.support.AMybatisTemplate;
-import com.cdkj.coin.wallet.domain.Account;
+import com.ogc.standard.dao.IAccountDAO;
+import com.ogc.standard.dao.base.support.AMybatisTemplate;
+import com.ogc.standard.domain.Account;
 
 /** 
  * @author: miyb 

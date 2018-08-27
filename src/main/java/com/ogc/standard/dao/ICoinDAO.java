@@ -1,7 +1,7 @@
 package com.ogc.standard.dao;
 
-import com.cdkj.coin.wallet.dao.base.IBaseDAO;
-import com.cdkj.coin.wallet.domain.Coin;
+import com.ogc.standard.dao.base.IBaseDAO;
+import com.ogc.standard.domain.Coin;
 
 public interface ICoinDAO extends IBaseDAO<Coin> {
     String NAMESPACE = ICoinDAO.class.getName().concat(".");

@@ -2,9 +2,9 @@ package com.ogc.standard.dao;
 
 import java.math.BigDecimal;
 
-import com.cdkj.coin.wallet.dao.base.IBaseDAO;
-import com.cdkj.coin.wallet.domain.Withdraw;
-import com.cdkj.coin.wallet.ethereum.EthAddress;
+import com.ogc.standard.dao.base.IBaseDAO;
+import com.ogc.standard.domain.EthMAddress;
+import com.ogc.standard.domain.Withdraw;
 
 public interface IWithdrawDAO extends IBaseDAO<Withdraw> {
     String NAMESPACE = IWithdrawDAO.class.getName().concat(".");
@@ -15,7 +15,7 @@ public interface IWithdrawDAO extends IBaseDAO<Withdraw> {
 
     void broadcastOrder(Withdraw data);
 
-    public EthAddress selectAddressUseInfo(Withdraw data);
+    public EthMAddress selectAddressUseInfo(Withdraw data);
 
     public BigDecimal selectTotalAmount(Withdraw data);
 

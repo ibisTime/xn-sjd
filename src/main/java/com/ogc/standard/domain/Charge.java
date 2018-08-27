@@ -9,7 +9,7 @@ import com.ogc.standard.dao.base.ABaseDO;
 //充值（2步骤）
 public class Charge extends ABaseDO {
 
-    private static final long serialVersionUID = 340253581181024692L;
+    private static final long serialVersionUID = 6959224049118889748L;
 
     // 充值编号
     private String code;
@@ -21,7 +21,7 @@ public class Charge extends ABaseDO {
     private String accountType;
 
     // 充值金额
-    private transient BigDecimal amount;
+    private BigDecimal amount;
 
     // 币种
     private String currency;
