@@ -13,7 +13,7 @@ package com.ogc.standard.dto.req;
  * @since: 2018年3月13日 上午11:13:30 
  * @history:
  */
-public class XN802265Req extends APageReq {
+public class XN802005Req extends APageReq {
 
     private static final long serialVersionUID = -7505046683745094215L;
 

@@ -13,7 +13,7 @@ package com.ogc.standard.dto.req;
  * @since: 2018年3月13日 上午11:13:30 
  * @history:
  */
-public class XN802267Req {
+public class XN802007Req {
 
     // 英文简称
     private String symbol;

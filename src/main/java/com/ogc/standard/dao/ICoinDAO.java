@@ -9,4 +9,6 @@ public interface ICoinDAO extends IBaseDAO<Coin> {
     public int update(Coin data);
 
     public int updateStatus(Coin data);
+
+    public Coin selectSymbol(Coin condition);
 }

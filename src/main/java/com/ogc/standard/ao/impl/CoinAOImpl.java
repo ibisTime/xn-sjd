@@ -16,7 +16,7 @@ import com.ogc.standard.common.CoinUtil;
 import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.domain.Coin;
 import com.ogc.standard.dto.req.XN802000Req;
-import com.ogc.standard.dto.req.XN802252Req;
+import com.ogc.standard.dto.req.XN802002Req;
 import com.ogc.standard.enums.ECoinStatus;
 import com.ogc.standard.enums.ECoinType;
 import com.ogc.standard.exception.BizException;
@@ -107,11 +107,11 @@ public class CoinAOImpl implements ICoinAO {
     }
 
     @Override
-    public int editCoin(XN802252Req req) {
+    public int editCoin(XN802002Req req) {
 
-        Coin data = coinBO.getCoin(req.getSymbol());
+        Coin data = coinBO.getCoin(StringValidater.toLong(req.getId()));
 
-        data.setSymbol(req.getSymbol());
+        data.setId(StringValidater.toLong(req.getId()));
         data.setEname(req.getEname());
         data.setCname(req.getCname());
         data.setIcon(req.getIcon());
@@ -135,9 +135,9 @@ public class CoinAOImpl implements ICoinAO {
     }
 
     @Override
-    public void publish(String symbol, String updater, String remark) {
+    public void publish(long id, String updater, String remark) {
 
-        Coin coin = coinBO.getCoin(symbol);
+        Coin coin = coinBO.getCoin(id);
         if (ECoinStatus.PUBLISHED.getCode().equals(coin.getStatus())) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "币种已发布，请勿重复操作");
@@ -148,9 +148,9 @@ public class CoinAOImpl implements ICoinAO {
     }
 
     @Override
-    public void revoke(String symbol, String updater, String remark) {
+    public void revoke(long id, String updater, String remark) {
 
-        Coin coin = coinBO.getCoin(symbol);
+        Coin coin = coinBO.getCoin(id);
         if (!ECoinStatus.PUBLISHED.getCode().equals(coin.getStatus())) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "币种未发布，不能进行撤下操作");
@@ -173,8 +173,8 @@ public class CoinAOImpl implements ICoinAO {
     }
 
     @Override
-    public Coin getCoin(String symbol) {
-        return coinBO.getCoin(symbol);
+    public Coin getCoin(long id) {
+        return coinBO.getCoin(id);
     }
 
     // @Override
