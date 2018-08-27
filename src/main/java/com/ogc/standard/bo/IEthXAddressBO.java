@@ -5,13 +5,9 @@ import com.ogc.standard.domain.EthXAddress;
 
 public interface IEthXAddressBO extends IPaginableBO<EthXAddress> {
 
-    // // 生成地址（有私钥）
-    // public String generateAddress(String userId, String accountNumber);
-    //
-    // // 导入（保存）地址
-    // public String saveEthXAddress(String userId, String accountNumber,
-    // String address, String password, BigDecimal balance, String status,
-    // String keystoreName, String keystoreContent);
+    // 生成地址（有私钥）
+    public String generateAddress(String userId);
+
     //
     // // 获取今日归集地址
     // public EthXAddress getWEthXAddressToday();
@@ -27,8 +23,8 @@ public interface IEthXAddressBO extends IPaginableBO<EthXAddress> {
     //
     // public EthXAddress getEthXAddressByAddress(String address);
     //
-    // public EthXAddress getEthXAddressByUserId(String userId);
-    //
+    public EthXAddress getEthXAddressByUserId(String userId);
+
     // public EthXAddress getEthXAddressByAccountNumber(String accountNumber);
     //
     // public boolean isEthXAddressExist(String address);

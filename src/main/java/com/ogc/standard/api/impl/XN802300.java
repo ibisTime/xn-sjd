@@ -7,6 +7,7 @@ import com.ogc.standard.ao.IAccountAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.common.JsonUtil;
+import com.ogc.standard.core.ObjValidater;
 import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.dto.req.XN802300Req;
@@ -31,30 +32,31 @@ public class XN802300 extends AProcessor {
     */
     @Override
     public Object doBusiness() throws BizException {
+
         Account condition = new Account();
+
         condition.setUserId(req.getUserId());
-        condition.setRealName(req.getRealName());
+        condition.setCurrency(req.getCurrency());
         condition.setType(req.getType());
         condition.setStatus(req.getStatus());
-        condition.setCurrency(req.getCurrency());
-
+        condition.setLastOrder(req.getLastOrder());
         if (CollectionUtils.isNotEmpty(req.getCurrencyList())) {
             condition.setCurrencyList(req.getCurrencyList());
         }
-        condition.setLastOrder(req.getLastOrder());
+
         condition.setCreateDatetimeStart(
             DateUtil.getFrontDate(req.getDateStart(), false));
         condition.setCreateDatetimeEnd(
             DateUtil.getFrontDate(req.getDateEnd(), true));
-        condition.setSystemCode(req.getSystemCode());
-        condition.setCompanyCode(req.getCompanyCode());
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
             orderColumn = IAccountAO.DEFAULT_ORDER_COLUMN;
         }
         condition.setOrder(orderColumn, req.getOrderDir());
+
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
+
         return accountAO.queryAccountPage(start, limit, condition);
     }
 
@@ -65,8 +67,6 @@ public class XN802300 extends AProcessor {
     public void doCheck(String inputparams, String operator)
             throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN802300Req.class);
-        StringValidater.validateNumber(req.getStart(), req.getLimit());
-        StringValidater.validateBlank(req.getSystemCode(),
-            req.getCompanyCode());
+        ObjValidater.validateReq(req);
     }
 }
