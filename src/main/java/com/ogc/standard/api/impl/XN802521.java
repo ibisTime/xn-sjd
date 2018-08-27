@@ -1,53 +1,51 @@
 /**
- * @Title XN802250.java 
- * @Package com.cdkj.coin.wallet.api.impl 
+ * @Title XN625200.java 
+ * @Package com.cdkj.coin.api.impl 
  * @Description 
- * @author haiqingzheng  
- * @date 2018年3月13日 上午11:12:25 
+ * @author leo(haiqing)  
+ * @date 2017年11月8日 下午3:12:21 
  * @version V1.0   
  */
 package com.ogc.standard.api.impl;
 
-import com.ogc.standard.ao.ICoinAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.ObjValidater;
-import com.ogc.standard.dto.req.XN802000Req;
+import com.ogc.standard.dto.req.XN802521Req;
 import com.ogc.standard.dto.res.BooleanRes;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
 
 /** 
- * 新增token币
+ * 弃用以太坊散取/归集地址
  * @author: haiqingzheng 
- * @since: 2018年3月13日 上午11:12:25 
+ * @since: 2017年11月8日 下午3:12:21 
  * @history:
  */
-public class XN802250 extends AProcessor {
+public class XN802521 extends AProcessor {
 
-    private ICoinAO coinAO = SpringContextHolder.getBean(ICoinAO.class);
+    private IEthAddressAO ethAddressAO = SpringContextHolder
+        .getBean(IEthAddressAO.class);
 
-    private XN802000Req req = null;
+    private XN802521Req req = null;
 
     /** 
-     * @see com.cdkj.coin.wallet.api.IProcessor#doBusiness()
+     * @see com.ogc.standard.api.IProcessor#doBusiness()
      */
     @Override
     public Object doBusiness() throws BizException {
-        synchronized (XN802250.class) {
-            coinAO.addCoinAndPublish(req);
-        }
+        ethAddressAO.abandonAddress(req.getCode());
         return new BooleanRes(true);
     }
 
     /** 
-     * @see com.cdkj.coin.wallet.api.IProcessor#doCheck(java.lang.String, java.lang.String)
+     * @see com.ogc.standard.api.IProcessor#doCheck(java.lang.String)
      */
     @Override
     public void doCheck(String inputparams, String operator)
             throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN802000Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN802521Req.class);
         ObjValidater.validateReq(req);
     }
 
