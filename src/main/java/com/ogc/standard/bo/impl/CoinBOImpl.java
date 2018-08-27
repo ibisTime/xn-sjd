@@ -22,9 +22,9 @@ public class CoinBOImpl extends PaginableBOImpl<Coin> implements ICoinBO {
     private ICoinDAO coinDAO;
 
     @Override
-    public boolean isSymbolExist(String symbol) {
+    public boolean isCoinExist(long id) {
         Coin condition = new Coin();
-        condition.setSymbol(symbol);
+        condition.setId(id);
         if (coinDAO.selectTotalCount(condition) > 0) {
             return true;
         }
@@ -74,17 +74,28 @@ public class CoinBOImpl extends PaginableBOImpl<Coin> implements ICoinBO {
     }
 
     @Override
-    public Coin getCoin(String symbol) {
+    public Coin getCoin(long id) {
         Coin data = null;
-        if (StringUtils.isNotBlank(symbol)) {
-            Coin condition = new Coin();
-            condition.setSymbol(symbol);
-            data = coinDAO.select(condition);
-            if (data == null) {
-                throw new BizException("xn0000", "币种" + symbol + "不存在");
-            }
+        Coin condition = new Coin();
+        condition.setId(id);
+
+        data = coinDAO.select(condition);
+        if (data == null) {
+            throw new BizException("xn0000", "币种" + id + "不存在");
         }
         return data;
+    }
+
+    @Override
+    public Coin getCoin(String symbol) {
+        Coin condition = new Coin();
+        condition.setSymbol(symbol);
+        Coin data = coinDAO.select(condition);
+        if (data == null) {
+            throw new BizException("xn0000", "币种" + symbol + "不存在");
+        }
+        return data;
+
     }
 
     @Override
@@ -109,6 +120,17 @@ public class CoinBOImpl extends PaginableBOImpl<Coin> implements ICoinBO {
         if (coinDAO.selectTotalCount(condition) <= 1) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(), "至少保留一个币种");
         }
+    }
+
+    @Override
+    public boolean isSymbolExist(String symbol) {
+        Coin condition = new Coin();
+        condition.setSymbol(symbol);
+        Coin data = coinDAO.select(condition);
+        if (data != null) {
+            return false;
+        } else
+            return true;
     }
 
 }

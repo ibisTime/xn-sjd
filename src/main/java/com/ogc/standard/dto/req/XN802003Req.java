@@ -15,11 +15,11 @@ import org.hibernate.validator.constraints.NotBlank;
  * @since: 2018年3月13日 上午11:13:30 
  * @history:
  */
-public class XN802254Req {
+public class XN802003Req {
 
     // 英文简称
     @NotBlank
-    private String symbol;
+    private String id;
 
     // 操作人
     @NotBlank
@@ -28,12 +28,12 @@ public class XN802254Req {
     // 备注
     private String remark;
 
-    public String getSymbol() {
-        return symbol;
+    public String getId() {
+        return id;
     }
 
-    public void setSymbol(String symbol) {
-        this.symbol = symbol;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getUpdater() {

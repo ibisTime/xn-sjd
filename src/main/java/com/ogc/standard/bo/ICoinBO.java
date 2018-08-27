@@ -8,6 +8,8 @@ import com.ogc.standard.enums.ECoinStatus;
 
 public interface ICoinBO extends IPaginableBO<Coin> {
 
+    public boolean isCoinExist(long id);
+
     public boolean isSymbolExist(String symbol);
 
     public boolean isContractAddressExist(String type, String contractAddress);
@@ -17,6 +19,8 @@ public interface ICoinBO extends IPaginableBO<Coin> {
     public int refreshCoin(Coin data);
 
     public List<Coin> queryCoinList(Coin condition);
+
+    public Coin getCoin(long id);
 
     public Coin getCoin(String symbol);
 

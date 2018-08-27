@@ -55,4 +55,10 @@ public class CoinDAOImpl extends AMybatisTemplate implements ICoinDAO {
         return super.update(NAMESPACE.concat("update_status"), data);
     }
 
+    @Override
+    public Coin selectSymbol(Coin condition) {
+        return super.select(NAMESPACE.concat("select_coin_symbol"), condition,
+            Coin.class);
+    }
+
 }

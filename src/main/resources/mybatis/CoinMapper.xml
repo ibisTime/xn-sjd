@@ -3,6 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cdkj.coin.wallet.dao.ICoinDAO">
 	<resultMap id="coin_DB_Result" type="coin">
+		<result column="id" property="id" />
 		<result column="symbol" property="symbol" />
 		<result column="ename" property="ename" />
 		<result column="cname" property="cname" />
@@ -24,6 +25,9 @@
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="id != null and id != '' ">
+				AND t.id = #{id}
+			</if>
 			<if test="symbol != null and symbol != '' ">
 				AND t.symbol = #{symbol}
 			</if>
@@ -49,7 +53,8 @@
 	</sql>
 	<select id="select_coin" parameterType="coin" resultMap="coin_DB_Result">
 		SELECT
-		t.symbol
+		t.id
+		,t.symbol
 		,t.ename
 		,t.cname
 		,t.type
@@ -79,7 +84,8 @@
 	
 	<select id="select_coin_list" parameterType="coin" resultMap="coin_DB_Result">
 		SELECT
-		t.symbol
+		t.id
+		,t.symbol
 		,t.ename
 		,t.cname
 		,t.type
@@ -167,7 +173,7 @@
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
 		,remark = #{remark}
-		WHERE symbol = #{symbol}
+		WHERE id = #{id}
 	</update>
 	
 	<update id="update_status" parameterType="coin">
@@ -177,7 +183,7 @@
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
 		,remark = #{remark}
-		WHERE symbol = #{symbol}
+		WHERE id = #{id}
 	</update>
 
 </mapper>

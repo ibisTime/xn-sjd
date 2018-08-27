@@ -8,35 +8,35 @@
  */
 package com.ogc.standard.api.impl;
 
-import com.cdkj.coin.wallet.ao.ICoinAO;
-import com.cdkj.coin.wallet.api.AProcessor;
-import com.cdkj.coin.wallet.common.JsonUtil;
-import com.cdkj.coin.wallet.core.ObjValidater;
-import com.cdkj.coin.wallet.dto.req.XN802253Req;
-import com.cdkj.coin.wallet.dto.res.BooleanRes;
-import com.cdkj.coin.wallet.exception.BizException;
-import com.cdkj.coin.wallet.exception.ParaException;
-import com.cdkj.coin.wallet.spring.SpringContextHolder;
+import com.ogc.standard.ao.ICoinAO;
+import com.ogc.standard.api.AProcessor;
+import com.ogc.standard.common.JsonUtil;
+import com.ogc.standard.core.ObjValidater;
+import com.ogc.standard.dto.req.XN802000Req;
+import com.ogc.standard.dto.res.BooleanRes;
+import com.ogc.standard.exception.BizException;
+import com.ogc.standard.exception.ParaException;
+import com.ogc.standard.spring.SpringContextHolder;
 
 /** 
- * 发布币种
+ * 新增token币
  * @author: haiqingzheng 
  * @since: 2018年3月13日 上午11:12:25 
  * @history:
  */
-public class XN802253 extends AProcessor {
+public class XN802000 extends AProcessor {
 
     private ICoinAO coinAO = SpringContextHolder.getBean(ICoinAO.class);
 
-    private XN802253Req req = null;
+    private XN802000Req req = null;
 
     /** 
      * @see com.cdkj.coin.wallet.api.IProcessor#doBusiness()
      */
     @Override
     public Object doBusiness() throws BizException {
-        synchronized (XN802253.class) {
-            coinAO.publish(req.getSymbol(), req.getUpdater(), req.getRemark());
+        synchronized (XN802000.class) {
+            coinAO.addCoinAndPublish(req);
         }
         return new BooleanRes(true);
     }
@@ -47,7 +47,7 @@ public class XN802253 extends AProcessor {
     @Override
     public void doCheck(String inputparams, String operator)
             throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN802253Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN802000Req.class);
         ObjValidater.validateReq(req);
     }
 

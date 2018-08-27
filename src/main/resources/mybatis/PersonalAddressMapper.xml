@@ -3,8 +3,8 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cdkj.coin.wallet.dao.IPersonalAddressDAO">
 	<resultMap id="personalAddress_DB_Result" type="personalAddress">
-		<result column="code" property="code" />
-		<result column="currency" property="currency" />
+		<result column="id" property="id" />
+		<result column="symbol" property="symbol" />
 		<result column="address" property="address" />
 		<result column="label" property="label" />
 		<result column="user_id" property="userId" />
@@ -16,8 +16,8 @@
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
-			<if test="code != null and code != '' ">
-				AND t.code = #{code}
+			<if test="id != null and id != '' ">
+				AND t.id = #{id}
 			</if>
 			<if test="userId != null and userId != '' ">
 				AND t.user_id = #{userId}
@@ -25,8 +25,8 @@
 			<if test="address != null and address != '' ">
 				AND t.address = #{address}
 			</if>
-			<if test="currency != null and currency != '' ">
-				AND t.currency = #{currency}
+			<if test="symbol != null and symbol != '' ">
+				AND t.symbol = #{symbol}
 			</if>
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
@@ -35,8 +35,8 @@
 	</sql>
 	<select id="select_personalAddress" parameterType="personalAddress" resultMap="personalAddress_DB_Result">
 		SELECT
-		t.code
-		,t.currency
+		t.id
+		,t.symbol
 		,t.address
 		,t.label
 		,t.user_id
@@ -64,8 +64,8 @@
 	<insert id="insert_personalAddress" parameterType="personalAddress">
 		INSERT INTO
 		tcoin_withdraw_address(
-		code
-		,currency
+		id
+		,symbol
 		,address
 		,label
 		,user_id
@@ -76,8 +76,8 @@
 		,remark
 		)
 		VALUES(
-		#{code}
-		,#{currency}
+		#{id}
+		,#{symbol}
 		,#{address}
 		,#{label}
 		,#{userId}
@@ -92,7 +92,7 @@
 	<update id="update_personalAddress" parameterType="personalAddress">
 		UPDATE tcoin_withdraw_address
 		SET
-		currency = #{currency}
+		symbol = #{symbol}
 		,address = #{address}
 		,label = #{label}
 		,user_id = #{userId}
@@ -101,13 +101,13 @@
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
 		,remark = #{remark}
-		WHERE code = #{code}
+		WHERE id = #{id}
 	</update>
 	
 	<delete id="delete_personalAddress" parameterType="personalAddress">
 		DELETE FROM tcoin_withdraw_address
 		WHERE
-		code = #{code}			
+		id = #{id}			
 	</delete>
 
 
