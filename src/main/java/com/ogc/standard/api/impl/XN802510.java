@@ -8,6 +8,7 @@
  */
 package com.ogc.standard.api.impl;
 
+import com.ogc.standard.ao.IEthMAddressAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.dto.res.BooleanRes;
 import com.ogc.standard.exception.BizException;
@@ -22,15 +23,15 @@ import com.ogc.standard.spring.SpringContextHolder;
  */
 public class XN802510 extends AProcessor {
 
-    private IEthAddressAO ethAddressAO = SpringContextHolder
-        .getBean(IEthAddressAO.class);
+    private IEthMAddressAO ethMAddressAO = SpringContextHolder
+        .getBean(IEthMAddressAO.class);
 
     /** 
      * @see com.ogc.standard.api.IProcessor#doBusiness()
      */
     @Override
     public Object doBusiness() throws BizException {
-        ethAddressAO.generateMAddress();
+        ethMAddressAO.generate();
         return new BooleanRes(true);
     }
 

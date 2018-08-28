@@ -272,7 +272,7 @@ CREATE TABLE `tcoin_market` (
   `update_datetime` datetime NOT NULL COMMENT '更新时间',
   `coinmarketcap_id` int(10) NOT NULL COMMENT 'coinmarketcap中的币种id',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `origin` (`origin`,`coin`) USING BTREE
+  UNIQUE KEY `origin` (`origin`,`symbol`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT '币种行情';
 
 /*

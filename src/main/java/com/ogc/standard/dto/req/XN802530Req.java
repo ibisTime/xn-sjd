@@ -8,6 +8,8 @@
  */
 package com.ogc.standard.dto.req;
 
+import java.math.BigInteger;
+
 /** 
  * @author: haiqingzheng 
  * @since: 2017年11月9日 下午7:02:19 
@@ -17,34 +19,20 @@ public class XN802530Req extends APageReq {
 
     private static final long serialVersionUID = -2919414958783911395L;
 
-    // 地址
-    private String address;
-
-    // 交易hash
+    // 交易哈希
     private String hash;
 
-    // 区块hash
+    // 区块哈希
     private String blockHash;
 
-    // 区块编号
-    private String blockNumber;
+    // 区块号
+    private BigInteger blockNumber;
 
-    // 发送地址
+    // 转出地址
     private String from;
 
-    // 接受地址
+    // 转入地址
     private String to;
-
-    // 管理订单号
-    private String refNo;
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
 
     public String getHash() {
         return hash;
@@ -62,11 +50,11 @@ public class XN802530Req extends APageReq {
         this.blockHash = blockHash;
     }
 
-    public String getBlockNumber() {
+    public BigInteger getBlockNumber() {
         return blockNumber;
     }
 
-    public void setBlockNumber(String blockNumber) {
+    public void setBlockNumber(BigInteger blockNumber) {
         this.blockNumber = blockNumber;
     }
 
@@ -84,14 +72,6 @@ public class XN802530Req extends APageReq {
 
     public void setTo(String to) {
         this.to = to;
-    }
-
-    public String getRefNo() {
-        return refNo;
-    }
-
-    public void setRefNo(String refNo) {
-        this.refNo = refNo;
     }
 
 }

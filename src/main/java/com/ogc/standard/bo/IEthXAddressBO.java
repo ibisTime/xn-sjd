@@ -8,38 +8,8 @@ public interface IEthXAddressBO extends IPaginableBO<EthXAddress> {
     // 生成地址（有私钥）
     public String generateAddress(String userId);
 
-    //
-    // // 获取今日归集地址
-    // public EthXAddress getWEthXAddressToday();
-    //
-    // // 查询以太坊地址余额
-    // public BigDecimal getEthBalance(String address);
-    //
-    // // 更新余额
-    // public int refreshBalance(EthXAddress address);
-    //
-    // // 更新状态
-    // public int refreshStatus(EthXAddress address, String status);
-    //
-    // public EthXAddress getEthXAddressByAddress(String address);
-    //
-    public EthXAddress getEthXAddressByUserId(String userId);
+    public EthXAddress getEthXAddressByAddress(String address);
 
-    // public EthXAddress getEthXAddressByAccountNumber(String accountNumber);
-    //
-    // public boolean isEthXAddressExist(String address);
-    //
-    // public EthXAddress getEthXAddressSecret(String code);
-    //
-    // public List<EthXAddress> queryEthXAddressList(EthXAddress condition);
-    //
-    // public EthXAddress getEthXAddress(String code);
-    //
-    // public int abandonAddress(EthXAddress ethAddress);
-    //
-    // public BigDecimal getTotalBalance();
-    //
-    // public List<EthXAddress> queryManualCollectAddressPage(
-    // BigDecimal balanceStart, int start, int limit);
+    public EthXAddress getEthXAddressByUserId(String userId);
 
 }

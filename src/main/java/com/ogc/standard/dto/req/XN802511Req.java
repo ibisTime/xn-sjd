@@ -17,15 +17,15 @@ import org.hibernate.validator.constraints.NotBlank;
  */
 public class XN802511Req {
 
-    @NotBlank(message = "地址编号不能为空")
-    private String code; // 地址编号
+    @NotBlank
+    private String id; // 编号
 
-    public String getCode() {
-        return code;
+    public String getId() {
+        return id;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setId(String id) {
+        this.id = id;
     }
 
 }

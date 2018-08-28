@@ -8,6 +8,7 @@
  */
 package com.ogc.standard.api.impl;
 
+import com.ogc.standard.ao.IEthWAddressAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.ObjValidater;
@@ -25,8 +26,8 @@ import com.ogc.standard.spring.SpringContextHolder;
  */
 public class XN802520 extends AProcessor {
 
-    private IEthAddressAO ethAddressAO = SpringContextHolder
-        .getBean(IEthAddressAO.class);
+    private IEthWAddressAO ethWAddressAO = SpringContextHolder
+        .getBean(IEthWAddressAO.class);
 
     private XN802520Req req = null;
 
@@ -35,7 +36,7 @@ public class XN802520 extends AProcessor {
      */
     @Override
     public Object doBusiness() throws BizException {
-        ethAddressAO.importWAddress(req.getAddress());
+        ethWAddressAO.importWAddress(req.getAddress());
         return new BooleanRes(true);
     }
 

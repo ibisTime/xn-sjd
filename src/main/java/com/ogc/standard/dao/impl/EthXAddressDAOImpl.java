@@ -1,6 +1,5 @@
 package com.ogc.standard.dao.impl;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
@@ -49,30 +48,9 @@ public class EthXAddressDAOImpl extends AMybatisTemplate
     }
 
     @Override
-    public int updateAbandon(EthXAddress data) {
-        return super.update(NAMESPACE.concat("update_abandon"), data);
-    }
-
-    @Override
-    public int updateBalance(EthXAddress data) {
-        return super.update(NAMESPACE.concat("update_balance"), data);
-    }
-
-    @Override
     public EthXAddress selectSecret(EthXAddress condition) {
         return super.select(NAMESPACE.concat("select_ethAddress_secret"),
             condition, EthXAddress.class);
-    }
-
-    @Override
-    public BigDecimal selectTotalBalance(EthXAddress condition) {
-        return super.select(NAMESPACE.concat("select_totalBalance"), condition,
-            BigDecimal.class);
-    }
-
-    @Override
-    public int updateStatus(EthXAddress data) {
-        return super.update(NAMESPACE.concat("update_status"), data);
     }
 
 }

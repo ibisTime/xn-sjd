@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import com.ogc.standard.ao.IWithdrawAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
+import com.ogc.standard.core.ObjValidater;
 import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.dto.req.XN802350Req;
 import com.ogc.standard.dto.res.PKCodeRes;
@@ -30,8 +31,8 @@ public class XN802350 extends AProcessor {
         synchronized (XN802350.class) {
             BigDecimal amount = StringValidater.toBigDecimal(req.getAmount());
             String code = withdrawAO.applyOrder(req.getAccountNumber(), amount,
-                req.getPayCardInfo(), req.getPayCardNo(), req.getApplyUser(),
-                req.getApplyNote());
+                req.getPayCardInfo(), req.getPayCardNo(), req.getTradePwd(),
+                req.getApplyUser(), req.getApplyNote());
             return new PKCodeRes(code);
         }
 
@@ -41,8 +42,6 @@ public class XN802350 extends AProcessor {
     public void doCheck(String inputparams, String operator)
             throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN802350Req.class);
-        StringValidater.validateBlank(req.getAccountNumber(),
-            req.getPayCardInfo(), req.getPayCardNo(), req.getApplyUser());
-        StringValidater.validateAmount(req.getAmount());
+        ObjValidater.validateReq(req);
     }
 }

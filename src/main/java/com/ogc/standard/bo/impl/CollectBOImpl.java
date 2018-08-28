@@ -1,20 +1,28 @@
 package com.ogc.standard.bo.impl;
 
+import java.util.List;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.ogc.standard.bo.ICollectBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
+import com.ogc.standard.dao.ICollectDAO;
 import com.ogc.standard.domain.Collect;
 
 @Component
 public class CollectBOImpl extends PaginableBOImpl<Collect>
         implements ICollectBO {
 
-    // private static final Logger logger = LoggerFactory
-    // .getLogger(CollectBOImpl.class);
-    //
-    // @Autowired
-    // private ICollectDAO collectionDAO;
+    private static final Logger logger = LoggerFactory
+        .getLogger(CollectBOImpl.class);
+
+    @Autowired
+    private ICollectDAO collectionDAO;
+
     //
     // @Autowired
     // private IEthXAddressBO ethXAddressBO;
@@ -72,17 +80,17 @@ public class CollectBOImpl extends PaginableBOImpl<Collect>
     // return collection;
     // }
     //
-    // @Override
-    // public Collect getCollectByRefNo(String refNo) {
-    // Collect ethCollect = null;
-    // Collect condition = new Collect();
-    // condition.setRefNo(refNo);
-    // List<Collect> results = collectionDAO.selectList(condition);
-    // if (CollectUtils.isNotEmpty(results)) {
-    // ethCollect = results.get(0);
-    // }
-    // return ethCollect;
-    // }
+    @Override
+    public Collect getCollectByRefNo(String refNo) {
+        Collect ethCollect = null;
+        Collect condition = new Collect();
+        condition.setRefNo(refNo);
+        List<Collect> results = collectionDAO.selectList(condition);
+        if (CollectionUtils.isNotEmpty(results)) {
+            ethCollect = results.get(0);
+        }
+        return ethCollect;
+    }
     //
     // @Override
     // public int colectionNoticeETH(Collect data, BigDecimal txfee,

@@ -1,6 +1,6 @@
 /**
  * @Title XN802250Req.java 
- * @Package com.cdkj.coin.wallet.dto.req 
+ * @Package com.ogc.standard.dto.req 
  * @Description 
  * @author haiqingzheng  
  * @date 2018年3月13日 上午11:13:30 
