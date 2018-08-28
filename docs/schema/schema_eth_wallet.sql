@@ -162,6 +162,7 @@ CREATE TABLE `tstd_charge` (
   `pay_card_no` varchar(255) DEFAULT NULL COMMENT '支付渠道账号',
   `status` varchar(4) NOT NULL COMMENT '状态 1待支付 2支付失败 3支付成功',
   `apply_user` varchar(32) DEFAULT NULL COMMENT '申请人',
+  `apply_note` varchar(255) DEFAULT NULL COMMENT '申请说明',
   `apply_datetime` datetime DEFAULT NULL COMMENT '申请时间',
   `pay_user` varchar(32) DEFAULT NULL COMMENT '支付回录人',
   `pay_note` varchar(255) DEFAULT NULL COMMENT '支付渠道说明',

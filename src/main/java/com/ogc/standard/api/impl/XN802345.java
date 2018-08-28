@@ -7,6 +7,7 @@ import com.ogc.standard.ao.IChargeAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.common.JsonUtil;
+import com.ogc.standard.core.ObjValidater;
 import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.domain.Charge;
 import com.ogc.standard.dto.req.XN802345Req;
@@ -28,13 +29,10 @@ public class XN802345 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         Charge condition = new Charge();
-        condition.setCodeForQuery(req.getCode());
-        condition.setPayGroup(req.getPayGroup());
-        condition.setRefNo(req.getRefNo());
-        condition.setAccountNumber(req.getAccountNumber());
-        condition.setAccountName(req.getAccountName());
 
-        condition.setType(req.getType());
+        condition.setCodeForQuery(req.getCode());
+        condition.setAccountNumber(req.getAccountNumber());
+        condition.setAccountType(req.getAccountType());
         condition.setCurrency(req.getCurrency());
         if (CollectionUtils.isNotEmpty(req.getCurrencyList())) {
             condition.setCurrencyList(req.getCurrencyList());
@@ -55,8 +53,7 @@ public class XN802345 extends AProcessor {
         condition.setPayDatetimeEnd(
             DateUtil.getFrontDate(req.getPayDateEnd(), true));
         condition.setChannelType(req.getChannelType());
-        condition.setSystemCode(req.getSystemCode());
-        condition.setCompanyCode(req.getCompanyCode());
+        condition.setChannelOrder(req.getChannelOrder());
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
             orderColumn = IChargeAO.DEFAULT_ORDER_COLUMN;
@@ -72,8 +69,6 @@ public class XN802345 extends AProcessor {
     public void doCheck(String inputparams, String operator)
             throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN802345Req.class);
-        StringValidater.validateNumber(req.getStart(), req.getLimit());
-        StringValidater.validateBlank(req.getSystemCode(),
-            req.getCompanyCode());
+        ObjValidater.validateReq(req);
     }
 }

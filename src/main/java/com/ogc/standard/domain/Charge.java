@@ -47,6 +47,9 @@ public class Charge extends ABaseDO {
     // 申请人
     private String applyUser;
 
+    // 申请说明
+    private String applyNote;
+
     // 申请时间
     private Date applyDatetime;
 
@@ -61,6 +64,9 @@ public class Charge extends ABaseDO {
 
     // 支付渠道
     private String channelType;
+
+    // 渠道订单号
+    private String channelOrder;
 
     // *******************************
 
@@ -178,6 +184,14 @@ public class Charge extends ABaseDO {
         this.applyUser = applyUser;
     }
 
+    public String getApplyNote() {
+        return applyNote;
+    }
+
+    public void setApplyNote(String applyNote) {
+        this.applyNote = applyNote;
+    }
+
     public Date getApplyDatetime() {
         return applyDatetime;
     }
@@ -264,6 +278,14 @@ public class Charge extends ABaseDO {
 
     public void setCurrencyList(List<String> currencyList) {
         this.currencyList = currencyList;
+    }
+
+    public String getChannelOrder() {
+        return channelOrder;
+    }
+
+    public void setChannelOrder(String channelOrder) {
+        this.channelOrder = channelOrder;
     }
 
 }

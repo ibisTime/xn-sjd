@@ -11,7 +11,7 @@ public interface IEthTransactionBO extends IPaginableBO<EthTransaction> {
     // public List<EthTransaction> queryEthTransactionList(
     // EthTransaction condition);
     //
-    // public EthTransaction getEthTransaction(String hash);
+    public EthTransaction getEthTransaction(String hash);
     //
     // // 估算交易价格
     //

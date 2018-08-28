@@ -1,5 +1,7 @@
 package com.ogc.standard.dto.req;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 /**
  * 线下充值申请
  * @author: xieyj 
@@ -9,9 +11,11 @@ package com.ogc.standard.dto.req;
 public class XN802340Req {
 
     // 针对账号（必填）
+    @NotBlank
     private String accountNumber;
 
     // 充值金额（必填）
+    @NotBlank
     private String amount;
 
     // 支付渠道账号信息（如开户支行）（选填）
@@ -21,6 +25,7 @@ public class XN802340Req {
     private String payCardNo;
 
     // 申请人（必填）
+    @NotBlank
     private String applyUser;
 
     // 申请说明（选填）

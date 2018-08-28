@@ -14,7 +14,7 @@ public interface ICollectBO extends IPaginableBO<Collect> {
     //
     // public Collect getCollectByTxHash(String txHash);
     //
-    // public Collect getCollectByRefNo(String refNo);
+    public Collect getCollectByRefNo(String refNo);
     //
     // public void doETHCollect(EthXAddress ethAddress, String chargeCode);
     //

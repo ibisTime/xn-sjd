@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import com.ogc.standard.ao.IChargeAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
+import com.ogc.standard.core.ObjValidater;
 import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.dto.req.XN802340Req;
 import com.ogc.standard.dto.res.PKCodeRes;
@@ -42,8 +43,6 @@ public class XN802340 extends AProcessor {
     public void doCheck(String inputparams, String operator)
             throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN802340Req.class);
-        StringValidater.validateBlank(req.getAccountNumber(),
-            req.getApplyUser());
-        StringValidater.validateAmount(req.getAmount());
+        ObjValidater.validateReq(req);
     }
 }
