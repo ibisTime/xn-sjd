@@ -139,52 +139,13 @@ public class AccountAOImpl implements IAccountAO {
             for (Coin coin : coins) {
                 Account account = accountBO.getAccountByUser(userId,
                     coin.getSymbol());
-                setCoinAddress(coin, account);
                 accounts.add(account);
             }
         } else {
             Account account = accountBO.getAccountByUser(userId, currency);
-            Coin coin = coinBO.getCoin(currency);
-            setCoinAddress(coin, account);
             accounts.add(account);
         }
         return accounts;
-    }
-
-    private void setCoinAddress(Coin coin, Account account) {
-
-        // if (ECoinType.ORIGINAL.getCode().equals(coin.getType())) {
-        // if (EOriginialCoin.ETH.getCode().equals(coin.getSymbol())) {
-        // // 获取ETH地址
-        // EthAddress ethAddress = ethAddressBO
-        // .getEthAddressByAccountNumber(account.getAccountNumber());
-        // account.setCoinAddress(ethAddress.getAddress());
-        //
-        // } else if (EOriginialCoin.BTC.getCode()
-        // .equals(account.getCurrency())) {
-        // // 获取BTC地址
-        // BtcAddress btcAddress = btcAddressBO
-        // .getBtcAddressByAccountNumber(account.getAccountNumber());
-        // account.setCoinAddress(btcAddress.getAddress());
-        //
-        // } else if (EOriginialCoin.WAN.getCode()
-        // .equals(account.getCurrency())) {
-        // // 获取WAN地址
-        // WanAddress wanAddress = wanAddressBO
-        // .getWanAddressByAccountNumber(account.getAccountNumber());
-        // account.setCoinAddress(wanAddress.getAddress());
-        // }
-        // } else if (ECoinType.ETH_TOKEN.getCode().equals(coin.getType())) {
-        // // 获取token地址
-        // TokenAddress tokenAddress = tokenAddressBO
-        // .getTokenAddressByAccountNumber(account.getAccountNumber());
-        // account.setCoinAddress(tokenAddress.getAddress());
-        // } else if (ECoinType.WAN_TOKEN.getCode().equals(coin.getType())) {
-        // // 获取token地址
-        // WTokenAddress wtokenAddress = wtokenAddressBO
-        // .getWTokenAddressByAccountNumber(account.getAccountNumber());
-        // account.setCoinAddress(wtokenAddress.getAddress());
-        // }
     }
 
     @Override
