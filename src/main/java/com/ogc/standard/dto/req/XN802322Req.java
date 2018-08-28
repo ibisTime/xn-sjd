@@ -1,12 +1,10 @@
 package com.ogc.standard.dto.req;
 
 public class XN802322Req extends APageReq {
-    /** 
-     * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
-     */
-    private static final long serialVersionUID = 1L;
 
-    private String kind;
+    private static final long serialVersionUID = -8457904537485395601L;
+
+    private String type;
 
     // 流水所属账号(必填)
     private String accountNumber;
@@ -20,12 +18,12 @@ public class XN802322Req extends APageReq {
     // 状态(选填)
     private String status;
 
-    public String getKind() {
-        return kind;
+    public String getType() {
+        return type;
     }
 
-    public void setKind(String kind) {
-        this.kind = kind;
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getStatus() {
