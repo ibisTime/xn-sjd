@@ -53,10 +53,10 @@ public class Group extends ABaseDO {
     private BigDecimal monthBenefit;
 
     // 排行
-    private Integer orderNo;
+    private Long orderNo;
 
     // 关注人数
-    private Integer followNumber;
+    private Long followNumber;
 
     // 状态(1-进行中，0-已结束)
     private String status;
@@ -76,7 +76,7 @@ public class Group extends ABaseDO {
     private List<GroupCoin> coinList;
 
     // 最新成交记录
-    // private List<?> latestOrderDetailList;
+    private List<GroupCoinJour> latestOrderDetailList;
 
     public String getCode() {
         return code;
@@ -174,19 +174,19 @@ public class Group extends ABaseDO {
         this.monthBenefit = monthBenefit;
     }
 
-    public Integer getOrderNo() {
+    public Long getOrderNo() {
         return orderNo;
     }
 
-    public void setOrderNo(Integer orderNo) {
+    public void setOrderNo(Long orderNo) {
         this.orderNo = orderNo;
     }
 
-    public Integer getFollowNumber() {
+    public Long getFollowNumber() {
         return followNumber;
     }
 
-    public void setFollowNumber(Integer followNumber) {
+    public void setFollowNumber(Long followNumber) {
         this.followNumber = followNumber;
     }
 
@@ -228,6 +228,15 @@ public class Group extends ABaseDO {
 
     public void setCoinList(List<GroupCoin> coinList) {
         this.coinList = coinList;
+    }
+
+    public List<GroupCoinJour> getLatestOrderDetailList() {
+        return latestOrderDetailList;
+    }
+
+    public void setLatestOrderDetailList(
+            List<GroupCoinJour> latestOrderDetailList) {
+        this.latestOrderDetailList = latestOrderDetailList;
     }
 
 }

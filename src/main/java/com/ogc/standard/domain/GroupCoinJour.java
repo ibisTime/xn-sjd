@@ -8,18 +8,15 @@ import com.ogc.standard.dao.base.ABaseDO;
 /**
 * 币种配置账户流水
 * @author: lei
-* @since: 2018年08月23日 下午09:32:06
+* @since: 2018年08月25日 下午05:51:27
 * @history:
 */
 public class GroupCoinJour extends ABaseDO {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 3915403594524433240L;
 
     // 编号
     private String code;
-
-    // 订单分组组号
-    private String payGroup;
 
     // 参考订单号
     private String refNo;
@@ -29,6 +26,9 @@ public class GroupCoinJour extends ABaseDO {
 
     // 变动金额
     private BigDecimal transAmount;
+
+    // 组合编号
+    private String groupCode;
 
     // 用户编号
     private String userId;
@@ -59,14 +59,6 @@ public class GroupCoinJour extends ABaseDO {
         this.code = code;
     }
 
-    public String getPayGroup() {
-        return payGroup;
-    }
-
-    public void setPayGroup(String payGroup) {
-        this.payGroup = payGroup;
-    }
-
     public String getRefNo() {
         return refNo;
     }
@@ -89,6 +81,14 @@ public class GroupCoinJour extends ABaseDO {
 
     public void setTransAmount(BigDecimal transAmount) {
         this.transAmount = transAmount;
+    }
+
+    public String getGroupCode() {
+        return groupCode;
+    }
+
+    public void setGroupCode(String groupCode) {
+        this.groupCode = groupCode;
     }
 
     public String getUserId() {

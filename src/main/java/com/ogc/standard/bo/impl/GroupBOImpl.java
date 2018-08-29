@@ -11,16 +11,18 @@ import org.springframework.stereotype.Component;
 import com.ogc.standard.bo.IAttentionBO;
 import com.ogc.standard.bo.IGroupBO;
 import com.ogc.standard.bo.IGroupCoinBO;
+import com.ogc.standard.bo.IGroupCoinJourBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.IGroupDAO;
 import com.ogc.standard.domain.Attention;
 import com.ogc.standard.domain.Group;
 import com.ogc.standard.domain.GroupCoin;
+import com.ogc.standard.domain.GroupCoinJour;
 import com.ogc.standard.enums.EBoolean;
-import com.ogc.standard.enums.ECoin;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.enums.EGroupStatus;
+import com.ogc.standard.enums.EJourBizType;
 import com.ogc.standard.exception.BizException;
 
 @Component
@@ -34,6 +36,9 @@ public class GroupBOImpl extends PaginableBOImpl<Group> implements IGroupBO {
 
     @Autowired
     private IGroupCoinBO groupCoinBO;
+
+    @Autowired
+    private IGroupCoinJourBO groupCoinJourBO;
 
     @Override
     public String saveGroup(String matchCode, String teamCode, String userId,
@@ -50,7 +55,7 @@ public class GroupBOImpl extends PaginableBOImpl<Group> implements IGroupBO {
             group.setMatchCode(matchCode);
             group.setTeamCode(teamCode);
             group.setUserId(userId);
-            group.setSymbol(ECoin.USDT.getCode());
+            group.setSymbol(symbol);
 
             group.setInitAmount(initAmount);
             group.setBalance(initAmount);
@@ -61,23 +66,28 @@ public class GroupBOImpl extends PaginableBOImpl<Group> implements IGroupBO {
 
             group.setWeekBenefit(BigDecimal.ZERO);
             group.setMonthBenefit(BigDecimal.ZERO);
-            group.setOrderNo(0);
-            group.setFollowNumber(0);
+            group.setOrderNo(0L);
+            group.setFollowNumber(0L);
             group.setStatus(EGroupStatus.START.getCode());
 
             group.setCreateDatetime(new Date());
             groupDAO.insert(group);
 
-            // 初始化基础币种配置
-            groupCoinBO.distributeAccount(userId, group.getCode(),
-                group.getSymbol(), group.getInitAmount(),
+            // 分配基础币种配置账户
+            GroupCoin dbAccount = groupCoinBO.distributeAccount(userId,
+                group.getCode(), group.getSymbol(), group.getInitAmount(),
                 group.getTotalAssets(), 1.0);
+
+            // 记录流水
+            groupCoinJourBO.addJour(dbAccount, group.getCode(),
+                EJourBizType.DISTRIBUTE_ACCOUNT.getCode(),
+                EJourBizType.DISTRIBUTE_ACCOUNT.getValue(), initAmount);
         }
         return code;
     }
 
     @Override
-    public void editGroupFollowNumber(String code, int followNumber) {
+    public void editGroupFollowNumber(String code, Long followNumber) {
         Group data = new Group();
         data.setCode(code);
         data.setFollowNumber(followNumber);
@@ -136,7 +146,7 @@ public class GroupBOImpl extends PaginableBOImpl<Group> implements IGroupBO {
             // 获取提醒记录
             Attention remind = attentionBO.getAttention(visitUserId, code,
                 EBoolean.NO.getCode()); // 0-提醒
-            data.setAttentionFlag(null == remind ? EBoolean.NO.getCode()
+            data.setRemindFlag(null == remind ? EBoolean.NO.getCode()
                     : EBoolean.YES.getCode());
 
             // 获取币种配置
@@ -145,6 +155,11 @@ public class GroupBOImpl extends PaginableBOImpl<Group> implements IGroupBO {
             data.setCoinList(groupCoins);
 
             // 获取最新成交记录
+            GroupCoinJour gcjCondition = new GroupCoinJour();
+            gcjCondition.setGroupCode(code);
+            List<GroupCoinJour> groupCoinJours = groupCoinJourBO
+                .queryGroupCoinJourList(gcjCondition);
+            data.setLatestOrderDetailList(groupCoinJours);
 
         }
         return data;

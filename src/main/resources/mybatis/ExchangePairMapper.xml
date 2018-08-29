@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cdkj.info.dao.IExchangePairDAO">
+<mapper namespace="com.ogc.standard.dao.IExchangePairDAO">
 	<resultMap id="exchangePair_DB_Result" type="exchangePair">
 		<result column="id" property="id" />
 		<result column="exchange_ename" property="exchangeEname" />
-		<result column="exchange_cname" property="exchangeCname" />
 		<result column="symbol" property="symbol" />
 		<result column="to_symbol" property="toSymbol" />
 		<result column="pair" property="pair" />
-		<result column="location" property="location" />
+		
+		<result column="price" property="price" />
 		<result column="updater" property="updater" />
 		<result column="update_datetime" property="updateDatetime" />
 	</resultMap>
@@ -21,15 +21,6 @@
 			<if test="exchangeEname != null and exchangeEname != '' ">
 				AND t.exchange_ename like "%"#{exchangeEname}"%"
 			</if>
-			<if test="exchangeCname != null and exchangeCname != '' ">
-				AND t.exchange_cname like "%"#{exchangeCname}"%"
-			</if>
-			<if test="keywords != null and keywords != '' ">
-				AND (t.exchange_ename like "%"#{keywords}"%" 
-				OR t.exchange_cname like "%"#{keywords}"%" 
-				OR t.symbol like "%"#{keywords}"%"
-				OR t.to_symbol like "%"#{keywords}"%")
-			</if>
 			<if test="symbol != null and symbol != '' ">
 				AND t.symbol = #{symbol}
 			</if>
@@ -39,20 +30,17 @@
 			<if test="pair != null and pair != '' ">
 				AND t.pair = #{pair}
 			</if>
-			<if test="location != null and location != '' ">
-				AND t.location = #{location}
-			</if>
 		</trim>
 	</sql>
 	<select id="select_exchangePair" parameterType="exchangePair" resultMap="exchangePair_DB_Result">
 		SELECT
 		t.id
 		,t.exchange_ename
-		,t.exchange_cname
 		,t.symbol
 		,t.to_symbol
 		,t.pair
-		,t.location
+		
+		,t.price
 		,t.updater
 		,t.update_datetime
 		FROM
@@ -73,7 +61,8 @@
 		,upper(t.symbol) as symbol
 		,upper(t.to_symbol) as to_symbol
 		,pair
-		,t.location
+		
+		,t.price
 		,t.updater
 		,t.update_datetime
 		FROM
@@ -92,34 +81,10 @@
 		<include refid="where_condition" />
 	</select>
 
-	<insert id="insert_exchangePair" parameterType="exchangePair">
-		INSERT INTO
-		tmk_exchange_pair(
-		exchange_ename
-		,exchange_cname
-		,symbol
-		,to_symbol
-		,pair
-		,location
-		,updater
-		,update_datetime
-		)
-		VALUES(
-		#{exchangeEname}
-		,#{exchangeCname}
-		,#{symbol}
-		,#{toSymbol}
-		,#{pair}
-		,#{location}
-		,#{updater}
-		,#{updateDatetime}
-		)
-	</insert>
-	
-	<update id="update_location" parameterType="exchangePair">
+	<update id="update_price" parameterType="exchangePair">
 		UPDATE tmk_exchange_pair
 		SET
-		location = #{location}
+		price = #{price}
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
 		WHERE id = #{id}		

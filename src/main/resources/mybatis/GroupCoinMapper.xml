@@ -17,8 +17,14 @@
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
-			<if test="code != null and code != '' ">
-				AND t.code = #{code}
+			<if test="groupCode != null and groupCode != '' ">
+				AND t.group_code = #{groupCode}
+			</if>
+			<if test="userId != null and userId != '' ">
+				AND t.user_id = #{userId}
+			</if>
+			<if test="symbol != null and symbol != '' ">
+				AND t.symbol = #{symbol}
 			</if>
 		</trim>
 	</sql>
@@ -83,7 +89,7 @@
 
 	<update id="update_account_amount" parameterType="groupCoin">
 		UPDATE
-		tsimu_account
+		tsimu_group_coin
 		SET
 		count= #{count}
 		,last_order = #{lastOrder}
@@ -94,7 +100,7 @@
 	<update id="update_frozenAmount" parameterType="groupCoin">
 		UPDATE tsimu_group_coin
 		SET
-		frozen_amount = #{frozenAmount}
+		frozen_count = #{frozenCount}
 		,last_order = #{lastOrder}
 		WHERE
 		account_number = #{accountNumber}
@@ -103,7 +109,7 @@
 	<update id="update_unfrozenAmount" parameterType="groupCoin">
 		UPDATE tsimu_group_coin
 		SET
-		frozen_amount = #{frozenAmount}
+		frozen_count = #{frozenCount}
 		,last_order = #{lastOrder}
 		WHERE
 		account_number = #{accountNumber}

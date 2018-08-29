@@ -1,9 +1,15 @@
 package com.ogc.standard.ao.impl;
 
+import java.util.ArrayList;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ogc.standard.ao.IHuobiproAO;
 import com.ogc.standard.ao.IMarketAO;
+import com.ogc.standard.enums.EExchange;
 import com.ogc.standard.market.MarketDepth;
+import com.ogc.standard.market.MarketDepthItem;
 
 /** 
  * 
@@ -14,16 +20,22 @@ import com.ogc.standard.market.MarketDepth;
 @Service
 public class MarketAOImpl implements IMarketAO {
 
-    // @Autowired
-    // IHuobiproAO huobiproAO;
+    @Autowired
+    IHuobiproAO huobiproAO;
 
     @Override
     public MarketDepth getMarketDepth(String symbolPair, String exchange) {
 
         MarketDepth marketDepth = null;
 
-        symbolPair = symbolPair.replace("/", "").toLowerCase();
-        // marketDepth = huobiproAO.getMarketDepth(symbolPair, "step1");
+        if (EExchange.HuobiPro.getCode().equals(exchange)) {
+            symbolPair = symbolPair.replace("/", "").toLowerCase();
+            marketDepth = huobiproAO.getMarketDepth(symbolPair, "step1");
+        } else {
+            marketDepth = new MarketDepth();
+            marketDepth.setAsks(new ArrayList<MarketDepthItem>());
+            marketDepth.setBids(new ArrayList<MarketDepthItem>());
+        }
 
         return marketDepth;
     }

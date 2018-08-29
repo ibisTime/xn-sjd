@@ -25,6 +25,8 @@ public class DateUtil {
 
     public static final String DATA_TIME_PATTERN_7 = "yyyy年MM月dd日 ahh:mm:ss";
 
+    public static final String UTC_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
+
     public static final String TIME_BEGIN = " 00:00:00";
 
     public static final String TIME_MIDDLE = " 12:00:00";
@@ -290,5 +292,23 @@ public class DateUtil {
     public static void main(String[] args) {
         System.out.println(
             getEndDatetime(dateToStr(new Date(), FRONT_DATE_FORMAT_STRING)));
+    }
+
+    /**
+     * 得到UTC时间，类型为字符串，格式为"yyyy-MM-dd HH:mm:ss"<br />
+     * 如果获取失败，返回null
+     * @return
+     */
+    public static String getUTCTimeStr() {
+        // 1、取得本地时间：
+        Calendar cal = Calendar.getInstance();
+        // 2、取得时间偏移量：
+        int zoneOffset = cal.get(java.util.Calendar.ZONE_OFFSET);
+        // 3、取得夏令时差：
+        int dstOffset = cal.get(java.util.Calendar.DST_OFFSET);
+        // 4、从本地时间里扣除这些差量，即可以取得UTC时间：
+        cal.add(java.util.Calendar.MILLISECOND, -(zoneOffset + dstOffset));
+        Date utc = new Date(cal.getTimeInMillis());
+        return dateToStr(utc, UTC_TIME_FORMAT);
     }
 }

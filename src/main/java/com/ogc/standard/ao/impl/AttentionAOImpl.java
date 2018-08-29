@@ -28,7 +28,7 @@ public class AttentionAOImpl implements IAttentionAO {
         Attention attention = attentionBO.getAttention(userId, groupCode, type);
 
         // 获取组合关注人数
-        int followNumber = groupBO.getGroup(groupCode).getFollowNumber();
+        Long followNumber = groupBO.getGroup(groupCode).getFollowNumber();
 
         if (null == attention) {
 

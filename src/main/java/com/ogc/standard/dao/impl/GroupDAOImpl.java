@@ -47,7 +47,7 @@ public class GroupDAOImpl extends AMybatisTemplate implements IGroupDAO {
 
     @Override
     public int updateGroupFollowNumber(Group data) {
-        return super.update(NAMESPACE.concat("delete_group"), data);
+        return super.update(NAMESPACE.concat("update_group"), data);
     }
 
 }

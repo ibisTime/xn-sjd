@@ -71,5 +71,11 @@
 		)
 	</insert>
 
+	<delete id="delete_attention" parameterType="attention">
+		DELETE FROM
+		tsimu_attention
+		WHERE
+		code = #{code}
+	</delete>
 
 </mapper>

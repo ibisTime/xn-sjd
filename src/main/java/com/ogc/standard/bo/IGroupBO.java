@@ -11,7 +11,7 @@ public interface IGroupBO extends IPaginableBO<Group> {
     public String saveGroup(String matchCode, String teamCode, String userId,
             BigDecimal initAmount, String symbol);
 
-    public void editGroupFollowNumber(String code, int followNumber);
+    public void editGroupFollowNumber(String code, Long followNumber);
 
     public int removeGroup(String code);
 

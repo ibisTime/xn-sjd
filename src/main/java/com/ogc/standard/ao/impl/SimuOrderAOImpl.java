@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.IMarketAO;
 import com.ogc.standard.ao.ISimuOrderAO;
-import com.ogc.standard.bo.IGroupBO;
 import com.ogc.standard.bo.IGroupCoinBO;
 import com.ogc.standard.bo.ISimuOrderBO;
 import com.ogc.standard.bo.ISimuOrderDetailBO;
@@ -55,9 +54,6 @@ public class SimuOrderAOImpl implements ISimuOrderAO {
     private IUserBO userBO;
 
     @Autowired
-    private IGroupBO groupBO;
-
-    @Autowired
     private IGroupCoinBO groupCoinBO;
 
     @Override
@@ -85,9 +81,9 @@ public class SimuOrderAOImpl implements ISimuOrderAO {
     }
 
     @Override
-    public void buySuccessOrder(String code) {
+    public void buySuccessOrder(String orderCode) {
         // 当前挂单的订单是否可立即成交处理
-        SimuOrder data = simuOrderBO.getSimuOrder(code);
+        SimuOrder data = simuOrderBO.getSimuOrder(orderCode);
         MarketDepth marketDepth = marketAO.getMarketDepth(
             SymbolUtil.getSymbolPair(data.getSymbol(), data.getToSymbol()),
             data.getExchange());
@@ -106,7 +102,10 @@ public class SimuOrderAOImpl implements ISimuOrderAO {
                 }
 
                 SimuOrderDetail simuOrderDetail = new SimuOrderDetail();
-                simuOrderDetail.setOrderCode(code);
+                String code = OrderNoGenerater
+                    .generate(EGeneratePrefix.SIMU_ORDER_DETAIL.getCode());
+                simuOrderDetail.setCode(code);
+                simuOrderDetail.setOrderCode(orderCode);
                 simuOrderDetail.setTradedPrice(marketDepthItem.getPrice());
                 simuOrderDetail.setTradedCount(tradedCount);
                 BigDecimal tradedAmount = marketDepthItem.getPrice()
@@ -196,20 +195,23 @@ public class SimuOrderAOImpl implements ISimuOrderAO {
             .generate(EGeneratePrefix.SIMU_ORDER.getCode());
         SimuOrder data = new SimuOrder();
         data.setCode(code);
+        data.setGroupCode(req.getGroupCode());
         data.setUserId(req.getUserId());
         data.setExchange(req.getExchange());
         data.setSymbol(req.getSymbol());
-        data.setToSymbol(req.getToSymbol());
 
+        data.setToSymbol(req.getToSymbol());
         data.setType(req.getType());
         data.setDirection(req.getDirection());
         data.setPrice(price);
         data.setTotalCount(totalCount);
-        data.setTotalAmount(totalAmount);
 
+        data.setTotalAmount(totalAmount);
         data.setTradedCount(BigDecimal.ZERO);
         data.setTradedAmount(BigDecimal.ZERO);
         data.setTradedFee(BigDecimal.ZERO);
+        data.setLastTradedDatetime(new Date());
+
         data.setCreateDatetime(new Date());
         data.setStatus(ESimuOrderStatus.SUBMIT.getCode());
         simuOrderBO.saveSimuOrder(data);
@@ -255,20 +257,23 @@ public class SimuOrderAOImpl implements ISimuOrderAO {
             .generate(EGeneratePrefix.SIMU_ORDER.getCode());
         SimuOrder data = new SimuOrder();
         data.setCode(code);
+        data.setGroupCode(req.getGroupCode());
         data.setUserId(req.getUserId());
         data.setExchange(req.getExchange());
         data.setSymbol(req.getSymbol());
-        data.setToSymbol(req.getToSymbol());
 
+        data.setToSymbol(req.getToSymbol());
         data.setType(req.getType());
         data.setDirection(req.getDirection());
         data.setPrice(price);
         data.setTotalCount(totalCount);
-        data.setTotalAmount(totalAmount);
 
+        data.setTotalAmount(totalAmount);
         data.setTradedCount(BigDecimal.ZERO);
         data.setTradedAmount(BigDecimal.ZERO);
         data.setTradedFee(BigDecimal.ZERO);
+        data.setLastTradedDatetime(new Date());
+
         data.setCreateDatetime(new Date());
         data.setStatus(ESimuOrderStatus.SUBMIT.getCode());
         simuOrderBO.saveSimuOrder(data);
@@ -417,7 +422,7 @@ public class SimuOrderAOImpl implements ISimuOrderAO {
 
         // 添加购买的交易币种金额
         GroupCoin symbolAccount = groupCoinBO.checkAccountAndDistribute(
-            simuOrder.getUserId(), simuOrder.getExchange(),
+            simuOrder.getUserId(), gcAccount.getGroupCode(),
             simuOrder.getSymbol());
         symbolAccount = groupCoinBO.changeAmount(symbolAccount,
             simuOrder.getTotalCount(), simuOrder.getCode(),

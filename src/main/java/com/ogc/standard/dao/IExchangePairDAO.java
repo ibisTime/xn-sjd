@@ -12,4 +12,5 @@ public interface IExchangePairDAO extends IBaseDAO<ExchangePair> {
     public List<ExchangePair> selectListShow(ExchangePair condition, int start,
             int count);
 
+    public int updatePrice(ExchangePair data);
 }

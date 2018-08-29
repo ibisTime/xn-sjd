@@ -10,7 +10,7 @@ import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
 
 /**
- * 详情查询组合币种配置（详细仓位）（front）
+ * 列表查询组合币种配置（详细仓位）（front）
  * @author: lei 
  * @since: 2018年8月20日 下午9:34:20 
  * @history:

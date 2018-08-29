@@ -20,6 +20,11 @@ public class ExchangePairBOImpl extends PaginableBOImpl<ExchangePair>
     private IExchangePairDAO exchangePairDAO;
 
     @Override
+    public List<ExchangePair> queryExchangePairList(ExchangePair condition) {
+        return exchangePairDAO.selectList(condition);
+    }
+
+    @Override
     public Paginable<ExchangePair> queryExchangePairShowPage(int start,
             int pageSize, ExchangePair condition) {
         prepare(condition);
@@ -30,6 +35,13 @@ public class ExchangePairBOImpl extends PaginableBOImpl<ExchangePair>
             page.getStart(), page.getPageSize());
         page.setList(dataList);
         return page;
+    }
+
+    @Override
+    public void updatePrice(ExchangePair data) {
+        if (data != null) {
+            exchangePairDAO.updatePrice(data);
+        }
     }
 
 }

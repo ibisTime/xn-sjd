@@ -1,5 +1,6 @@
 package com.ogc.standard.ao.impl;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -21,6 +22,7 @@ import com.ogc.standard.domain.MatchApply;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.dto.req.XN628300Req;
 import com.ogc.standard.enums.EBoolean;
+import com.ogc.standard.enums.ECoin;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.enums.EMatchApplyStatus;
 import com.ogc.standard.enums.EMatchStatus;
@@ -103,8 +105,9 @@ public class MatchApplyAOImpl implements IMatchApplyAO {
                 matchApply.getApplyUser());
 
             // 添加组合
-            // groupBO.saveGroup(match.getCode(), teamCode,
-            // matchApply.getApplyUser(), new BigDecimal(0));
+            groupBO.saveGroup(match.getCode(), teamCode,
+                matchApply.getApplyUser(), new BigDecimal(100000),
+                ECoin.USDT.getCode());
         } else {
             status = EMatchApplyStatus.APPROVED_NO.getCode();
         }

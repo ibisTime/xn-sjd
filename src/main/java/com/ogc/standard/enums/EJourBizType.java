@@ -22,7 +22,9 @@ public enum EJourBizType {
 
     SELL_ORDER_UNFROZEN("buy_order_unfrozen", "卖出委托单解冻"),
 
-    SELL_ORDER_SUCCESS("sell_order_success", "卖出委托单成交");
+    SELL_ORDER_SUCCESS("sell_order_success", "卖出委托单成交"),
+
+    DISTRIBUTE_ACCOUNT("distribute_account", "分配账户初始币种");
 
     public static EJourBizType getBizType(String code) {
         Map<String, EJourBizType> map = getBizTypeMap();

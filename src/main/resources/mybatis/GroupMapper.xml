@@ -23,6 +23,7 @@
 		
 		<result column="create_datetime" property="createDatetime" />
 	</resultMap>
+	
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != '' ">
@@ -42,6 +43,7 @@
 			</if>
 		</trim>
 	</sql>
+	
 	<select id="select_group" parameterType="group" resultMap="group_DB_Result">
 		SELECT
 		t.code
@@ -126,10 +128,11 @@
 	</insert>
 
 	<update id="update_group" parameterType="group">
-		UPDATE tsimu_group SET
-		followNumber = #{followNumber}
+		UPDATE tsimu_group 
+		SET
+		follow_number = #{followNumber}
 		
-		WHERE id = #{code}
+		WHERE code = #{code}
 	</update>
-
+	
 </mapper>

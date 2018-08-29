@@ -25,12 +25,12 @@ public class SCDM_IDAO {
 
     private static String dbname = "tsimu_group_coin_jour";
 
-    private static String[] DBwords = { "code", "pay_group", "ref_no",
-            "account_number", "trans_amount", "user_id", "symbol", "biz_type",
+    private static String[] DBwords = { "code", "ref_no", "account_number",
+            "trans_amount", "group_code", "user_id", "symbol", "biz_type",
             "biz_note", "pre_amount", "post_amount", "create_datetime" };
 
-    private static String[] DBwordsName = { "编号", "订单分组组号", "参考订单号", "账户编号",
-            "变动金额", "用户编号", "币种", "业务类型", "业务类型", "变动前金额", "变动后金额", "创建时间" };
+    private static String[] DBwordsName = { "编号", "参考订单号", "账户编号", "变动金额",
+            "组合编号", "用户编号", "币种", "业务类型", "业务类型", "变动前金额", "变动后金额", "创建时间" };
 
     private static String[] DOwords = getDOwords();
 

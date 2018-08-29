@@ -19,6 +19,7 @@ import com.ogc.standard.domain.Team;
 import com.ogc.standard.domain.TeamMemberApply;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.enums.EBoolean;
+import com.ogc.standard.enums.ECoin;
 import com.ogc.standard.enums.ETeamMemberApplyStatus;
 import com.ogc.standard.enums.ETeamStatus;
 import com.ogc.standard.exception.BizException;
@@ -90,7 +91,8 @@ public class TeamMemberApplyAOImpl implements ITeamMemberApplyAO {
 
             // 添加组合
             groupBO.saveGroup(team.getMatchCode(), team.getCode(),
-                teamMemberApply.getApplyUser(), new BigDecimal(0));
+                teamMemberApply.getApplyUser(), new BigDecimal(0),
+                ECoin.USDT.getCode());
         } else {
             status = ETeamMemberApplyStatus.APPROVED_NO.getCode();
         }

@@ -1,6 +1,7 @@
 package com.ogc.standard.domain;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 import com.ogc.standard.dao.base.ABaseDO;
 
@@ -26,12 +27,17 @@ public class ExchangePair extends ABaseDO {
     // 计价币种
     private String toSymbol;
 
+    // 计价币种
+    private String pair;
+
     // 交易对
     private BigDecimal price;
 
-    // *******db properties*******
-    // 关键字
-    private String keywords;
+    // 更新人
+    private String updater;
+
+    // 更新时间
+    private Date updateDatetime;
 
     public String getId() {
         return id;
@@ -65,6 +71,14 @@ public class ExchangePair extends ABaseDO {
         this.toSymbol = toSymbol;
     }
 
+    public String getPair() {
+        return pair;
+    }
+
+    public void setPair(String pair) {
+        this.pair = pair;
+    }
+
     public BigDecimal getPrice() {
         return price;
     }
@@ -73,12 +87,20 @@ public class ExchangePair extends ABaseDO {
         this.price = price;
     }
 
-    public String getKeywords() {
-        return keywords;
+    public String getUpdater() {
+        return updater;
     }
 
-    public void setKeywords(String keywords) {
-        this.keywords = keywords;
+    public void setUpdater(String updater) {
+        this.updater = updater;
+    }
+
+    public Date getUpdateDatetime() {
+        return updateDatetime;
+    }
+
+    public void setUpdateDatetime(Date updateDatetime) {
+        this.updateDatetime = updateDatetime;
     }
 
 }

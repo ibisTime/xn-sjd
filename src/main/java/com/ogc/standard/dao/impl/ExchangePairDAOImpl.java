@@ -54,4 +54,9 @@ public class ExchangePairDAOImpl extends AMybatisTemplate
             start, count, condition, ExchangePair.class);
     }
 
+    @Override
+    public int updatePrice(ExchangePair data) {
+        return super.update(NAMESPACE.concat("update_price"), data);
+    }
+
 }

@@ -43,9 +43,12 @@ public class GroupCoinJourBOImpl extends PaginableBOImpl<GroupCoinJour>
         data.setTransAmount(transCount);
         data.setUserId(dbAccount.getUserId());
 
+        data.setGroupCode(dbAccount.getGroupCode());
+        data.setSymbol(dbAccount.getSymbol());
         data.setBizType(bizType);
         data.setBizNote(bizNote);
         data.setPreAmount(dbAccount.getCount());
+
         data.setPostAmount(dbAccount.getCount().add(transCount));
         data.setCreateDatetime(new Date());
         groupCoinJourDAO.insert(data);
@@ -69,11 +72,14 @@ public class GroupCoinJourBOImpl extends PaginableBOImpl<GroupCoinJour>
         data.setRefNo(refNo);
         data.setAccountNumber(dbAccount.getAccountNumber());
         data.setTransAmount(transCount);
-        data.setUserId(dbAccount.getUserId());
+        data.setGroupCode(dbAccount.getGroupCode());
 
+        data.setUserId(dbAccount.getUserId());
+        data.setSymbol(dbAccount.getSymbol());
         data.setBizType(bizType);
         data.setBizNote(bizNote);
         data.setPreAmount(dbAccount.getFrozenCount());
+
         data.setPostAmount(dbAccount.getFrozenCount().add(transCount));
         data.setCreateDatetime(new Date());
         groupCoinJourDAO.insert(data);
