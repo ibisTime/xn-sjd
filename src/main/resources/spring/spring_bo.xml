@@ -146,4 +146,24 @@
 		<property name="paginableDAO" ref="currencyRateDAOImpl"/>
 	</bean>
 	
+	<bean id="accountBO" class="com.ogc.standard.bo.impl.AccountBOImpl">
+		<property name="paginableDAO" ref="accountDAOImpl"/>
+	</bean>
+	
+	<bean id="ethXAddressBO" class="com.ogc.standard.bo.impl.EthXAddressBOImpl">
+		<property name="paginableDAO" ref="ethXAddressDAOImpl"/>
+	</bean>
+	
+	<bean id="ethMAddressBO" class="com.ogc.standard.bo.impl.EthMAddressBOImpl">
+		<property name="paginableDAO" ref="ethMAddressDAOImpl"/>
+	</bean>
+	
+	<bean id="ethWAddressBO" class="com.ogc.standard.bo.impl.EthWAddressBOImpl">
+		<property name="paginableDAO" ref="ethWAddressDAOImpl"/>
+	</bean>
+	
+	<bean id="ethTransactionBO" class="com.ogc.standard.bo.impl.EthTransactionBOImpl">
+		<property name="paginableDAO" ref="ethTransactionDAOImpl"/>
+	</bean>
+	
 </beans>

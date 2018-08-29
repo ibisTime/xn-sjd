@@ -154,7 +154,8 @@ public class EthClient {
 
     public static void main(String[] args) {
 
-        System.out.println(getGasPrice());
+        // System.out.println(getGasPrice());
+        System.out.println(newAccount().getAddress());
 
     }
 

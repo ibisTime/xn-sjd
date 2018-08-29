@@ -45,7 +45,7 @@
 		</trim>
 	</select>
 	
-	<select id="select_ethMAddress_secret" parameterType="ethMAddress" resultMap="secret_DB_Result">
+	<select id="select_ethMAddress_secret" parameterType="ethMAddress" resultMap="ethMAddress_DB_Result">
 		SELECT
 		t.id
 		,t.address

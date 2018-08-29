@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ogc.standard.dao.IEthAddressDAO">
+<mapper namespace="com.ogc.standard.dao.IEthXAddressDAO">
 	<resultMap id="ethXAddress_DB_Result" type="ethXAddress">
 		<result column="id" property="id" />
 		<result column="address" property="address" />
@@ -43,7 +43,7 @@
 		</trim>
 	</select>
 	
-	<select id="select_ethXAddress_secret" parameterType="ethXAddress" resultMap="secret_DB_Result">
+	<select id="select_ethXAddress_secret" parameterType="ethXAddress" resultMap="ethXAddress_DB_Result">
 		SELECT
 		t.id
 		,t.address

@@ -3,24 +3,26 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ogc.standard.dao.IEthTransactionDAO">
 	<resultMap id="ethTransaction_DB_Result" type="ethTransaction">
+		<result column="id" property="id" />
 		<result column="hash" property="hash" />
 		<result column="nonce" property="nonce" />
-		<result column="blockHash" property="blockHash" />
-		<result column="blockNumber" property="blockNumber" />
-		<result column="transactionIndex" property="transactionIndex" />
-		<result column="fromAddress" property="from" />
-		<result column="toAddress" property="to" />
+		<result column="block_hash" property="blockHash" />
+		<result column="block_number" property="blockNumber" />
+		<result column="block_create_datetime" property="blockCreateDatetime" />
+		<result column="transaction_index" property="transactionIndex" />
+		<result column="from" property="from" />
+		<result column="to" property="to" />
 		<result column="value" property="value" />
-		<result column="gasPrice" property="gasPrice" />
-		<result column="gas" property="gas" />
-		<result column="gasUsed" property="gasUsed" />
+		<result column="sync_datetime" property="syncDatetime" />
+		<result column="gas_price" property="gasPrice" />
+		<result column="gas_limit" property="gasLimit" />
+		<result column="gas_used" property="gasUsed" />
+		<result column="gas_fee" property="gasFee" />
 		<result column="input" property="input" />
-		<result column="creates" property="creates" />
-		<result column="publicKey" property="publicKey" />
+		<result column="public_key" property="publicKey" />
 		<result column="raw" property="raw" />
 		<result column="r" property="r" />
 		<result column="s" property="s" />
-		<result column="ref_no" property="refNo" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
@@ -34,45 +36,35 @@
 				AND t.blockNumber = #{blockNumber}
 			</if>
 			<if test="from != null and from != '' ">
-				AND t.fromAddress = #{from}
+				AND t.from = #{from}
 			</if>
 			<if test="to != null and to != '' ">
-				AND t.toAddress = #{to}
-			</if>
-			<if test="createsStart != null and createsStart != '' ">
-				<![CDATA[AND t.creates >= #{createsStart}]]>
-			</if>
-			<if test="createsEnd != null and createsEnd != '' ">
-				<![CDATA[AND t.creates <= #{createsEnd}]]>
-			</if>
-			<if test="refNo != null and refNo != '' ">
-				AND t.ref_no = #{refNo}
-			</if>
-			<if test="address != null and address != '' ">
-				AND t.fromAddress = #{address} or t.toAddress = #{address}
+				AND t.to = #{to}
 			</if>
 		</trim>
 	</sql>
 	<select id="select_ethTransaction" parameterType="ethTransaction" resultMap="ethTransaction_DB_Result">
 		SELECT
-		t.hash
+		t.id
+		,t.hash
 		,t.nonce
-		,t.blockHash
-		,t.blockNumber
-		,t.transactionIndex
-		,t.fromAddress
-		,t.toAddress
+		,t.block_hash
+		,t.block_number
+		,t.block_create_datetime
+		,t.transaction_index
+		,t.from
+		,t.to
 		,t.value
-		,t.gasPrice
-		,t.gas
-		,t.gasUsed
+		,t.sync_datetime
+		,t.gas_price
+		,t.gas_limit
+		,t.gas_used
+		,t.gas_fee
 		,t.input
-		,t.creates
-		,t.publicKey
+		,t.public_key
 		,t.raw
 		,t.r
 		,t.s
-		,t.ref_no
 		FROM
 		tcoin_eth_transaction t
 		<include refid="where_condition" />
@@ -92,44 +84,47 @@
 	<insert id="insert_ethTransaction" parameterType="ethTransaction">
 		INSERT INTO
 		tcoin_eth_transaction(
-		hash
+		id
+		,hash
 		,nonce
-		,blockHash
-		,blockNumber
-		,transactionIndex
-		,fromAddress
-		,toAddress
+		,block_hash
+		,block_number
+		,block_create_datetime
+		,transaction_index
+		,from
+		,to
 		,value
-		,gasPrice
-		,gas
-		,gasUsed
+		,sync_datetime
+		,gas_price
+		,gas_limit
+		,gas_used
+		,gas_fee
 		,input
-		,creates
 		,publicKey
 		,raw
 		,r
 		,s
-		,ref_no
 		)
 		VALUES(
-		#{hash}
+		#{id}
+		,#{hash}
 		,#{nonce}
 		,#{blockHash}
 		,#{blockNumber}
+		,#{blockCreateDatetime}
 		,#{transactionIndex}
 		,#{from}
 		,#{to}
 		,#{value}
 		,#{gasPrice}
-		,#{gas}
+		,#{gasLimit}
 		,#{gasUsed}
+		,#{gasFee}
 		,#{input}
-		,#{creates}
 		,#{publicKey}
 		,#{raw}
 		,#{r}
 		,#{s}
-		,#{refNo}
 		)
 	</insert>
 
