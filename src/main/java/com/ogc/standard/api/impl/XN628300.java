@@ -24,7 +24,7 @@ public class XN628300 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return new PKCodeRes(matchApplyAO.addMatchApply(req));
+        return new PKCodeRes(matchApplyAO.matchApply(req));
     }
 
     @Override

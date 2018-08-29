@@ -56,7 +56,7 @@ public class TeamMemberApply extends ABaseDO {
     private List<String> statusList;
 
     // 战队名称
-    private String teamName;
+    private Team team;
 
     // 申请人
     private User applyUserInfo;
@@ -168,12 +168,12 @@ public class TeamMemberApply extends ABaseDO {
         this.statusList = statusList;
     }
 
-    public String getTeamName() {
-        return teamName;
+    public Team getTeam() {
+        return team;
     }
 
-    public void setTeamName(String teamName) {
-        this.teamName = teamName;
+    public void setTeam(Team team) {
+        this.team = team;
     }
 
     public User getApplyUserInfo() {

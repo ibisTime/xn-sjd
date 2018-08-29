@@ -55,7 +55,7 @@ public class TeamAOImpl implements ITeamAO {
     public Paginable<Team> queryTeamPage(int start, int limit, Team condition) {
         Paginable<Team> page = teamBO.getPaginable(start, limit, condition);
 
-        if (null != page && CollectionUtils.isEmpty(page.getList())) {
+        if (null != page && CollectionUtils.isNotEmpty(page.getList())) {
             for (Team team : page.getList()) {
                 initTeam(team);
             }
@@ -100,7 +100,7 @@ public class TeamAOImpl implements ITeamAO {
     private void initTeam(Team team) {
         // 赛事信息
         Match match = matchBO.getMatch(team.getMatchCode());
-        team.setMatchName(match.getName());
+        team.setMatch(match);
 
         // 队长信息
         User captainInfo = userBO.getUser(team.getCaptain());

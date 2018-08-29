@@ -69,8 +69,8 @@ public class Team extends ABaseDO {
     // 前端用户是否属于此战队
     private String isUserBelongTeam;
 
-    // 赛事名称
-    private String matchName;
+    // 赛事信息
+    private Match match;
 
     // 队长信息
     private User captainInfo;
@@ -219,12 +219,12 @@ public class Team extends ABaseDO {
         this.isUserBelongTeam = isUserBelongTeam;
     }
 
-    public String getMatchName() {
-        return matchName;
+    public Match getMatch() {
+        return match;
     }
 
-    public void setMatchName(String matchName) {
-        this.matchName = matchName;
+    public void setMatch(Match match) {
+        this.match = match;
     }
 
     public User getCaptainInfo() {

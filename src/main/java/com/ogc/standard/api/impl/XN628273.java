@@ -24,7 +24,7 @@ public class XN628273 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        commentAO.dropComment(req.getCode(), req.getUpdater());
+        commentAO.dropOssComment(req.getCode(), req.getUpdater());
         return new BooleanRes(true);
     }
 

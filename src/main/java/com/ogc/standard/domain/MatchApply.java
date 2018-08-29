@@ -61,14 +61,17 @@ public class MatchApply extends ABaseDO {
     // 审核结束时间
     private Date approveEndDatetime;
 
-    // 赛事名称
-    private String matchName;
+    // 赛事
+    private Match match;
 
     // 状态列表
     private List<String> statusList;
 
     // 申请人
     private User applyUserInfo;
+
+    // 赛事状态列表
+    private List<String> matchStatusList;
 
     public void setCode(String code) {
         this.code = code;
@@ -190,12 +193,12 @@ public class MatchApply extends ABaseDO {
         this.approveEndDatetime = approveEndDatetime;
     }
 
-    public String getMatchName() {
-        return matchName;
+    public Match getMatch() {
+        return match;
     }
 
-    public void setMatchName(String matchName) {
-        this.matchName = matchName;
+    public void setMatch(Match match) {
+        this.match = match;
     }
 
     public List<String> getStatusList() {
@@ -212,6 +215,14 @@ public class MatchApply extends ABaseDO {
 
     public void setApplyUserInfo(User applyUserInfo) {
         this.applyUserInfo = applyUserInfo;
+    }
+
+    public List<String> getMatchStatusList() {
+        return matchStatusList;
+    }
+
+    public void setMatchStatusList(List<String> matchStatusList) {
+        this.matchStatusList = matchStatusList;
     }
 
 }

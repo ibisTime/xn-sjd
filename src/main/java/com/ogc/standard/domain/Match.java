@@ -42,12 +42,6 @@ public class Match extends ABaseDO {
 
     /**********DB Properties****************/
 
-    // 开始时间(用于定时器)
-    private Date matchStartDatetime;
-
-    // 结束时间(用于定时器)
-    private Date matchEndDatetime;
-
     // 赛事开始开始时间
     private Date startDatetimeStart;
 
@@ -130,22 +124,6 @@ public class Match extends ABaseDO {
 
     public String getRemark() {
         return remark;
-    }
-
-    public Date getMatchStartDatetime() {
-        return matchStartDatetime;
-    }
-
-    public void setMatchStartDatetime(Date matchStartDatetime) {
-        this.matchStartDatetime = matchStartDatetime;
-    }
-
-    public Date getMatchEndDatetime() {
-        return matchEndDatetime;
-    }
-
-    public void setMatchEndDatetime(Date matchEndDatetime) {
-        this.matchEndDatetime = matchEndDatetime;
     }
 
     public Date getStartDatetimeStart() {

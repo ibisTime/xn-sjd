@@ -15,7 +15,7 @@
 	</resultMap>
 	
 	<sql id="join_condition">
-		<if test="teamStatusList != null and teamStatusList != '' ">
+		<if test="teamStatusList != null and teamStatusList.size() > 0 ">
 			join tforum_team t1 on t.team_code = t1.code
 		</if>
 	</sql>

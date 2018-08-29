@@ -18,6 +18,12 @@
 		<result column="remark" property="remark" />
 	</resultMap>
 	
+	<sql id="join_condition">
+		<if test="matchStatusList != null and matchStatusList.size() > 0 ">
+			join tforum_match t1 on t.match_code = t1.code
+		</if>
+	</sql>
+	
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != '' ">
@@ -47,6 +53,13 @@
 				</when>
 			</choose>
 			
+			<if test="matchStatusList != null and matchStatusList.size() > 0 ">
+				AND t1.status IN
+				<foreach collection="matchStatusList" item="item" index="index" open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+				
 			<if test="applyStartDatetime != null and applyStartDatetime != '' ">
 				<![CDATA[AND t.apply_datetime >= #{applyStartDatetime}]]>
 			</if>
@@ -79,6 +92,7 @@
 		,t.remark
 		FROM
 		tforum_match_apply t
+		<include refid="join_condition" />
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -90,6 +104,7 @@
 	<select id="select_matchApply_count" parameterType="matchApply"
 		resultType="java.lang.Long">
 		SELECT count(1) FROM tforum_match_apply t
+		<include refid="join_condition" />
 		<include refid="where_condition" />
 	</select>
 

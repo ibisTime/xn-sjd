@@ -98,15 +98,13 @@ public class MatchAOImpl implements IMatchAO {
     @Override
     public void doDailyStartMatch() {
         Match condition = new Match();
-        condition.setMatchStartDatetime(DateUtil.getTodayStart());
+        condition.setStartDatetimeEnd(DateUtil.getTodayStart());
         condition.setStatus(EMatchStatus.PUBLISHED.getCode());
 
         while (true) {
-            Paginable<Match> matchPage = matchBO.getPaginable(0, 100,
-                condition);
-            if (null != matchPage
-                    && CollectionUtils.isNotEmpty(matchPage.getList())) {
-                for (Match match : matchPage.getList()) {
+            Paginable<Match> page = matchBO.getPaginable(0, 100, condition);
+            if (null != page && CollectionUtils.isNotEmpty(page.getList())) {
+                for (Match match : page.getList()) {
                     // 更新赛事状态
                     matchBO.startMatch(match.getCode());
 
@@ -123,15 +121,13 @@ public class MatchAOImpl implements IMatchAO {
     @Override
     public void doDailyEndMatch() {
         Match condition = new Match();
-        condition.setMatchEndDatetime(DateUtil.getTodayStart());
+        condition.setEndDatetimeEnd(DateUtil.getTodayStart());
         condition.setStatus(EMatchStatus.STARTED.getCode());
 
         while (true) {
-            Paginable<Match> matchPage = matchBO.getPaginable(0, 100,
-                condition);
-            if (null != matchPage
-                    && CollectionUtils.isNotEmpty(matchPage.getList())) {
-                for (Match match : matchPage.getList()) {
+            Paginable<Match> page = matchBO.getPaginable(0, 100, condition);
+            if (null != page && CollectionUtils.isNotEmpty(page.getList())) {
+                for (Match match : page.getList()) {
                     // 更新赛事状态
                     matchBO.endMatch(match.getCode());
 

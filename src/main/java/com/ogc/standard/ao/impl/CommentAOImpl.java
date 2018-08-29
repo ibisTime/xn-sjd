@@ -1,23 +1,30 @@
 package com.ogc.standard.ao.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.ICommentAO;
 import com.ogc.standard.bo.ICommentBO;
 import com.ogc.standard.bo.IInteractBO;
 import com.ogc.standard.bo.IKeywordBO;
 import com.ogc.standard.bo.IPostBO;
+import com.ogc.standard.bo.ITeamBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Comment;
 import com.ogc.standard.domain.Interact;
 import com.ogc.standard.domain.Keyword;
 import com.ogc.standard.domain.Post;
+import com.ogc.standard.domain.Team;
+import com.ogc.standard.dto.res.XN628271Res;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECommentStatus;
 import com.ogc.standard.enums.ECommentType;
+import com.ogc.standard.enums.EFilterFlag;
 import com.ogc.standard.enums.EInteractType;
 import com.ogc.standard.enums.EKeyWordReaction;
 import com.ogc.standard.enums.EObjectType;
@@ -43,44 +50,64 @@ public class CommentAOImpl implements ICommentAO {
     @Autowired
     private IPostBO postBO;
 
-    @Override
-    public String commentComment(String code, String content, String userId) {
-        // 关键字过滤
-        Keyword keyWord = keywordBO.checkContent(content);
-        String status = ECommentStatus.RELEASED.getCode();
+    @Autowired
+    private ITeamBO teamBO;
 
-        if (null != keyWord) {
+    @Override
+    public XN628271Res commentComment(String commentCode, String content,
+            String userId) {
+        // 关键字过滤
+        List<Keyword> keywordList = keywordBO.checkContent(content);
+        String status = ECommentStatus.RELEASED.getCode();
+        String filterFlag = null;
+
+        if (CollectionUtils.isNotEmpty(keywordList)) {
 
             // 直接拦截
-            if (EKeyWordReaction.REFUSE.getCode()
-                .equals(keyWord.getReaction())) {
-                throw new BizException("xn000",
-                    "发帖内容存在关键字：【" + keyWord.getWord() + "】,请删除后重新发帖！");
+            if (EKeyWordReaction.REFUSE.getCode().equals(
+                keywordList.get(0).getReaction())) {
+                throw new BizException("xn000", "评论内容存在关键字：【"
+                        + keywordList.get(0).getWord() + "】,请删除后再评论！");
             }
 
             // 替换**
-            if (EKeyWordReaction.REPLACE.getCode()
-                .equals(keyWord.getReaction())) {
-                content = keywordBO.replaceKeyword(content, keyWord.getWord());
+            if (EKeyWordReaction.REPLACE.getCode().equals(
+                keywordList.get(0).getReaction())) {
+                for (Keyword keyword : keywordList) {
+                    content = keywordBO.replaceKeyword(content,
+                        keyword.getWord());
+                }
+
+                filterFlag = EFilterFlag.REPLACED.getCode();
             }
 
             // 审核
-            if (EKeyWordReaction.APPROVE.getCode()
-                .equals(keyWord.getReaction())) {
+            if (EKeyWordReaction.APPROVE.getCode().equals(
+                keywordList.get(0).getReaction())) {
                 status = ECommentStatus.TO_APPROVE.getCode();
             }
         }
 
-        return commentBO.saveComment(ECommentType.COMMENT.getCode(), code,
-            userId, content, status, userId);
+        if (ECommentStatus.RELEASED.getCode().equals(status)
+                && null == filterFlag) {
+            filterFlag = EFilterFlag.NORMAN.getCode();
+        } else if (ECommentStatus.TO_APPROVE.getCode().equals(status)) {
+            filterFlag = EFilterFlag.TO_APPROVE.getCode();
+        }
+
+        String code = commentBO.saveComment(ECommentType.COMMENT.getCode(),
+            commentCode, userId, content, status, userId);
+
+        return new XN628271Res(code, filterFlag);
     }
 
     @Override
+    @Transactional
     public void approveComment(String code, String approveResult,
             String approver, String approveNote) {
         Comment comment = commentBO.getComment(code);
         if (!ECommentStatus.TO_APPROVE.getCode().equals(comment.getStatus())) {
-            throw new BizException("xn000", "帖子不处于可审核状态！");
+            throw new BizException("xn000", "评论不处于可审核状态！");
         }
 
         String status = null;
@@ -102,44 +129,111 @@ public class CommentAOImpl implements ICommentAO {
     }
 
     @Override
+    @Transactional
     public void pointComment(String code, String userId) {
         Interact interact = interactBO.getInteract(
             EInteractType.POINT.getCode(), EObjectType.COMMENT.getCode(), code,
             userId);
+        Comment comment = commentBO.getComment(code);
+        Integer pointCount = comment.getPointCount();
 
         // 点赞记录不存在时，添加点赞；点赞记录存在时，删除点赞
         if (null == interact) {
             interactBO.saveInteract(EInteractType.POINT.getCode(),
                 EObjectType.COMMENT.getCode(), code, userId);
+
+            pointCount += 1;
         } else {
             interactBO.removeInteract(interact.getCode());
+
+            pointCount -= 1;
         }
+
+        // 更新帖子点赞量
+        commentBO.refreshPointComment(code, pointCount);
     }
 
     @Override
-    public void dropComment(String code, String updater) {
+    public void dropOssComment(String code, String updater) {
         Comment comment = commentBO.getComment(code);
-        if (ECommentStatus.DELETED.getCode().equals(comment.getStatus())) {
-            throw new BizException("xn000", "帖子不处于可删除状态！");
+        if (!ECommentStatus.DELETED.getCode().equals(comment.getStatus())) {
+            throw new BizException("xn000", "评论不处于可删除状态！");
         }
 
-        commentBO.removeComment(code, updater);
+        commentBO.removeComment(code);
+    }
+
+    @Override
+    public void dropFrontComment(String code, String userId) {
+        Comment comment = commentBO.getComment(code);
+        if (!ECommentStatus.DELETED.getCode().equals(comment.getStatus())) {
+            throw new BizException("xn000", "评论不处于可删除状态！");
+        }
+
+        Post post = postBO.getPost(comment.getObjectCode());
+        Team team = teamBO.getTeam(post.getPlateCode());
+        if (!userId.equals(comment.getUserId())
+                && !userId.equals(team.getCaptain())) {
+            throw new BizException("xn0000", "当前用户不是评论用户或战队队长，无法删除该评论！");
+        }
+
+        commentBO.removeComment(code);
     }
 
     @Override
     public Paginable<Comment> queryCommentPage(int start, int limit,
             Comment condition) {
-        return commentBO.getPaginable(start, limit, condition);
+        Paginable<Comment> page = commentBO.getPaginable(start, limit,
+            condition);
+        List<Comment> resultList = page.getList();
+        if (CollectionUtils.isNotEmpty(resultList)) {
+            for (Comment comment : resultList) {
+                commentBO.initComment(null, comment);
+                Post post = postBO.getPost(comment.getObjectCode());
+                comment.setPost(post);
+            }
+        }
+        return page;
     }
 
     @Override
-    public List<Comment> queryCommentList(Comment condition) {
-        return commentBO.queryCommentList(condition);
+    public Paginable<Comment> queryMyCommentPage(int start, int limit,
+            Comment condition, String userId) {
+        Paginable<Comment> page = commentBO.getPaginable(start, limit,
+            condition);
+        List<Comment> resultList = page.getList();
+        if (CollectionUtils.isNotEmpty(resultList)) {
+            for (Comment comment : resultList) {
+                Post post = postBO.getPost(comment.getObjectCode());
+                comment.setPost(post);
+
+                commentBO.initComment(null, comment);
+
+                List<Comment> commentList = new ArrayList<Comment>();
+                commentBO.searchCycleComment(comment.getCode(), commentList);
+                commentBO.orderCommentList(commentList, userId);
+                comment.setNextCommentList(commentList);
+            }
+        }
+        return page;
+    }
+
+    @Override
+    public Comment getFrontComment(String code, String userId) {
+        Comment comment = commentBO.getComment(code);
+        commentBO.initComment(userId, comment);
+        List<Comment> commentList = new ArrayList<Comment>();
+        commentBO.searchCycleComment(comment.getCode(), commentList);
+        commentBO.orderCommentList(commentList, userId);
+        comment.setNextCommentList(commentList);
+        return comment;
     }
 
     @Override
     public Comment getComment(String code) {
-        return commentBO.getComment(code);
+        Comment comment = commentBO.getComment(code);
+        commentBO.initComment(null, comment);
+        return comment;
     }
 
 }

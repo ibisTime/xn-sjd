@@ -13,6 +13,7 @@ import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.dao.IMatchApplyDAO;
 import com.ogc.standard.domain.MatchApply;
 import com.ogc.standard.enums.EMatchApplyStatus;
+import com.ogc.standard.enums.EMatchStatus;
 import com.ogc.standard.exception.BizException;
 
 /**
@@ -47,6 +48,27 @@ public class MatchApplyBOImpl extends PaginableBOImpl<MatchApply>
         statusList.add(EMatchApplyStatus.TO_APPROVE.getCode());
         statusList.add(EMatchApplyStatus.APPROVED_YES.getCode());
         condition.setStatusList(statusList);
+
+        if (matchApplyDAO.selectTotalCount(condition) > 0) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isApplyUserExist(String applyUser) {
+        MatchApply condition = new MatchApply();
+        condition.setApplyUser(applyUser);
+
+        List<String> statusList = new ArrayList<String>();
+        statusList.add(EMatchApplyStatus.TO_APPROVE.getCode());
+        statusList.add(EMatchApplyStatus.APPROVED_YES.getCode());
+        condition.setStatusList(statusList);
+
+        List<String> matchStatusList = new ArrayList<String>();
+        matchStatusList.add(EMatchStatus.PUBLISHED.getCode());
+        matchStatusList.add(EMatchStatus.STARTED.getCode());
+        condition.setMatchStatusList(matchStatusList);
 
         if (matchApplyDAO.selectTotalCount(condition) > 0) {
             return true;

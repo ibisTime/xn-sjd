@@ -73,6 +73,20 @@ public class Post extends ABaseDO {
     // 评论列表
     private List<Comment> commentList;
 
+    // 发布人信息
+    private User userInfo;
+
+    // 战队信息
+    private Team team;
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
+    }
+
     public String getCode() {
         return code;
     }
@@ -223,6 +237,14 @@ public class Post extends ABaseDO {
 
     public void setCommentList(List<Comment> commentList) {
         this.commentList = commentList;
+    }
+
+    public User getUserInfo() {
+        return userInfo;
+    }
+
+    public void setUserInfo(User userInfo) {
+        this.userInfo = userInfo;
     }
 
 }

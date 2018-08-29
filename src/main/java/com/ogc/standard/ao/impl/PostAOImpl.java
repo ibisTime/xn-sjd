@@ -3,6 +3,7 @@ package com.ogc.standard.ao.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,12 +16,14 @@ import com.ogc.standard.bo.IKeywordBO;
 import com.ogc.standard.bo.IPostBO;
 import com.ogc.standard.bo.ITeamBO;
 import com.ogc.standard.bo.ITeamMemberApplyBO;
+import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Comment;
 import com.ogc.standard.domain.Interact;
 import com.ogc.standard.domain.Keyword;
 import com.ogc.standard.domain.Post;
 import com.ogc.standard.domain.Team;
+import com.ogc.standard.domain.User;
 import com.ogc.standard.dto.res.XN628030Res;
 import com.ogc.standard.dto.res.XN628035Res;
 import com.ogc.standard.enums.EBoolean;
@@ -61,6 +64,9 @@ public class PostAOImpl implements IPostAO {
     @Autowired
     private ITeamMemberApplyBO teamMemberApplyBO;
 
+    @Autowired
+    private IUserBO userBO;
+
     @Override
     @Transactional
     public XN628030Res publishPost(String userId, String content,
@@ -74,29 +80,33 @@ public class PostAOImpl implements IPostAO {
         }
 
         // 关键字过滤
-        Keyword keyWord = keywordBO.checkContent(content);
+        List<Keyword> keywordList = keywordBO.checkContent(content);
         String status = EPostStatus.RELEASED.getCode();
         String filterFlag = null;
 
-        if (null != keyWord) {
+        if (CollectionUtils.isNotEmpty(keywordList)) {
 
             // 直接拦截
-            if (EKeyWordReaction.REFUSE.getCode()
-                .equals(keyWord.getReaction())) {
-                throw new BizException("xn000",
-                    "发帖内容存在关键字：【" + keyWord.getWord() + "】,请删除关键字后重新发帖！");
+            if (EKeyWordReaction.REFUSE.getCode().equals(
+                keywordList.get(0).getReaction())) {
+                throw new BizException("xn000", "发帖内容存在关键字：【"
+                        + keywordList.get(0).getWord() + "】,请删除关键字后重新发帖！");
             }
 
             // 替换**
-            if (EKeyWordReaction.REPLACE.getCode()
-                .equals(keyWord.getReaction())) {
-                content = keywordBO.replaceKeyword(content, keyWord.getWord());
+            if (EKeyWordReaction.REPLACE.getCode().equals(
+                keywordList.get(0).getReaction())) {
+                for (Keyword keyword : keywordList) {
+                    content = keywordBO.replaceKeyword(content,
+                        keyword.getWord());
+                }
+
                 filterFlag = EFilterFlag.REPLACED.getCode();
             }
 
             // 审核
-            if (EKeyWordReaction.APPROVE.getCode()
-                .equals(keyWord.getReaction())) {
+            if (EKeyWordReaction.APPROVE.getCode().equals(
+                keywordList.get(0).getReaction())) {
                 status = EPostStatus.TO_APPROVE.getCode();
             }
         }
@@ -110,7 +120,7 @@ public class PostAOImpl implements IPostAO {
 
         String code = postBO.savePost(userId, content, plateCode, status);
 
-        if (EPostStatus.RELEASED.getCode().equals(status)) {
+        if (EPostStatus.RELEASED.getCode().equals(status) && null == filterFlag) {
             filterFlag = EFilterFlag.NORMAN.getCode();
         } else if (EPostStatus.TO_APPROVE.getCode().equals(status)) {
             filterFlag = EFilterFlag.TO_APPROVE.getCode();
@@ -136,8 +146,8 @@ public class PostAOImpl implements IPostAO {
 
             // 审核通过后更新战队帖子数
             Team team = teamBO.getTeam(post.getPlateCode());
-            teamBO.refreshTeamPostCount(team.getCode(),
-                team.getPostCount() + 1);
+            teamBO
+                .refreshTeamPostCount(team.getCode(), team.getPostCount() + 1);
         } else {
             status = EPostStatus.APPROVED_NO.getCode();
         }
@@ -149,7 +159,7 @@ public class PostAOImpl implements IPostAO {
     public void modifyLocation(String code, String updater) {
         Post post = postBO.getPost(code);
         if (!EPostStatus.APPROVED_YES.getCode().equals(post.getStatus())
-                && EPostStatus.RELEASED.getCode().equals(post.getStatus())) {
+                && !EPostStatus.RELEASED.getCode().equals(post.getStatus())) {
             throw new BizException("xn0000", "帖子未处于可置顶/取消置顶状态！");
         }
 
@@ -168,34 +178,38 @@ public class PostAOImpl implements IPostAO {
     public XN628035Res commentPost(String code, String content, String userId) {
         Post post = postBO.getPost(code);
         if (!EPostStatus.APPROVED_YES.getCode().equals(post.getStatus())
-                && EPostStatus.RELEASED.getCode().equals(post.getStatus())) {
+                && !EPostStatus.RELEASED.getCode().equals(post.getStatus())) {
             throw new BizException("xn0000", "帖子未处于可评论状态！");
         }
 
         // 关键字过滤
-        Keyword keyWord = keywordBO.checkContent(content);
+        List<Keyword> keywordList = keywordBO.checkContent(content);
         String status = ECommentStatus.RELEASED.getCode();
         String filterFlag = null;
 
-        if (null != keyWord) {
+        if (CollectionUtils.isNotEmpty(keywordList)) {
 
             // 直接拦截
-            if (EKeyWordReaction.REFUSE.getCode()
-                .equals(keyWord.getReaction())) {
-                throw new BizException("xn000",
-                    "发帖内容存在关键字：【" + keyWord.getWord() + "】,请删除关键字后重新发帖！");
+            if (EKeyWordReaction.REFUSE.getCode().equals(
+                keywordList.get(0).getReaction())) {
+                throw new BizException("xn000", "评论内容存在关键字：【"
+                        + keywordList.get(0).getWord() + "】,请删除关键字后再评论！");
             }
 
             // 替换**
-            if (EKeyWordReaction.REPLACE.getCode()
-                .equals(keyWord.getReaction())) {
-                content = keywordBO.replaceKeyword(content, keyWord.getWord());
+            if (EKeyWordReaction.REPLACE.getCode().equals(
+                keywordList.get(0).getReaction())) {
+                for (Keyword keyword : keywordList) {
+                    content = keywordBO.replaceKeyword(content,
+                        keyword.getWord());
+                }
+
                 filterFlag = EFilterFlag.REPLACED.getCode();
             }
 
             // 审核
-            if (EKeyWordReaction.APPROVE.getCode()
-                .equals(keyWord.getReaction())) {
+            if (EKeyWordReaction.APPROVE.getCode().equals(
+                keywordList.get(0).getReaction())) {
                 status = ECommentStatus.TO_APPROVE.getCode();
             }
         }
@@ -210,7 +224,8 @@ public class PostAOImpl implements IPostAO {
         commentBO.saveComment(ECommentType.POST.getCode(), code, userId,
             content, status, userId);
 
-        if (ECommentStatus.RELEASED.getCode().equals(status)) {
+        if (ECommentStatus.RELEASED.getCode().equals(status)
+                && null == filterFlag) {
             filterFlag = EFilterFlag.NORMAN.getCode();
         } else if (ECommentStatus.TO_APPROVE.getCode().equals(status)) {
             filterFlag = EFilterFlag.TO_APPROVE.getCode();
@@ -226,7 +241,7 @@ public class PostAOImpl implements IPostAO {
     public void pointPost(String code, String userId) {
         Post post = postBO.getPost(code);
         if (!EPostStatus.APPROVED_YES.getCode().equals(post.getStatus())
-                && EPostStatus.RELEASED.getCode().equals(post.getStatus())) {
+                && !EPostStatus.RELEASED.getCode().equals(post.getStatus())) {
             throw new BizException("xn0000", "当前帖子状态不可操作！");
         }
 
@@ -262,7 +277,7 @@ public class PostAOImpl implements IPostAO {
     @Override
     public void dropPostFront(String code, String userId) {
         Post post = postBO.getPost(code);
-        if (EPostStatus.DELETED.getCode().equals(post.getStatus())) {
+        if (!EPostStatus.DELETED.getCode().equals(post.getStatus())) {
             throw new BizException("xn0000", "帖子未处于可删除状态！");
         }
 
@@ -271,14 +286,13 @@ public class PostAOImpl implements IPostAO {
                 && !userId.equals(team.getCaptain())) {
             throw new BizException("xn0000", "此用户不是发帖人或战队队长，无法删除该帖子！");
         }
-
         postBO.removePost(code, userId);
     }
 
     @Override
     public void dropPostOss(String code, String updater) {
         Post post = postBO.getPost(code);
-        if (EPostStatus.DELETED.getCode().equals(post.getStatus())) {
+        if (!EPostStatus.DELETED.getCode().equals(post.getStatus())) {
             throw new BizException("xn0000", "帖子未处于可删除状态！");
         }
 
@@ -287,17 +301,24 @@ public class PostAOImpl implements IPostAO {
 
     @Override
     public Paginable<Post> queryPostPage(int start, int limit, Post condition) {
-        return postBO.getPaginable(start, limit, condition);
+        Paginable<Post> page = postBO.getPaginable(start, limit, condition);
+
+        if (null != page && CollectionUtils.isNotEmpty(page.getList())) {
+            for (Post post : page.getList()) {
+                initPost(post);
+            }
+        }
+
+        return page;
     }
 
     @Override
-    public List<Post> queryPostList(Post condition) {
-        return postBO.queryPostList(condition);
-    }
+    public Post getOssPost(String code) {
+        Post post = postBO.getPost(code);
 
-    @Override
-    public Post getPostOss(String code) {
-        return postBO.getPost(code);
+        initPost(post);
+
+        return post;
     }
 
     @Override
@@ -306,8 +327,8 @@ public class PostAOImpl implements IPostAO {
 
         if (StringUtils.isNotBlank(userId)) {
             Interact interact = interactBO.getInteract(
-                EInteractType.POINT.getCode(), EObjectType.POST.getCode(), code,
-                userId);
+                EInteractType.POINT.getCode(), EObjectType.POST.getCode(),
+                code, userId);
 
             if (null != interact) {
                 post.setIsPoint(EBoolean.YES.getCode());
@@ -317,11 +338,21 @@ public class PostAOImpl implements IPostAO {
         }
 
         // 评论列表
-        List<Comment> commentList = commentBO.queryCommentListByObjectCode(code,
-            userId);
+        List<Comment> commentList = commentBO.queryCommentListByObjectCode(
+            code, userId);
         post.setCommentList(commentList);
 
+        initPost(post);
+
         return post;
+    }
+
+    private void initPost(Post post) {
+        // 发布人信息
+        User userInfo = userBO.getUser(post.getUserId());
+        post.setUserInfo(userInfo);
+        Team team = teamBO.getTeam(post.getPlateCode());
+        post.setTeam(team);
     }
 
 }

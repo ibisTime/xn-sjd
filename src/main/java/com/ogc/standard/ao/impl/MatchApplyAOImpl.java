@@ -53,7 +53,7 @@ public class MatchApplyAOImpl implements IMatchApplyAO {
 
     @Override
     @Transactional
-    public String addMatchApply(XN628300Req req) {
+    public String matchApply(XN628300Req req) {
         Match match = matchBO.getMatch(req.getMatchCode());
         if (!EMatchStatus.PUBLISHED.getCode().equals(match.getStatus())) {
             throw new BizException("xn000", "当前赛事未处于可报名状态！");
@@ -63,9 +63,13 @@ public class MatchApplyAOImpl implements IMatchApplyAO {
             throw new BizException("xn000", "战队名称已存在，请重新输入！");
         }
 
+        if (matchApplyBO.isApplyUserExist(req.getUserId())) {
+            throw new BizException("xn000", "该用户已报名赛事，无法再次报名！");
+        }
+
         MatchApply data = new MatchApply();
-        String code = OrderNoGenerater
-            .generate(EGeneratePrefix.MatchApply.getCode());
+        String code = OrderNoGenerater.generate(EGeneratePrefix.MatchApply
+            .getCode());
         data.setCode(code);
         data.setStatus(EMatchApplyStatus.TO_APPROVE.getCode());
         data.setMatchCode(req.getMatchCode());
@@ -85,8 +89,8 @@ public class MatchApplyAOImpl implements IMatchApplyAO {
     public void approveMatchApply(String code, String approveResult,
             String approver, String remark) {
         MatchApply matchApply = matchApplyBO.getMatchApply(code);
-        if (!EMatchApplyStatus.TO_APPROVE.getCode()
-            .equals(matchApply.getStatus())) {
+        if (!EMatchApplyStatus.TO_APPROVE.getCode().equals(
+            matchApply.getStatus())) {
             throw new BizException("xn0000", "报名申请未处于待审核状态！");
         }
 
@@ -100,9 +104,9 @@ public class MatchApplyAOImpl implements IMatchApplyAO {
             status = EMatchApplyStatus.APPROVED_YES.getCode();
 
             // 审核通过后添加战队
-            String teamCode = teamBO.saveTeam(code, matchApply.getTeamName(),
-                matchApply.getLogo(), matchApply.getDescription(),
-                matchApply.getApplyUser());
+            String teamCode = teamBO.saveTeam(matchApply.getMatchCode(),
+                matchApply.getTeamName(), matchApply.getLogo(),
+                matchApply.getDescription(), matchApply.getApplyUser());
 
             // 添加组合
             groupBO.saveGroup(match.getCode(), teamCode,
@@ -156,7 +160,7 @@ public class MatchApplyAOImpl implements IMatchApplyAO {
     private void initMatchApply(MatchApply matchApply) {
         // 赛事信息
         Match match = matchBO.getMatch(matchApply.getMatchCode());
-        matchApply.setMatchName(match.getName());
+        matchApply.setMatch(match);
 
         // 申请人
         User applyUserInfo = userBO.getUser(matchApply.getApplyUser());

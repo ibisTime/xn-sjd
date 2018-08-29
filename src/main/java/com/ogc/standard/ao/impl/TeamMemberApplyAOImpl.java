@@ -25,7 +25,6 @@ import com.ogc.standard.enums.ETeamStatus;
 import com.ogc.standard.exception.BizException;
 
 /**
- * 战队成员申请表
  * @author: silver 
  * @since: 2018年8月21日 下午7:13:58 
  * @history:
@@ -46,10 +45,10 @@ public class TeamMemberApplyAOImpl implements ITeamMemberApplyAO {
     private IGroupBO groupBO;
 
     @Override
-    public String addTeamMemberApply(String teamCode, String applyUser) {
+    public String teamMemberApply(String teamCode, String applyUser) {
         Team team = teamBO.getTeam(teamCode);
         if (!ETeamStatus.TO_START.getCode().equals(team.getStatus())) {
-            throw new BizException("xn000", "当前战队不在可申请加入状态！");
+            throw new BizException("xn000", "当前战队未处于可申请加入状态！");
         }
 
         // 判断是否已申请加入该战队
@@ -135,7 +134,7 @@ public class TeamMemberApplyAOImpl implements ITeamMemberApplyAO {
     private void initTeamMemberApply(TeamMemberApply teamMemberApply) {
         // 战队信息
         Team team = teamBO.getTeam(teamMemberApply.getTeamCode());
-        teamMemberApply.setTeamName(team.getName());
+        teamMemberApply.setTeam(team);
 
         // 申请人
         User applyUserInfo = userBO.getUser(teamMemberApply.getApplyUser());
