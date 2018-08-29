@@ -1,14 +1,6 @@
 package com.ogc.standard.api.impl;
 
 import com.ogc.standard.ao.ISimuOrderAO;
-/**
- * @Title XN628500.java 
- * @Package com.cdkj.info.api.impl 
- * @Description 
- * @author haiqingzheng  
- * @date 2018年4月18日 下午4:15:24 
- * @version V1.0   
- */
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.ObjValidater;
