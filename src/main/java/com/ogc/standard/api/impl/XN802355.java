@@ -7,6 +7,7 @@ import com.ogc.standard.ao.IWithdrawAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.common.JsonUtil;
+import com.ogc.standard.core.ObjValidater;
 import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.domain.Withdraw;
 import com.ogc.standard.dto.req.XN802355Req;
@@ -33,24 +34,20 @@ public class XN802355 extends AProcessor {
             condition.setAccountNumber(req.getAccountNumber());
         }
         condition.setCodeForQuery(req.getCode());
-        condition.setAccountName(req.getAccountName());
         condition.setCurrency(req.getCurrency());
 
         if (CollectionUtils.isNotEmpty(req.getCurrencyList())) {
             condition.setCurrencyList(req.getCurrencyList());
         }
 
-        condition.setType(req.getType());
+        condition.setAccountType(req.getAccountType());
         condition.setChannelType(req.getChannelType());
         condition.setStatus(req.getStatus());
         condition.setApplyUser(req.getApplyUser());
         condition.setApproveUser(req.getApproveUser());
 
         condition.setPayUser(req.getPayUser());
-        condition.setPayGroup(req.getPayGroup());
         condition.setChannelOrder(req.getChannelOrder());
-        condition.setCompanyCode(req.getCompanyCode());
-        condition.setSystemCode(req.getSystemCode());
 
         condition.setApplyDatetimeStart(
             DateUtil.getFrontDate(req.getApplyDateStart(), false));
@@ -80,9 +77,7 @@ public class XN802355 extends AProcessor {
     public void doCheck(String inputparams, String operator)
             throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN802355Req.class);
-        StringValidater.validateNumber(req.getStart(), req.getLimit());
-        StringValidater.validateBlank(req.getSystemCode(),
-            req.getCompanyCode());
+        ObjValidater.validateReq(req);
 
     }
 

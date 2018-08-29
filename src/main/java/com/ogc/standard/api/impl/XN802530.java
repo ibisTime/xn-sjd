@@ -13,6 +13,7 @@ import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.ObjValidater;
 import com.ogc.standard.core.StringValidater;
+import com.ogc.standard.domain.EthTransaction;
 import com.ogc.standard.dto.req.XN802530Req;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
@@ -42,11 +43,7 @@ public class XN802530 extends AProcessor {
         condition.setBlockNumber(req.getBlockNumber());
         condition.setFrom(req.getFrom());
         condition.setTo(req.getTo());
-        condition.setRefNo(req.getRefNo());
-        condition.setCreatesStart(req.getDateStart());
-        condition.setCreatesEnd(req.getDateEnd());
-        condition.setAddress(req.getAddress());
-        condition.setOrder("creates", "desc");
+        condition.setOrder("block_create_datetime", "desc");
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
         return ethTransactionAO.queryEthTransactionPage(start, limit,

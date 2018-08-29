@@ -1,10 +1,14 @@
 package com.ogc.standard.bo.impl;
 
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.ogc.standard.bo.IEthTransactionBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
+import com.ogc.standard.dao.IEthTransactionDAO;
 import com.ogc.standard.domain.EthTransaction;
+import com.ogc.standard.exception.BizException;
 
 @Component
 public class EthTransactionBOImpl extends PaginableBOImpl<EthTransaction>
@@ -13,8 +17,9 @@ public class EthTransactionBOImpl extends PaginableBOImpl<EthTransaction>
     // private static Web3j web3j = Web3j
     // .build(new HttpService(PropertiesUtil.Config.ETH_URL));
     //
-    // @Autowired
-    // private IEthTransactionDAO ethTransactionDAO;
+    @Autowired
+    private IEthTransactionDAO ethTransactionDAO;
+
     //
     // @Override
     // public int saveEthTransaction(CtqEthTransaction ctqEthTransaction,
@@ -55,19 +60,19 @@ public class EthTransactionBOImpl extends PaginableBOImpl<EthTransaction>
     // return ethTransactionDAO.selectList(condition);
     // }
     //
-    // @Override
-    // public EthTransaction getEthTransaction(String hash) {
-    // EthTransaction data = null;
-    // if (StringUtils.isNotBlank(hash)) {
-    // EthTransaction condition = new EthTransaction();
-    // condition.setHash(hash);
-    // data = ethTransactionDAO.select(condition);
-    // if (data == null) {
-    // throw new BizException("xn0000", "以太坊交易记录不存在");
-    // }
-    // }
-    // return data;
-    // }
+    @Override
+    public EthTransaction getEthTransaction(String hash) {
+        EthTransaction data = null;
+        if (StringUtils.isNotBlank(hash)) {
+            EthTransaction condition = new EthTransaction();
+            condition.setHash(hash);
+            data = ethTransactionDAO.select(condition);
+            if (data == null) {
+                throw new BizException("xn0000", "以太坊交易记录不存在");
+            }
+        }
+        return data;
+    }
     //
     // @Override
     // public BigDecimal getGasPrice() {

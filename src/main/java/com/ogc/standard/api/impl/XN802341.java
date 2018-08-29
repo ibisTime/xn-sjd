@@ -1,11 +1,9 @@
 package com.ogc.standard.api.impl;
 
-import org.apache.commons.collections.CollectionUtils;
-
 import com.ogc.standard.ao.IChargeAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
-import com.ogc.standard.core.StringValidater;
+import com.ogc.standard.core.ObjValidater;
 import com.ogc.standard.dto.req.XN802341Req;
 import com.ogc.standard.dto.res.BooleanRes;
 import com.ogc.standard.exception.BizException;
@@ -31,7 +29,7 @@ public class XN802341 extends AProcessor {
         synchronized (XN802341.class) {
             for (String code : req.getCodeList()) {
                 chargeAO.payOrder(code, req.getPayUser(), req.getPayResult(),
-                    req.getPayNote(), req.getSystemCode());
+                    req.getPayNote());
             }
             return new BooleanRes(true);
         }
@@ -44,10 +42,6 @@ public class XN802341 extends AProcessor {
     public void doCheck(String inputparams, String operator)
             throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN802341Req.class);
-        if (CollectionUtils.isEmpty(req.getCodeList())) {
-            throw new BizException("订单列表不能为空");
-        }
-        StringValidater.validateBlank(req.getPayUser(), req.getPayResult(),
-            req.getPayNote(), req.getSystemCode());
+        ObjValidater.validateReq(req);
     }
 }

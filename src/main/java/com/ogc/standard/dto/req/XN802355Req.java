@@ -18,11 +18,11 @@ public class XN802355Req extends APageReq {
     // 订单编号模糊查询
     private String code;
 
-    // 针对账号
+    // 账户编号
     private String accountNumber;
 
-    // 针对户名（手机号或其他）
-    private String accountName;
+    // 账户类型
+    private String accountType;
 
     // 币种
     private String currency;
@@ -30,11 +30,11 @@ public class XN802355Req extends APageReq {
     // 币种列表
     private List<String> currencyList;
 
-    // 类型
-    private String type;
-
     // 支付渠道
     private String channelType;
+
+    // 支付渠道的订单编号（支付渠道代表）
+    private String channelOrder;
 
     // 状态（待审核/审核不通过/审核通过待支付/支付成功/支付失败）
     private String status;
@@ -47,18 +47,6 @@ public class XN802355Req extends APageReq {
 
     // 支付回录人
     private String payUser;
-
-    // 支付组号（信息流代表）
-    private String payGroup;
-
-    // 支付渠道的订单编号（支付渠道代表）
-    private String channelOrder;
-
-    // 系统编号
-    private String systemCode;
-
-    // 公司编号
-    private String companyCode;
 
     // ******** db *****
 
@@ -80,15 +68,92 @@ public class XN802355Req extends APageReq {
     // 支付时间止
     private String payDateEnd;
 
-    // 针对用户编号
-    private String userId;
-
-    public String getType() {
-        return type;
+    public String getCode() {
+        return code;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getAccountNumber() {
+        return accountNumber;
+    }
+
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
+    }
+
+    public String getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(String accountType) {
+        this.accountType = accountType;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
+    public List<String> getCurrencyList() {
+        return currencyList;
+    }
+
+    public void setCurrencyList(List<String> currencyList) {
+        this.currencyList = currencyList;
+    }
+
+    public String getChannelType() {
+        return channelType;
+    }
+
+    public void setChannelType(String channelType) {
+        this.channelType = channelType;
+    }
+
+    public String getChannelOrder() {
+        return channelOrder;
+    }
+
+    public void setChannelOrder(String channelOrder) {
+        this.channelOrder = channelOrder;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getApplyUser() {
+        return applyUser;
+    }
+
+    public void setApplyUser(String applyUser) {
+        this.applyUser = applyUser;
+    }
+
+    public String getApproveUser() {
+        return approveUser;
+    }
+
+    public void setApproveUser(String approveUser) {
+        this.approveUser = approveUser;
+    }
+
+    public String getPayUser() {
+        return payUser;
+    }
+
+    public void setPayUser(String payUser) {
+        this.payUser = payUser;
     }
 
     public String getApplyDateStart() {
@@ -139,123 +204,4 @@ public class XN802355Req extends APageReq {
         this.payDateEnd = payDateEnd;
     }
 
-    public String getAccountNumber() {
-        return accountNumber;
-    }
-
-    public void setAccountNumber(String accountNumber) {
-        this.accountNumber = accountNumber;
-    }
-
-    public String getAccountName() {
-        return accountName;
-    }
-
-    public void setAccountName(String accountName) {
-        this.accountName = accountName;
-    }
-
-    public String getChannelType() {
-        return channelType;
-    }
-
-    public void setChannelType(String channelType) {
-        this.channelType = channelType;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getApplyUser() {
-        return applyUser;
-    }
-
-    public void setApplyUser(String applyUser) {
-        this.applyUser = applyUser;
-    }
-
-    public String getApproveUser() {
-        return approveUser;
-    }
-
-    public void setApproveUser(String approveUser) {
-        this.approveUser = approveUser;
-    }
-
-    public String getPayUser() {
-        return payUser;
-    }
-
-    public void setPayUser(String payUser) {
-        this.payUser = payUser;
-    }
-
-    public String getPayGroup() {
-        return payGroup;
-    }
-
-    public void setPayGroup(String payGroup) {
-        this.payGroup = payGroup;
-    }
-
-    public String getChannelOrder() {
-        return channelOrder;
-    }
-
-    public void setChannelOrder(String channelOrder) {
-        this.channelOrder = channelOrder;
-    }
-
-    public String getSystemCode() {
-        return systemCode;
-    }
-
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
-    }
-
-    public String getCompanyCode() {
-        return companyCode;
-    }
-
-    public void setCompanyCode(String companyCode) {
-        this.companyCode = companyCode;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(String currency) {
-        this.currency = currency;
-    }
-
-    public List<String> getCurrencyList() {
-        return currencyList;
-    }
-
-    public void setCurrencyList(List<String> currencyList) {
-        this.currencyList = currencyList;
-    }
 }

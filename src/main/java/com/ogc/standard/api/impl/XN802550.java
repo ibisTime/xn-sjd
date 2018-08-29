@@ -11,7 +11,6 @@ package com.ogc.standard.api.impl;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
-import com.ogc.standard.spring.SpringContextHolder;
 
 /** 
  * 获取节点监控信息
@@ -20,15 +19,13 @@ import com.ogc.standard.spring.SpringContextHolder;
  * @history:
  */
 public class XN802550 extends AProcessor {
-    private IEthNodeAO ethNodeAO = SpringContextHolder
-        .getBean(IEthNodeAO.class);
 
     /** 
      * @see com.ogc.standard.api.IProcessor#doBusiness()
      */
     @Override
     public Object doBusiness() throws BizException {
-        return ethNodeAO.getNodeMonitorInfo();
+        return null;
     }
 
     /** 

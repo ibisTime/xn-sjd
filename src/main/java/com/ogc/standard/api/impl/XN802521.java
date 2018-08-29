@@ -8,9 +8,11 @@
  */
 package com.ogc.standard.api.impl;
 
+import com.ogc.standard.ao.IEthWAddressAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.ObjValidater;
+import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.dto.req.XN802521Req;
 import com.ogc.standard.dto.res.BooleanRes;
 import com.ogc.standard.exception.BizException;
@@ -25,8 +27,8 @@ import com.ogc.standard.spring.SpringContextHolder;
  */
 public class XN802521 extends AProcessor {
 
-    private IEthAddressAO ethAddressAO = SpringContextHolder
-        .getBean(IEthAddressAO.class);
+    private IEthWAddressAO ethWAddressAO = SpringContextHolder
+        .getBean(IEthWAddressAO.class);
 
     private XN802521Req req = null;
 
@@ -35,7 +37,7 @@ public class XN802521 extends AProcessor {
      */
     @Override
     public Object doBusiness() throws BizException {
-        ethAddressAO.abandonAddress(req.getCode());
+        ethWAddressAO.abandon(StringValidater.toLong(req.getId()));
         return new BooleanRes(true);
     }
 

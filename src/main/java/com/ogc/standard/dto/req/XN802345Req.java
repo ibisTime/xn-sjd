@@ -18,20 +18,11 @@ public class XN802345Req extends APageReq {
     // 订单编号模糊查询
     private String code;
 
-    // 支付组号（信息流代表）
-    private String payGroup;
-
-    // 流水分组组号（橙账本代表）---核心字段2
-    private String refNo;
-
-    // 针对账号
+    // 账户编号
     private String accountNumber;
 
-    // 针对户名（手机号或其他）
-    private String accountName;
-
-    // 类型
-    private String type;
+    // 账户类型
+    private String accountType;
 
     // 币种
     private String currency;
@@ -41,6 +32,9 @@ public class XN802345Req extends APageReq {
 
     // 业务类型编号（因为什么业务类型而充值）
     private String bizType;
+
+    // 关联业务单号
+    private String bizNo;
 
     // 支付渠道账号（如银行卡号）
     private String payCardNo;
@@ -69,11 +63,8 @@ public class XN802345Req extends APageReq {
     // 支付渠道
     private String channelType;
 
-    // 系统编号
-    private String systemCode;
-
-    // 公司编号
-    private String companyCode;
+    // 渠道订单号
+    private String channelOrder;
 
     public String getCode() {
         return code;
@@ -81,22 +72,6 @@ public class XN802345Req extends APageReq {
 
     public void setCode(String code) {
         this.code = code;
-    }
-
-    public String getPayGroup() {
-        return payGroup;
-    }
-
-    public void setPayGroup(String payGroup) {
-        this.payGroup = payGroup;
-    }
-
-    public String getRefNo() {
-        return refNo;
-    }
-
-    public void setRefNo(String refNo) {
-        this.refNo = refNo;
     }
 
     public String getAccountNumber() {
@@ -107,12 +82,28 @@ public class XN802345Req extends APageReq {
         this.accountNumber = accountNumber;
     }
 
-    public String getAccountName() {
-        return accountName;
+    public String getAccountType() {
+        return accountType;
     }
 
-    public void setAccountName(String accountName) {
-        this.accountName = accountName;
+    public void setAccountType(String accountType) {
+        this.accountType = accountType;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
+    public List<String> getCurrencyList() {
+        return currencyList;
+    }
+
+    public void setCurrencyList(List<String> currencyList) {
+        this.currencyList = currencyList;
     }
 
     public String getBizType() {
@@ -121,6 +112,14 @@ public class XN802345Req extends APageReq {
 
     public void setBizType(String bizType) {
         this.bizType = bizType;
+    }
+
+    public String getBizNo() {
+        return bizNo;
+    }
+
+    public void setBizNo(String bizNo) {
+        this.bizNo = bizNo;
     }
 
     public String getPayCardNo() {
@@ -195,43 +194,12 @@ public class XN802345Req extends APageReq {
         this.channelType = channelType;
     }
 
-    public String getSystemCode() {
-        return systemCode;
+    public String getChannelOrder() {
+        return channelOrder;
     }
 
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
+    public void setChannelOrder(String channelOrder) {
+        this.channelOrder = channelOrder;
     }
 
-    public String getCompanyCode() {
-        return companyCode;
-    }
-
-    public void setCompanyCode(String companyCode) {
-        this.companyCode = companyCode;
-    }
-
-    public String getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(String currency) {
-        this.currency = currency;
-    }
-
-    public List<String> getCurrencyList() {
-        return currencyList;
-    }
-
-    public void setCurrencyList(List<String> currencyList) {
-        this.currencyList = currencyList;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
 }

@@ -1,41 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cdkj.coin.wallet.dao.IEthAddressDAO">
+<mapper namespace="com.ogc.standard.dao.IEthAddressDAO">
 	<resultMap id="ethXAddress_DB_Result" type="ethXAddress">
-		<result column="code" property="code" />
-		<result column="type" property="type" />
+		<result column="id" property="id" />
 		<result column="address" property="address" />
-		<result column="password" property="password" />
-		<result column="user_id" property="userId" />
-		<result column="account_number" property="accountNumber" />
-		<result column="initial_balance" property="initialBalance" />
-		<result column="balance" property="balance" />
-		<result column="status" property="status" />
-		<result column="create_datetime" property="createDatetime" />
-		<result column="abandon_datetime" property="abandonDatetime" />
-		<result column="update_datetime" property="updateDatetime" />
-	</resultMap>
-	<resultMap id="secret_DB_Result" type="ethXAddress">
-		<result column="code" property="code" />
-		<result column="address" property="address" />
-		<result column="password" property="password" />
 		<result column="keystore_name" property="keystoreName" />
 		<result column="keystore_content" property="keystoreContent" />
+		<result column="keystore_pwd" property="password" />
+		<result column="user_id" property="userId" />
+		<result column="create_datetime" property="createDatetime" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
-			<if test="code != null and code != '' ">
-				AND t.code = #{code}
-			</if>
-			<if test="type != null and type != '' ">
-				AND t.type = #{type}
-			</if>
-			<if test="typeList != null and typeList != '' ">
-				AND t.type in 
-                <foreach item="item" index="index" collection="typeList" open="(" separator="," close=")">
-	            	#{item}
-                </foreach> 
+			<if test="id != null and id != '' ">
+				AND t.id = #{id}
 			</if>
 			<if test="address != null and address != '' ">
 				AND t.address = #{address}
@@ -46,41 +25,16 @@
 			<if test="userId != null and userId != '' ">
 				AND t.user_id = #{userId}
 			</if>
-			<if test="accountNumber != null and accountNumber != '' ">
-				AND t.account_number = #{accountNumber}
-			</if>
-			<if test="status != null and status != '' ">
-				AND t.status = #{status}
-			</if>
-			<if test="statusList != null and statusList != '' ">
-				AND t.status in 
-                <foreach item="item" index="index" collection="statusList" open="(" separator="," close=")">
-	            	#{item}
-                </foreach> 
-			</if>
-			<if test="balanceStart != null and balanceStart != '' ">
-				<![CDATA[AND t.balance >= #{balanceStart}]]>
-			</if>
-			<if test="balanceEnd != null and balanceEnd != '' ">
-				<![CDATA[AND t.balance <= #{balanceEnd}]]>
-			</if>
 		</trim>
 	</sql>
 	<select id="select_ethXAddress" parameterType="ethXAddress" resultMap="ethXAddress_DB_Result">
 		SELECT
-		t.code
-		,t.type
+		t.id
 		,t.address
 		,t.user_id
-		,t.account_number
-		,t.initial_balance
-		,t.balance
-		,t.status
 		,t.create_datetime
-		,t.abandon_datetime
-		,t.update_datetime
 		FROM
-		tcoin_eth_address t
+		tcoin_eth_xaddress t
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -91,87 +45,47 @@
 	
 	<select id="select_ethXAddress_secret" parameterType="ethXAddress" resultMap="secret_DB_Result">
 		SELECT
-		t.code
+		t.id
 		,t.address
-		,t.password
+		,t.keystore_pwd
 		,t.keystore_name
 		,t.keystore_content
+		,t.user_id
+		,t.create_datetime
 		FROM
-		tcoin_eth_address t
+		tcoin_eth_xaddress t
 		<include refid="where_condition" />
 	</select>
 
 	<select id="select_ethXAddress_count" parameterType="ethXAddress"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tcoin_eth_address t
+		SELECT count(1) FROM tcoin_eth_xaddress t
 		<include refid="where_condition" />
 	</select>
 	
-	<select id="select_totalBalance" parameterType="ethXAddress"
-		resultType="java.math.BigDecimal">
-		SELECT COALESCE(SUM(balance),0) FROM tcoin_eth_address t
-		<include refid="where_condition" />
-	</select>
-
 	<insert id="insert_ethXAddress" parameterType="ethXAddress">
 		INSERT INTO
-		tcoin_eth_address(
-		code
-		,type
-		,address
-		,password
-		,user_id
-		,account_number
-		,initial_balance
-		,balance
-		,status
-		,create_datetime
-		,abandon_datetime
-		,update_datetime
+		tcoin_eth_xaddress(
+		
+		address
+		,keystore_pwd
 		,keystore_name
 		,keystore_content
+		,user_id
+		,create_datetime
+		
 		)
 		VALUES(
-		#{code}
-		,#{type}
-		,#{address}
-		,#{password}
-		,#{userId}
-		,#{accountNumber}
-		,#{initialBalance}
-		,#{balance}
-		,#{status}
-		,#{createDatetime}
-		,#{abandonDatetime}
-		,#{updateDatetime}
+		
+		#{address}
+		,#{keystorePwd}
 		,#{keystoreName}
 		,#{keystoreContent}
+		,#{userId}
+		,#{createDatetime}
+		
 		)
 	</insert>
 
-    <update id="update_abandon" parameterType="ethXAddress">
-		UPDATE tcoin_eth_address
-		SET
-		status = #{status}
-		,abandon_datetime = #{abandonDatetime}
-		,update_datetime = #{updateDatetime}
-		WHERE code = #{code}
-	</update>
-	
-	<update id="update_balance" parameterType="ethXAddress">
-		UPDATE tcoin_eth_address
-		SET
-		balance = #{balance}
-		,update_datetime = #{updateDatetime}
-		WHERE code = #{code}
-	</update>
-	
-	<update id="update_status" parameterType="ethXAddress">
-		UPDATE tcoin_eth_address
-		SET
-		status = #{status}
-		,update_datetime = #{updateDatetime}
-		WHERE code = #{code}
-	</update>
 
 </mapper>

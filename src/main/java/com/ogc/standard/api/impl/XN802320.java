@@ -7,6 +7,7 @@ import com.ogc.standard.ao.IJourAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.common.JsonUtil;
+import com.ogc.standard.core.ObjValidater;
 import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.domain.Jour;
 import com.ogc.standard.dto.req.XN802320Req;
@@ -21,31 +22,32 @@ import com.ogc.standard.spring.SpringContextHolder;
  * @history:
  */
 public class XN802320 extends AProcessor {
+
     private IJourAO jourAO = SpringContextHolder.getBean(IJourAO.class);
 
     private XN802320Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
+
         Jour condition = new Jour();
-        condition.setKind(req.getKind());
-        condition.setPayGroup(req.getPayGroup());
-        condition.setRefNo(req.getRefNo());
+
+        condition.setType(req.getType());
+        condition.setUserId(req.getUserId());
+        condition.setAccountNumber(req.getAccountNumber());
+        condition.setAccountType(req.getAccountType());
+        condition.setCurrency(req.getCurrency());
+
+        condition.setBizType(req.getBizType());
+        condition.setStatus(req.getStatus());
         condition.setChannelType(req.getChannelType());
         condition.setChannelOrder(req.getChannelOrder());
-
-        condition.setAccountNumber(req.getAccountNumber());
-        condition.setUserId(req.getUserId());
-        condition.setRealName(req.getRealName());
-        condition.setType(req.getType());
-        condition.setCurrency(req.getCurrency());
+        condition.setRefNo(req.getRefNo());
 
         if (CollectionUtils.isNotEmpty(req.getCurrencyList())) {
             condition.setCurrencyList(req.getCurrencyList());
         }
 
-        condition.setBizType(req.getBizType());
-        condition.setStatus(req.getStatus());
         condition.setCreateDatetimeStart(
             DateUtil.getFrontDate(req.getDateStart(), false));
         condition.setCreateDatetimeEnd(
@@ -54,8 +56,6 @@ public class XN802320 extends AProcessor {
         condition.setWorkDate(req.getWorkDate());
         condition.setCheckUser(req.getCheckUser());
         condition.setAdjustUser(req.getAdjustUser());
-        condition.setSystemCode(req.getSystemCode());
-        condition.setCompanyCode(req.getCompanyCode());
 
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
@@ -71,8 +71,6 @@ public class XN802320 extends AProcessor {
     public void doCheck(String inputparams, String operator)
             throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN802320Req.class);
-        StringValidater.validateNumber(req.getStart(), req.getLimit());
-        StringValidater.validateBlank(req.getSystemCode(),
-            req.getCompanyCode());
+        ObjValidater.validateReq(req);
     }
 }

@@ -8,6 +8,9 @@
  */
 package com.ogc.standard.ao;
 
+import com.ogc.standard.bo.base.Paginable;
+import com.ogc.standard.domain.EthTransaction;
+
 /** 
  * @author: haiqingzheng 
  * @since: 2017年11月7日 下午8:32:00 
@@ -27,9 +30,9 @@ public interface IEthTransactionAO {
     // // 归集交易通知处理
     // public void collectionNotice(CtqEthTransaction ctqEthTransaction);
     //
-    // // 分页查询广播记录
-    // public Paginable<EthTransaction> queryEthTransactionPage(int start,
-    // int limit, EthTransaction condition);
+    // 分页查询广播记录
+    public Paginable<EthTransaction> queryEthTransactionPage(int start,
+            int limit, EthTransaction condition);
     //
     // // 每日定存
     // public void depositNotice(CtqEthTransaction ctqEthTransaction);

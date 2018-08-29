@@ -2,6 +2,9 @@ package com.ogc.standard.dto.req;
 
 import java.util.List;
 
+import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
+
 /**
  * 线下取现审批
  * @author: xieyj 
@@ -9,28 +12,22 @@ import java.util.List;
  * @history:
  */
 public class XN802352Req {
-    // 系统编号(必填)
-    private String systemCode;
 
     // 取现订单编号(必填)
+    @NotEmpty
     private List<String> codeList;
 
     // 审核人(必填)
+    @NotBlank
     private String approveUser;
 
     // 审核结果(必填)
+    @NotBlank
     private String approveResult;
 
     // 审核说明(必填)
+    @NotBlank
     private String approveNote;
-
-    public String getSystemCode() {
-        return systemCode;
-    }
-
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
-    }
 
     public List<String> getCodeList() {
         return codeList;

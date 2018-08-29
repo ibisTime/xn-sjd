@@ -8,9 +8,13 @@
  */
 package com.ogc.standard.ao.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ogc.standard.ao.IEthTransactionAO;
+import com.ogc.standard.bo.IEthTransactionBO;
+import com.ogc.standard.bo.base.Paginable;
+import com.ogc.standard.domain.EthTransaction;
 
 /** 
  * @author: haiqingzheng 
@@ -32,8 +36,9 @@ public class EthTransactionAOImpl implements IEthTransactionAO {
     // @Autowired
     // private IEthAddressBO ethAddressBO;
     //
-    // @Autowired
-    // private IEthTransactionBO ethTransactionBO;
+    @Autowired
+    private IEthTransactionBO ethTransactionBO;
+
     //
     // @Autowired
     // private ICollectBO collectBO;
@@ -223,11 +228,11 @@ public class EthTransactionAOImpl implements IEthTransactionAO {
     // ethAddressBO.refreshBalance(to);
     // }
     //
-    // @Override
-    // public Paginable<EthTransaction> queryEthTransactionPage(int start,
-    // int limit, EthTransaction condition) {
-    // return ethTransactionBO.getPaginable(start, limit, condition);
-    // }
+    @Override
+    public Paginable<EthTransaction> queryEthTransactionPage(int start,
+            int limit, EthTransaction condition) {
+        return ethTransactionBO.getPaginable(start, limit, condition);
+    }
     //
     // @Override
     // public void depositNotice(CtqEthTransaction ctqEthTransaction) {

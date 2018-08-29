@@ -1,5 +1,7 @@
 package com.ogc.standard.dto.req;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 /**
  * 查询充值订单详情
  * @author: xieyj 
@@ -7,10 +9,9 @@ package com.ogc.standard.dto.req;
  * @history:
  */
 public class XN802346Req {
-    private String code;
 
-    // 系统编号
-    private String systemCode;
+    @NotBlank
+    private String code;
 
     public String getCode() {
         return code;
@@ -18,14 +19,6 @@ public class XN802346Req {
 
     public void setCode(String code) {
         this.code = code;
-    }
-
-    public String getSystemCode() {
-        return systemCode;
-    }
-
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
     }
 
 }

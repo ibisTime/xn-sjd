@@ -8,16 +8,14 @@ import java.util.List;
  * @history:
  */
 public class XN802300Req extends APageReq {
-    /** 
-     * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
-     */
-    private static final long serialVersionUID = 1L;
+
+    private static final long serialVersionUID = 5582592396364166469L;
 
     // 用户编号
     private String userId;
 
-    // 户名
-    private String realName;
+    // 币种
+    private String currency;
 
     // 类别（B端账号，C端账号，平台账号）
     private String type;
@@ -25,20 +23,11 @@ public class XN802300Req extends APageReq {
     // 状态（正常/程序冻结/人工冻结）
     private String status;
 
-    // 币种
-    private String currency;
-
     // 币种列表
     private List<String> currencyList;
 
     // 最近一次变动对应的流水编号
     private String lastOrder;
-
-    // 系统编号(必填)
-    private String systemCode;
-
-    // 公司编号(必填)
-    private String companyCode;
 
     public String getUserId() {
         return userId;
@@ -48,12 +37,12 @@ public class XN802300Req extends APageReq {
         this.userId = userId;
     }
 
-    public String getRealName() {
-        return realName;
+    public String getCurrency() {
+        return currency;
     }
 
-    public void setRealName(String realName) {
-        this.realName = realName;
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 
     public String getType() {
@@ -72,14 +61,6 @@ public class XN802300Req extends APageReq {
         this.status = status;
     }
 
-    public String getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(String currency) {
-        this.currency = currency;
-    }
-
     public List<String> getCurrencyList() {
         return currencyList;
     }
@@ -96,19 +77,4 @@ public class XN802300Req extends APageReq {
         this.lastOrder = lastOrder;
     }
 
-    public String getSystemCode() {
-        return systemCode;
-    }
-
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
-    }
-
-    public String getCompanyCode() {
-        return companyCode;
-    }
-
-    public void setCompanyCode(String companyCode) {
-        this.companyCode = companyCode;
-    }
 }

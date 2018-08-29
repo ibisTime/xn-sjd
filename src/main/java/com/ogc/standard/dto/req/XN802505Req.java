@@ -8,8 +8,6 @@
  */
 package com.ogc.standard.dto.req;
 
-import java.util.List;
-
 /** 
  * @author: haiqingzheng 
  * @since: 2017年11月8日 下午3:25:36 
@@ -19,42 +17,11 @@ public class XN802505Req extends APageReq {
 
     private static final long serialVersionUID = -4584603630956235345L;
 
-    // 地址类型
-    private String type;
-
     // 以太坊地址
     private String address;
 
     // 用户编号
     private String userId;
-
-    // 账户编号
-    private String accountNumber;
-
-    // 状态
-    private String status;
-
-    // 状态列表
-    private List<String> statusList;
-
-    // 余额起
-    private String balanceStart;
-
-    public List<String> getStatusList() {
-        return statusList;
-    }
-
-    public void setStatusList(List<String> statusList) {
-        this.statusList = statusList;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
 
     public String getAddress() {
         return address;
@@ -72,27 +39,4 @@ public class XN802505Req extends APageReq {
         this.userId = userId;
     }
 
-    public String getAccountNumber() {
-        return accountNumber;
-    }
-
-    public void setAccountNumber(String accountNumber) {
-        this.accountNumber = accountNumber;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getBalanceStart() {
-        return balanceStart;
-    }
-
-    public void setBalanceStart(String balanceStart) {
-        this.balanceStart = balanceStart;
-    }
 }

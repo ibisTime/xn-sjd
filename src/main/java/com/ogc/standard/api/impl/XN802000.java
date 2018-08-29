@@ -1,6 +1,6 @@
 /**
  * @Title XN802250.java 
- * @Package com.cdkj.coin.wallet.api.impl 
+ * @Package com.ogc.standard.api.impl 
  * @Description 
  * @author haiqingzheng  
  * @date 2018年3月13日 上午11:12:25 
@@ -31,7 +31,7 @@ public class XN802000 extends AProcessor {
     private XN802000Req req = null;
 
     /** 
-     * @see com.cdkj.coin.wallet.api.IProcessor#doBusiness()
+     * @see com.ogc.standard.api.IProcessor#doBusiness()
      */
     @Override
     public Object doBusiness() throws BizException {
@@ -42,7 +42,7 @@ public class XN802000 extends AProcessor {
     }
 
     /** 
-     * @see com.cdkj.coin.wallet.api.IProcessor#doCheck(java.lang.String, java.lang.String)
+     * @see com.ogc.standard.api.IProcessor#doCheck(java.lang.String, java.lang.String)
      */
     @Override
     public void doCheck(String inputparams, String operator)

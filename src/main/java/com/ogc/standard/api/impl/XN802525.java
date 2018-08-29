@@ -8,12 +8,12 @@
  */
 package com.ogc.standard.api.impl;
 
-import org.apache.commons.lang3.StringUtils;
-
+import com.ogc.standard.ao.IEthWAddressAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.ObjValidater;
 import com.ogc.standard.core.StringValidater;
+import com.ogc.standard.domain.EthWAddress;
 import com.ogc.standard.dto.req.XN802525Req;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
@@ -27,8 +27,8 @@ import com.ogc.standard.spring.SpringContextHolder;
  */
 public class XN802525 extends AProcessor {
 
-    private IEthAddressAO ethAddressAO = SpringContextHolder
-        .getBean(IEthAddressAO.class);
+    private IEthWAddressAO ethWAddressAO = SpringContextHolder
+        .getBean(IEthWAddressAO.class);
 
     private XN802525Req req = null;
 
@@ -37,20 +37,12 @@ public class XN802525 extends AProcessor {
      */
     @Override
     public Object doBusiness() throws BizException {
-        EthAddress condition = new EthAddress();
-        condition.setStatusList(req.getStatusList());
-        condition.setType(req.getType());
+        EthWAddress condition = new EthWAddress();
         condition.setAddressForQuery(req.getAddress());
-        condition.setUserId(req.getUserId());
-        condition.setAccountNumber(req.getAccountNumber());
         condition.setStatus(req.getStatus());
-        if (StringUtils.isNotBlank(req.getBalanceStart())) {
-            condition.setBalanceStart(
-                StringValidater.toBigDecimal(req.getBalanceStart()));
-        }
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
-        return ethAddressAO.queryEthAddressPage(start, limit, condition);
+        return ethWAddressAO.queryEthWAddressPage(start, limit, condition);
     }
 
     /** 

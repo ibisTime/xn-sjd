@@ -50,7 +50,10 @@
 		<typeAlias alias="personalAddress" type="com.ogc.standard.domain.PersonalAddress" />
 		<typeAlias alias="hlOrder" type="com.ogc.standard.domain.HLOrder" />
 		<typeAlias alias="ethXAddress" type="com.ogc.standard.domain.EthXAddress" />
+		<typeAlias alias="ethMAddress" type="com.ogc.standard.domain.EthMAddress" />
+		<typeAlias alias="ethWAddress" type="com.ogc.standard.domain.EthWAddress" />
 		<typeAlias alias="ethTransaction" type="com.ogc.standard.domain.EthTransaction" />
+		<typeAlias alias="ethTransaction" type="com.ogc.standard.domain.TokenEvent" />
 		
 	</typeAliases>
 </configuration>

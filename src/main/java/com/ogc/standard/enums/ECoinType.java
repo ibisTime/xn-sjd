@@ -1,6 +1,6 @@
 /**
  * @Title ECoinType.java 
- * @Package com.cdkj.coin.wallet.enums 
+ * @Package com.ogc.standard.enums 
  * @Description 
  * @author haiqingzheng  
  * @date 2018年3月13日 上午11:30:16 

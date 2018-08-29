@@ -162,6 +162,7 @@ CREATE TABLE `tstd_charge` (
   `pay_card_no` varchar(255) DEFAULT NULL COMMENT '支付渠道账号',
   `status` varchar(4) NOT NULL COMMENT '状态 1待支付 2支付失败 3支付成功',
   `apply_user` varchar(32) DEFAULT NULL COMMENT '申请人',
+  `apply_note` varchar(255) DEFAULT NULL COMMENT '申请说明',
   `apply_datetime` datetime DEFAULT NULL COMMENT '申请时间',
   `pay_user` varchar(32) DEFAULT NULL COMMENT '支付回录人',
   `pay_note` varchar(255) DEFAULT NULL COMMENT '支付渠道说明',
@@ -271,7 +272,7 @@ CREATE TABLE `tcoin_market` (
   `update_datetime` datetime NOT NULL COMMENT '更新时间',
   `coinmarketcap_id` int(10) NOT NULL COMMENT 'coinmarketcap中的币种id',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `origin` (`origin`,`coin`) USING BTREE
+  UNIQUE KEY `origin` (`origin`,`symbol`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT '币种行情';
 
 /*
