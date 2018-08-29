@@ -31,7 +31,7 @@ public class XN802010 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        personalAddressAO.addPersonalAddress(req.getCurrency(),
+        personalAddressAO.addPersonalAddress(req.getSymbol(),
             req.getAddress(), req.getLabel(), req.getUserId(),
             req.getIsCerti());
         return new BooleanRes(true);

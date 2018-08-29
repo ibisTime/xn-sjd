@@ -127,7 +127,7 @@ public class CoinBOImpl extends PaginableBOImpl<Coin> implements ICoinBO {
         Coin condition = new Coin();
         condition.setSymbol(symbol);
         Coin data = coinDAO.select(condition);
-        if (data != null) {
+        if (data == null) {
             return false;
         } else
             return true;

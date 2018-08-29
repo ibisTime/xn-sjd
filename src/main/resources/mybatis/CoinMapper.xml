@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cdkj.coin.wallet.dao.ICoinDAO">
+<mapper namespace="com.ogc.standard.dao.ICoinDAO">
 	<resultMap id="coin_DB_Result" type="coin">
 		<result column="id" property="id" />
 		<result column="symbol" property="symbol" />
@@ -17,7 +17,7 @@
 		<result column="collect_start" property="collectStart" />
 		<result column="withdraw_fee" property="withdrawFee" />
 		<result column="contract_address" property="contractAddress" />
-		<result column="contract_abi" property="contractABI" />
+		<result column="contract_abi" property="contractAbi" />
 		<result column="status" property="status" />
 		<result column="updater" property="updater" />
 		<result column="update_datetime" property="updateDatetime" />
@@ -150,7 +150,7 @@
 		,#{collectStart}
 		,#{withdrawFee}
 		,#{contractAddress}
-		,#{contractABI}
+		,#{contractAbi}
 		,#{status}
 		,#{updater}
 		,#{updateDatetime}

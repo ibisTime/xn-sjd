@@ -35,7 +35,7 @@ public class XN802010Req {
 
     // 币种
     @NotBlank
-    private String currency;
+    private String symbol;
 
     public String getAddress() {
         return address;
@@ -69,12 +69,12 @@ public class XN802010Req {
         this.userId = userId;
     }
 
-    public String getCurrency() {
-        return currency;
+    public String getSymbol() {
+        return symbol;
     }
 
-    public void setCurrency(String currency) {
-        this.currency = currency;
+    public void setSymbol(String currency) {
+        this.symbol = currency;
     }
 
 }

@@ -46,6 +46,7 @@
 		<typeAlias alias="withdraw" type="com.ogc.standard.domain.Withdraw" />
 		<typeAlias alias="collect" type="com.ogc.standard.domain.Collect" />
 		<typeAlias alias="deposit" type="com.ogc.standard.domain.Deposit" />
+		<typeAlias alias="currencyRate" type="com.ogc.standard.domain.CurrencyRate" />
 		<typeAlias alias="personalAddress" type="com.ogc.standard.domain.PersonalAddress" />
 		<typeAlias alias="hlOrder" type="com.ogc.standard.domain.HLOrder" />
 		<typeAlias alias="ethXAddress" type="com.ogc.standard.domain.EthXAddress" />

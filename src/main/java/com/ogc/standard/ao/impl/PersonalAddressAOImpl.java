@@ -21,7 +21,7 @@ import com.ogc.standard.exception.EBizErrorCode;
 public class PersonalAddressAOImpl implements IPersonalAddressAO {
 
     @Autowired
-    private IPersonalAddressBO IPersonalAddressBO;
+    private IPersonalAddressBO personalAddressBO;
 
     @Autowired
     private IEthXAddressBO ethXAddressBO;
@@ -42,7 +42,7 @@ public class PersonalAddressAOImpl implements IPersonalAddressAO {
         condition.setSymbol(symbol);
         condition.setUserId(userId);
         condition.setAddress(address);
-        if (IPersonalAddressBO.getTotalCount(condition) > 0) {
+        if (personalAddressBO.getTotalCount(condition) > 0) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(), "请勿重复添加地址");
         }
 
@@ -52,7 +52,7 @@ public class PersonalAddressAOImpl implements IPersonalAddressAO {
             status = EPersonalAddressStatus.CERTI.getCode();
         }
 
-        return IPersonalAddressBO.savePersonalAddress(symbol, address, label,
+        return personalAddressBO.savePersonalAddress(symbol, address, label,
             userId, status);
     }
 
@@ -70,13 +70,13 @@ public class PersonalAddressAOImpl implements IPersonalAddressAO {
 
     @Override
     public int dropPersonalAddress(long id) {
-        return IPersonalAddressBO.removePersonalAddress(id);
+        return personalAddressBO.removePersonalAddress(id);
     }
 
     @Override
     public Paginable<PersonalAddress> queryPersonalAddressPage(int start,
             int limit, PersonalAddress condition) {
-        return IPersonalAddressBO.getPaginable(start, limit, condition);
+        return personalAddressBO.getPaginable(start, limit, condition);
     }
     //
     // @Override
