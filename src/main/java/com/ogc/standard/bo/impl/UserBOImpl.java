@@ -300,6 +300,9 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         if (StringUtils.isNotBlank(userId)
                 && StringUtils.isNotBlank(tradePwd)) {
             User user = this.getUser(userId);
+            if (user == null) {
+                throw new BizException("jd00001", "该用户不存在！");
+            }
             if (StringUtils.isBlank(user.getTradePwdStrength())) {
                 throw new BizException("jd00001", "请您先设置支付密码！");
             }

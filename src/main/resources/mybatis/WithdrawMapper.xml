@@ -5,12 +5,12 @@
 	<resultMap id="withdraw_DB_Result" type="withdraw">
 		<result column="code" property="code" />
 		<result column="account_number" property="accountNumber" />
-		<result column="account_name" property="accountName" />
+		<result column="account_type" property="accountType" />
 		<result column="currency" property="currency" />
-		<result column="type" property="type" />
 		<result column="amount" property="amount" />
 		
 		<result column="fee" property="fee" />
+		<result column="actual_amount" property="actualAmount" />
 		<result column="channel_type" property="channelType" />
 		<result column="channel_bank" property="channelBank" />
 		<result column="channel_order" property="channelOrder" />
@@ -28,13 +28,8 @@
 		<result column="pay_user" property="payUser" />
 		<result column="pay_note" property="payNote" />
 		
-		<result column="pay_group" property="payGroup" />
-		<result column="pay_code" property="payCode" />
 		<result column="pay_fee" property="payFee" />
 		<result column="pay_datetime" property="payDatetime" />
-		<result column="system_code" property="systemCode" />
-		
-		<result column="company_code" property="companyCode" />
 	</resultMap>
 	<!-- <resultMap id="addressUseInfo_DB_Result" type="ethAddress">
 		<result column="use_count" property="useCount" />
@@ -51,11 +46,8 @@
 			<if test="accountNumber != null and accountNumber != '' ">
 				AND t.account_number = #{accountNumber}
 			</if>
-			<if test="type != null and type != '' ">
-				AND t.type = #{type}
-			</if>
-			<if test="accountName != null and accountName != '' ">
-				AND t.account_name like "%"#{accountName}"%"
+			<if test="accountType != null and accountType != '' ">
+				AND t.account_type = #{accountType}
 			</if>
 			<if test="currency != null and currency != '' ">
 				AND t.currency = #{currency}
@@ -108,9 +100,6 @@
 			<if test="payUser != null and payUser != '' ">
 				AND t.pay_user = #{payUser}
 			</if>
-			<if test="payGroup != null and payGroup != '' ">
-				AND t.pay_group = #{payGroup}
-			</if>
 			<if test="channelOrder != null and channelOrder != '' ">
 				AND t.channel_order = #{channelOrder}
 			</if>
@@ -121,48 +110,37 @@
 			<if test="payDatetimeEnd != null and payDatetimeEnd != '' ">
 				<![CDATA[AND t.pay_datetime <= #{payDatetimeEnd}]]>
 			</if>
-			<if test="systemCode != null and systemCode != '' ">
-				AND t.system_code = #{systemCode}
-			</if>
-			<if test="companyCode != null and companyCode != '' ">
-				AND t.company_code = #{companyCode}
-			</if>
 		</trim>
 	</sql>
 	<select id="select_withdraw" parameterType="withdraw" resultMap="withdraw_DB_Result">
 		SELECT
 		t.code
 		,t.account_number
-		,t.account_name
+		,t.account_type
 		,t.currency
-		,t.type
 		,t.amount
 		
 		,t.fee
+		,t.actual_amount
 		,t.channel_type
 		,t.channel_bank
 		,t.channel_order
-		,t.pay_card_info
 		
+		,t.pay_card_info
 		,t.pay_card_no
 		,t.status
 		,t.apply_user
 		,t.apply_note
-		,t.apply_datetime
 		
+		,t.apply_datetime
 		,t.approve_user
 		,t.approve_note
 		,t.approve_datetime
 		,t.pay_user
-		,t.pay_note
 		
-		,t.pay_group
-		,t.pay_code
+		,t.pay_note
 		,t.pay_fee
 		,t.pay_datetime
-		,t.system_code
-		
-		,t.company_code
 		FROM
 		tstd_withdraw t
 		<include refid="where_condition" />
@@ -184,46 +162,60 @@
 		tstd_withdraw(
 		code
 		,account_number
-		,account_name
+		,account_type
 		,currency
-		,type
-		
 		,amount
+		
 		,fee
+		,actual_amount
 		,channel_type
 		,channel_bank
-		,pay_card_info
+		,channel_order
 		
+		,pay_card_info
 		,pay_card_no
 		,status
 		,apply_user
 		,apply_note
+	
 		,apply_datetime
+		,approve_user
+		,approve_note
+		,approve_datetime
+		,pay_user
 		
-		,system_code
-		,company_code
+		,pay_note
+		,pay_fee
+		,pay_datetime
 		)
 		VALUES(
 		#{code}
 		,#{accountNumber}
-		,#{accountName}
+		,#{accountType}
 		,#{currency}
-		,#{type}
-		
 		,#{amount}
+		
 		,#{fee}
+		,#{actualAmount}
 		,#{channelType}
 		,#{channelBank}
-		,#{payCardInfo}
+		,#{channelOrder}
 		
+		,#{payCardInfo}
 		,#{payCardNo}
 		,#{status}
 		,#{applyUser}
 		,#{applyNote}
-		,#{applyDatetime}
 		
-		,#{systemCode}
-		,#{companyCode}
+		,#{applyDatetime}
+		,#{approveUser}
+		,#{approveNote}
+		,#{approveDatetime}
+		,#{payUser}
+		
+		,#{payNote}
+		,#{payFee}
+		,#{payDatetime}
 		)
 	</insert>
 
@@ -244,8 +236,6 @@
 		,channel_order = #{channelOrder}
 		,pay_user = #{payUser}
 		,pay_note = #{payNote}
-		,pay_group = #{payGroup}
-		,pay_code = #{payCode}
 		,pay_fee = #{payFee}
 		,pay_datetime = #{payDatetime}
 		WHERE code = #{code}

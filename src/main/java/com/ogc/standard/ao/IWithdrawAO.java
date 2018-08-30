@@ -24,6 +24,9 @@ public interface IWithdrawAO {
     // 取现广播
     public void broadcast(String code, String mAddressCode, String approveUser);
 
+    // 打回取现订单
+    public void returnOrder(String code, String payUser, String payNote);
+
     public void payOrder(String code, String payUser, String payResult,
             String payNote, String channelOrder);
 

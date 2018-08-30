@@ -137,6 +137,10 @@ public class WithdrawAOImpl implements IWithdrawAO {
             String approveUser) {
         // 取现记录验证
         Withdraw withdraw = withdrawBO.getWithdraw(code);
+        if (withdraw == null) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "不存在编号为" + code + "的订单");
+        }
         if (!EWithdrawStatus.Approved_YES.getCode()
             .equals(withdraw.getStatus())) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
@@ -289,6 +293,10 @@ public class WithdrawAOImpl implements IWithdrawAO {
     public void payOrder(String code, String payUser, String payResult,
             String payNote, String channelOrder) {
         Withdraw data = withdrawBO.getWithdraw(code);
+        if (data == null) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "不存在编号为" + code + "的订单");
+        }
         if (!EWithdrawStatus.Approved_YES.getCode().equals(data.getStatus())) {
             throw new BizException("xn000000", "申请记录状态不是待支付状态，无法支付");
         }
@@ -441,6 +449,25 @@ public class WithdrawAOImpl implements IWithdrawAO {
     @Override
     public BigDecimal getTotalWithdraw(String currency) {
         return withdrawBO.getTotalWithdraw(currency);
+    }
+
+    @Override
+    public void returnOrder(String code, String payUser, String payNote) {
+        Withdraw data = withdrawBO.getWithdraw(code);
+        if (data == null) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "不存在编号为" + code + "的订单");
+        }
+        if (!EWithdrawStatus.Approved_YES.getCode().equals(data.getStatus())) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "申请记录状态不是待审批通过状态，无法审批");
+        }
+        withdrawBO.returnOrder(code, payUser, payNote);
+        Account dbAccount = accountBO.getAccount(data.getAccountNumber());
+        // 释放冻结流水
+        accountBO.unfrozenAmount(dbAccount, data.getAmount(),
+            EJourBizTypeUser.AJ_WITHDRAW_UNFROZEN.getCode(), "取现失败退回",
+            data.getCode());
     }
 
 }

@@ -166,4 +166,16 @@
 		<property name="paginableDAO" ref="ethTransactionDAOImpl"/>
 	</bean>
 	
+	<bean id="jourBO" class="com.ogc.standard.bo.impl.JourBOImpl">
+		<property name="paginableDAO" ref="jourDAOImpl"/>
+	</bean>
+	
+	<bean id="chargeBO" class="com.ogc.standard.bo.impl.ChargeBOImpl">
+		<property name="paginableDAO" ref="chargeDAOImpl"/>
+	</bean>
+	
+	<bean id="withdrawBO" class="com.ogc.standard.bo.impl.WithdrawBOImpl">
+		<property name="paginableDAO" ref="withdrawDAOImpl"/>
+	</bean>
+	
 </beans>

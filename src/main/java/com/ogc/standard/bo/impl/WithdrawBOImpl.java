@@ -165,4 +165,14 @@ public class WithdrawBOImpl extends PaginableBOImpl<Withdraw>
         condition.setStatus(EWithdrawStatus.Pay_YES.getCode());
         return withdrawDAO.selectTotalAmount(condition);
     }
+
+    @Override
+    public void returnOrder(String code, String payUser, String payNote) {
+        Withdraw data = new Withdraw();
+        data.setCode(code);
+        data.setPayUser(payUser);
+        data.setPayNote(payNote);
+        data.setStatus(EWithdrawStatus.Pay_NO.getCode());
+        withdrawDAO.payOrder(data);
+    }
 }

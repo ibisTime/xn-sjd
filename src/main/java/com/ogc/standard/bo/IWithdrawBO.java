@@ -34,4 +34,6 @@ public interface IWithdrawBO extends IPaginableBO<Withdraw> {
     public EthMAddress getAddressUseInfo(String fromAddress, String currency);
 
     public BigDecimal getTotalWithdraw(String currency);
+
+    public void returnOrder(String code, String payUser, String payNote);
 }

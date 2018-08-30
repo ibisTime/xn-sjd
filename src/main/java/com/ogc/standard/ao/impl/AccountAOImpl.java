@@ -133,6 +133,7 @@ public class AccountAOImpl implements IAccountAO {
     @Override
     @Transactional
     public List<Account> getAccountByUserId(String userId, String currency) {
+        distributeAccount(userId);
         List<Account> accounts = new ArrayList<>();
         if (StringUtils.isBlank(currency)) {
             List<Coin> coins = coinBO.queryOpenCoinList();

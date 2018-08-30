@@ -6,6 +6,7 @@ public class XN802320Req extends APageReq {
 
     private static final long serialVersionUID = -505923347145288692L;
 
+    // 类型
     private String type;
 
     // 用户编号
