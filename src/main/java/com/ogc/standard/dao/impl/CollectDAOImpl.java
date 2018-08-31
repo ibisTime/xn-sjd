@@ -10,40 +10,40 @@ import com.ogc.standard.dao.base.support.AMybatisTemplate;
 import com.ogc.standard.domain.Collect;
 import com.ogc.standard.domain.EthWAddress;
 
-@Repository("collectionDAOImpl")
+@Repository("collectDAOImpl")
 public class CollectDAOImpl extends AMybatisTemplate implements ICollectDAO {
 
     @Override
     public int insert(Collect data) {
-        return super.insert(NAMESPACE.concat("insert_collection"), data);
+        return super.insert(NAMESPACE.concat("insert_collect"), data);
     }
 
     @Override
     public int delete(Collect data) {
-        return super.delete(NAMESPACE.concat("delete_collection"), data);
+        return super.delete(NAMESPACE.concat("delete_collect"), data);
     }
 
     @Override
     public Collect select(Collect condition) {
-        return super.select(NAMESPACE.concat("select_collection"), condition,
+        return super.select(NAMESPACE.concat("select_collect"), condition,
             Collect.class);
     }
 
     @Override
     public long selectTotalCount(Collect condition) {
-        return super.selectTotalCount(
-            NAMESPACE.concat("select_collection_count"), condition);
+        return super.selectTotalCount(NAMESPACE.concat("select_collect_count"),
+            condition);
     }
 
     @Override
     public List<Collect> selectList(Collect condition) {
-        return super.selectList(NAMESPACE.concat("select_collection"),
-            condition, Collect.class);
+        return super.selectList(NAMESPACE.concat("select_collect"), condition,
+            Collect.class);
     }
 
     @Override
     public List<Collect> selectList(Collect condition, int start, int count) {
-        return super.selectList(NAMESPACE.concat("select_collection"), start,
+        return super.selectList(NAMESPACE.concat("select_collect"), start,
             count, condition, Collect.class);
     }
 

@@ -3,6 +3,7 @@ package com.ogc.standard.bo.impl;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import com.ogc.standard.bo.ICollectBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.dao.ICollectDAO;
 import com.ogc.standard.domain.Collect;
+import com.ogc.standard.exception.BizException;
 
 @Component
 public class CollectBOImpl extends PaginableBOImpl<Collect>
@@ -21,7 +23,7 @@ public class CollectBOImpl extends PaginableBOImpl<Collect>
         .getLogger(CollectBOImpl.class);
 
     @Autowired
-    private ICollectDAO collectionDAO;
+    private ICollectDAO collectDAO;
 
     //
     // @Autowired
@@ -54,19 +56,20 @@ public class CollectBOImpl extends PaginableBOImpl<Collect>
     // return collectionDAO.selectList(condition);
     // }
     //
-    // @Override
-    // public Collect getCollect(String code) {
-    // Collect data = null;
-    // if (StringUtils.isNotBlank(code)) {
-    // Collect condition = new Collect();
-    // condition.setCode(code);
-    // data = collectionDAO.select(condition);
-    // if (data == null) {
-    // throw new BizException("xn0000", "归集记录不存在");
-    // }
-    // }
-    // return data;
-    // }
+    @Override
+    public Collect getCollect(String code) {
+        Collect data = null;
+        if (StringUtils.isNotBlank(code)) {
+            Collect condition = new Collect();
+            condition.setCode(code);
+            data = collectDAO.select(condition);
+            if (data == null) {
+                throw new BizException("xn0000", "归集记录不存在");
+            }
+        }
+        return data;
+    }
+
     //
     // @Override
     // public Collect getCollectByTxHash(String txHash) {
@@ -85,7 +88,7 @@ public class CollectBOImpl extends PaginableBOImpl<Collect>
         Collect ethCollect = null;
         Collect condition = new Collect();
         condition.setRefNo(refNo);
-        List<Collect> results = collectionDAO.selectList(condition);
+        List<Collect> results = collectDAO.selectList(condition);
         if (CollectionUtils.isNotEmpty(results)) {
             ethCollect = results.get(0);
         }

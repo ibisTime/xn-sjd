@@ -178,4 +178,12 @@
 		<property name="paginableDAO" ref="withdrawDAOImpl"/>
 	</bean>
 	
+	<bean id="collectBO" class="com.ogc.standard.bo.impl.CollectBOImpl">
+		<property name="paginableDAO" ref="collectDAOImpl"/>
+	</bean>
+	
+	<bean id="depositBO" class="com.ogc.standard.bo.impl.DepositBOImpl">
+		<property name="paginableDAO" ref="depositDAOImpl"/>
+	</bean>
+	
 </beans>

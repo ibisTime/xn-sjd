@@ -10,8 +10,8 @@ public interface ICollectBO extends IPaginableBO<Collect> {
     //
     // public List<Collect> queryCollectList(Collect condition);
     //
-    // public Collect getCollect(String code);
-    //
+    public Collect getCollect(String code);
+
     // public Collect getCollectByTxHash(String txHash);
     //
     public Collect getCollectByRefNo(String refNo);

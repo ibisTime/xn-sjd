@@ -1,8 +1,12 @@
 package com.ogc.standard.ao.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ogc.standard.ao.ICollectAO;
+import com.ogc.standard.bo.ICollectBO;
+import com.ogc.standard.bo.base.Paginable;
+import com.ogc.standard.domain.Collect;
 
 @Service
 public class CollectAOImpl implements ICollectAO {
@@ -10,22 +14,23 @@ public class CollectAOImpl implements ICollectAO {
     // private static final Logger logger = LoggerFactory
     // .getLogger(CollectAOImpl.class);
     //
-    // @Autowired
-    // private ICollectBO collectionBO;
-    //
+    @Autowired
+    private ICollectBO collectBO;
+
     // @Autowired
     // private IEthXAddressBO ethXAddressBO;
     //
-    // @Override
-    // public Paginable<Collect> queryCollectPage(int start, int limit,
-    // Collect condition) {
-    // return collectionBO.getPaginable(start, limit, condition);
-    // }
+    @Override
+    public Paginable<Collect> queryCollectPage(int start, int limit,
+            Collect condition) {
+        return collectBO.getPaginable(start, limit, condition);
+    }
+
     //
-    // @Override
-    // public Collect getCollect(String code) {
-    // return collectionBO.getCollect(code);
-    // }
+    @Override
+    public Collect getCollect(String code) {
+        return collectBO.getCollect(code);
+    }
     //
     // @Override
     // public BigDecimal getTotalCollect(String currency) {
