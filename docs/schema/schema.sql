@@ -1,4 +1,125 @@
 
+DROP TABLE IF EXISTS `tstd_user`;
+CREATE TABLE `tstd_user` (
+  `user_id` varchar(32) NOT NULL COMMENT '用户编号',
+  `login_name` varchar(64) DEFAULT NULL COMMENT '登陆名',
+  `mobile` varchar(16) DEFAULT NULL COMMENT '手机号',
+  `photo` varchar(255) DEFAULT NULL COMMENT '头像',
+  `nickname` varchar(64) DEFAULT NULL COMMENT '昵称',
+  `login_pwd` varchar(32) DEFAULT NULL COMMENT '登陆密码',
+  `login_pwd_strength` char(1) DEFAULT NULL COMMENT '登陆密码强度',
+  `level` varchar(4) DEFAULT NULL COMMENT '用户等级',
+  `user_referee` varchar(32) DEFAULT NULL COMMENT '推荐人',
+  `id_kind` char(1) DEFAULT NULL COMMENT '证件类型',
+  `id_no` varchar(32) DEFAULT NULL COMMENT '证件号码',
+  `real_name` varchar(16) DEFAULT NULL COMMENT '真实姓名',
+  `trade_pwd` varchar(32) DEFAULT NULL COMMENT '安全密码',
+  `trade_pwd_strength` char(1) DEFAULT NULL COMMENT '安全密码强度',
+  `status` varchar(2) DEFAULT NULL COMMENT '状态',
+  `province` varchar(255) DEFAULT NULL COMMENT '省',
+  `city` varchar(255) DEFAULT NULL COMMENT '市',
+  `area` varchar(255) DEFAULT NULL COMMENT '区',
+  `address` varchar(255) DEFAULT NULL COMMENT '详细地址',
+  `longitude` varchar(255) DEFAULT NULL COMMENT '经度',
+  `latitude` varchar(255) DEFAULT NULL COMMENT '维度',
+  `create_datetime` datetime DEFAULT NULL COMMENT '注册时间',
+  `updater` varchar(32) DEFAULT NULL COMMENT '修改人',
+  `update_datetime` datetime DEFAULT NULL COMMENT '修改时间',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `tstd_user_ext`;
+CREATE TABLE `tstd_user_ext` (
+  `user_id` varchar(32) NOT NULL COMMENT '用户编号',
+  `gender` char(1) DEFAULT NULL COMMENT '性别(1 男 0 女)',
+  `introduce` varchar(255) DEFAULT NULL COMMENT '自我介绍',
+  `birthday` varchar(16) DEFAULT NULL COMMENT '生日',
+  `email` varchar(255) DEFAULT NULL COMMENT '邮箱',
+  `diploma` varchar(4) DEFAULT NULL COMMENT '学位',
+  `occupation` varchar(64) DEFAULT NULL COMMENT '职业',
+  `grad_datetime` datetime DEFAULT NULL COMMENT '毕业时间',
+  `work_time` varchar(4) DEFAULT NULL COMMENT '工作年限',
+  `pdf` varchar(255) DEFAULT NULL COMMENT '用户资料',
+  PRIMARY KEY (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `tstd_sign_log`;
+CREATE TABLE `tstd_sign_log` (
+  `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT 'ID主键',
+  `user_id` varchar(32) DEFAULT NULL COMMENT '用户编号',
+  `type` varchar(4) DEFAULT NULL COMMENT '分类（1-登录日志；2-签到日志）',
+  `ip` varchar(255) DEFAULT NULL COMMENT 'ip',
+  `client` varchar(4) DEFAULT NULL COMMENT '客户端',
+  `location` varchar(255) DEFAULT NULL COMMENT '登录时定位',
+  `create_datetime` datetime DEFAULT NULL COMMENT '签到时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `tstd_auth_log`;
+CREATE TABLE `tstd_auth_log` (
+  `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT 'ID主键',
+  `type` varchar(4) DEFAULT NULL COMMENT '认证类型',
+  `auth_arg1` varchar(255) DEFAULT NULL COMMENT '入参1',
+  `auth_arg2` varchar(255) DEFAULT NULL COMMENT '入参2',
+  `auth_arg3` varchar(255) DEFAULT NULL COMMENT '入参3',
+  `status` varchar(4) DEFAULT NULL COMMENT '状态 0=待处理 1=认证通过 2=认证不通过',
+  `apply_user` varchar(32) DEFAULT NULL COMMENT '申请人',
+  `apply_datetime` datetime DEFAULT NULL COMMENT '申请时间',
+  `approve_user` varchar(32) DEFAULT NULL COMMENT '审核人',
+  `approve_datetime` datetime DEFAULT NULL COMMENT '审核时间',
+  `result` varchar(255) DEFAULT NULL COMMENT '出参',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `tstd_blacklist`;
+CREATE TABLE `tstd_blacklist` (
+  `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT 'ID主键',
+  `user_id` varchar(32) DEFAULT NULL COMMENT '用户编号',
+  `type` varchar(4) DEFAULT NULL COMMENT '拉黑粒度',
+  `status` varchar(4) DEFAULT NULL COMMENT '状态 0-已失效 1-已生效',
+  `create_datetime` datetime DEFAULT NULL COMMENT '拉黑时间',
+  `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `update_datetime` varchar(45) DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+
+DROP TABLE IF EXISTS `tstd_read`;
+CREATE TABLE `tstd_read` (
+  `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT 'ID主键',
+  `user_id` varchar(32) DEFAULT NULL COMMENT '用户编号',
+  `sms_code` varchar(32) DEFAULT NULL COMMENT '消息编号',
+  `receive_way` varchar(4) DEFAULT NULL COMMENT '接受方式(站内消息，APP推送,短信)',
+  `status` varchar(4) DEFAULT NULL COMMENT '状态 0-未阅读 1-已阅读 2-已删除',
+  `create_datetime` datetime DEFAULT NULL COMMENT '推送时间',
+  `read_datetime` datetime DEFAULT NULL COMMENT '阅读时间',
+  `delete_datetime` datetime DEFAULT NULL COMMENT '删除时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `tstd_sms`;
+CREATE TABLE `tstd_sms` (
+  `code` varchar(32) NOT NULL COMMENT '消息编号',
+  `type` varchar(4) DEFAULT NULL COMMENT '消息类型（系统公告，短信内容）',
+  `title` varchar(255) DEFAULT NULL COMMENT '标题',
+  `content` varchar(255) DEFAULT NULL COMMENT '内容',
+  `status` varchar(4) DEFAULT NULL COMMENT '状态 0-草稿 1-已发送 2-已回撤',
+  `create_datetime` datetime DEFAULT NULL COMMENT '创建时间',
+  `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `update_datetime` varchar(45) DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 DROP TABLE IF EXISTS `tsys_dict`;
 CREATE TABLE `tsys_dict` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
