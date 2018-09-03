@@ -46,5 +46,20 @@
 		<typeAlias alias="userStatistics" type="com.ogc.standard.domain.UserStatistics" />
 		
 		
+		<typeAlias alias="coin" type="com.ogc.standard.domain.Coin" />
+		<typeAlias alias="account" type="com.ogc.standard.domain.Account" />
+		<typeAlias alias="jour" type="com.ogc.standard.domain.Jour" />
+		<typeAlias alias="charge" type="com.ogc.standard.domain.Charge" />
+		<typeAlias alias="withdraw" type="com.ogc.standard.domain.Withdraw" />
+		<typeAlias alias="collect" type="com.ogc.standard.domain.Collect" />
+		<typeAlias alias="deposit" type="com.ogc.standard.domain.Deposit" />
+		<typeAlias alias="currencyRate" type="com.ogc.standard.domain.CurrencyRate" />
+		<typeAlias alias="personalAddress" type="com.ogc.standard.domain.PersonalAddress" />
+		<typeAlias alias="hlOrder" type="com.ogc.standard.domain.HLOrder" />
+		<typeAlias alias="ethXAddress" type="com.ogc.standard.domain.EthXAddress" />
+		<typeAlias alias="ethMAddress" type="com.ogc.standard.domain.EthMAddress" />
+		<typeAlias alias="ethWAddress" type="com.ogc.standard.domain.EthWAddress" />
+		<typeAlias alias="ethTransaction" type="com.ogc.standard.domain.EthTransaction" />
+		
 	</typeAliases>
 </configuration>
