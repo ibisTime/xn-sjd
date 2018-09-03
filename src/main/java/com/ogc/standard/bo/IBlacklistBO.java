@@ -17,6 +17,6 @@ public interface IBlacklistBO extends IPaginableBO<Blacklist> {
 
     public Blacklist getBlacklist(Long id);
 
-    public void isAddBlacklist(String userId, String type);
+    public void isAddBlacklist(String userId);
 
 }

@@ -12,6 +12,26 @@ public class XN804080Req {
 
     // 发送时间--非必填
     private String sendDatetime;
+    
+    private String companyCode;
+    
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
+    }
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
+
+    private String systemCode;
 
     public String getType() {
         return type;

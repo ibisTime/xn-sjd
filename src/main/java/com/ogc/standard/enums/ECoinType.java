@@ -16,7 +16,7 @@ package com.ogc.standard.enums;
 public enum ECoinType {
 
     // 公链币
-    ETH("0", "以太币"), BTC("1", "比特币")
+    ETH("0", "以太币"), BTC("1", "比特币"),ORIGINAL("0", "原生币"), TOKEN("1", "token币")
 
     // 基于某条公链的token币
     , ETH_TOKEN("0T", "以太token币");

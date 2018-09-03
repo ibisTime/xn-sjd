@@ -41,6 +41,10 @@
 		<property name="paginableDAO" ref="sysUserDAOImpl"/>
 	</bean>
 	
+	<bean id="userSettingsBO" class="com.ogc.standard.bo.impl.UserSettingsBOImpl">
+		<property name="paginableDAO" ref="userSettingsDAOImpl"/>
+	</bean>
+	
 	<bean id="channelBankBO" class="com.ogc.standard.bo.impl.ChannelBankBOImpl">
 		<property name="paginableDAO" ref="channelBankDAOImpl"/>
 	</bean>
@@ -83,6 +87,10 @@
 
 	<bean id="userBO" class="com.ogc.standard.bo.impl.UserBOImpl">
 		<property name="paginableDAO" ref="userDAOImpl"/>
+	</bean>
+	
+	<bean id="userRelationBO" class="com.ogc.standard.bo.impl.UserRelationBOImpl">
+		<property name="paginableDAO" ref="userRelationDAOImpl"/>
 	</bean>
 	
 	<bean id="userExtBO" class="com.ogc.standard.bo.impl.UserExtBOImpl">
@@ -134,6 +142,30 @@
 		<property name="paginableDAO" ref="interactDAOImpl"/>
 	</bean>
 	
+	<bean id="adsBO" class="com.ogc.standard.bo.impl.AdsBOImpl">
+		<property name="paginableDAO" ref="adsDAOImpl"/>
+	</bean>
+	
+	<bean id="arbitrateBO" class="com.ogc.standard.bo.impl.ArbitrateBOImpl">
+		<property name="paginableDAO" ref="arbitrateDAOImpl"/>
+	</bean>
+	
+	<bean id="interactBO" class="com.ogc.standard.bo.impl.InteractBOImpl">
+		<property name="paginableDAO" ref="interactDAOImpl"/>
+	</bean>
+	
+	<bean id="interactBO" class="com.ogc.standard.bo.impl.InteractBOImpl">
+		<property name="paginableDAO" ref="interactDAOImpl"/>
+	</bean>
+	
+	<bean id="interactBO" class="com.ogc.standard.bo.impl.InteractBOImpl">
+		<property name="paginableDAO" ref="interactDAOImpl"/>
+	</bean>
+	
+	<bean id="interactBO" class="com.ogc.standard.bo.impl.InteractBOImpl">
+		<property name="paginableDAO" ref="interactDAOImpl"/>
+	</bean>
+
 	<bean id="coinBO" class="com.ogc.standard.bo.impl.CoinBOImpl">
 		<property name="paginableDAO" ref="coinDAOImpl"/>
 	</bean>
@@ -184,6 +216,10 @@
 	
 	<bean id="depositBO" class="com.ogc.standard.bo.impl.DepositBOImpl">
 		<property name="paginableDAO" ref="depositDAOImpl"/>
+	</bean>
+	
+	<bean id="tradeOrderBO" class="com.ogc.standard.bo.impl.TradeOrderBOImpl">
+		<property name="paginableDAO" ref="tradeOrderDAOImpl"/>
 	</bean>
 	
 </beans>
