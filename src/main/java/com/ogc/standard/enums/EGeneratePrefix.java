@@ -12,7 +12,8 @@ public enum EGeneratePrefix {
 
     DH("DH", "导航"), JS("JS", "角色"), CD("CD", "菜单"), BM("BM", "部门"), GS("GS",
             "公司"), XX("XX",
-                    "信息"), RZ("RZ", "日志"), SIMU_ORDER("MNWT", "模拟交易委托单"),
+                    "信息"), RZ("RZ", "日志"), SIMU_ORDER("MNWT", "模拟交易委托单"), ARBITRATE(
+                        "ZC", "仲裁工单"),TRADE_ORDER("JY", "交易订单"),
 
     SIMU_ORDER_DETAIL("MNWTMX", "模拟交易委托单明细"), Account("A", "账户"), AJour("AJ",
             "账户流水"),

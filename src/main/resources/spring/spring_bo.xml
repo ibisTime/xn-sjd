@@ -134,4 +134,24 @@
 		<property name="paginableDAO" ref="interactDAOImpl"/>
 	</bean>
 	
+	<bean id="adsBO" class="com.ogc.standard.bo.impl.AdsBOImpl">
+		<property name="paginableDAO" ref="adsDAOImpl"/>
+	</bean>
+	
+	<bean id="interactBO" class="com.ogc.standard.bo.impl.InteractBOImpl">
+		<property name="paginableDAO" ref="interactDAOImpl"/>
+	</bean>
+	
+	<bean id="interactBO" class="com.ogc.standard.bo.impl.InteractBOImpl">
+		<property name="paginableDAO" ref="interactDAOImpl"/>
+	</bean>
+	
+	<bean id="interactBO" class="com.ogc.standard.bo.impl.InteractBOImpl">
+		<property name="paginableDAO" ref="interactDAOImpl"/>
+	</bean>
+	
+	<bean id="interactBO" class="com.ogc.standard.bo.impl.InteractBOImpl">
+		<property name="paginableDAO" ref="interactDAOImpl"/>
+	</bean>
+	
 </beans>
