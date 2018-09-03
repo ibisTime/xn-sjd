@@ -16,16 +16,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.cdkj.coin.ao.IUserRelationAO;
-import com.cdkj.coin.bo.ITradeOrderBO;
-import com.cdkj.coin.bo.IUserBO;
-import com.cdkj.coin.bo.IUserRelationBO;
-import com.cdkj.coin.bo.base.Paginable;
-import com.cdkj.coin.domain.User;
-import com.cdkj.coin.domain.UserRelation;
-import com.cdkj.coin.domain.UserStatistics;
-import com.cdkj.coin.enums.EUserReleationType;
-import com.cdkj.coin.exception.BizException;
+import com.ogc.standard.ao.IUserRelationAO;
+import com.ogc.standard.bo.ITradeOrderBO;
+import com.ogc.standard.bo.IUserBO;
+import com.ogc.standard.bo.IUserRelationBO;
+import com.ogc.standard.bo.base.Paginable;
+import com.ogc.standard.domain.User;
+import com.ogc.standard.domain.UserRelation;
+import com.ogc.standard.domain.UserStatistics;
+import com.ogc.standard.enums.ESystemCode;
+import com.ogc.standard.enums.EUserReleationType;
+import com.ogc.standard.exception.BizException;
 
 /**
  * @author: xieyj
@@ -129,7 +130,7 @@ public class UserRelationAOImpl implements IUserRelationAO {
         }
 
         userRelationBO.saveUserRelation(userId, toUserId, type,
-            user.getSystemCode());
+            ESystemCode.BZ.getCode());
 
     }
 

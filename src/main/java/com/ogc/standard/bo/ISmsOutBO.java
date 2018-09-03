@@ -51,4 +51,7 @@ public interface ISmsOutBO {
             String companyCode, String systemCode);
 
     public void sendSmsOut(String mobile, String content, String bizType);
+
+    void sendSmsOut(String mobile, String content, String companyCode,
+            String systemCode);
 }

@@ -8,49 +8,7 @@ import java.util.List;
 import com.ogc.standard.dao.base.ABaseDO;
 
 public class Market extends ABaseDO implements Serializable {
-
-    private static final long serialVersionUID = -4119900661343861336L;
-
-    // ID主键
     private Long id;
-
-    // 代币符号
-    private String symbol;
-
-    // 参照法币币种
-    private String referCurrency;
-
-    // 行情来源
-    private String origin;
-
-    // 最新成交价格
-    private BigDecimal lastPrice;// Last
-
-    // 买家期望价格
-    private BigDecimal bid;// Bid
-
-    // 卖家期望价格
-    private BigDecimal ask;// Ask
-
-    // 中间价格
-    private BigDecimal mid;// Mid
-
-    // 最低价格
-    private BigDecimal low;// Low
-
-    // 最高价格
-    private BigDecimal high;// High
-
-    // 交易量
-    private String volume;// Volume
-
-    // 更新时间
-    private Date updateDatetime;
-
-    // coinmarketcap对一个的ID
-    private String CoinmarketcapId;
-
-    private List<String> coinList;
 
     public Long getId() {
         return id;
@@ -60,12 +18,46 @@ public class Market extends ABaseDO implements Serializable {
         this.id = id;
     }
 
-    public String getSymbol() {
-        return symbol;
+    private String coin;
+
+    private String referCurrency;
+
+    private String origin;
+
+    private BigDecimal lastPrice;// Last
+
+    private BigDecimal bid;// Bid
+
+    private BigDecimal ask;// Ask
+
+    private BigDecimal mid;// Mid
+
+    private BigDecimal low;// Low
+
+    private BigDecimal high;// High
+
+    private String volume;// Volume
+
+    private Date updateDatetime;
+
+    private List<String> coinList;
+
+    public List<String> getCoinList() {
+        return coinList;
     }
 
-    public void setSymbol(String symbol) {
-        this.symbol = symbol;
+    public void setCoinList(List<String> coinList) {
+        this.coinList = coinList;
+    }
+
+    private static final long serialVersionUID = 1L;
+
+    public String getCoin() {
+        return coin;
+    }
+
+    public void setCoin(String coin) {
+        this.coin = coin == null ? null : coin.trim();
     }
 
     public String getReferCurrency() {
@@ -73,7 +65,8 @@ public class Market extends ABaseDO implements Serializable {
     }
 
     public void setReferCurrency(String referCurrency) {
-        this.referCurrency = referCurrency;
+        this.referCurrency = referCurrency == null ? null : referCurrency
+            .trim();
     }
 
     public String getOrigin() {
@@ -81,7 +74,7 @@ public class Market extends ABaseDO implements Serializable {
     }
 
     public void setOrigin(String origin) {
-        this.origin = origin;
+        this.origin = origin == null ? null : origin.trim();
     }
 
     public BigDecimal getLastPrice() {
@@ -137,7 +130,7 @@ public class Market extends ABaseDO implements Serializable {
     }
 
     public void setVolume(String volume) {
-        this.volume = volume;
+        this.volume = volume == null ? null : volume.trim();
     }
 
     public Date getUpdateDatetime() {
@@ -147,21 +140,4 @@ public class Market extends ABaseDO implements Serializable {
     public void setUpdateDatetime(Date updateDatetime) {
         this.updateDatetime = updateDatetime;
     }
-
-    public String getCoinmarketcapId() {
-        return CoinmarketcapId;
-    }
-
-    public void setCoinmarketcapId(String coinmarketcapId) {
-        CoinmarketcapId = coinmarketcapId;
-    }
-
-    public List<String> getCoinList() {
-        return coinList;
-    }
-
-    public void setCoinList(List<String> coinList) {
-        this.coinList = coinList;
-    }
-
 }

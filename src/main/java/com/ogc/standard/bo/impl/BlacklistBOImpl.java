@@ -78,11 +78,10 @@ public class BlacklistBOImpl extends PaginableBOImpl<Blacklist>
     }
 
     @Override
-    public void isAddBlacklist(String userId, String type) {
+    public void isAddBlacklist(String userId) {
 
         Blacklist condition = new Blacklist();
         condition.setUserId(userId);
-        condition.setType(type);
         condition.setStatus(EBlacklistStatus.VALID.getCode());
         if (getTotalCount(condition) > 0) {
             throw new BizException("xn000000", "该用户已经在黑名单中");

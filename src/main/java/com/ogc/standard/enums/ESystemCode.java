@@ -17,7 +17,7 @@ import java.util.Map;
  * @history:
  */
 public enum ESystemCode {
-    BZ("CD-OGC000000", "标准系统");
+    BZ("CD-OGC000000", "标准系统"),COIN("CD-COIN000017", "区块链货币");
 
     public static Map<String, ESystemCode> getCurrencyMap() {
         Map<String, ESystemCode> map = new HashMap<String, ESystemCode>();

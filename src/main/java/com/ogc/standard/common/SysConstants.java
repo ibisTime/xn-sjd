@@ -3,6 +3,8 @@ package com.ogc.standard.common;
 public class SysConstants {
 
     public static final String admin = "admin";
+    
+    public static final String ACTIVITY_TRADE_FEE_RATE = "activity_trade_fee_rate"; // 活动期间交易广告费
 
     public static final String COLLECTION_LIMIT = "collection_limit"; // 账户余额大于等于该值时，进行归集
 
@@ -58,6 +60,15 @@ public class SysConstants {
     public static String QX_SMS_NOTICE = "qx_sms_notice";// 取现短信通知
 
     // ****** 短信模板 ******
+    
+    // 有人仲裁
+    public static String ARBITRATE = "您有一个新的仲裁订单（编号：%s）需要处理！"; 
+    
+    // 有人下单
+    public static String ORDER_SUBMIT = "您发布的广告已经有新用户下单了噢，赶紧去处理吧！"; 
+
+    // 有人开始聊天
+    public static String ORDER_CONTACT = "您的广告刚刚被新用户关注，可能随时跟您聊天，赶紧去看看吧！"; 
 
     // 有人提现通知运营人员
     public static String WITHDRAW_CN = "您有一个新的取现订单（编号：%s），请及时处理！";

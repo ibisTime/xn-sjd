@@ -31,7 +31,7 @@ public class BlacklistAOImpl implements IBlacklistAO {
         if (user == null) {
             throw new BizException("xn000000", "用户编号不存在");
         }
-        blacklistBO.isAddBlacklist(userId, type);
+        blacklistBO.isAddBlacklist(userId);
         blacklistBO.saveBlacklist(user, type, updater, remark);
         // 修改用户状态为人工锁定
         userBO.refreshStatus(userId, EUserStatus.Ren_Locked, updater, remark);

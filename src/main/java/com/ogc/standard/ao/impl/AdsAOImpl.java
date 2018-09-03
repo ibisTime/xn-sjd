@@ -25,7 +25,6 @@ import com.ogc.standard.bo.IUserRelationBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.BTCUtil;
 import com.ogc.standard.common.CoinUtil;
-import com.ogc.standard.common.SCUtil;
 import com.ogc.standard.common.SysConstants;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.domain.Account;
@@ -165,7 +164,7 @@ public class AdsAOImpl implements IAdsAO {
         }
 
         // 检查 平台 黑名单
-        this.checkPlatformBlackList(user.getUserId());
+        blacklistBO.isAddBlacklist(user.getUserId());
 
         String publishType = req.getPublishType();
 
@@ -295,15 +294,7 @@ public class AdsAOImpl implements IAdsAO {
 
     }
 
-    private void checkPlatformBlackList(String userId) {
-
-        String flag = this.blacklistBO.isAddBlacklist(userId);
-        if (flag.equals(EBoolean.YES.getCode())) {
-            throw new BizException("xn000", "您已被平台加入黑名单，不能进行该项操作。如有疑问请联系客服。");
-        }
-
-    }
-
+    
     private void checkHaveSameTypeShangJiaAds(String userId, String tradeType,
             String tradeCoin) {
 
@@ -533,8 +524,6 @@ public class AdsAOImpl implements IAdsAO {
         Double x = 0d;
         if (ECoin.ETH.getCode().equals(market.getCoin())) {
             x = this.sysConfigBO.getDoubleValue(SysConstants.ETH_COIN_PRICE_X);
-        } else if (ECoin.SC.getCode().equals(market.getCoin())) {
-            x = this.sysConfigBO.getDoubleValue(SysConstants.SC_COIN_PRICE_X);
         } else if (ECoin.BTC.getCode().equals(market.getCoin())) {
             x = this.sysConfigBO.getDoubleValue(SysConstants.BTC_COIN_PRICE_X);
         }
@@ -603,8 +592,6 @@ public class AdsAOImpl implements IAdsAO {
             BigDecimal maxSellEther = BigDecimal.ZERO;
             if (ECoin.ETH.getCode().equals(newAds.getTradeCoin())) {
                 maxSellEther = Convert.fromWei(maxSell, Convert.Unit.ETHER);
-            } else if (ECoin.SC.getCode().equals(newAds.getTradeCoin())) {
-                maxSellEther = SCUtil.fromHasting(maxSell);
             } else if (ECoin.BTC.getCode().equals(newAds.getTradeCoin())) {
                 maxSellEther = BTCUtil.fromBtc(maxSell);
             }
@@ -669,16 +656,19 @@ public class AdsAOImpl implements IAdsAO {
             // 算出应该退还的广告费
             BigDecimal backFee = leftCount.multiply(ads.getFeeRate())
                 .setScale(0, BigDecimal.ROUND_DOWN);
+            
 
+                    
+            Account dbAccount=accountBO.getAccountByUser(ads.getUserId(), ads.getTradeCurrency());
             // 解冻 未卖出金额
-            accountBO.unfrozenAmount(ads.getUserId(), ads.getTradeCoin(),
+            accountBO.unfrozenAmount(dbAccount,
                 ads.getLeftCount(), EJourBizTypeUser.AJ_ADS_UNFROZEN.getCode(),
                 EJourBizTypeUser.AJ_ADS_UNFROZEN.getValue() + "-广告未卖出部分解冻",
                 ads.getCode());
 
             if (backFee.compareTo(BigDecimal.ZERO) > 0) {
                 // 解冻广告费
-                accountBO.unfrozenAmount(ads.getUserId(), ads.getTradeCoin(),
+                accountBO.unfrozenAmount(dbAccount,
                     backFee, EJourBizTypeUser.AJ_ADS_UNFROZEN.getCode(),
                     EJourBizTypeUser.AJ_ADS_UNFROZEN.getValue() + "-广告费解冻",
                     ads.getCode());
@@ -690,12 +680,13 @@ public class AdsAOImpl implements IAdsAO {
         BigDecimal feeRate = ads.getFeeRate();
         BigDecimal fee = ads.getTotalCount().multiply(feeRate);
 
-        accountBO.frozenAmount(ads.getUserId(), ads.getTradeCoin(),
+        Account dbAccount=accountBO.getAccountByUser(ads.getUserId(), ads.getTradeCurrency());
+        accountBO.frozenAmount(dbAccount,
             ads.getTotalCount(), EJourBizTypeUser.AJ_ADS_FROZEN.getCode(),
             EJourBizTypeUser.AJ_ADS_FROZEN.getValue(), ads.getCode());
 
         // 冻结 对应的广告费
-        accountBO.frozenAmount(ads.getUserId(), ads.getTradeCoin(), fee,
+        accountBO.frozenAmount(dbAccount, fee,
             EJourBizTypeUser.AJ_ADS_FROZEN.getCode(),
             EJourBizTypeUser.AJ_ADS_FROZEN.getValue() + "-交易广告费冻结",
             ads.getCode());

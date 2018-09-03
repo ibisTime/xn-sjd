@@ -44,7 +44,7 @@
 		<typeAlias alias="tradeOrder" type="com.ogc.standard.domain.TradeOrder" />
 		<typeAlias alias="userRelation" type="com.ogc.standard.domain.UserRelation" />
 		<typeAlias alias="userStatistics" type="com.ogc.standard.domain.UserStatistics" />
-		
+		<typeAlias alias="userSettings" type="com.ogc.standard.domain.UserSettings" />		
 		
 		<typeAlias alias="coin" type="com.ogc.standard.domain.Coin" />
 		<typeAlias alias="account" type="com.ogc.standard.domain.Account" />

@@ -2,6 +2,7 @@ package com.ogc.standard.domain;
 
 import java.util.Date;
 
+import com.ogc.standard.domain.UserStatistics;
 import com.ogc.standard.dao.base.ABaseDO;
 
 /**
@@ -119,6 +120,29 @@ public class User extends ABaseDO {
     private Date createDatetimeEnd;
 
     /***** 辅助字段 ******/
+    
+    private String kind;
+    
+    private String userRefereeLevel;
+
+    public String getUserRefereeLevel() {
+        return userRefereeLevel;
+    }
+
+    public void setUserRefereeLevel(String userRefereeLevel) {
+        this.userRefereeLevel = userRefereeLevel;
+    }
+
+    // 交易广告费率
+    private Double tradeRate;
+
+    public Double getTradeRate() {
+        return tradeRate;
+    }
+
+    public void setTradeRate(Double tradeRate) {
+        this.tradeRate = tradeRate;
+    }
 
     // 是否绑定银行卡
     private String bankcardFlag;
@@ -158,6 +182,16 @@ public class User extends ABaseDO {
 
     // 自我介绍
     private String introduce;
+    
+    private UserStatistics userStatistics;
+
+    public UserStatistics getUserStatistics() {
+        return userStatistics;
+    }
+
+    public void setUserStatistics(UserStatistics userStatistics) {
+        this.userStatistics = userStatistics;
+    }
 
     public String getGender() {
         return gender;
@@ -533,6 +567,14 @@ public class User extends ABaseDO {
 
     public void setRefereeUser(User refereeUser) {
         this.refereeUser = refereeUser;
+    }
+    
+    public String getKind() {
+        return kind;
+    }
+
+    public void setKind(String kind) {
+        this.kind = kind;
     }
 
 }

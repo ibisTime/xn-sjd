@@ -29,7 +29,6 @@ import com.ogc.standard.bo.IUserRelationBO;
 import com.ogc.standard.bo.IUserSettingsBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.BTCUtil;
-import com.ogc.standard.common.SCUtil;
 import com.ogc.standard.common.SysConstants;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.Ads;
@@ -323,8 +322,9 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
         // 改变广告可交易量
         this.adsBO.cutLeftCount(ads.getCode(), tradeCount);
 
+        Account dbAccount=accountBO.getAccountByUser(ads.getUserId(), ads.getTradeCurrency());
         // 冻结卖家 数字货币
-        this.accountBO.frozenAmount(sellUser, ads.getTradeCoin(), tradeCount,
+        this.accountBO.frozenAmount(dbAccount, tradeCount,
             EJourBizTypeUser.AJ_ADS_FROZEN.getCode(),
             EJourBizTypeUser.AJ_ADS_FROZEN.getValue() + "-提交卖出订单",
             tradeOrder.getCode());
@@ -377,10 +377,7 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
 
     private void checkPlatformBlackList(String userId) {
 
-        String flag = this.blacklistBO.isAddBlacklist(userId);
-        if (flag.equals(EBoolean.YES.getCode())) {
-            throw new BizException("xn000", "您已被平台加入黑名单，不能进行该项操作。如有疑问请联系客服。");
-        }
+        blacklistBO.isAddBlacklist(userId);
 
     }
 
@@ -403,21 +400,20 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
         // 变更广告信息 剩余可交易金额
         adsBO.addLeftCount(tradeOrder.getAdsCode(), tradeOrder.getCount());
 
+        Ads data=adsBO.adsDetail(tradeOrder.getAdsCode());
+        Account dbAccount=accountBO.getAccountByUser(data.getUserId(), data.getTradeCurrency());
         if (tradeOrder.getType().equals(ETradeOrderType.SELL.getCode())) {
             // 由于出售时冻结了，卖家的余额这里需要解冻
-            accountBO.unfrozenAmount(tradeOrder.getSellUser(),
-                tradeOrder.getTradeCoin(), tradeOrder.getCount(),
+            accountBO.unfrozenAmount(dbAccount, tradeOrder.getCount(),
                 EJourBizTypeUser.AJ_ADS_UNFROZEN.getCode(),
                 EJourBizTypeUser.AJ_ADS_UNFROZEN.getValue() + "-取消卖出订单",
                 tradeOrder.getCode());
 
         } else if (tradeOrder.getType().equals(ETradeOrderType.BUY.getCode())) {
-            Ads ads = adsBO.adsDetail(tradeOrder.getAdsCode());
-            if (EAdsStatus.XIAJIA.getCode().equals(ads.getStatus())) {
+            if (EAdsStatus.XIAJIA.getCode().equals(data.getStatus())) {
                 // 如果广告已下架，解冻卖家订单金额
                 if (tradeOrder.getCount().compareTo(BigDecimal.ZERO) > 0) {
-                    this.accountBO.unfrozenAmount(tradeOrder.getSellUser(),
-                        tradeOrder.getTradeCoin(), tradeOrder.getCount(),
+                    this.accountBO.unfrozenAmount(dbAccount, tradeOrder.getCount(),
                         EJourBizTypeUser.AJ_ADS_UNFROZEN.getCode(),
                         EJourBizTypeUser.AJ_ADS_UNFROZEN.getValue()
                                 + "-交易订单取消，解冻订单金额",
@@ -426,8 +422,7 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
 
                 // 对卖家订单冻结广告费进行解冻
                 if (tradeOrder.getFee().compareTo(BigDecimal.ZERO) > 0) {
-                    this.accountBO.unfrozenAmount(tradeOrder.getSellUser(),
-                        tradeOrder.getTradeCoin(), tradeOrder.getFee(),
+                    this.accountBO.unfrozenAmount(dbAccount, tradeOrder.getFee(),
                         EJourBizTypeUser.AJ_ADS_UNFROZEN.getCode(),
                         EJourBizTypeUser.AJ_ADS_UNFROZEN.getValue()
                                 + "-交易订单取消，解冻订单广告费",
@@ -464,22 +459,20 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
 
         // 变更广告信息 剩余可交易金额
         adsBO.addLeftCount(tradeOrder.getAdsCode(), tradeOrder.getCount());
-
+        Ads data=adsBO.adsDetail(tradeOrder.getAdsCode());
+        Account dbAccount=accountBO.getAccountByUser(data.getUserId(), data.getTradeCurrency());
         if (tradeOrder.getType().equals(ETradeOrderType.SELL.getCode())) {
             // 由于出售时冻结了，卖家的余额这里需要解冻
-            this.accountBO.unfrozenAmount(tradeOrder.getSellUser(),
-                tradeOrder.getTradeCoin(), tradeOrder.getCount(),
+            this.accountBO.unfrozenAmount(dbAccount, tradeOrder.getCount(),
                 EJourBizTypeUser.AJ_ADS_UNFROZEN.getCode(),
                 EJourBizTypeUser.AJ_ADS_UNFROZEN.getValue() + "-取消卖出订单",
                 tradeOrder.getCode());
 
         } else if (tradeOrder.getType().equals(ETradeOrderType.BUY.getCode())) {
-            Ads ads = adsBO.adsDetail(tradeOrder.getAdsCode());
-            if (EAdsStatus.XIAJIA.getCode().equals(ads.getStatus())) {
+            if (EAdsStatus.XIAJIA.getCode().equals(data.getStatus())) {
                 // 如果广告已下架，解冻卖家订单金额
                 if (tradeOrder.getCount().compareTo(BigDecimal.ZERO) > 0) {
-                    this.accountBO.unfrozenAmount(tradeOrder.getSellUser(),
-                        tradeOrder.getTradeCoin(), tradeOrder.getCount(),
+                    this.accountBO.unfrozenAmount(dbAccount, tradeOrder.getCount(),
                         EJourBizTypeUser.AJ_ADS_UNFROZEN.getCode(),
                         EJourBizTypeUser.AJ_ADS_UNFROZEN.getValue()
                                 + "-交易订单取消，解冻订单金额",
@@ -488,8 +481,7 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
 
                 // 对卖家订单冻结广告费进行解冻
                 if (tradeOrder.getFee().compareTo(BigDecimal.ZERO) > 0) {
-                    this.accountBO.unfrozenAmount(tradeOrder.getSellUser(),
-                        tradeOrder.getTradeCoin(), tradeOrder.getFee(),
+                    this.accountBO.unfrozenAmount(dbAccount, tradeOrder.getFee(),
                         EJourBizTypeUser.AJ_ADS_UNFROZEN.getCode(),
                         EJourBizTypeUser.AJ_ADS_UNFROZEN.getValue()
                                 + "-交易订单取消，解冻订单广告费",
@@ -649,8 +641,10 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
 
         // 通知相关人员
         String content = String.format(SysConstants.ARBITRATE, arbitrateCode);
+        SYSDict condition=new SYSDict();
+        condition.setParentKey(SysConstants.ZC_SMS_NOTICE);
         List<SYSDict> mobiledDicts = sysDictBO
-            .querySYSDictList(SysConstants.ZC_SMS_NOTICE);
+            .querySYSDictList(condition);
         for (SYSDict sysDict : mobiledDicts) {
             smsOutBO.sendSmsOut(sysDict.getDkey(), content,
                 ESystemCode.COIN.getCode(), ESystemCode.COIN.getCode());
@@ -757,10 +751,10 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
 
         // 充值对应流水记录
 
-        XN802523Req req = new XN802523Req();
-        req.setRefNo(tradeOrder.getCode());
-        req.setSystemCode(ESystemCode.COIN.getCode());
-        List<Jour> jourList = jourBO.queryJourList(req);
+        Jour condition = new Jour();
+        condition.setRefNo(tradeOrder.getCode());
+        
+        List<Jour> jourList = jourBO.queryJourList(condition);
 
         res.setTradeOrder(tradeOrder);
         res.setJourList(jourList);
@@ -833,15 +827,16 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
 
         // 1.卖家 冻结金额减少
 
+        Account dbAccount=accountBO.getAccountByUser(tradeOrder.getSellUser(), tradeOrder.getTradeCoin());
         // 1.1 解冻卖家 冻结金额
-        this.accountBO.unfrozenAmount(tradeOrder.getSellUser(),
-            tradeOrder.getTradeCoin(), tradeOrder.getCount(),
+        this.accountBO.unfrozenAmount(dbAccount, tradeOrder.getCount(),
             EJourBizTypeUser.AJ_ADS_UNFROZEN.getCode(),
             EJourBizTypeUser.AJ_ADS_UNFROZEN.getValue() + "-订单释放解冻",
             tradeOrder.getCode());
 
         // 1.2扣除卖家账户金额,买家 账户余额增加
-        accountBO.transAmount(tradeOrder.getSellUser(), tradeOrder.getBuyUser(),
+        accountBO.transAmount(tradeOrder.getSellUser(),
+            tradeOrder.getTradeCoin(), tradeOrder.getBuyUser(),
             tradeOrder.getTradeCoin(), tradeOrder.getCount(),
             EJourBizTypeUser.AJ_SELL.getCode(),
             EJourBizTypeUser.AJ_BUY.getCode(),
@@ -852,7 +847,7 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
 
             // 2.2买家 扣除交易广告费,平台 盈亏账户加钱
             accountBO.transAmount(tradeOrder.getBuyUser(),
-                ESysUser.SYS_USER.getCode(), tradeOrder.getTradeCoin(),
+                 tradeOrder.getTradeCoin(),ESysUser.SYS_USER.getCode(),tradeOrder.getTradeCoin(),
                 tradeOrder.getFee(), EJourBizTypeUser.AJ_TRADEFEE.getCode(),
                 EJourBizTypePlat.AJ_TRADEFEE.getCode(),
                 EJourBizTypeUser.AJ_TRADEFEE.getValue(),
@@ -881,21 +876,14 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
             String thenRefereeUserLevel, TradeOrder tradeOrder) {
         Double fenChengFee = null;
 
-        if (thenRefereeUserLevel.equals(EUserLevel.ONE.getCode())) {
-            // 推荐人为普通
-            fenChengFee = refereeUser.getDivRate1();
-        } else {
-            // 推荐人代理人
-            fenChengFee = refereeUser.getDivRate2();
-        }
-
+       
         BigDecimal shouldPayFenCheng = tradeOrder.getFee()
             .multiply(BigDecimal.valueOf(fenChengFee));
 
         // 4.1平台盈亏账户，减少
         accountBO.transAmount(ESysUser.SYS_USER.getCode(),
-            refereeUser.getUserId(), tradeOrder.getTradeCoin(),
-            shouldPayFenCheng, EJourBizTypePlat.AJ_INVITE.getCode(),
+             tradeOrder.getTradeCoin(),refereeUser.getUserId(),
+             tradeOrder.getTradeCoin(),shouldPayFenCheng, EJourBizTypePlat.AJ_INVITE.getCode(),
             EJourBizTypeUser.AJ_INVITE.getCode(),
             EJourBizTypePlat.AJ_INVITE.getValue(),
             EJourBizTypeUser.AJ_INVITE.getValue() + "-推荐的用户完成交易获得分成",
@@ -905,22 +893,23 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
     // 出售广告处理，购买 释放处理
     private void doTransferBuy(TradeOrder tradeOrder) {
 
+        Account dbAccount=accountBO.getAccountByUser(tradeOrder.getSellUser(),
+            tradeOrder.getTradeCoin());
         // 1.1卖家 交易冻结 金额解冻
-        accountBO.unfrozenAmount(tradeOrder.getSellUser(),
-            tradeOrder.getTradeCoin(), tradeOrder.getCount(),
+        accountBO.unfrozenAmount(dbAccount, tradeOrder.getCount(),
             EJourBizTypeUser.AJ_ADS_UNFROZEN.getCode(),
             EJourBizTypeUser.AJ_ADS_UNFROZEN.getValue(), tradeOrder.getCode());
 
         // 1.2卖家 交易所需广告费 解冻
-        accountBO.unfrozenAmount(tradeOrder.getSellUser(),
-            tradeOrder.getTradeCoin(), tradeOrder.getFee(),
+        accountBO.unfrozenAmount(dbAccount, tradeOrder.getFee(),
             EJourBizTypeUser.AJ_ADS_UNFROZEN.getCode(),
             EJourBizTypeUser.AJ_ADS_UNFROZEN.getValue() + "-广告费解冻",
             tradeOrder.getCode());
 
         // 1.3卖家 扣除交易金额,买家账户余额增加
-        accountBO.transAmount(tradeOrder.getSellUser(), tradeOrder.getBuyUser(),
-            tradeOrder.getTradeCoin(), tradeOrder.getCount(),
+        accountBO.transAmount(tradeOrder.getSellUser(), 
+            tradeOrder.getTradeCoin(), tradeOrder.getBuyUser(),
+            tradeOrder.getTradeCoin(),tradeOrder.getCount(),
             EJourBizTypeUser.AJ_SELL.getCode(),
             EJourBizTypeUser.AJ_BUY.getCode(),
             EJourBizTypeUser.AJ_SELL.getValue(),
@@ -928,7 +917,7 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
 
         // 1.4卖家 扣除交易广告费,平台盈亏账户余额增加(有手续费，才有后续分成)
         if (tradeOrder.getFee().compareTo(BigDecimal.ZERO) > 0) {
-            accountBO.transAmount(tradeOrder.getSellUser(),
+            accountBO.transAmount(tradeOrder.getSellUser(),tradeOrder.getTradeCoin(),
                 ESysUser.SYS_USER.getCode(), tradeOrder.getTradeCoin(),
                 tradeOrder.getFee(), EJourBizTypeUser.AJ_TRADEFEE.getCode(),
                 EJourBizTypePlat.AJ_TRADEFEE.getCode(),
@@ -961,12 +950,6 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
             String outOfLeftCountString) {
         if (ECoin.ETH.getCode().equals(adsSell.getTradeCoin())) {
             if (tradePrice.multiply(Convert.fromWei(count, Unit.ETHER))
-                .subtract(tradeAmount).abs().compareTo(BigDecimal.ONE) > 0) {
-                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                    "交易总额计算有误");
-            }
-        } else if (ECoin.SC.getCode().equals(adsSell.getTradeCoin())) {
-            if (tradePrice.multiply(SCUtil.fromHasting(count))
                 .subtract(tradeAmount).abs().compareTo(BigDecimal.ONE) > 0) {
                 throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                     "交易总额计算有误");
