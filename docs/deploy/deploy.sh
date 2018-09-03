@@ -1,7 +1,7 @@
 
 #!/usr/bin/expect
 
-set tomcat_path "/mnt/www/standard/tomcat_ogc_standard"
+set tomcat_path "/mnt/www/hmoney/tomcat_hmoney_biz"
 set war_name "ogc-standard"
 set host_ip "120.26.6.213"
 set host_pwd "cdkj123456Q"
