@@ -134,4 +134,56 @@
 		<property name="paginableDAO" ref="interactDAOImpl"/>
 	</bean>
 	
+	<bean id="coinBO" class="com.ogc.standard.bo.impl.CoinBOImpl">
+		<property name="paginableDAO" ref="coinDAOImpl"/>
+	</bean>
+	
+	<bean id="personalAddressBO" class="com.ogc.standard.bo.impl.PersonalAddressBOImpl">
+		<property name="paginableDAO" ref="personalAddressDAOImpl"/>
+	</bean>
+	
+	<bean id="currencyRateBO" class="com.ogc.standard.bo.impl.CurrencyRateBOImpl">
+		<property name="paginableDAO" ref="currencyRateDAOImpl"/>
+	</bean>
+	
+	<bean id="accountBO" class="com.ogc.standard.bo.impl.AccountBOImpl">
+		<property name="paginableDAO" ref="accountDAOImpl"/>
+	</bean>
+	
+	<bean id="ethXAddressBO" class="com.ogc.standard.bo.impl.EthXAddressBOImpl">
+		<property name="paginableDAO" ref="ethXAddressDAOImpl"/>
+	</bean>
+	
+	<bean id="ethMAddressBO" class="com.ogc.standard.bo.impl.EthMAddressBOImpl">
+		<property name="paginableDAO" ref="ethMAddressDAOImpl"/>
+	</bean>
+	
+	<bean id="ethWAddressBO" class="com.ogc.standard.bo.impl.EthWAddressBOImpl">
+		<property name="paginableDAO" ref="ethWAddressDAOImpl"/>
+	</bean>
+	
+	<bean id="ethTransactionBO" class="com.ogc.standard.bo.impl.EthTransactionBOImpl">
+		<property name="paginableDAO" ref="ethTransactionDAOImpl"/>
+	</bean>
+	
+	<bean id="jourBO" class="com.ogc.standard.bo.impl.JourBOImpl">
+		<property name="paginableDAO" ref="jourDAOImpl"/>
+	</bean>
+	
+	<bean id="chargeBO" class="com.ogc.standard.bo.impl.ChargeBOImpl">
+		<property name="paginableDAO" ref="chargeDAOImpl"/>
+	</bean>
+	
+	<bean id="withdrawBO" class="com.ogc.standard.bo.impl.WithdrawBOImpl">
+		<property name="paginableDAO" ref="withdrawDAOImpl"/>
+	</bean>
+	
+	<bean id="collectBO" class="com.ogc.standard.bo.impl.CollectBOImpl">
+		<property name="paginableDAO" ref="collectDAOImpl"/>
+	</bean>
+	
+	<bean id="depositBO" class="com.ogc.standard.bo.impl.DepositBOImpl">
+		<property name="paginableDAO" ref="depositDAOImpl"/>
+	</bean>
+	
 </beans>

@@ -38,5 +38,7 @@ public class PropertiesUtil {
         public static String BLOCKCHAIN_DATA_URL = props
             .getProperty("BLOCKCHAIN_DATA_URL");// 区块链全流水查询
 
+        public static String ETH_URL = props.getProperty("ETH_URL");
+
     }
 }
