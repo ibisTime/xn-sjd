@@ -8,8 +8,10 @@ import org.springframework.stereotype.Component;
 
 import com.ogc.standard.bo.ISimuOrderDetailBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
+import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.ISimuOrderDetailDAO;
 import com.ogc.standard.domain.SimuOrderDetail;
+import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.exception.BizException;
 
 @Component
@@ -20,12 +22,15 @@ public class SimuOrderDetailBOImpl extends PaginableBOImpl<SimuOrderDetail>
     private ISimuOrderDetailDAO simuOrderDetailDAO;
 
     @Override
-    public int saveSimuOrderDetail(SimuOrderDetail data) {
-        int count = 0;
+    public String saveSimuOrderDetail(SimuOrderDetail data) {
+        String code = null;
         if (data != null) {
-            count = simuOrderDetailDAO.insert(data);
+            code = OrderNoGenerater
+                .generate(EGeneratePrefix.SIMU_ORDER_DETAIL.getCode());
+            data.setCode(code);
+            simuOrderDetailDAO.insert(data);
         }
-        return 0;
+        return code;
     }
 
     @Override

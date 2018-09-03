@@ -14,14 +14,6 @@ public class XN650050Req {
     @NotBlank
     private String userId;
 
-    // 必填，组合编号
-    @NotBlank
-    private String groupCode;
-
-    // 必填，交易所
-    @NotBlank
-    private String exchange;
-
     // 必填，交易币种
     @NotBlank
     private String symbol;
@@ -51,22 +43,6 @@ public class XN650050Req {
 
     public void setUserId(String userId) {
         this.userId = userId;
-    }
-
-    public String getGroupCode() {
-        return groupCode;
-    }
-
-    public void setGroupCode(String groupCode) {
-        this.groupCode = groupCode;
-    }
-
-    public String getExchange() {
-        return exchange;
-    }
-
-    public void setExchange(String exchange) {
-        this.exchange = exchange;
     }
 
     public String getSymbol() {

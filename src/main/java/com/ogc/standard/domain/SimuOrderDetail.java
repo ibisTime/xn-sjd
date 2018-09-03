@@ -21,6 +21,18 @@ public class SimuOrderDetail extends ABaseDO {
     // 委托单编号
     private String orderCode;
 
+    // 委托单编号
+    private String matchResultId;
+
+    // 用户编号
+    private String userId;
+
+    // 交易币种
+    private String symbol;
+
+    // 计价币种
+    private String toSymbol;
+
     // 成交价格
     private BigDecimal tradedPrice;
 
@@ -50,6 +62,38 @@ public class SimuOrderDetail extends ABaseDO {
 
     public void setOrderCode(String orderCode) {
         this.orderCode = orderCode;
+    }
+
+    public String getMatchResultId() {
+        return matchResultId;
+    }
+
+    public void setMatchResultId(String matchResultId) {
+        this.matchResultId = matchResultId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getSymbol() {
+        return symbol;
+    }
+
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
+    }
+
+    public String getToSymbol() {
+        return toSymbol;
+    }
+
+    public void setToSymbol(String toSymbol) {
+        this.toSymbol = toSymbol;
     }
 
     public BigDecimal getTradedPrice() {

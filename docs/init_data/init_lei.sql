@@ -175,3 +175,137 @@ ENGINE = InnoDB DEFAULT CHARSET=utf8
 COMMENT = '交易对';
 
 
+DROP TABLE IF EXISTS `tsimu_order`;
+CREATE TABLE IF NOT EXISTS `tsimu_order` (
+  `code` VARCHAR(32) NOT NULL COMMENT '编号',
+  `user_id` VARCHAR(32) NULL COMMENT '委托用户编号',
+  `symbol` VARCHAR(32) NULL COMMENT '交易币种',
+  `to_symbol` VARCHAR(32) NULL COMMENT '计价币种',
+  `type` VARCHAR(32) NULL COMMENT '类型(0-市价，1-限价)',
+  `direction` VARCHAR(32) NULL COMMENT '买卖方向(0-买入，1-卖出)',
+  `price` DECIMAL(64,8) NULL COMMENT '委托价格',
+  `total_count` DECIMAL(64,8) NULL COMMENT '委托总数量',
+  `total_amount` DECIMAL(64,8) NULL COMMENT '委托总金额',
+  `traded_count` DECIMAL(64,8) NULL COMMENT '已成交数量',
+  `traded_amount` DECIMAL(64,8) NULL COMMENT '已成交总金额',
+  `traded_fee` DECIMAL(64,8) NULL COMMENT '已成交总手续费',
+  `avg_price` DECIMAL(64,8) NULL COMMENT '已成交均价',
+  `last_traded_datetime` DATETIME NULL COMMENT '最后成交时间',
+  `create_datetime` DATETIME NULL COMMENT '创建时间',
+  `cancel_datetime` DATETIME NULL COMMENT '撤销时间',
+  `status` VARCHAR(32) NULL COMMENT '状态(2-部分成交撤销，3-完全成交，4-已撤销)',
+  PRIMARY KEY (`code`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COMMENT = '委托单';
+
+DROP TABLE IF EXISTS `tsimu_order_history`;
+CREATE TABLE IF NOT EXISTS `tsimu_order_history` (
+  `code` VARCHAR(32) NOT NULL COMMENT '编号',
+  `user_id` VARCHAR(32) NULL COMMENT '委托用户编号',
+  `symbol` VARCHAR(32) NULL COMMENT '交易币种',
+  `to_symbol` VARCHAR(32) NULL COMMENT '计价币种',
+  `type` VARCHAR(32) NULL COMMENT '类型(0-市价，1-限价)',
+  `direction` VARCHAR(32) NULL COMMENT '买卖方向(0-买入，1-卖出)',
+  `price` DECIMAL(64,8) NULL COMMENT '委托价格',
+  `total_count` DECIMAL(64,8) NULL COMMENT '委托总数量',
+  `total_amount` DECIMAL(64,8) NULL COMMENT '委托总金额',
+  `traded_count` DECIMAL(64,8) NULL COMMENT '已成交数量',
+  `traded_amount` DECIMAL(64,8) NULL COMMENT '已成交总金额',
+  `traded_fee` DECIMAL(64,8) NULL COMMENT '已成交总手续费',
+  `avg_price` DECIMAL(64,8) NULL COMMENT '已成交均价',
+  `last_traded_datetime` DATETIME NULL COMMENT '最后成交时间',
+  `create_datetime` DATETIME NULL COMMENT '创建时间',
+  `cancel_datetime` DATETIME NULL COMMENT '撤销时间',
+  `status` VARCHAR(32) NULL COMMENT '状态(0-待成交，1-部分成交)',
+  PRIMARY KEY (`code`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COMMENT = '历史委托单';
+
+DROP TABLE IF EXISTS `tsimu_handicap`;
+CREATE TABLE IF NOT EXISTS `tsimu_handicap` (
+  `id` BIGINT(32) NOT NULL COMMENT '编号',
+  `order_code` VARCHAR(32) NULL COMMENT '委托单',
+  `price` DECIMAL(64,8) NULL COMMENT '价格',
+  `count` DECIMAL(64,8) NULL COMMENT '数量',
+  `direction` VARCHAR(32) NULL COMMENT '买卖方向',
+  `symbol` VARCHAR(32) NULL COMMENT '交易币种',
+  `to_symbol` VARCHAR(32) NULL COMMENT '计价币种',
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COMMENT = '盘口';
+
+DROP TABLE IF EXISTS `tsimu_order_detail`;
+CREATE TABLE IF NOT EXISTS `tsimu_order_detail` (
+  `code` BIGINT(32) NOT NULL COMMENT '编号',
+  `order_code` VARCHAR(32) NULL COMMENT '委托单编号',
+  `match_result_id` BIGINT(32) NULL COMMENT '撮合编号',
+  `user_id` VARCHAR(32) NULL COMMENT '用户编号',
+  `symbol` VARCHAR(32) NULL COMMENT '交易币种',
+  `to_symbol` VARCHAR(32) NULL COMMENT '计价币种',
+  `traded_price` DECIMAL(64,8) NULL COMMENT '成交价格',
+  `traded_count` DECIMAL(64,8) NULL COMMENT '成交数量',
+  `traded_amount` DECIMAL(64,8) NULL COMMENT '成交总金额',
+  `traded_fee` DECIMAL(64,8) NULL COMMENT '成交手续费',
+  `create_datetime` DATETIME NULL COMMENT '成交时间',
+  PRIMARY KEY (`code`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COMMENT = '成交单';
+
+DROP TABLE IF EXISTS `tsimu_kline`;
+CREATE TABLE IF NOT EXISTS `tsimu_kline` (
+  `id` BIGINT(32) NOT NULL COMMENT '编号',
+  `symbol` VARCHAR(32) NULL COMMENT '交易币种',
+  `to_symbol` VARCHAR(32) NULL COMMENT '计价币种',
+  `period` VARCHAR(32) NULL COMMENT 'K线类型',
+  `volume` DECIMAL(64,8) NULL COMMENT '成交量',
+  `quantity` DECIMAL(64,8) NULL COMMENT '成交笔数',
+  `amount` DECIMAL(64,8) NULL COMMENT '成交额',
+  `open` DECIMAL(64,8) NULL COMMENT '开盘价',
+  `close` DECIMAL(64,8) NULL COMMENT '收盘价',
+  `high` DECIMAL(64,8) NULL COMMENT '最高价',
+  `low` DECIMAL(64,8) NULL COMMENT '最低价',
+  `create_datetime` DATETIME NULL COMMENT '时间',
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COMMENT = '行情K线';
+
+DROP TABLE IF EXISTS `tsimu_match_result`;
+CREATE TABLE IF NOT EXISTS `tsimu_match_result` (
+  `id` BIGINT(32) NOT NULL COMMENT '撮合编号',
+  `buy_order_code` VARCHAR(32) NULL COMMENT '买单成交单编号',
+  `sell_order_code` VARCHAR(32) NULL COMMENT '卖单成交单编号',
+  `symbol` VARCHAR(32) NULL COMMENT '交易币种',
+  `to_symbol` VARCHAR(32) NULL COMMENT '计价币种',
+  `buy_user_id` VARCHAR(32) NULL COMMENT '买方用户编号',
+  `sell_user_id` VARCHAR(32) NULL COMMENT '卖方用户编号',
+  `buy_amount` DECIMAL(64,8) NULL COMMENT '交易数量',
+  `sell_amount` DECIMAL(64,8) NULL COMMENT '计价数量',
+  `fee` DECIMAL(64,8) NULL COMMENT '手续费',
+  `create_datetime` DATETIME NULL COMMENT '撮合时间',
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COMMENT = '撮合结果';
+
+DROP TABLE IF EXISTS `tsimu_match_result_history`;
+CREATE TABLE IF NOT EXISTS `tsimu_match_result_history` (
+  `id` BIGINT(32) NULL COMMENT '撮合编号',
+  `buy_order_code` VARCHAR(32) NULL COMMENT '买单成交单编号',
+  `sell_order_code` VARCHAR(32) NULL COMMENT '卖单成交单编号',
+  `symbol` VARCHAR(32) NULL COMMENT '交易币种',
+  `to_symbol` VARCHAR(32) NULL COMMENT '计价币种',
+  `buy_user_id` VARCHAR(32) NULL COMMENT '买方用户编号',
+  `sell_user_id` VARCHAR(32) NULL COMMENT '卖方用户编号',
+  `buy_amount` DECIMAL(64,8) NULL COMMENT '交易数量',
+  `sell_amount` DECIMAL(64,8) NULL COMMENT '计价数量',
+  `fee` DECIMAL(64,8) NULL COMMENT '手续费',
+  `create_datetime` DATETIME NULL COMMENT '撮合时间',
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COMMENT = '撮合结果历史';

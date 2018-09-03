@@ -1,6 +1,5 @@
 package com.ogc.standard.bo.impl;
 
-import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -11,7 +10,8 @@ import com.ogc.standard.bo.ISimuOrderBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.dao.ISimuOrderDAO;
 import com.ogc.standard.domain.SimuOrder;
-import com.ogc.standard.enums.ESimuOrderStatus;
+import com.ogc.standard.enums.ESimuOrderDirection;
+import com.ogc.standard.enums.ESimuOrderType;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
 
@@ -47,11 +47,27 @@ public class SimuOrderBOImpl extends PaginableBOImpl<SimuOrder>
     }
 
     @Override
+    public int refreshMarketSimuOrder(SimuOrder data) {
+        int count = 0;
+        if (data != null && StringUtils.isNotBlank(data.getCode())) {
+            count = simuOrderDAO.updateMarketSimuOrder(data);
+        }
+        return count;
+    }
+
+    @Override
+    public int refreshLimitSimuOrder(SimuOrder data) {
+        int count = 0;
+        if (data != null && StringUtils.isNotBlank(data.getCode())) {
+            count = simuOrderDAO.updateLimitSimuOrder(data);
+        }
+        return count;
+    }
+
+    @Override
     public int cancel(SimuOrder data) {
         int count = 0;
         if (data != null && StringUtils.isNotBlank(data.getCode())) {
-            data.setStatus(ESimuOrderStatus.CANCEL.getCode());
-            data.setCancelDatetime(new Date());
             count = simuOrderDAO.cancel(data);
         }
         return count;
@@ -60,6 +76,28 @@ public class SimuOrderBOImpl extends PaginableBOImpl<SimuOrder>
     @Override
     public List<SimuOrder> querySimuOrderList(SimuOrder condition) {
         return simuOrderDAO.selectList(condition);
+    }
+
+    @Override
+    public List<SimuOrder> queryBidsHandicapList(int handicapQuantity) {
+        SimuOrder condition = new SimuOrder();
+        condition.setType(ESimuOrderType.LIMIT.getCode());
+        condition.setDirection(ESimuOrderDirection.BUY.getCode());
+
+        condition.setOrder("price desc, start_datetime desc");
+
+        return simuOrderDAO.selectList(condition, 1, handicapQuantity);
+    }
+
+    @Override
+    public List<SimuOrder> queryAsksHandicapList(int handicapQuantity) {
+        SimuOrder condition = new SimuOrder();
+        condition.setType(ESimuOrderType.LIMIT.getCode());
+        condition.setDirection(ESimuOrderDirection.SELL.getCode());
+
+        condition.setOrder("price asc, start_datetime asc");
+
+        return simuOrderDAO.selectList(condition, 1, handicapQuantity);
     }
 
     @Override

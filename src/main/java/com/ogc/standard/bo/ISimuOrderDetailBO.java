@@ -7,7 +7,7 @@ import com.ogc.standard.domain.SimuOrderDetail;
 
 public interface ISimuOrderDetailBO extends IPaginableBO<SimuOrderDetail> {
 
-    public int saveSimuOrderDetail(SimuOrderDetail data);
+    public String saveSimuOrderDetail(SimuOrderDetail data);
 
     public List<SimuOrderDetail> querySimuOrderDetailList(
             SimuOrderDetail condition);

@@ -5,11 +5,14 @@
 	<resultMap id="simuOrderDetail_DB_Result" type="simuOrderDetail">
 		<result column="code" property="code" />
 		<result column="order_code" property="orderCode" />
+		<result column="user_id" property="userId" />
+		<result column="symbol" property="symbol" />
+		<result column="to_symbol" property="toSymbol" />
+		
 		<result column="traded_price" property="tradedPrice" />
 		<result column="traded_count" property="tradedCount" />
 		<result column="traded_amount" property="tradedAmount" />
 		<result column="traded_fee" property="tradedFee" />
-		
 		<result column="create_datetime" property="createDatetime" />
 	</resultMap>
 	<sql id="where_condition">
@@ -26,11 +29,14 @@
 		SELECT
 		t.code
 		,t.order_code
+		,t.user_id
+		,t.symbol
+		,t.to_symbol
+		
 		,t.traded_price
 		,t.traded_count
 		,t.traded_amount
 		,t.traded_fee
-		
 		,t.create_datetime
 		FROM
 		tsimu_order_detail t
@@ -53,21 +59,27 @@
 		tsimu_order_detail(
 		code
 		,order_code
+		,user_id
+		,symbol
+		,to_symbol
+		
 		,traded_price
 		,traded_count
 		,traded_amount
-		
 		,traded_fee
 		,create_datetime
 		)
 		VALUES(
 		#{code}
 		,#{orderCode}
+		,#{userId}
+		,#{symbol}
+		,#{toSymbol}
+		
 		,#{tradedPrice}
 		,#{tradedCount}
 		,#{tradedAmount}
 		,#{tradedFee}
-		
 		,#{createDatetime}
 		)
 	</insert>

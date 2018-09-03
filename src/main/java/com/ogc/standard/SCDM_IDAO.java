@@ -12,10 +12,10 @@ public class SCDM_IDAO {
     private static String author = "lei";
 
     // 实体
-    private static String key = "groupCoinJour";
+    private static String key = "simuMatchResultHistory";
 
     // 实体名称
-    private static String keyName = "币种配置账户流水";
+    private static String keyName = "撮合结果历史";
 
     // 包路径
     private static String packge = "com.ogc.standard.";
@@ -23,14 +23,15 @@ public class SCDM_IDAO {
     // 表名
     private static String path = "/Users/lei/Desktop/temp";
 
-    private static String dbname = "tsimu_group_coin_jour";
+    private static String dbname = "tsimu_match_result_history";
 
-    private static String[] DBwords = { "code", "ref_no", "account_number",
-            "trans_amount", "group_code", "user_id", "symbol", "biz_type",
-            "biz_note", "pre_amount", "post_amount", "create_datetime" };
+    private static String[] DBwords = { "id", "buy_order_code",
+            "sell_order_code", "symbol", "to_symbol", "buy_user_id",
+            "sell_user_id", "buy_amount", "sell_amount", "fee",
+            "create_datetime" };
 
-    private static String[] DBwordsName = { "编号", "参考订单号", "账户编号", "变动金额",
-            "组合编号", "用户编号", "币种", "业务类型", "业务类型", "变动前金额", "变动后金额", "创建时间" };
+    private static String[] DBwordsName = { "撮合编号", "买单成交单编号", "卖单成交单编号",
+            "交易币种", "计价币种", "买方用户编号", "卖方用户编号", "交易数量", "计价数量", "手续费", "撮合时间" };
 
     private static String[] DOwords = getDOwords();
 
@@ -401,7 +402,7 @@ public class SCDM_IDAO {
                 + "();\n\t\t\tcondition.setCode(code);\n\t\t\t" + "data = "
                 + key
                 + "DAO.select(condition);\n\t\t\tif (data == null) {\n\t\t\t\t"
-                + "throw new BizException(\"xn0000\", \"" + "keyName"
+                + "throw new BizException(\"xn0000\", \"" + keyName
                 + "记录不存在\");\n\t\t\t" + "}\n\t\t}\n\t\treturn data;\n\t}\n}";
         return str;
     }
