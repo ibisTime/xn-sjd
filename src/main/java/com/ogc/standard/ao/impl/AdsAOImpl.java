@@ -71,7 +71,7 @@ public class AdsAOImpl implements IAdsAO {
     IAccountBO accountBO;
 
     @Autowired
-    IAdsBO iAdsBO;
+    IAdsBO adsBO;
 
     @Autowired
     ITradeOrderBO tradeOrderBO;
@@ -94,7 +94,7 @@ public class AdsAOImpl implements IAdsAO {
     @Override
     public Object frontPage(Integer start, Integer limit, Ads condition) {
 
-        Paginable<Ads> paginable = this.iAdsBO.frontPage(start, limit,
+        Paginable<Ads> paginable = this.adsBO.frontPage(start, limit,
             condition);
         List<Ads> adsList = paginable.getList();
         for (Ads ads : adsList) {
@@ -107,7 +107,7 @@ public class AdsAOImpl implements IAdsAO {
     @Override
     public Object ossPage(Integer start, Integer limit, Ads condition) {
 
-        Paginable<Ads> paginable = this.iAdsBO.ossPage(start, limit, condition);
+        Paginable<Ads> paginable = this.adsBO.ossPage(start, limit, condition);
         List<Ads> adsList = paginable.getList();
 
         for (Ads ads : adsList) {
@@ -184,7 +184,7 @@ public class AdsAOImpl implements IAdsAO {
                 throw new BizException("xn000", "请传入原广告编号");
             }
 
-            Ads lastAds = this.iAdsBO.adsDetail(oldAdsCode);
+            Ads lastAds = this.adsBO.adsDetail(oldAdsCode);
             if (lastAds == null) {
                 throw new BizException("xn000", "原广告不存在");
             }
@@ -216,7 +216,7 @@ public class AdsAOImpl implements IAdsAO {
 
     private void xiaJiaAdsAndRepublish(String oldAdsCode, XN625220Req req) {
         String userId = req.getUserId();
-        Ads oldAds = iAdsBO.adsDetail(oldAdsCode);
+        Ads oldAds = adsBO.adsDetail(oldAdsCode);
 
         // 只有待交易的可以下架
         if (!oldAds.getStatus().equals(EAdsStatus.SHANGJIA.getCode())) {
@@ -230,7 +230,7 @@ public class AdsAOImpl implements IAdsAO {
         }
 
         // 进行下架操作
-        this.iAdsBO.xiaJiaAds(oldAds);
+        this.adsBO.xiaJiaAds(oldAds);
 
         // 删除该广告所有的待下单 订单
         this.tradeOrderBO.removeDaiXiaDanOrders(oldAds.getCode());
@@ -240,7 +240,7 @@ public class AdsAOImpl implements IAdsAO {
         // 直接发布
         newAds.setStatus(EAdsStatus.SHANGJIA.getCode());
         this.handleTime(newAds);
-        if (this.iAdsBO.insertAds(newAds) != 1) {
+        if (this.adsBO.insertAds(newAds) != 1) {
             throw new BizException("xn000", "发布广告失败");
         }
 
@@ -278,7 +278,7 @@ public class AdsAOImpl implements IAdsAO {
         ads.setStatus(EAdsStatus.SHANGJIA.getCode());
 
         this.handleTime(ads);
-        int count = this.iAdsBO.draftPublish(ads);
+        int count = this.adsBO.draftPublish(ads);
         if (count != 1) {
             throw new BizException("xn000", "草稿发布失败");
         }
@@ -299,7 +299,7 @@ public class AdsAOImpl implements IAdsAO {
             String tradeCoin) {
 
         // 检查是否存在已上架的——同类型的广告
-        long count = this.iAdsBO.totalCountOfShangJiaAds(userId, tradeType,
+        long count = this.adsBO.totalCountOfShangJiaAds(userId, tradeType,
             tradeCoin);
 
         if (count > 0) {
@@ -476,7 +476,7 @@ public class AdsAOImpl implements IAdsAO {
         ads.setStatus(EAdsStatus.SHANGJIA.getCode());
 
         this.handleTime(ads);
-        if (this.iAdsBO.insertAds(ads) != 1) {
+        if (this.adsBO.insertAds(ads) != 1) {
             throw new BizException("xn000", "发布广告失败");
         }
 
@@ -493,7 +493,7 @@ public class AdsAOImpl implements IAdsAO {
         Ads ads = this.buildAds(req, OrderNoGenerater.generate("ADS"));
         ads.setStatus(EAdsStatus.DRAFT.getCode());
         this.handleTime(ads);
-        if (this.iAdsBO.insertAds(ads) != 1) {
+        if (this.adsBO.insertAds(ads) != 1) {
             throw new BizException("xn000", "发布广告失败");
         }
 
@@ -604,7 +604,7 @@ public class AdsAOImpl implements IAdsAO {
     @Override
     public Object adsDetail(String adsCode, String searchUserUserId) {
 
-        Ads ads = this.iAdsBO.adsDetail(adsCode);
+        Ads ads = this.adsBO.adsDetail(adsCode);
 
         // 获取展示时间
         ads.setDisplayTime(this.displayTimeBO.queryList(adsCode));
@@ -620,7 +620,7 @@ public class AdsAOImpl implements IAdsAO {
     @Override
     public void xiaJiaAds(String adsCode, String userId) {
 
-        Ads ads = iAdsBO.adsDetail(adsCode);
+        Ads ads = adsBO.adsDetail(adsCode);
 
         // 只有待交易的可以下架
         if (!ads.getStatus().equals(EAdsStatus.SHANGJIA.getCode())) {
@@ -634,7 +634,7 @@ public class AdsAOImpl implements IAdsAO {
         }
 
         // 进行下架操作
-        this.iAdsBO.xiaJiaAds(ads);
+        this.adsBO.xiaJiaAds(ads);
 
         // 删除该广告所有的待下单 订单
         this.tradeOrderBO.removeDaiXiaDanOrders(ads.getCode());
@@ -695,7 +695,7 @@ public class AdsAOImpl implements IAdsAO {
     @Override
     public void checkXiajia(String adsCode) {
 
-        Ads ads = iAdsBO.adsDetail(adsCode);
+        Ads ads = adsBO.adsDetail(adsCode);
         // 只有上架的 广告才可以下架。
         if (EAdsStatus.SHANGJIA.getCode().equals(ads.getStatus())) {
             // 剩余金额小于 单笔最小交易金额就下架
@@ -723,7 +723,7 @@ public class AdsAOImpl implements IAdsAO {
         Market marketSc = this.marketBO.standardMarket(ECoin.SC);
         Market marketBtc = this.marketBO.standardMarket(ECoin.BTC);
         // 1.只刷新上架状态的
-        List<Ads> shangJiaAdsList = this.iAdsBO.queryShangJiaAdsList();
+        List<Ads> shangJiaAdsList = this.adsBO.queryShangJiaAdsList();
 
         BigDecimal marketPriceEth = this.getPlatformPrice(marketEth);
         BigDecimal marketPriceSc = this.getPlatformPrice(marketSc);
@@ -765,7 +765,7 @@ public class AdsAOImpl implements IAdsAO {
             ads.setTruePrice(truePrice);
 
             // 只更新行情 和 真实价格
-            this.iAdsBO.updateAdsPriceByPrimaryKey(ads.getCode(),
+            this.adsBO.updateAdsPriceByPrimaryKey(ads.getCode(),
                 ads.getMarketPrice(), ads.getTruePrice());
 
         }

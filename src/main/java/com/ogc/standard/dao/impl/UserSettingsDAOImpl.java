@@ -9,7 +9,7 @@ import java.util.List;
 
 
 
-@Repository("UserSettingsDAOImpl")
+@Repository("userSettingsDAOImpl")
 public class UserSettingsDAOImpl extends AMybatisTemplate implements IUserSettingsDAO {
 
 

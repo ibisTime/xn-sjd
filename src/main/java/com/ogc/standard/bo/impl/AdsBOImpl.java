@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import com.ogc.standard.bo.IAdsBO;
 import com.ogc.standard.bo.base.Page;
 import com.ogc.standard.bo.base.Paginable;
+import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.dao.IAdsDAO;
 import com.ogc.standard.domain.Ads;
 import com.ogc.standard.enums.EAdsStatus;
@@ -24,7 +25,7 @@ import com.ogc.standard.exception.EBizErrorCode;
  * Created by tianlei on 2017/十一月/14.
  */
 @Component
-public class AdsBOImpl implements IAdsBO {
+public class AdsBOImpl extends PaginableBOImpl<Ads> implements IAdsBO {
 
     @Autowired
     IAdsDAO adsDAO;

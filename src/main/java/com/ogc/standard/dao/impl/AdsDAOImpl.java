@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Created by tianlei on 2017/十一月/14.
  */
-@Repository("adsSellDAOImpl")
+@Repository("adsDAOImpl")
 public class AdsDAOImpl extends AMybatisTemplate implements IAdsDAO {
 
     @Override

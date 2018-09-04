@@ -150,22 +150,6 @@
 		<property name="paginableDAO" ref="arbitrateDAOImpl"/>
 	</bean>
 	
-	<bean id="interactBO" class="com.ogc.standard.bo.impl.InteractBOImpl">
-		<property name="paginableDAO" ref="interactDAOImpl"/>
-	</bean>
-	
-	<bean id="interactBO" class="com.ogc.standard.bo.impl.InteractBOImpl">
-		<property name="paginableDAO" ref="interactDAOImpl"/>
-	</bean>
-	
-	<bean id="interactBO" class="com.ogc.standard.bo.impl.InteractBOImpl">
-		<property name="paginableDAO" ref="interactDAOImpl"/>
-	</bean>
-	
-	<bean id="interactBO" class="com.ogc.standard.bo.impl.InteractBOImpl">
-		<property name="paginableDAO" ref="interactDAOImpl"/>
-	</bean>
-
 	<bean id="coinBO" class="com.ogc.standard.bo.impl.CoinBOImpl">
 		<property name="paginableDAO" ref="coinDAOImpl"/>
 	</bean>
