@@ -8,6 +8,8 @@
  */
 package com.ogc.standard.dto.req;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 /** 
  * 下架广告
  * @author: taojian 
@@ -16,8 +18,12 @@ package com.ogc.standard.dto.req;
  */
 public class XN625222Req {
 
+    // 用户编号
+    @NotBlank
     private String userId;
-    
+
+    // 广告编号
+    @NotBlank
     private String adsCode;
 
     public String getUserId() {

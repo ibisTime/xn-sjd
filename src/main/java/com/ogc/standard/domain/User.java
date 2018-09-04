@@ -2,7 +2,6 @@ package com.ogc.standard.domain;
 
 import java.util.Date;
 
-import com.ogc.standard.domain.UserStatistics;
 import com.ogc.standard.dao.base.ABaseDO;
 
 /**
@@ -79,6 +78,9 @@ public class User extends ABaseDO {
     // 维度
     private String latitude;
 
+    // 交易广告费率
+    private Double tradeRate;
+
     // 注册时间
     private Date createDatetime;
 
@@ -120,9 +122,9 @@ public class User extends ABaseDO {
     private Date createDatetimeEnd;
 
     /***** 辅助字段 ******/
-    
+
     private String kind;
-    
+
     private String userRefereeLevel;
 
     public String getUserRefereeLevel() {
@@ -132,9 +134,6 @@ public class User extends ABaseDO {
     public void setUserRefereeLevel(String userRefereeLevel) {
         this.userRefereeLevel = userRefereeLevel;
     }
-
-    // 交易广告费率
-    private Double tradeRate;
 
     public Double getTradeRate() {
         return tradeRate;
@@ -182,7 +181,7 @@ public class User extends ABaseDO {
 
     // 自我介绍
     private String introduce;
-    
+
     private UserStatistics userStatistics;
 
     public UserStatistics getUserStatistics() {
@@ -568,7 +567,7 @@ public class User extends ABaseDO {
     public void setRefereeUser(User refereeUser) {
         this.refereeUser = refereeUser;
     }
-    
+
     public String getKind() {
         return kind;
     }

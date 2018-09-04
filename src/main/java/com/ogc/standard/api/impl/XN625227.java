@@ -4,7 +4,6 @@ import com.ogc.standard.ao.IAdsAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.ObjValidater;
-import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.domain.Ads;
 import com.ogc.standard.dto.req.XN625227Req;
 import com.ogc.standard.exception.BizException;
@@ -12,7 +11,10 @@ import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
 
 /**
- * Created by tianlei on 2017/十一月/14.
+ * 前端分页查询广告
+ * @author: taojian 
+ * @since: 2018年9月4日 下午8:18:19 
+ * @history:
  */
 public class XN625227 extends AProcessor {
 
@@ -27,13 +29,9 @@ public class XN625227 extends AProcessor {
         condition.setTradeCoin(req.getCoin());
         condition.setTradeType(req.getTradeType());
         condition.setPayType(req.getPayType());
-        condition.setTradeCoin(req.getCoin());
-        condition.setMinPrice(StringValidater.toBigDecimal(req.getMaxPrice()));
-        condition.setMinPrice(StringValidater.toBigDecimal(req.getMinPrice()));
-        int start = StringValidater.toInteger(req.getStart());
-        int limit = StringValidater.toInteger(req.getLimit());
-        return this.adsAO.frontPage(start, limit, condition);
-
+        condition.setMaxPrice(req.getMaxPrice());
+        condition.setMinPrice(req.getMinPrice());
+        return this.adsAO.frontPage(req.getStart(), req.getLimit(), condition);
     }
 
     @Override

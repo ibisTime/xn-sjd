@@ -105,7 +105,7 @@
                 </foreach>
             </if>
 
-            # 前端查询 时的条件
+            <!-- # 前端查询 时的条件 -->
             <if test="currentTime != null and currentTime != '' and currentWeek != null and currentWeek != ''">
                 AND
                  left_count > 0

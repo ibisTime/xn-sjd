@@ -28,6 +28,7 @@
 		<result column="longitude" property="longitude" />
 		
 		<result column="latitude" property="latitude" />
+		<result column="trade_rate" property="tradeRate" />
 		<result column="create_datetime" property="createDatetime" />
 		<result column="updater" property="updater" />
 		<result column="update_datetime" property="updateDatetime" />
@@ -138,6 +139,7 @@
 		,t.latitude
 		,t.create_datetime
 		
+		,t.trade_rate
 		,t.updater
 		,t.update_datetime
 		,t.remark
@@ -185,6 +187,7 @@
 
 		,latitude
 		,create_datetime
+		,trade_rate
 		,updater
 		,update_datetime
 		,remark
@@ -216,6 +219,7 @@
 		
 		,#{latitude}
 		,#{createDatetime}
+		,#{tradeRate}
 		,#{updater}
 		,#{updateDatetime}
 		,#{remark}

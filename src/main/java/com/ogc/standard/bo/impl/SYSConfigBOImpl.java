@@ -10,18 +10,16 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.ogc.standard.dto.req.XN660918Req;
-import com.ogc.standard.http.BizConnecter;
-import com.ogc.standard.http.JsonUtils;
-import com.ogc.standard.bo.impl.SYSConfigBOImpl;
-import com.ogc.standard.enums.ESystemCode;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.ogc.standard.bo.ISYSConfigBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.dao.ISYSConfigDAO;
 import com.ogc.standard.domain.SYSConfig;
+import com.ogc.standard.dto.req.XN660918Req;
 import com.ogc.standard.exception.BizException;
+import com.ogc.standard.http.BizConnecter;
+import com.ogc.standard.http.JsonUtils;
 
 /**
  * @author: xieyj 
@@ -31,7 +29,7 @@ import com.ogc.standard.exception.BizException;
 @Component
 public class SYSConfigBOImpl extends PaginableBOImpl<SYSConfig>
         implements ISYSConfigBO {
-    
+
     static Logger logger = Logger.getLogger(SYSConfigBOImpl.class);
 
     @Autowired
@@ -58,9 +56,6 @@ public class SYSConfigBOImpl extends PaginableBOImpl<SYSConfig>
         return sysConfig;
     }
 
-    /** 
-     * @see com.xnjr.base.bo.ISYSConfigBO#getConfigValue(java.lang.String)
-     */
     @Override
     public SYSConfig getConfigValue(String ckey) {
         SYSConfig result = null;
@@ -97,7 +92,7 @@ public class SYSConfigBOImpl extends PaginableBOImpl<SYSConfig>
         condition.setType(type);
         return sysConfigDAO.selectList(condition);
     }
-    
+
     @Override
     public Double getDoubleValue(String key) {
         Double result = 0.0;
@@ -105,12 +100,12 @@ public class SYSConfigBOImpl extends PaginableBOImpl<SYSConfig>
         try {
             result = Double.valueOf(config.getCvalue());
         } catch (Exception e) {
-            logger.error("参数名为" + key + "的配置转换成Double类型发生错误, 原因："
-                    + e.getMessage());
+            logger.error(
+                "参数名为" + key + "的配置转换成Double类型发生错误, 原因：" + e.getMessage());
         }
         return result;
     }
-    
+
     @Override
     public Map<String, String> getSYSConfigMap(String type, String companyCode,
             String systemCode) {

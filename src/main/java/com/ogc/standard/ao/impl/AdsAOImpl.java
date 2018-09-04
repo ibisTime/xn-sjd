@@ -337,14 +337,14 @@ public class AdsAOImpl implements IAdsAO {
         ads.setTradeType(data.getTradeType());
         ads.setTruePrice(data.getTruePrice());
         if (ECoinType.ORIGINAL.getCode().equals(coin.getType())) {// 获取市场价格
-            Market market = this.marketBO
-                .standardMarket(ECoin.getCoin(data.getTradeCoin()));
-            if (market == null) {
-                throw new BizException("xn000", "发布失败,行情价格获取异常");
-            }
-            //
-
-            BigDecimal platPrice = this.getPlatformPrice(market);
+//            Market market = this.marketBO
+//                .standardMarket(ECoin.getCoin(data.getTradeCoin()));
+//            if (market == null) {
+//                throw new BizException("xn000", "发布失败,行情价格获取异常");
+//            }
+//
+//            BigDecimal platPrice = this.getPlatformPrice(market);
+            BigDecimal platPrice = new BigDecimal(200);
             ads.setMarketPrice(platPrice);
             BigDecimal truePrice = platPrice
                 .multiply(BigDecimal.ONE.add(data.getPremiumRate()));
@@ -382,9 +382,12 @@ public class AdsAOImpl implements IAdsAO {
         if (activityTradeRate >= 0) {
             fee = activityTradeRate;
         }
-
+        // 待改正
+//        if (!fee.equals(null)) {
         ads.setFeeRate(BigDecimal.valueOf(fee));
-
+//        } else {
+//            fee = 0.1;
+//        }
         // 设置保护价
         ads.setProtectPrice(data.getProtectPrice());
         ads.setMaxTrade(data.getMaxTrade());
@@ -759,7 +762,12 @@ public class AdsAOImpl implements IAdsAO {
         data.setPayType(req.getPayType());
         data.setLeaveMessage(req.getLeaveMessage());
         data.setDisplayTime(req.getDisplayTime());
-
+        // 2. 草稿发布
+        if (req.getPublishType()
+            .equals(EAdsPublishType.PUBLISH_DRAFT.getCode())) {
+            this.draftPublish(data);
+            return;
+        }
         // 3. 重新编辑发布
         if (req.getPublishType()
             .equals(EAdsPublishType.PUBLISH_REEDIT.getCode())) {
@@ -772,12 +780,7 @@ public class AdsAOImpl implements IAdsAO {
             xiaJiaAdsAndRepublish(data);
             return;
         }
-        // 2. 草稿发布
-        if (req.getPublishType()
-            .equals(EAdsPublishType.PUBLISH_DRAFT.getCode())) {
-            this.draftPublish(data);
-            return;
-        }
+
     }
 
 }
