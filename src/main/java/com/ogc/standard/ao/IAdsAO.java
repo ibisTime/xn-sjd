@@ -1,21 +1,26 @@
 package com.ogc.standard.ao;
 
-import com.ogc.standard.domain.Ads;
-import com.ogc.standard.dto.req.XN625220Req;
-
 import java.util.List;
 
+import com.ogc.standard.domain.Ads;
+import com.ogc.standard.dto.req.XN625220Req;
+import com.ogc.standard.dto.req.XN625221Req;
+
 /**
- * Created by tianlei on 2017/十一月/14.
+ * @author: taojian 
+ * @since: 2018年9月4日 下午3:58:00 
+ * @history:
  */
 public interface IAdsAO {
 
     public void publishAds(XN625220Req req);
 
-    //谁查的详情就是谁的 userId
+    public void editAds(XN625221Req req);
+
+    // 谁查的详情就是谁的 userId
     public Object adsDetail(String adsCode, String searchUserUserId);
 
-//    public void draftPublish(XN625220Req req);
+    // public void draftPublish(XN625220Req req);
 
     public void xiaJiaAds(String adsCode, String userId);
 

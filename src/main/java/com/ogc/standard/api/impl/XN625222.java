@@ -1,42 +1,49 @@
+/**
+ * @Title XN625222.java 
+ * @Package com.ogc.standard.api.impl 
+ * @Description 
+ * @author taojian  
+ * @date 2018年9月4日 下午12:57:19 
+ * @version V1.0   
+ */
 package com.ogc.standard.api.impl;
 
 import com.ogc.standard.ao.IAdsAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.ObjValidater;
-import com.ogc.standard.dto.req.XN625220Req;
-import com.ogc.standard.dto.req.XN625221Req;
+import com.ogc.standard.dto.req.XN625222Req;
 import com.ogc.standard.dto.res.BooleanRes;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
 
-/**
- * Created by tianlei on 2017/十一月/15.
+/** 
+ * 下架广告
+ * @author: taojian 
+ * @since: 2018年9月4日 下午12:57:19 
+ * @history:
  */
-public class XN625221 extends AProcessor {
+public class XN625222 extends AProcessor {
 
-    // 草稿发布为广告
     private IAdsAO adsAO = SpringContextHolder.getBean(IAdsAO.class);
 
-    private XN625221Req req;
+    private XN625222Req req;
 
     @Override
     public Object doBusiness() throws BizException {
-
-   
-         this.adsAO.editAds(req);
-         return new BooleanRes(true);
-
+        adsAO.xiaJiaAds(req.getAdsCode(), req.getUserId());
+        return new BooleanRes(true);
     }
 
+    /** 
+     * @see com.ogc.standard.api.IProcessor#doCheck(java.lang.String, java.lang.String)
+     */
     @Override
     public void doCheck(String inputparams, String operator)
             throws ParaException {
-
-        req = JsonUtil.json2Bean(inputparams, XN625221Req.class);
-        req.setUserId(operator);
+        req = JsonUtil.json2Bean(inputparams, XN625222Req.class);
         ObjValidater.validateReq(req);
-
     }
+
 }

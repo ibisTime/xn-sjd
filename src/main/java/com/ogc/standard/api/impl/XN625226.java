@@ -14,18 +14,18 @@ import com.ogc.standard.spring.SpringContextHolder;
  */
 public class XN625226 extends AProcessor {
 
-    private IAdsAO adsAO = SpringContextHolder
-            .getBean(IAdsAO.class);
+    private IAdsAO adsAO = SpringContextHolder.getBean(IAdsAO.class);
 
-    XN625226Req req;
+    private XN625226Req req;
 
     @Override
     public Object doBusiness() throws BizException {
-        return this.adsAO.adsDetail(req.getAdsCode(),req.getUserId());
+        return this.adsAO.adsDetail(req.getAdsCode(), req.getUserId());
     }
 
     @Override
-    public void doCheck(String inputparams, String operator) throws ParaException {
+    public void doCheck(String inputparams, String operator)
+            throws ParaException {
 
         req = JsonUtil.json2Bean(inputparams, XN625226Req.class);
         ObjValidater.validateReq(req);

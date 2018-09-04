@@ -38,13 +38,14 @@ public class SYSUserAOImpl implements ISYSUserAO {
 
     // 新增用户
     @Override
-    public String addSYSUser(String mobile, String loginPwd, String realName,
-            String photo) {
+    public String addSYSUser(String mobile, String loginPwd, String roleCode,
+            String realName, String photo) {
         sysUserBO.isMobileExist(mobile);
         SYSUser data = new SYSUser();
         String userId = OrderNoGenerater.generate("U");
         data.setUserId(userId);
         data.setMobile(mobile);
+        data.setRoleCode(roleCode);
         data.setRealName(realName);
         data.setLoginName(mobile);
         data.setLoginPwd(MD5Util.md5(loginPwd));

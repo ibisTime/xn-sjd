@@ -89,6 +89,7 @@
 		,real_name
 		,photo
 		,mobile
+		,role_code
 		,login_name		
 		,login_pwd
 		,login_pwd_strength
@@ -104,6 +105,7 @@
 		,#{realName}
 		,#{photo}
 		,#{mobile}
+		,#{roleCode}
 		,#{loginName}
 		,#{loginPwd}
 		,#{loginPwdStrength}	

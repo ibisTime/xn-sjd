@@ -49,8 +49,7 @@ public class DispatcherImpl implements IDispatcher {
             }
             rm.setData(data);
         } catch (Exception e) {
-            System.out.println("sssssssssssssss" + e.getMessage());
-
+            System.out.println(e.getMessage());
             if (e instanceof BizException) {
                 rm.setErrorCode(EErrorCode.BIZ_ERR.getCode());
                 rm.setErrorInfo(((BizException) e).getErrorMessage());

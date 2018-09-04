@@ -11,7 +11,10 @@ import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
 
 /**
- * Created by tianlei on 2017/十一月/14.
+ * 保存草稿或直接发布
+ * @author: taojian 
+ * @since: 2018年9月4日 下午3:58:30 
+ * @history:
  */
 public class XN625220 extends AProcessor {
 
@@ -32,10 +35,8 @@ public class XN625220 extends AProcessor {
     @Override
     public void doCheck(String inputparams, String operator)
             throws ParaException {
-
         req = JsonUtil.json2Bean(inputparams, XN625220Req.class);
         req.setUserId(operator);
         ObjValidater.validateReq(req);
-
     }
 }

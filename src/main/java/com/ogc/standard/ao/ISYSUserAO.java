@@ -16,8 +16,8 @@ public interface ISYSUserAO {
     String DEFAULT_ORDER_COLUMN = "user_id";
 
     // 新增用户
-    public String addSYSUser(String mobile, String loginPwd, String realName,
-            String photo);
+    public String addSYSUser(String mobile, String loginPwd, String roleCode,
+            String realName, String photo);
 
     // 用户登录
     public String doLogin(String loginName, String loginPwd);

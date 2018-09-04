@@ -1,94 +1,37 @@
+/**
+ * @Title XN625227Req.java 
+ * @Package com.ogc.standard.dto.req 
+ * @Description 
+ * @author taojian  
+ * @date 2018年9月4日 下午2:59:41 
+ * @version V1.0   
+ */
 package com.ogc.standard.dto.req;
 
-import java.util.List;
+import org.hibernate.validator.constraints.NotBlank;
 
-import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.NotNull;
-
-/**
- * Created by tianlei on 2017/十一月/14.
+/** 
+ * 分页查询广告
+ * @author: taojian 
+ * @since: 2018年9月4日 下午2:59:41 
+ * @history:
  */
-public class XN625227Req {
+public class XN625227Req extends APageReq {
 
-    @NotNull
-    @DecimalMin(value = "1")
-    private Integer start;
+    private static final long serialVersionUID = -5997299880226874951L;
 
-    @NotNull
-    @DecimalMin(value = "1")
-    private Integer limit;
-
+    @NotBlank
     private String coin;
 
-    private String userId;
+    private String maxPrice;
 
-    private String tradeType;
+    private String minPrice;
 
-    private String status;
+    private String nickName;
 
     private String payType;
 
-    private String onlyTrust;
-
-    private List<String> statusList;
-
-    private List<String> currencyList;
-
-    public String getPayType() {
-        return payType;
-    }
-
-    public void setPayType(String payType) {
-        this.payType = payType;
-    }
-
-    public String getOnlyTrust() {
-        return onlyTrust;
-    }
-
-    public void setOnlyTrust(String onlyTrust) {
-        this.onlyTrust = onlyTrust;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public List<String> getStatusList() {
-        return statusList;
-    }
-
-    public void setStatusList(List<String> statusList) {
-        this.statusList = statusList;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public Integer getStart() {
-        return start;
-    }
-
-    public void setStart(Integer start) {
-        this.start = start;
-    }
-
-    public Integer getLimit() {
-        return limit;
-    }
-
-    public void setLimit(Integer limit) {
-        this.limit = limit;
-    }
+    private String tradeType;
 
     public String getCoin() {
         return coin;
@@ -98,20 +41,44 @@ public class XN625227Req {
         this.coin = coin;
     }
 
+    public String getMaxPrice() {
+        return maxPrice;
+    }
+
+    public void setMaxPrice(String maxPrice) {
+        this.maxPrice = maxPrice;
+    }
+
+    public String getMinPrice() {
+        return minPrice;
+    }
+
+    public void setMinPrice(String minPrice) {
+        this.minPrice = minPrice;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public String getPayType() {
+        return payType;
+    }
+
+    public void setPayType(String payType) {
+        this.payType = payType;
+    }
+
     public String getTradeType() {
         return tradeType;
     }
 
     public void setTradeType(String tradeType) {
         this.tradeType = tradeType;
-    }
-
-    public List<String> getCurrencyList() {
-        return currencyList;
-    }
-
-    public void setCurrencyList(List<String> currencyList) {
-        this.currencyList = currencyList;
     }
 
 }

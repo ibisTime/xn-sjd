@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ogc.standard.dao.IMarketDAO">
+
+  <resultMap id="BaseResultMap" type="com.ogc.standard.domain.Market">
+    <id column="id"  property="id" />
+    <result column="coin" jdbcType="VARCHAR" property="coin" />
+    <result column="refer_currency" jdbcType="VARCHAR" property="referCurrency" />
+    <result column="origin" jdbcType="VARCHAR" property="origin" />
+    <result column="last_price" jdbcType="DECIMAL" property="lastPrice" />
+    <result column="bid" jdbcType="DECIMAL" property="bid" />
+    <result column="ask" jdbcType="DECIMAL" property="ask" />
+    <result column="mid" jdbcType="DECIMAL" property="mid" />
+    <result column="low" jdbcType="DECIMAL" property="low" />
+    <result column="high" jdbcType="DECIMAL" property="high" />
+    <result column="volume" jdbcType="VARCHAR" property="volume" />
+    <result column="update_datetime" jdbcType="TIMESTAMP" property="updateDatetime" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, coin, refer_currency, origin, last_price, bid, ask, mid, low, high, volume,
+    update_datetime
+  </sql>
+
+  <sql id="whereCondation">
+    <trim prefix="where" prefixOverrides="AND | OR">
+      <if test="origin != null and origin != ''">
+        AND origin = #{origin}
+      </if>
+      <if test="coin != null and coin != ''">
+        AND coin = #{coin}
+      </if>
+      <if test="coinList != null">
+        AND coin in
+        <foreach collection="coinList" item="coin" open="(" close=")" separator=",">
+          #{coin}
+        </foreach>
+      </if>
+    </trim>
+  </sql>
+
+  <update id="update" parameterType="com.ogc.standard.domain.Market">
+    update tcoin_market
+    set
+    refer_currency = #{referCurrency,jdbcType=VARCHAR},
+    last_price = #{lastPrice,jdbcType=DECIMAL},
+    bid = #{bid,jdbcType=DECIMAL},
+    ask = #{ask,jdbcType=DECIMAL},
+    mid = #{mid,jdbcType=DECIMAL},
+    low = #{low,jdbcType=DECIMAL},
+    high = #{high,jdbcType=DECIMAL},
+    volume = #{volume,jdbcType=VARCHAR},
+    update_datetime = #{updateDatetime,jdbcType=TIMESTAMP}
+    where coin = #{coin} and origin = #{origin}
+  </update>
+
+  <select id="selectedByCoinTypeAndOrigin" parameterType="com.ogc.standard.domain.Market" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from tcoin_market
+    <include refid="whereCondation"/>
+  </select>
+
+  <select id="selectTotalCount" parameterType="com.ogc.standard.domain.Market"
+          resultType="java.lang.Long">
+    SELECT count(1) FROM tcoin_arbitrate t
+    <include refid="whereCondation" />
+  </select>
+
+  <select id="select" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tcoin_market
+    <include refid="whereCondation"/>
+  </select>
+
+  <select id="selectMarketAvg" resultType="Decimal" parameterType="com.ogc.standard.domain.Market">
+    SELECT avg(mid)
+    FROM tcoin_market
+    WHERE coin = #{coin}
+  </select>
+
+  <!--<select id="selectList" parameterType="java.lang.String" resultMap="BaseResultMap">-->
+    <!--select-->
+    <!--<include refid="Base_Column_List" />-->
+    <!--from tcoin_market-->
+    <!--<include refid="whereCondation"/>-->
+  <!--</select>-->
+
+</mapper>

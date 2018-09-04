@@ -30,7 +30,8 @@ public interface IAdsBO {
     // 广告详情
     public Ads adsDetail(String adsCode);
 
-    public Paginable<Ads> frontPage(Integer start, Integer limit, Ads condition);
+    public Paginable<Ads> frontPage(Integer start, Integer limit,
+            Ads condition);
 
     public Paginable<Ads> ossPage(Integer start, Integer limit, Ads condition);
 
@@ -40,7 +41,7 @@ public interface IAdsBO {
     // public void refreshStatus(String adsCode, boolean existOningOrder);
 
     // 获取
-    public long totalCountOfShangJiaAds(String userId, String tradeType,
+    public void checkHaveSameTypeShangJiaAds(String userId, String tradeType,
             String tradeCoin);
 
     public long updateAdsPriceByPrimaryKey(String adsCode,

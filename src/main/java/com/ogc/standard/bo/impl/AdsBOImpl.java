@@ -207,14 +207,34 @@ public class AdsBOImpl extends PaginableBOImpl<Ads> implements IAdsBO {
     }
 
     @Override
-    public long totalCountOfShangJiaAds(String userId, String tradeType,
+    public void checkHaveSameTypeShangJiaAds(String userId, String tradeType,
             String tradeCoin) {
+
         Ads condition = new Ads();
         condition.setTradeType(tradeType);
         condition.setUserId(userId);
         condition.setTradeCoin(tradeCoin);
         condition.setStatusList(this.shangJiaStatusList());
-        return this.adsDAO.selectTotalCount(condition);
+        long count = adsDAO.selectTotalCount(condition);
+
+        if (count > 0) {
+
+            if (tradeType.equals(ETradeType.BUY.getCode())) {
+
+                throw new BizException("xn000", "您已经有一个已上架的购买广告");
+
+            } else if (tradeType.equals(ETradeType.SELL.getCode())) {
+
+                throw new BizException("xn000", "您已经有一个已上架的出售广告");
+
+            } else {
+
+                throw new BizException("xn000", "不支持的交易类型");
+
+            }
+
+        }
+
     }
 
     // @Override

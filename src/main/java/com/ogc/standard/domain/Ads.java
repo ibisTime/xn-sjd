@@ -39,6 +39,7 @@ public class Ads extends ABaseDO implements Serializable {
 
     private BigDecimal marketPrice;
 
+    // 真实价格
     private BigDecimal truePrice;
 
     private BigDecimal protectPrice;

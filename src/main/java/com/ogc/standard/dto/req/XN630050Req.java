@@ -22,6 +22,10 @@ public class XN630050Req {
     @NotBlank(message = "真实姓名不能为空")
     private String realName;
 
+    // 角色编号
+    @NotBlank
+    private String roleCode;
+
     // （选填）头像
     private String photo;
 
@@ -55,6 +59,14 @@ public class XN630050Req {
 
     public void setPhoto(String photo) {
         this.photo = photo;
+    }
+
+    public String getRoleCode() {
+        return roleCode;
+    }
+
+    public void setRoleCode(String roleCode) {
+        this.roleCode = roleCode;
     }
 
 }

@@ -17,7 +17,7 @@ public class XN625224 extends AProcessor {
 
     private IAdsAO adsAO = SpringContextHolder.getBean(IAdsAO.class);
 
-    XN625224Req req;
+    private XN625224Req req;
 
     @Override
     public Object doBusiness() throws BizException {

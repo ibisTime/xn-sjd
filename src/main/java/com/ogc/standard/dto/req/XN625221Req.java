@@ -1,3 +1,11 @@
+/**
+ * @Title XN625221Req.java 
+ * @Package com.ogc.standard.dto.req 
+ * @Description 
+ * @author taojian  
+ * @date 2018年9月4日 上午11:38:56 
+ * @version V1.0   
+ */
 package com.ogc.standard.dto.req;
 
 import java.math.BigDecimal;
@@ -11,12 +19,20 @@ import org.hibernate.validator.constraints.NotBlank;
 
 import com.ogc.standard.domain.AdsDisplayTime;
 
-/**
- * Created by tianlei on 2017/十一月/14.
+/** 
+ * @author: taojian 
+ * @since: 2018年9月4日 上午11:38:56 
+ * @history:
  */
-public class XN625220Req {
+public class XN625221Req {
+
+    // 草稿发布时使用（必填）
+    @NotBlank
+    private String adsCode;
 
     private String userId;
+
+    
 
     // 发布类型 0 存草稿，1直接发布
     @NotBlank
@@ -33,13 +49,15 @@ public class XN625220Req {
     @NotBlank
     private String tradeCoin;
 
-    // 0=任何人都可以交易、1=只有受信任的人可以交易
+    //0=任何人都可以交易、1=只有受信任的人可以交易    
     @NotBlank
     private String onlyTrust;
-
-    // 是否需要实名认证1是0否
+    
+    //是否需要实名认证1是0否  
     @NotBlank
     private String onlyCert;
+
+    
 
     // 溢价率（原生币必填）
     @NotNull
@@ -93,6 +111,15 @@ public class XN625220Req {
     public void setTradeType(String tradeType) {
         this.tradeType = tradeType;
     }
+
+    public String getAdsCode() {
+        return adsCode;
+    }
+
+    public void setAdsCode(String adsCode) {
+        this.adsCode = adsCode;
+    }
+
 
     public String getPublishType() {
         return publishType;
@@ -205,7 +232,7 @@ public class XN625220Req {
     public void setTruePrice(BigDecimal truePrice) {
         this.truePrice = truePrice;
     }
-
+    
     public String getOnlyCert() {
         return onlyCert;
     }
@@ -213,7 +240,7 @@ public class XN625220Req {
     public void setOnlyCert(String onlyCert) {
         this.onlyCert = onlyCert;
     }
-
+    
     public String getUserId() {
         return userId;
     }

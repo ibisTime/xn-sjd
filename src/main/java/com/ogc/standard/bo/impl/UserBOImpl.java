@@ -198,6 +198,9 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             condition.setUserId(userId);
             data = userDAO.select(condition);
         }
+        if (data == null) {
+            throw new BizException("xn00000", "用户不存在");
+        }
         return data;
     }
 
