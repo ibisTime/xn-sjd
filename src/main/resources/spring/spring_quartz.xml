@@ -28,7 +28,7 @@
 				<!-- <ref bean="marketGlobalTrigger"/> -->
 				
 				<!-- 模拟交易 -->
-       		    <ref bean="doCheckDealTrigger"/>
+       		    <!-- <ref bean="doCheckDealTrigger"/> -->
        		    <!-- <ref bean="doRefreshDayMarketAmountTrigger"/> -->
        		    
 			</list>
