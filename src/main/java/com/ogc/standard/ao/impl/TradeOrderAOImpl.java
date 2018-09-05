@@ -11,8 +11,6 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.web3j.utils.Convert;
-import org.web3j.utils.Convert.Unit;
 
 import com.ogc.standard.ao.ITradeOrderAO;
 import com.ogc.standard.bo.IAccountBO;
@@ -28,7 +26,6 @@ import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.IUserRelationBO;
 import com.ogc.standard.bo.IUserSettingsBO;
 import com.ogc.standard.bo.base.Paginable;
-import com.ogc.standard.common.BTCUtil;
 import com.ogc.standard.common.SysConstants;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.Ads;
@@ -40,7 +37,6 @@ import com.ogc.standard.domain.User;
 import com.ogc.standard.domain.UserStatistics;
 import com.ogc.standard.dto.res.XN625252Res;
 import com.ogc.standard.enums.EAdsStatus;
-import com.ogc.standard.enums.ECoin;
 import com.ogc.standard.enums.ECommentLevel;
 import com.ogc.standard.enums.EJourBizTypePlat;
 import com.ogc.standard.enums.EJourBizTypeUser;
@@ -370,17 +366,16 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
     @Override
     @Transactional
     public void userCancel(String code, String updater, String remark) {
+        TradeOrder order = this.tradeOrderBO.getTradeOrder(code);
+        if (order == null) {
+            throw new BizException("xn000000", "无效的订单编号");
+        }
         TradeOrder tradeOrder = tradeOrderBO.getTradeOrder(code);
         if (!ETradeOrderStatus.TO_PAY.getCode().equals(tradeOrder.getStatus())
                 && !ETradeOrderStatus.ARBITRATE.getCode()
                     .equals(tradeOrder.getStatus())) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "当前状态下不能取消订单");
-        }
-
-        TradeOrder order = this.tradeOrderBO.getTradeOrder(code);
-        if (order == null) {
-            throw new BizException("xn000000", "无效的订单编号");
         }
 
         // 变更广告信息 剩余可交易金额
@@ -942,19 +937,19 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
     private void doAmountCheck(Ads adsSell, BigDecimal tradePrice,
             BigDecimal count, BigDecimal tradeAmount,
             String outOfLeftCountString) {
-        if (ECoin.ETH.getCode().equals(adsSell.getTradeCoin())) {
-            if (tradePrice.multiply(Convert.fromWei(count, Unit.ETHER))
-                .subtract(tradeAmount).abs().compareTo(BigDecimal.ONE) > 0) {
-                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                    "交易总额计算有误");
-            }
-        } else if (ECoin.BTC.getCode().equals(adsSell.getTradeCoin())) {
-            if (tradePrice.multiply(BTCUtil.fromBtc(count))
-                .subtract(tradeAmount).abs().compareTo(BigDecimal.ONE) > 0) {
-                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                    "交易总额计算有误");
-            }
-        }
+//        if (ECoin.ETH.getCode().equals(adsSell.getTradeCoin())) {
+//            if (tradePrice.multiply(Convert.fromWei(count, Unit.ETHER))
+//                .subtract(tradeAmount).abs().compareTo(BigDecimal.ONE) > 0) {
+//                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+//                    "交易总额计算有误");
+//            }
+//        } else if (ECoin.BTC.getCode().equals(adsSell.getTradeCoin())) {
+//            if (tradePrice.multiply(BTCUtil.fromBtc(count))
+//                .subtract(tradeAmount).abs().compareTo(BigDecimal.ONE) > 0) {
+//                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+//                    "交易总额计算有误");
+//            }
+//        }
 
         if (adsSell.getMinTrade().compareTo(tradeAmount) > 0) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
