@@ -41,12 +41,13 @@ import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECommentLevel;
 import com.ogc.standard.enums.EJourBizTypePlat;
 import com.ogc.standard.enums.EJourBizTypeUser;
+import com.ogc.standard.enums.EReleaserKind;
 import com.ogc.standard.enums.ESysUser;
 import com.ogc.standard.enums.ESystemCode;
 import com.ogc.standard.enums.ETradeOrderStatus;
 import com.ogc.standard.enums.ETradeOrderType;
 import com.ogc.standard.enums.ETradeType;
-import com.ogc.standard.enums.EUserKind;
+import com.ogc.standard.enums.EUserLevel;
 import com.ogc.standard.enums.EUserReleationType;
 import com.ogc.standard.enums.EUserSettingsType;
 import com.ogc.standard.exception.BizException;
@@ -196,6 +197,12 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
 
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "您有尚未完成的购买订单");
+        }
+        // 必须为卖币广告
+        if (!ads.getTradeType().equals(ETradeType.SELL.getCode())) {
+
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "该广告不是卖币广告");
         }
 
         // 校验广告状态，和广告 与 购买者的关系
@@ -519,30 +526,36 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
 
     @Override
     @Transactional
-    public TradeOrder release(String code, String updater, String remark) {
+    public TradeOrder release(String code, String updater, String remark,
+            String kind) {
 
         TradeOrder tradeOrder = tradeOrderBO.getTradeOrder(code);
-
+        // 操作权限判断，卖家和平台仲裁能释放订单
+        // 卖家：已支付和仲裁中的状态下可释放订单
+        // 平台：只有仲裁中的状态下可释放订单
         // 已支付 和 仲裁中的订单才能释放
+        userBO.getUser(updater);
         if (!(ETradeOrderStatus.PAYED.getCode().equals(tradeOrder.getStatus())
                 || ETradeOrderStatus.ARBITRATE.getCode()
                     .equals(tradeOrder.getStatus()))) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "当前状态下不能释放");
         }
-
-        // 操作权限判断，卖家和平台仲裁能释放订单
-        // 卖家：已支付和仲裁中的状态下可释放订单
-        // 平台：只有仲裁中的状态下可释放订单
-        User user = userBO.getUser(updater);
-        if (user != null
-                && EUserKind.Customer.getCode().equals(user.getKind())) {
-            if (!updater.equals(tradeOrder.getSellUser())) {
-
-                throw new BizException("xn000", "您不能释放该订单");
-
+        if (EReleaserKind.plat.getCode().equals(kind)) {
+            if (!ETradeOrderStatus.ARBITRATE.getCode()
+                .equals(tradeOrder.getStatus())) {
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                    "当前状态下不能释放");
             }
         }
+//        if (user != null
+//                && EUserKind.Customer.getCode().equals(user.getKind())) {
+//            if (!updater.equals(tradeOrder.getSellUser())) {
+//
+//                throw new BizException("xn000", "您不能释放该订单");
+//
+//            }
+//        }
 
         if (ETradeOrderType.BUY.getCode().equals(tradeOrder.getType())) {
 
@@ -844,27 +857,37 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
                 EJourBizTypePlat.AJ_TRADEFEE.getValue(), tradeOrder.getCode());
 
             // todo 4.推荐人有分成
-            String buyUserId = tradeOrder.getBuyUser();
-            User buyUser = this.userBO.getUser(buyUserId);
-            String refereeUserId = buyUser.getUserReferee();
-            if (!StringUtils.isNotBlank(refereeUserId)) {
-                return;
-            }
-            User refereeUser = this.userBO.getUser(refereeUserId);
-            if (refereeUser == null) {
-                return;
-            }
 
-            handleReferenceFenCheng(refereeUser, buyUser.getUserRefereeLevel(),
-                tradeOrder);
+            handleReferenceFenCheng(tradeOrder);
         }
     }
 
     // ！！！！！！！！注意！！！！！！
     // 卖出广告 和 买入广告，共用此方法
-    private void handleReferenceFenCheng(User refereeUser,
-            String thenRefereeUserLevel, TradeOrder tradeOrder) {
+    private void handleReferenceFenCheng(TradeOrder tradeOrder) {
+
+        String userId = tradeOrder.getSellUser();
+        User user = this.userBO.getUser(userId);
+
+        // 无推荐人 直接 return 掉
+        String rederUserId = user.getUserReferee();
+        if (!StringUtils.isNotBlank(rederUserId)) {
+            return;
+        }
+
+        // 推荐人为空 return
+        User refereeUser = this.userBO.getUser(rederUserId);
+        if (refereeUser == null) {
+            return;
+        }
         Double fenChengFee = null;
+        if (user.getUserRefereeLevel().equals(EUserLevel.ONE.getCode())) {
+            // 推荐人为普通
+            fenChengFee = refereeUser.getDivRate1();
+        } else {
+            // 推荐人代理人
+            fenChengFee = refereeUser.getDivRate2();
+        }
 
         BigDecimal shouldPayFenCheng = tradeOrder.getFee()
             .multiply(BigDecimal.valueOf(fenChengFee));
@@ -916,23 +939,7 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
                 EJourBizTypePlat.AJ_TRADEFEE.getValue(), tradeOrder.getCode());
 
             // 4.推荐人有分成
-            String sellUserId = tradeOrder.getSellUser();
-            User sellUser = this.userBO.getUser(sellUserId);
-
-            // 无推荐人 直接 return 掉
-            String rederUserId = sellUser.getUserReferee();
-            if (!StringUtils.isNotBlank(rederUserId)) {
-                return;
-            }
-
-            // 推荐人为空 return
-            User sellUserRefereeUser = this.userBO.getUser(rederUserId);
-            if (sellUserRefereeUser == null) {
-                return;
-            }
-            // sellUser.getRefeereLevel()
-            handleReferenceFenCheng(sellUserRefereeUser,
-                sellUser.getUserRefereeLevel(), tradeOrder);
+            handleReferenceFenCheng(tradeOrder);
         }
     }
 

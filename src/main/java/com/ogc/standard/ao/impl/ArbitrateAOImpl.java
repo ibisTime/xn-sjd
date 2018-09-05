@@ -40,17 +40,19 @@ public class ArbitrateAOImpl implements IArbitrateAO {
 
     @Override
     @Transactional
-    public void handle(String code, String result, String updater, String remark) {
+    public void handle(String code, String result, String updater,
+            String remark) {
 
         // 工单信息
         Arbitrate arbitrate = arbitrateBO.getArbitrate(code);
-        if (!EArbitrateStatus.TO_HANDLE.getCode().equals(arbitrate.getStatus())) {
+        if (!EArbitrateStatus.TO_HANDLE.getCode()
+            .equals(arbitrate.getStatus())) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "仲裁工单不处于待处理状态");
         }
         // 订单信息
-        TradeOrder tradeOrder = tradeOrderBO.getTradeOrder(arbitrate
-            .getTradeOrderCode());
+        TradeOrder tradeOrder = tradeOrderBO
+            .getTradeOrder(arbitrate.getTradeOrderCode());
 
         if (arbitrate.getYuangao().equals(tradeOrder.getBuyUser())) {
             // 买家申请仲裁
@@ -74,7 +76,7 @@ public class ArbitrateAOImpl implements IArbitrateAO {
 
             // 仲裁通过，表示买家标记打款，并且实际已支付（卖家是骗子）
             tradeOrderAO.release(tradeOrder.getCode(), updater,
-                "买家申请仲裁通过，买家实际已付款，自动释放");
+                "买家申请仲裁通过，买家实际已付款，自动释放", "P");
 
         } else {
 
@@ -98,7 +100,7 @@ public class ArbitrateAOImpl implements IArbitrateAO {
 
             // 仲裁不通过，表示买家标记打款，并且实际已付款（卖家是骗子）
             tradeOrderAO.release(tradeOrder.getCode(), updater,
-                "卖家申请仲裁不通过，买家实际已付款，自动释放");
+                "卖家申请仲裁不通过，买家实际已付款，自动释放", "P");
         }
     }
 
@@ -110,8 +112,8 @@ public class ArbitrateAOImpl implements IArbitrateAO {
         for (Arbitrate arbitrate : results.getList()) {
             arbitrate.setYuangaoInfo(userBO.getUser(arbitrate.getYuangao()));
             arbitrate.setBeigaoInfo(userBO.getUser(arbitrate.getBeigao()));
-            arbitrate.setTradeOrder(tradeOrderBO.getTradeOrder(arbitrate
-                .getTradeOrderCode()));
+            arbitrate.setTradeOrder(
+                tradeOrderBO.getTradeOrder(arbitrate.getTradeOrderCode()));
         }
         return results;
     }
@@ -126,8 +128,8 @@ public class ArbitrateAOImpl implements IArbitrateAO {
         Arbitrate arbitrate = arbitrateBO.getArbitrate(code);
         arbitrate.setYuangaoInfo(userBO.getUser(arbitrate.getYuangao()));
         arbitrate.setBeigaoInfo(userBO.getUser(arbitrate.getBeigao()));
-        arbitrate.setTradeOrder(tradeOrderBO.getTradeOrder(arbitrate
-            .getTradeOrderCode()));
+        arbitrate.setTradeOrder(
+            tradeOrderBO.getTradeOrder(arbitrate.getTradeOrderCode()));
         return arbitrate;
     }
 

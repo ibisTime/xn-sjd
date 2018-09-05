@@ -42,6 +42,12 @@ public class User extends ABaseDO {
     // 推荐人
     private String userReferee;
 
+    // 分成比例1
+    private Double divRate1;
+
+    // 分成比例2
+    private Double divRate2;
+
     // 证件类型
     private String idKind;
 
@@ -122,8 +128,6 @@ public class User extends ABaseDO {
     private Date createDatetimeEnd;
 
     /***** 辅助字段 ******/
-
-    private String kind;
 
     private String userRefereeLevel;
 
@@ -568,12 +572,19 @@ public class User extends ABaseDO {
         this.refereeUser = refereeUser;
     }
 
-    public String getKind() {
-        return kind;
+    public Double getDivRate1() {
+        return divRate1;
     }
 
-    public void setKind(String kind) {
-        this.kind = kind;
+    public void setDivRate1(Double divRate1) {
+        this.divRate1 = divRate1;
     }
 
+    public Double getDivRate2() {
+        return divRate2;
+    }
+
+    public void setDivRate2(Double divRate2) {
+        this.divRate2 = divRate2;
+    }
 }

@@ -11,13 +11,6 @@ package com.ogc.standard.bo.impl;
 import java.net.URLEncoder;
 import java.util.Map;
 
-import okhttp3.Call;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.ogc.standard.bo.ISYSConfigBO;
 import com.ogc.standard.bo.ITencentBO;
 import com.ogc.standard.common.SysConstants;
@@ -33,9 +28,14 @@ import com.ogc.standard.enums.EConfigType;
 import com.ogc.standard.enums.ESystemCode;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.tls.sigcheck.tls_sigcheck;
+
+import okhttp3.Call;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 /** 
  * @author: haiqingzheng 
@@ -122,10 +122,10 @@ public class TencentBOImpl implements ITencentBO {
         try {
             String urlString = getUrl(TENXUN_CHAT_DULI_URL);
             String result = sendChildSms(urlString, userId, nickname);
-            String errorCode = JSONObject.parseObject(result).getString(
-                "ErrorCode");
-            String errorInfo = JSONObject.parseObject(result).getString(
-                "ErrorInfo");
+            String errorCode = JSONObject.parseObject(result)
+                .getString("ErrorCode");
+            String errorInfo = JSONObject.parseObject(result)
+                .getString("ErrorInfo");
             if (!errorCode.equals("0")) {
                 throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                     "腾讯云注册异常,错误编号：" + errorCode + "，原因：" + errorInfo);
@@ -170,7 +170,8 @@ public class TencentBOImpl implements ITencentBO {
             .getResource("jnisigcheck.so").getPath());
         int ret = demo.tls_gen_signature_ex2(txAppCode, userId, secretKey);
         if (0 != ret) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "腾讯云IM签名失败");
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "腾讯云IM签名失败");
         }
         XN625000Res res = new XN625000Res();
         res.setTxAppCode(txAppCode);
@@ -235,18 +236,18 @@ public class TencentBOImpl implements ITencentBO {
             String result = doAccessHTTPPostJson(urlString, sendSms,
                 backEncodType);
 
-            String errorCode = JSONObject.parseObject(result).getString(
-                "ErrorCode");
-            String errorInfo = JSONObject.parseObject(result).getString(
-                "ErrorInfo");
-            if (!errorCode.equals("0")) {
-                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                    "腾讯云创建群组异常,错误编号：" + errorCode + "，原因：" + errorInfo);
-            }
+            String errorCode = JSONObject.parseObject(result)
+                .getString("ErrorCode");
+            String errorInfo = JSONObject.parseObject(result)
+                .getString("ErrorInfo");
+//            if (!errorCode.equals("0")) {
+//                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+//                    "腾讯云创建群组异常,错误编号：" + errorCode + "，原因：" + errorInfo);
+//            }
 
         } catch (Exception e) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "腾讯云创建群组异常，原因" + e.getMessage());
+//            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+//                "腾讯云创建群组异常，原因" + e.getMessage());
         }
     }
 
@@ -348,10 +349,10 @@ public class TencentBOImpl implements ITencentBO {
 
             String result = doAccessHTTPPostJson(urlString, paramsString,
                 backEncodType);
-            String errorCode = JSONObject.parseObject(result).getString(
-                "ErrorCode");
-            String errorInfo = JSONObject.parseObject(result).getString(
-                "ErrorInfo");
+            String errorCode = JSONObject.parseObject(result)
+                .getString("ErrorCode");
+            String errorInfo = JSONObject.parseObject(result)
+                .getString("ErrorInfo");
             if (!errorCode.equals("0")) {
                 throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                     "腾讯云发送系统消息异常,错误编号：" + errorCode + "，原因：" + errorInfo);
@@ -404,18 +405,18 @@ public class TencentBOImpl implements ITencentBO {
 
             String result = doAccessHTTPPostJson(urlString, paramsString,
                 backEncodType);
-            String errorCode = JSONObject.parseObject(result).getString(
-                "ErrorCode");
-            String errorInfo = JSONObject.parseObject(result).getString(
-                "ErrorInfo");
-            if (!errorCode.equals("0")) {
-                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                    "腾讯云发送普通消息异常,错误编号：" + errorCode + "，原因：" + errorInfo);
-            }
+            String errorCode = JSONObject.parseObject(result)
+                .getString("ErrorCode");
+            String errorInfo = JSONObject.parseObject(result)
+                .getString("ErrorInfo");
+//            if (!errorCode.equals("0")) {
+//                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+//                    "腾讯云发送普通消息异常,错误编号：" + errorCode + "，原因：" + errorInfo);
+//            }
 
         } catch (Exception e) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "腾讯云发送普通消息异常，原因" + e.getMessage());
+//            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+//                "腾讯云发送普通消息异常，原因" + e.getMessage());
         }
     }
 
@@ -446,10 +447,10 @@ public class TencentBOImpl implements ITencentBO {
 
             String result = doAccessHTTPPostJson(urlString, paramsString,
                 backEncodType);
-            String errorCode = JSONObject.parseObject(result).getString(
-                "ErrorCode");
-            String errorInfo = JSONObject.parseObject(result).getString(
-                "ErrorInfo");
+            String errorCode = JSONObject.parseObject(result)
+                .getString("ErrorCode");
+            String errorInfo = JSONObject.parseObject(result)
+                .getString("ErrorInfo");
             if (!errorCode.equals("0")) {
                 throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                     "设置昵称失败,错误编号：" + errorCode + "，原因：" + errorInfo);

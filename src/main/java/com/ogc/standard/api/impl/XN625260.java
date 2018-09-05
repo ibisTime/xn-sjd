@@ -31,9 +31,6 @@ public class XN625260 extends AProcessor {
 
     private XN625260Req req;
 
-    /** 
-     * @see com.ogc.standard.api.IProcessor#doBusiness()
-     */
     @Override
     public Object doBusiness() throws BizException {
         arbitrateAO.handle(req.getCode(), req.getResult(), req.getUpdater(),
@@ -41,11 +38,9 @@ public class XN625260 extends AProcessor {
         return new BooleanRes(true);
     }
 
-    /** 
-     * @see com.ogc.standard.api.IProcessor#doCheck(java.lang.String)
-     */
     @Override
-    public void doCheck(String inputparams, String operator) throws ParaException {
+    public void doCheck(String inputparams, String operator)
+            throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN625260Req.class);
         ObjValidater.validateReq(req);
     }
