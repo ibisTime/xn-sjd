@@ -16,7 +16,10 @@ import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
 
 /**
- * Created by tianlei on 2017/十一月/23.
+ * 查询用户统计信息（包含信任和黑名单关系）
+ * @author: taojian 
+ * @since: 2018年9月5日 上午10:07:13 
+ * @history:
  */
 public class XN625256 extends AProcessor {
 

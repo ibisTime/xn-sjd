@@ -410,17 +410,9 @@ public class TradeOrderBOImpl extends PaginableBOImpl<TradeOrder>
             ETradeOrderType tradeOrderType, String tradeCoin) {
 
         TradeOrder condition = new TradeOrder();
-
-        if (tradeOrderType.equals(ETradeOrderType.BUY)) {
-            condition.setType(ETradeOrderType.BUY.getCode());
-            condition.setBuyUser(userId);
-            condition.setTradeCoin(tradeCoin);
-        } else {
-
-            condition.setType(ETradeOrderType.SELL.getCode());
-            condition.setSellUser(userId);
-            condition.setTradeCoin(tradeCoin);
-        }
+        condition.setType(tradeOrderType.getCode());
+        condition.setBuyUser(userId);
+        condition.setTradeCoin(tradeCoin);
 
         List<String> statusList = new ArrayList<>();
         statusList.add(ETradeOrderStatus.TO_PAY.getCode());

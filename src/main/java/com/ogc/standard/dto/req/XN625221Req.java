@@ -30,14 +30,14 @@ public class XN625221Req {
     @NotBlank
     private String adsCode;
 
+    @NotBlank
     private String userId;
 
-    
-
-    // 发布类型 0 存草稿，1直接发布
+    // 发布类型 "2", "草稿发布" "3", "编辑发布，原广告下
     @NotBlank
     private String publishType;
 
+    // 交易类型 0=买币，1=卖币
     @NotBlank
     private String tradeType;
 
@@ -49,15 +49,13 @@ public class XN625221Req {
     @NotBlank
     private String tradeCoin;
 
-    //0=任何人都可以交易、1=只有受信任的人可以交易    
+    // 0=任何人都可以交易、1=只有受信任的人可以交易
     @NotBlank
     private String onlyTrust;
-    
-    //是否需要实名认证1是0否  
+
+    // 是否需要实名认证1是0否
     @NotBlank
     private String onlyCert;
-
-    
 
     // 溢价率（原生币必填）
     @NotNull
@@ -102,7 +100,8 @@ public class XN625221Req {
     @NotBlank
     private String leaveMessage;
 
-    List<AdsDisplayTime> displayTime;
+    // 相关时间
+    private List<AdsDisplayTime> displayTime;
 
     public String getTradeType() {
         return tradeType;
@@ -119,7 +118,6 @@ public class XN625221Req {
     public void setAdsCode(String adsCode) {
         this.adsCode = adsCode;
     }
-
 
     public String getPublishType() {
         return publishType;
@@ -232,7 +230,7 @@ public class XN625221Req {
     public void setTruePrice(BigDecimal truePrice) {
         this.truePrice = truePrice;
     }
-    
+
     public String getOnlyCert() {
         return onlyCert;
     }
@@ -240,7 +238,7 @@ public class XN625221Req {
     public void setOnlyCert(String onlyCert) {
         this.onlyCert = onlyCert;
     }
-    
+
     public String getUserId() {
         return userId;
     }

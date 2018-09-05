@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.IUserAO;
+import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.ISignLogBO;
 import com.ogc.standard.bo.ISmsOutBO;
@@ -67,6 +68,9 @@ public class UserAOImpl implements IUserAO {
     @Autowired
     private ISYSUserBO sysUserBO;
 
+    @Autowired
+    private IAccountBO accountBO;
+
     @Override
     public void doCheckMobile(String mobile) {
         userBO.isMobileExist(mobile);
@@ -89,7 +93,7 @@ public class UserAOImpl implements IUserAO {
         // ext中添加数据
         userExtBO.addUserExt(userId);
         String refereeUserId = refereeUser.getUserId();
-
+        // 分配账户
         return new XN805041Res(userId, true, refereeUserId);
     }
 
@@ -182,14 +186,12 @@ public class UserAOImpl implements IUserAO {
 
         // 发送短信
 
-        smsOutBO
-            .sendSmsOut(oldMobile,
-                String.format(SysConstants.DO_CHANGE_MOBILE_CN,
-                    PhoneUtil.hideMobile(oldMobile),
-                    DateUtil.dateToStr(new Date(),
-                        DateUtil.DATA_TIME_PATTERN_1),
-                    newMobile),
-                ECaptchaType.MOBILE_CHANGE.getCode());
+        smsOutBO.sendSmsOut(oldMobile,
+            String.format(SysConstants.DO_CHANGE_MOBILE_CN,
+                PhoneUtil.hideMobile(oldMobile),
+                DateUtil.dateToStr(new Date(), DateUtil.DATA_TIME_PATTERN_1),
+                newMobile),
+            ECaptchaType.MOBILE_CHANGE.getCode());
 
     }
 
@@ -215,14 +217,12 @@ public class UserAOImpl implements IUserAO {
         userBO.refreshMobile(userId, newMobile);
 
         // 发送短信
-        smsOutBO
-            .sendSmsOut(oldMobile,
-                String.format(SysConstants.DO_CHANGE_MOBILE_CN,
-                    PhoneUtil.hideMobile(oldMobile),
-                    DateUtil.dateToStr(new Date(),
-                        DateUtil.DATA_TIME_PATTERN_1),
-                    newMobile),
-                ECaptchaType.MOBILE_CHANGE.getCode());
+        smsOutBO.sendSmsOut(oldMobile,
+            String.format(SysConstants.DO_CHANGE_MOBILE_CN,
+                PhoneUtil.hideMobile(oldMobile),
+                DateUtil.dateToStr(new Date(), DateUtil.DATA_TIME_PATTERN_1),
+                newMobile),
+            ECaptchaType.MOBILE_CHANGE.getCode());
     }
 
     @Override

@@ -84,19 +84,13 @@ public class AdsBOImpl extends PaginableBOImpl<Ads> implements IAdsBO {
             throw new BizException("xn000", "改变金额需大于0");
         }
 
-        Ads condition = new Ads();
-        condition.setCode(adsCode);
-        Ads ads = this.adsDAO.select(condition);
+        Ads ads = adsDetail(adsCode);
 
-        if (ads == null) {
-            throw new BizException("xn", "广告不存在");
-        }
-
-        Ads updateCcondition = new Ads();
-        updateCcondition.setCode(ads.getCode());
-        updateCcondition.setLeftCount(ads.getLeftCount().subtract(value));
+        Ads updateCondition = new Ads();
+        updateCondition.setCode(ads.getCode());
+        updateCondition.setLeftCount(ads.getLeftCount().subtract(value));
         // 校验余额
-        int count = this.adsDAO.updateByPrimaryKeySelective(updateCcondition);
+        int count = this.adsDAO.updateByPrimaryKeySelective(updateCondition);
         if (count != 1) {
             throw new BizException("xn", "更新失败可售余额失败");
         }

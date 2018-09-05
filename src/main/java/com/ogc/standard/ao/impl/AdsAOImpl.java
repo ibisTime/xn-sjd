@@ -382,12 +382,7 @@ public class AdsAOImpl implements IAdsAO {
         if (activityTradeRate >= 0) {
             fee = activityTradeRate;
         }
-        // 待改正
-//        if (!fee.equals(null)) {
         ads.setFeeRate(BigDecimal.valueOf(fee));
-//        } else {
-//            fee = 0.1;
-//        }
         // 设置保护价
         ads.setProtectPrice(data.getProtectPrice());
         ads.setMaxTrade(data.getMaxTrade());
@@ -637,7 +632,7 @@ public class AdsAOImpl implements IAdsAO {
         BigDecimal fee = ads.getTotalCount().multiply(feeRate);
 
         Account dbAccount = accountBO.getAccountByUser(ads.getUserId(),
-            ads.getTradeCurrency());
+            ads.getTradeCoin());
         // 冻结交易金额
         accountBO.frozenAmount(dbAccount, ads.getTotalCount(),
             EJourBizTypeUser.AJ_ADS_FROZEN.getCode(),

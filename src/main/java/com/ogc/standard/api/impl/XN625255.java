@@ -13,7 +13,10 @@ import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
 
 /**
- * Created by tianlei on 2017/十一月/22.
+ * 查询用户的交易量
+ * @author: taojian 
+ * @since: 2018年9月5日 上午10:07:49 
+ * @history:
  */
 public class XN625255 extends AProcessor {
 
@@ -26,8 +29,8 @@ public class XN625255 extends AProcessor {
     public Object doBusiness() throws BizException {
 
         XN625255Res res = new XN625255Res();
-        BigDecimal totalTradeCount = this.tradeOrderAO.getUserTotalTradeCount(
-            req.getUserId(), req.getCurrency());
+        BigDecimal totalTradeCount = this.tradeOrderAO
+            .getUserTotalTradeCount(req.getUserId(), req.getCurrency());
         res.setTotalTradeCount(totalTradeCount.toString());
         return res;
     }

@@ -4,7 +4,6 @@ import com.ogc.standard.ao.IAdsAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.ObjValidater;
-import com.ogc.standard.dto.req.XN625220Req;
 import com.ogc.standard.dto.req.XN625221Req;
 import com.ogc.standard.dto.res.BooleanRes;
 import com.ogc.standard.exception.BizException;
@@ -12,11 +11,13 @@ import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
 
 /**
- * Created by tianlei on 2017/十一月/15.
+ * 广告修改
+ * @author: taojian 
+ * @since: 2018年9月5日 下午4:34:26 
+ * @history:
  */
 public class XN625221 extends AProcessor {
 
-    // 草稿发布为广告
     private IAdsAO adsAO = SpringContextHolder.getBean(IAdsAO.class);
 
     private XN625221Req req;
@@ -24,9 +25,8 @@ public class XN625221 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
 
-   
-         this.adsAO.editAds(req);
-         return new BooleanRes(true);
+        this.adsAO.editAds(req);
+        return new BooleanRes(true);
 
     }
 

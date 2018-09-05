@@ -22,6 +22,7 @@ public class XN625220Req {
     @NotBlank
     private String publishType;
 
+    // 支付方式（0=支付宝、1=微信、2=银行卡转账）
     @NotBlank
     private String tradeType;
 

@@ -25,8 +25,8 @@ import com.ogc.standard.spring.SpringContextHolder;
 
 /** 
  * 我要购买
- * @author: haiqingzheng 
- * @since: 2017年11月14日 下午12:40:28 
+ * @author: taojian 
+ * @since: 2018年9月5日 上午10:15:41 
  * @history:
  */
 public class XN625240 extends AProcessor {
@@ -38,9 +38,6 @@ public class XN625240 extends AProcessor {
 
     private XN625240Req req;
 
-    /** 
-     * @see com.ogc.standard.api.IProcessor#doBusiness()
-     */
     @Override
     public Object doBusiness() throws BizException {
         synchronized (XN625240.class) {
@@ -57,9 +54,6 @@ public class XN625240 extends AProcessor {
         }
     }
 
-    /** 
-     * @see com.ogc.standard.api.IProcessor#doCheck(java.lang.String)
-     */
     @Override
     public void doCheck(String inputparams, String operator)
             throws ParaException {
