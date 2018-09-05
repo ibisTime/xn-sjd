@@ -28,7 +28,7 @@ public interface IAdsBO {
     public int draftPublish(Ads adsSell);
 
     // 广告详情
-    public Ads adsDetail(String adsCode);
+    public Ads getAds(String adsCode);
 
     public Paginable<Ads> frontPage(Integer start, Integer limit,
             Ads condition);

@@ -37,6 +37,7 @@ import com.ogc.standard.domain.User;
 import com.ogc.standard.domain.UserStatistics;
 import com.ogc.standard.dto.res.XN625252Res;
 import com.ogc.standard.enums.EAdsStatus;
+import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECommentLevel;
 import com.ogc.standard.enums.EJourBizTypePlat;
 import com.ogc.standard.enums.EJourBizTypeUser;
@@ -111,7 +112,7 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
         }
 
         // 获取广告详情
-        Ads ads = adsBO.adsDetail(adsCode);
+        Ads ads = adsBO.getAds(adsCode);
 
         // 校验广告状态，和广告 与 下单者的关系
         this.checkAdsStatusAndMasterCannotBuy(ads, buyUser);
@@ -143,7 +144,7 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
         // 检查黑名单
         blacklistBO.isAddBlacklist(sellUser);
         // 获取广告详情
-        Ads ads = adsBO.adsDetail(adsCode);
+        Ads ads = adsBO.getAds(adsCode);
 
         // 校验广告状态，和广告 与 下单者的关系
         this.checkAdsStatusAndMasterCannotBuy(ads, sellUser);
@@ -176,7 +177,7 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
         TradeOrder tradeOrder = null;
 
         // 获取广告详情
-        Ads ads = adsBO.adsDetail(adsCode);
+        Ads ads = adsBO.getAds(adsCode);
 
         // 校验用户是否存在
         User user = this.userBO.getUser(buyUser);
@@ -250,7 +251,7 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
         TradeOrder tradeOrder = null;
 
         // 获取广告详情
-        Ads ads = this.adsBO.adsDetail(adsCode);
+        Ads ads = this.adsBO.getAds(adsCode);
 
         // 检查黑名单
         blacklistBO.isAddBlacklist(sellUser);
@@ -333,7 +334,7 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
     // 校验广告交易状态，主人不能 购买 或者 出售
     private void checkAdsStatusAndMasterCannotBuy(Ads ads, String applyUser) {
 
-        if (ads.getOnlyTrust().equals("1")) {
+        if (ads.getOnlyTrust().equals(EBoolean.YES.getCode())) {
 
             if (!this.userRelationBO.checkReleation(ads.getUserId(), applyUser,
                 EUserReleationType.TRUST.getCode())) {
@@ -381,7 +382,7 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
         // 变更广告信息 剩余可交易金额
         adsBO.addLeftCount(tradeOrder.getAdsCode(), tradeOrder.getCount());
 
-        Ads data = adsBO.adsDetail(tradeOrder.getAdsCode());
+        Ads data = adsBO.getAds(tradeOrder.getAdsCode());
         Account dbAccount = accountBO.getAccountByUser(data.getUserId(),
             data.getTradeCurrency());
         if (tradeOrder.getType().equals(ETradeOrderType.SELL.getCode())) {
@@ -443,7 +444,7 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
 
         // 变更广告信息 剩余可交易金额
         adsBO.addLeftCount(tradeOrder.getAdsCode(), tradeOrder.getCount());
-        Ads data = adsBO.adsDetail(tradeOrder.getAdsCode());
+        Ads data = adsBO.getAds(tradeOrder.getAdsCode());
         Account dbAccount = accountBO.getAccountByUser(data.getUserId(),
             data.getTradeCurrency());
         if (tradeOrder.getType().equals(ETradeOrderType.SELL.getCode())) {
@@ -530,8 +531,9 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
                 "当前状态下不能释放");
         }
 
-        // 操作权限判断
-        // 卖家能释放订单
+        // 操作权限判断，卖家和平台仲裁能释放订单
+        // 卖家：已支付和仲裁中的状态下可释放订单
+        // 平台：只有仲裁中的状态下可释放订单
         User user = userBO.getUser(updater);
         if (user != null
                 && EUserKind.Customer.getCode().equals(user.getKind())) {
