@@ -39,7 +39,7 @@ public class AdsBOImpl extends PaginableBOImpl<Ads> implements IAdsBO {
     }
 
     @Override
-    public Ads adsDetail(String adsCode) {
+    public Ads getAds(String adsCode) {
 
         Ads condition = new Ads();
         condition.setCode(adsCode);
@@ -84,7 +84,7 @@ public class AdsBOImpl extends PaginableBOImpl<Ads> implements IAdsBO {
             throw new BizException("xn000", "改变金额需大于0");
         }
 
-        Ads ads = adsDetail(adsCode);
+        Ads ads = getAds(adsCode);
 
         Ads updateCondition = new Ads();
         updateCondition.setCode(ads.getCode());
