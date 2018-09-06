@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.IUserAO;
 import com.ogc.standard.bo.IAccountBO;
+import com.ogc.standard.bo.ICoinBO;
 import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.ISignLogBO;
 import com.ogc.standard.bo.ISmsOutBO;
@@ -36,7 +37,6 @@ import com.ogc.standard.domain.UserExt;
 import com.ogc.standard.dto.req.XN805041Req;
 import com.ogc.standard.dto.req.XN805042Req;
 import com.ogc.standard.dto.req.XN805081Req;
-import com.ogc.standard.dto.res.XN805041Res;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECaptchaType;
 import com.ogc.standard.enums.ESignLogType;
@@ -71,13 +71,16 @@ public class UserAOImpl implements IUserAO {
     @Autowired
     private IAccountBO accountBO;
 
+    @Autowired
+    private ICoinBO coinBO;
+
     @Override
     public void doCheckMobile(String mobile) {
         userBO.isMobileExist(mobile);
     }
 
     @Override
-    public XN805041Res doRegister(XN805041Req req) {
+    public String doRegister(XN805041Req req) {
         // 验证手机号是否存在
         userBO.isMobileExist(req.getMobile());
 
@@ -92,9 +95,15 @@ public class UserAOImpl implements IUserAO {
             req.getArea());
         // ext中添加数据
         userExtBO.addUserExt(userId);
-        String refereeUserId = refereeUser.getUserId();
+//        String refereeUserId = refereeUser.getUserId();
         // 分配账户
-        return new XN805041Res(userId, true, refereeUserId);
+//        //accountBO.distributeAccount(refereeUserId, EAccountType.Customer.getCode(), currency, address)
+//        List<Coin> coinList=coinBO.queryCoinList(null);
+//        for (Coin coin : coinList) {
+//            accountBO.distributeAccount(refereeUserId, EAccountType.Customer.getCode(), coin.getType(), address)
+//
+//        }
+        return userId;
     }
 
     @Override

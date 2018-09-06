@@ -112,6 +112,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
 
         String userId = OrderNoGenerater.generate("U");
         User user = new User();
+        user.setUserId(userId);
         user.setLoginName(mobile);
         user.setMobile(mobile);
 

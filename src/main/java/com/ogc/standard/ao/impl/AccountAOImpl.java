@@ -12,8 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.IAccountAO;
 import com.ogc.standard.bo.IAccountBO;
+import com.ogc.standard.bo.IBtcAddressBO;
 import com.ogc.standard.bo.ICoinBO;
 import com.ogc.standard.bo.IEthXAddressBO;
+import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.Coin;
@@ -32,8 +34,14 @@ public class AccountAOImpl implements IAccountAO {
     @Autowired
     private IEthXAddressBO ethXAddressBO;
 
+    @Autowired
+    private IBtcAddressBO btcXAddressBO;
+
     // @Autowired
     // private ICtqBO ctqBO;
+
+    @Autowired
+    private IUserBO userBO;
 
     @Autowired
     private ICoinBO coinBO;
@@ -50,20 +58,26 @@ public class AccountAOImpl implements IAccountAO {
 
         // 移除已经创建账户的币种
         coins = removeExistAccountCoins(coins, accounts);
-
-        String ethXAddress = null;
+//        String ethXAddress = null;
+//        if (CollectionUtils.isNotEmpty(coins)) {
+//            for (Coin coin : coins) {
+//                if (ECoinType.ETH.getCode().equals(coin.getType())
+//                        || ECoinType.ETH_TOKEN.getCode()
+//                            .equals(coin.getType())) {
+//                    if (ethXAddress == null) {
+//                        ethXAddress = ethXAddressBO.generateAddress(userId);
+//                    }
+//                    accountBO.distributeAccount(userId, EAccountType.Customer,
+//                        coin.getSymbol(), ethXAddress);
+//                }
+//
+//            }
+//        }
         if (CollectionUtils.isNotEmpty(coins)) {
             for (Coin coin : coins) {
-                if (ECoinType.ETH.getCode().equals(coin.getType())
-                        || ECoinType.ETH_TOKEN.getCode()
-                            .equals(coin.getType())) {
-                    if (ethXAddress == null) {
-                        ethXAddress = ethXAddressBO.generateAddress(userId);
-                    }
-                    accountBO.distributeAccount(userId, EAccountType.Customer,
-                        coin.getSymbol(), ethXAddress);
-                }
-
+                String accountId = accountBO.distributeAccount(userId,
+                    EAccountType.Customer, coin.getSymbol());
+                generateAddress(userId, accountId, coin);
             }
         }
     }
@@ -88,33 +102,39 @@ public class AccountAOImpl implements IAccountAO {
     private String generateAddress(String userId, String accountId, Coin coin) {
 
         String address = null;
-
-        // if (ECoinType.ORIGINAL.getCode().equals(coin.getType())) {
-        // if (EOriginialCoin.ETH.getCode().equals(coin.getSymbol())) {
-        // address = ethAddressBO.generateAddress(EAddressType.X, userId,
-        // accountId);
-        // ctqBO.uploadEthAddress(address, EAddressType.X.getCode());
-        // } else if (EOriginialCoin.BTC.getCode().equals(coin.getSymbol())) {
-        // address = btcAddressBO.generateAddress(EAddressType.X, userId,
-        // accountId, "system", "注册时自动分配");// 生成比特币地址
-        // ctqBO.uploadBtcAddress(address);// 上传比特币地址至橙提取
-        // } else if (EOriginialCoin.WAN.getCode().equals(coin.getSymbol())) {
-        // address = wanAddressBO.generateAddress(EAddressType.X, userId,
-        // accountId);
-        // ctqBO.uploadWanAddress(address, EAddressType.X.getCode());
-        // } else {
-        // throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-        // "不支持的币种" + coin.getSymbol());
-        // }
-        // } else if (ECoinType.ETH_TOKEN.getCode().equals(coin.getType())) {
-        // address = tokenAddressBO.generateAddress(EAddressType.X, userId,
-        // accountId, coin.getSymbol());
-        // ctqBO.uploadTokenAddress(address, coin.getSymbol());
-        // } else if (ECoinType.WAN_TOKEN.getCode().equals(coin.getType())) {
-        // address = wtokenAddressBO.generateAddress(EAddressType.X, userId,
-        // accountId, coin.getSymbol());
-        // ctqBO.uploadWanTokenAddress(address, coin.getSymbol());
-        // }
+        if (ECoinType.ETH.getCode().equals(coin.getSymbol())
+                || ECoinType.HPM.getCode().equals(coin.getSymbol())) {
+            address = ethXAddressBO.generateAddress(userId);
+        } else if (ECoinType.BTC.getCode().equals(coin.getSymbol())) {
+//            address = btcXAddressBO.generateAddress(type, userId, accountNumber,
+//                updater, remark);
+        }
+//        if (ECoinType.ORIGINAL.getCode().equals(coin.getType())) {
+//            if (EOriginialCoin.ETH.getCode().equals(coin.getSymbol())) {
+//                address = ethAddressBO.generateAddress(EAddressType.X, userId,
+//                    accountId);
+//                ctqBO.uploadEthAddress(address, EAddressType.X.getCode());
+//            } else if (EOriginialCoin.BTC.getCode().equals(coin.getSymbol())) {
+//                address = btcAddressBO.generateAddress(EAddressType.X, userId,
+//                    accountId, "system", "注册时自动分配");// 生成比特币地址
+//                ctqBO.uploadBtcAddress(address);// 上传比特币地址至橙提取
+//            } else if (EOriginialCoin.WAN.getCode().equals(coin.getSymbol())) {
+//                address = wanAddressBO.generateAddress(EAddressType.X, userId,
+//                    accountId);
+//                ctqBO.uploadWanAddress(address, EAddressType.X.getCode());
+//            } else {
+//                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+//                    "不支持的币种" + coin.getSymbol());
+//            }
+//        } else if (ECoinType.ETH_TOKEN.getCode().equals(coin.getType())) {
+//            address = tokenAddressBO.generateAddress(EAddressType.X, userId,
+//                accountId, coin.getSymbol());
+//            ctqBO.uploadTokenAddress(address, coin.getSymbol());
+//        } else if (ECoinType.WAN_TOKEN.getCode().equals(coin.getType())) {
+//            address = wtokenAddressBO.generateAddress(EAddressType.X, userId,
+//                accountId, coin.getSymbol());
+//            ctqBO.uploadWanTokenAddress(address, coin.getSymbol());
+//        }
 
         return address;
     }

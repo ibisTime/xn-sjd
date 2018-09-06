@@ -5,7 +5,6 @@ import com.ogc.standard.domain.User;
 import com.ogc.standard.dto.req.XN805041Req;
 import com.ogc.standard.dto.req.XN805042Req;
 import com.ogc.standard.dto.req.XN805081Req;
-import com.ogc.standard.dto.res.XN805041Res;
 
 /**
  * @author: xieyj 
@@ -19,7 +18,7 @@ public interface IUserAO {
     public void doCheckMobile(String mobile);
 
     // 注册前端用户
-    public XN805041Res doRegister(XN805041Req req);
+    public String doRegister(XN805041Req req);
 
     // 代注册
     public String doAddUser(XN805042Req req);

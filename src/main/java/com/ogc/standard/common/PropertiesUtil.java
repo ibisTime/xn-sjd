@@ -40,5 +40,21 @@ public class PropertiesUtil {
 
         public static String ETH_URL = props.getProperty("ETH_URL");
 
+        public static String BTC_ENV = props.getProperty("BTC_ENV");
+
+        public static String BTC_URL = props.getProperty("BTC_URL");
+
+        public static String BTC_FEE = props.getProperty("BTC_FEE");
+
+        public static String BTC_CORE_USER = props.getProperty("BTC_CORE_USER");
+
+        public static String BTC_CORE_PWD = props.getProperty("BTC_CORE_PWD");
+
+        public static String BTC_CORE_HOST = props.getProperty("BTC_CORE_HOST");
+
+        public static String BTC_CORE_PORT = props.getProperty("BTC_CORE_PORT");
+
+        public static String TOKEN_URL = props.getProperty("TOKEN_URL");
+
     }
 }
