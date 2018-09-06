@@ -31,9 +31,6 @@ public class XN625246 extends AProcessor {
 
     private XN625246Req req;
 
-    /** 
-     * @see com.ogc.standard.api.IProcessor#doBusiness()
-     */
     @Override
     public Object doBusiness() throws BizException {
         tradeOrderAO.applyArbitrate(req.getCode(), req.getApplyUser(),
@@ -41,9 +38,6 @@ public class XN625246 extends AProcessor {
         return new BooleanRes(true);
     }
 
-    /** 
-     * @see com.ogc.standard.api.IProcessor#doCheck(java.lang.String)
-     */
     @Override
     public void doCheck(String inputparams, String operator)
             throws ParaException {

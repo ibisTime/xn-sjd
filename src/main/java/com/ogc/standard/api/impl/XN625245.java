@@ -31,18 +31,12 @@ public class XN625245 extends AProcessor {
 
     private XN625245Req req;
 
-    /** 
-     * @see com.ogc.standard.api.IProcessor#doBusiness()
-     */
     @Override
     public Object doBusiness() throws BizException {
         tradeOrderAO.comment(req.getCode(), req.getUserId(), req.getComment());
         return new BooleanRes(true);
     }
 
-    /** 
-     * @see com.ogc.standard.api.IProcessor#doCheck(java.lang.String)
-     */
     @Override
     public void doCheck(String inputparams, String operator)
             throws ParaException {

@@ -11,8 +11,6 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.web3j.utils.Convert;
-import org.web3j.utils.Convert.Unit;
 
 import com.ogc.standard.ao.ITradeOrderAO;
 import com.ogc.standard.bo.IAccountBO;
@@ -28,7 +26,6 @@ import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.IUserRelationBO;
 import com.ogc.standard.bo.IUserSettingsBO;
 import com.ogc.standard.bo.base.Paginable;
-import com.ogc.standard.common.BTCUtil;
 import com.ogc.standard.common.SysConstants;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.Ads;
@@ -41,16 +38,16 @@ import com.ogc.standard.domain.UserStatistics;
 import com.ogc.standard.dto.res.XN625252Res;
 import com.ogc.standard.enums.EAdsStatus;
 import com.ogc.standard.enums.EBoolean;
-import com.ogc.standard.enums.ECoin;
 import com.ogc.standard.enums.ECommentLevel;
 import com.ogc.standard.enums.EJourBizTypePlat;
 import com.ogc.standard.enums.EJourBizTypeUser;
+import com.ogc.standard.enums.EReleaserKind;
 import com.ogc.standard.enums.ESysUser;
 import com.ogc.standard.enums.ESystemCode;
 import com.ogc.standard.enums.ETradeOrderStatus;
 import com.ogc.standard.enums.ETradeOrderType;
 import com.ogc.standard.enums.ETradeType;
-import com.ogc.standard.enums.EUserKind;
+import com.ogc.standard.enums.EUserLevel;
 import com.ogc.standard.enums.EUserReleationType;
 import com.ogc.standard.enums.EUserSettingsType;
 import com.ogc.standard.exception.BizException;
@@ -133,9 +130,8 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
             tencentBO.createGroup(code, buyUser, ads.getUserId());
             // 发送提醒短信
             User adsUser = userBO.getUser(ads.getUserId());
-            smsOutBO.sendSmsOut(adsUser.getMobile(),
-                SysConstants.ORDER_CONTACT, ESystemCode.COIN.getCode(),
-                ESystemCode.COIN.getCode());
+            smsOutBO.sendSmsOut(adsUser.getMobile(), SysConstants.ORDER_CONTACT,
+                ESystemCode.COIN.getCode(), ESystemCode.COIN.getCode());
         }
 
         return code;
@@ -155,8 +151,8 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
         this.checkAdsStatusAndMasterCannotBuy(ads, sellUser);
 
         // 检查是否有正在聊天订单
-        TradeOrder tradeOrder = tradeOrderBO.getToSubmitTradeOrder(
-            ads.getUserId(), sellUser, adsCode);
+        TradeOrder tradeOrder = tradeOrderBO
+            .getToSubmitTradeOrder(ads.getUserId(), sellUser, adsCode);
         if (tradeOrder != null) {
             code = tradeOrder.getCode();
         } else {
@@ -166,9 +162,8 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
             tencentBO.createGroup(code, ads.getUserId(), sellUser);
             // 发送提醒短信
             User adsUser = userBO.getUser(ads.getUserId());
-            smsOutBO.sendSmsOut(adsUser.getMobile(),
-                SysConstants.ORDER_CONTACT, ESystemCode.COIN.getCode(),
-                ESystemCode.COIN.getCode());
+            smsOutBO.sendSmsOut(adsUser.getMobile(), SysConstants.ORDER_CONTACT,
+                ESystemCode.COIN.getCode(), ESystemCode.COIN.getCode());
         }
 
         return code;
@@ -177,8 +172,8 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
     // 我要买币
     @Override
     @Transactional
-    public TradeOrder buy(String adsCode, String buyUser,
-            BigDecimal tradePrice, BigDecimal count, BigDecimal tradeAmount) {
+    public TradeOrder buy(String adsCode, String buyUser, BigDecimal tradePrice,
+            BigDecimal count, BigDecimal tradeAmount) {
 
         TradeOrder tradeOrder = null;
 
@@ -202,6 +197,12 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
 
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "您有尚未完成的购买订单");
+        }
+        // 必须为卖币广告
+        if (!ads.getTradeType().equals(ETradeType.SELL.getCode())) {
+
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "该广告不是卖币广告");
         }
 
         // 校验广告状态，和广告 与 购买者的关系
@@ -227,16 +228,16 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
                 tradeAmount, fee);
         } else {
             // 提交交易订单
-            tradeOrder = tradeOrderBO.buySubmit(ads, buyUser, tradePrice,
-                count, tradeAmount, fee);
+            tradeOrder = tradeOrderBO.buySubmit(ads, buyUser, tradePrice, count,
+                tradeAmount, fee);
             // 创建聊天群组
             tencentBO.createGroup(tradeOrder.getCode(), buyUser,
                 ads.getUserId());
         }
 
         // 发送系统消息
-        tencentBO
-            .sendNormalMessage(tradeOrder.getCode(), "系统消息：交易已下单，等待买家标记打款");
+        tencentBO.sendNormalMessage(tradeOrder.getCode(),
+            "系统消息：交易已下单，等待买家标记打款");
 
         // 发送提醒短信
         User adsUser = userBO.getUser(ads.getUserId());
@@ -251,7 +252,8 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
     @Override
     @Transactional
     public TradeOrder sell(String adsCode, String sellUser,
-            BigDecimal tradePrice, BigDecimal tradeCount, BigDecimal tradeAmount) {
+            BigDecimal tradePrice, BigDecimal tradeCount,
+            BigDecimal tradeAmount) {
 
         TradeOrder tradeOrder = null;
 
@@ -273,7 +275,8 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
         // 必须为买币广告
         if (!ads.getTradeType().equals(ETradeType.BUY.getCode())) {
 
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "该广告不是购买广告");
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "该广告不是购买广告");
         }
 
         // 校验广告
@@ -285,10 +288,11 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
         Account sellUserAccount = this.accountBO.getAccountByUser(sellUser,
             ads.getTradeCoin());
         if (sellUserAccount.getAmount()
-            .subtract(sellUserAccount.getFrozenAmount()).compareTo(tradeCount) < 0) {
+            .subtract(sellUserAccount.getFrozenAmount())
+            .compareTo(tradeCount) < 0) {
 
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "您的"
-                    + ads.getTradeCoin() + "可用余额不足");
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "您的" + ads.getTradeCoin() + "可用余额不足");
         }
 
         // 计算交易广告费
@@ -322,8 +326,8 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
             tradeOrder.getCode());
 
         // 发送系统消息
-        tencentBO
-            .sendNormalMessage(tradeOrder.getCode(), "系统消息：交易已下单，等待买家标记打款");
+        tencentBO.sendNormalMessage(tradeOrder.getCode(),
+            "系统消息：交易已下单，等待买家标记打款");
 
         // 发送提醒短信
         User adsUser = userBO.getUser(ads.getUserId());
@@ -370,17 +374,16 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
     @Override
     @Transactional
     public void userCancel(String code, String updater, String remark) {
-        TradeOrder tradeOrder = tradeOrderBO.getTradeOrder(code);
-        if (!ETradeOrderStatus.TO_PAY.getCode().equals(tradeOrder.getStatus())
-                && !ETradeOrderStatus.ARBITRATE.getCode().equals(
-                    tradeOrder.getStatus())) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "当前状态下不能取消订单");
-        }
-
         TradeOrder order = this.tradeOrderBO.getTradeOrder(code);
         if (order == null) {
             throw new BizException("xn000000", "无效的订单编号");
+        }
+        TradeOrder tradeOrder = tradeOrderBO.getTradeOrder(code);
+        if (!ETradeOrderStatus.TO_PAY.getCode().equals(tradeOrder.getStatus())
+                && !ETradeOrderStatus.ARBITRATE.getCode()
+                    .equals(tradeOrder.getStatus())) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "当前状态下不能取消订单");
         }
 
         // 变更广告信息 剩余可交易金额
@@ -404,7 +407,8 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
                         tradeOrder.getCount(),
                         EJourBizTypeUser.AJ_ADS_UNFROZEN.getCode(),
                         EJourBizTypeUser.AJ_ADS_UNFROZEN.getValue()
-                                + "-交易订单取消，解冻订单金额", tradeOrder.getCode());
+                                + "-交易订单取消，解冻订单金额",
+                        tradeOrder.getCode());
                 }
 
                 // 对卖家订单冻结广告费进行解冻
@@ -413,7 +417,8 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
                         tradeOrder.getFee(),
                         EJourBizTypeUser.AJ_ADS_UNFROZEN.getCode(),
                         EJourBizTypeUser.AJ_ADS_UNFROZEN.getValue()
-                                + "-交易订单取消，解冻订单广告费", tradeOrder.getCode());
+                                + "-交易订单取消，解冻订单广告费",
+                        tradeOrder.getCode());
                 }
             }
             // 购买订单
@@ -433,8 +438,8 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
     @Transactional
     public void platCancel(String code, String updater, String remark) {
         TradeOrder tradeOrder = tradeOrderBO.getTradeOrder(code);
-        if (!ETradeOrderStatus.ARBITRATE.getCode().equals(
-            tradeOrder.getStatus())) {
+        if (!ETradeOrderStatus.ARBITRATE.getCode()
+            .equals(tradeOrder.getStatus())) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "当前状态下不能被平台取消订单");
         }
@@ -464,7 +469,8 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
                         tradeOrder.getCount(),
                         EJourBizTypeUser.AJ_ADS_UNFROZEN.getCode(),
                         EJourBizTypeUser.AJ_ADS_UNFROZEN.getValue()
-                                + "-交易订单取消，解冻订单金额", tradeOrder.getCode());
+                                + "-交易订单取消，解冻订单金额",
+                        tradeOrder.getCode());
                 }
 
                 // 对卖家订单冻结广告费进行解冻
@@ -473,7 +479,8 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
                         tradeOrder.getFee(),
                         EJourBizTypeUser.AJ_ADS_UNFROZEN.getCode(),
                         EJourBizTypeUser.AJ_ADS_UNFROZEN.getValue()
-                                + "-交易订单取消，解冻订单广告费", tradeOrder.getCode());
+                                + "-交易订单取消，解冻订单广告费",
+                        tradeOrder.getCode());
                 }
             }
             // 购买订单
@@ -504,7 +511,8 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
         }
 
         //
-        if (!ETradeOrderStatus.TO_PAY.getCode().equals(tradeOrder.getStatus())) {
+        if (!ETradeOrderStatus.TO_PAY.getCode()
+            .equals(tradeOrder.getStatus())) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "当前状态下不能标记已打款");
         }
@@ -518,27 +526,36 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
 
     @Override
     @Transactional
-    public TradeOrder release(String code, String updater, String remark) {
+    public TradeOrder release(String code, String updater, String remark,
+            String kind) {
 
         TradeOrder tradeOrder = tradeOrderBO.getTradeOrder(code);
-
-        // 已支付 和 仲裁中的订单才能释放
-        if (!(ETradeOrderStatus.PAYED.getCode().equals(tradeOrder.getStatus()) || ETradeOrderStatus.ARBITRATE
-            .getCode().equals(tradeOrder.getStatus()))) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "当前状态下不能释放");
-        }
-
         // 操作权限判断，卖家和平台仲裁能释放订单
         // 卖家：已支付和仲裁中的状态下可释放订单
         // 平台：只有仲裁中的状态下可释放订单
-        User user = userBO.getUser(updater);
-        if (user != null && EUserKind.Customer.getCode().equals(user.getKind())) {
-            if (!updater.equals(tradeOrder.getSellUser())) {
-
-                throw new BizException("xn000", "您不能释放该订单");
-
+        // 已支付 和 仲裁中的订单才能释放
+        userBO.getUser(updater);
+        if (!(ETradeOrderStatus.PAYED.getCode().equals(tradeOrder.getStatus())
+                || ETradeOrderStatus.ARBITRATE.getCode()
+                    .equals(tradeOrder.getStatus()))) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "当前状态下不能释放");
+        }
+        if (EReleaserKind.plat.getCode().equals(kind)) {
+            if (!ETradeOrderStatus.ARBITRATE.getCode()
+                .equals(tradeOrder.getStatus())) {
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                    "当前状态下不能释放");
             }
         }
+//        if (user != null
+//                && EUserKind.Customer.getCode().equals(user.getKind())) {
+//            if (!updater.equals(tradeOrder.getSellUser())) {
+//
+//                throw new BizException("xn000", "您不能释放该订单");
+//
+//            }
+//        }
 
         if (ETradeOrderType.BUY.getCode().equals(tradeOrder.getType())) {
 
@@ -546,7 +563,8 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
             // 购买订单划转业务处理
             doTransferBuy(tradeOrder);
 
-        } else if (ETradeOrderType.SELL.getCode().equals(tradeOrder.getType())) {
+        } else if (ETradeOrderType.SELL.getCode()
+            .equals(tradeOrder.getType())) {
 
             // 收币广告
             // 出售订单划转业务处理
@@ -584,7 +602,8 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
         TradeOrder tradeOrder = tradeOrderBO.getTradeOrder(code);
         if (!ETradeOrderStatus.RELEASED.getCode()
             .equals(tradeOrder.getStatus())) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "当前状态下不能评价");
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "当前状态下不能评价");
         }
         if (userId.equals(tradeOrder.getBuyUser())) {
             doBsComment(tradeOrder, userId, comment); // 买家对卖家进行评论
@@ -617,8 +636,8 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
         // 更新交易订单信息
         tradeOrderBO.applyArbitrate(tradeOrder, applyUser);
         // 提交仲裁工单
-        String arbitrateCode = arbitrateBO.submit(tradeOrder.getCode(),
-            yuangao, beigao, reason, attach);
+        String arbitrateCode = arbitrateBO.submit(tradeOrder.getCode(), yuangao,
+            beigao, reason, attach);
         // 发送系统消息
         tencentBO.sendNormalMessage(code, "系统消息：订单已申请仲裁");
 
@@ -684,11 +703,11 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
     public UserStatistics userStatisticsInfoNotContainTradeCount(String userId,
             String currency) {
 
-        UserStatistics userStatistics = this.tradeOrderBO.obtainUserStatistics(
-            userId, currency);
+        UserStatistics userStatistics = this.tradeOrderBO
+            .obtainUserStatistics(userId, currency);
         // 获取被信任次数
-        userStatistics.setBeiXinRenCount(this.userRelationBO.getRelationCount(
-            userId, EUserReleationType.TRUST.getCode()));
+        userStatistics.setBeiXinRenCount(this.userRelationBO
+            .getRelationCount(userId, EUserReleationType.TRUST.getCode()));
         return userStatistics;
 
     }
@@ -748,10 +767,10 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
     public void dropTradeOrder(String code) {
         // 交易订单详情
         TradeOrder tradeOrder = tradeOrderBO.getTradeOrder(code);
-        if (!ETradeOrderStatus.TO_SUBMIT.getCode().equals(
-            tradeOrder.getStatus())
-                && !ETradeOrderStatus.CANCEL.getCode().equals(
-                    tradeOrder.getStatus())) {
+        if (!ETradeOrderStatus.TO_SUBMIT.getCode()
+            .equals(tradeOrder.getStatus())
+                && !ETradeOrderStatus.CANCEL.getCode()
+                    .equals(tradeOrder.getStatus())) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "只有待下单和已取消的订单可以删除");
         }
@@ -809,8 +828,8 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
 
         // 1.卖家 冻结金额减少
 
-        Account dbAccount = accountBO.getAccountByUser(
-            tradeOrder.getSellUser(), tradeOrder.getTradeCoin());
+        Account dbAccount = accountBO.getAccountByUser(tradeOrder.getSellUser(),
+            tradeOrder.getTradeCoin());
         // 1.1 解冻卖家 冻结金额
         this.accountBO.unfrozenAmount(dbAccount, tradeOrder.getCount(),
             EJourBizTypeUser.AJ_ADS_UNFROZEN.getCode(),
@@ -838,30 +857,40 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
                 EJourBizTypePlat.AJ_TRADEFEE.getValue(), tradeOrder.getCode());
 
             // todo 4.推荐人有分成
-            String buyUserId = tradeOrder.getBuyUser();
-            User buyUser = this.userBO.getUser(buyUserId);
-            String refereeUserId = buyUser.getUserReferee();
-            if (!StringUtils.isNotBlank(refereeUserId)) {
-                return;
-            }
-            User refereeUser = this.userBO.getUser(refereeUserId);
-            if (refereeUser == null) {
-                return;
-            }
 
-            handleReferenceFenCheng(refereeUser, buyUser.getUserRefereeLevel(),
-                tradeOrder);
+            handleReferenceFenCheng(tradeOrder);
         }
     }
 
     // ！！！！！！！！注意！！！！！！
     // 卖出广告 和 买入广告，共用此方法
-    private void handleReferenceFenCheng(User refereeUser,
-            String thenRefereeUserLevel, TradeOrder tradeOrder) {
-        Double fenChengFee = null;
+    private void handleReferenceFenCheng(TradeOrder tradeOrder) {
 
-        BigDecimal shouldPayFenCheng = tradeOrder.getFee().multiply(
-            BigDecimal.valueOf(fenChengFee));
+        String userId = tradeOrder.getSellUser();
+        User user = this.userBO.getUser(userId);
+
+        // 无推荐人 直接 return 掉
+        String rederUserId = user.getUserReferee();
+        if (!StringUtils.isNotBlank(rederUserId)) {
+            return;
+        }
+
+        // 推荐人为空 return
+        User refereeUser = this.userBO.getUser(rederUserId);
+        if (refereeUser == null) {
+            return;
+        }
+        Double fenChengFee = null;
+        if (user.getUserRefereeLevel().equals(EUserLevel.ONE.getCode())) {
+            // 推荐人为普通
+            fenChengFee = refereeUser.getDivRate1();
+        } else {
+            // 推荐人代理人
+            fenChengFee = refereeUser.getDivRate2();
+        }
+
+        BigDecimal shouldPayFenCheng = tradeOrder.getFee()
+            .multiply(BigDecimal.valueOf(fenChengFee));
 
         // 4.1平台盈亏账户，减少
         accountBO.transAmount(ESysUser.SYS_USER.getCode(),
@@ -877,8 +906,8 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
     // 出售广告处理，购买 释放处理
     private void doTransferBuy(TradeOrder tradeOrder) {
 
-        Account dbAccount = accountBO.getAccountByUser(
-            tradeOrder.getSellUser(), tradeOrder.getTradeCoin());
+        Account dbAccount = accountBO.getAccountByUser(tradeOrder.getSellUser(),
+            tradeOrder.getTradeCoin());
         // 1.1卖家 交易冻结 金额解冻
         accountBO.unfrozenAmount(dbAccount, tradeOrder.getCount(),
             EJourBizTypeUser.AJ_ADS_UNFROZEN.getCode(),
@@ -910,42 +939,26 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
                 EJourBizTypePlat.AJ_TRADEFEE.getValue(), tradeOrder.getCode());
 
             // 4.推荐人有分成
-            String sellUserId = tradeOrder.getSellUser();
-            User sellUser = this.userBO.getUser(sellUserId);
-
-            // 无推荐人 直接 return 掉
-            String rederUserId = sellUser.getUserReferee();
-            if (!StringUtils.isNotBlank(rederUserId)) {
-                return;
-            }
-
-            // 推荐人为空 return
-            User sellUserRefereeUser = this.userBO.getUser(rederUserId);
-            if (sellUserRefereeUser == null) {
-                return;
-            }
-            // sellUser.getRefeereLevel()
-            handleReferenceFenCheng(sellUserRefereeUser,
-                sellUser.getUserRefereeLevel(), tradeOrder);
+            handleReferenceFenCheng(tradeOrder);
         }
     }
 
     private void doAmountCheck(Ads adsSell, BigDecimal tradePrice,
             BigDecimal count, BigDecimal tradeAmount,
             String outOfLeftCountString) {
-        if (ECoin.ETH.getCode().equals(adsSell.getTradeCoin())) {
-            if (tradePrice.multiply(Convert.fromWei(count, Unit.ETHER))
-                .subtract(tradeAmount).abs().compareTo(BigDecimal.ONE) > 0) {
-                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                    "交易总额计算有误");
-            }
-        } else if (ECoin.BTC.getCode().equals(adsSell.getTradeCoin())) {
-            if (tradePrice.multiply(BTCUtil.fromBtc(count))
-                .subtract(tradeAmount).abs().compareTo(BigDecimal.ONE) > 0) {
-                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                    "交易总额计算有误");
-            }
-        }
+//        if (ECoin.ETH.getCode().equals(adsSell.getTradeCoin())) {
+//            if (tradePrice.multiply(Convert.fromWei(count, Unit.ETHER))
+//                .subtract(tradeAmount).abs().compareTo(BigDecimal.ONE) > 0) {
+//                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+//                    "交易总额计算有误");
+//            }
+//        } else if (ECoin.BTC.getCode().equals(adsSell.getTradeCoin())) {
+//            if (tradePrice.multiply(BTCUtil.fromBtc(count))
+//                .subtract(tradeAmount).abs().compareTo(BigDecimal.ONE) > 0) {
+//                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+//                    "交易总额计算有误");
+//            }
+//        }
 
         if (adsSell.getMinTrade().compareTo(tradeAmount) > 0) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
@@ -1029,8 +1042,8 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
         condition.setStatusList(statusList);
         condition.setOrder("release_datetime", false);
 
-        Paginable<TradeOrder> pages = tradeOrderBO
-            .getPaginable(1, 1, condition);
+        Paginable<TradeOrder> pages = tradeOrderBO.getPaginable(1, 1,
+            condition);
         if (CollectionUtils.isNotEmpty(pages.getList())) {
             lastestPrice = pages.getList().get(0).getTradePrice();
         }

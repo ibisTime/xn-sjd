@@ -37,7 +37,7 @@ public class XN625244 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
 
-        tradeOrderAO.release(req.getCode(), req.getUpdater(), "卖家已释放");
+        tradeOrderAO.release(req.getCode(), req.getUpdater(), "卖家已释放", "S");
         return new BooleanRes(true);
 
     }
