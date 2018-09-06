@@ -33,6 +33,23 @@
 		)
 	</insert>
 	
+	<select id="select_userExt" parameterType="userExt" resultMap="userExt_DB_Result">
+		SELECT
+		t.user_id
+		,t.gender
+		,t.introduce
+		,t.birthday
+		,t.email
+		,t.diploma
+		,t.occupation
+		,t.grad_datetime
+		,t.work_time
+		,t.pdf
+		FROM
+		tstd_user_ext t
+		<include refid="where_condition"/>
+	</select>
+	
 	<update id="update_userExt" parameterType="userExt">
 		UPDATE tstd_user_ext
 		SET
@@ -46,6 +63,6 @@
 		,work_time=#{workTime}
 		,pdf=#{pdf}
 		WHERE
-		,user_id=#{userId}
+		user_id=#{userId}
 	</update>
 </mapper>

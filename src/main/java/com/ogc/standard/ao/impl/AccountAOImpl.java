@@ -20,6 +20,7 @@ import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.Coin;
 import com.ogc.standard.enums.EAccountType;
+import com.ogc.standard.enums.EAddressType;
 import com.ogc.standard.enums.ECoinType;
 import com.ogc.standard.enums.ESysUser;
 import com.ogc.standard.exception.BizException;
@@ -106,8 +107,8 @@ public class AccountAOImpl implements IAccountAO {
                 || ECoinType.HPM.getCode().equals(coin.getSymbol())) {
             address = ethXAddressBO.generateAddress(userId);
         } else if (ECoinType.BTC.getCode().equals(coin.getSymbol())) {
-//            address = btcXAddressBO.generateAddress(type, userId, accountNumber,
-//                updater, remark);
+            address = btcXAddressBO.generateAddress(EAddressType.X, userId,
+                accountId, "admin", "注册时自动分配");
         }
 //        if (ECoinType.ORIGINAL.getCode().equals(coin.getType())) {
 //            if (EOriginialCoin.ETH.getCode().equals(coin.getSymbol())) {

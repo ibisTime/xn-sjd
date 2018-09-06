@@ -33,7 +33,6 @@ import com.ogc.standard.common.PwdUtil;
 import com.ogc.standard.common.SysConstants;
 import com.ogc.standard.domain.SignLog;
 import com.ogc.standard.domain.User;
-import com.ogc.standard.domain.UserExt;
 import com.ogc.standard.dto.req.XN805041Req;
 import com.ogc.standard.dto.req.XN805042Req;
 import com.ogc.standard.dto.req.XN805081Req;
@@ -431,9 +430,11 @@ public class UserAOImpl implements IUserAO {
         if (user == null) {
             throw new BizException("li01004", userId + "用户不存在");
         }
-        // 拉取推荐人信息
-        User refereeUser = userBO.getUser(user.getUserReferee());
-        user.setRefereeUser(refereeUser);
+        if (StringUtils.isNotBlank(user.getUserReferee())) {
+            // 拉取推荐人信息
+            User refereeUser = userBO.getUser(user.getUserReferee());
+            user.setRefereeUser(refereeUser);
+        }
 
         // 是否设置过交易密码
         if (StringUtils.isNotBlank(user.getTradePwdStrength())) {
@@ -448,16 +449,18 @@ public class UserAOImpl implements IUserAO {
             user.setLoginPwdFlag(false);
         }
         // 拉取ext数据
-        UserExt data = userExtBO.getUserExt(userId);
-        user.setGender(data.getGender());
-        user.setBirthday(data.getBirthday());
-        user.setEmail(data.getEmail());
-        user.setDiploma(data.getDiploma());
-        user.setIntroduce(data.getIntroduce());
-        user.setOccupation(data.getOccupation());
-        user.setPdf(data.getPdf());
-        user.setWorkTime(data.getWorkTime());
-        user.setGradDatetime(data.getGradDatetime());
+//        UserExt data = userExtBO.getUserExt(userId);
+//        if (data != null) {
+//            user.setGender(data.getGender());
+//            user.setBirthday(data.getBirthday());
+//            user.setEmail(data.getEmail());
+//            user.setDiploma(data.getDiploma());
+//            user.setIntroduce(data.getIntroduce());
+//            user.setOccupation(data.getOccupation());
+//            user.setPdf(data.getPdf());
+//            user.setWorkTime(data.getWorkTime());
+//            user.setGradDatetime(data.getGradDatetime());
+//        }
 
         return user;
     }

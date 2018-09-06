@@ -52,7 +52,7 @@ public class UserExtBOImpl extends PaginableBOImpl<UserExt>
     public UserExt getUserExt(String userId) {
         UserExt condition = new UserExt();
         condition.setUserId(userId);
-        return userExtDAO.select(condition);
+        return userExtDAO.getUserExt(condition);
     }
 
 }
