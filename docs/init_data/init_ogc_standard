@@ -1,0 +1,135 @@
+/*
+-- Query: SELECT 
+code,name,type,url,order_no,'admin' updater, now() as update_datetime,remark,parent_code,system_code 
+FROM ogc_standard.tsys_menu where code ='COINSM201700000000000000' or parent_code ='COINSM201700000000000000'
+or parent_code='COINSM201700001000000001' or parent_code in (select code from tsys_menu where parent_code ='COINSM201700001000000001')
+or parent_code in (select code from tsys_menu where parent_code in (select code from tsys_menu where parent_code ='COINSM201700001000000001'))
+LIMIT 0, 500
+
+-- Date: 2018-09-03 17:49
+*/
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('COINSM201612071021105964','财务管理','1','#',3,'admin',now(),'','COINSM201700000000000000','CD-HPMN000024');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('COINSM201700000000000000','根目录','1','#',1,'admin',now(),'','','CD-HPMN000024');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('COINSM201700001000000001','系统管理','1','#',1,'admin',now(),'','COINSM201700000000000000','CD-HPMN000024');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('COINSM201700001000000002','运维管理','1','#',2,'admin',now(),NULL,'COINSM201700001000000001','CD-HPMN000024');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('COINSM201700001000000003','菜单管理','1','/system/menu.htm',1,'admin',now(),NULL,'COINSM201700001000000002','CD-HPMN000024');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('COINSM201700001000000004','新增','2','/add',1,'admin',now(),'','COINSM201700001000000003','CD-HPMN000024');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('COINSM2017032911200961325','修改','2','/edit',2,'admin',now(),'','COINSM201700001000000003','CD-HPMN000024');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('COINSM2017033020005366333','banner管理','1','/public/banner.htm',1,'admin',now(),'','COINSM201707251006045006005','CD-HPMN000024');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('COINSM2017033020015631166','新增','2','/add',1,'admin',now(),'','COINSM2017033020005366333','CD-HPMN000024');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('COINSM2017033020021094115','修改','2','/edit',2,'admin',now(),'','COINSM2017033020005366333','CD-HPMN000024');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('COINSM2017033020022649991','删除','2','/delete',3,'admin',now(),'','COINSM2017033020005366333','CD-HPMN000024');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('COINSM2017033020024827112','详情','2','/detail',4,'admin',now(),'','COINSM2017033020005366333','CD-HPMN000024');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('COINSM201707251006045006005','广告位管理','1','#',5,'admin',now(),'','COINSM201700001000000001','CD-HPMN000024');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('COINSM201708241024194086655','删除','2','/delete',3,'admin',now(),'','COINSM201700001000000003','CD-HPMN000024');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('COINSM201708241036442974134','业务管理','1','#',2,'admin',now(),'','COINSM201700000000000000','CD-HPMN000024');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('COINSM201708241037322072730','统计分析','1','#',4,'admin',now(),'','COINSM201700000000000000','CD-HPMN000024');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('COINSM2017101716241339082','运营管理','1','#',1,'admin',now(),'','COINSM201700001000000001','CD-HPMN000024');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('COINSM2017101716253866426','角色管理','1','/system/role.htm',1,'admin',now(),'','COINSM2017101716241339082','CD-HPMN000024');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('COINSM2017101716261754674','会员查询','1','/system/user.htm',2,'admin',now(),'','COINSM2017101716241339082','CD-HPMN000024');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('COINSM2017101716450533995','分配菜单','2','/change',4,'admin',now(),'','COINSM2017101716253866426','CD-HPMN000024');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('COINSM2017101717551955993','新增','2','/add',1,'admin',now(),'','COINSM2017101716253866426','CD-HPMN000024');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('COINSM2017101717560118734','修改','2','/edit',2,'admin',now(),'','COINSM2017101716253866426','CD-HPMN000024');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('COINSM2017101717563661357','删除','2','/delete',3,'admin',now(),'','COINSM2017101716253866426','CD-HPMN000024');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('COINSM2017101719082391126','新增','2','/add',1,'admin',now(),'','COINSM2017101716261754674','CD-HPMN000024');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('COINSM2017101719094151894','重置密码','2','/reset',2,'admin',now(),'','COINSM2017101716261754674','CD-HPMN000024');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('COINSM2017101719100760088','注销','2','/rock',4,'admin',now(),'','COINSM2017101716261754674','CD-HPMN000024');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('COINSM2017101719110981215','设置角色','2','/assign',5,'admin',now(),'','COINSM2017101716261754674','CD-HPMN000024');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('COINSM2017112911152991684','消息推送','1','#',3,'admin',now(),'','COINSM201700001000000001','CD-HPMN000024');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('COINSM2017112911280249973','公告管理','1','/public/notice.htm',1,'admin',now(),'','COINSM2017112911152991684','CD-HPMN000024');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('COINSM2017112914292031228','新增','2','/add',1,'admin',now(),'','COINSM2017112911280249973','CD-HPMN000024');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('COINSM2017112914295002950','修改','2','/edit2',2,'admin',now(),'','COINSM2017112911280249973','CD-HPMN000024');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('COINSM2017112914322481897','发布/撤下','2','/push',3,'admin',now(),'','COINSM2017112911280249973','CD-HPMN000024');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('COINSM2017112914325471772','详情','2','/detail',5,'admin',now(),'','COINSM2017112911280249973','CD-HPMN000024');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('COINSM2017120610552303416','激活','2','/active',3,'admin',now(),'','COINSM2017101716261754674','CD-HPMN000024');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('COINSM2017121215543215610','文章管理','1','#',4,'admin',now(),'','COINSM201700001000000001','CD-HPMN000024');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('COINSM2017121216045274832','关于我们','1','/public/aboutus_addedit.htm',1,'admin',now(),'','COINSM2017121215543215610','CD-HPMN000024');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM201711181218447587419','常见问题','1','/public/question_addedit.htm',4,'admin',now(),'','COINSM2017121215543215610','CD-HPMN000024');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM201711181220013316605','注册协议','1','/public/register_addedit.htm',5,'admin',now(),'','COINSM2017121215543215610','CD-HPMN000024');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM201711231353203735078','购买广告说明','1','/public/buyADS.htm',6,'admin',now(),'','COINSM2017121215543215610','CD-HPMN000024');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM201711231354531532054','卖币广告说明','1','/public/sellETH.htm',7,'admin',now(),'','COINSM2017121215543215610','CD-HPMN000024');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM201711232222591772487','修改','2','/edit',1,'admin',now(),'','SM201711231353203735078','CD-HPMN000024');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM201711232223319261758','修改','2','/edit',1,'admin',now(),'','SM201711231354531532054','CD-HPMN000024');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM201711251639118496237','交易提醒说明','1','/public/TransactionRemind.htm',75,'admin',now(),'','COINSM2017121215543215610','CD-HPMN000024');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM201711251639362545256','修改','2','/edit',1,'admin',now(),'','SM201711251639118496237','CD-HPMN000024');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM201711272034567989636','联系客服','1','/public/service_addedit.htm',16,'admin',now(),'','COINSM2017121215543215610','CD-HPMN000024');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM201711281438072475181','版本管理','1','#',22,'admin',now(),'','COINSM201700001000000001','CD-HPMN000024');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM201711281440352206679','Android版本管理','1','/edition/versionAc.htm',1,'admin',now(),'','SM201711281438072475181','CD-HPMN000024');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM201711281440497751340','修改','2','/edit',1,'admin',now(),'','SM201711281440352206679','CD-HPMN000024');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM201711281441276181084','IOS版本管理','1','/edition/versionIc.htm',2,'admin',now(),'','SM201711281438072475181','CD-HPMN000024');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM201711281442162104491','修改','2','/edit',1,'admin',now(),'','SM201711281441276181084','CD-HPMN000024');
+INSERT INTO `tsys_menu` (`code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`parent_code`,`system_code`) VALUES ('SM201801020529137343821','隐私政策','1','/public/privacy_addedit.htm',2,'admin',now(),'','COINSM2017121215543215610','CD-HPMN000024');
+
+
+/*
+-- Query: SELECT 'COINSR201700000000000000' `role_code`,code `menu_code`,'admin' `updater`,now() as `update_datetime`,`remark`,'CD-HPMN000024' `system_code` FROM tsys_menu
+LIMIT 0, 500
+
+-- Date: 2018-09-03 17:57
+*/
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSR201700000000000000','COINSM201612071021105964','admin',now(),'','CD-HPMN000024');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSR201700000000000000','COINSM201700000000000000','admin',now(),'','CD-HPMN000024');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSR201700000000000000','COINSM201700001000000001','admin',now(),'','CD-HPMN000024');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSR201700000000000000','COINSM201700001000000002','admin',now(),NULL,'CD-HPMN000024');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSR201700000000000000','COINSM201700001000000003','admin',now(),NULL,'CD-HPMN000024');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSR201700000000000000','COINSM201700001000000004','admin',now(),'','CD-HPMN000024');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSR201700000000000000','COINSM2017032911200961325','admin',now(),'','CD-HPMN000024');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSR201700000000000000','COINSM2017033020005366333','admin',now(),'','CD-HPMN000024');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSR201700000000000000','COINSM2017033020015631166','admin',now(),'','CD-HPMN000024');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSR201700000000000000','COINSM2017033020021094115','admin',now(),'','CD-HPMN000024');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSR201700000000000000','COINSM2017033020022649991','admin',now(),'','CD-HPMN000024');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSR201700000000000000','COINSM2017033020024827112','admin',now(),'','CD-HPMN000024');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSR201700000000000000','COINSM201707251006045006005','admin',now(),'','CD-HPMN000024');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSR201700000000000000','COINSM201708241024194086655','admin',now(),'','CD-HPMN000024');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSR201700000000000000','COINSM201708241036442974134','admin',now(),'','CD-HPMN000024');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSR201700000000000000','COINSM201708241037322072730','admin',now(),'','CD-HPMN000024');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSR201700000000000000','COINSM2017101716241339082','admin',now(),'','CD-HPMN000024');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSR201700000000000000','COINSM2017101716253866426','admin',now(),'','CD-HPMN000024');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSR201700000000000000','COINSM2017101716261754674','admin',now(),'','CD-HPMN000024');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSR201700000000000000','COINSM2017101716450533995','admin',now(),'','CD-HPMN000024');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSR201700000000000000','COINSM2017101717551955993','admin',now(),'','CD-HPMN000024');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSR201700000000000000','COINSM2017101717560118734','admin',now(),'','CD-HPMN000024');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSR201700000000000000','COINSM2017101717563661357','admin',now(),'','CD-HPMN000024');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSR201700000000000000','COINSM2017101719082391126','admin',now(),'','CD-HPMN000024');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSR201700000000000000','COINSM2017101719094151894','admin',now(),'','CD-HPMN000024');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSR201700000000000000','COINSM2017101719100760088','admin',now(),'','CD-HPMN000024');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSR201700000000000000','COINSM2017101719110981215','admin',now(),'','CD-HPMN000024');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSR201700000000000000','COINSM2017112911152991684','admin',now(),'','CD-HPMN000024');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSR201700000000000000','COINSM2017112911280249973','admin',now(),'','CD-HPMN000024');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSR201700000000000000','COINSM2017112914292031228','admin',now(),'','CD-HPMN000024');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSR201700000000000000','COINSM2017112914295002950','admin',now(),'','CD-HPMN000024');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSR201700000000000000','COINSM2017112914322481897','admin',now(),'','CD-HPMN000024');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSR201700000000000000','COINSM2017112914325471772','admin',now(),'','CD-HPMN000024');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSR201700000000000000','COINSM2017120610552303416','admin',now(),'','CD-HPMN000024');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSR201700000000000000','COINSM2017121215543215610','admin',now(),'','CD-HPMN000024');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSR201700000000000000','COINSM2017121216045274832','admin',now(),'','CD-HPMN000024');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSR201700000000000000','SM201711181218447587419','admin',now(),'','CD-HPMN000024');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSR201700000000000000','SM201711181220013316605','admin',now(),'','CD-HPMN000024');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSR201700000000000000','SM201711231353203735078','admin',now(),'','CD-HPMN000024');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSR201700000000000000','SM201711231354531532054','admin',now(),'','CD-HPMN000024');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSR201700000000000000','SM201711232222591772487','admin',now(),'','CD-HPMN000024');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSR201700000000000000','SM201711232223319261758','admin',now(),'','CD-HPMN000024');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSR201700000000000000','SM201711251639118496237','admin',now(),'','CD-HPMN000024');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSR201700000000000000','SM201711251639362545256','admin',now(),'','CD-HPMN000024');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSR201700000000000000','SM201711272034567989636','admin',now(),'','CD-HPMN000024');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSR201700000000000000','SM201711281438072475181','admin',now(),'','CD-HPMN000024');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSR201700000000000000','SM201711281440352206679','admin',now(),'','CD-HPMN000024');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSR201700000000000000','SM201711281440497751340','admin',now(),'','CD-HPMN000024');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSR201700000000000000','SM201711281441276181084','admin',now(),'','CD-HPMN000024');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSR201700000000000000','SM201711281442162104491','admin',now(),'','CD-HPMN000024');
+INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSR201700000000000000','SM201801020529137343821','admin',now(),'','CD-HPMN000024');
+
+/*
+-- Query: SELECT `code`,`name`,`level`,'admin' as `updater`,now() as 'update_datetime',`remark`,`system_code` FROM tsys_role where system_code = 'CD-HPMN000024'
+LIMIT 0, 10000
+
+-- Date: 2017-03-31 10:33
+*/
+INSERT INTO `tsys_role` (`code`,`name`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSR201700000000000000','超级管理员','admin',now(),'','CD-HPMN000024');
+
+INSERT INTO `tsys_user` (`user_id`,`login_name`,`login_pwd`,`login_pwd_strength`,`role_code`,`status`,`create_datetime`,`remark`,`system_code`) VALUES ('UCOIN201700000000000001','admin','21218cca77804d2ba1922c33e0151105','1','COINSR201700000000000000','0',now(),'管理端系统方','CD-HPMN000024');
+
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('qiniu','qiniu_access_key','Dc0pMP8ImFm78-uk4iGsOPpB2-vHc64D07OsOQVi','admin',now(),'七牛云key1');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('qiniu','qiniu_secret_key','3NP-tpZP9-5fH-R-FhvKTfYpPPVFNvjFF3JXmrcq','admin',now(),'七牛云key1');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('qiniu','qiniu_bucket','test','admin',now(),'存储空间');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('qiniu','qiniu_domain','ounm8iw2d.bkt.clouddn.com','admin',now(),'访问域名');
