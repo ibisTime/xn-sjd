@@ -67,8 +67,7 @@ public class TencentBOImpl implements ITencentBO {
     private String getUrl(String baseUrl) {
         String urlString = null;
         Map<String, String> sysConfigMap = sysConfigBO.getSYSConfigMap(
-            EConfigType.TENCENT_IM.getCode(), ESystemCode.COIN.getCode(),
-            ESystemCode.COIN.getCode());
+            EConfigType.TENCENT_IM.getCode(), ESystemCode.COIN.getCode());
         String txAppCode = sysConfigMap.get(SysConstants.TX_APP_CODE);
         String txAppAdmin = sysConfigMap.get(SysConstants.TX_APP_ADMIN);
         String accessKey = sysConfigMap.get(SysConstants.TX_ACCESS_KEY);
@@ -142,8 +141,8 @@ public class TencentBOImpl implements ITencentBO {
     @Override
     public XN625000Res getSign(String userId, String companyCode,
             String systemCode) {
-        Map<String, String> sysConfigMap = sysConfigBO.getSYSConfigMap(
-            EConfigType.TENCENT_IM.getCode(), companyCode, systemCode);
+        Map<String, String> sysConfigMap = sysConfigBO
+            .getSYSConfigMap(EConfigType.TENCENT_IM.getCode(), systemCode);
         String txAppCode = sysConfigMap.get(SysConstants.TX_APP_CODE);
         String txAppAdmin = sysConfigMap.get(SysConstants.TX_APP_ADMIN);
         String accessKey = sysConfigMap.get(SysConstants.TX_ACCESS_KEY);

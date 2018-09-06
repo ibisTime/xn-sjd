@@ -10,9 +10,6 @@ public class XN660918Req {
     // 类型
     private String type;
 
-    // 公司编号（必填）
-    private String companyCode;
-
     // 系统编号（必填）
     private String systemCode;
 
@@ -22,14 +19,6 @@ public class XN660918Req {
 
     public void setType(String type) {
         this.type = type;
-    }
-
-    public String getCompanyCode() {
-        return companyCode;
-    }
-
-    public void setCompanyCode(String companyCode) {
-        this.companyCode = companyCode;
     }
 
     public String getSystemCode() {

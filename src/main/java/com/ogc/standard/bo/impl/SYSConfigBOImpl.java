@@ -107,11 +107,9 @@ public class SYSConfigBOImpl extends PaginableBOImpl<SYSConfig>
     }
 
     @Override
-    public Map<String, String> getSYSConfigMap(String type, String companyCode,
-            String systemCode) {
+    public Map<String, String> getSYSConfigMap(String type, String systemCode) {
         XN660918Req req = new XN660918Req();
         req.setType(type);
-        req.setCompanyCode(companyCode);
         req.setSystemCode(systemCode);
         String jsonStr = BizConnecter.getBizData("660918",
             JsonUtils.object2Json(req));
