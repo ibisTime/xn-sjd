@@ -9,16 +9,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.ogc.standard.bo.IAccountBO;
+import com.ogc.standard.bo.IBtcAddressBO;
+import com.ogc.standard.bo.IEthXAddressBO;
 import com.ogc.standard.bo.IJourBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.core.AccountUtil;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.IAccountDAO;
 import com.ogc.standard.domain.Account;
+import com.ogc.standard.domain.Coin;
 import com.ogc.standard.domain.HLOrder;
 import com.ogc.standard.enums.EAccountStatus;
 import com.ogc.standard.enums.EAccountType;
 import com.ogc.standard.enums.EChannelType;
+import com.ogc.standard.enums.ECoinType;
 import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.enums.EJourBizTypeUser;
@@ -40,19 +44,35 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
     @Autowired
     private IJourBO jourBO;
 
+    @Autowired
+    private IEthXAddressBO ethXAddressBO;
+
+    @Autowired
+    private IBtcAddressBO btcXAddressBO;
+
     @Override
     public String distributeAccount(String userId, EAccountType accountType,
-            String currency) {
+            Coin coin) {
         String accountNumber = null;
         if (StringUtils.isNotBlank(userId)) {
+            String address = null;
+            if (ECoinType.ETH.getCode().equals(coin.getType())
+                    || ECoinType.HPM.getCode().equals(coin.getType())) {
+                address = ethXAddressBO.generateAddress(userId);
+            } else if (ECoinType.BTC.getCode().equals(coin.getType())) {
+                address = btcXAddressBO.generateAddress(userId);
+            } else {
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                    "不支持的币种" + coin.getSymbol());
+            }
             accountNumber = OrderNoGenerater
                 .generate(EGeneratePrefix.Account.getCode());
             Account data = new Account();
             data.setAccountNumber(accountNumber);
             data.setUserId(userId);
-
+            data.setAddress(address);
             data.setType(accountType.getCode());
-            data.setCurrency(currency);
+            data.setCurrency(coin.getSymbol());
             data.setStatus(EAccountStatus.NORMAL.getCode());
             data.setAmount(BigDecimal.ZERO);
             data.setFrozenAmount(BigDecimal.ZERO);
@@ -63,6 +83,7 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
             data.setCreateDatetime(new Date());
 
             accountDAO.insert(data);
+
         }
         return accountNumber;
     }

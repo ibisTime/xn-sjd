@@ -1,20 +1,18 @@
 package com.ogc.standard.bo;
 
+import java.util.List;
+
 import com.ogc.standard.bo.base.IPaginableBO;
 import com.ogc.standard.domain.BtcXAddress;
-import com.ogc.standard.enums.EAddressType;
 
 public interface IBtcAddressBO extends IPaginableBO<BtcXAddress> {
 
     // 生成地址（有私钥）
-    public String generateAddress(EAddressType type, String userId,
-            String accountNumber, String updater, String remark);
+    public String generateAddress(String userId);
 
-//    // 导入（保存）地址
-//    public String saveBtcAddress(EAddressType type, String address,
-//            String privatekey, String userId, String accountNumber,
-//            String status, String updater, String remark);
-//
+    // 导入（保存）地址
+    public int saveBtcAddress(String address, String privatekey, String userId);
+
 //    // 获取今日归集地址
 //    public BtcXAddress getWBtcAddressToday();
 //
@@ -29,8 +27,8 @@ public interface IBtcAddressBO extends IPaginableBO<BtcXAddress> {
 //
 //    public boolean isBtcAddressExist(String address);
 //
-//    public List<BtcXAddress> queryBtcAddressList(BtcXAddress condition);
-//
+    public List<BtcXAddress> queryBtcAddressList(BtcXAddress condition);
+
 //    public BtcXAddress getBtcAddress(String code);
 //
 //    public int abandonAddress(BtcXAddress adddress, String updater,

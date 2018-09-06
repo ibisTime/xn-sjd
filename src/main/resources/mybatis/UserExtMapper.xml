@@ -48,6 +48,11 @@
 		FROM
 		tstd_user_ext t
 		<include refid="where_condition"/>
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				${order}
+			</if>
+		</trim>
 	</select>
 	
 	<update id="update_userExt" parameterType="userExt">

@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.ogc.standard.bo.base.IPaginableBO;
 import com.ogc.standard.domain.Account;
+import com.ogc.standard.domain.Coin;
 import com.ogc.standard.domain.HLOrder;
 import com.ogc.standard.enums.EAccountStatus;
 import com.ogc.standard.enums.EAccountType;
@@ -21,7 +22,7 @@ public interface IAccountBO extends IPaginableBO<Account> {
 
     // 分配账户
     public String distributeAccount(String userId, EAccountType accountType,
-            String currency);
+            Coin coin);
 
     // 变更账户余额：流水落地
     public Account changeAmount(Account dbAccount, BigDecimal transAmount,

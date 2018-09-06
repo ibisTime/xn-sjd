@@ -1,5 +1,9 @@
 package com.ogc.standard.bo.impl;
 
+import java.util.Date;
+import java.util.List;
+
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -10,8 +14,6 @@ import com.ogc.standard.core.BtcAddressRes;
 import com.ogc.standard.core.BtcClient;
 import com.ogc.standard.dao.IBtcAddressDAO;
 import com.ogc.standard.domain.BtcXAddress;
-import com.ogc.standard.enums.EAddressType;
-import com.ogc.standard.exception.BizException;
 
 @Component
 public class BtcAddressBOImpl extends PaginableBOImpl<BtcXAddress>
@@ -23,51 +25,49 @@ public class BtcAddressBOImpl extends PaginableBOImpl<BtcXAddress>
     private IBtcAddressDAO BtcXAddressDAO;
 
     @Override
-    public String generateAddress(EAddressType type, String userId,
-            String accountNumber, String updater, String remark) {
-        if (!EAddressType.X.getCode().equals(type.getCode())
-                && !EAddressType.M.getCode().equals(type.getCode())) {
-            throw new BizException("不支持生成该类型的btc地址");
+    public String generateAddress(String userId) {
+        String address = null;
+        BtcXAddress dbAddress = null;
+        BtcXAddress condition = new BtcXAddress();
+        condition.setUserId(userId);
+        List<BtcXAddress> btcList = queryBtcAddressList(condition);
+        if (CollectionUtils.isNotEmpty(btcList)) {
+            dbAddress = btcList.get(0);
         }
-        // 生成btc地址
-        BtcAddressRes BtcXAddress = BtcClient.getSingleAddress();
+        if (dbAddress != null) {
+            address = dbAddress.getAddress();
+        } else {
+            // 生成btc地址
+            BtcAddressRes BtcXAddress = BtcClient.getSingleAddress();
 
-        // 落地地址信息
-//        saveBtcXAddress(type, BtcXAddress.getAddress(),
-//            BtcXAddress.getPrivatekey(), userId, accountNumber,
-//            EMAddressStatus.VALID.getCode(), updater, remark);
-        return BtcXAddress.getAddress();
+            // 落地地址信息
+            saveBtcAddress(BtcXAddress.getAddress(),
+                BtcXAddress.getPrivatekey(), userId);
+            address = BtcXAddress.getAddress();
+        }
+
+        return address;
     }
 
-//    @Override
-//    public String saveBtcAddress(EAddressType type, String address,
-//            String privatekey, String userId, String accountNumber,
-//            String status, String updater, String remark) {
-//        String code = OrderNoGenerater.generate("Btc");
-//        Date now = new Date();
-//        BtcXAddress data = new BtcXAddress();
-//        data.setCode(code);
-//        data.setType(type.getCode());
-//        data.setAddress(address);
-//        data.setPrivatekey(privatekey);
-//
-//        data.setUserId(userId);
-//        data.setAccountNumber(accountNumber);
-//        data.setStatus(status);
-//        data.setCreateDatetime(now);
-//        data.setUpdater(updater);
-//
-//        data.setUpdateDatetime(now);
-//        data.setRemark(remark);
-//        BtcXAddressDAO.insert(data);
-//        return code;
-//    }
+    @Override
+    public int saveBtcAddress(String address, String privatekey,
+            String userId) {
+        BtcXAddress data = new BtcXAddress();
+        Date now = new Date();
+        data.setAddress(address);
+        data.setPrivatekey(privatekey);
 
-//    @Override
-//    public List<BtcXAddress> queryBtcAddressList(BtcXAddress condition) {
-//        return BtcXAddressDAO.selectList(condition);
-//    }
-//
+        data.setUserId(userId);
+        data.setCreateDatetime(now);
+        int count = BtcXAddressDAO.insert(data);
+        return count;
+    }
+
+    @Override
+    public List<BtcXAddress> queryBtcAddressList(BtcXAddress condition) {
+        return BtcXAddressDAO.selectList(condition);
+    }
+
 //    @Override
 //    public BtcXAddress getBtcXAddress(String code) {
 //        BtcXAddress data = null;

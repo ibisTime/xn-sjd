@@ -53,19 +53,17 @@
 
 	<insert id="insert_btcAddress" parameterType="btcXAddress">
 		INSERT INTO
-		tcoin_btc_address(
-		id
-		,address
+		tcoin_btc_xaddress(
+		address
 		,privatekey
 		,user_id
 		,create_datetime
 		)
 		VALUES(
-		#{id}
-		,#{address}
+		#{address}
 		,#{privatekey}
 		,#{userId}
-		,#{createDatetime}
+		,#{createDatetime})
 	</insert>
 
 	

@@ -14,6 +14,7 @@ public class XN805042Req {
     private String loginPwd;
 
     // 手机号（选填）
+    @NotBlank
     private String mobile;
 
     // 证件类型（选填）

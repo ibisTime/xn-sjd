@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ogc.standard.ao.IAccountAO;
 import com.ogc.standard.ao.IUserAO;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.ICoinBO;
@@ -31,6 +32,7 @@ import com.ogc.standard.common.MD5Util;
 import com.ogc.standard.common.PhoneUtil;
 import com.ogc.standard.common.PwdUtil;
 import com.ogc.standard.common.SysConstants;
+import com.ogc.standard.domain.Coin;
 import com.ogc.standard.domain.SignLog;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.dto.req.XN805041Req;
@@ -38,6 +40,7 @@ import com.ogc.standard.dto.req.XN805042Req;
 import com.ogc.standard.dto.req.XN805081Req;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECaptchaType;
+import com.ogc.standard.enums.ECoinStatus;
 import com.ogc.standard.enums.ESignLogType;
 import com.ogc.standard.enums.EUser;
 import com.ogc.standard.enums.EUserLevel;
@@ -71,6 +74,9 @@ public class UserAOImpl implements IUserAO {
     private IAccountBO accountBO;
 
     @Autowired
+    private IAccountAO accountAO;
+
+    @Autowired
     private ICoinBO coinBO;
 
     @Override
@@ -94,14 +100,11 @@ public class UserAOImpl implements IUserAO {
             req.getArea());
         // ext中添加数据
         userExtBO.addUserExt(userId);
-//        String refereeUserId = refereeUser.getUserId();
+        Coin condition = new Coin();
+        condition.setStatus(ECoinStatus.PUBLISHED.getCode());
+
         // 分配账户
-//        //accountBO.distributeAccount(refereeUserId, EAccountType.Customer.getCode(), currency, address)
-//        List<Coin> coinList=coinBO.queryCoinList(null);
-//        for (Coin coin : coinList) {
-//            accountBO.distributeAccount(refereeUserId, EAccountType.Customer.getCode(), coin.getType(), address)
-//
-//        }
+        accountAO.distributeAccount(userId);
         return userId;
     }
 
@@ -137,6 +140,8 @@ public class UserAOImpl implements IUserAO {
         userId = userBO.doAddUser(user);
         // 在userExt中添加一条数据
         userExtBO.addUserExt(userId);
+        // 分配账户
+        accountAO.distributeAccount(userId);
         return userId;
     }
 
