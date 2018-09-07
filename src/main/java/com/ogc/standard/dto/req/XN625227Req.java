@@ -1,11 +1,11 @@
 package com.ogc.standard.dto.req;
 
-import org.hibernate.validator.constraints.NotBlank;
+import java.math.BigDecimal;
 
 import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.math.BigDecimal;
+
+import org.hibernate.validator.constraints.NotBlank;
 
 /**
  * Created by tianlei on 2017/十一月/14.
@@ -20,9 +20,10 @@ public class XN625227Req {
     @DecimalMin(value = "1")
     private Integer limit;
 
+    @NotBlank
     private String coin;
 
-    //交易类型
+    // 交易类型
     private String tradeType;
 
     private String payType;
@@ -70,7 +71,6 @@ public class XN625227Req {
     public void setCoin(String coin) {
         this.coin = coin;
     }
-
 
     public Integer getStart() {
         return start;

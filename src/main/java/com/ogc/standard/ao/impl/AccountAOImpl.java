@@ -59,7 +59,22 @@ public class AccountAOImpl implements IAccountAO {
         // 移除已经创建账户的币种
         coins = removeExistAccountCoins(coins, accounts);
         if (CollectionUtils.isNotEmpty(coins)) {
+            String ethXAddress = null;
+            String btcXAddress = null;
             for (Coin coin : coins) {
+                if (ECoinType.ETH.getCode().equals(coin.getType())
+                        || ECoinType.HPM.getCode().equals(coin.getType())) {
+                    if (ethXAddress == null) {
+                        ethXAddress = ethXAddressBO.generateAddress(userId);
+                    }
+                } else if (ECoinType.BTC.getCode().equals(coin.getType())) {
+                    if (btcXAddress == null) {
+                        btcXAddress = btcXAddressBO.generateAddress(userId);
+                    }
+                } else {
+                    throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                        "不支持的币种" + coin.getSymbol());
+                }
                 accountBO.distributeAccount(userId, EAccountType.Customer,
                     coin);
             }

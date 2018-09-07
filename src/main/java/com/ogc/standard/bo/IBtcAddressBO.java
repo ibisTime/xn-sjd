@@ -13,6 +13,9 @@ public interface IBtcAddressBO extends IPaginableBO<BtcXAddress> {
     // 导入（保存）地址
     public int saveBtcAddress(String address, String privatekey, String userId);
 
+    // 取用户的btc地址
+    public BtcXAddress getBtcXAddressByUserId(String userId);
+
 //    // 获取今日归集地址
 //    public BtcXAddress getWBtcAddressToday();
 //

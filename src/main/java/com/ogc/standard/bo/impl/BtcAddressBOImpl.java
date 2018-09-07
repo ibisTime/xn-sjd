@@ -27,15 +27,9 @@ public class BtcAddressBOImpl extends PaginableBOImpl<BtcXAddress>
     @Override
     public String generateAddress(String userId) {
         String address = null;
-        BtcXAddress dbAddress = null;
-        BtcXAddress condition = new BtcXAddress();
-        condition.setUserId(userId);
-        List<BtcXAddress> btcList = queryBtcAddressList(condition);
-        if (CollectionUtils.isNotEmpty(btcList)) {
-            dbAddress = btcList.get(0);
-        }
-        if (dbAddress != null) {
-            address = dbAddress.getAddress();
+
+        if (getBtcXAddressByUserId(userId) != null) {
+            address = getBtcXAddressByUserId(userId).getAddress();
         } else {
             // 生成btc地址
             BtcAddressRes BtcXAddress = BtcClient.getSingleAddress();
@@ -66,6 +60,18 @@ public class BtcAddressBOImpl extends PaginableBOImpl<BtcXAddress>
     @Override
     public List<BtcXAddress> queryBtcAddressList(BtcXAddress condition) {
         return BtcXAddressDAO.selectList(condition);
+    }
+
+    @Override
+    public BtcXAddress getBtcXAddressByUserId(String userId) {
+        BtcXAddress dbAddress = null;
+        BtcXAddress condition = new BtcXAddress();
+        condition.setUserId(userId);
+        List<BtcXAddress> btcList = queryBtcAddressList(condition);
+        if (CollectionUtils.isNotEmpty(btcList)) {
+            dbAddress = btcList.get(0);
+        }
+        return dbAddress;
     }
 
 //    @Override

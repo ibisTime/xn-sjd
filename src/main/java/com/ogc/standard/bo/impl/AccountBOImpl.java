@@ -22,7 +22,6 @@ import com.ogc.standard.domain.HLOrder;
 import com.ogc.standard.enums.EAccountStatus;
 import com.ogc.standard.enums.EAccountType;
 import com.ogc.standard.enums.EChannelType;
-import com.ogc.standard.enums.ECoinType;
 import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.enums.EJourBizTypeUser;
@@ -54,17 +53,9 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
     public String distributeAccount(String userId, EAccountType accountType,
             Coin coin) {
         String accountNumber = null;
+        String address = null;
         if (StringUtils.isNotBlank(userId)) {
-            String address = null;
-            if (ECoinType.ETH.getCode().equals(coin.getType())
-                    || ECoinType.HPM.getCode().equals(coin.getType())) {
-                address = ethXAddressBO.generateAddress(userId);
-            } else if (ECoinType.BTC.getCode().equals(coin.getType())) {
-                address = btcXAddressBO.generateAddress(userId);
-            } else {
-                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                    "不支持的币种" + coin.getSymbol());
-            }
+
             accountNumber = OrderNoGenerater
                 .generate(EGeneratePrefix.Account.getCode());
             Account data = new Account();
@@ -85,7 +76,7 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
             accountDAO.insert(data);
 
         }
-        return accountNumber;
+        return address;
     }
 
     @Override
