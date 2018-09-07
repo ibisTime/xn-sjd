@@ -182,6 +182,9 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
 
         // 校验用户是否存在
         User user = this.userBO.getUser(buyUser);
+        if (null == user) {
+            throw new BizException("xn00000", "用户不存在");
+        }
 
         // 是否实名
         if (StringUtils.isBlank(user.getRealName())) {

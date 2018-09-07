@@ -51,9 +51,8 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
 
     @Override
     public String distributeAccount(String userId, EAccountType accountType,
-            Coin coin) {
+            Coin coin, String address) {
         String accountNumber = null;
-        String address = null;
         if (StringUtils.isNotBlank(userId)) {
 
             accountNumber = OrderNoGenerater
@@ -76,7 +75,7 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
             accountDAO.insert(data);
 
         }
-        return address;
+        return accountNumber;
     }
 
     @Override

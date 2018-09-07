@@ -62,21 +62,25 @@ public class AccountAOImpl implements IAccountAO {
             String ethXAddress = null;
             String btcXAddress = null;
             for (Coin coin : coins) {
+                // 有几个币种创建几个账户，有几个原生币就加几个地址（代币用原生币地址）
                 if (ECoinType.ETH.getCode().equals(coin.getType())
                         || ECoinType.HPM.getCode().equals(coin.getType())) {
                     if (ethXAddress == null) {
                         ethXAddress = ethXAddressBO.generateAddress(userId);
                     }
+                    accountBO.distributeAccount(userId, EAccountType.Customer,
+                        coin, ethXAddress);
                 } else if (ECoinType.BTC.getCode().equals(coin.getType())) {
                     if (btcXAddress == null) {
                         btcXAddress = btcXAddressBO.generateAddress(userId);
                     }
+                    accountBO.distributeAccount(userId, EAccountType.Customer,
+                        coin, btcXAddress);
                 } else {
                     throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                         "不支持的币种" + coin.getSymbol());
                 }
-                accountBO.distributeAccount(userId, EAccountType.Customer,
-                    coin);
+
             }
         }
     }

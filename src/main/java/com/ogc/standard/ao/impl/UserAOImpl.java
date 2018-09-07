@@ -36,6 +36,7 @@ import com.ogc.standard.common.SysConstants;
 import com.ogc.standard.domain.Coin;
 import com.ogc.standard.domain.SignLog;
 import com.ogc.standard.domain.User;
+import com.ogc.standard.domain.UserExt;
 import com.ogc.standard.dto.req.XN805041Req;
 import com.ogc.standard.dto.req.XN805042Req;
 import com.ogc.standard.dto.req.XN805081Req;
@@ -141,9 +142,11 @@ public class UserAOImpl implements IUserAO {
         user.setUpdater(req.getUpdater());
         user.setUpdateDatetime(date);
         user.setRemark(req.getRemark());
+        double tradeRate = sysConfigBO
+            .getDoubleValue(SysConstants.DEFAULT_USER_RATE);
+        user.setTradeRate(tradeRate);
         userId = userBO.doAddUser(user);
-        user.setTradeRate(
-            sysConfigBO.getDoubleValue(SysConstants.DEFAULT_USER_RATE));
+
         // 在userExt中添加一条数据
         userExtBO.addUserExt(userId);
         // 分配账户
@@ -460,18 +463,18 @@ public class UserAOImpl implements IUserAO {
             user.setLoginPwdFlag(false);
         }
         // 拉取ext数据
-//        UserExt data = userExtBO.getUserExt(userId);
-//        if (data != null) {
-//            user.setGender(data.getGender());
-//            user.setBirthday(data.getBirthday());
-//            user.setEmail(data.getEmail());
-//            user.setDiploma(data.getDiploma());
-//            user.setIntroduce(data.getIntroduce());
-//            user.setOccupation(data.getOccupation());
-//            user.setPdf(data.getPdf());
-//            user.setWorkTime(data.getWorkTime());
-//            user.setGradDatetime(data.getGradDatetime());
-//        }
+        UserExt data = userExtBO.getUserExt(userId);
+        if (data != null) {
+            user.setGender(data.getGender());
+            user.setBirthday(data.getBirthday());
+            user.setEmail(data.getEmail());
+            user.setDiploma(data.getDiploma());
+            user.setIntroduce(data.getIntroduce());
+            user.setOccupation(data.getOccupation());
+            user.setPdf(data.getPdf());
+            user.setWorkTime(data.getWorkTime());
+            user.setGradDatetime(data.getGradDatetime());
+        }
 
         return user;
     }

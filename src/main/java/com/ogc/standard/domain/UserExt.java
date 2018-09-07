@@ -19,7 +19,8 @@ import com.ogc.standard.dao.base.ABaseDO;
  * @history:
  */
 public class UserExt extends ABaseDO {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 4683217240952437620L;
+
     // ***********db properties***********
 
     // 用户编号
