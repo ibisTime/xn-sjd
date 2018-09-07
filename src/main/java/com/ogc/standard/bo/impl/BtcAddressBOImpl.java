@@ -14,6 +14,7 @@ import com.ogc.standard.core.BtcAddressRes;
 import com.ogc.standard.core.BtcClient;
 import com.ogc.standard.dao.IBtcAddressDAO;
 import com.ogc.standard.domain.BtcXAddress;
+import com.ogc.standard.exception.BizException;
 
 @Component
 public class BtcAddressBOImpl extends PaginableBOImpl<BtcXAddress>
@@ -74,32 +75,29 @@ public class BtcAddressBOImpl extends PaginableBOImpl<BtcXAddress>
         return dbAddress;
     }
 
-//    @Override
-//    public BtcXAddress getBtcXAddress(String code) {
-//        BtcXAddress data = null;
-//        if (StringUtils.isNotBlank(code)) {
-//            BtcXAddress condition = new BtcXAddress();
-//            condition.setCode(code);
-//            data = BtcXAddressDAO.select(condition);
-//            if (data == null) {
-//                throw new BizException("xn0000", "Btc地址不存在");
-//            }
-//        }
-//        return data;
-//    }
-//
-//    @Override
-//    public BtcXAddress getBtcXAddress(EAddressType type, String address) {
-//        BtcXAddress data = null;
-//        BtcXAddress condition = new BtcXAddress();
-//        condition.setType(type.getCode());
-//        condition.setAddress(address);
-//        List<BtcXAddress> results = BtcXAddressDAO.selectList(condition);
-//        if (CollectionUtils.isNotEmpty(results)) {
-//            data = results.get(0);
-//        }
-//        return data;
-//    }
+    @Override
+    public BtcXAddress getBtcAddress(long id) {
+        BtcXAddress data = null;
+        BtcXAddress condition = new BtcXAddress();
+        condition.setId(id);
+        data = BtcXAddressDAO.select(condition);
+        if (data == null) {
+            throw new BizException("xn0000", "Btc地址不存在");
+        }
+        return data;
+    }
+
+    @Override
+    public BtcXAddress getBtcAddress(String address) {
+        BtcXAddress data = null;
+        BtcXAddress condition = new BtcXAddress();
+        condition.setAddress(address);
+        List<BtcXAddress> results = BtcXAddressDAO.selectList(condition);
+        if (CollectionUtils.isNotEmpty(results)) {
+            data = results.get(0);
+        }
+        return data;
+    }
 
 //    @Override
 //    public BtcXAddress getBtcXAddressByUserId(String userId) {

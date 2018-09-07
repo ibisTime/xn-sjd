@@ -97,6 +97,9 @@ public class AdsAOImpl implements IAdsAO {
     public void publishAds(XN625220Req req) {
         // 校验用户是否存在
         User user = userBO.getUser(req.getUserId());
+        if (user == null) {
+            throw new BizException("xn00000", "用户不存在");
+        }
         // 是否实名认证
         if (EBoolean.YES.getCode().equals(req.getOnlyCert())) {
             if (StringUtils.isBlank(user.getRealName())) {

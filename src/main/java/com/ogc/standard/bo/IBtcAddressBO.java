@@ -22,7 +22,8 @@ public interface IBtcAddressBO extends IPaginableBO<BtcXAddress> {
 //    // 更新状态
 //    public int refreshStatus(BtcXAddress address, String status);
 //
-//    public BtcXAddress getBtcAddress(EAddressType type, String address);
+    public BtcXAddress getBtcAddress(String address);
+
 //
 //    public BtcXAddress getBtcAddressByUserId(String userId);
 //
@@ -32,7 +33,7 @@ public interface IBtcAddressBO extends IPaginableBO<BtcXAddress> {
 //
     public List<BtcXAddress> queryBtcAddressList(BtcXAddress condition);
 
-//    public BtcXAddress getBtcAddress(String code);
+    public BtcXAddress getBtcAddress(long id);
 //
 //    public int abandonAddress(BtcXAddress adddress, String updater,
 //            String remark);

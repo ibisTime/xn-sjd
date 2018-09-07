@@ -21,6 +21,7 @@ import com.ogc.standard.ao.IAccountAO;
 import com.ogc.standard.ao.IUserAO;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.ICoinBO;
+import com.ogc.standard.bo.ISYSConfigBO;
 import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.ISignLogBO;
 import com.ogc.standard.bo.ISmsOutBO;
@@ -78,6 +79,9 @@ public class UserAOImpl implements IUserAO {
 
     @Autowired
     private ICoinBO coinBO;
+
+    @Autowired
+    private ISYSConfigBO sysConfigBO;
 
     @Override
     public void doCheckMobile(String mobile) {
@@ -138,6 +142,8 @@ public class UserAOImpl implements IUserAO {
         user.setUpdateDatetime(date);
         user.setRemark(req.getRemark());
         userId = userBO.doAddUser(user);
+        user.setTradeRate(
+            sysConfigBO.getDoubleValue(SysConstants.DEFAULT_USER_RATE));
         // 在userExt中添加一条数据
         userExtBO.addUserExt(userId);
         // 分配账户

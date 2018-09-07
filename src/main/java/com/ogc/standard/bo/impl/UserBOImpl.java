@@ -17,11 +17,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.ogc.standard.bo.ISYSConfigBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.common.MD5Util;
 import com.ogc.standard.common.PhoneUtil;
 import com.ogc.standard.common.PwdUtil;
+import com.ogc.standard.common.SysConstants;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.IUserDAO;
 import com.ogc.standard.domain.User;
@@ -38,6 +40,9 @@ import com.ogc.standard.exception.BizException;
 public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     @Autowired
     private IUserDAO userDAO;
+
+    @Autowired
+    private ISYSConfigBO sysConfigBO;
 
     @Override
     public void isMobileExist(String mobile) {
@@ -132,6 +137,8 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         user.setArea(area);
         Date date = new Date();
         user.setCreateDatetime(date);
+        user.setTradeRate(
+            sysConfigBO.getDoubleValue(SysConstants.DEFAULT_USER_RATE));
 
         userDAO.insert(user);
         return userId;
@@ -198,9 +205,6 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             User condition = new User();
             condition.setUserId(userId);
             data = userDAO.select(condition);
-        }
-        if (data == null) {
-            throw new BizException("xn00000", "用户不存在");
         }
         return data;
     }
