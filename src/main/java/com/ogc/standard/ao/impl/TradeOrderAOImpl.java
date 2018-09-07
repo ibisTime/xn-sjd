@@ -395,7 +395,7 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
 
         Ads data = adsBO.getAds(tradeOrder.getAdsCode());
         Account dbAccount = accountBO.getAccountByUser(data.getUserId(),
-            data.getTradeCurrency());
+            data.getTradeCoin());
         if (tradeOrder.getType().equals(ETradeOrderType.SELL.getCode())) {
             // 由于出售时冻结了，卖家的余额这里需要解冻
             accountBO.unfrozenAmount(dbAccount, tradeOrder.getCount(),
@@ -457,7 +457,7 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
         adsBO.addLeftCount(tradeOrder.getAdsCode(), tradeOrder.getCount());
         Ads data = adsBO.getAds(tradeOrder.getAdsCode());
         Account dbAccount = accountBO.getAccountByUser(data.getUserId(),
-            data.getTradeCurrency());
+            data.getTradeCoin());
         if (tradeOrder.getType().equals(ETradeOrderType.SELL.getCode())) {
             // 由于出售时冻结了，卖家的余额这里需要解冻
             this.accountBO.unfrozenAmount(dbAccount, tradeOrder.getCount(),
