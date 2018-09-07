@@ -188,7 +188,8 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
 
         // 是否实名
         if (StringUtils.isBlank(user.getRealName())) {
-            throw new BizException("xn00000", "您还未实名认证，请前往个人中心进行认证");
+            // throw new BizException("xn00000", "您还未实名认证，请前往个人中心进行认证");
+            System.out.println("实名认证未处理");
         }
 
         // 检查黑名单
