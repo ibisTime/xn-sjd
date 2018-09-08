@@ -106,19 +106,19 @@
             </if>
 
             <!-- # 前端查询 时的条件 -->
-            <if test="currentTime != null and currentTime != '' and currentWeek != null and currentWeek != ''">
-                AND
-                 left_count > 0
+           <if test="currentTime != null and currentTime != '' and currentWeek != null and currentWeek != ''">
+                 <!-- AND
+                left_count > 0
                  <choose>
-				 <when test="tradeCoin == 'ETH'">
-				  AND
-                  left_count*true_price/pow(10,18) >= min_trade
-				 </when>
-				 <when test="tradeCoin == 'SC'">
-				  AND
-                  left_count*true_price/pow(10,24) >= min_trade
-				 </when>
-			</choose>	
+					 <when test="tradeCoin == 'ETH'">
+					  AND
+	                  left_count*true_price/pow(10,18) >= min_trade
+					 </when>
+					 <when test="tradeCoin == 'SC'">
+					  AND
+	                  left_count*true_price/pow(10,24) >= min_trade
+					 </when>
+				</choose>	 --> 
                 
                 AND (
                  tcoin_ads_display_time.ads_code IS NULL OR (
@@ -128,7 +128,7 @@
                 )
                 )
 
-            </if>
+            </if> 
 
             <if test="maxPrice != null and maxPrice != ''">
                 <![CDATA[ and `true_price` <= #{maxPrice} ]]>
