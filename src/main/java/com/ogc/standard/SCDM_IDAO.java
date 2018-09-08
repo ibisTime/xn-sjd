@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import com.ogc.standard.common.DateUtil;
 
@@ -38,7 +40,20 @@ public class SCDM_IDAO {
     private static String Key = key.substring(0, 1).toUpperCase()
             + key.substring(1);
 
+    public static String getTimeByMinute(int minute) {
+
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.add(Calendar.MINUTE, minute);
+
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm")
+            .format(calendar.getTime());
+
+    }
+
     public static void main(String[] args) {
+
+        System.out.println(getTimeByMinute(-1));
 
         File DOMAINfile = new File(path, Key + ".java");
 

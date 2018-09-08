@@ -1,5 +1,6 @@
 package com.ogc.standard.ao.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,9 +10,12 @@ import org.springframework.stereotype.Service;
 import com.ogc.standard.ao.IHandicapAO;
 import com.ogc.standard.bo.IHandicapBO;
 import com.ogc.standard.bo.base.Paginable;
+import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.domain.Handicap;
+import com.ogc.standard.domain.HandicapGrade;
 import com.ogc.standard.domain.HandicapItem;
 import com.ogc.standard.dto.res.XN650065Res;
+import com.ogc.standard.enums.EHandicapGradeNum;
 import com.ogc.standard.enums.ESimuOrderDirection;
 
 @Service
@@ -35,36 +39,38 @@ public class HandicapAOImpl implements IHandicapAO {
     public XN650065Res getHandicap(String symbol, String toSymbol) {
         XN650065Res data = new XN650065Res();
 
-        // 买盘
-        List<HandicapItem> bids = new ArrayList<>();
+        data.setBids(formatHandicap(symbol, toSymbol,
+            ESimuOrderDirection.BUY.getCode()));
 
-        // 查询买方
-        List<Handicap> bidsHandicap = handicapBO.queryHandicapList(symbol,
-            toSymbol, ESimuOrderDirection.BUY.getCode(), 5);
-        for (Handicap handicap : bidsHandicap) {
-            HandicapItem item = new HandicapItem();
-            item.setPrice(handicap.getPrice());
-            item.setCount(handicap.getCount());
-
-            bids.add(item);
-        }
-        data.setBids(bids);
-
-        // 卖盘
-        List<HandicapItem> asks = new ArrayList<>();
-
-        // 查询卖方
-        List<Handicap> asksSimuOrder = handicapBO.queryHandicapList(symbol,
-            toSymbol, ESimuOrderDirection.SELL.getCode(), 5);
-        for (Handicap handicap : asksSimuOrder) {
-            HandicapItem item = new HandicapItem();
-            item.setPrice(handicap.getPrice());
-            item.setCount(handicap.getCount());
-
-            asks.add(item);
-        }
-        data.setAsks(asks);
+        data.setAsks(formatHandicap(symbol, toSymbol,
+            ESimuOrderDirection.SELL.getCode()));
 
         return data;
+    }
+
+    private List<HandicapItem> formatHandicap(String symbol, String toSymbol,
+            String direction) {
+
+        List<HandicapItem> handicapItems = new ArrayList<>();
+
+        List<HandicapGrade> asksGrades = handicapBO.queryHandicapList(symbol,
+            toSymbol, direction,
+            StringValidater.toInteger(EHandicapGradeNum.FIVE.getCode()));
+
+        for (HandicapGrade handicapGrade : asksGrades) {
+            HandicapItem item = new HandicapItem();
+            item.setPrice(handicapGrade.getPrice());
+
+            BigDecimal count = BigDecimal.ZERO;
+            for (Handicap handicaps : handicapGrade.getHandicapList()) {
+                count = count.add(handicaps.getCount());
+            }
+            item.setCount(count);
+
+            handicapItems.add(item);
+        }
+
+        return handicapItems;
+
     }
 }

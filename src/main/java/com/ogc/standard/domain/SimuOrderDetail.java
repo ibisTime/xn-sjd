@@ -13,7 +13,7 @@ import com.ogc.standard.dao.base.ABaseDO;
  */
 public class SimuOrderDetail extends ABaseDO {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -3267238414760698120L;
 
     // 编号
     private String code;
@@ -47,6 +47,14 @@ public class SimuOrderDetail extends ABaseDO {
 
     // 成交时间
     private Date createDatetime;
+
+    // ******************db properties**************
+
+    // 成交时间起
+    private Date createDatetimeStart;
+
+    // 成交时间止
+    private Date createDatetimeEnd;
 
     public String getCode() {
         return code;
@@ -134,6 +142,22 @@ public class SimuOrderDetail extends ABaseDO {
 
     public void setCreateDatetime(Date createDatetime) {
         this.createDatetime = createDatetime;
+    }
+
+    public Date getCreateDatetimeStart() {
+        return createDatetimeStart;
+    }
+
+    public void setCreateDatetimeStart(Date createDatetimeStart) {
+        this.createDatetimeStart = createDatetimeStart;
+    }
+
+    public Date getCreateDatetimeEnd() {
+        return createDatetimeEnd;
+    }
+
+    public void setCreateDatetimeEnd(Date createDatetimeEnd) {
+        this.createDatetimeEnd = createDatetimeEnd;
     }
 
 }

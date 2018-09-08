@@ -3,7 +3,6 @@ package com.ogc.standard.domain;
 import java.math.BigDecimal;
 
 /**
- * 
  * @author: lei 
  * @since: 2018年8月29日 下午4:03:55 
  * @history:

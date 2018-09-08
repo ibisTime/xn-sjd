@@ -30,7 +30,7 @@ public class XN650050Req {
     @NotBlank
     private String direction;
 
-    // 特殊必填，type=1时必填，委托价格
+    // 条件必填，type=1时必填，委托价格
     private String price;
 
     // 必填，委托数量

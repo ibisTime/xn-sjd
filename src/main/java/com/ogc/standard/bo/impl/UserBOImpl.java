@@ -28,6 +28,7 @@ import com.ogc.standard.domain.User;
 import com.ogc.standard.enums.EUserLevel;
 import com.ogc.standard.enums.EUserStatus;
 import com.ogc.standard.exception.BizException;
+import com.ogc.standard.exception.EBizErrorCode;
 
 /** 
  * @author: miyb 
@@ -198,6 +199,22 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             condition.setUserId(userId);
             data = userDAO.select(condition);
         }
+        if (data == null) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "用户编号" + userId + "不存在");
+        }
+        return data;
+    }
+
+    @Override
+    public User getUserUnCheck(String userId) {
+        User data = null;
+        if (StringUtils.isNotBlank(userId)) {
+            User condition = new User();
+            condition.setUserId(userId);
+            data = userDAO.select(condition);
+        }
+
         return data;
     }
 

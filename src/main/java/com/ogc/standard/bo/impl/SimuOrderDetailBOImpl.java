@@ -1,5 +1,7 @@
 package com.ogc.standard.bo.impl;
 
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -10,6 +12,7 @@ import com.ogc.standard.bo.ISimuOrderDetailBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.ISimuOrderDetailDAO;
+import com.ogc.standard.domain.SimuOrder;
 import com.ogc.standard.domain.SimuOrderDetail;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.exception.BizException;
@@ -22,15 +25,29 @@ public class SimuOrderDetailBOImpl extends PaginableBOImpl<SimuOrderDetail>
     private ISimuOrderDetailDAO simuOrderDetailDAO;
 
     @Override
-    public String saveSimuOrderDetail(SimuOrderDetail data) {
-        String code = null;
+    public SimuOrderDetail saveSimuOrderDetail(SimuOrder simuOrder,
+            BigDecimal tradedPrice, BigDecimal tradedCount,
+            BigDecimal tradedAmount, BigDecimal tradedFee) {
+        // 新增成交单并更新委托单
+        SimuOrderDetail data = new SimuOrderDetail();
         if (data != null) {
-            code = OrderNoGenerater
+            String code = OrderNoGenerater
                 .generate(EGeneratePrefix.SIMU_ORDER_DETAIL.getCode());
             data.setCode(code);
+            data.setOrderCode(simuOrder.getCode());
+            data.setUserId(simuOrder.getUserId());
+            data.setSymbol(simuOrder.getSymbol());
+            data.setToSymbol(simuOrder.getToSymbol());
+            data.setTradedPrice(tradedPrice);
+
+            data.setTradedCount(tradedCount);
+            data.setTradedAmount(tradedAmount);
+            // 交易手续费
+            data.setTradedFee(tradedFee);
+            data.setCreateDatetime(new Date());
             simuOrderDetailDAO.insert(data);
         }
-        return code;
+        return data;
     }
 
     @Override

@@ -101,7 +101,7 @@
 		WHERE id = #{id}
 	</update>
 
-	<update id="delete_handicap" parameterType="handicap">
+	<update id="delete_simuMatchResult" parameterType="handicap">
 		DELETE FROM 
 		tsimu_match_result
 		

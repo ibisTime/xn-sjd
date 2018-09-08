@@ -16,13 +16,14 @@ public class SimuKLineAOImpl implements ISimuKLineAO {
     private ISimuKLineBO simuKLineBO;
 
     @Override
-    public SimuKLine addSimuKLine(SimuKLine data) {
-        return simuKLineBO.saveSimuKLine(data);
-    }
+    public List<SimuKLine> querySimuKLineList(String symbol, String toSymbol,
+            String period) {
 
-    @Override
-    public List<SimuKLine> querySimuKLineList(SimuKLine condition) {
+        SimuKLine condition = new SimuKLine();
+        condition.setSymbol(symbol);
+        condition.setToSymbol(toSymbol);
+        condition.setPeriod(period);
+
         return simuKLineBO.querySimuKLineList(condition);
     }
-
 }

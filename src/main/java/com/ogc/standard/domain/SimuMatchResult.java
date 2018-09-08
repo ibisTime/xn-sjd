@@ -24,6 +24,12 @@ public class SimuMatchResult extends ABaseDO {
     // 委托单卖单编号
     private String sellOrderCode;
 
+    // 成交单买单编号
+    private String buyOrderDetailCode;
+
+    // 成交单卖单编号
+    private String sellOrderDetailCode;
+
     // 交易币种
     private String symbol;
 
@@ -48,92 +54,108 @@ public class SimuMatchResult extends ABaseDO {
     // 撮合时间
     private Date createDatetime;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public Long getId() {
         return id;
     }
 
-    public void setBuyOrderCode(String buyOrderCode) {
-        this.buyOrderCode = buyOrderCode;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getBuyOrderCode() {
         return buyOrderCode;
     }
 
-    public void setSellOrderCode(String sellOrderCode) {
-        this.sellOrderCode = sellOrderCode;
+    public void setBuyOrderCode(String buyOrderCode) {
+        this.buyOrderCode = buyOrderCode;
     }
 
     public String getSellOrderCode() {
         return sellOrderCode;
     }
 
-    public void setSymbol(String symbol) {
-        this.symbol = symbol;
+    public void setSellOrderCode(String sellOrderCode) {
+        this.sellOrderCode = sellOrderCode;
+    }
+
+    public String getBuyOrderDetailCode() {
+        return buyOrderDetailCode;
+    }
+
+    public void setBuyOrderDetailCode(String buyOrderDetailCode) {
+        this.buyOrderDetailCode = buyOrderDetailCode;
+    }
+
+    public String getSellOrderDetailCode() {
+        return sellOrderDetailCode;
+    }
+
+    public void setSellOrderDetailCode(String sellOrderDetailCode) {
+        this.sellOrderDetailCode = sellOrderDetailCode;
     }
 
     public String getSymbol() {
         return symbol;
     }
 
-    public void setToSymbol(String toSymbol) {
-        this.toSymbol = toSymbol;
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
     }
 
     public String getToSymbol() {
         return toSymbol;
     }
 
-    public void setBuyUserId(String buyUserId) {
-        this.buyUserId = buyUserId;
+    public void setToSymbol(String toSymbol) {
+        this.toSymbol = toSymbol;
     }
 
     public String getBuyUserId() {
         return buyUserId;
     }
 
-    public void setSellUserId(String sellUserId) {
-        this.sellUserId = sellUserId;
+    public void setBuyUserId(String buyUserId) {
+        this.buyUserId = buyUserId;
     }
 
     public String getSellUserId() {
         return sellUserId;
     }
 
-    public void setBuyAmount(BigDecimal buyAmount) {
-        this.buyAmount = buyAmount;
+    public void setSellUserId(String sellUserId) {
+        this.sellUserId = sellUserId;
     }
 
     public BigDecimal getBuyAmount() {
         return buyAmount;
     }
 
-    public void setSellAmount(BigDecimal sellAmount) {
-        this.sellAmount = sellAmount;
+    public void setBuyAmount(BigDecimal buyAmount) {
+        this.buyAmount = buyAmount;
     }
 
     public BigDecimal getSellAmount() {
         return sellAmount;
     }
 
-    public void setFee(BigDecimal fee) {
-        this.fee = fee;
+    public void setSellAmount(BigDecimal sellAmount) {
+        this.sellAmount = sellAmount;
     }
 
     public BigDecimal getFee() {
         return fee;
     }
 
-    public void setCreateDatetime(Date createDatetime) {
-        this.createDatetime = createDatetime;
+    public void setFee(BigDecimal fee) {
+        this.fee = fee;
     }
 
     public Date getCreateDatetime() {
         return createDatetime;
+    }
+
+    public void setCreateDatetime(Date createDatetime) {
+        this.createDatetime = createDatetime;
     }
 
 }

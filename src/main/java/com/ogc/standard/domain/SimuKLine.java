@@ -30,9 +30,6 @@ public class SimuKLine extends ABaseDO {
     // 成交量
     private BigDecimal volume;
 
-    // 成交价
-    private BigDecimal price;
-
     // 成交笔数
     private BigDecimal quantity;
 
@@ -92,14 +89,6 @@ public class SimuKLine extends ABaseDO {
 
     public void setVolume(BigDecimal volume) {
         this.volume = volume;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
     }
 
     public BigDecimal getQuantity() {

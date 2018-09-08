@@ -1,15 +1,18 @@
 package com.ogc.standard.bo;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.ogc.standard.bo.base.IPaginableBO;
 import com.ogc.standard.domain.SimuOrder;
+import com.ogc.standard.dto.req.XN650050Req;
 
 public interface ISimuOrderBO extends IPaginableBO<SimuOrder> {
 
     public boolean isSimuOrderExist(String code);
 
-    public void saveSimuOrder(SimuOrder data);
+    public SimuOrder saveSimuOrder(XN650050Req req, BigDecimal totalCount,
+            BigDecimal price, BigDecimal totalAmount);
 
     public void tradeSuccess(SimuOrder data);
 

@@ -7,17 +7,19 @@ import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.ogc.standard.bo.IHandicapBO;
-import com.ogc.standard.bo.ISimuKLineBO;
 import com.ogc.standard.bo.ISimuMatchResultBO;
 import com.ogc.standard.bo.ISimuOrderBO;
 import com.ogc.standard.bo.ISimuOrderDetailBO;
 import com.ogc.standard.bo.ISimuOrderHistoryBO;
+import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.domain.Handicap;
-import com.ogc.standard.domain.SimuKLine;
+import com.ogc.standard.domain.HandicapGrade;
 import com.ogc.standard.domain.SimuOrder;
 import com.ogc.standard.domain.SimuOrderDetail;
+import com.ogc.standard.enums.EHandicapQuantity;
 import com.ogc.standard.enums.ESimuOrderDirection;
 import com.ogc.standard.enums.ESimuOrderStatus;
 import com.ogc.standard.enums.ESimuOrderType;
@@ -28,6 +30,7 @@ import com.ogc.standard.enums.ESimuOrderType;
  * @since: 2018年8月31日 下午4:50:02 
  * @history:
  */
+@Service
 public class SimuOrderMatch {
 
     @Autowired
@@ -43,30 +46,26 @@ public class SimuOrderMatch {
     private IHandicapBO handicapBO;
 
     @Autowired
-    private ISimuKLineBO simuKLineBO;
-
-    @Autowired
     private ISimuMatchResultBO simuMatchResultBO;
 
     /**
-     * 按交易对查找委托单进行撮合
-     * @param symbol
-     * @param toSymbol 
-     * @create: 2018年8月31日 下午5:03:56 lei
-     * @history:
-     */
+    * 按交易对查找委托单进行撮合逻辑
+    * 1、市价单先撮合
+    * 2、先查对方五档，if没有，补充，if 补充没有return；
+    * 3、执行撮合逻辑，重建盘口
+    */
     public void doMatchTrade(String symbol, String toSymbol) {
 
-        List<SimuOrder> simuOrders = getSimuOrderList(symbol, toSymbol);
+        List<SimuOrder> simuOrders = queryMarketSimuOrderList(symbol, toSymbol);
         if (CollectionUtils.isNotEmpty(simuOrders)) {
 
             // 存在市价单时，优先撮合市价单
-            doMatchMarket(simuOrders, symbol, toSymbol);
+            matchMarket(simuOrders, symbol, toSymbol);
 
         } else {
 
             // 不存在市价单时，撮合限价单
-            doMatchLimit(symbol, toSymbol);
+            matchLimit(symbol, toSymbol);
 
         }
 
@@ -80,7 +79,8 @@ public class SimuOrderMatch {
      * @create: 2018年8月31日 下午5:13:50 lei
      * @history:
      */
-    private List<SimuOrder> getSimuOrderList(String symbol, String toSymbol) {
+    private List<SimuOrder> queryMarketSimuOrderList(String symbol,
+            String toSymbol) {
         List<String> statusList = new ArrayList<>();
         statusList.add(ESimuOrderStatus.SUBMIT.getCode());
         statusList.add(ESimuOrderStatus.PART_DEAL.getCode());
@@ -97,158 +97,66 @@ public class SimuOrderMatch {
 
     /**
      * 市价单撮合
-     * @param symbol
-     * @param toSymbol 
-     * @create: 2018年8月31日 下午5:13:10 lei
-     * @history:
+     * 1.从存活委托单池内取出对应交易对下所有市价单
+     * 2.获取对向盘口档位，循环盘口档位，根据价格匹配市价单
+     * 3.撮合当前档位下匹配到的市价单和盘口
+     * 4.修改市价单、盘口交易信息
+     * 5.根据最后的撮合结果修改市价单信息
      */
-    private void doMatchMarket(List<SimuOrder> simuOrders, String symbol,
+    private void matchMarket(List<SimuOrder> simuOrders, String symbol,
             String toSymbol) {
 
         for (SimuOrder marketOrder : simuOrders) {
 
-            List<Handicap> handicaps = null;
-            // 获取对方盘口
-            if (ESimuOrderDirection.BUY.getCode()
-                .equals(marketOrder.getDirection())) {
-                handicaps = handicapBO.queryHandicapList(
-                    marketOrder.getSymbol(), marketOrder.getToSymbol(),
-                    ESimuOrderDirection.SELL.getCode(), 5);
-
-            } else {
-                handicaps = handicapBO.queryHandicapList(
-                    marketOrder.getSymbol(), marketOrder.getToSymbol(),
-                    ESimuOrderDirection.BUY.getCode(), 5);
-
+            // 获取对向盘口档位
+            List<HandicapGrade> handicapGrades = queryHandicapGrades(
+                marketOrder.getSymbol(), marketOrder.getSymbol(),
+                marketOrder.getDirection());
+            if (CollectionUtils.isEmpty(handicapGrades)) {
+                break;
             }
 
-            for (Handicap handicap : handicaps) {
+            boolean isHGBreak = false; // 盘口档位循环是否可以停止
+            for (HandicapGrade handicapGrade : handicapGrades) {
 
-                // 根据盘口获取委托单
-                SimuOrder limitOrder = simuOrderBO
-                    .getSimuOrder(handicap.getOrderCode());
+                for (Handicap handicap : handicapGrade.getHandicapList()) {
 
-                // 双委托单所有者为同一人
-                if (marketOrder.getUserId().equals(limitOrder.getUserId())) {
-                    continue;
-                }
+                    // 根据盘口获取委托单
+                    SimuOrder limitOrder = simuOrderBO
+                        .getSimuOrder(handicap.getOrderCode());
 
-                // 委托总量减去已成交量：委托剩余可交易量
-                BigDecimal avilAmount = marketOrder.getTotalAmount()
-                    .subtract(marketOrder.getTradedAmount());
+                    // 双委托单所有者为同一人
+                    if (marketOrder.getUserId()
+                        .equals(limitOrder.getUserId())) {
+                        continue;
+                    }
 
-                if (avilAmount.compareTo(BigDecimal.ZERO) > 0) {
+                    // 委托总量减去已成交量：委托剩余可交易量
+                    BigDecimal avilAmount = marketOrder.getTotalAmount()
+                        .subtract(marketOrder.getTradedAmount());
 
+                    if (avilAmount.compareTo(BigDecimal.ZERO) == 0) {
+                        isHGBreak = true;
+                        break;
+                    }
+
+                    // 对向
                     BigDecimal avilHandicapAmount = handicap.getCount()
                         .multiply(handicap.getPrice());
 
-                    // 当前盘口的交易量是否能满足
-                    if (avilHandicapAmount.compareTo(avilAmount) > 0) {
-                        // 当前委托单完全成交，新增当前委托单交易明细单
-                        doMarketOrderMatch(marketOrder, handicap,
-                            avilAmount.divide(handicap.getPrice(), 4,
-                                BigDecimal.ROUND_DOWN),
-                            avilAmount);
+                    doMatchMarket(marketOrder, handicap, limitOrder, avilAmount,
+                        avilHandicapAmount);
 
-                        // 盘口部分成交，新增盘口单交易明细单
-                        doLimitSimuOrderMatch(limitOrder,
-                            avilAmount.divide(handicap.getPrice(), 4,
-                                BigDecimal.ROUND_DOWN),
-                            avilAmount, ESimuOrderStatus.PART_DEAL.getCode());
+                }
 
-                    } else if (avilHandicapAmount.compareTo(avilAmount) <= 0) {
-                        // 当前委托单完全成交，新增当前委托单交易明细单
-                        doMarketOrderMatch(marketOrder, handicap,
-                            handicap.getCount(), avilHandicapAmount);
-
-                        // 盘口完全成交，新增盘口单交易明细单
-                        doLimitSimuOrderMatch(limitOrder, handicap.getCount(),
-                            avilHandicapAmount,
-                            ESimuOrderStatus.ENTIRE_DEAL.getCode());
-
-                    } else {
-                        // 当前委托单部分成交，新增当前委托单交易明细单
-                        doMarketOrderMatch(marketOrder, handicap,
-                            handicap.getCount(), avilHandicapAmount);
-
-                        // 盘口完全成交，新增盘口单交易明细单
-                        doLimitSimuOrderMatch(limitOrder, handicap.getCount(),
-                            avilHandicapAmount,
-                            ESimuOrderStatus.ENTIRE_DEAL.getCode());
-
-                    }
-
-                    // 落地撮合结果
-                    simuMatchResultBO.doSimuMatchResult(marketOrder,
-                        limitOrder);
-
-                } else {
+                if (isHGBreak) {
                     break;
                 }
 
             }
 
             /** 当前市价委托单已 撮合 完所有的对方盘口 **/
-
-            // 获取当前市价委托单的所有成交明细
-            SimuOrderDetail condition = new SimuOrderDetail();
-            condition.setOrderCode(marketOrder.getCode());
-            List<SimuOrderDetail> simuOrderDetails = simuOrderDetailBO
-                .querySimuOrderDetailList(condition);
-
-            if (CollectionUtils.isEmpty(simuOrderDetails)) {
-
-                // 此委托单无法成交
-                marketOrder.setAvgPrice(BigDecimal.ZERO);
-                marketOrder.setTradedCount(BigDecimal.ZERO);
-                marketOrder.setTradedAmount(BigDecimal.ZERO);
-                marketOrder.setStatus(ESimuOrderStatus.CANCEL.getCode());
-                marketOrder.setCancelDatetime(new Date());
-
-                moveToHistory(marketOrder);
-
-            } else {
-
-                // 比较所有明细交易金额相加 和 当前委托单的委托金额，小于则为部分成交，等于则为全部成交
-                BigDecimal totalTradeAmount = BigDecimal.ZERO;
-
-                // 成交总数量
-                BigDecimal totalTradeCount = BigDecimal.ZERO;
-
-                for (SimuOrderDetail simuOrderDetail : simuOrderDetails) {
-
-                    totalTradeAmount = totalTradeAmount
-                        .add(simuOrderDetail.getTradedAmount());
-
-                    totalTradeCount = totalTradeCount
-                        .add(simuOrderDetail.getTradedCount());
-
-                }
-
-                // 计算成交均价
-                BigDecimal avgPrice = totalTradeAmount.divide(totalTradeCount,
-                    4, BigDecimal.ROUND_DOWN);
-
-                // 当前委托单是否完全成交？修改状态，进入历史委托单
-                if (totalTradeAmount
-                    .compareTo(marketOrder.getTotalAmount()) < 0) {
-                    // 已成交集金额 小于 总委托金额，部分成交
-                    marketOrder
-                        .setStatus(ESimuOrderStatus.PART_DEAL_CANCEL.getCode());
-                } else {
-                    // 完全成交
-                    marketOrder
-                        .setStatus(ESimuOrderStatus.ENTIRE_DEAL.getCode());
-                }
-
-                // 装填委托单信息并转入历史委托单
-                marketOrder.setAvgPrice(avgPrice);
-                marketOrder.setTradedCount(totalTradeCount);
-                marketOrder.setTradedAmount(totalTradeAmount);
-
-                moveToHistory(marketOrder);
-
-            }
+            doMarchMarketDone(marketOrder);
 
         }
 
@@ -258,97 +166,66 @@ public class SimuOrderMatch {
     }
 
     /**
-     * 限价单撮合
-     * @param symbol
-     * @param toSymbol 
-     * @create: 2018年8月31日 下午5:13:10 lei
-     * @history:
+     * 限价单撮合（循环优化for替换为map）
+     * 1.获取买卖双方盘口档位，以买盘为主，用卖盘来进行撮合
+     * 2.匹配双方盘口
+     * 3.撮合当前档位下匹配到的双方盘口
+     * 4.修改双方盘口、委托单交易信息
      */
-    private void doMatchLimit(String symbol, String toSymbol) {
+    private void matchLimit(String symbol, String toSymbol) {
 
-        // 买盘盘口
-        List<Handicap> bids = handicapBO.queryHandicapList(symbol, toSymbol,
-            ESimuOrderDirection.BUY.getCode(), 5);
+        // 获取买盘盘口档位
+        List<HandicapGrade> bidsGrades = queryHandicapGrades(symbol, toSymbol,
+            ESimuOrderDirection.SELL.getCode());
 
-        // 卖盘盘口
-        List<Handicap> asks = handicapBO.queryHandicapList(symbol, toSymbol,
-            ESimuOrderDirection.SELL.getCode(), 5);
+        // 获取卖盘盘口档位
+        List<HandicapGrade> asksGrades = queryHandicapGrades(symbol, toSymbol,
+            ESimuOrderDirection.BUY.getCode());
 
-        // 用买盘 去扫 卖盘
-        for (Handicap bidsHandicap : bids) {
+        for (HandicapGrade bidsGrade : bidsGrades) {
 
-            // 根据盘口获取委托单
-            SimuOrder bidsOrder = simuOrderBO
-                .getSimuOrder(bidsHandicap.getOrderCode());
+            // 用买盘 去扫 卖盘
+            for (Handicap bidsHandicap : bidsGrade.getHandicapList()) {
 
-            // 委托总量减去已成交量：剩余可交易量
-            BigDecimal avilBidsAmount = bidsOrder.getTotalAmount()
-                .subtract(bidsOrder.getTradedAmount());
+                // 根据盘口获取委托单
+                SimuOrder bidsOrder = simuOrderBO
+                    .getSimuOrder(bidsHandicap.getOrderCode());
 
-            if (avilBidsAmount.compareTo(BigDecimal.ZERO) > 0) {
+                // 委托总量减去已成交量：剩余可交易量
+                BigDecimal avilBidsAmount = bidsOrder.getTotalAmount()
+                    .subtract(bidsOrder.getTradedAmount());
 
-                for (Handicap asksHandicap : asks) {
+                if (avilBidsAmount.compareTo(BigDecimal.ZERO) == 0) {
+                    break;
+                }
 
-                    // 根据盘口获取委托单
-                    SimuOrder asksOrder = simuOrderBO
-                        .getSimuOrder(asksHandicap.getOrderCode());
+                for (HandicapGrade asksGrade : asksGrades) {
 
-                    // 双委托单所有者为同一人
-                    if (bidsOrder.getUserId().equals(asksOrder.getUserId())) {
-                        continue;
-                    }
+                    for (Handicap asksHandicap : asksGrade.getHandicapList()) {
 
-                    // 盘口剩余可交易量
-                    BigDecimal avilAsksAmount = asksOrder.getTotalAmount()
-                        .subtract(asksOrder.getTradedAmount());
+                        // 根据盘口获取委托单
+                        SimuOrder asksOrder = simuOrderBO
+                            .getSimuOrder(asksHandicap.getOrderCode());
 
-                    // 卖盘盘口价格 低于等于 买盘盘口价格 撮合成功
-                    if (asksOrder.getPrice()
-                        .compareTo(bidsOrder.getPrice()) <= 0) {
-
-                        // 买盘交易量能否被满足
-                        if (avilAsksAmount.compareTo(avilBidsAmount) > 0) {
-
-                            // 买盘单完全成交
-                            doLimitSimuOrderMatch(bidsOrder,
-                                bidsHandicap.getCount(), avilBidsAmount,
-                                ESimuOrderStatus.ENTIRE_DEAL.getCode());
-
-                            // 卖盘单部分成交
-                            doLimitSimuOrderMatch(asksOrder,
-                                bidsHandicap.getCount(), avilBidsAmount,
-                                ESimuOrderStatus.PART_DEAL.getCode());
-
-                        } else if (avilAsksAmount
-                            .compareTo(avilBidsAmount) == 0) {
-
-                            // 买盘单完全成交
-                            doLimitSimuOrderMatch(bidsOrder,
-                                bidsHandicap.getCount(), avilBidsAmount,
-                                ESimuOrderStatus.ENTIRE_DEAL.getCode());
-
-                            // 卖盘单完全成交
-                            doLimitSimuOrderMatch(asksOrder,
-                                asksHandicap.getCount(), avilAsksAmount,
-                                ESimuOrderStatus.ENTIRE_DEAL.getCode());
-
-                        } else {
-
-                            // 买盘单部分成交
-                            doLimitSimuOrderMatch(bidsOrder,
-                                asksHandicap.getCount(), avilAsksAmount,
-                                ESimuOrderStatus.PART_DEAL.getCode());
-
-                            // 卖盘单完全成交
-                            doLimitSimuOrderMatch(asksOrder,
-                                asksHandicap.getCount(), avilAsksAmount,
-                                ESimuOrderStatus.ENTIRE_DEAL.getCode());
-
+                        // 双委托单所有者为同一人
+                        if (bidsOrder.getUserId()
+                            .equals(asksOrder.getUserId())) {
+                            continue;
                         }
 
-                        // 落地撮合结果
-                        simuMatchResultBO.doSimuMatchResult(bidsOrder,
-                            asksOrder);
+                        // 盘口剩余可交易量
+                        BigDecimal avilAsksAmount = asksOrder.getTotalAmount()
+                            .subtract(asksOrder.getTradedAmount());
+
+                        // 卖盘盘口价格 低于等于 买盘盘口价格 撮合成功
+                        if (asksOrder.getPrice()
+                            .compareTo(bidsOrder.getPrice()) <= 0) {
+
+                            doMatchLimit(bidsHandicap, bidsOrder,
+                                avilBidsAmount, asksHandicap, asksOrder,
+                                avilAsksAmount);
+
+                        }
 
                     }
 
@@ -360,8 +237,184 @@ public class SimuOrderMatch {
 
     }
 
+    //
+    private void doMatchMarket(SimuOrder marketOrder, Handicap handicap,
+            SimuOrder limitOrder, BigDecimal avilAmount,
+            BigDecimal avilHandicapAmount) {
+
+        // 当前盘口的交易量是否能满足
+        if (avilHandicapAmount.compareTo(avilAmount) > 0) {
+            // 计算交易数量
+            BigDecimal tradeCount = avilAmount.divide(handicap.getPrice(), 4,
+                BigDecimal.ROUND_DOWN);
+
+            // 当前委托单完全成交，新增当前委托单交易明细单
+            SimuOrderDetail marketDetail = doOrderMatch(marketOrder,
+                handicap.getPrice(), tradeCount, avilAmount,
+                ESimuOrderStatus.ENTIRE_DEAL.getCode());
+
+            // 盘口部分成交，新增盘口单交易明细单
+            SimuOrderDetail handicapDetail = doOrderMatch(limitOrder,
+                handicap.getPrice(), tradeCount, avilAmount,
+                ESimuOrderStatus.PART_DEAL.getCode());
+
+            // 落地撮合结果
+            simuMatchResultBO.doSimuMatchResult(marketDetail, handicapDetail);
+
+        } else if (avilHandicapAmount.compareTo(avilAmount) == 0) {
+            // 当前委托单完全成交，新增当前委托单交易明细单
+            SimuOrderDetail marketDetail = doOrderMatch(marketOrder,
+                handicap.getPrice(), handicap.getCount(), avilHandicapAmount,
+                ESimuOrderStatus.ENTIRE_DEAL.getCode());
+
+            // 盘口完全成交，新增盘口单交易明细单
+            SimuOrderDetail handicapDetail = doOrderMatch(limitOrder,
+                handicap.getPrice(), handicap.getCount(), avilHandicapAmount,
+                ESimuOrderStatus.ENTIRE_DEAL.getCode());
+
+            // 落地撮合结果
+            simuMatchResultBO.doSimuMatchResult(marketDetail, handicapDetail);
+
+        } else {
+            // 当前委托单部分成交，新增当前委托单交易明细单
+            SimuOrderDetail marketDetail = doOrderMatch(marketOrder,
+                handicap.getPrice(), handicap.getCount(), avilHandicapAmount,
+                ESimuOrderStatus.PART_DEAL.getCode());
+
+            // 盘口完全成交，新增盘口单交易明细单
+            SimuOrderDetail handicapDetail = doOrderMatch(limitOrder,
+                handicap.getPrice(), handicap.getCount(), avilHandicapAmount,
+                ESimuOrderStatus.ENTIRE_DEAL.getCode());
+
+            // 落地撮合结果
+            simuMatchResultBO.doSimuMatchResult(marketDetail, handicapDetail);
+
+        }
+
+    }
+
+    private void doMatchLimit(Handicap bidsHandicap, SimuOrder bidsOrder,
+            BigDecimal avilBidsAmount, Handicap asksHandicap,
+            SimuOrder asksOrder, BigDecimal avilAsksAmount) {
+        // 买盘交易量能否被满足
+        if (avilAsksAmount.compareTo(avilBidsAmount) > 0) {
+
+            // 买盘单完全成交
+            SimuOrderDetail bidsDetail = doOrderMatch(bidsOrder,
+                asksHandicap.getPrice(), bidsHandicap.getCount(),
+                avilBidsAmount, ESimuOrderStatus.ENTIRE_DEAL.getCode());
+
+            // 卖盘单部分成交
+            SimuOrderDetail asksDetail = doOrderMatch(asksOrder,
+                asksHandicap.getPrice(), bidsHandicap.getCount(),
+                avilBidsAmount, ESimuOrderStatus.PART_DEAL.getCode());
+
+            // 落地撮合结果
+            simuMatchResultBO.doSimuMatchResult(bidsDetail, asksDetail);
+
+        } else if (avilAsksAmount.compareTo(avilBidsAmount) == 0) {
+
+            // 买盘单完全成交
+            SimuOrderDetail bidsDetail = doOrderMatch(bidsOrder,
+                asksHandicap.getPrice(), bidsHandicap.getCount(),
+                avilBidsAmount, ESimuOrderStatus.ENTIRE_DEAL.getCode());
+
+            // 卖盘单完全成交
+            SimuOrderDetail asksDetail = doOrderMatch(asksOrder,
+                asksHandicap.getPrice(), asksHandicap.getCount(),
+                avilAsksAmount, ESimuOrderStatus.ENTIRE_DEAL.getCode());
+
+            // 落地撮合结果
+            simuMatchResultBO.doSimuMatchResult(bidsDetail, asksDetail);
+
+        } else {
+
+            // 买盘单部分成交
+            SimuOrderDetail bidsDetail = doOrderMatch(bidsOrder,
+                asksHandicap.getPrice(), asksHandicap.getCount(),
+                avilAsksAmount, ESimuOrderStatus.PART_DEAL.getCode());
+
+            // 卖盘单完全成交
+            SimuOrderDetail asksDetail = doOrderMatch(asksOrder,
+                asksHandicap.getPrice(), asksHandicap.getCount(),
+                avilAsksAmount, ESimuOrderStatus.ENTIRE_DEAL.getCode());
+
+            // 落地撮合结果
+            simuMatchResultBO.doSimuMatchResult(bidsDetail, asksDetail);
+
+        }
+    }
+
     /**
-     * 处理市价委托单撮合结果
+     * 市价单撮合结束后处理
+     * @param marketOrder 
+     * @create: 2018年9月8日 下午1:54:31 lei
+     * @history:
+     */
+    private void doMarchMarketDone(SimuOrder marketOrder) {
+        // 获取当前市价委托单的所有成交明细
+        SimuOrderDetail condition = new SimuOrderDetail();
+        condition.setOrderCode(marketOrder.getCode());
+        List<SimuOrderDetail> simuOrderDetails = simuOrderDetailBO
+            .querySimuOrderDetailList(condition);
+
+        if (CollectionUtils.isEmpty(simuOrderDetails)) {
+
+            // 此委托单无法成交
+            marketOrder.setAvgPrice(BigDecimal.ZERO);
+            marketOrder.setTradedCount(BigDecimal.ZERO);
+            marketOrder.setTradedAmount(BigDecimal.ZERO);
+            marketOrder.setStatus(ESimuOrderStatus.CANCEL.getCode());
+            marketOrder.setCancelDatetime(new Date());
+
+        } else {
+
+            // 比较所有明细交易金额相加 和 当前委托单的委托金额，小于则为部分成交，等于则为全部成交
+            BigDecimal totalTradeAmount = BigDecimal.ZERO;
+
+            // 成交总数量
+            BigDecimal totalTradeCount = BigDecimal.ZERO;
+
+            for (SimuOrderDetail simuOrderDetail : simuOrderDetails) {
+
+                totalTradeAmount = totalTradeAmount
+                    .add(simuOrderDetail.getTradedAmount());
+
+                totalTradeCount = totalTradeCount
+                    .add(simuOrderDetail.getTradedCount());
+
+            }
+
+            // 计算成交均价
+            BigDecimal avgPrice = totalTradeAmount.divide(totalTradeCount, 4,
+                BigDecimal.ROUND_DOWN);
+
+            // 装填委托单信息并转入历史委托单
+            marketOrder.setAvgPrice(avgPrice);
+            marketOrder.setTradedCount(totalTradeCount);
+            marketOrder.setTradedAmount(totalTradeAmount);
+
+        }
+
+        moveToHistory(marketOrder);
+    }
+
+    private List<HandicapGrade> queryHandicapGrades(String symbol,
+            String toSymbol, String direction) {
+
+        // 补充对向盘口
+        handicapBO.stuffHandicap(symbol, toSymbol, direction,
+            StringValidater.toInteger(EHandicapQuantity.FIFTY.getCode()));
+
+        // 获取对向盘口档位
+        List<HandicapGrade> handicapGrades = handicapBO
+            .queryHandicapList(symbol, toSymbol, direction, 5);
+
+        return handicapGrades;
+    }
+
+    /**
+     * 处理委托单撮合结果
      * @param simuOrder
      * @param handicap
      * @param tradedCount
@@ -369,34 +422,28 @@ public class SimuOrderMatch {
      * @create: 2018年8月31日 下午5:12:47 lei
      * @history:
      */
-    private void doMarketOrderMatch(SimuOrder simuOrder, Handicap handicap,
-            BigDecimal tradedCount, BigDecimal tradedAmount) {
+    private SimuOrderDetail doOrderMatch(SimuOrder simuOrder,
+            BigDecimal tradedPrice, BigDecimal tradedCount,
+            BigDecimal tradedAmount, String status) {
 
-        // 新增盘口成交单并更新委托单
-        SimuOrderDetail orderDetail = new SimuOrderDetail();
-        orderDetail.setOrderCode(simuOrder.getCode());
-        orderDetail.setUserId(simuOrder.getUserId());
-        orderDetail.setSymbol(simuOrder.getSymbol());
-        orderDetail.setToSymbol(simuOrder.getToSymbol());
-        orderDetail.setTradedPrice(handicap.getPrice());
+        // 新增成交单并更新委托单
+        BigDecimal tradedFee = getFee(tradedAmount);
+        SimuOrderDetail orderDetail = simuOrderDetailBO.saveSimuOrderDetail(
+            simuOrder, tradedPrice, tradedCount, tradedAmount, tradedFee);
 
-        orderDetail.setTradedCount(tradedCount);
-        orderDetail.setTradedAmount(tradedAmount);
-        // 交易手续费
-        // data.setTradedFee();
-        orderDetail.setCreateDatetime(new Date());
-        simuOrderDetailBO.saveSimuOrderDetail(orderDetail);
+        // 更新委托单交易信息
+        updateSimuOrderTradeInfo(simuOrder, tradedCount, tradedAmount, status);
 
-        // 落地行情K线
-        saveSimuKLine(orderDetail);
+        // 委托单是限价单时更新盘口信息
+        if (ESimuOrderType.LIMIT.equals(simuOrder.getType())) {
+            // 更新盘口交易信息
+            updateHandicapTradeInfo(simuOrder.getCode(),
+                simuOrder.getTotalCount().subtract(simuOrder.getTradedCount()),
+                status);
 
-        // 更新当前委托单的已交易信息
-        simuOrder.setTradedCount(simuOrder.getTradedCount().add(tradedCount));
-        simuOrder
-            .setTradedAmount(simuOrder.getTradedAmount().add(tradedAmount));
-        // simuOrder.setTradedFee();
-        simuOrder.setLastTradedDatetime(new Date());
-        simuOrderBO.refreshMarketSimuOrder(simuOrder);
+        }
+
+        return orderDetail;
     }
 
     /**
@@ -408,34 +455,34 @@ public class SimuOrderMatch {
      * @create: 2018年8月31日 下午5:09:09 lei
      * @history:
      */
-    private void doLimitSimuOrderMatch(SimuOrder simuOrder,
-            BigDecimal tradedCount, BigDecimal tradedAmount, String status) {
-
-        // 新增盘口成交单并更新委托单
-        SimuOrderDetail handicapDetail = new SimuOrderDetail();
-        handicapDetail.setOrderCode(simuOrder.getCode());
-        handicapDetail.setUserId(simuOrder.getUserId());
-        handicapDetail.setSymbol(simuOrder.getSymbol());
-        handicapDetail.setToSymbol(simuOrder.getToSymbol());
-        handicapDetail.setTradedPrice(simuOrder.getPrice());
-
-        handicapDetail.setTradedCount(tradedCount);
-        handicapDetail.setTradedAmount(tradedAmount);
-        // 交易手续费
-        // data.setTradedFee();
-        handicapDetail.setCreateDatetime(new Date());
-        simuOrderDetailBO.saveSimuOrderDetail(handicapDetail);
-
-        // 落地行情K线
-        saveSimuKLine(handicapDetail);
-
-        // 更新盘口委托单交易信息
-        updateSimuOrderTradeInfo(simuOrder, tradedCount, tradedAmount, status);
-
-        // 更新盘口交易信息
-        updateHandicapTradeInfo(simuOrder.getCode(),
-            simuOrder.getTotalAmount().subtract(tradedCount), status);
-    }
+    // private SimuOrderDetail doLimitSimuOrderMatch(SimuOrder simuOrder,
+    // BigDecimal tradedCount, BigDecimal tradedAmount, String status) {
+    //
+    // // 新增成交单并更新委托单
+    // SimuOrderDetail handicapDetail = new SimuOrderDetail();
+    // handicapDetail.setOrderCode(simuOrder.getCode());
+    // handicapDetail.setUserId(simuOrder.getUserId());
+    // handicapDetail.setSymbol(simuOrder.getSymbol());
+    // handicapDetail.setToSymbol(simuOrder.getToSymbol());
+    // handicapDetail.setTradedPrice(simuOrder.getPrice());
+    //
+    // handicapDetail.setTradedCount(tradedCount);
+    // handicapDetail.setTradedAmount(tradedAmount);
+    // // 交易手续费
+    // handicapDetail.setTradedFee(getFee(tradedAmount));
+    // handicapDetail.setCreateDatetime(new Date());
+    // simuOrderDetailBO.saveSimuOrderDetail(handicapDetail);
+    //
+    // // 更新委托单交易信息
+    // updateSimuOrderTradeInfo(simuOrder, tradedCount, tradedAmount, status);
+    //
+    // // 更新盘口交易信息
+    // updateHandicapTradeInfo(simuOrder.getCode(),
+    // simuOrder.getTotalCount().subtract(simuOrder.getTradedCount()),
+    // status);
+    //
+    // return handicapDetail;
+    // }
 
     /**
      * 更新委托单交易信息
@@ -460,8 +507,8 @@ public class SimuOrderMatch {
             simuOrder
                 .setTradedAmount(simuOrder.getTradedAmount().add(tradedAmount));
             // 交易手续费
-            // handicapDetail
-            // .setTradedFee(handicapDetail.getTradedFee().add(augend));
+            simuOrder.setTradedFee(
+                simuOrder.getTradedFee().add(getFee(tradedAmount)));
 
             simuOrderBO.refreshLimitSimuOrder(simuOrder);
 
@@ -470,7 +517,7 @@ public class SimuOrderMatch {
             simuOrder.setTradedCount(tradedCount);
             simuOrder.setTradedAmount(tradedAmount);
             // 交易手续费
-            // handicapDetail.setTradedFee();
+            simuOrder.setTradedFee(getFee(tradedAmount));
 
             // 放入历史委托单
             moveToHistory(simuOrder);
@@ -489,38 +536,21 @@ public class SimuOrderMatch {
     private void updateHandicapTradeInfo(String orderCode,
             BigDecimal tradedCount, String status) {
 
-        Handicap handicap = new Handicap();
-        handicap.setOrderCode(orderCode);
-        handicap.setCount(tradedCount);
+        Handicap condition = new Handicap();
+        condition.setOrderCode(orderCode);
+        condition.setCount(tradedCount);
 
         if (ESimuOrderStatus.PART_DEAL.getCode().equals(status)) { // 部分成交
 
             // 更新盘口可交易量
-            handicapBO.refreshHandicap(handicap);
+            handicapBO.refreshHandicap(condition);
 
         } else if (ESimuOrderStatus.ENTIRE_DEAL.getCode().equals(status)) { // 完全成交
 
             // 删除盘口
-            handicapBO.removeHandicap(handicap.getOrderCode());
+            handicapBO.removeHandicap(condition.getOrderCode());
         }
 
-    }
-
-    /**
-     * 落地K线
-     * @param orderDetail 
-     * @create: 2018年8月31日 下午5:07:46 lei
-     * @history:
-     */
-    private void saveSimuKLine(SimuOrderDetail orderDetail) {
-        SimuKLine simuKLine = new SimuKLine();
-        simuKLine.setSymbol(orderDetail.getSymbol());
-        simuKLine.setToSymbol(orderDetail.getToSymbol());
-        simuKLine.setVolume(orderDetail.getTradedCount());
-        simuKLine.setQuantity(BigDecimal.ONE);
-        simuKLine.setAmount(orderDetail.getTradedAmount());
-        simuKLine.setCreateDatetime(new Date());
-        simuKLineBO.saveSimuKLine(simuKLine);
     }
 
     /**
@@ -535,6 +565,21 @@ public class SimuOrderMatch {
 
         // 撤销，并从 存活委托 中删除；
         simuOrderBO.cancel(data);
+    }
+
+    /**
+     * 计算手续费
+     * @param tradeAmount
+     * @return 
+     * @create: 2018年9月4日 下午8:16:58 lei
+     * @history:
+     */
+    private BigDecimal getFee(BigDecimal tradeAmount) {
+
+        BigDecimal fee = BigDecimal.ZERO;
+        fee = tradeAmount.multiply(BigDecimal.ONE);
+
+        return fee;
     }
 
 }

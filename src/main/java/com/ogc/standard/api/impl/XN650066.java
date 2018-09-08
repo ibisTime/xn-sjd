@@ -4,7 +4,6 @@ import com.ogc.standard.ao.ISimuKLineAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.ObjValidater;
-import com.ogc.standard.domain.SimuKLine;
 import com.ogc.standard.dto.req.XN650066Req;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
@@ -26,12 +25,8 @@ public class XN650066 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
 
-        SimuKLine condition = new SimuKLine();
-        condition.setSymbol(req.getSymbol());
-        condition.setToSymbol(req.getToSymbol());
-        condition.setPeriod(req.getPeriod());
-
-        return simuKLineAO.querySimuKLineList(condition);
+        return simuKLineAO.querySimuKLineList(req.getSymbol(),
+            req.getToSymbol(), req.getPeriod());
     }
 
     @Override

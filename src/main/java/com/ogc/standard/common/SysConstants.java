@@ -1,5 +1,7 @@
 package com.ogc.standard.common;
 
+import java.math.BigDecimal;
+
 public class SysConstants {
 
     public static final String admin = "admin";
@@ -88,4 +90,10 @@ public class SysConstants {
 
     // 绑定手机
     public static String DO_BIND_MOBILE_CN = "尊敬的%s用户，您于%s提交的绑定手机号码服务已完成，现绑定手机号码为%s，请妥善保管您的账户相关信息。";
+
+    // ****** 币币交易 ******
+
+    public static BigDecimal minCountLimit = new BigDecimal("0.00001"); // 最小委托数量
+
+    public static BigDecimal maxCountLimit = new BigDecimal("1000000"); // 最大委托数量
 }
