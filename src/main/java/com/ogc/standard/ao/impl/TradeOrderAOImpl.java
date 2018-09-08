@@ -322,7 +322,7 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
         this.adsBO.cutLeftCount(ads.getCode(), tradeCount);
 
         Account dbAccount = accountBO.getAccountByUser(ads.getUserId(),
-            ads.getTradeCurrency());
+            ads.getTradeCoin());
         // 冻结卖家 数字货币
         this.accountBO.frozenAmount(dbAccount, tradeCount,
             EJourBizTypeUser.AJ_ADS_FROZEN.getCode(),
