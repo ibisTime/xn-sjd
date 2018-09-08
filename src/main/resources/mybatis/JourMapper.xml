@@ -12,10 +12,10 @@
 		<result column="currency" property="currency" />
 		<result column="biz_type" property="bizType" />
 		<result column="biz_note" property="bizNote" />
-		<result column="trans_amount" jdbcType="DECIMAL" property="transAmount" />
+		<result column="trans_amount"  property="transAmount" /><!-- jdbcType="DECIMAL" --> 
         
-		<result column="pre_amount" jdbcType="DECIMAL" property="preAmount" />
-		<result column="post_amount" jdbcType="DECIMAL" property="postAmount" />
+		<result column="pre_amount" property="preAmount" /><!-- jdbcType="DECIMAL" --> 
+		<result column="post_amount" property="postAmount" /><!-- jdbcType="DECIMAL" --> 
 		<result column="status" property="status" />
 		<result column="channel_type" property="channelType" />
 		<result column="channel_order" property="channelOrder" />

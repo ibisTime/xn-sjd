@@ -43,11 +43,33 @@ public class Jour extends ABaseDO {
     // 变动金额（有正负之分）
     private transient BigDecimal transAmount;
 
+    private String transAmountString;
+
     // 变动前金额
     private transient BigDecimal preAmount;
 
+    private String preAmountString;
+
     // 变动后金额
     private transient BigDecimal postAmount;
+
+    private String postAmountString;
+
+    public String getPreAmountString() {
+        return preAmountString;
+    }
+
+    public void setPreAmountString(String preAmountString) {
+        this.preAmountString = preAmountString;
+    }
+
+    public String getPostAmountString() {
+        return postAmountString;
+    }
+
+    public void setPostAmountString(String postAmountString) {
+        this.postAmountString = postAmountString;
+    }
 
     // 状态
     private String status;
@@ -170,6 +192,7 @@ public class Jour extends ABaseDO {
     }
 
     public void setTransAmount(BigDecimal transAmount) {
+        setTransAmountString(transAmount.toString());
         this.transAmount = transAmount;
     }
 
@@ -178,6 +201,7 @@ public class Jour extends ABaseDO {
     }
 
     public void setPreAmount(BigDecimal preAmount) {
+        setPreAmountString(preAmount.toString());
         this.preAmount = preAmount;
     }
 
@@ -186,6 +210,7 @@ public class Jour extends ABaseDO {
     }
 
     public void setPostAmount(BigDecimal postAmount) {
+        setPostAmountString(postAmount.toString());
         this.postAmount = postAmount;
     }
 
@@ -323,6 +348,14 @@ public class Jour extends ABaseDO {
 
     public void setCurrencyList(List<String> currencyList) {
         this.currencyList = currencyList;
+    }
+
+    public String getTransAmountString() {
+        return transAmountString;
+    }
+
+    public void setTransAmountString(String transAmountString) {
+        this.transAmountString = transAmountString;
     }
 
 }
