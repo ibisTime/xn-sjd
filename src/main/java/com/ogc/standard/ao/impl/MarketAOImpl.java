@@ -28,13 +28,13 @@ import com.ogc.standard.market.MarketDepthItem;
 public class MarketAOImpl implements IMarketAO {
 
     @Autowired
-    IHuobiproAO huobiproAO;
-
-    @Autowired
-    private ISYSConfigBO sysConfigBO;
+    private IHuobiproAO huobiproAO;
 
     @Autowired
     private IMarketBO marketBO;
+
+    @Autowired
+    private ISYSConfigBO sysConfigBO;
 
     @Override
     public MarketDepth getMarketDepth(String symbolPair, String exchange) {
