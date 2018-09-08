@@ -1,12 +1,16 @@
 package com.ogc.standard.ao.impl;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ogc.standard.ao.IHuobiproAO;
 import com.ogc.standard.ao.IMarketAO;
+import com.ogc.standard.bo.IMarketBO;
+import com.ogc.standard.domain.Market;
+import com.ogc.standard.dto.req.XN625291Req;
 import com.ogc.standard.enums.EExchange;
 import com.ogc.standard.market.MarketDepth;
 import com.ogc.standard.market.MarketDepthItem;
@@ -21,7 +25,19 @@ import com.ogc.standard.market.MarketDepthItem;
 public class MarketAOImpl implements IMarketAO {
 
     @Autowired
-    IHuobiproAO huobiproAO;
+    private IHuobiproAO huobiproAO;
+
+    @Autowired
+    private IMarketBO marketBO;
+
+    @Override
+    public List<Market> marketListByReq(XN625291Req req) {
+
+        Market condition = new Market();
+        condition.setCoin(req.getCoin());
+        return this.marketBO.marketListByCondation(condition);
+
+    }
 
     @Override
     public MarketDepth getMarketDepth(String symbolPair, String exchange) {
