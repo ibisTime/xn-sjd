@@ -13,7 +13,8 @@ import com.ogc.standard.exception.EBizErrorCode;
  * @history:
  */
 public enum ECoin {
-    ETH("ETH", "以太币"), BTC("BTC", "比特币"), USDT("USDT", "美元代币"),SC("SC", "云储币");
+    ETH("ETH", "以太币"), BTC("BTC", "比特币"), USDT("USDT", "美元代币"), SC("SC",
+            "云储币"), HPM("HPY", "开心币");
 
     public static Map<String, ECoin> getCurrencyMap() {
         Map<String, ECoin> map = new HashMap<String, ECoin>();

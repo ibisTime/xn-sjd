@@ -26,7 +26,7 @@ public class MarketBOImpl implements IMarketBO {
     public Market standardMarket(ECoin coin) {
 
         Market avgCondition = new Market();
-        avgCondition.setCoin(coin.getCode());
+        avgCondition.setSymbol(coin.getCode());
         BigDecimal avg = this.marketDAO.selectMarketAvg(avgCondition);
         avg = avg.setScale(2, BigDecimal.ROUND_HALF_EVEN);
         if (avg == null) {
@@ -35,7 +35,7 @@ public class MarketBOImpl implements IMarketBO {
 
         Market market = new Market();
         market.setMid(avg);
-        market.setCoin(coin.getCode());
+        market.setSymbol(coin.getCode());
         // market.setAsk(avg);
         // market.setBid(avg);
         // market.setLastPrice(avg);
@@ -54,7 +54,7 @@ public class MarketBOImpl implements IMarketBO {
 
         Market condition = new Market();
         condition.setOrigin(origin);
-        condition.setCoin(coinType);
+        condition.setSymbol(coinType);
         return this.marketDAO.select(condition);
 
     }
@@ -63,7 +63,7 @@ public class MarketBOImpl implements IMarketBO {
     public int updateMarket(String origin, String coinType, Market market) {
 
         market.setOrigin(origin);
-        market.setCoin(coinType);
+        market.setSymbol(coinType);
         return this.marketDAO.update(market);
 
     }

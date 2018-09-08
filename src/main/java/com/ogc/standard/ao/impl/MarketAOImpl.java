@@ -1,5 +1,6 @@
 package com.ogc.standard.ao.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +8,13 @@ import org.springframework.stereotype.Service;
 
 import com.ogc.standard.ao.IHuobiproAO;
 import com.ogc.standard.ao.IMarketAO;
+import com.ogc.standard.bo.IMarketBO;
+import com.ogc.standard.bo.ISYSConfigBO;
+import com.ogc.standard.common.SysConstants;
+import com.ogc.standard.domain.Market;
+import com.ogc.standard.enums.ECoin;
 import com.ogc.standard.enums.EExchange;
+import com.ogc.standard.exception.BizException;
 import com.ogc.standard.market.MarketDepth;
 import com.ogc.standard.market.MarketDepthItem;
 
@@ -22,6 +29,12 @@ public class MarketAOImpl implements IMarketAO {
 
     @Autowired
     IHuobiproAO huobiproAO;
+
+    @Autowired
+    private ISYSConfigBO sysConfigBO;
+
+    @Autowired
+    private IMarketBO marketBO;
 
     @Override
     public MarketDepth getMarketDepth(String symbolPair, String exchange) {
@@ -38,6 +51,41 @@ public class MarketAOImpl implements IMarketAO {
         }
 
         return marketDepth;
+    }
+
+    @Override
+    public Market coinPriceByPlatform(String coin) {
+
+        // 获取平台调控值
+        BigDecimal x = BigDecimal.ZERO;
+
+        ECoin eCoin = null;
+        if (coin.equals(ECoin.ETH.getCode())) {
+            eCoin = ECoin.ETH;
+            x = this.sysConfigBO
+                .getBigDecimalValue(SysConstants.ETH_COIN_PRICE_X);
+        } else if (coin.equals(ECoin.HPM.getCode())) {
+            eCoin = ECoin.HPM;
+            x = this.sysConfigBO
+                .getBigDecimalValue(SysConstants.HPM_COIN_PRICE_X);
+        } else if (coin.equals(ECoin.BTC.getCode())) {
+            eCoin = ECoin.BTC;
+            x = this.sysConfigBO
+                .getBigDecimalValue(SysConstants.BTC_COIN_PRICE_X);
+        }
+
+        if (eCoin == null) {
+            throw new BizException("xn000", coin + "不支持的货币类型");
+        }
+
+        Market market = this.marketBO.standardMarket(eCoin);
+
+        // 计算平台调控过的值
+        market.setMid(market.getMid().add(x));
+
+        //
+        return market;
+
     }
 
 }

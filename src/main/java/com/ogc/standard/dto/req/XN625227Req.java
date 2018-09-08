@@ -5,6 +5,8 @@ import java.math.BigDecimal;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 /**
  * Created by tianlei on 2017/十一月/14.
  */
@@ -18,6 +20,7 @@ public class XN625227Req {
     @DecimalMin(value = "1")
     private Integer limit;
 
+    @NotBlank
     private String coin;
 
     // 交易类型

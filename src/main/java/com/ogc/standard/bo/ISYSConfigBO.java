@@ -8,6 +8,7 @@
  */
 package com.ogc.standard.bo;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -42,4 +43,7 @@ public interface ISYSConfigBO extends IPaginableBO<SYSConfig> {
     public Double getDoubleValue(String key);
 
     public List<SYSConfig> queryConfigsList(String type);
+
+    public BigDecimal getBigDecimalValue(String key);
+
 }

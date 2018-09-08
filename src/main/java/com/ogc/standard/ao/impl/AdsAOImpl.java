@@ -478,9 +478,9 @@ public class AdsAOImpl implements IAdsAO {
     // 由市场加权价格 和 配置参数，获取 最终的价格
     private BigDecimal getPlatformPrice(Market market) {
         Double x = 0d;
-        if (ECoin.ETH.getCode().equals(market.getCoin())) {
+        if (ECoin.ETH.getCode().equals(market.getSymbol())) {
             x = this.sysConfigBO.getDoubleValue(SysConstants.ETH_COIN_PRICE_X);
-        } else if (ECoin.BTC.getCode().equals(market.getCoin())) {
+        } else if (ECoin.BTC.getCode().equals(market.getSymbol())) {
             x = this.sysConfigBO.getDoubleValue(SysConstants.BTC_COIN_PRICE_X);
         }
         return market.getMid().add(BigDecimal.valueOf(x));

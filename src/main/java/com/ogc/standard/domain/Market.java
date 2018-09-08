@@ -18,7 +18,7 @@ public class Market extends ABaseDO implements Serializable {
         this.id = id;
     }
 
-    private String coin;
+    private String symbol;
 
     private String referCurrency;
 
@@ -52,12 +52,12 @@ public class Market extends ABaseDO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public String getCoin() {
-        return coin;
+    public String getSymbol() {
+        return symbol;
     }
 
-    public void setCoin(String coin) {
-        this.coin = coin == null ? null : coin.trim();
+    public void setSymbol(String coin) {
+        this.symbol = coin == null ? null : coin.trim();
     }
 
     public String getReferCurrency() {

@@ -4,7 +4,7 @@
 
   <resultMap id="BaseResultMap" type="com.ogc.standard.domain.Market">
     <id column="id"  property="id" />
-    <result column="coin" jdbcType="VARCHAR" property="coin" />
+    <result column="symbol" jdbcType="VARCHAR" property="symbol" />
     <result column="refer_currency" jdbcType="VARCHAR" property="referCurrency" />
     <result column="origin" jdbcType="VARCHAR" property="origin" />
     <result column="last_price" jdbcType="DECIMAL" property="lastPrice" />
@@ -77,7 +77,7 @@
   <select id="selectMarketAvg" resultType="Decimal" parameterType="com.ogc.standard.domain.Market">
     SELECT avg(mid)
     FROM tcoin_market
-    WHERE coin = #{coin}
+    WHERE symbol = #{symbol}
   </select>
 
   <!--<select id="selectList" parameterType="java.lang.String" resultMap="BaseResultMap">-->

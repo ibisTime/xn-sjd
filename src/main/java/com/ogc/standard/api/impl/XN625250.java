@@ -1,11 +1,3 @@
-/**
- * @Title XN625240.java 
- * @Package com.ogc.standard.api.impl 
- * @Description 
- * @author leo(haiqing)  
- * @date 2017年11月14日 下午12:40:28 
- * @version V1.0   
- */
 package com.ogc.standard.api.impl;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -45,6 +37,7 @@ public class XN625250 extends AProcessor {
         condition.setAdsCode(req.getAdsCode());
         condition.setBuyUser(req.getBuyUser());
         condition.setSellUser(req.getSellUser());
+
         condition.setTradeCurrency(req.getTradeCurrency());
         condition.setTradeCoin(req.getTradeCoin());
         condition.setPayType(req.getPayType());
@@ -54,16 +47,16 @@ public class XN625250 extends AProcessor {
         if (CollectionUtils.isNotEmpty(req.getCurrencyList())) {
             condition.setTradeCoinList(req.getCurrencyList());
         }
+
         condition.setStatus(req.getStatus());
         condition.setBelongUser(req.getBelongUser());
+
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
+
         return tradeOrderAO.queryTradeOrderPage(start, limit, condition);
     }
 
-    /** 
-     * @see com.ogc.standard.api.IProcessor#doCheck(java.lang.String)
-     */
     @Override
     public void doCheck(String inputparams, String operator)
             throws ParaException {

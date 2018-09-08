@@ -1,5 +1,6 @@
 package com.ogc.standard.bo.impl;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -116,5 +117,18 @@ public class SYSConfigBOImpl extends PaginableBOImpl<SYSConfig>
         Gson gson = new Gson();
         return gson.fromJson(jsonStr, new TypeToken<Map<String, String>>() {
         }.getType());
+    }
+
+    @Override
+    public BigDecimal getBigDecimalValue(String key) {
+        BigDecimal result = BigDecimal.ZERO;
+        SYSConfig config = getConfigValue(key);
+        try {
+            result = new BigDecimal(config.getCvalue());
+        } catch (Exception e) {
+            logger.error(
+                "参数名为" + key + "的配置转换成BigDecimal类型发生错误, 原因：" + e.getMessage());
+        }
+        return result;
     }
 }

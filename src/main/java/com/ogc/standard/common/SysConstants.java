@@ -16,6 +16,8 @@ public class SysConstants {
 
     public static final String BTC_COIN_PRICE_X = "btc_coin_price_x"; // BTC价格计算因子
 
+    public static final String HPM_COIN_PRICE_X = "HPM_COIN_PRICE_X"; // BTC价格计算因子
+
     // 七牛云图片配置
     public static String QINIU_ACCESS_KEY = "qiniu_access_key";
 
