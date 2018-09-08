@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.web3j.utils.Convert;
 
 import com.ogc.standard.ao.IAdsAO;
+import com.ogc.standard.ao.IMarketAO;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IAdsBO;
 import com.ogc.standard.bo.IAdsDisplayTimeBO;
@@ -64,6 +65,9 @@ public class AdsAOImpl implements IAdsAO {
 
     @Autowired
     IMarketBO marketBO;
+
+    @Autowired
+    IMarketAO marketAO;
 
     @Autowired
     ISYSConfigBO sysConfigBO;
@@ -348,7 +352,8 @@ public class AdsAOImpl implements IAdsAO {
             // }
             //
             // BigDecimal platPrice = this.getPlatformPrice(market);
-            BigDecimal platPrice = new BigDecimal(200);
+            BigDecimal platPrice = marketAO
+                .coinPriceByPlatform(ads.getTradeCoin()).getMid();
             ads.setMarketPrice(platPrice);
             BigDecimal truePrice = platPrice
                 .multiply(BigDecimal.ONE.add(data.getPremiumRate()));
