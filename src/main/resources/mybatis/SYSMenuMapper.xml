@@ -41,6 +41,9 @@
 			<if test="systemCode != null and systemCode != '' ">
 				AND t.system_code = #{systemCode}
 			</if>
+			<if test="remark != null and reamrk != '' ">
+				AND t.remark = #{remark}
+			</if>	
 		</trim>
 	</sql>
 	<select id="select_sysMenu" parameterType="sysMenu" resultMap="sysMenu_DB_Result">
@@ -109,7 +112,9 @@
 	    
 	    ,updater= #{updater}
 	    ,update_datetime= #{updateDatetime}
-	    ,remark = #{remark}
+		<if test="remark != null and remark != '' ">
+			,remark = #{remark}
+		</if>
 	    ,parent_code = #{parentCode}
 	    WHERE
 	    code = #{code}

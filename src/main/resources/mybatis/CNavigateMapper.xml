@@ -106,7 +106,9 @@
 		,location = #{location}
 		,order_no = #{orderNo}
 		,parent_code = #{parentCode}
-		,remark = #{remark}
+		<if test="remark != null and remark != '' ">
+			,remark = #{remark}
+		</if>
 		WHERE code = #{code}
 	</update>
 </mapper>

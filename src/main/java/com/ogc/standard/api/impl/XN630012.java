@@ -37,6 +37,7 @@ public class XN630012 extends AProcessor {
         data.setUpdater(req.getUpdater());
         data.setUpdateDatetime(new Date());
         data.setSystemCode(req.getCode());
+        data.setRemark(req.getRemark());
         return new BooleanRes(sysMenuAO.editSYSMenu(data));
     }
 

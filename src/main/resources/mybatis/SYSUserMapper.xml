@@ -5,6 +5,7 @@
 	<resultMap id="sysuser_DB_Result" type="sysuser">
 		<result column="user_id" property="userId" />
 		<result column="role_code" property="roleCode" />
+		<result column="department_code" property="departmentCode" />
 		<result column="real_name" property="realName" />	
 		<result column="photo" property="photo" />	
 		<result column="mobile" property="mobile" />	
@@ -24,17 +25,28 @@
 			<if test="userId != null and userId != '' ">
 				AND t.user_id = #{userId}
 			</if>
-			
+			<if test="departmentCode != null and departmentCode != '' ">
+				AND t.department_code = #{departmentCode}
+			</if>
 			<if test="loginName != null and loginName != '' ">
 				AND t.login_name = #{loginName}
 
 			</if>					
-
-			
+			<if test="createDatetimeStart != null and createDatetimeStart != '' ">
+				<![CDATA[AND t.create_datetime >= #{createDatetimeStart}]]>
+			</if>
+			<if test="createDatetimeEnd != null and createDatetimeEnd != '' ">
+				<![CDATA[AND t.create_datetime <= #{createDatetimeEnd}]]>
+			</if>
+			<if test="remark != null and reamrk != '' ">
+				AND t.remark = #{remark}
+			</if>	
 			<if test="loginPwd != null and loginPwd != '' ">
 				AND t.login_pwd = #{loginPwd}
 			</if>				
-			
+			<if test="updater != null and updater != '' ">
+				AND t.updater = #{updater}
+			</if>
 			<if test="mobile != null and mobile != '' ">
 				AND t.mobile = #{mobile}
 			</if>
@@ -42,7 +54,15 @@
 			<if test="systemCode != null and systemCode != '' ">
 				AND t.system_code = #{systemCode}
 			</if>
-						
+			<if test="roleCode != null and roleCode != '' ">
+				AND t.role_code = #{roleCode}
+			</if>
+			<if test="mobileForQuery != null and mobileForQuery != '' ">
+				AND t.mobile like "%"#{mobileForQuery}"%"
+			</if>
+			<if test="realNameForQuery != null and realNameForQuery != '' ">
+				AND t.real_name like "%"#{realNameForQuery}"%"
+			</if>		
 		</trim>
 	</sql>
 	
@@ -189,7 +209,9 @@
 		status=#{status}
 		,updater=#{updater}
 		,update_datetime=#{updateDatetime}
-		,remark=#{remark}
+		<if test="remark != null and remark != '' ">
+			,remark = #{remark}
+		</if>
 		WHERE user_id = #{userId}
 	</update>
 	
@@ -199,6 +221,9 @@
 		SET
 		 role_code = #{roleCode}
 		,updater = #{updater}
+		<if test="remark != null and remark != '' ">
+			,remark = #{remark}
+		</if>
 		WHERE
 		user_id = #{userId}	
 	</update>	

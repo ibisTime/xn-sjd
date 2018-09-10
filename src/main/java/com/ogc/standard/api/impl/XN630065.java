@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.ogc.standard.ao.ISYSUserAO;
 import com.ogc.standard.api.AProcessor;
+import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.ObjValidater;
 import com.ogc.standard.core.StringValidater;
@@ -28,8 +29,17 @@ public class XN630065 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         SYSUser condition = new SYSUser();
-
+        condition.setDepartmentCode(req.getDepartmentCode());
+        condition.setMobileForQuery(req.getKeyword());
+        condition.setRealNameForQuery(req.getKeyword());
+        condition.setRoleCode(req.getRoleCode());
+        condition.setStatus(req.getStatus());
+        condition.setUpdater(req.getUpdater());
         String column = req.getOrderColumn();
+        condition.setCreateDatetimeStart(
+            DateUtil.getFrontDate(req.getDateStart(), false));
+        condition.setCreateDatetimeEnd(
+            DateUtil.getFrontDate(req.getDateEnd(), true));
         if (StringUtils.isBlank(column)) {
             column = ISYSUserAO.DEFAULT_ORDER_COLUMN;
         }

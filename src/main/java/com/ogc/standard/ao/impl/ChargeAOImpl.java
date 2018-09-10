@@ -120,6 +120,11 @@ public class ChargeAOImpl implements IChargeAO {
     public Paginable<Charge> queryChargePage(int start, int limit,
             Charge condition) {
         Paginable<Charge> page = chargeBO.getPaginable(start, limit, condition);
+        List<Charge> chargeList = page.getList();
+        for (Charge charge : chargeList) {
+            User user = userBO.getUser(charge.getApplyUser());
+            charge.setPayer(user);
+        }
         return page;
     }
 

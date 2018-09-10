@@ -1,197 +1,181 @@
-///**
-// * @Title BtcUtxoAOImpl.java 
-// * @Package com.cdkj.coin.ao.impl 
-// * @Description 
-// * @author leo(haiqing)  
-// * @date 2017年11月7日 下午8:33:42 
-// * @version V1.0   
-// */
-//package com.ogc.standard.ao.impl;
-//
-//import java.math.BigDecimal;
-//import java.math.RoundingMode;
-//
-//import org.apache.commons.lang3.StringUtils;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.stereotype.Service;
-//import org.springframework.transaction.annotation.Transactional;
-//
-//import com.ogc.standard.ao.IBtcUtxoAO;
-//import com.ogc.standard.ao.ICollectAO;
-//import com.ogc.standard.bitcoin.original.BTCOriginalTx;
-//import com.ogc.standard.bo.IAccountBO;
-//import com.ogc.standard.bo.IBtcAddressBO;
-//import com.ogc.standard.bo.IBtcTransactionBO;
-//import com.ogc.standard.bo.IBtcUtxoBO;
-//import com.ogc.standard.bo.IChargeBO;
-//import com.ogc.standard.bo.ICoinBO;
-//import com.ogc.standard.bo.ICollectBO;
-//import com.ogc.standard.bo.IWithdrawBO;
-//import com.ogc.standard.bo.base.Paginable;
-//import com.ogc.standard.common.DateUtil;
-//import com.ogc.standard.core.OrderNoGenerater;
-//import com.ogc.standard.domain.Account;
-//import com.ogc.standard.domain.BtcUtxo;
-//import com.ogc.standard.domain.Coin;
-//import com.ogc.standard.domain.CtqBtcUtxo;
-//import com.ogc.standard.domain.Withdraw;
-//import com.ogc.standard.enums.EAddressType;
-//import com.ogc.standard.enums.EBtcUtxoRefType;
-//import com.ogc.standard.enums.EBtcUtxoStatus;
-//import com.ogc.standard.enums.EChannelType;
-//import com.ogc.standard.enums.ECollectionStatus;
-//import com.ogc.standard.enums.EGeneratePrefix;
-//import com.ogc.standard.enums.EJourBizTypeCold;
-//import com.ogc.standard.enums.EJourBizTypePlat;
-//import com.ogc.standard.enums.EJourBizTypeUser;
-//import com.ogc.standard.enums.EOriginialCoin;
-//import com.ogc.standard.enums.ESystemAccount;
-//import com.ogc.standard.enums.EWithdrawStatus;
-//import com.ogc.standard.exception.BizException;
-//import com.ogc.standard.exception.EBizErrorCode;
-//import com.ogc.standard.util.BtcBlockExplorer;
-//
-///** 
-// * @author: haiqingzheng 
-// * @since: 2017年11月7日 下午8:33:42 
-// * @history:
-// */
-//@Service
-//public class BtcUtxoAOImpl implements IBtcUtxoAO {
-//
-//    @Autowired
-//    private IChargeBO chargeBO;
-//
-//    @Autowired
-//    private IWithdrawBO withdrawBO;
-//
-//    @Autowired
-//    private IAccountBO accountBO;
-//
-//    @Autowired
-//    private IBtcAddressBO btcAddressBO;
-//
-//    @Autowired
-//    private IBtcUtxoBO btcUtxoBO;
-//
-//    @Autowired
-//    private IBtcTransactionBO btcTransactionBO;
-//
-//    @Autowired
-//    private ICollectAO collectionAO;
-//
-//    @Autowired
-//    private ICollectBO collectionBO;
-//
-//    @Autowired
-//    private ICoinBO coinBO;
-//
-//    @Autowired
-//    private BtcBlockExplorer btcBlockExplorer;
-//
-//    @Override
-//    @Transactional
-//    public String chargeNotice(CtqBtcUtxo ctqBtcUtxo) {
-//
-//        BtcAddress btcAddress = btcAddressBO.getBtcAddress(EAddressType.X,
-//            ctqBtcUtxo.getAddress());
-//        if (btcAddress == null) {
-//            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-//                "BTC充值地址不存在");
-//        }
-//
-//        // 判断是否已经处理过该交易
-//        if (chargeBO.isExistOfRefNo(ctqBtcUtxo.getRefNo())) {
-//            return "";
-//        }
-//
-//        Account account = accountBO.getAccountByUser(btcAddress.getUserId(),
-//            EOriginialCoin.BTC.getCode());
-//        String payGroup = OrderNoGenerater
-//            .generate(EGeneratePrefix.PAY_GROUP.getCode());
-//        BigDecimal amount = ctqBtcUtxo.getCount();
-//
-//        // 充值订单落地
-//        String code = chargeBO.applyOrderOnline(account, payGroup,
-//            ctqBtcUtxo.getRefNo(), EJourBizTypeUser.AJ_CHARGE.getCode(),
-//            EOriginialCoin.BTC.getCode() + "充值-来自交易：" + ctqBtcUtxo.getRefNo(),
-//            amount, EChannelType.Online, account.getUserId(),
-//            ctqBtcUtxo.getRefNo());
-//
-//        // 落地UTXO
-//        btcUtxoBO.saveBtcUtxo(ctqBtcUtxo, EAddressType.X);
-//
-//        // 落地交易记录
-//        BTCOriginalTx btcOriginalTx = btcBlockExplorer
-//            .queryTxHash(ctqBtcUtxo.getTxid());
-//        btcTransactionBO.saveBtcTransaction(btcOriginalTx, code);
-//
-//        // 账户加钱
-//        accountBO.changeAmount(account, amount, EChannelType.Online,
-//            ctqBtcUtxo.getRefNo(), payGroup, code,
-//            EJourBizTypeUser.AJ_CHARGE.getCode(),
-//            EChannelType.Online.getCode() + "充值-来自交易：" + ctqBtcUtxo.getRefNo());
-//
-//        return code;
-//    }
-//
-//    @Override
-//    @Transactional
-//    public void withdrawNotice(CtqBtcUtxo ctqBtcUtxo) {
-//
-//        // 取到UTXO
-//        BtcUtxo btcUtxo = btcUtxoBO.getBtcUtxo(ctqBtcUtxo.getTxid(),
-//            ctqBtcUtxo.getVout());
-//
-//        // 判断是否是正在取现广播中的UTXO
-//        if (EBtcUtxoStatus.USING.getCode().equals(btcUtxo.getStatus())
-//                && EBtcUtxoRefType.WITHDRAW.getCode()
-//                    .equals(btcUtxo.getRefType())
-//                && StringUtils.isNotBlank(btcUtxo.getRefNo())) {
-//
-//            // 修改UTXO状态
-//            btcUtxoBO.refreshStatus(btcUtxo, EBtcUtxoStatus.USED);
-//
-//            // 查询取现订单
-//            Withdraw withdraw = withdrawBO.getWithdraw(btcUtxo.getRefNo());
-//            if (withdraw == null) {
-//                return;
-//            }
-//            if (!EWithdrawStatus.Broadcast.getCode()
-//                .equals(withdraw.getStatus())) {
-//                return;
-//            }
-//
-//            // 查询交易详情
-//            BTCOriginalTx btcOriginalTx = btcBlockExplorer
-//                .queryTxHash(withdraw.getChannelOrder());
-//            if (btcOriginalTx == null) {
-//                return;
-//            }
-//
-//            // 取现订单更新
-//            withdrawBO.payOrder(withdraw, EWithdrawStatus.Pay_YES,
-//                btcOriginalTx.getTxid(), "广播成功", btcOriginalTx.getTxid(),
-//                btcOriginalTx.getTxid(), btcOriginalTx.getFees());
-//
-//            // 落地交易记录
-//            btcTransactionBO.saveBtcTransaction(btcOriginalTx,
-//                withdraw.getCode());
-//
-//            // 账户处理
-//            handlerAccountWithdraw(withdraw, btcOriginalTx);
-//        }
-//    }
-//
-//    private void handlerAccountWithdraw(Withdraw withdraw,
-//            BTCOriginalTx btcOriginalTx) {
-//        Account userAccount = accountBO.getAccount(withdraw.getAccountNumber());
-//        // 取现金额解冻
-//        userAccount = accountBO.unfrozenAmount(userAccount,
-//            withdraw.getAmount(),
-//            EJourBizTypeUser.AJ_WITHDRAW_UNFROZEN.getCode(),
-//            EJourBizTypeUser.AJ_WITHDRAW_UNFROZEN.getValue(),
-//            withdraw.getCode());
+/**
+ * @Title BtcUtxoAOImpl.java 
+ * @Package com.cdkj.coin.ao.impl 
+ * @Description 
+ * @author leo(haiqing)  
+ * @date 2017年11月7日 下午8:33:42 
+ * @version V1.0   
+ */
+package com.ogc.standard.ao.impl;
+
+import java.math.BigDecimal;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.ogc.standard.ao.IBtcUtxoAO;
+import com.ogc.standard.bitcoin.original.BTCOriginalTx;
+import com.ogc.standard.bo.IAccountBO;
+import com.ogc.standard.bo.IBtcAddressBO;
+import com.ogc.standard.bo.IBtcTransactionBO;
+import com.ogc.standard.bo.IBtcUtxoBO;
+import com.ogc.standard.bo.IChargeBO;
+import com.ogc.standard.bo.ICoinBO;
+import com.ogc.standard.bo.IWithdrawBO;
+import com.ogc.standard.core.OrderNoGenerater;
+import com.ogc.standard.domain.Account;
+import com.ogc.standard.domain.BtcUtxo;
+import com.ogc.standard.domain.BtcXAddress;
+import com.ogc.standard.domain.CtqBtcUtxo;
+import com.ogc.standard.domain.Withdraw;
+import com.ogc.standard.enums.EAddressType;
+import com.ogc.standard.enums.EBtcUtxoRefType;
+import com.ogc.standard.enums.EBtcUtxoStatus;
+import com.ogc.standard.enums.EChannelType;
+import com.ogc.standard.enums.EGeneratePrefix;
+import com.ogc.standard.enums.EJourBizTypeUser;
+import com.ogc.standard.enums.EOriginialCoin;
+import com.ogc.standard.enums.EWithdrawStatus;
+import com.ogc.standard.exception.BizException;
+import com.ogc.standard.exception.EBizErrorCode;
+import com.ogc.standard.util.BtcBlockExplorer;
+
+/** 
+ * @author: haiqingzheng 
+ * @since: 2017年11月7日 下午8:33:42 
+ * @history:
+ */
+@Service
+public class BtcUtxoAOImpl implements IBtcUtxoAO {
+
+    @Autowired
+    private IChargeBO chargeBO;
+
+    @Autowired
+    private IWithdrawBO withdrawBO;
+
+    @Autowired
+    private IAccountBO accountBO;
+
+    @Autowired
+    private IBtcAddressBO btcAddressBO;
+
+    @Autowired
+    private IBtcUtxoBO btcUtxoBO;
+
+    @Autowired
+    private IBtcTransactionBO btcTransactionBO;
+
+    @Autowired
+    private ICoinBO coinBO;
+
+    @Autowired
+    private BtcBlockExplorer btcBlockExplorer;
+
+    @Override
+    @Transactional
+    public String chargeNotice(CtqBtcUtxo ctqBtcUtxo) {
+
+        BtcXAddress btcAddress = btcAddressBO
+            .getBtcAddress(ctqBtcUtxo.getAddress());
+        if (btcAddress == null) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "BTC充值地址不存在");
+        }
+
+        // 判断是否已经处理过该交易
+        if (chargeBO.isExistOfRefNo(ctqBtcUtxo.getRefNo())) {
+            return "";
+        }
+
+        Account account = accountBO.getAccountByUser(btcAddress.getUserId(),
+            EOriginialCoin.BTC.getCode());
+        String payGroup = OrderNoGenerater
+            .generate(EGeneratePrefix.PAY_GROUP.getCode());
+        BigDecimal amount = ctqBtcUtxo.getCount();
+
+        // 充值订单落地
+        String code = chargeBO.applyOrderOnline(account, payGroup,
+            ctqBtcUtxo.getRefNo(), EJourBizTypeUser.AJ_CHARGE.getCode(),
+            EOriginialCoin.BTC.getCode() + "充值-来自交易：" + ctqBtcUtxo.getRefNo(),
+            amount, EChannelType.Online, account.getUserId(),
+            ctqBtcUtxo.getRefNo());
+
+        // 落地UTXO
+        btcUtxoBO.saveBtcUtxo(ctqBtcUtxo, EAddressType.X);
+
+        // 落地交易记录
+        BTCOriginalTx btcOriginalTx = btcBlockExplorer
+            .queryTxHash(ctqBtcUtxo.getTxid());
+        btcTransactionBO.saveBtcTransaction(btcOriginalTx, code);
+
+        // 账户加钱
+        accountBO.changeAmount(account, amount, EChannelType.Online, code,
+            ctqBtcUtxo.getRefNo(), EJourBizTypeUser.AJ_CHARGE.getCode(),
+            EChannelType.Online.getCode() + "充值-来自交易：" + ctqBtcUtxo.getRefNo());
+
+        return code;
+    }
+
+    @Override
+    @Transactional
+    public void withdrawNotice(CtqBtcUtxo ctqBtcUtxo) {
+
+        // 取到UTXO
+        BtcUtxo btcUtxo = btcUtxoBO.getBtcUtxo(ctqBtcUtxo.getTxid(),
+            ctqBtcUtxo.getVout());
+
+        // 判断是否是正在取现广播中的UTXO
+        if (EBtcUtxoStatus.USING.getCode().equals(btcUtxo.getStatus())
+                && EBtcUtxoRefType.WITHDRAW.getCode()
+                    .equals(btcUtxo.getRefType())
+                && StringUtils.isNotBlank(btcUtxo.getRefNo())) {
+
+            // 修改UTXO状态
+            btcUtxoBO.refreshStatus(btcUtxo, EBtcUtxoStatus.USED);
+
+            // 查询取现订单
+            Withdraw withdraw = withdrawBO.getWithdraw(btcUtxo.getRefNo());
+            if (withdraw == null) {
+                return;
+            }
+            if (!EWithdrawStatus.Broadcast.getCode()
+                .equals(withdraw.getStatus())) {
+                return;
+            }
+
+            // 查询交易详情
+            BTCOriginalTx btcOriginalTx = btcBlockExplorer
+                .queryTxHash(withdraw.getChannelOrder());
+            if (btcOriginalTx == null) {
+                return;
+            }
+
+            // 取现订单更新
+            withdrawBO.payOrder(withdraw, EWithdrawStatus.Pay_YES,
+                btcOriginalTx.getTxid(), "广播成功", btcOriginalTx.getTxid(),
+                btcOriginalTx.getFees());
+
+            // 落地交易记录
+            btcTransactionBO.saveBtcTransaction(btcOriginalTx,
+                withdraw.getCode());
+
+            // 账户处理
+            handlerAccountWithdraw(withdraw, btcOriginalTx);
+        }
+    }
+
+    private void handlerAccountWithdraw(Withdraw withdraw,
+            BTCOriginalTx btcOriginalTx) {
+        Account userAccount = accountBO.getAccount(withdraw.getAccountNumber());
+        // 取现金额解冻
+        userAccount = accountBO.unfrozenAmount(userAccount,
+            withdraw.getAmount(),
+            EJourBizTypeUser.AJ_WITHDRAW_UNFROZEN.getCode(),
+            EJourBizTypeUser.AJ_WITHDRAW_UNFROZEN.getValue(),
+            withdraw.getCode());
 //        // 取现金额扣减
 //        userAccount = accountBO.changeAmount(userAccount,
 //            withdraw.getAmount().subtract(withdraw.getFee()).negate(),
@@ -206,8 +190,8 @@
 //                withdraw.getChannelOrder(), "BTC", withdraw.getCode(),
 //                EJourBizTypeUser.AJ_WITHDRAWFEE.getCode(),
 //                EJourBizTypeUser.AJ_WITHDRAWFEE.getValue());
-//        }
-//
+    }
+
 //        // 平台盈亏账户记入取现手续费
 //        Account sysAccount = accountBO
 //            .getAccount(ESystemAccount.SYS_ACOUNT_BTC.getCode());
@@ -333,5 +317,5 @@
 //    public BigDecimal getTotalEnableUTXOCount(EAddressType addressType) {
 //        return btcUtxoBO.getTotalEnableUTXOCount(addressType);
 //    }
-//
-//}
+
+}

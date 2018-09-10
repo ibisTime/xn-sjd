@@ -3,9 +3,9 @@ package com.ogc.standard.dto.req;
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
- * 设置角色
- * @author: nyc 
- * @since: 2018年4月26日 下午5:54:31 
+ * 新增用户
+ * @author: taojian 
+ * @since: 2018年9月10日 上午10:07:50 
  * @history:
  */
 public class XN630050Req {
