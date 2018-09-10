@@ -32,11 +32,9 @@ public class XN630012Req {
     private String updater;
 
     // 备注(选填)
-    @NotBlank
     private String remark;
 
     // 系统编号（必填）
-    @NotBlank
     private String systemCode;
 
     public String getSystemCode() {

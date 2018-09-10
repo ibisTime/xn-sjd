@@ -75,7 +75,9 @@
 		name = #{name}
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
-		,remark = #{remark}
+		<if test="remark != null and remark != '' ">
+			,remark = #{remark}
+		</if>
 		WHERE code = #{code}
 	</update>
 </mapper>

@@ -1,5 +1,7 @@
 package com.ogc.standard.dto.req;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 /**
  * 设置角色
  * @author: nyc 
@@ -9,12 +11,15 @@ package com.ogc.standard.dto.req;
 public class XN630057Req {
 
     // 用户编号(必填)
+    @NotBlank
     private String userId;
 
     // 角色编号(必填)
+    @NotBlank
     private String roleCode;
 
     // 更新人(必填)
+    @NotBlank
     private String updater;
 
     // 备注(选填)

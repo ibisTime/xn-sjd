@@ -69,6 +69,16 @@ public class Charge extends ABaseDO {
     private String channelOrder;
 
     // *******************************
+    // 申请人
+    private User payer;
+
+    public User getPayer() {
+        return payer;
+    }
+
+    public void setPayer(User payer) {
+        this.payer = payer;
+    }
 
     // 订单编号模糊查询
     private String codeForQuery;

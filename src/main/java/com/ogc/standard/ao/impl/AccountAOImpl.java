@@ -19,6 +19,7 @@ import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.Coin;
+import com.ogc.standard.domain.User;
 import com.ogc.standard.enums.EAccountType;
 import com.ogc.standard.enums.ECoinType;
 import com.ogc.standard.enums.ESysUser;
@@ -121,7 +122,24 @@ public class AccountAOImpl implements IAccountAO {
     @Override
     public Paginable<Account> queryAccountPage(int start, int limit,
             Account condition) {
-        return accountBO.getPaginable(start, limit, condition);
+
+        Paginable<Account> page = accountBO.getPaginable(start, limit,
+            condition);
+
+        if (null != page) {
+            List<Account> list = page.getList();
+            for (Account account : list) {
+                User user = userBO.getUser(account.getUserId());
+                if (null == user) {
+                    throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                        "用户编号不存在");
+                }
+                account.setRealName(user.getRealName());
+                account.setMobile(user.getMobile());
+            }
+        }
+
+        return page;
     }
 
     @Override

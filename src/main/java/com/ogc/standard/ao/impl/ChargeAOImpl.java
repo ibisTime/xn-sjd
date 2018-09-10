@@ -26,10 +26,13 @@ import com.ogc.standard.domain.Jour;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.dto.res.XN802347Res;
 import com.ogc.standard.enums.EBoolean;
+import com.ogc.standard.enums.EChannelType;
 import com.ogc.standard.enums.EChargeStatus;
 import com.ogc.standard.enums.ECoinType;
+import com.ogc.standard.enums.EJourBizTypeCold;
 import com.ogc.standard.enums.EJourBizTypeUser;
 import com.ogc.standard.enums.EJourType;
+import com.ogc.standard.enums.ESystemAccount;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
 
@@ -101,18 +104,18 @@ public class ChargeAOImpl implements IChargeAO {
         String symbol = coin.getSymbol();
 
         // 用户账户加钱
-        // userAccount = accountBO.changeAmount(userAccount, data.getAmount(),
-        // EChannelType.Offline, null, data.getCode(),
-        // EJourBizTypeUser.AJ_CHARGE.getCode(), symbol + "线下充值");
-        //
-        // Account coldAccount = accountBO
-        // .getAccount(ESystemAccount.getPlatColdAccount(symbol));
-        //
-        // // 冷钱包加钱
-        // accountBO.changeAmount(coldAccount, data.getAmount(),
-        // EChannelType.Offline, null, data.getCode(),
-        // EJourBizTypeCold.AJ_INCOME.getCode(),
-        // symbol + "线下充值，充值账户：" + user.getRealName());
+        userAccount = accountBO.changeAmount(userAccount, data.getAmount(),
+            EChannelType.Offline, null, data.getCode(),
+            EJourBizTypeUser.AJ_CHARGE.getCode(), symbol + "线下充值");
+
+        Account coldAccount = accountBO
+            .getAccount(ESystemAccount.getPlatColdAccount(symbol));
+
+        // 冷钱包加钱
+        accountBO.changeAmount(coldAccount, data.getAmount(),
+            EChannelType.Offline, null, data.getCode(),
+            EJourBizTypeCold.AJ_INCOME.getCode(),
+            symbol + "线下充值，充值账户：" + user.getRealName());
 
     }
 
@@ -120,6 +123,11 @@ public class ChargeAOImpl implements IChargeAO {
     public Paginable<Charge> queryChargePage(int start, int limit,
             Charge condition) {
         Paginable<Charge> page = chargeBO.getPaginable(start, limit, condition);
+        List<Charge> chargeList = page.getList();
+        for (Charge charge : chargeList) {
+            User user = userBO.getUser(charge.getApplyUser());
+            charge.setPayer(user);
+        }
         return page;
     }
 

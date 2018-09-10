@@ -12,10 +12,10 @@ public class SCDM_IDAO {
     private static String author = "lei";
 
     // 实体
-    private static String key = "groupCoinJour";
+    private static String key = "coinAcceptOrder";
 
     // 实体名称
-    private static String keyName = "币种配置账户流水";
+    private static String keyName = "承兑交易订单";
 
     // 包路径
     private static String packge = "com.ogc.standard.";
@@ -23,14 +23,21 @@ public class SCDM_IDAO {
     // 表名
     private static String path = "/Users/lei/Desktop/temp";
 
-    private static String dbname = "tsimu_group_coin_jour";
+    private static String dbname = "tcoin_accept_order";
 
-    private static String[] DBwords = { "code", "ref_no", "account_number",
-            "trans_amount", "group_code", "user_id", "symbol", "biz_type",
-            "biz_note", "pre_amount", "post_amount", "create_datetime" };
+    private static String[] DBwords = { "code", "type", "user_id",
+            "accept_user", "trade_currency", "trade_coin", "trade_price",
+            "count", "trade_amount", "fee", "invalid_datetime", "pay_type",
+            "pay_info", "pay_bank", "pay_card_no", "receive_type",
+            "receive_info", "receive_bank", "receive_card_no", "status",
+            "mark_datetime", "mark_note", "release_datetime", "create_datetime",
+            "updater", "update_datetime", "remark" };
 
-    private static String[] DBwordsName = { "编号", "参考订单号", "账户编号", "变动金额",
-            "组合编号", "用户编号", "币种", "业务类型", "业务类型", "变动前金额", "变动后金额", "创建时间" };
+    private static String[] DBwordsName = { "编号", "类型(0买入/1卖出)", "用户编号", "承兑商",
+            "交易币种", "交易数字货币", "交易单价", "交易数量", "交易总额", "手续费", "支付超时时间", "付款方式",
+            "付款信息", "付款银行", "付款卡号", "收款方式", "收款信息", "收款银行", "收款卡号",
+            "状态(0=待支付 1=已支付 2=已释放 3=已取消)", "打款时间", "打款说明", "币释放时间", "创建时间",
+            "最后更新人", "最后更新时间", "备注" };
 
     private static String[] DOwords = getDOwords();
 

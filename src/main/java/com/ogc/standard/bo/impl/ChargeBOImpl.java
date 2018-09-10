@@ -155,4 +155,15 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
         }
         return result;
     }
+
+    @Override
+    public boolean isExistOfRefNo(String refNo) {
+        boolean result = false;
+        Charge condition = new Charge();
+        condition.setBizNo(refNo);
+        if (getTotalCount(condition) > 0) {
+            result = true;
+        }
+        return result;
+    }
 }

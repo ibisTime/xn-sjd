@@ -321,7 +321,7 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
         // 改变广告可交易量
         this.adsBO.cutLeftCount(ads.getCode(), tradeCount);
 
-        Account dbAccount = accountBO.getAccountByUser(ads.getUserId(),
+        Account dbAccount = accountBO.getAccountByUser(sellUser,
             ads.getTradeCoin());
         // 冻结卖家 数字货币
         this.accountBO.frozenAmount(dbAccount, tradeCount,

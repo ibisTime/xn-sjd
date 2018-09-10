@@ -73,6 +73,28 @@ public class SYSUser extends ABaseDO {
     // 注册时间止
     private Date createDatetimeEnd;
 
+    // 手机模糊查询
+    private String mobileForQuery;
+
+    // 名字模糊查询
+    private String realNameForQuery;
+
+    public String getMobileForQuery() {
+        return mobileForQuery;
+    }
+
+    public void setMobileForQuery(String mobileForQuery) {
+        this.mobileForQuery = mobileForQuery;
+    }
+
+    public String getRealNameForQuery() {
+        return realNameForQuery;
+    }
+
+    public void setRealNameForQuery(String realNameForQuery) {
+        this.realNameForQuery = realNameForQuery;
+    }
+
     public List<SYSUser> getSysUserList() {
         return sysUserList;
     }

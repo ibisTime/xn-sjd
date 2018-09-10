@@ -32,4 +32,6 @@ public interface IChargeBO extends IPaginableBO<Charge> {
 
     public boolean isExistOfChannelOrder(String orderNo);
 
+    public boolean isExistOfRefNo(String refNo);
+
 }

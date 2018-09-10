@@ -60,9 +60,6 @@ public class XN802300 extends AProcessor {
         return accountAO.queryAccountPage(start, limit, condition);
     }
 
-    /** 
-    * @see com.xnjr.base.api.IProcessor#doCheck(java.lang.String)
-    */
     @Override
     public void doCheck(String inputparams, String operator)
             throws ParaException {

@@ -426,7 +426,14 @@ public class UserAOImpl implements IUserAO {
 
     @Override
     public Paginable<User> queryUserPage(int start, int limit, User condition) {
-        Paginable<User> page = userBO.getPaginable(start, limit, condition);
+
+        Paginable<User> page = null;
+        try {
+            page = userBO.getPaginable(start, limit, condition);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         List<User> list = page.getList();
         for (User user : list) {
             // 推荐人转义
