@@ -206,4 +206,8 @@
 		<property name="paginableDAO" ref="tradeOrderDAOImpl"/>
 	</bean>
 	
+	<bean id="coinAcceptOrderBO" class="com.ogc.standard.bo.impl.CoinAcceptOrderBOImpl">
+		<property name="paginableDAO" ref="coinAcceptOrderDAOImpl"/>
+	</bean>
+	
 </beans>

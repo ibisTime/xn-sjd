@@ -120,6 +120,10 @@ public class WithdrawAOImpl implements IWithdrawAO {
     public void approveOrder(String code, String approveUser,
             String approveResult, String approveNote) {
         Withdraw data = withdrawBO.getWithdraw(code);
+        if (null == data) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "取现订单编号不存在");
+        }
         if (!EWithdrawStatus.toApprove.getCode().equals(data.getStatus())) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "申请记录状态不是待审批状态，无法审批");

@@ -66,6 +66,12 @@ public class Account extends ABaseDO {
     // 币种列表
     private List<String> currencyList;
 
+    // 真实姓名
+    private String realName;
+
+    // 手机号
+    private String mobile;
+
     public String getAccountNumber() {
         return accountNumber;
     }
@@ -192,6 +198,22 @@ public class Account extends ABaseDO {
 
     public void setCurrencyList(List<String> currencyList) {
         this.currencyList = currencyList;
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 
 }
