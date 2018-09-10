@@ -25,7 +25,6 @@ CREATE TABLE `tcoin_trade_order` (
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
 CREATE TABLE `tcoin_ads` (
   `code` varchar(32) NOT NULL COMMENT '编号',
   `trade_type` varchar(32) NOT NULL COMMENT '广告类型（0购买 1出售）',
