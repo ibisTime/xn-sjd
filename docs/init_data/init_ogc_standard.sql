@@ -656,17 +656,7 @@ INSERT INTO `tstd_account` (`account_number`,`user_id`,`type`,`status`,`currency
 INSERT INTO `tstd_account` (`account_number`,`user_id`,`type`,`status`,`currency`,`amount`,`frozen_amount`,`md5`,`create_datetime`,`last_order`) VALUES ('SYS_ACOUNT_BTC_COLD','SYS_USER_COLD','P','0','BTC',0,0,'b99e0407fedc3d160f73fec8d1fa9a0c',now(),NULL);
 INSERT INTO `tstd_account` (`account_number`,`user_id`,`type`,`status`,`currency`,`amount`,`frozen_amount`,`md5`,`create_datetime`,`last_order`) VALUES ('SYS_ACOUNT_WAN_COLD','SYS_USER_COLD','P','0','WAN',0,0,'b99e0407fedc3d160f73fec8d1fa9a0c',now(),NULL);
 
-/*
--- Query: SELECT 
-code,name,type,url,order_no,'admin' updater, now() as update_datetime,remark,parent_code,system_code 
-FROM ogc_standard.tsys_menu where code ='COINSM201700000000000000' or parent_code ='COINSM201700000000000000'
-or parent_code='COINSM201700001000000001' or parent_code in (select code from tsys_menu where parent_code ='COINSM201700001000000001')
-or parent_code in (select code from tsys_menu where parent_code in (select code from tsys_menu where parent_code ='COINSM201700001000000001'))
-LIMIT 0, 500
 
--- Date: 2018-09-03 17:49
-*/
-INSERT INTO `tsys_user` (`user_id`,`login_name`,`login_pwd`,`login_pwd_strength`,`role_code`,`status`,`create_datetime`,`remark`) VALUES ('UTOKEN201700000000000001','admin','21218cca77804d2ba1922c33e0151105','1','TOKENSR201700000000000000','0',now(),'管理端系统方');
 /*
 -- Query: SELECT * FROM ogc_standard.tsys_role
 LIMIT 0, 1000

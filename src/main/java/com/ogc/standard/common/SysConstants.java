@@ -104,4 +104,9 @@ public class SysConstants {
 
     // 绑定手机
     public static String DO_BIND_MOBILE_CN = "尊敬的%s用户，您于%s提交的绑定手机号码服务已完成，现绑定手机号码为%s，请妥善保管您的账户相关信息。";
+
+    // ****** OTC ******
+
+    // 承兑商支付超时时间
+    public static Integer ACCEPT_ORDER_PAY_LIMIT = 10;
 }
