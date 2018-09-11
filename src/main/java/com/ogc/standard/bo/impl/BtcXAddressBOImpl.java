@@ -8,22 +8,22 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.ogc.standard.bo.IBtcAddressBO;
+import com.ogc.standard.bo.IBtcXAddressBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.core.BtcAddressRes;
 import com.ogc.standard.core.BtcClient;
-import com.ogc.standard.dao.IBtcAddressDAO;
+import com.ogc.standard.dao.IBtcXAddressDAO;
 import com.ogc.standard.domain.BtcXAddress;
 import com.ogc.standard.exception.BizException;
 
 @Component
-public class BtcAddressBOImpl extends PaginableBOImpl<BtcXAddress>
-        implements IBtcAddressBO {
+public class BtcXAddressBOImpl extends PaginableBOImpl<BtcXAddress>
+        implements IBtcXAddressBO {
 
-    private static Logger logger = Logger.getLogger(BtcAddressBOImpl.class);
+    private static Logger logger = Logger.getLogger(BtcXAddressBOImpl.class);
 
     @Autowired
-    private IBtcAddressDAO BtcXAddressDAO;
+    private IBtcXAddressDAO BtcXAddressDAO;
 
     @Override
     public String generateAddress(String userId) {

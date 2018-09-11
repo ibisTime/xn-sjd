@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ogc.standard.ao.IBtcUtxoAO;
 import com.ogc.standard.bitcoin.original.BTCOriginalTx;
 import com.ogc.standard.bo.IAccountBO;
-import com.ogc.standard.bo.IBtcAddressBO;
+import com.ogc.standard.bo.IBtcXAddressBO;
 import com.ogc.standard.bo.IBtcTransactionBO;
 import com.ogc.standard.bo.IBtcUtxoBO;
 import com.ogc.standard.bo.IChargeBO;
@@ -60,7 +60,7 @@ public class BtcUtxoAOImpl implements IBtcUtxoAO {
     private IAccountBO accountBO;
 
     @Autowired
-    private IBtcAddressBO btcAddressBO;
+    private IBtcXAddressBO btcXAddressBO;
 
     @Autowired
     private IBtcUtxoBO btcUtxoBO;
@@ -78,7 +78,7 @@ public class BtcUtxoAOImpl implements IBtcUtxoAO {
     @Transactional
     public String chargeNotice(CtqBtcUtxo ctqBtcUtxo) {
 
-        BtcXAddress btcAddress = btcAddressBO
+        BtcXAddress btcAddress = btcXAddressBO
             .getBtcAddress(ctqBtcUtxo.getAddress());
         if (btcAddress == null) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),

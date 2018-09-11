@@ -11,12 +11,12 @@ package com.ogc.standard.dto.req;
 import java.math.BigInteger;
 
 /** 
- * 分页查询ETH交易记录
+ * 分页查询BTC交易记录
  * @author: taojian 
- * @since: 2018年9月11日 下午2:01:05 
+ * @since: 2018年9月11日 下午2:01:47 
  * @history:
  */
-public class XN802530Req extends APageReq {
+public class XN802590Req extends APageReq {
 
     private static final long serialVersionUID = -2919414958783911395L;
 

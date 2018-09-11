@@ -90,6 +90,7 @@ public class UserAOImpl implements IUserAO {
     }
 
     @Override
+    @Transactional
     public String doRegister(XN805041Req req) {
         // 验证手机号是否存在
         userBO.isMobileExist(req.getMobile());
@@ -114,6 +115,7 @@ public class UserAOImpl implements IUserAO {
     }
 
     @Override
+    @Transactional
     public String doAddUser(XN805042Req req) {
         String userId = null;
         User user = new User();

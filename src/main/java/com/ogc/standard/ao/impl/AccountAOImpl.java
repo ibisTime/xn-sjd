@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.IAccountAO;
 import com.ogc.standard.bo.IAccountBO;
-import com.ogc.standard.bo.IBtcAddressBO;
+import com.ogc.standard.bo.IBtcXAddressBO;
 import com.ogc.standard.bo.ICoinBO;
 import com.ogc.standard.bo.IEthXAddressBO;
 import com.ogc.standard.bo.IUserBO;
@@ -36,7 +36,7 @@ public class AccountAOImpl implements IAccountAO {
     private IEthXAddressBO ethXAddressBO;
 
     @Autowired
-    private IBtcAddressBO btcXAddressBO;
+    private IBtcXAddressBO btcXAddressBO;
 
     // @Autowired
     // private ICtqBO ctqBO;

@@ -5,7 +5,7 @@ import java.util.List;
 import com.ogc.standard.bo.base.IPaginableBO;
 import com.ogc.standard.domain.BtcXAddress;
 
-public interface IBtcAddressBO extends IPaginableBO<BtcXAddress> {
+public interface IBtcXAddressBO extends IPaginableBO<BtcXAddress> {
 
     // 生成地址（有私钥）
     public String generateAddress(String userId);
