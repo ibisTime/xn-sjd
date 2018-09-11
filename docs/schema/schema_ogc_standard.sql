@@ -365,19 +365,6 @@ COMMENT = '组合表';
 
 DROP TABLE IF EXISTS `tsimu_group_coin`;
 CREATE TABLE IF NOT EXISTS `tsimu_group_coin` (
-  `id` BIGINT(32) NOT NULL AUTO_INCREMENT COMMENT '序号',
-  `group_code` VARCHAR(32) NOT NULL COMMENT '组合编号',
-  `symbol` VARCHAR(32) NULL COMMENT '代币符号',
-  `count` DECIMAL(64,18) NULL COMMENT '数量',
-  `frozen_count` DECIMAL(64,18) NULL COMMENT '冻结数量',
-  `assets` DECIMAL(64,18) NULL COMMENT '币种资产',
-  `rate` DECIMAL(18,4) NULL COMMENT '占比',
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB DEFAULT CHARSET=utf8
-COMMENT = '币种配置表';
-
-DROP TABLE IF EXISTS `tsimu_group_coin`;
-CREATE TABLE IF NOT EXISTS `tsimu_group_coin` (
   `account_number` varchar(32) NOT NULL COMMENT '账户编号',
   `user_id` varchar(32) DEFAULT NULL COMMENT '用户编号',
   `group_code` VARCHAR(32) NOT NULL COMMENT '组合编号',

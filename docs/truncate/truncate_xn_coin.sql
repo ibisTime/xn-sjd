@@ -18,9 +18,9 @@ TRUNCATE `tsys_config`;
 TRUNCATE `tsys_company`;
 TRUNCATE `tsys_department`;
 TRUNCATE `tsys_user`;
+TRUNCATE `tsys_role`;
 TRUNCATE `tsys_menu`;
 TRUNCATE `tsys_menu_role`;
-TRUNCATE `tsys_role`;
 TRUNCATE `tsys_cnavigate`;
 TRUNCATE `tsys_channel_bank`;
 
