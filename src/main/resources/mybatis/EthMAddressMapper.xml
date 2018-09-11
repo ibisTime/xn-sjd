@@ -26,6 +26,12 @@
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
 			</if>
+			<if test="statusList != null and statusList != ''">
+                AND `status` in
+                <foreach item="item" index="index" collection="statusList" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
 		</trim>
 	</sql>
 	<select id="select_ethMAddress" parameterType="ethMAddress" resultMap="ethMAddress_DB_Result">

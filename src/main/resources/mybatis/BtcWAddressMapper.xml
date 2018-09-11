@@ -7,7 +7,6 @@
 		<result column="address" property="address" />
 		<result column="status" property="status" />
 		<result column="create_datetime" property="createDatetime" />
-		<result column="abandon_datetime" property="abandonDatetime" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
@@ -23,6 +22,12 @@
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
 			</if>
+			<if test="statusList != null and statusList != ''">
+                AND `status` in
+                <foreach item="item" index="index" collection="statusList" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
 		</trim>
 	</sql>
 	<select id="select_btcWAddress" parameterType="btcWAddress" resultMap="btcWAddress_DB_Result">
@@ -31,7 +36,6 @@
 		,t.address
 		,t.status
 		,t.create_datetime
-		,t.abandon_datetime
 		FROM
 		tcoin_btc_waddress t
 		<include refid="where_condition" />
@@ -70,7 +74,6 @@
 		UPDATE tcoin_btc_waddress
 		SET
 		status = #{status}
-		,abandon_datetime = #{abandonDatetime}
 		WHERE id = #{id}
 	</update>
 

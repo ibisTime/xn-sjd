@@ -190,7 +190,9 @@
 		<property name="paginableDAO" ref="btcMAddressDAOImpl"/>
 	</bean>
 	
-
+	<bean id="btcWAddressBO" class="com.ogc.standard.bo.impl.BtcWAddressBOImpl">
+		<property name="paginableDAO" ref="btcWAddressDAOImpl"/>
+	</bean>
 	
 	<bean id="btcTransactionBO" class="com.ogc.standard.bo.impl.BtcTransactionBOImpl">
 		<property name="paginableDAO" ref="btcTransactionDAOImpl"/>

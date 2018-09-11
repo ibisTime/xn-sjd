@@ -8,8 +8,6 @@
  */
 package com.ogc.standard.dto.req;
 
-import java.math.BigInteger;
-
 /** 
  * 分页查询BTC交易记录
  * @author: taojian 
@@ -21,26 +19,20 @@ public class XN802590Req extends APageReq {
     private static final long serialVersionUID = -2919414958783911395L;
 
     // 交易哈希
-    private String hash;
+    private String txid;
 
     // 区块哈希
     private String blockHash;
 
-    // 区块号
-    private BigInteger blockNumber;
+    // 区块高度
+    private String blockHeight;
 
-    // 转出地址
-    private String from;
-
-    // 转入地址
-    private String to;
-
-    public String getHash() {
-        return hash;
+    public String getTxid() {
+        return txid;
     }
 
-    public void setHash(String hash) {
-        this.hash = hash;
+    public void setTxid(String txid) {
+        this.txid = txid;
     }
 
     public String getBlockHash() {
@@ -51,28 +43,12 @@ public class XN802590Req extends APageReq {
         this.blockHash = blockHash;
     }
 
-    public BigInteger getBlockNumber() {
-        return blockNumber;
+    public String getBlockHeight() {
+        return blockHeight;
     }
 
-    public void setBlockNumber(BigInteger blockNumber) {
-        this.blockNumber = blockNumber;
-    }
-
-    public String getFrom() {
-        return from;
-    }
-
-    public void setFrom(String from) {
-        this.from = from;
-    }
-
-    public String getTo() {
-        return to;
-    }
-
-    public void setTo(String to) {
-        this.to = to;
+    public void setBlockHeight(String blockHeight) {
+        this.blockHeight = blockHeight;
     }
 
 }
