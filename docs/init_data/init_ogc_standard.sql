@@ -1,13 +1,4 @@
 /*
--- Query: SELECT * FROM ogc_standard.tcoin_coin
-LIMIT 0, 1000
-
--- Date: 2018-09-11 12:55
-*/
-INSERT INTO `tcoin_coin` (`symbol`,`ename`,`cname`,`type`,`unit`,`icon`,`pic1`,`pic2`,`pic3`,`order_no`,`collect_start`,`withdraw_fee`,`contract_address`,`contract_abi`,`status`,`updater`,`update_datetime`,`remark`) VALUES ('HPM','Happymoney','开心币','0T',18,'http://m.hichengdai.com/icon.png','http://m.hichengdai.com/pic1.png','http://m.hichengdai.com/pic2.png','http://m.hichengdai.com/pic3.png',4,1000000000,100,'0xA1b7f66d2c5Cd89A848c75CCda085117825A0Af9','0xA1b7f66d2c5Cd89A848c75CCda085117825A0Af9','0','admin','2018-09-08 20:41:59',NULL);
-INSERT INTO `tcoin_coin` (`symbol`,`ename`,`cname`,`type`,`unit`,`icon`,`pic1`,`pic2`,`pic3`,`order_no`,`collect_start`,`withdraw_fee`,`contract_address`,`contract_abi`,`status`,`updater`,`update_datetime`,`remark`) VALUES ('BTC','Bitcoin','比特币','1',8,'http://m.hichengdai.com/icon.png','http://m.hichengdai.com/pic1.png','http://m.hichengdai.com/pic2.png','http://m.hichengdai.com/pic3.png',4,1000000000,100000000,'0xA1b7f66d2c5Cd89A848c75CCda085117825A0Ar9','0xA1b7f66d2c5Cd89A848c75CCda085117825A0Ar9','0','admin','2018-09-08 20:23:54','测试');
-INSERT INTO `tcoin_coin` (`symbol`,`ename`,`cname`,`type`,`unit`,`icon`,`pic1`,`pic2`,`pic3`,`order_no`,`collect_start`,`withdraw_fee`,`contract_address`,`contract_abi`,`status`,`updater`,`update_datetime`,`remark`) VALUES ('ETH','Ethereun','以太坊','0',18,'FjdmXxf49V1bQYkeLnmG9kzkS_OY','FuYWZ2i49Gb5-EbDbauKLV_FbwJm','FnTUugffEc4yxWOoZK-Gyk6v41y2','Fo4ACqf0bHRLRJaYwssrwGAIwHBC',1,10000000,10,'kkkk','kkkk','0','tao','2018-09-08 20:07:58','测试');
-/*
 -- Query: SELECT * FROM ogc_standard.tsys_role
 LIMIT 0, 1000
 
