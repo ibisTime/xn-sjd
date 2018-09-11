@@ -1,17 +1,13 @@
 package com.ogc.standard.dto.req;
 
-import org.hibernate.validator.constraints.NotBlank;
-
-/** 
- * 详情查询承兑订单
+/**
+ * 
  * @author: lei 
- * @since: 2018年9月10日 下午8:07:48 
+ * @since: 2018年9月11日 下午5:30:44 
  * @history:
  */
-public class XN625286Req {
-
-    // 必填，编号
-    @NotBlank
+public class XN802021Req {
+    // 编号
     private String code;
 
     public String getCode() {

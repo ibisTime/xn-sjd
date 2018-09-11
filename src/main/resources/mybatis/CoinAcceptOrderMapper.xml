@@ -39,49 +39,6 @@
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != '' ">
-				AND t.code = #{code}
-			</if>
-		</trim>
-	</sql>
-	<select id="select_coinAcceptOrder" parameterType="coinAcceptOrder" resultMap="coinAcceptOrder_DB_Result">
-		SELECT
-		t.code
-		,t.type
-		,t.user_id
-		,t.accept_user
-		,t.trade_currency
-		
-		,t.trade_coin
-		,t.trade_price
-		,t.count
-		,t.trade_amount
-		,t.fee
-		
-		,t.invalid_datetime
-		,t.pay_type
-		,t.pay_info
-		,t.pay_bank
-		,t.pay_card_no
-		
-		,t.receive_type
-		,t.receive_info
-		,t.receive_bank
-		,t.receive_card_no
-		,t.status
-		
-		,t.mark_datetime
-		,t.mark_note
-		,t.release_datetime
-		,t.create_datetime
-		,t.updater
-		
-		,t.update_datetime
-		,t.remark
-		FROM
-		tcoin_accept_order t
-		<include refid="where_condition" />
-		<trim prefix="ORDER BY ">
-			<if test="code != null and code != '' ">
                 AND `code` = #{code}
             </if>
             
@@ -124,6 +81,49 @@
             <if test="type != null and type != '' ">
                 AND `type` = #{type}
             </if>
+		</trim>
+	</sql>
+	<select id="select_coinAcceptOrder" parameterType="coinAcceptOrder" resultMap="coinAcceptOrder_DB_Result">
+		SELECT
+		t.code
+		,t.type
+		,t.user_id
+		,t.accept_user
+		,t.trade_currency
+		
+		,t.trade_coin
+		,t.trade_price
+		,t.count
+		,t.trade_amount
+		,t.fee
+		
+		,t.invalid_datetime
+		,t.pay_type
+		,t.pay_info
+		,t.pay_bank
+		,t.pay_card_no
+		
+		,t.receive_type
+		,t.receive_info
+		,t.receive_bank
+		,t.receive_card_no
+		,t.status
+		
+		,t.mark_datetime
+		,t.mark_note
+		,t.release_datetime
+		,t.create_datetime
+		,t.updater
+		
+		,t.update_datetime
+		,t.remark
+		FROM
+		tcoin_accept_order t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
             
 		</trim>
 	</select>

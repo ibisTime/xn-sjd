@@ -65,6 +65,7 @@
 		<typeAlias alias="btcUtxo" type="com.ogc.standard.domain.BtcUtxo"/>
 		
 		<typeAlias alias="coinAcceptOrder" type="com.ogc.standard.domain.CoinAcceptOrder"/>
+		<typeAlias alias="bankcard" type="com.ogc.standard.domain.Bankcard"/>
 		
 	</typeAliases>
 </configuration>
