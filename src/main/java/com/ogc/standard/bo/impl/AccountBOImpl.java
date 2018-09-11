@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.ogc.standard.bo.IAccountBO;
-import com.ogc.standard.bo.IBtcAddressBO;
+import com.ogc.standard.bo.IBtcXAddressBO;
 import com.ogc.standard.bo.IEthXAddressBO;
 import com.ogc.standard.bo.IJourBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
@@ -47,7 +47,7 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
     private IEthXAddressBO ethXAddressBO;
 
     @Autowired
-    private IBtcAddressBO btcXAddressBO;
+    private IBtcXAddressBO btcXAddressBO;
 
     @Override
     public String distributeAccount(String userId, EAccountType accountType,

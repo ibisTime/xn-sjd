@@ -182,6 +182,20 @@
 		<property name="paginableDAO" ref="ethTransactionDAOImpl"/>
 	</bean>
 	
+	<bean id="btcXAddressBO" class="com.ogc.standard.bo.impl.BtcXAddressBOImpl">
+		<property name="paginableDAO" ref="btcXAddressDAOImpl"/>
+	</bean>
+	
+	<bean id="btcMAddressBO" class="com.ogc.standard.bo.impl.BtcMAddressBOImpl">
+		<property name="paginableDAO" ref="btcMAddressDAOImpl"/>
+	</bean>
+	
+
+	
+	<bean id="btcTransactionBO" class="com.ogc.standard.bo.impl.BtcTransactionBOImpl">
+		<property name="paginableDAO" ref="btcTransactionDAOImpl"/>
+	</bean>
+	
 	<bean id="jourBO" class="com.ogc.standard.bo.impl.JourBOImpl">
 		<property name="paginableDAO" ref="jourDAOImpl"/>
 	</bean>

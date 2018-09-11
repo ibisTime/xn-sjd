@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS `tcoin_trade_order`;
 CREATE TABLE `tcoin_trade_order` (
   `code` varchar(32) NOT NULL COMMENT '订单编号',
   `type` varchar(32) DEFAULT NULL COMMENT '订单类型',
@@ -25,6 +26,7 @@ CREATE TABLE `tcoin_trade_order` (
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `tcoin_ads`;
 CREATE TABLE `tcoin_ads` (
   `code` varchar(32) NOT NULL COMMENT '编号',
   `trade_type` varchar(32) NOT NULL COMMENT '广告类型（0购买 1出售）',
@@ -50,6 +52,7 @@ CREATE TABLE `tcoin_ads` (
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `tcoin_ads_display_time`;
 CREATE TABLE `tcoin_ads_display_time` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `ads_code` varchar(32) NOT NULL COMMENT '编号',
@@ -60,6 +63,7 @@ CREATE TABLE `tcoin_ads_display_time` (
   UNIQUE KEY `ads_week` (`ads_code`,`week`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `tcoin_arbitrate`;
 CREATE TABLE `tcoin_arbitrate` (
   `code` varchar(32) NOT NULL COMMENT '工单编号',
   `trade_order_code` varchar(32) DEFAULT NULL COMMENT '交易订单编号',
@@ -99,6 +103,7 @@ CREATE TABLE `tstd_user` (
   `address` varchar(255) DEFAULT NULL COMMENT '详细地址',
   `longitude` varchar(255) DEFAULT NULL COMMENT '经度',
   `latitude` varchar(255) DEFAULT NULL COMMENT '维度',
+  `trade_rate` decimal(8,4) DEFAULT NULL COMMENT '交易手续费',
   `create_datetime` datetime DEFAULT NULL COMMENT '注册时间',
   `updater` varchar(32) DEFAULT NULL COMMENT '修改人',
   `update_datetime` datetime DEFAULT NULL COMMENT '修改时间',
@@ -122,7 +127,6 @@ CREATE TABLE `tstd_user_ext` (
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
 DROP TABLE IF EXISTS `tstd_sign_log`;
 CREATE TABLE `tstd_sign_log` (
   `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT 'ID主键',
@@ -134,7 +138,6 @@ CREATE TABLE `tstd_sign_log` (
   `create_datetime` datetime DEFAULT NULL COMMENT '签到时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 
 DROP TABLE IF EXISTS `tstd_auth_log`;
 CREATE TABLE `tstd_auth_log` (
@@ -168,7 +171,7 @@ CREATE TABLE `tstd_blacklist` (
 
 
 
-
+DROP TABLE IF EXISTS `tstd_read`;
 DROP TABLE IF EXISTS `tstd_read`;
 CREATE TABLE `tstd_read` (
   `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT 'ID主键',
@@ -268,6 +271,7 @@ CREATE TABLE `tsys_user` (
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `tsys_menu`;
 CREATE TABLE `tsys_menu` (
   `code` varchar(32) NOT NULL DEFAULT '' COMMENT '编号',
   `parent_code` varchar(32) DEFAULT NULL COMMENT '父亲key',
@@ -283,7 +287,7 @@ CREATE TABLE `tsys_menu` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-
+DROP TABLE IF EXISTS `tsys_menu_role`;
 CREATE TABLE `tsys_menu_role` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `role_code` varchar(32) DEFAULT NULL COMMENT '角色编号',

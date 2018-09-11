@@ -239,14 +239,14 @@ public class TencentBOImpl implements ITencentBO {
                 .getString("ErrorCode");
             String errorInfo = JSONObject.parseObject(result)
                 .getString("ErrorInfo");
-//            if (!errorCode.equals("0")) {
-//                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-//                    "腾讯云创建群组异常,错误编号：" + errorCode + "，原因：" + errorInfo);
-//            }
+            if (!errorCode.equals("0")) {
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                    "腾讯云创建群组异常,错误编号：" + errorCode + "，原因：" + errorInfo);
+            }
 
         } catch (Exception e) {
-//            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-//                "腾讯云创建群组异常，原因" + e.getMessage());
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "腾讯云创建群组异常，原因" + e.getMessage());
         }
     }
 
@@ -408,14 +408,14 @@ public class TencentBOImpl implements ITencentBO {
                 .getString("ErrorCode");
             String errorInfo = JSONObject.parseObject(result)
                 .getString("ErrorInfo");
-//            if (!errorCode.equals("0")) {
-//                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-//                    "腾讯云发送普通消息异常,错误编号：" + errorCode + "，原因：" + errorInfo);
-//            }
+            if (!errorCode.equals("0")) {
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                    "腾讯云发送普通消息异常,错误编号：" + errorCode + "，原因：" + errorInfo);
+            }
 
         } catch (Exception e) {
-//            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-//                "腾讯云发送普通消息异常，原因" + e.getMessage());
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "腾讯云发送普通消息异常，原因" + e.getMessage());
         }
     }
 

@@ -4,5 +4,9 @@ import com.ogc.standard.dao.base.IBaseDAO;
 import com.ogc.standard.domain.CoinAcceptOrder;
 
 public interface ICoinAcceptOrderDAO extends IBaseDAO<CoinAcceptOrder> {
-	String NAMESPACE = ICoinAcceptOrderDAO.class.getName().concat(".");
+    String NAMESPACE = ICoinAcceptOrderDAO.class.getName().concat(".");
+
+    public int updateCancel(CoinAcceptOrder tradeOrder);
+
+    public int updateMarkPay(CoinAcceptOrder tradeOrder);
 }

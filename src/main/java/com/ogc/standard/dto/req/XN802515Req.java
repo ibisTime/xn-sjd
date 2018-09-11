@@ -8,6 +8,8 @@
  */
 package com.ogc.standard.dto.req;
 
+import java.util.List;
+
 /** 
  * @author: haiqingzheng 
  * @since: 2017年11月8日 下午3:25:36 
@@ -25,6 +27,16 @@ public class XN802515Req extends APageReq {
 
     // 状态
     private String status;
+
+    private List<String> statusList;
+
+    public List<String> getStatusList() {
+        return statusList;
+    }
+
+    public void setStatusList(List<String> statusList) {
+        this.statusList = statusList;
+    }
 
     public String getAddress() {
         return address;

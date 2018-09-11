@@ -11,8 +11,9 @@ package com.ogc.standard.dto.req;
 import java.math.BigInteger;
 
 /** 
- * @author: haiqingzheng 
- * @since: 2017年11月9日 下午7:02:19 
+ * 分页查询ETH交易记录
+ * @author: taojian 
+ * @since: 2018年9月11日 下午2:01:05 
  * @history:
  */
 public class XN802530Req extends APageReq {

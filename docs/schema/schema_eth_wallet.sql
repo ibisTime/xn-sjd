@@ -1,4 +1,4 @@
-
+DROP TABLE IF EXISTS `tcoin_coin`;
 CREATE TABLE `tcoin_coin` (
   `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `symbol` varchar(64) NOT NULL DEFAULT '' COMMENT '英文简称',
@@ -22,6 +22,7 @@ CREATE TABLE `tcoin_coin` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='钱包支持币种';
 
+DROP TABLE IF EXISTS `tcoin_eth_xaddress`;
 CREATE TABLE `tcoin_eth_xaddress` (
   `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `address` varchar(255) NOT NULL COMMENT '以太坊地址',
@@ -33,6 +34,7 @@ CREATE TABLE `tcoin_eth_xaddress` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='ETH用户分发地址';
 
+DROP TABLE IF EXISTS `tcoin_eth_maddress`;
 CREATE TABLE `tcoin_eth_maddress` (
   `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `address` varchar(255) DEFAULT NULL COMMENT '以太坊地址',
@@ -45,6 +47,7 @@ CREATE TABLE `tcoin_eth_maddress` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='ETH平台散取地址';
 
+DROP TABLE IF EXISTS `tcoin_eth_waddress`;
 CREATE TABLE `tcoin_eth_waddress` (
   `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `address` varchar(255) DEFAULT NULL COMMENT '以太坊地址',
@@ -54,6 +57,7 @@ CREATE TABLE `tcoin_eth_waddress` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='ETH平台归集地址';
 
+DROP TABLE IF EXISTS `tcoin_eth_transaction`;
 CREATE TABLE `tcoin_eth_transaction` (
   `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `hash` varchar(255) NOT NULL COMMENT '交易哈希',
@@ -79,6 +83,7 @@ CREATE TABLE `tcoin_eth_transaction` (
   UNIQUE KEY `hash_UNIQUE` (`hash`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='ETH交易记录';
 
+DROP TABLE IF EXISTS `tcoin_token_event`;
 CREATE TABLE `tcoin_token_event` (
   `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `hash` varchar(255) NOT NULL COMMENT '交易哈希',
@@ -90,6 +95,7 @@ CREATE TABLE `tcoin_token_event` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='ETHtoken交易event';
 
+DROP TABLE IF EXISTS `tcoin_personal_address`;
 CREATE TABLE `tcoin_personal_address` (
   `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `symbol` varchar(32) DEFAULT NULL COMMENT '币种',
@@ -104,6 +110,7 @@ CREATE TABLE `tcoin_personal_address` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户取现地址';
 
+DROP TABLE IF EXISTS `tstd_account`;
 CREATE TABLE `tstd_account` (
   `account_number` varchar(32) NOT NULL COMMENT '账户编号',
   `user_id` varchar(32) DEFAULT NULL COMMENT '用户编号',
@@ -121,6 +128,7 @@ CREATE TABLE `tstd_account` (
   PRIMARY KEY (`account_number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='账户';
 
+DROP TABLE IF EXISTS `tstd_jour`;
 CREATE TABLE `tstd_jour` (
   `code` varchar(32) NOT NULL COMMENT '编号',
   `type` varchar(32) DEFAULT NULL COMMENT '流水类型（余额流水、冻结流水）',
@@ -149,6 +157,7 @@ CREATE TABLE `tstd_jour` (
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='账户流水';
 
+DROP TABLE IF EXISTS `tstd_charge`;
 CREATE TABLE `tstd_charge` (
   `code` varchar(32) NOT NULL COMMENT '编号',
   `account_number` varchar(32) DEFAULT NULL COMMENT '账户编号',
@@ -172,6 +181,7 @@ CREATE TABLE `tstd_charge` (
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='充值订单';
 
+DROP TABLE IF EXISTS `tstd_withdraw`;
 CREATE TABLE `tstd_withdraw` (
   `code` varchar(32) NOT NULL COMMENT '编号',
   `account_number` varchar(32) DEFAULT NULL COMMENT '账户编号',
@@ -199,6 +209,7 @@ CREATE TABLE `tstd_withdraw` (
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT '取现订单';
 
+DROP TABLE IF EXISTS `tstd_collect`;
 CREATE TABLE `tstd_collect` (
   `code` varchar(32) NOT NULL COMMENT '编号',
   `currency` varchar(32) DEFAULT NULL COMMENT '币种',
@@ -215,6 +226,7 @@ CREATE TABLE `tstd_collect` (
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT '归集订单';
 
+DROP TABLE IF EXISTS `tstd_deposit`;
 CREATE TABLE `tstd_deposit` (
   `code` varchar(32) NOT NULL COMMENT '编号',
   `currency` varchar(32) DEFAULT NULL COMMENT '币种',
@@ -229,6 +241,7 @@ CREATE TABLE `tstd_deposit` (
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT '定存订单';
 
+DROP TABLE IF EXISTS `tstd_hlorder`;
 CREATE TABLE `tstd_hlorder` (
   `code` varchar(32) NOT NULL COMMENT '编号',
   `account_number` varchar(32) NOT NULL COMMENT '账户编号',
@@ -247,6 +260,7 @@ CREATE TABLE `tstd_hlorder` (
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT '红蓝订单';
 
+DROP TABLE IF EXISTS `tcoin_currency_rate`;
 CREATE TABLE `tcoin_currency_rate` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `currency` varchar(10) NOT NULL COMMENT '币种',
@@ -257,6 +271,7 @@ CREATE TABLE `tcoin_currency_rate` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT '法币汇率';
 
+DROP TABLE IF EXISTS `tcoin_market`;
 CREATE TABLE `tcoin_market` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `symbol` varchar(10) NOT NULL COMMENT '数字货币',
