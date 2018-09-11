@@ -1,4 +1,3 @@
-
 /*
 -- Query: SELECT 
 code,name,type,url,order_no,'admin' updater, now() as update_datetime,remark,parent_code,system_code 
