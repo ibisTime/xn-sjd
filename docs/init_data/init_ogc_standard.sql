@@ -1,14 +1,13 @@
-
 /*
--- Query: SELECT 
-code,name,type,url,order_no,'admin' updater, now() as update_datetime,remark,parent_code,system_code 
-FROM ogc_standard.tsys_menu where code ='COINSM201700000000000000' or parent_code ='COINSM201700000000000000'
-or parent_code='COINSM201700001000000001' or parent_code in (select code from tsys_menu where parent_code ='COINSM201700001000000001')
-or parent_code in (select code from tsys_menu where parent_code in (select code from tsys_menu where parent_code ='COINSM201700001000000001'))
-LIMIT 0, 500
+-- Query: SELECT * FROM ogc_standard.tcoin_coin
+LIMIT 0, 1000
 
--- Date: 2018-09-03 17:49
+-- Date: 2018-09-10 20:47
 */
+INSERT INTO `tcoin_coin` (`symbol`,`ename`,`cname`,`type`,`unit`,`icon`,`pic1`,`pic2`,`pic3`,`order_no`,`collect_start`,`withdraw_fee`,`contract_address`,`contract_abi`,`status`,`updater`,`update_datetime`,`remark`) VALUES ('BTC','bitcoin','比特币','0',8,'比特币@3x_1521170843181.png','比特币图标@3x_1521170851717.png','充值@3x_1521170848604.png','提现@3x_1521170854543.png',1,100000000,200,NULL,NULL,'0','hss','2018-03-22 17:59:47','初始化币种');
+INSERT INTO `tcoin_coin` (`symbol`,`ename`,`cname`,`type`,`unit`,`icon`,`pic1`,`pic2`,`pic3`,`order_no`,`collect_start`,`withdraw_fee`,`contract_address`,`contract_abi`,`status`,`updater`,`update_datetime`,`remark`) VALUES ('ETH','ethereum','以太币','0',18,'ETH@3x_1521178778526.png','以太币图标@3x_1521178784980.png','充-直@3x_1521178789622.png','提-现@3x_1521178792797.png',2,1000000000000000000,1000000000000000,NULL,NULL,'0','hss','2018-03-16 13:46:21','初始化币种');
+INSERT INTO `tcoin_coin` (`symbol`,`ename`,`cname`,`type`,`unit`,`icon`,`pic1`,`pic2`,`pic3`,`order_no`,`collect_start`,`withdraw_fee`,`contract_address`,`contract_abi`,`status`,`updater`,`update_datetime`,`remark`) VALUES ('HPM','happymoney','X币','1',18,'sc@3x_1521178817388.png','云储币图标@3x_1521178823009.png','充直@3x_1521178826583.png','提现@3x_1521178830034.png',3,0,100000000000000000000000000,NULL,NULL,'0','hss','2018-03-16 13:46:30','初始化币种');
+
 INSERT INTO `tsys_user` (`user_id`,`login_name`,`login_pwd`,`login_pwd_strength`,`role_code`,`status`,`create_datetime`,`remark`) VALUES ('UTOKEN201700000000000001','admin','21218cca77804d2ba1922c33e0151105','1','COINSR201700000000000000','0',now(),'管理端系统方');
 /*
 -- Query: SELECT * FROM ogc_standard.tsys_role
@@ -569,6 +568,11 @@ INSERT INTO `tsys_config` (`id`,`type`,`ckey`,`cvalue`,`updater`,`update_datetim
 INSERT INTO `tsys_config` (`id`,`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES (15,'coin_type','0T','HPM','admin','2018-09-08 00:00:00','x币');
 INSERT INTO `tsys_config` (`id`,`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES (16,'coin_status','0','已发布','admin','2018-09-08 00:00:00','币种状态');
 INSERT INTO `tsys_config` (`id`,`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES (17,'coin_status','1','已撤下','admin','2018-09-09 00:00:00','币种状态');
+INSERT INTO `tsys_config` (`id`,`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES (18,'tencent_im','tx_app_code','1400139627','admin','2018-09-11 00:00:00','应用编号');
+INSERT INTO `tsys_config` (`id`,`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES (19,'tencent_im','tx_app_admin','admin','admin','2018-09-11 00:00:00','账号管理员');
+INSERT INTO `tsys_config` (`id`,`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES (20,'tencent_im','tx_access_key','-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEjpFnJBYdffrPuhNwuMVHgA8ww9tx\n5b3N12QOOneRRrM9FfOv5FE+GmmyFjZPNlxemK35TAru63AUgQpNzs+x1g==\n-----END PUBLIC KEY-----','admin','2018-09-11 00:00:00','公钥');
+INSERT INTO `tsys_config` (`id`,`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES (21,'tencent_im','tx_secret_key','-----BEGIN PRIVATE KEY-----\nMIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgX50tBBPq9VZnCYvU\n68DXJlWtimgmGVQbYJ2vbK5AczahRANCAASOkWckFh19+s+6E3C4xUeADzDD23Hl\nvc3XZA46d5FGsz0V86/kUT4aabIWNk82XF6YrflMCu7rcBSBCk3Oz7HW\n-----END PRIVATE KEY-----','admin','2018-09-11 00:00:00','私钥');
+INSERT INTO `tsys_config` (`id`,`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES (22,'tencent_im','tx_account_type','38263','admin','2018-09-11 00:00:00','账户类型');
 
 /*
 -- Query: SELECT * FROM ogc_standard.tsys_dict
