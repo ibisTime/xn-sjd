@@ -18,15 +18,11 @@ public interface ICoinAcceptOrderAO {
 
     public void cancelBuyOrder(String code, String userId, String remark);
 
-    //
+    // 标记打款
     public void markPay(String code, String note, String pdf, String updater);
 
     // 平台收款处理
     public TradeOrder release(String code, String result, String updater);
-
-    public int dropCoinAcceptOrder(String code);
-
-    public int editCoinAcceptOrder(CoinAcceptOrder data);
 
     public Paginable<CoinAcceptOrder> queryCoinAcceptOrderPage(int start,
             int limit, CoinAcceptOrder condition);

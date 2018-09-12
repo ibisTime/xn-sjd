@@ -48,6 +48,16 @@ public class SimuOrderDAOImpl extends AMybatisTemplate
     }
 
     @Override
+    public int updateMarketSimuOrder(SimuOrder data) {
+        return super.update(NAMESPACE.concat("update_market_simuOrder"), data);
+    }
+
+    @Override
+    public int updateLimitSimuOrder(SimuOrder data) {
+        return super.update(NAMESPACE.concat("update_limit_simuOrder"), data);
+    }
+
+    @Override
     public int cancel(SimuOrder data) {
         return super.update(NAMESPACE.concat("cancel_simuOrder"), data);
     }

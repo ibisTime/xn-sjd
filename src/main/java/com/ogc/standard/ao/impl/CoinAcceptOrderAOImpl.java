@@ -3,18 +3,22 @@ package com.ogc.standard.ao.impl;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.ICoinAcceptOrderAO;
 import com.ogc.standard.bo.IAccountBO;
+import com.ogc.standard.bo.IBankcardBO;
 import com.ogc.standard.bo.IBlacklistBO;
 import com.ogc.standard.bo.ICoinAcceptOrderBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.domain.Account;
+import com.ogc.standard.domain.Bankcard;
 import com.ogc.standard.domain.CoinAcceptOrder;
 import com.ogc.standard.domain.TradeOrder;
 import com.ogc.standard.domain.User;
@@ -22,6 +26,10 @@ import com.ogc.standard.dto.req.XN625270Req;
 import com.ogc.standard.dto.req.XN625271Req;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECoinAcceptOrderStatus;
+import com.ogc.standard.enums.EJourBizTypeUser;
+import com.ogc.standard.enums.ESysUser;
+import com.ogc.standard.enums.ESystemAccount;
+import com.ogc.standard.enums.ESystemCode;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
 
@@ -39,6 +47,9 @@ public class CoinAcceptOrderAOImpl implements ICoinAcceptOrderAO {
 
     @Autowired
     private IBlacklistBO blacklistBO;
+
+    @Autowired
+    private IBankcardBO bankcardBO;
 
     @Override
     public String buyOrder(XN625270Req req) {
@@ -79,10 +90,16 @@ public class CoinAcceptOrderAOImpl implements ICoinAcceptOrderAO {
                 "不被支持的付款方式");
         }
 
-        // 随机获取一个承兑商账户
-        String acceptUser = "";
+        // 获取所有承兑商收款账号
+        List<Bankcard> bankcardList = bankcardBO.queryBankcardList(
+            ESysUser.SYS_USER.getCode(), ESystemCode.BZ.getCode());
 
-        return coinAcceptOrderBO.saveBuyAcceptOrder(req, acceptUser);
+        // 随机获取一个承兑商账户
+        Random rand = new Random();
+        Bankcard bankcard = bankcardList.get(rand.nextInt(bankcardList.size()));
+
+        return coinAcceptOrderBO.saveBuyAcceptOrder(req,
+            bankcard.getBankcardNumber(), bankcard.getBankName());
     }
 
     @Override
@@ -135,10 +152,15 @@ public class CoinAcceptOrderAOImpl implements ICoinAcceptOrderAO {
                 "您的" + req.getTradeCurrency() + "可用余额不足");
         }
 
-        // 随机获取一个承兑商账户
-        String acceptUser = "";
+        // 获取所有承兑商收款账号
+        List<Bankcard> bankcardList = bankcardBO.queryBankcardList(
+            ESysUser.SYS_USER.getCode(), ESystemCode.BZ.getCode());
 
-        return sell(req, acceptUser);
+        // 随机获取一个承兑商打款账户
+        Random rand = new Random();
+        Bankcard bankcard = bankcardList.get(rand.nextInt(bankcardList.size()));
+
+        return sell(req, bankcard);
     }
 
     @Override
@@ -188,18 +210,45 @@ public class CoinAcceptOrderAOImpl implements ICoinAcceptOrderAO {
             return;
         }
 
+        if (!order.getUserId().equals(updater)) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "只有此单的买家才可以标记打款");
+        }
+
         if (!ECoinAcceptOrderStatus.TO_PAY.getCode()
             .equals(order.getStatus())) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "当前状态下不能标记已打款");
         }
 
-        // 变更交易订单信息
-        coinAcceptOrderBO.markPay(order, updater, note);
+        if (order.getType().equals(EBoolean.YES.getCode())) { // 0买入/1卖出
+
+            // 交易解冻
+            Account dbAccount = accountBO.getAccountByUser(order.getUserId(),
+                order.getTradeCoin());
+            accountBO.unfrozenAmount(dbAccount, order.getCount(),
+                EJourBizTypeUser.AJ_ADS_UNFROZEN.getCode(),
+                EJourBizTypeUser.AJ_ADS_UNFROZEN.getValue(), order.getCode());
+
+            // 划转X币
+            Account platAccount = accountBO
+                .getAccount(ESystemAccount.SYS_ACOUNT_ETH.getCode());
+
+            accountBO.transAmount(dbAccount, platAccount, order.getCount(),
+                EJourBizTypeUser.AJ_SELL.getCode(),
+                EJourBizTypeUser.AJ_BUY.getCode(),
+                EJourBizTypeUser.AJ_SELL.getValue(),
+                EJourBizTypeUser.AJ_BUY.getValue(), order.getCode());
+
+        } else {
+            // 变更交易订单信息
+            coinAcceptOrderBO.markPay(order, updater, note);
+        }
 
     }
 
     @Override
+    @Transactional
     public TradeOrder release(String code, String result, String updater) {
         CoinAcceptOrder order = coinAcceptOrderBO.getCoinAcceptOrder(code);
 
@@ -211,35 +260,25 @@ public class CoinAcceptOrderAOImpl implements ICoinAcceptOrderAO {
                     "当前状态下不能释放");
             }
 
+            Account dbAccount = accountBO.getAccountByUser(order.getUserId(),
+                order.getTradeCoin());
+
+            Account platAccount = accountBO
+                .getAccount(ESystemAccount.SYS_ACOUNT_ETH.getCode());
+
+            accountBO.transAmount(platAccount, dbAccount, order.getCount(),
+                EJourBizTypeUser.AJ_SELL.getCode(),
+                EJourBizTypeUser.AJ_BUY.getCode(),
+                EJourBizTypeUser.AJ_SELL.getValue(),
+                EJourBizTypeUser.AJ_BUY.getValue(), order.getCode());
+
         } else if (EBoolean.NO.getCode().equals(order.getType())) {
-
             platCancel(order.getCode(), "系统", "未收到钱款，取消订单");
-
         } else {
-
             throw new BizException(EBizErrorCode.DEFAULT.getCode(), "未识别的订单类型");
-
         }
-        // 变更交易订单信息
-        // coinAcceptOrderBO.release(order, updater, remark);
 
         return null;
-    }
-
-    @Override
-    public int editCoinAcceptOrder(CoinAcceptOrder data) {
-        if (!coinAcceptOrderBO.isCoinAcceptOrderExist(data.getCode())) {
-            throw new BizException("xn0000", "记录编号不存在");
-        }
-        return coinAcceptOrderBO.refreshCoinAcceptOrder(data);
-    }
-
-    @Override
-    public int dropCoinAcceptOrder(String code) {
-        if (!coinAcceptOrderBO.isCoinAcceptOrderExist(code)) {
-            throw new BizException("xn0000", "记录编号不存在");
-        }
-        return coinAcceptOrderBO.removeCoinAcceptOrder(code);
     }
 
     @Override
@@ -267,9 +306,21 @@ public class CoinAcceptOrderAOImpl implements ICoinAcceptOrderAO {
      * @create: 2018年9月10日 下午9:32:59 lei
      * @history:
      */
-    private String sell(XN625271Req req, String acceptUser) {
+    @Transactional
+    private String sell(XN625271Req req, Bankcard bankcard) {
 
-        return coinAcceptOrderBO.saveSellAcceptOrder(req, acceptUser);
+        CoinAcceptOrder order = coinAcceptOrderBO.saveSellAcceptOrder(req,
+            bankcard.getBankcardNumber(), bankcard.getBankName());
+
+        Account dbAccount = accountBO.getAccountByUser(order.getUserId(),
+            order.getTradeCoin());
+
+        // 冻结卖家交易金额
+        accountBO.frozenAmount(dbAccount, order.getCount(),
+            EJourBizTypeUser.AJ_ADS_UNFROZEN.getCode(),
+            EJourBizTypeUser.AJ_ADS_UNFROZEN.getValue(), order.getCode());
+
+        return order.getCode();
     }
 
 }

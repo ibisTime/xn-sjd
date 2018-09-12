@@ -11,19 +11,17 @@ public interface ICoinAcceptOrderBO extends IPaginableBO<CoinAcceptOrder> {
 
     public boolean isCoinAcceptOrderExist(String code);
 
-    public String saveBuyAcceptOrder(XN625270Req req, String acceptUser);
+    public String saveBuyAcceptOrder(XN625270Req req, String receiveCardNo,
+            String receiveBank);
 
-    public String saveSellAcceptOrder(XN625271Req req, String acceptUser);
-
-    public int removeCoinAcceptOrder(String code);
+    public CoinAcceptOrder saveSellAcceptOrder(XN625271Req req,
+            String payCardNo, String payBank);
 
     public int cancel(CoinAcceptOrder acceptOrder, String updater,
             String remark);
 
     public int markPay(CoinAcceptOrder tradeOrder, String updater,
             String remark);
-
-    public int refreshCoinAcceptOrder(CoinAcceptOrder data);
 
     public List<CoinAcceptOrder> queryCoinAcceptOrderList(
             CoinAcceptOrder condition);

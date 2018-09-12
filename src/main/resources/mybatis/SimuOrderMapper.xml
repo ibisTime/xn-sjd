@@ -4,24 +4,23 @@
 <mapper namespace="com.ogc.standard.dao.ISimuOrderDAO">
 	<resultMap id="simuOrder_DB_Result" type="simuOrder">
 		<result column="code" property="code" />
-		<result column="group_code" property="groupCode" />
 		<result column="user_id" property="userId" />
-		<result column="exchange" property="exchange" />
 		<result column="symbol" property="symbol" />
-		
 		<result column="to_symbol" property="toSymbol" />
 		<result column="type" property="type" />
+		
 		<result column="direction" property="direction" />
 		<result column="price" property="price" />
 		<result column="total_count" property="totalCount" />
-		
 		<result column="total_amount" property="totalAmount" />
 		<result column="traded_count" property="tradedCount" />
+		
 		<result column="traded_amount" property="tradedAmount" />
 		<result column="traded_fee" property="tradedFee" />
+		<result column="avg_price" property="avgPrice" />
 		<result column="last_traded_datetime" property="lastTradedDatetime" />
-		
 		<result column="create_datetime" property="createDatetime" />
+		
 		<result column="cancel_datetime" property="cancelDatetime" />
 		<result column="status" property="status" />
 	</resultMap>
@@ -30,14 +29,8 @@
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
 			</if>
-			<if test="groupCode != null and groupCode != '' ">
-				AND t.group_code = #{groupCode}
-			</if>
 			<if test="userId != null and userId != '' ">
 				AND t.user_id = #{userId}
-			</if>
-			<if test="exchange != null and exchange != '' ">
-				AND t.exchange = #{exchange}
 			</if>
 			<if test="symbol != null and symbol != '' ">
 				AND t.symbol = #{symbol}
@@ -67,24 +60,23 @@
 		resultMap="simuOrder_DB_Result">
 		SELECT
 		t.code
-		,t.group_code
 		,t.user_id
-		,t.exchange
 		,t.symbol
-		
 		,t.to_symbol
 		,t.type
+		
 		,t.direction
 		,t.price
 		,t.total_count
-		
 		,t.total_amount
 		,t.traded_count
+		
 		,t.traded_amount
 		,t.traded_fee
+		,t.avg_price
 		,t.last_traded_datetime
-		
 		,t.create_datetime
+		
 		,t.cancel_datetime
 		,t.status
 		FROM
@@ -107,59 +99,80 @@
 		INSERT INTO
 		tsimu_order(
 		code
-		,group_code
 		,user_id
-		,exchange
 		,symbol
-		
 		,to_symbol
 		,type
+		
 		,direction
 		,price
 		,total_count
-		
 		,total_amount
 		,traded_count
+		
 		,traded_amount
 		,traded_fee
+		,avg_price
 		,last_traded_datetime
-		
 		,create_datetime
+		
 		,cancel_datetime
 		,status 
 		)
 		VALUES(
 		#{code}
-		,#{groupCode}
 		,#{userId}
-		,#{exchange}
 		,#{symbol}
-		
 		,#{toSymbol}
 		,#{type}
+		
 		,#{direction}
 		,#{price}
 		,#{totalCount}
-		
 		,#{totalAmount}
 		,#{tradedCount}
+		
 		,#{tradedAmount}
 		,#{tradedFee}
+		,#{avgPrice}
 		,#{lastTradedDatetime}
-		
 		,#{createDatetime}
+		
 		,#{cancelDatetime}
 		,#{status}
 		)
 	</insert>
 
-	<update id="cancel_simuOrder" parameterType="simuOrder">
+
+	<update id="update_market_simuOrder" parameterType="simuOrder">
 		UPDATE tsimu_order
 		SET
-		cancel_datetime = #{cancelDatetime}
+		traded_count = #{tradedCount}
+		,traded_amount = #{tradedAmount}
+		,traded_fee = #{tradedFee}
+		,last_traded_datetime = #{lastTradedDatetime}
 		,status = #{status}
-		WHERE code =
-		#{code}
+		
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_limit_simuOrder" parameterType="simuOrder">
+		UPDATE tsimu_order
+		SET
+		traded_count = #{tradedCount}
+		,traded_amount = #{tradedAmount}
+		,traded_fee = #{tradedFee}
+		,avg_price = #{avgPrice}
+		,last_traded_datetime = #{lastTradedDatetime}
+		
+		WHERE code = #{code}
+	</update>
+
+	<update id="cancel_simuOrder" parameterType="simuOrder">
+		DELETE FROM
+		tsimu_order
+		
+		WHERE code = #{code}
 	</update>
 
 	<update id="trade_success" parameterType="simuOrder">
@@ -170,6 +183,7 @@
 		,traded_fee = #{tradedFee}
 		,last_traded_datetime =#{lastTradedDatetime}
 		,status = #{status}
+		
 		WHERE code = #{code}
 	</update>
 

@@ -8,9 +8,7 @@ import org.hibernate.validator.constraints.NotBlank;
  * @since: 2018年9月10日 下午8:07:48 
  * @history:
  */
-public class XN625286Req extends APageReq {
-
-    private static final long serialVersionUID = 3913281104492731431L;
+public class XN625286Req {
 
     // 必填，编号
     @NotBlank
