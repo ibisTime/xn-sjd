@@ -26,6 +26,12 @@
 			<if test="userId != null and userId != '' ">
 				AND t.user_id = #{userId}
 			</if>
+			<if test="statusList != null and statusList != ''">
+                AND `status` in
+                <foreach item="item" index="index" collection="statusList" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
 		</trim>
 	</sql>
 	<select id="select_btcAddress" parameterType="btcXAddress" resultMap="btcXAddress_DB_Result">

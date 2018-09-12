@@ -18,4 +18,6 @@ import com.ogc.standard.dto.req.XN805085Req;
 public interface IUserExtAO {
     public String editUserExt(XN805085Req req);
 
+    public void bindEmail(String captcha, String email, String userId);
+
 }

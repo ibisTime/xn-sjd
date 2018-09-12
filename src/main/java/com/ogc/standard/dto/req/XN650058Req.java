@@ -16,9 +16,6 @@ public class XN650058Req extends APageReq {
     @NotBlank
     private String userId;
 
-    // 选填，交易所
-    private String exchange;
-
     // 选填，交易币种
     private String symbol;
 
@@ -31,7 +28,7 @@ public class XN650058Req extends APageReq {
     // 选填，买卖方向（0=买入，1=卖出）
     private String direction;
 
-    // 选填，状态（0=已提交，1=部分成交，2=部分成交撤销，3=完全成交，4=已撤销）
+    // 选填，状态（0=已提交，1=部分成交）
     private String status;
 
     public String getUserId() {
@@ -40,14 +37,6 @@ public class XN650058Req extends APageReq {
 
     public void setUserId(String userId) {
         this.userId = userId;
-    }
-
-    public String getExchange() {
-        return exchange;
-    }
-
-    public void setExchange(String exchange) {
-        this.exchange = exchange;
     }
 
     public String getSymbol() {

@@ -1,5 +1,6 @@
 package com.ogc.standard.bo.impl;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -9,9 +10,14 @@ import org.springframework.stereotype.Component;
 
 import com.ogc.standard.bo.ISimuOrderBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
+import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.ISimuOrderDAO;
 import com.ogc.standard.domain.SimuOrder;
+import com.ogc.standard.dto.req.XN650050Req;
+import com.ogc.standard.enums.EGeneratePrefix;
+import com.ogc.standard.enums.ESimuOrderDirection;
 import com.ogc.standard.enums.ESimuOrderStatus;
+import com.ogc.standard.enums.ESimuOrderType;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
 
@@ -33,10 +39,32 @@ public class SimuOrderBOImpl extends PaginableBOImpl<SimuOrder>
     }
 
     @Override
-    public void saveSimuOrder(SimuOrder data) {
-        if (data != null) {
-            simuOrderDAO.insert(data);
-        }
+    public SimuOrder saveSimuOrder(XN650050Req req, BigDecimal totalCount,
+            BigDecimal price, BigDecimal totalAmount) {
+        String code = OrderNoGenerater
+            .generate(EGeneratePrefix.SIMU_ORDER.getCode());
+        SimuOrder simuOrder = new SimuOrder();
+        simuOrder.setCode(code);
+        simuOrder.setUserId(req.getUserId());
+        simuOrder.setSymbol(req.getSymbol());
+        simuOrder.setToSymbol(req.getToSymbol());
+        simuOrder.setType(req.getType());
+
+        simuOrder.setDirection(req.getDirection());
+        simuOrder.setPrice(price);
+        simuOrder.setTotalCount(totalCount);
+        simuOrder.setTotalAmount(totalAmount);
+        simuOrder.setTradedCount(BigDecimal.ZERO);
+
+        simuOrder.setTradedAmount(BigDecimal.ZERO);
+        simuOrder.setTradedFee(BigDecimal.ZERO);
+        simuOrder.setLastTradedDatetime(new Date());
+        simuOrder.setCreateDatetime(new Date());
+        simuOrder.setStatus(ESimuOrderStatus.SUBMIT.getCode());
+
+        simuOrderDAO.insert(simuOrder);
+
+        return simuOrder;
     }
 
     @Override
@@ -47,11 +75,27 @@ public class SimuOrderBOImpl extends PaginableBOImpl<SimuOrder>
     }
 
     @Override
+    public int refreshMarketSimuOrder(SimuOrder data) {
+        int count = 0;
+        if (data != null && StringUtils.isNotBlank(data.getCode())) {
+            count = simuOrderDAO.updateMarketSimuOrder(data);
+        }
+        return count;
+    }
+
+    @Override
+    public int refreshLimitSimuOrder(SimuOrder data) {
+        int count = 0;
+        if (data != null && StringUtils.isNotBlank(data.getCode())) {
+            count = simuOrderDAO.updateLimitSimuOrder(data);
+        }
+        return count;
+    }
+
+    @Override
     public int cancel(SimuOrder data) {
         int count = 0;
         if (data != null && StringUtils.isNotBlank(data.getCode())) {
-            data.setStatus(ESimuOrderStatus.CANCEL.getCode());
-            data.setCancelDatetime(new Date());
             count = simuOrderDAO.cancel(data);
         }
         return count;
@@ -60,6 +104,34 @@ public class SimuOrderBOImpl extends PaginableBOImpl<SimuOrder>
     @Override
     public List<SimuOrder> querySimuOrderList(SimuOrder condition) {
         return simuOrderDAO.selectList(condition);
+    }
+
+    @Override
+    public List<SimuOrder> queryBidsHandicapList(int handicapQuantity,
+            String symbol, String toSymbol) {
+        SimuOrder condition = new SimuOrder();
+        condition.setSymbol(symbol);
+        condition.setToSymbol(toSymbol);
+        condition.setType(ESimuOrderType.LIMIT.getCode());
+        condition.setDirection(ESimuOrderDirection.BUY.getCode());
+
+        condition.setOrder("price desc, create_datetime desc");
+
+        return simuOrderDAO.selectList(condition, 1, handicapQuantity);
+    }
+
+    @Override
+    public List<SimuOrder> queryAsksHandicapList(int handicapQuantity,
+            String symbol, String toSymbol) {
+        SimuOrder condition = new SimuOrder();
+        condition.setSymbol(symbol);
+        condition.setToSymbol(toSymbol);
+        condition.setType(ESimuOrderType.LIMIT.getCode());
+        condition.setDirection(ESimuOrderDirection.SELL.getCode());
+
+        condition.setOrder("price asc, create_datetime asc");
+
+        return simuOrderDAO.selectList(condition, 1, handicapQuantity);
     }
 
     @Override

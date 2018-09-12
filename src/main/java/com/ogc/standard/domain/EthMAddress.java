@@ -1,6 +1,7 @@
 package com.ogc.standard.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import com.ogc.standard.dao.base.ABaseDO;
 
@@ -42,6 +43,16 @@ public class EthMAddress extends ABaseDO {
 
     // 所属用户信息
     private User userInfo;
+
+    private List<String> statusList;
+
+    public List<String> getStatusList() {
+        return statusList;
+    }
+
+    public void setStatusList(List<String> statusList) {
+        this.statusList = statusList;
+    }
 
     // 地址模糊查询
     private String addressForQuery;

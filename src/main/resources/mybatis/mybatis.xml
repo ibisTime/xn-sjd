@@ -67,7 +67,19 @@
 		<typeAlias alias="btcUtxo" type="com.ogc.standard.domain.BtcUtxo"/>
 		
 		<typeAlias alias="coinAcceptOrder" type="com.ogc.standard.domain.CoinAcceptOrder"/>
+<<<<<<< HEAD
 		<typeAlias alias="tokenEvent" type="com.ogc.standard.domain.TokenEvent"/>
+=======
+		<typeAlias alias="bankcard" type="com.ogc.standard.domain.Bankcard"/>
+		
+		<typeAlias alias="simuOrder" type="com.ogc.standard.domain.SimuOrder" />
+		<typeAlias alias="simuOrderHistory" type="com.ogc.standard.domain.SimuOrderHistory" />
+		<typeAlias alias="handicap" type="com.ogc.standard.domain.Handicap" />
+		<typeAlias alias="simuOrderDetail" type="com.ogc.standard.domain.SimuOrderDetail" />
+		<typeAlias alias="simuKLine" type="com.ogc.standard.domain.SimuKLine" />
+		<typeAlias alias="simuMatchResult" type="com.ogc.standard.domain.SimuMatchResult" />
+		<typeAlias alias="simuMatchResultHistory" type="com.ogc.standard.domain.SimuMatchResultHistory" />
+>>>>>>> refs/remotes/origin/master
 		
 	</typeAliases>
 </configuration>

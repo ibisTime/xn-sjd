@@ -35,6 +35,12 @@ public class UserExt extends ABaseDO {
     // 邮箱
     private String email;
 
+    // 驾驶照
+    private String driverLi;
+
+    // 护照
+    private String passport;
+
     // 学位
     private String diploma;
 
@@ -132,6 +138,22 @@ public class UserExt extends ABaseDO {
 
     public void setPdf(String pdf) {
         this.pdf = pdf;
+    }
+
+    public String getDriverLi() {
+        return driverLi;
+    }
+
+    public void setDriverLi(String driverLi) {
+        this.driverLi = driverLi;
+    }
+
+    public String getPassport() {
+        return passport;
+    }
+
+    public void setPassport(String passport) {
+        this.passport = passport;
     }
 
 }

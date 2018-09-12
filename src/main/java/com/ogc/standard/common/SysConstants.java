@@ -1,5 +1,7 @@
 package com.ogc.standard.common;
 
+import java.math.BigDecimal;
+
 public class SysConstants {
 
     public static final String admin = "admin";
@@ -107,6 +109,11 @@ public class SysConstants {
 
     // ****** OTC ******
 
-    // 承兑商支付超时时间
-    public static Integer ACCEPT_ORDER_PAY_LIMIT = 10;
+    public static Integer ACCEPT_ORDER_PAY_LIMIT = 10; // 承兑商支付超时时间
+
+    // ****** 币币交易 ******
+
+    public static BigDecimal minCountLimit = new BigDecimal("0.00001"); // 最小委托数量
+
+    public static BigDecimal maxCountLimit = new BigDecimal("1000000"); // 最大委托数量
 }

@@ -55,4 +55,10 @@ public class UserExtBOImpl extends PaginableBOImpl<UserExt>
         return userExtDAO.getUserExt(condition);
     }
 
+    @Override
+    public boolean isEmailExit(String email) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
 }

@@ -13,11 +13,11 @@ public enum ESystemAccount {
     SYS_ACOUNT_ETH("SYS_ACOUNT_ETH",
             "平台ETH盈亏账户"), SYS_ACOUNT_ETH_COLD("SYS_ACOUNT_ETH_COLD", "平台ETH冷钱包")
 
-    , SYS_ACOUNT_BTC("SYS_ACOUNT_BTC",
-            "平台BTC盈亏账户"), SYS_ACOUNT_BTC_COLD("SYS_ACOUNT_BTC_COLD", "平台BTC冷钱包")
+    , SYS_ACOUNT_BTC("SYS_ACOUNT_BTC", "平台BTC盈亏账户"), SYS_ACOUNT_BTC_COLD("SYS_ACOUNT_BTC_COLD", "平台BTC冷钱包")
 
-    , SYS_ACOUNT_WAN("SYS_ACOUNT_WAN", "平台WAN盈亏账户"), SYS_ACOUNT_WAN_COLD(
-            "SYS_ACOUNT_WAN_COLD", "平台WAN冷钱包");
+    , SYS_ACOUNT_WAN("SYS_ACOUNT_WAN", "平台WAN盈亏账户"), SYS_ACOUNT_WAN_COLD("SYS_ACOUNT_WAN_COLD", "平台WAN冷钱包")
+
+    , SYS_ACOUNT_X("SYS_ACOUNT_X", "平台X盈亏账户");
 
     public static Map<String, ESystemAccount> getMap() {
         Map<String, ESystemAccount> map = new HashMap<String, ESystemAccount>();

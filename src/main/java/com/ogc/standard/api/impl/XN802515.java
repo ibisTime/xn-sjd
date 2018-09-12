@@ -8,6 +8,8 @@
  */
 package com.ogc.standard.api.impl;
 
+import org.apache.commons.collections.CollectionUtils;
+
 import com.ogc.standard.ao.IEthMAddressAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
@@ -40,6 +42,9 @@ public class XN802515 extends AProcessor {
         EthMAddress condition = new EthMAddress();
         condition.setAddressForQuery(req.getAddress());
         condition.setStatus(req.getStatus());
+        if (CollectionUtils.isNotEmpty(req.getStatusList())) {
+            condition.setStatusList(req.getStatusList());
+        }
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
         return ethMAddressAO.queryEthMAddressPage(start, limit, condition);

@@ -16,7 +16,7 @@ public interface ISmsOutAO {
     public void sendSmsCaptcha(String mobile, String bizType);
 
     // 4位邮箱验证码
-    // public void sendEmailCaptcha(String email, String bizType);
+    public void sendEmailCaptcha(String email, String bizType);
 
     // 6位短信验证码
     // public void sendInterSmsCaptchaL6(String mobile, String bizType);

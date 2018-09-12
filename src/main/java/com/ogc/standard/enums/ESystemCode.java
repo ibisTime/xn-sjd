@@ -1,11 +1,3 @@
-/**
- * @Title ECurrency.java 
- * @Package com.ibis.account.enums 
- * @Description 
- * @author miyb  
- * @date 2015-3-15 下午4:41:06 
- * @version V1.0   
- */
 package com.ogc.standard.enums;
 
 import java.util.HashMap;

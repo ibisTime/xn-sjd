@@ -19,132 +19,64 @@
 		<property name="triggers">
 			<list>
 			
-			    <!-- 币种+汇率 -->
-			    <!-- <ref bean="currencyRateTrigger"/>-->
-				<!-- <ref bean="coinTrigger"/> -->
-			    
-			    <!-- 行情 -->
-				<!-- <ref bean="huobiProMarketTrigger"/>-->
-				<!-- <ref bean="marketGlobalTrigger"/> -->
-				
 				<!-- 模拟交易 -->
        		    <!-- <ref bean="doCheckDealTrigger"/> -->
        		    <!-- <ref bean="doRefreshDayMarketAmountTrigger"/> -->
+
+       		    <ref bean="doScanPairTrigger"/>
+       		    <ref bean="doSaveKLineTrigger"/>
+       		   <ref bean="doScanMatchResultTrigger"/>
+
        		    
 			</list>
 		</property>
 		<property name="autoStartup" value="true" />
 	</bean>
 	
-	
-	<!-- 定时获取汇率 -->
-	<!-- <bean id="currencyRateTrigger"
-		  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-		<property name="jobDetail" ref="currencyRate" />
 
-		每30分钟 获取一次
-		<property name="cronExpression" value="0 */30 * * * ?" />
-	</bean>
-	
-	<bean id="currencyRate"
-		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-		<property name="targetObject" ref="currencyRateAOImpl" />
-		<property name="targetMethod" value="obtainCurrencyRate" />
-		<property name="concurrent" value="false" />
-		是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程
-	</bean> -->
-
-	<!-- 定时获取全局行情 -->
-	<!-- <bean id="marketGlobalTrigger"
+	<!-- 扫描交易对 -->
+	<bean id="doScanPairTrigger"
 		  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-		<property name="jobDetail" ref="marketGlobal" />
-		每15秒 获取一次
-		<property name="cronExpression" value="0 */2 * * * ?" />
+		<property name="jobDetail" ref="doScanPair" />
+		<property name="cronExpression" value="0/1 * * * * ?" />
 	</bean>
 	
-	<bean id="marketGlobal"
-		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-		<property name="targetObject" ref="marketGlobalAOImpl" />
-		<property name="targetMethod" value="obtainExchangeMarket" />
-		<property name="concurrent" value="false" />
-		是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程
-	</bean>
- -->
-	<!-- 定时获取火币Pro行情 -->
-	<!-- <bean id="huobiProMarketTrigger"
-		  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-		<property name="jobDetail" ref="doObtainLastestMarket" />
-		每30秒 获取一次
-		<property name="cronExpression" value="*/30 * * * * ?" />
-	</bean>
-	
-	<bean id="doObtainLastestMarket"
-		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-		<property name="targetObject" ref="marketHuobiproLogAOImpl" />
-		<property name="targetMethod" value="doObtainLastestMarket" />
-		<property name="concurrent" value="false" />
-		是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程
-	</bean> -->
-	
-	<!-- 定时获取币种均价 -->
-	<!-- <bean id="coinTrigger"
-		  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-		<property name="jobDetail" ref="coin" />
-		每30秒 获取一次
-		<property name="cronExpression" value="*/30 * * * * ?" />
-	</bean>
-	
-	<bean id="coin"
-		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-		<property name="targetObject" ref="coinAOImpl" />
-		<property name="targetMethod" value="obtainMarketDetailList" />
-		<property name="concurrent" value="false" />
-		是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程
-	</bean> -->
-	
-	<!-- 定时检查委托单成交 -->
-	<bean id="doCheckDealTrigger"
-		  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-		<property name="jobDetail" ref="doCheckDeal" />
-		<property name="cronExpression" value="0/15 * * * * ?" />
-	</bean>
-	
-	<bean id="doCheckDeal"
-		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-		<property name="targetObject" ref="simuOrderAOImpl" />
-		<property name="targetMethod" value="doCheckDeal" />
-		<property name="concurrent" value="false" />
-		<!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程 -->
-	</bean>
-	
-	<!-- 定时刷新火币交易对的价格 -->
-	<bean id="huobiPairPriceTrigger"
-		  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-		<property name="jobDetail" ref="doCheckDeal" />
-		<property name="cronExpression" value="0/59 * * * * ?" />
-	</bean>
-	
-	<bean id="huobiPairPrice"
+	<bean id="doScanPair"
 		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject" ref="exchangePairAOImpl" />
-		<property name="targetMethod" value="doRefreshExchangePairPrice" />
+		<property name="targetMethod" value="scanPair" />
 		<property name="concurrent" value="false" />
 		<!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程 -->
-	</bean>
+	</bean>	
 	
-	<!-- 每日凌晨更新账户总市值 -->
-	<!-- <bean id="doRefreshDayMarketAmountTrigger"
+	<!-- 落地行情K线 -->
+	<bean id="doSaveKLineTrigger"
 		  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-		<property name="jobDetail" ref="doRefreshDayMarketAmount" />
-		<property name="cronExpression" value="0 0 0 * * ?" />
+		<property name="jobDetail" ref="doSaveKLine" />
+		<property name="cronExpression" value="* 0/1 * * * ?" />
 	</bean>
 	
-	<bean id="doRefreshDayMarketAmount"
+	<bean id="doSaveKLine"
 		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-		<property name="targetObject" ref="simuAccountAOImpl" />
-		<property name="targetMethod" value="doRefreshDayMarketAmount" />
+		<property name="targetObject" ref="exchangePairAOImpl" />
+		<property name="targetMethod" value="saveKLineMin1" />
 		<property name="concurrent" value="false" />
-		是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程
-	</bean> -->
+		<!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程 -->
+	</bean>	
 	
+	<!-- 扫描存活撮合结果 -->
+	<bean id="doScanMatchResultTrigger"
+		  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="doScanMatchResult" />
+		<property name="cronExpression" value="0/1 * * * * ?" />
+	</bean>
+	
+	<bean id="doScanMatchResult"
+		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="simuMatchResultAOImpl" />
+		<property name="targetMethod" value="doCheckMatchResult" />
+		<property name="concurrent" value="false" />
+		<!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程 -->
+	</bean>	
+
 </beans>

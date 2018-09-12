@@ -16,10 +16,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ogc.standard.ao.IUserExtAO;
+import com.ogc.standard.bo.ISmsOutBO;
 import com.ogc.standard.bo.IUserExtBO;
 import com.ogc.standard.domain.UserExt;
 import com.ogc.standard.dto.req.XN805085Req;
 import com.ogc.standard.exception.BizException;
+import com.ogc.standard.exception.EBizErrorCode;
 
 /** 
  * @author: dl 
@@ -30,6 +32,9 @@ import com.ogc.standard.exception.BizException;
 public class UserExtAOImpl implements IUserExtAO {
     @Autowired
     private IUserExtBO userExtBO;
+
+    @Autowired
+    private ISmsOutBO smsOutBO;
 
     @Override
     public String editUserExt(XN805085Req req) {
@@ -50,6 +55,21 @@ public class UserExtAOImpl implements IUserExtAO {
         data.setPdf(req.getPdf());
         userExtBO.refreshUserExt(data);
         return req.getUserId();
+    }
+
+    @Override
+    public void bindEmail(String captcha, String email, String userId) {
+        smsOutBO.checkCaptcha(email, captcha, "805086");
+        UserExt data = userExtBO.getUserExt(userId);
+        if (data == null) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "用户不存在");
+        }
+        if (data.getEmail() != null) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "用户已绑定邮箱");
+        }
+
+        data.setEmail(email);
+        userExtBO.refreshUserExt(data);
     }
 
 }

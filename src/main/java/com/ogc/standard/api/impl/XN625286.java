@@ -10,7 +10,7 @@ import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
 
 /**
- * 平台收款处理
+ * 详情查询承兑订单
  * @author: lei 
  * @since: 2018年9月10日 下午10:21:20 
  * @history:

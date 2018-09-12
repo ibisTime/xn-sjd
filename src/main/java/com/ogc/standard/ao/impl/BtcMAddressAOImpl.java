@@ -38,6 +38,9 @@ public class BtcMAddressAOImpl implements IBtcMAddressAO {
     @Override
     public void abandon(Long id) {
         BtcMAddress btcMAddress = btcMAddressBO.getAddressById(id);
+        if (btcMAddress == null) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "不存在改地址");
+        }
         if (EMAddressStatus.INVALID.getCode().equals(btcMAddress.getStatus())) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "地址已失效，无需重复弃用");

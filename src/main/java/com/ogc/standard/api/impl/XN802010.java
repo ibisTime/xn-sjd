@@ -1,11 +1,3 @@
-/**
- * @Title XN802170.java 
- * @Package com.ogc.standard.api.impl 
- * @Description 
- * @author leo(haiqing)  
- * @date 2018年2月1日 下午8:08:46 
- * @version V1.0   
- */
 package com.ogc.standard.api.impl;
 
 import com.ogc.standard.ao.IPersonalAddressAO;
@@ -31,9 +23,8 @@ public class XN802010 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        personalAddressAO.addPersonalAddress(req.getSymbol(),
-            req.getAddress(), req.getLabel(), req.getUserId(),
-            req.getIsCerti());
+        personalAddressAO.addPersonalAddress(req.getSymbol(), req.getAddress(),
+            req.getLabel(), req.getUserId(), req.getIsCerti());
         return new BooleanRes(true);
     }
 
