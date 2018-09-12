@@ -22,6 +22,7 @@ import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECoin;
 import com.ogc.standard.enums.ECoinAcceptOrderStatus;
 import com.ogc.standard.enums.EGeneratePrefix;
+import com.ogc.standard.enums.ESystemAccount;
 import com.ogc.standard.enums.ETradeOrderStatus;
 import com.ogc.standard.exception.BizException;
 
@@ -43,7 +44,8 @@ public class CoinAcceptOrderBOImpl extends PaginableBOImpl<CoinAcceptOrder>
     }
 
     @Override
-    public String saveBuyAcceptOrder(XN625270Req req, String acceptUser) {
+    public String saveBuyAcceptOrder(XN625270Req req, String receiveCardNo,
+            String receiveBank) {
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.ACCEPT_ORDER.getCode());
 
@@ -51,11 +53,11 @@ public class CoinAcceptOrderBOImpl extends PaginableBOImpl<CoinAcceptOrder>
         data.setCode(code);
         data.setType(EBoolean.NO.getCode()); // 0买入/1卖出
         data.setUserId(req.getUserId());
-        data.setAcceptUser(acceptUser);
+        data.setAcceptUser(ESystemAccount.SYS_ACOUNT_ETH.getCode());
         data.setTradeCurrency(req.getTradeCurrency());
 
         data.setTradeCoin(ECoin.X.getCode());
-        data.setTradeCoin(req.getTradePrice());
+        data.setTradePrice(StringValidater.toBigDecimal(req.getTradePrice()));
         data.setCount(StringValidater.toBigDecimal(req.getCount()));
         data.setTradeAmount(StringValidater.toBigDecimal(req.getTradeAmount()));
         data.setFee(BigDecimal.ZERO);
@@ -65,7 +67,10 @@ public class CoinAcceptOrderBOImpl extends PaginableBOImpl<CoinAcceptOrder>
         data.setPayType(req.getPayType());
         data.setPayBank(req.getPayBank());
         data.setPayCardNo(req.getPayCardNo());
+        data.setReceiveType(req.getPayType());
 
+        data.setReceiveBank(receiveBank);
+        data.setReceiveCardNo(receiveCardNo);
         data.setStatus(ECoinAcceptOrderStatus.TO_PAY.getCode());
         data.setCreateDatetime(new Date());
 
@@ -74,29 +79,38 @@ public class CoinAcceptOrderBOImpl extends PaginableBOImpl<CoinAcceptOrder>
     }
 
     @Override
-    public String saveSellAcceptOrder(XN625271Req req, String acceptUser) {
-        // TODO Auto-generated method stub
-        return null;
-    }
+    public CoinAcceptOrder saveSellAcceptOrder(XN625271Req req,
+            String payCardNo, String payBank) {
+        String code = OrderNoGenerater
+            .generate(EGeneratePrefix.ACCEPT_ORDER.getCode());
 
-    @Override
-    public int removeCoinAcceptOrder(String code) {
-        int count = 0;
-        if (StringUtils.isNotBlank(code)) {
-            CoinAcceptOrder data = new CoinAcceptOrder();
-            data.setCode(code);
-            count = coinAcceptOrderDAO.delete(data);
-        }
-        return count;
-    }
+        CoinAcceptOrder data = new CoinAcceptOrder();
+        data.setCode(code);
+        data.setType(EBoolean.NO.getCode()); // 0买入/1卖出
+        data.setUserId(req.getUserId());
+        data.setAcceptUser(ESystemAccount.SYS_ACOUNT_ETH.getCode());
+        data.setTradeCurrency(req.getTradeCurrency());
 
-    @Override
-    public int refreshCoinAcceptOrder(CoinAcceptOrder data) {
-        int count = 0;
-        if (StringUtils.isNotBlank(data.getCode())) {
-            // count = coinAcceptOrderDAO.update(data);
-        }
-        return count;
+        data.setTradeCoin(ECoin.X.getCode());
+        data.setTradePrice(StringValidater.toBigDecimal(req.getTradePrice()));
+        data.setCount(StringValidater.toBigDecimal(req.getCount()));
+        data.setTradeAmount(StringValidater.toBigDecimal(req.getTradeAmount()));
+        data.setFee(BigDecimal.ZERO);
+
+        data.setInvalidDatetime(DateUtil.getRelativeDateOfMinute(new Date(),
+            SysConstants.ACCEPT_ORDER_PAY_LIMIT));
+        data.setPayType(req.getReceiveType());
+        data.setPayBank(payBank);
+        data.setPayCardNo(payCardNo);
+        data.setReceiveType(req.getReceiveType());
+
+        data.setReceiveBank(req.getReceiveBank());
+        data.setReceiveCardNo(req.getReceiveCardNo());
+        data.setStatus(ECoinAcceptOrderStatus.PAYED.getCode());
+        data.setCreateDatetime(new Date());
+
+        coinAcceptOrderDAO.insert(data);
+        return data;
     }
 
     @Override

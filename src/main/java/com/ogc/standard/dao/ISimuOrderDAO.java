@@ -7,6 +7,10 @@ public interface ISimuOrderDAO extends IBaseDAO<SimuOrder> {
 
     String NAMESPACE = ISimuOrderDAO.class.getName().concat(".");
 
+    public int updateMarketSimuOrder(SimuOrder data);
+
+    public int updateLimitSimuOrder(SimuOrder data);
+
     public int cancel(SimuOrder data);
 
     public int tradeSuccess(SimuOrder data);

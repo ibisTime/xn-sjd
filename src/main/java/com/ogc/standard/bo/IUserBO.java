@@ -32,6 +32,8 @@ public interface IUserBO extends IPaginableBO<User> {
 
     public String getUserId(String mobile);
 
+    public User getUserUnCheck(String userId);
+
     public User getUserByMobile(String mobile);
 
     // 前端用户注册

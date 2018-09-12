@@ -103,6 +103,7 @@ CREATE TABLE `tstd_user` (
   `address` varchar(255) DEFAULT NULL COMMENT '详细地址',
   `longitude` varchar(255) DEFAULT NULL COMMENT '经度',
   `latitude` varchar(255) DEFAULT NULL COMMENT '维度',
+  `trade_rate` decimal(8,4) DEFAULT NULL COMMENT '交易手续费',
   `create_datetime` datetime DEFAULT NULL COMMENT '注册时间',
   `updater` varchar(32) DEFAULT NULL COMMENT '修改人',
   `update_datetime` datetime DEFAULT NULL COMMENT '修改时间',

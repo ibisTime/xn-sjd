@@ -14,6 +14,10 @@ public class XN625271Req {
     @NotBlank
     private String receiveCardNo;
 
+    // 必填，收款银行
+    @NotBlank
+    private String receiveBank;
+
     // 必填，收款方式
     @NotBlank
     private String receiveType;
@@ -44,6 +48,14 @@ public class XN625271Req {
 
     public void setReceiveCardNo(String receiveCardNo) {
         this.receiveCardNo = receiveCardNo;
+    }
+
+    public String getReceiveBank() {
+        return receiveBank;
+    }
+
+    public void setReceiveBank(String receiveBank) {
+        this.receiveBank = receiveBank;
     }
 
     public String getReceiveType() {

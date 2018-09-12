@@ -12,7 +12,7 @@ LIMIT 0, 1000
 
 -- Date: 2018-09-11 12:57
 */
-INSERT INTO `tsys_user` (`user_id`,`role_code`,`department_code`,`real_name`,`photo`,`mobile`,`login_name`,`login_pwd`,`login_pwd_strength`,`create_datetime`,`status`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('UCOIN201700000000000001','COINSR201700000000000000',NULL,NULL,NULL,NULL,'admin',?,'1','2018-09-03 14:28:54','0','admin',NULL,'管理端系统方','CD-HPMN000024');
+INSERT INTO `tsys_user` (`user_id`,`login_name`,`login_pwd`,`login_pwd_strength`,`role_code`,`status`,`create_datetime`,`remark`) VALUES ('UTOKEN201700000000000001','admin','21218cca77804d2ba1922c33e0151105','1','COINSR201700000000000000','0',now(),'管理端系统方');
 /*
 -- Query: SELECT * FROM ogc_standard.tsys_menu
 LIMIT 0, 1000
@@ -650,6 +650,17 @@ LIMIT 0, 1000
 INSERT INTO `tstd_account` (`account_number`,`user_id`,`currency`,`address`,`type`,`status`,`amount`,`frozen_amount`,`md5`,`in_amount`,`out_amount`,`create_datetime`,`last_order`) VALUES ('SYS_ACOUNT_BTC_COLD','SYS_USER_COLD','BTC',NULL,'P','0',0,0,'b99e0407fedc3d160f73fec8d1fa9a0c',0,0,'2018-09-10 08:53:58',NULL);
 INSERT INTO `tstd_account` (`account_number`,`user_id`,`currency`,`address`,`type`,`status`,`amount`,`frozen_amount`,`md5`,`in_amount`,`out_amount`,`create_datetime`,`last_order`) VALUES ('SYS_ACOUNT_ETH_COLD','SYS_USER_COLD','ETH',NULL,'P','0',300000000000000000000,0,'811a1aeb3577b3108caa1ff46244f333',0,0,'2018-09-10 08:53:58','AJ201809101725344704294');
 INSERT INTO `tstd_account` (`account_number`,`user_id`,`currency`,`address`,`type`,`status`,`amount`,`frozen_amount`,`md5`,`in_amount`,`out_amount`,`create_datetime`,`last_order`) VALUES ('SYS_ACOUNT_WAN_COLD','SYS_USER_COLD','WAN',NULL,'P','0',0,0,'b99e0407fedc3d160f73fec8d1fa9a0c',0,0,'2018-09-10 08:53:58',NULL);
+
+/*
+-- Query: SELECT * FROM ogc_standard.tcoin_coin
+LIMIT 0, 1000
+
+-- Date: 2018-09-11 15:29
+*/
+INSERT INTO `tcoin_coin` (`symbol`,`ename`,`cname`,`type`,`unit`,`icon`,`pic1`,`pic2`,`pic3`,`order_no`,`collect_start`,`withdraw_fee`,`contract_address`,`contract_abi`,`status`,`updater`,`update_datetime`,`remark`) VALUES ('X','Happymoney','X币','0T',18,'http://m.hichengdai.com/icon.png','http://m.hichengdai.com/pic1.png','http://m.hichengdai.com/pic2.png','http://m.hichengdai.com/pic3.png',4,1000000000,100,'0xA1b7f66d2c5Cd89A848c75CCda085117825A0Af9','0xA1b7f66d2c5Cd89A848c75CCda085117825A0Af9','0','admin','2018-09-08 20:41:59',NULL);
+INSERT INTO `tcoin_coin` (`symbol`,`ename`,`cname`,`type`,`unit`,`icon`,`pic1`,`pic2`,`pic3`,`order_no`,`collect_start`,`withdraw_fee`,`contract_address`,`contract_abi`,`status`,`updater`,`update_datetime`,`remark`) VALUES ('BTC','Bitcoin','比特币','1',8,'http://m.hichengdai.com/icon.png','http://m.hichengdai.com/pic1.png','http://m.hichengdai.com/pic2.png','http://m.hichengdai.com/pic3.png',4,1000000000,100000000,'0xA1b7f66d2c5Cd89A848c75CCda085117825A0Ar9','0xA1b7f66d2c5Cd89A848c75CCda085117825A0Ar9','0','admin','2018-09-08 20:23:54','测试');
+INSERT INTO `tcoin_coin` (`symbol`,`ename`,`cname`,`type`,`unit`,`icon`,`pic1`,`pic2`,`pic3`,`order_no`,`collect_start`,`withdraw_fee`,`contract_address`,`contract_abi`,`status`,`updater`,`update_datetime`,`remark`) VALUES ('ETH','Ethereun','以太坊','0',18,'FjdmXxf49V1bQYkeLnmG9kzkS_OY','FuYWZ2i49Gb5-EbDbauKLV_FbwJm','FnTUugffEc4yxWOoZK-Gyk6v41y2','Fo4ACqf0bHRLRJaYwssrwGAIwHBC',1,10000000,10,'kkkk','kkkk','0','tao','2018-09-08 20:07:58','测试');
+
 
 /*
 -- Query: SELECT * FROM ogc_standard.tcoin_market

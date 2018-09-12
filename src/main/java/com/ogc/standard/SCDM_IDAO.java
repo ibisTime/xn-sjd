@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import com.ogc.standard.common.DateUtil;
 
@@ -44,7 +46,20 @@ public class SCDM_IDAO {
     private static String Key = key.substring(0, 1).toUpperCase()
             + key.substring(1);
 
+    public static String getTimeByMinute(int minute) {
+
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.add(Calendar.MINUTE, minute);
+
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm")
+            .format(calendar.getTime());
+
+    }
+
     public static void main(String[] args) {
+
+        System.out.println(getTimeByMinute(-1));
 
         File DOMAINfile = new File(path, Key + ".java");
 
@@ -408,7 +423,7 @@ public class SCDM_IDAO {
                 + "();\n\t\t\tcondition.setCode(code);\n\t\t\t" + "data = "
                 + key
                 + "DAO.select(condition);\n\t\t\tif (data == null) {\n\t\t\t\t"
-                + "throw new BizException(\"xn0000\", \"" + "keyName"
+                + "throw new BizException(\"xn0000\", \"" + keyName
                 + "记录不存在\");\n\t\t\t" + "}\n\t\t}\n\t\treturn data;\n\t}\n}";
         return str;
     }
