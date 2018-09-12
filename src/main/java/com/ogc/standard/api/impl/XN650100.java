@@ -13,6 +13,12 @@ import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
 
+/**
+ * 交易对分页查询
+ * @author: lei 
+ * @since: 2018年9月12日 下午1:54:15 
+ * @history:
+ */
 public class XN650100 extends AProcessor {
     private IExchangePairAO exchangePairAO = SpringContextHolder
         .getBean(IExchangePairAO.class);

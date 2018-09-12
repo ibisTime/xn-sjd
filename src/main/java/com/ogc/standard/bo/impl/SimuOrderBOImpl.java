@@ -112,7 +112,7 @@ public class SimuOrderBOImpl extends PaginableBOImpl<SimuOrder>
         condition.setType(ESimuOrderType.LIMIT.getCode());
         condition.setDirection(ESimuOrderDirection.BUY.getCode());
 
-        condition.setOrder("price desc, start_datetime desc");
+        condition.setOrder("price desc, create_datetime desc");
 
         return simuOrderDAO.selectList(condition, 1, handicapQuantity);
     }
@@ -123,7 +123,7 @@ public class SimuOrderBOImpl extends PaginableBOImpl<SimuOrder>
         condition.setType(ESimuOrderType.LIMIT.getCode());
         condition.setDirection(ESimuOrderDirection.SELL.getCode());
 
-        condition.setOrder("price asc, start_datetime asc");
+        condition.setOrder("price asc, create_datetime asc");
 
         return simuOrderDAO.selectList(condition, 1, handicapQuantity);
     }

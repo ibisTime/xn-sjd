@@ -57,7 +57,6 @@
 		SELECT
 		t.id
 		,t.exchange_ename
-		,t.exchange_cname
 		,upper(t.symbol) as symbol
 		,upper(t.to_symbol) as to_symbol
 		,pair

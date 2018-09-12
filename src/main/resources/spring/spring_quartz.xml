@@ -23,8 +23,8 @@
        		    <!-- <ref bean="doCheckDealTrigger"/> -->
        		    <!-- <ref bean="doRefreshDayMarketAmountTrigger"/> -->
 
-       		    <!-- <ref bean="doScanPairTrigger"/>
-       		    <ref bean="doSaveKLineTrigger"/> -->
+       		    <ref bean="doScanPairTrigger"/>
+       		    <ref bean="doSaveKLineTrigger"/>
        		   <ref bean="doScanMatchResultTrigger"/>
 
        		    
