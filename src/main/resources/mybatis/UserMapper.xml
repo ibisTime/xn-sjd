@@ -149,7 +149,7 @@
 		,t.address
 		,t.longitude
 		,t.latitude
-		,t.resr_area
+		,t.resp_area
 		,t.create_datetime
 		
 		,t.trade_rate

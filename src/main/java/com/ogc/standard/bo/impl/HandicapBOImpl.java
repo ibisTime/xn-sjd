@@ -3,6 +3,7 @@ package com.ogc.standard.bo.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -50,27 +51,48 @@ public class HandicapBOImpl extends PaginableBOImpl<Handicap>
             List<SimuOrder> simuOrders = new ArrayList<>();
             // 根据买卖方向 填充盘口
             if (ESimuOrderDirection.BUY.getCode().equals(direction)) {
-                simuOrders = simuOrderBO.queryAsksHandicapList(querryQuantity,
+                simuOrders = simuOrderBO.queryBidsHandicapList(querryQuantity,
                     symbol, toSymbol);
             } else {
-                simuOrders = simuOrderBO.queryBidsHandicapList(querryQuantity,
+                simuOrders = simuOrderBO.queryAsksHandicapList(querryQuantity,
                     symbol, toSymbol);
             }
 
             for (SimuOrder simuOrder : simuOrders) {
-                Handicap handicap = new Handicap();
-                handicap.setOrderCode(simuOrder.getCode());
-                handicap.setPrice(simuOrder.getPrice());
-                handicap.setCount(simuOrder.getTotalCount());
-                handicap.setDirection(simuOrder.getDirection());
 
-                handicap.setSymbol(simuOrder.getSymbol());
-                handicap.setToSymbol(simuOrder.getToSymbol());
-                handicapDAO.insert(handicap);
+                // 盘口为空直接添加
+                if (CollectionUtils.isEmpty(handicaps)) {
+                    saveHandicap(simuOrder);
+                }
+
+                // 重新获取盘口
+                handicaps = queryHandicapList(condition);
+
+                for (Handicap handicap : handicaps) {
+
+                    // 当前委托单不在盘口内时
+                    if (!handicap.getOrderCode().equals(simuOrder.getCode())) {
+                        saveHandicap(simuOrder);
+                    }
+
+                }
+
             }
 
         }
 
+    }
+
+    private void saveHandicap(SimuOrder simuOrder) {
+        Handicap data = new Handicap();
+        data.setOrderCode(simuOrder.getCode());
+        data.setPrice(simuOrder.getPrice());
+        data.setCount(simuOrder.getTotalCount());
+        data.setDirection(simuOrder.getDirection());
+
+        data.setSymbol(simuOrder.getSymbol());
+        data.setToSymbol(simuOrder.getToSymbol());
+        handicapDAO.insert(data);
     }
 
     @Override

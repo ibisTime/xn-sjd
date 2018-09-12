@@ -25,7 +25,7 @@
 
        		    <ref bean="doScanPairTrigger"/>
        		    <ref bean="doSaveKLineTrigger"/>
-       		   <ref bean="doScanMatchResultTrigger"/>
+       		    <ref bean="doScanMatchResultTrigger"/>
 
        		    
 			</list>
