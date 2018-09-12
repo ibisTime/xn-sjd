@@ -25,4 +25,6 @@ public interface IUserExtBO extends IPaginableBO<UserExt> {
 
     // 用户详情
     public UserExt getUserExt(String userId);
+
+    public boolean isEmailExit(String email);
 }

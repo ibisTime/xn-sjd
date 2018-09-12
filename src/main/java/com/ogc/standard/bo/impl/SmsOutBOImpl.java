@@ -7,6 +7,7 @@ import com.ogc.standard.bo.ISmsOutBO;
 import com.ogc.standard.dto.req.XN804080Req;
 import com.ogc.standard.dto.req.XN804081Req;
 import com.ogc.standard.dto.req.XN804082Req;
+import com.ogc.standard.dto.req.XN804083Req;
 import com.ogc.standard.dto.res.BooleanRes;
 import com.ogc.standard.dto.res.PKCodeRes;
 import com.ogc.standard.enums.ESystemCode;
@@ -54,6 +55,7 @@ public class SmsOutBOImpl implements ISmsOutBO {
             req.setMobile(mobile);
             req.setContent(content);
             req.setType("M");
+            req.setCompanyCode(ESystemCode.BZ.getCode());
             req.setSystemCode(ESystemCode.BZ.getCode());
             BizConnecter.getBizData("804080", JsonUtils.object2Json(req),
                 PKCodeRes.class);
@@ -76,6 +78,21 @@ public class SmsOutBOImpl implements ISmsOutBO {
                 PKCodeRes.class);
         } catch (Exception e) {
             logger.error("调用短信发送服务异常");
+        }
+    }
+
+    @Override
+    public void sendEmailCaptcha(String email, String bizType) {
+        try {
+            XN804083Req req = new XN804083Req();
+            req.setEmail(email);
+            req.setBizType(bizType);
+            req.setSystemCode(ESystemCode.BZ.getCode());
+            req.setCompanyCode(ESystemCode.BZ.getCode());
+            BizConnecter.getBizData("804083", JsonUtils.object2Json(req),
+                PKCodeRes.class);
+        } catch (Exception e) {
+            logger.error("调用邮件发送验证码异常");
         }
     }
 }

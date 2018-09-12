@@ -16,4 +16,6 @@ public interface ISmsOutBO {
 
     void sendSmsOut(String mobile, String content, String companyCode,
             String systemCode);
+
+    public void sendEmailCaptcha(String mobile, String bizType);
 }
