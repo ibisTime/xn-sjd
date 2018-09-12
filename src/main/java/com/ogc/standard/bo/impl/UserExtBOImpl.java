@@ -1,5 +1,6 @@
 package com.ogc.standard.bo.impl;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -8,6 +9,7 @@ import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.dao.IUserExtDAO;
 import com.ogc.standard.domain.UserExt;
+import com.ogc.standard.exception.BizException;
 
 @Component
 public class UserExtBOImpl extends PaginableBOImpl<UserExt>
@@ -17,8 +19,7 @@ public class UserExtBOImpl extends PaginableBOImpl<UserExt>
 
     @Override
     public long getTotalCount(UserExt condition) {
-        // TODO Auto-generated method stub
-        return 0;
+        return userExtDAO.selectTotalCount(condition);
     }
 
     @Override
@@ -56,9 +57,21 @@ public class UserExtBOImpl extends PaginableBOImpl<UserExt>
     }
 
     @Override
-    public boolean isEmailExit(String email) {
-        // TODO Auto-generated method stub
-        return false;
+    public void isEmailExit(String email) {
+        if (StringUtils.isNotBlank(email)) {
+            UserExt condition = new UserExt();
+            condition.setEmail(email);
+            long count = getTotalCount(condition);
+            if (count > 0) {
+                throw new BizException("li01003", "邮箱已经存在");
+            }
+        }
+    }
+
+    @Override
+    public void refreshEmail(UserExt data) {
+        userExtDAO.bindEmail(data);
+
     }
 
 }

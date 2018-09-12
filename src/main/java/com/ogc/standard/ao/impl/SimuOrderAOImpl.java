@@ -204,10 +204,6 @@ public class SimuOrderAOImpl implements ISimuOrderAO {
         }
 
         User user = userBO.getUser(req.getUserId());
-        if (user == null) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "用户编号" + req.getUserId() + "不存在");
-        }
 
         // **检查卖出币种账户 和 账户余额
         // GroupCoin groupCoin = groupCoinBO.getGroupCoin(req.getGroupCode(),

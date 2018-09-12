@@ -26,4 +26,7 @@ public interface IUserExtDAO extends IBaseDAO<UserExt> {
     // 详情查
     public UserExt getUserExt(UserExt data);
 
+    // 改邮箱（绑定）
+    public int bindEmail(UserExt data);
+
 }

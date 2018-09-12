@@ -67,9 +67,9 @@ public class UserExtAOImpl implements IUserExtAO {
         if (data.getEmail() != null) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(), "用户已绑定邮箱");
         }
-
+        userExtBO.isEmailExit(email);
         data.setEmail(email);
-        userExtBO.refreshUserExt(data);
+        userExtBO.refreshEmail(data);
     }
 
 }
