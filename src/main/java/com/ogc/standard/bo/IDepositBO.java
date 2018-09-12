@@ -8,6 +8,9 @@
  */
 package com.ogc.standard.bo;
 
+import java.math.BigDecimal;
+import java.util.Date;
+
 import com.ogc.standard.bo.base.IPaginableBO;
 import com.ogc.standard.domain.Deposit;
 
@@ -20,4 +23,7 @@ public interface IDepositBO extends IPaginableBO<Deposit> {
 
     public Deposit getDeposit(String code);
 
+    public String saveDeposit(String symbol, String fromAddress,
+            String toAddress, BigDecimal amount, String hash,
+            BigDecimal gasFee, Date confirmDatetime);
 }

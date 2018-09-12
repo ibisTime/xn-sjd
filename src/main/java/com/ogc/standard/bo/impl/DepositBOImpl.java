@@ -8,14 +8,19 @@
  */
 package com.ogc.standard.bo.impl;
 
+import java.math.BigDecimal;
+import java.util.Date;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.ogc.standard.bo.IDepositBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
+import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.IDepositDAO;
 import com.ogc.standard.domain.Deposit;
+import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.exception.BizException;
 
 /** 
@@ -24,8 +29,8 @@ import com.ogc.standard.exception.BizException;
  * @history:
  */
 @Component
-public class DepositBOImpl extends PaginableBOImpl<Deposit>
-        implements IDepositBO {
+public class DepositBOImpl extends PaginableBOImpl<Deposit> implements
+        IDepositBO {
 
     @Autowired
     private IDepositDAO depositDAO;
@@ -43,6 +48,28 @@ public class DepositBOImpl extends PaginableBOImpl<Deposit>
             }
         }
         return data;
+    }
+
+    @Override
+    public String saveDeposit(String symbol, String fromAddress,
+            String toAddress, BigDecimal amount, String hash,
+            BigDecimal gasFee, Date confirmDatetime) {
+        String code = OrderNoGenerater.generate(EGeneratePrefix.DEPOSIT
+            .getCode());
+        Deposit deposit = new Deposit();
+
+        deposit.setCode(code);
+        deposit.setCurrency(symbol);
+        deposit.setFromAddress(fromAddress);
+        deposit.setToAddress(toAddress);
+        deposit.setAmount(amount);
+
+        deposit.setTxHash(hash);
+        deposit.setTxFee(gasFee);
+        deposit.setConfirmDatetime(confirmDatetime);
+        deposit.setCreateDatetime(new Date());
+        depositDAO.insert(deposit);
+        return code;
     }
 
 }

@@ -12,7 +12,6 @@
 		<result column="tx_fee" property="txFee"/>
 		<result column="confirm_datetime" property="confirmDatetime"/>
 		<result column="create_datetime" property="createDatetime"/>
-		<result column="ref_no" property="refNo"/>
 	</resultMap>
 	
 	<sql id="where_condition">
@@ -32,9 +31,6 @@
 			<if test="toAddress != null and toAddress != '' ">
 				AND t.to_address = #{toAddress}
 			</if>
-			<if test="refNo != null and refNo != '' ">
-				AND t.ref_no = #{refNo}
-			</if>
 		</trim>
 	</sql>
 	<select id="select_deposit" parameterType="deposit" resultMap="deposit_DB_Result">
@@ -48,7 +44,6 @@
 		,t.tx_fee
 		,t.confirm_datetime
 		,t.create_datetime
-		,t.ref_no
 		FROM
 		tstd_deposit t
 		<include refid="where_condition"/>
@@ -63,4 +58,31 @@
 		SELECT count(1) FROM tstd_deposit t
 		<include refid="where_condition" />
 	</select>
+	<insert id="insert_deposit" parameterType="deposit">
+		INSERT INTO `tstd_deposit`(
+			`code`
+			,`currency`
+			,`from_address`
+			,`to_address`
+			,`amount`
+			
+			,`tx_hash`
+			,`tx_fee`
+			,`confirm_datetime`
+			,`create_datetime`
+			)
+			 VALUE
+			(
+				#{code}
+				,#{currency}
+				,#{fromAddress}
+				,#{toAddress}
+				,#{amount}
+				
+				,#{txHash}
+				,#{txFee}
+				,#{confirmDatetime}
+				,#{createDatetime}
+			)
+	</insert>
 </mapper>

@@ -177,7 +177,7 @@ CREATE TABLE `tstd_charge` (
   `pay_note` varchar(255) DEFAULT NULL COMMENT '支付渠道说明',
   `pay_datetime` datetime DEFAULT NULL COMMENT '支付时间',
   `channel_type` varchar(32) DEFAULT NULL COMMENT '支付渠道',
-  `channel_order` varchar(64) DEFAULT NULL COMMENT '支付渠道单号',
+  `channel_order` varchar(66) DEFAULT NULL COMMENT '支付渠道单号',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='充值订单';
 
@@ -237,7 +237,6 @@ CREATE TABLE `tstd_deposit` (
   `tx_fee` decimal(64,0) DEFAULT NULL COMMENT '矿工费',
   `confirm_datetime` datetime DEFAULT NULL COMMENT '网络记账时间',
   `create_datetime` datetime DEFAULT NULL COMMENT '创建时间',
-  `ref_no` varchar(32) DEFAULT NULL COMMENT '关联订单号',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT '定存订单';
 
