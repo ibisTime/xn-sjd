@@ -85,7 +85,6 @@ CREATE TABLE `tstd_user` (
   `user_id` varchar(32) NOT NULL COMMENT '用户编号',
   `login_name` varchar(64) DEFAULT NULL COMMENT '登陆名',
   `mobile` varchar(16) DEFAULT NULL COMMENT '手机号',
-  `kind` char(1) DEFAULT NULL COMMENT '用户类型（C 普通用户，M 机器人，D 渠道商）',
   `photo` varchar(255) DEFAULT NULL COMMENT '头像',
   `nickname` varchar(64) DEFAULT NULL COMMENT '昵称',
   `login_pwd` varchar(32) DEFAULT NULL COMMENT '登陆密码',
@@ -95,9 +94,6 @@ CREATE TABLE `tstd_user` (
   `id_kind` char(1) DEFAULT NULL COMMENT '证件类型',
   `id_no` varchar(32) DEFAULT NULL COMMENT '证件号码',
   `real_name` varchar(16) DEFAULT NULL COMMENT '真实姓名',
-  `id_face` varchar(255) DEFAULT NULL COMMENT '证件照正面',
-  `id_oppo` varchar(255) DEFAULT NULL COMMENT '证件照背面',
-  `id_hold` varchar(255) DEFAULT NULL COMMENT '证件照手持照',
   `trade_pwd` varchar(32) DEFAULT NULL COMMENT '安全密码',
   `trade_pwd_strength` char(1) DEFAULT NULL COMMENT '安全密码强度',
   `status` varchar(2) DEFAULT NULL COMMENT '状态',
@@ -107,7 +103,6 @@ CREATE TABLE `tstd_user` (
   `address` varchar(255) DEFAULT NULL COMMENT '详细地址',
   `longitude` varchar(255) DEFAULT NULL COMMENT '经度',
   `latitude` varchar(255) DEFAULT NULL COMMENT '维度',
-  `resp_area` varchar(255) DEFAULT 'NIULL' COMMENT '负责区域',
   `trade_rate` decimal(8,4) DEFAULT NULL COMMENT '交易手续费',
   `create_datetime` datetime DEFAULT NULL COMMENT '注册时间',
   `updater` varchar(32) DEFAULT NULL COMMENT '修改人',
@@ -124,8 +119,6 @@ CREATE TABLE `tstd_user_ext` (
   `introduce` varchar(255) DEFAULT NULL COMMENT '自我介绍',
   `birthday` varchar(16) DEFAULT NULL COMMENT '生日',
   `email` varchar(255) DEFAULT NULL COMMENT '邮箱',
-  `driver_li` varchar(255) DEFAULT NULL COMMENT '驾驶照',
-  `passport` varchar(255) DEFAULT NULL COMMENT '护照',
   `diploma` varchar(4) DEFAULT NULL COMMENT '学位',
   `occupation` varchar(64) DEFAULT NULL COMMENT '职业',
   `grad_datetime` datetime DEFAULT NULL COMMENT '毕业时间',
@@ -133,7 +126,6 @@ CREATE TABLE `tstd_user_ext` (
   `pdf` varchar(255) DEFAULT NULL COMMENT '用户资料',
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 
 DROP TABLE IF EXISTS `tstd_sign_log`;
 CREATE TABLE `tstd_sign_log` (
@@ -177,9 +169,6 @@ CREATE TABLE `tstd_blacklist` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
-
-DROP TABLE IF EXISTS `tstd_read`;
 DROP TABLE IF EXISTS `tstd_read`;
 CREATE TABLE `tstd_read` (
   `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT 'ID主键',
@@ -528,27 +517,3 @@ CREATE TABLE IF NOT EXISTS `tmk_exchange_pair` (
 ENGINE = InnoDB DEFAULT CHARSET=utf8
 COMMENT = '交易对';
 
-DROP TABLE IF EXISTS `tstd_user_relation`;
-CREATE TABLE `tstd_user_relation` (
-  `code` varchar(32) NOT NULL COMMENT '编号',
-  `user_id` varchar(32) DEFAULT NULL COMMENT '用户编号',
-  `to_user` varchar(32) DEFAULT NULL COMMENT '关系人编号',
-  `type` varchar(4) DEFAULT NULL COMMENT '关系类型',
-  `status` varchar(4) DEFAULT NULL COMMENT '状态',
-  `update_datetime` datetime DEFAULT NULL COMMENT '创建时间',
-  `company_code` varchar(32) DEFAULT NULL COMMENT '公司编号',
-  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
-  PRIMARY KEY (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-DROP TABLE IF EXISTS `tstd_user_settings`;
-CREATE TABLE `tstd_user_settings` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` varchar(45) NOT NULL,
-  `type` varchar(4) NOT NULL COMMENT '设置类型',
-  `value` varchar(10) NOT NULL COMMENT '预留值',
-  `create_datetime` datetime NOT NULL,
-  `update_datetime` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `user_type` (`user_id`,`type`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
