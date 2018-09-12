@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ogc.standard.dao.ISimuMatchResultHistoryDAO">
+	<resultMap id="simuMatchResultHistory_DB_Result" type="simuMatchResultHistory">
+		<result column="id" property="id" />
+		<result column="buy_order_code" property="buyOrderCode" />
+		<result column="sell_order_code" property="sellOrderCode" />
+		<result column="symbol" property="symbol" />
+		<result column="to_symbol" property="toSymbol" />
+		
+		<result column="buy_user_id" property="buyUserId" />
+		<result column="sell_user_id" property="sellUserId" />
+		<result column="buy_amount" property="buyAmount" />
+		<result column="sell_amount" property="sellAmount" />
+		<result column="fee" property="fee" />
+		
+		<result column="create_datetime" property="createDatetime" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+		</trim>
+	</sql>
+	<select id="select_simuMatchResultHistory" parameterType="simuMatchResultHistory" resultMap="simuMatchResultHistory_DB_Result">
+		SELECT
+		t.id
+		,t.buy_order_code
+		,t.sell_order_code
+		,t.symbol
+		,t.to_symbol
+		
+		,t.buy_user_id
+		,t.sell_user_id
+		,t.buy_amount
+		,t.sell_amount
+		,t.fee
+		
+		,t.create_datetime
+		FROM
+		tsimu_match_result_history t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_simuMatchResultHistory_count" parameterType="simuMatchResultHistory"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tsimu_match_result_history t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_simuMatchResultHistory" parameterType="simuMatchResultHistory">
+		INSERT INTO
+		tsimu_match_result_history(
+		id
+		,buy_order_code
+		,sell_order_code
+		,symbol
+		,to_symbol
+		
+		,buy_user_id
+		,sell_user_id
+		,buy_amount
+		,sell_amount
+		,fee
+		
+		,create_datetime
+		)
+		VALUES(
+		#{id}
+		,#{buyOrderCode}
+		,#{sellOrderCode}
+		,#{symbol}
+		,#{toSymbol}
+		,#{buyUserId}
+		,#{sellUserId}
+		,#{buyAmount}
+		,#{sellAmount}
+		,#{fee}
+		,#{createDatetime}
+		)
+	</insert>
+
+
+
+</mapper>

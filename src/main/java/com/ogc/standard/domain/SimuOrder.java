@@ -19,14 +19,8 @@ public class SimuOrder extends ABaseDO {
     // 编号
     private String code;
 
-    // 组合编号
-    private String groupCode;
-
     // 用户编号
     private String userId;
-
-    // 交易所
-    private String exchange;
 
     // 交易币种
     private String symbol;
@@ -58,6 +52,9 @@ public class SimuOrder extends ABaseDO {
     // 已成交总手续费
     private BigDecimal tradedFee;
 
+    // 已成交总手续费
+    private BigDecimal avgPrice;
+
     // 最后成交时间
     private Date lastTradedDatetime;
 
@@ -81,28 +78,12 @@ public class SimuOrder extends ABaseDO {
         this.code = code;
     }
 
-    public String getGroupCode() {
-        return groupCode;
-    }
-
-    public void setGroupCode(String groupCode) {
-        this.groupCode = groupCode;
-    }
-
     public String getUserId() {
         return userId;
     }
 
     public void setUserId(String userId) {
         this.userId = userId;
-    }
-
-    public String getExchange() {
-        return exchange;
-    }
-
-    public void setExchange(String exchange) {
-        this.exchange = exchange;
     }
 
     public String getSymbol() {
@@ -183,6 +164,14 @@ public class SimuOrder extends ABaseDO {
 
     public void setTradedFee(BigDecimal tradedFee) {
         this.tradedFee = tradedFee;
+    }
+
+    public BigDecimal getAvgPrice() {
+        return avgPrice;
+    }
+
+    public void setAvgPrice(BigDecimal avgPrice) {
+        this.avgPrice = avgPrice;
     }
 
     public Date getLastTradedDatetime() {

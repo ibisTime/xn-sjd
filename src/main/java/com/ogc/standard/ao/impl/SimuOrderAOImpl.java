@@ -1,66 +1,60 @@
 package com.ogc.standard.ao.impl;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.log4j.Logger;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ogc.standard.ao.IMarketAO;
 import com.ogc.standard.ao.ISimuOrderAO;
-import com.ogc.standard.bo.IGroupCoinBO;
+import com.ogc.standard.bo.IHandicapBO;
+import com.ogc.standard.bo.ISimuKLineBO;
 import com.ogc.standard.bo.ISimuOrderBO;
-import com.ogc.standard.bo.ISimuOrderDetailBO;
+import com.ogc.standard.bo.ISimuOrderHistoryBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
-import com.ogc.standard.core.OrderNoGenerater;
+import com.ogc.standard.common.SysConstants;
 import com.ogc.standard.core.StringValidater;
-import com.ogc.standard.domain.GroupCoin;
+import com.ogc.standard.domain.SimuKLine;
 import com.ogc.standard.domain.SimuOrder;
-import com.ogc.standard.domain.SimuOrderDetail;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.dto.req.XN650050Req;
-import com.ogc.standard.enums.EGeneratePrefix;
-import com.ogc.standard.enums.EJourBizType;
+import com.ogc.standard.enums.ESimuKLinePeriod;
 import com.ogc.standard.enums.ESimuOrderDirection;
 import com.ogc.standard.enums.ESimuOrderStatus;
 import com.ogc.standard.enums.ESimuOrderType;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
-import com.ogc.standard.market.MarketDepth;
-import com.ogc.standard.market.MarketDepthItem;
-import com.ogc.standard.util.SymbolUtil;
 
 @Service
 public class SimuOrderAOImpl implements ISimuOrderAO {
-
-    private static Logger logger = Logger.getLogger(SimuOrderAOImpl.class);
 
     @Autowired
     private ISimuOrderBO simuOrderBO;
 
     @Autowired
-    private ISimuOrderDetailBO simuOrderDetailBO;
-
-    @Autowired
-    private IMarketAO marketAO;
+    private ISimuOrderHistoryBO simuOrderHistoryBO;
 
     @Autowired
     private IUserBO userBO;
 
     @Autowired
-    private IGroupCoinBO groupCoinBO;
+    private IHandicapBO handicapBO;
+
+    @Autowired
+    private ISimuKLineBO simuKLineBO;
 
     @Override
     @Transactional
     public String submit(XN650050Req req) {
 
-        SimuOrder data = null;
+        SimuOrder data = new SimuOrder();
+
+        // 参数验证
+        parameterValidater(req);
 
         if (ESimuOrderDirection.BUY.getCode().equals(req.getDirection())) {
 
@@ -74,51 +68,12 @@ public class SimuOrderAOImpl implements ISimuOrderAO {
             data = submitSellOrder(req);
 
         } else {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "不支持买卖方向");
+
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "不支持的买卖方向");
+
         }
 
         return data.getCode();
-    }
-
-    @Override
-    public void buySuccessOrder(String orderCode) {
-        // 当前挂单的订单是否可立即成交处理
-        SimuOrder data = simuOrderBO.getSimuOrder(orderCode);
-        MarketDepth marketDepth = marketAO.getMarketDepth(
-            SymbolUtil.getSymbolPair(data.getSymbol(), data.getToSymbol()),
-            data.getExchange());
-        List<MarketDepthItem> asksList = marketDepth.getAsks();
-        boolean breakFlag = false;
-        for (MarketDepthItem marketDepthItem : asksList) {
-            BigDecimal haveCount = data.getTotalCount()
-                .subtract(data.getTradedCount());
-            if (data.getPrice().compareTo(marketDepthItem.getPrice()) >= 0) {
-                BigDecimal tradedCount = BigDecimal.ZERO;
-                if (haveCount.compareTo(marketDepthItem.getAmount()) > 0) {
-                    tradedCount = marketDepthItem.getAmount();
-                } else {
-                    tradedCount = haveCount;
-                    breakFlag = true;
-                }
-
-                SimuOrderDetail simuOrderDetail = new SimuOrderDetail();
-                String code = OrderNoGenerater
-                    .generate(EGeneratePrefix.SIMU_ORDER_DETAIL.getCode());
-                simuOrderDetail.setCode(code);
-                simuOrderDetail.setOrderCode(orderCode);
-                simuOrderDetail.setTradedPrice(marketDepthItem.getPrice());
-                simuOrderDetail.setTradedCount(tradedCount);
-                BigDecimal tradedAmount = marketDepthItem.getPrice()
-                    .multiply(marketDepthItem.getAmount());
-                simuOrderDetail.setTradedAmount(tradedAmount);
-                simuOrderDetail.setTradedFee(BigDecimal.ZERO);
-                simuOrderDetailBO.saveSimuOrderDetail(simuOrderDetail);
-                if (breakFlag) {
-                    break;
-                }
-            }
-        }
-
     }
 
     @Override
@@ -132,19 +87,34 @@ public class SimuOrderAOImpl implements ISimuOrderAO {
                 "当前状态下不支持撤单");
         }
 
-        // 买入订单解冻计价币种数量
-        if (ESimuOrderDirection.BUY.getCode().equals(data.getDirection())) {
+        // **买入订单解冻计价币种数量
+        // if (ESimuOrderDirection.BUY.getCode().equals(data.getDirection())) {
+        //
+        // GroupCoin gcAccount = groupCoinBO.getGroupCoin(data.getGroupCode(),
+        // data.getUserId(), data.getToSymbol());
+        // groupCoinBO.unfrozenAmount(gcAccount, data.getTotalCount(),
+        // EJourBizType.BUY_ORDER_UNFROZEN.getCode(),
+        // "提交购买[" + SymbolUtil.getSymbolPair(data.getSymbol(),
+        // data.getToSymbol()) + "]委托撤单",
+        // code);
+        // }
 
-            GroupCoin gcAccount = groupCoinBO.getGroupCoin(data.getGroupCode(),
-                data.getUserId(), data.getToSymbol());
-            groupCoinBO.unfrozenAmount(gcAccount, data.getTotalCount(),
-                EJourBizType.BUY_ORDER_UNFROZEN.getCode(),
-                "提交购买[" + SymbolUtil.getSymbolPair(data.getSymbol(),
-                    data.getToSymbol()) + "]委托撤单",
-                code);
+        // 更新委托单信息
+        if (ESimuOrderStatus.SUBMIT.getCode().equals(data.getStatus())) {
+            data.setStatus(ESimuOrderStatus.CANCEL.getCode());
+        } else {
+            data.setStatus(ESimuOrderStatus.PART_DEAL_CANCEL.getCode());
         }
+        data.setCancelDatetime(new Date());
 
+        // 增加历史委托
+        simuOrderHistoryBO.saveSimuOrderHistory(data);
+
+        // 撤销，并从 存活委托 中删除；
         simuOrderBO.cancel(data);
+
+        // 限价单需要同时删除盘口
+        handicapBO.removeHandicap(data.getCode());
     }
 
     @Override
@@ -170,59 +140,46 @@ public class SimuOrderAOImpl implements ISimuOrderAO {
             .toBigDecimal(req.getTotalCount());
 
         // 单个币买入价格（所需计价币种的数量）
-        BigDecimal price = getBuyPrice(req);
+        BigDecimal price;
 
         // 所有币买入，总共需要的计价币种的数量
-        BigDecimal totalAmount = price.multiply(totalCount);
+        BigDecimal totalAmount;
+
+        if (ESimuOrderType.LIMIT.getCode().equals(req.getType())) {
+            price = StringValidater.toBigDecimal(req.getPrice());
+            totalAmount = price.multiply(totalCount);
+        } else {
+            // 市价买单没有价格
+            price = new BigDecimal(-1);
+            // 在市价买单中数量的单位是 计价币种 ,意思是希望按照现在的市场价格持续买入，直到完全成交（计价币种完全消耗完）后停止
+            totalAmount = totalCount;
+        }
 
         User user = userBO.getUser(req.getUserId());
-        if (user == null) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "用户编号" + req.getUserId() + "不存在");
-        }
 
-        // 检查计价币种是否存在 和 账户余额
-        GroupCoin groupCoin = groupCoinBO.getGroupCoin(req.getGroupCode(),
-            req.getUserId(), req.getToSymbol());
-        if (groupCoin.getCount().subtract(groupCoin.getFrozenCount())
-            .compareTo(totalAmount) < 0) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "当前组合" + groupCoin.getSymbol() + "资产可用余额不足");
-        }
+        // **检查计价币种是否存在 和 账户余额
+        // GroupCoin groupCoin = groupCoinBO.getGroupCoin(req.getGroupCode(),
+        // req.getUserId(), req.getToSymbol());
+        // if (groupCoin.getCount().subtract(groupCoin.getFrozenCount())
+        // .compareTo(totalAmount) < 0) {
+        // throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+        // "当前组合" + groupCoin.getSymbol() + "资产可用余额不足");
+        // }
 
         // 落地委托单
-        String code = OrderNoGenerater
-            .generate(EGeneratePrefix.SIMU_ORDER.getCode());
-        SimuOrder data = new SimuOrder();
-        data.setCode(code);
-        data.setGroupCode(req.getGroupCode());
-        data.setUserId(req.getUserId());
-        data.setExchange(req.getExchange());
-        data.setSymbol(req.getSymbol());
+        SimuOrder simuOrder = simuOrderBO.saveSimuOrder(req, totalCount, price,
+            totalAmount);
 
-        data.setToSymbol(req.getToSymbol());
-        data.setType(req.getType());
-        data.setDirection(req.getDirection());
-        data.setPrice(price);
-        data.setTotalCount(totalCount);
+        // 落地盘口，只有限价单可以进入盘口
+        // saveHandicap(simuOrder);
 
-        data.setTotalAmount(totalAmount);
-        data.setTradedCount(BigDecimal.ZERO);
-        data.setTradedAmount(BigDecimal.ZERO);
-        data.setTradedFee(BigDecimal.ZERO);
-        data.setLastTradedDatetime(new Date());
+        // **冻结计价币种
+        // groupCoinBO.frozenCount(groupCoin, totalAmount,
+        // EJourBizType.BUY_ORDER_FROZEN.getCode(), "提交购买[" + SymbolUtil
+        // .getSymbolPair(req.getSymbol(), req.getToSymbol()) + "]委托单",
+        // code);
 
-        data.setCreateDatetime(new Date());
-        data.setStatus(ESimuOrderStatus.SUBMIT.getCode());
-        simuOrderBO.saveSimuOrder(data);
-
-        // 冻结计价币种
-        groupCoinBO.frozenCount(groupCoin, totalAmount,
-            EJourBizType.BUY_ORDER_FROZEN.getCode(), "提交购买[" + SymbolUtil
-                .getSymbolPair(req.getSymbol(), req.getToSymbol()) + "]委托单",
-            code);
-
-        return data;
+        return simuOrder;
     }
 
     private SimuOrder submitSellOrder(XN650050Req req) {
@@ -232,10 +189,19 @@ public class SimuOrderAOImpl implements ISimuOrderAO {
             .toBigDecimal(req.getTotalCount());
 
         // 单个币卖出价格（所需计价币种的数量）
-        BigDecimal price = getSellPrice(req);
+        BigDecimal price;
 
         // 所有币卖出，总共需要的计价币种的数量
-        BigDecimal totalAmount = price.multiply(totalCount);
+        BigDecimal totalAmount;
+        if (ESimuOrderType.LIMIT.getCode().equals(req.getType())) {
+            price = StringValidater.toBigDecimal(req.getPrice());
+            totalAmount = price.multiply(totalCount);
+        } else {
+            // 市价单卖单没有价格
+            price = new BigDecimal(-1);
+            // 在市价卖单中数量的单位是 交易币种 ,意思是希望按照现在的市场价格持续卖出，直到完全成交（交易币种完全消耗完）后停止
+            totalAmount = totalCount;
+        }
 
         User user = userBO.getUser(req.getUserId());
         if (user == null) {
@@ -243,254 +209,77 @@ public class SimuOrderAOImpl implements ISimuOrderAO {
                 "用户编号" + req.getUserId() + "不存在");
         }
 
-        // 检查卖出币种账户 和 账户余额
-        GroupCoin groupCoin = groupCoinBO.getGroupCoin(req.getGroupCode(),
-            req.getUserId(), req.getSymbol());
-        if (groupCoin.getCount().subtract(groupCoin.getFrozenCount())
-            .compareTo(totalCount) < 0) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "当前组合" + req.getSymbol() + "资产可用余额不足");
-        }
+        // **检查卖出币种账户 和 账户余额
+        // GroupCoin groupCoin = groupCoinBO.getGroupCoin(req.getGroupCode(),
+        // req.getUserId(), req.getSymbol());
+        // if (groupCoin.getCount().subtract(groupCoin.getFrozenCount())
+        // .compareTo(totalCount) < 0) {
+        // throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+        // "当前组合" + req.getSymbol() + "资产可用余额不足");
+        // }
 
         // 落地委托单
-        String code = OrderNoGenerater
-            .generate(EGeneratePrefix.SIMU_ORDER.getCode());
-        SimuOrder data = new SimuOrder();
-        data.setCode(code);
-        data.setGroupCode(req.getGroupCode());
-        data.setUserId(req.getUserId());
-        data.setExchange(req.getExchange());
-        data.setSymbol(req.getSymbol());
+        SimuOrder simuOrder = simuOrderBO.saveSimuOrder(req, totalCount, price,
+            totalAmount);
 
-        data.setToSymbol(req.getToSymbol());
-        data.setType(req.getType());
-        data.setDirection(req.getDirection());
-        data.setPrice(price);
-        data.setTotalCount(totalCount);
+        // 落地盘口，只有限价单可以进入盘口
+        // saveHandicap(simuOrder);
 
-        data.setTotalAmount(totalAmount);
-        data.setTradedCount(BigDecimal.ZERO);
-        data.setTradedAmount(BigDecimal.ZERO);
-        data.setTradedFee(BigDecimal.ZERO);
-        data.setLastTradedDatetime(new Date());
+        // **冻结出售币种资产
+        // groupCoinBO.frozenCount(groupCoin, totalAmount,
+        // EJourBizType.SELL_ORDER_FROZEN.getCode(), "提交卖出[" + SymbolUtil
+        // .getSymbolPair(req.getSymbol(), req.getToSymbol()) + "]委托单",
+        // code);
 
-        data.setCreateDatetime(new Date());
-        data.setStatus(ESimuOrderStatus.SUBMIT.getCode());
-        simuOrderBO.saveSimuOrder(data);
-
-        // 冻结出售币种资产
-        groupCoinBO.frozenCount(groupCoin, totalCount,
-            EJourBizType.SELL_ORDER_FROZEN.getCode(), "提交卖出[" + SymbolUtil
-                .getSymbolPair(req.getSymbol(), req.getToSymbol()) + "]委托单",
-            code);
-
-        return data;
+        return simuOrder;
 
     }
 
-    private BigDecimal getBuyPrice(XN650050Req req) {
-        BigDecimal price = null;
-        if (ESimuOrderType.LIMIT.getCode().equals(req.getType())) {
-            price = StringValidater.toBigDecimal(req.getPrice());
-        } else {
-            MarketDepth marketDepth = marketAO.getMarketDepth(
-                SymbolUtil.getSymbolPair(req.getSymbol(), req.getToSymbol()),
-                req.getExchange());
-            price = marketDepth.getAsks().get(0).getPrice();
-        }
-        return price;
-    }
-
-    private BigDecimal getSellPrice(XN650050Req req) {
-        BigDecimal price = null;
-        if (ESimuOrderType.LIMIT.getCode().equals(req.getType())) {
-            price = StringValidater.toBigDecimal(req.getPrice());
-        } else {
-            MarketDepth marketDepth = marketAO.getMarketDepth(
-                SymbolUtil.getSymbolPair(req.getSymbol(), req.getToSymbol()),
-                req.getExchange());
-            price = marketDepth.getBids().get(0).getPrice();
-        }
-        return price;
-    }
-
-    @Override
-    public void doCheckDeal() {
-
-        boolean isDebug = false;
-
-        if (isDebug) {
-            logger.info("**** 扫描委托单开始 ******");
-        }
-
-        List<String> statusList = new ArrayList<>();
-        statusList.add(ESimuOrderStatus.SUBMIT.getCode());
-        statusList.add(ESimuOrderStatus.PART_DEAL.getCode());
-
-        SimuOrder condition = new SimuOrder();
-        condition.setStatusList(statusList);
-
-        List<SimuOrder> simuOrders = simuOrderBO.querySimuOrderList(condition);
-        if (CollectionUtils.isNotEmpty(simuOrders)) {
-            for (SimuOrder simuOrder : simuOrders) {
-                if (isDebug) {
-                    logger
-                        .info("**** 共扫描到" + simuOrders.size() + "个委托单 ******");
-                }
-                doCheck(simuOrder);
-
+    private void parameterValidater(XN650050Req req) {
+        ESimuOrderType eSimuOrderType = ESimuOrderType
+            .getOrderType(req.getType());
+        if (ESimuOrderType.LIMIT.getCode().equals(eSimuOrderType.getCode())) {
+            if (StringUtils.isBlank(req.getPrice())) {
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                    "限价委托单委托价格需必填");
             }
         }
-        if (isDebug) {
-            logger.info("**** 扫描委托单结束 ******");
+
+        // 委托数量是否超过限制
+        BigDecimal count = StringValidater.toBigDecimal(req.getTotalCount());
+        if (count.compareTo(SysConstants.minCountLimit) < 0
+                || count.compareTo(SysConstants.maxCountLimit) > 0) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "委托数量应在" + SysConstants.minCountLimit + "至"
+                        + SysConstants.maxCountLimit + "之间");
         }
 
-    }
+        // 是否是最小委托数量的整数倍
+        if (BigDecimal.ZERO.compareTo(
+            count.divideAndRemainder(SysConstants.minCountLimit)[1]) != 0) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "委托数量应当" + SysConstants.minCountLimit + "的整数倍");
+        }
 
-    private void doCheck(SimuOrder simuOrder) {
-        try {
+        // 委托价格是否超过价格范围:不高于前收盘价的900%，不低于前收盘价测50%
+        BigDecimal price = StringValidater.toBigDecimal(req.getTotalCount());
+        // 获取上一时间单位的K线
+        SimuKLine simuKLine = simuKLineBO.getLatestSimuKLine(req.getSymbol(),
+            req.getToSymbol(), ESimuKLinePeriod.MIN1.getCode());
 
-            MarketDepth marketDepth = marketAO.getMarketDepth(SymbolUtil
-                .getSymbolPair(simuOrder.getSymbol(), simuOrder.getToSymbol()),
-                simuOrder.getExchange());
-
-            if (ESimuOrderDirection.BUY.getCode()
-                .equals(simuOrder.getDirection())) {
-
-                MarketDepthItem sellOne = marketDepth.getAsks().get(0);
-                if (sellOne.getPrice().compareTo(simuOrder.getPrice()) <= 0) {
-                    buySuccess(simuOrder, sellOne.getPrice());
-                }
-
-            } else if (ESimuOrderDirection.SELL.getCode()
-                .equals(simuOrder.getDirection())) {
-
-                MarketDepthItem buyOne = marketDepth.getBids().get(0);
-                if (buyOne.getPrice().compareTo(simuOrder.getPrice()) >= 0) {
-                    sellSuccess(simuOrder, buyOne.getPrice());
-                }
-
+        if (null != simuKLine) {
+            if (price.compareTo(
+                simuKLine.getClose().multiply(new BigDecimal("9"))) > 0) {
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                    "委托价格不得高于前收盘价的900%");
             }
 
-        } catch (Exception e) {
-            logger.error(
-                "扫描委托单" + simuOrder.getCode() + "发送异常，原因：" + e.getMessage());
+            if (price.compareTo(
+                simuKLine.getClose().multiply(new BigDecimal("0.5"))) < 0) {
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                    "委托价格不得低于前收盘价测50%");
+            }
+
         }
-
     }
-
-    @Override
-    @Transactional
-    public void buySuccess(SimuOrder simuOrder, BigDecimal tradePrice) {
-
-        // 第一版本 实现逻辑：价格匹配，全部成交
-        BigDecimal tradeCount = simuOrder.getTotalCount();
-
-        SimuOrderDetail simuOrderDetail = new SimuOrderDetail();
-        String code = OrderNoGenerater
-            .generate(EGeneratePrefix.SIMU_ORDER_DETAIL.getCode());
-        simuOrderDetail.setCode(code);
-        simuOrderDetail.setOrderCode(simuOrder.getCode());
-        simuOrderDetail.setTradedPrice(tradePrice);
-        simuOrderDetail.setTradedCount(tradeCount);
-        simuOrderDetail.setTradedAmount(tradeCount.multiply(tradePrice));
-
-        simuOrderDetail.setTradedFee(BigDecimal.ZERO);
-        simuOrderDetail.setCreateDatetime(new Date());
-        simuOrderDetailBO.saveSimuOrderDetail(simuOrderDetail);
-
-        // 更新委托单装填
-        simuOrder.setTradedCount(tradeCount);
-        simuOrder.setTradedAmount(simuOrderDetail.getTradedAmount());
-        simuOrder.setTradedFee(simuOrderDetail.getTradedFee());
-        simuOrder.setLastTradedDatetime(simuOrderDetail.getCreateDatetime());
-        simuOrder.setStatus(ESimuOrderStatus.ENTIRE_DEAL.getCode());
-
-        GroupCoin gcAccount = groupCoinBO.getGroupCoin(simuOrder.getGroupCode(),
-            simuOrder.getUserId(), simuOrder.getToSymbol());
-
-        // 解冻金额
-        gcAccount = groupCoinBO.unfrozenAmount(gcAccount,
-            simuOrder.getTotalCount(),
-            EJourBizType.BUY_ORDER_UNFROZEN.getCode(),
-            EJourBizType.BUY_ORDER_UNFROZEN.getValue(), code);
-
-        // 扣减
-        groupCoinBO.changeAmount(gcAccount, simuOrder.getTotalCount().negate(),
-            simuOrder.getCode(), EJourBizType.BUY_ORDER_SUCCESS.getCode(),
-            EJourBizType.BUY_ORDER_SUCCESS.getValue());
-
-        // 添加购买的交易币种金额
-        GroupCoin symbolAccount = groupCoinBO.checkAccountAndDistribute(
-            simuOrder.getUserId(), gcAccount.getGroupCode(),
-            simuOrder.getSymbol());
-        symbolAccount = groupCoinBO.changeAmount(symbolAccount,
-            simuOrder.getTotalCount(), simuOrder.getCode(),
-            EJourBizType.BUY_ORDER_SUCCESS.getCode(),
-            EJourBizType.BUY_ORDER_SUCCESS.getValue());
-
-        // 修改组合币种配置占比
-
-        // 更新委托单状态
-        simuOrderBO.tradeSuccess(simuOrder);
-
-    }
-
-    @Override
-    @Transactional
-    public void sellSuccess(SimuOrder simuOrder, BigDecimal tradePrice) {
-
-        // 第一版本 实现逻辑：价格匹配，全部成交
-        BigDecimal tradeCount = simuOrder.getTotalCount();
-
-        SimuOrderDetail simuOrderDetail = new SimuOrderDetail();
-        String code = OrderNoGenerater
-            .generate(EGeneratePrefix.SIMU_ORDER_DETAIL.getCode());
-        simuOrderDetail.setCode(code);
-        simuOrderDetail.setOrderCode(simuOrder.getCode());
-        simuOrderDetail.setTradedPrice(tradePrice);
-        simuOrderDetail.setTradedCount(tradeCount);
-        simuOrderDetail.setTradedAmount(tradeCount.multiply(tradePrice));
-
-        simuOrderDetail.setTradedFee(BigDecimal.ZERO);
-        simuOrderDetail.setCreateDatetime(new Date());
-        simuOrderDetailBO.saveSimuOrderDetail(simuOrderDetail);
-
-        // 更新委托单装填
-        simuOrder.setTradedCount(tradeCount);
-        simuOrder.setTradedAmount(simuOrderDetail.getTradedAmount());
-        simuOrder.setTradedFee(simuOrderDetail.getTradedFee());
-        simuOrder.setLastTradedDatetime(simuOrderDetail.getCreateDatetime());
-        simuOrder.setStatus(ESimuOrderStatus.ENTIRE_DEAL.getCode());
-
-        GroupCoin gcAccount = groupCoinBO.getGroupCoin(simuOrder.getGroupCode(),
-            simuOrder.getUserId(), simuOrder.getToSymbol());
-
-        // 解冻金额
-        gcAccount = groupCoinBO.unfrozenAmount(gcAccount,
-            simuOrder.getTotalCount(),
-            EJourBizType.SELL_ORDER_UNFROZEN.getCode(),
-            EJourBizType.SELL_ORDER_UNFROZEN.getValue(), code);
-
-        // 扣减币种金额
-        groupCoinBO.changeAmount(gcAccount, simuOrder.getTotalCount().negate(),
-            simuOrder.getCode(), EJourBizType.SELL_ORDER_SUCCESS.getCode(),
-            EJourBizType.SELL_ORDER_SUCCESS.getValue());
-
-        // 增加计价币种金额
-        GroupCoin symbolAccount = groupCoinBO.checkAccountAndDistribute(
-            simuOrder.getUserId(), simuOrder.getExchange(),
-            simuOrder.getToSymbol());
-        symbolAccount = groupCoinBO.changeAmount(symbolAccount,
-            simuOrder.getTotalCount(), simuOrder.getCode(),
-            EJourBizType.BUY_ORDER_SUCCESS.getCode(),
-            EJourBizType.BUY_ORDER_SUCCESS.getValue());
-
-        // 修改组合币种配置占比
-
-        // 更新委托单状态
-        simuOrderBO.tradeSuccess(simuOrder);
-
-    }
-
 }

@@ -125,7 +125,6 @@
 		<property name="paginableDAO" ref="teamDAOImpl"/>
 	</bean>
 	
-	
 	<bean id="keywordBO" class="com.ogc.standard.bo.impl.KeywordBOImpl">
 		<property name="paginableDAO" ref="keywordDAOImpl"/>
 	</bean>
@@ -142,6 +141,7 @@
 		<property name="paginableDAO" ref="interactDAOImpl"/>
 	</bean>
 	
+<<<<<<< HEAD
 	<bean id="adsBO" class="com.ogc.standard.bo.impl.AdsBOImpl">
 		<property name="paginableDAO" ref="adsDAOImpl"/>
 	</bean>
@@ -228,6 +228,25 @@
 	
 	<bean id="bankcardBO" class="com.ogc.standard.bo.impl.BankcardBOImpl">
 		<property name="paginableDAO" ref="bankcardDAOImpl"/>
+	
+	<bean id="simuOrderHistoryBO" class="com.ogc.standard.bo.impl.SimuOrderHistoryBOImpl">
+		<property name="paginableDAO" ref="simuOrderHistoryDAOImpl"/>
+	</bean>
+	
+	<bean id="handicapBO" class="com.ogc.standard.bo.impl.HandicapBOImpl">
+		<property name="paginableDAO" ref="handicapDAOImpl"/>
+	</bean>
+	
+	<bean id="simuKLineBO" class="com.ogc.standard.bo.impl.SimuKLineBOImpl">
+		<property name="paginableDAO" ref="simuKLineDAOImpl"/>
+	</bean>
+	
+	<bean id="simuMatchResultBO" class="com.ogc.standard.bo.impl.SimuMatchResultBOImpl">
+		<property name="paginableDAO" ref="simuMatchResultDAOImpl"/>
+	</bean>
+	
+	<bean id="simuMatchResultHistoryBO" class="com.ogc.standard.bo.impl.SimuMatchResultHistoryBOImpl">
+		<property name="paginableDAO" ref="simuMatchResultHistoryDAOImpl"/>
 	</bean>
 	
 </beans>

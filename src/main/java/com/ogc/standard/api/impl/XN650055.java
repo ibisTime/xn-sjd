@@ -32,7 +32,6 @@ public class XN650055 extends AProcessor {
         SimuOrder condition = new SimuOrder();
         condition.setCode(req.getCode());
         condition.setUserId(req.getUserId());
-        condition.setExchange(req.getExchange());
         condition.setSymbol(req.getSymbol());
         condition.setToSymbol(req.getToSymbol());
         condition.setType(req.getType());

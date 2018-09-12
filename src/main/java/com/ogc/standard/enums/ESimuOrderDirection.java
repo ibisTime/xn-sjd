@@ -1,11 +1,3 @@
-/**
- * @Title ECheckResult.java 
- * @Package com.ibis.account.enums 
- * @Description 
- * @author miyb  
- * @date 2015-2-26 下午2:58:54 
- * @version V1.0   
- */
 package com.ogc.standard.enums;
 
 /**

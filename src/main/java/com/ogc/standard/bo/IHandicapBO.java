@@ -1,0 +1,23 @@
+package com.ogc.standard.bo;
+
+import java.util.List;
+
+import com.ogc.standard.bo.base.IPaginableBO;
+import com.ogc.standard.domain.Handicap;
+import com.ogc.standard.domain.HandicapGrade;
+
+public interface IHandicapBO extends IPaginableBO<Handicap> {
+
+    public void stuffHandicap(String symbol, String toSymbol, String direction,
+            int stuffHandicapQuantity);
+
+    public int removeHandicap(String code);
+
+    public int refreshHandicap(Handicap data);
+
+    public List<Handicap> queryHandicapList(Handicap condition);
+
+    public List<HandicapGrade> queryHandicapList(String symbol, String toSymbol,
+            String direction, int handicapQuantity);
+
+}
