@@ -107,8 +107,11 @@ public class SimuOrderBOImpl extends PaginableBOImpl<SimuOrder>
     }
 
     @Override
-    public List<SimuOrder> queryBidsHandicapList(int handicapQuantity) {
+    public List<SimuOrder> queryBidsHandicapList(int handicapQuantity,
+            String symbol, String toSymbol) {
         SimuOrder condition = new SimuOrder();
+        condition.setSymbol(symbol);
+        condition.setToSymbol(toSymbol);
         condition.setType(ESimuOrderType.LIMIT.getCode());
         condition.setDirection(ESimuOrderDirection.BUY.getCode());
 
@@ -118,8 +121,11 @@ public class SimuOrderBOImpl extends PaginableBOImpl<SimuOrder>
     }
 
     @Override
-    public List<SimuOrder> queryAsksHandicapList(int handicapQuantity) {
+    public List<SimuOrder> queryAsksHandicapList(int handicapQuantity,
+            String symbol, String toSymbol) {
         SimuOrder condition = new SimuOrder();
+        condition.setSymbol(symbol);
+        condition.setToSymbol(toSymbol);
         condition.setType(ESimuOrderType.LIMIT.getCode());
         condition.setDirection(ESimuOrderDirection.SELL.getCode());
 

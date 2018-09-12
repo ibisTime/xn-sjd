@@ -38,31 +38,37 @@ public class HandicapBOImpl extends PaginableBOImpl<Handicap>
         List<Handicap> handicaps = queryHandicapList(condition);
 
         // 查询数量
-        int querryQuantity;
+        int querryQuantity = 0;
         if (handicaps.size() < stuffHandicapQuantity) {
             querryQuantity = stuffHandicapQuantity - handicaps.size();
         } else {
             return;
         }
 
-        List<SimuOrder> simuOrders = new ArrayList<>();
-        // 根据买卖方向 填充盘口
-        if (ESimuOrderDirection.BUY.getCode().equals(direction)) {
-            simuOrders = simuOrderBO.queryAsksHandicapList(querryQuantity);
-        } else {
-            simuOrders = simuOrderBO.queryBidsHandicapList(querryQuantity);
-        }
+        if (querryQuantity != 0) {
 
-        for (SimuOrder simuOrder : simuOrders) {
-            Handicap handicap = new Handicap();
-            handicap.setOrderCode(simuOrder.getCode());
-            handicap.setPrice(simuOrder.getPrice());
-            handicap.setCount(simuOrder.getTotalCount());
-            handicap.setDirection(simuOrder.getDirection());
+            List<SimuOrder> simuOrders = new ArrayList<>();
+            // 根据买卖方向 填充盘口
+            if (ESimuOrderDirection.BUY.getCode().equals(direction)) {
+                simuOrders = simuOrderBO.queryAsksHandicapList(querryQuantity,
+                    symbol, toSymbol);
+            } else {
+                simuOrders = simuOrderBO.queryBidsHandicapList(querryQuantity,
+                    symbol, toSymbol);
+            }
 
-            handicap.setSymbol(simuOrder.getSymbol());
-            handicap.setToSymbol(simuOrder.getToSymbol());
-            handicapDAO.insert(handicap);
+            for (SimuOrder simuOrder : simuOrders) {
+                Handicap handicap = new Handicap();
+                handicap.setOrderCode(simuOrder.getCode());
+                handicap.setPrice(simuOrder.getPrice());
+                handicap.setCount(simuOrder.getTotalCount());
+                handicap.setDirection(simuOrder.getDirection());
+
+                handicap.setSymbol(simuOrder.getSymbol());
+                handicap.setToSymbol(simuOrder.getToSymbol());
+                handicapDAO.insert(handicap);
+            }
+
         }
 
     }

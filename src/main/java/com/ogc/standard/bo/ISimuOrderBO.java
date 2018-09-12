@@ -30,7 +30,8 @@ public interface ISimuOrderBO extends IPaginableBO<SimuOrder> {
      * @create: 2018年8月29日 下午4:58:47 lei
      * @history:
      */
-    public List<SimuOrder> queryBidsHandicapList(int handicapQuantity);
+    public List<SimuOrder> queryBidsHandicapList(int handicapQuantity,
+            String symbol, String toSymbol);
 
     /**
      * 查询卖方盘
@@ -38,7 +39,8 @@ public interface ISimuOrderBO extends IPaginableBO<SimuOrder> {
      * @create: 2018年8月29日 下午4:58:47 lei
      * @history:
      */
-    public List<SimuOrder> queryAsksHandicapList(int handicapQuantity);
+    public List<SimuOrder> queryAsksHandicapList(int handicapQuantity,
+            String symbol, String toSymbol);
 
     public SimuOrder getSimuOrder(String code);
 
