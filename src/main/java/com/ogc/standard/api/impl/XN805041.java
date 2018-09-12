@@ -5,6 +5,7 @@ import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.ObjValidater;
 import com.ogc.standard.dto.req.XN805041Req;
+import com.ogc.standard.dto.res.PKCodeRes;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
@@ -23,7 +24,7 @@ public class XN805041 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         synchronized (IUserAO.class) {
-            return userAO.doRegister(req);
+            return new PKCodeRes(userAO.doRegister(req));
         }
     }
 

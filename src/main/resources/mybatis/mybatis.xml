@@ -61,6 +61,8 @@
 		<typeAlias alias="ethWAddress" type="com.ogc.standard.domain.EthWAddress" />
 		<typeAlias alias="ethTransaction" type="com.ogc.standard.domain.EthTransaction" />
 		<typeAlias alias="btcXAddress" type="com.ogc.standard.domain.BtcXAddress"/>
+		<typeAlias alias="btcMAddress" type="com.ogc.standard.domain.BtcMAddress"/>
+		<typeAlias alias="btcWAddress" type="com.ogc.standard.domain.BtcWAddress"/>
 		<typeAlias alias="btcTransaction" type="com.ogc.standard.domain.BtcTransaction"/>
 		<typeAlias alias="btcUtxo" type="com.ogc.standard.domain.BtcUtxo"/>
 		

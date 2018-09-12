@@ -1,7 +1,7 @@
 package com.ogc.standard.enums;
 
 public enum EWAddressStatus {
-    VALID("0", "正常"), INVALID("2", "已弃用");
+    VALID("0", "正常"), INVALID("1", "已弃用");
 
     EWAddressStatus(String code, String value) {
         this.code = code;

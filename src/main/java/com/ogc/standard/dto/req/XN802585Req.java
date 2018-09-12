@@ -1,34 +1,38 @@
+/**
+ * @Title XN625205Req.java 
+ * @Package com.cdkj.coin.dto.req 
+ * @Description 
+ * @author leo(haiqing)  
+ * @date 2017年11月8日 下午3:25:36 
+ * @version V1.0   
+ */
 package com.ogc.standard.dto.req;
 
-import java.util.List;
-
 /** 
- * 分页查询散取地址
+ * 分页查询归集地址
  * @author: taojian 
- * @since: 2018年9月11日 上午10:36:27 
+ * @since: 2018年9月11日 下午1:59:55 
  * @history:
  */
-public class XN802575Req extends APageReq {
+public class XN802585Req extends APageReq {
 
     private static final long serialVersionUID = -4584603630956235345L;
+
+    // 地址类型
+    private String type;
 
     // 以太坊地址
     private String address;
 
-    // 用户编号
-    private String userId;
-
     // 状态
     private String status;
 
-    private List<String> statusList;
-
-    public List<String> getStatusList() {
-        return statusList;
+    public String getType() {
+        return type;
     }
 
-    public void setStatusList(List<String> statusList) {
-        this.statusList = statusList;
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getAddress() {
@@ -37,14 +41,6 @@ public class XN802575Req extends APageReq {
 
     public void setAddress(String address) {
         this.address = address;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
     }
 
     public String getStatus() {
