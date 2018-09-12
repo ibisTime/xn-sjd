@@ -6,7 +6,9 @@ import org.springframework.stereotype.Service;
 import com.ogc.standard.ao.ISmsOutAO;
 import com.ogc.standard.bo.ISmsOutBO;
 import com.ogc.standard.bo.IUserBO;
+import com.ogc.standard.domain.User;
 import com.ogc.standard.enums.ECaptchaType;
+import com.ogc.standard.exception.BizException;
 
 @Service
 public class SmsOutAOImpl implements ISmsOutAO {
@@ -25,4 +27,15 @@ public class SmsOutAOImpl implements ISmsOutAO {
         smsOutBO.sendSmsCaptcha(mobile, bizType);
     }
 
+    @Override
+    public void sendEmailCaptcha(String email, String bizType) {
+        if ("805081".equals(bizType)) {
+            User condition = new User();
+            condition.setEmail(email);
+            if (userBO.getTotalCount(condition) > 0) {
+                throw new BizException("xn000000", "邮箱已经被使用");
+            }
+        }
+        smsOutBO.sendEmailCaptcha(email, bizType);
+    }
 }

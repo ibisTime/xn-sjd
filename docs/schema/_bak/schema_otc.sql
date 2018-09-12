@@ -113,3 +113,4 @@ CREATE TABLE `tcoin_accept_order`(
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='承兑交易订单';
 
+

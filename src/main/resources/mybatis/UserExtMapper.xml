@@ -8,6 +8,8 @@
 		<result column="introduce" property="introduce" />
 		<result column="birthday" property="birthday" />
 		<result column="email" property="email" />
+		<result column="driver_li" property="driverLi" />
+		<result column="passport" property="passport" />
 		<result column="diploma" property="diploma" />
 		<result column="occupation" property="occupation" />
 		<result column="grad_datatime" property="gradDatetime" />
@@ -40,6 +42,8 @@
 		,t.introduce
 		,t.birthday
 		,t.email
+		,t.driver_li
+		,t.passport
 		,t.diploma
 		,t.occupation
 		,t.grad_datetime
@@ -58,15 +62,39 @@
 	<update id="update_userExt" parameterType="userExt">
 		UPDATE tstd_user_ext
 		SET
-		gender=#{gender}
-		,introduce=#{introduce}
-		,birthday=#{birthday}
-		,email=#{email}
-		,diploma=#{diploma}
-		,occupation=#{occupation}
-		,grad_datetime=#{gradDatetime}
-		,work_time=#{workTime}
-		,pdf=#{pdf}
+		<if test="gender != null and gender != '' ">
+			gender=#{gender}
+		</if>
+		<if test="introduce != null and introduce != '' ">
+			,introduce=#{introduce}
+		</if>
+		<if test="birthday != null and birthday != '' ">
+			,birthday=#{birthday}
+		</if>
+		<if test="email != null and email != '' ">
+			,email=#{email}
+		</if>
+		<if test="driverLi != null and driverLi != '' ">
+			,driver_li=#{driverLi}
+		</if>
+		<if test="passport != null and passport != '' ">
+			,passport=#{passport}
+		</if>
+		<if test="diploma != null and diploma != '' ">
+			,diploma=#{diploma}
+		</if>
+		<if test="occupation != null and occupation != '' ">
+			,occupation=#{occupation}
+		</if>
+		<if test="gradDatetime != null and gradDatetime != '' ">
+			,grad_datetime=#{gradDatetime}
+		</if>
+		<if test="workTime != null and workTime != '' ">
+			,work_time=#{workTime}
+		</if>
+		<if test="pdf != null and pdf != '' ">
+			,pdf=#{pdf}
+		</if>
 		WHERE
 		user_id=#{userId}
 	</update>

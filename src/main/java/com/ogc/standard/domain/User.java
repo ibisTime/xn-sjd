@@ -24,6 +24,9 @@ public class User extends ABaseDO {
     // 手机号
     private String mobile;
 
+    // 类型
+    private char kind;
+
     // 头像
     private String photo;
 
@@ -57,11 +60,23 @@ public class User extends ABaseDO {
     // 真实姓名
     private String realName;
 
+    // 证件照正面
+    private String idFace;
+
+    // 证件照反面
+    private String idOppo;
+
+    // 证件照手持面
+    private String idHolder;
+
     // 安全密码
     private String tradePwd;
 
     // 安全密码强度
     private String tradePwdStrength;
+
+    // 谷歌验证码
+    private String googleScrete;
 
     // 状态
     private String status;
@@ -83,6 +98,9 @@ public class User extends ABaseDO {
 
     // 维度
     private String latitude;
+
+    // 负责区域
+    private String respArea;
 
     // 交易广告费率
     private Double tradeRate;
@@ -586,5 +604,53 @@ public class User extends ABaseDO {
 
     public void setDivRate2(Double divRate2) {
         this.divRate2 = divRate2;
+    }
+
+    public char getKind() {
+        return kind;
+    }
+
+    public void setKind(char kind) {
+        this.kind = kind;
+    }
+
+    public String getIdFace() {
+        return idFace;
+    }
+
+    public void setIdFace(String idFace) {
+        this.idFace = idFace;
+    }
+
+    public String getIdOppo() {
+        return idOppo;
+    }
+
+    public void setIdOppo(String idOppo) {
+        this.idOppo = idOppo;
+    }
+
+    public String getIdHolder() {
+        return idHolder;
+    }
+
+    public void setIdHolder(String idHolder) {
+        this.idHolder = idHolder;
+    }
+
+    public String getGoogleScrete() {
+        return googleScrete;
+    }
+
+    public void setGoogleScrete(String googleScrete) {
+        this.googleScrete = googleScrete;
+    }
+
+    public String getRespArea() {
+        return respArea;
+    }
+
+    public void setRespArea(String respArea) {
+        this.respArea = respArea;
     }
 }

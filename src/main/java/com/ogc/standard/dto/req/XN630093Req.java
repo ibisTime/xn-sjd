@@ -8,6 +8,8 @@
  */
 package com.ogc.standard.dto.req;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 /** 
  * 发送邮箱验证码
  * @author: taojian 
@@ -15,12 +17,10 @@ package com.ogc.standard.dto.req;
  * @history:
  */
 public class XN630093Req {
+    @NotBlank
     private String bizType;
 
-    private String companyCode;
-
-    private String systemCode;
-
+    @NotBlank
     private String email;
 
     public String getBizType() {
@@ -29,22 +29,6 @@ public class XN630093Req {
 
     public void setBizType(String bizType) {
         this.bizType = bizType;
-    }
-
-    public String getCompanyCode() {
-        return companyCode;
-    }
-
-    public void setCompanyCode(String companyCode) {
-        this.companyCode = companyCode;
-    }
-
-    public String getSystemCode() {
-        return systemCode;
-    }
-
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
     }
 
     public String getEmail() {
