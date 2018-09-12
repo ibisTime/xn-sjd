@@ -809,3 +809,19 @@ CREATE TABLE `tcoin_btc_xaddress` (
   `create_datetime` datetime DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `tstd_divide`;
+CREATE TABLE `tstd_divide` (
+  `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `user_id` varchar(32) NOT NULL COMMENT '用户编号',
+  `currency` varchar(8) DEFAULT NULL COMMENT '币种(X币)',
+  `amount` decimal(64,0) DEFAULT NULL COMMENT '当时余额', 
+  `divi_profit` decimal(64,0) DEFAULT NULL COMMENT '分红利润',  
+  `divi_amount` decimal(64,0) DEFAULT NULL COMMENT '分红余额',  
+  `divi_datetime` datetime NOT NULL COMMENT '最后操作时间',
+  `status` varchar(4) NOT NULL COMMENT '状态(0=待分红 1=已分红)',
+  `updater` varchar(32) NOT NULL COMMENT '最后操作人',
+  `update_datetime` datetime NOT NULL COMMENT '最后操作时间',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='币种分红快照';

@@ -169,9 +169,6 @@ CREATE TABLE `tstd_blacklist` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
-
-DROP TABLE IF EXISTS `tstd_read`;
 DROP TABLE IF EXISTS `tstd_read`;
 CREATE TABLE `tstd_read` (
   `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT 'ID主键',
