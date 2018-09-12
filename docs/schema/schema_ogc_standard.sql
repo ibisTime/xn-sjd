@@ -378,7 +378,6 @@ CREATE TABLE `tcoin_trade_order` (
 DROP TABLE IF EXISTS `tforum_comment`;
 CREATE TABLE `tforum_comment` (
   `code` varchar(32) NOT NULL COMMENT '编号',
-<<<<<<< HEAD
   `type` varchar(32) DEFAULT NULL COMMENT '类型（1=帖子 2=帖子评论）',
   `content` text COMMENT '评论内容',
   `user_id` varchar(32) DEFAULT NULL COMMENT '评论人',
@@ -387,7 +386,6 @@ CREATE TABLE `tforum_comment` (
   `parent_code` varchar(32) DEFAULT NULL COMMENT '父级编号',
   `parent_user_id` varchar(32) DEFAULT NULL COMMENT '父级评论编号',
   `object_code` varchar(32) DEFAULT NULL COMMENT '对象编号',
-=======
   `trade_type` varchar(32) NOT NULL COMMENT '广告类型（0购买 1出售）',
   `user_id` varchar(32) NOT NULL COMMENT '发布用户编号',
   `trade_currency` varchar(8) NOT NULL COMMENT '交易币种',
@@ -621,7 +619,6 @@ CREATE TABLE `tsys_user` (
   `login_pwd` varbinary(32) DEFAULT NULL COMMENT '登录密码',
   `login_pwd_strength` char(1) DEFAULT NULL COMMENT '登录密码强度',
   `create_datetime` datetime DEFAULT NULL COMMENT '注册时间',
->>>>>>> refs/remotes/origin/master
   `status` varchar(4) DEFAULT NULL COMMENT '状态',
   `approver` varchar(32) DEFAULT NULL COMMENT '审核人',
   `approve_datetime` datetime DEFAULT NULL COMMENT '审核时间',
@@ -1493,7 +1490,6 @@ CREATE TABLE `tsys_channel_bank` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-<<<<<<< HEAD
 -- ----------------------------
 --  Table structure for `tsys_cnavigate`
 -- ----------------------------
@@ -1645,7 +1641,6 @@ CREATE TABLE `tsys_user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 SET FOREIGN_KEY_CHECKS = 1;
-=======
 DROP TABLE IF EXISTS `tstd_divide`;
 CREATE TABLE `tstd_divide` (
   `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT 'ID',
@@ -1661,4 +1656,3 @@ CREATE TABLE `tstd_divide` (
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='币种分红快照';
->>>>>>> refs/remotes/origin/master
