@@ -17,7 +17,7 @@ import com.ogc.standard.ao.IUserIdAuthAO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.IUserIdAuthBO;
 import com.ogc.standard.bo.base.Paginable;
-import com.ogc.standard.dao.IUserIdAuthDAO;
+import com.ogc.standard.domain.User;
 import com.ogc.standard.domain.UserIdAuth;
 import com.ogc.standard.dto.req.XN805160Req;
 import com.ogc.standard.enums.EApproveStatus;
@@ -39,38 +39,26 @@ public class UserIdAuthAOImpl implements IUserIdAuthAO {
     @Autowired
     private IUserBO userBO;
 
-    @Autowired
-    private IUserIdAuthDAO userIdAuthDAO;
-
     @Override
     public void apply(XN805160Req req) {
-        UserIdAuth condition = new UserIdAuth();
-        condition.setApplyUser(req.getApplyUser());
-        condition.setStatus(EApproveStatus.PASS.getCode());
-        if (userIdAuthDAO.select(condition) != null) {
+        User applyUser = userBO.getUser(req.getApplyUser());
+        if (applyUser.getRealName() != null) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(), "该用户已认证成功");
         }
-        condition.setStatus(EApproveStatus.TOAPPROVE.getCode());
-        if (userIdAuthDAO.select(condition) != null) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "该用户已有认证审批中");
-        }
-        UserIdAuth data = new UserIdAuth();
-        data.setApplyUser(req.getApplyUser());
-        data.setRealName(req.getRealName());
-        data.setCountry(req.getCountry());
-        data.setIdFace(req.getIdFace());
-        data.setIdKind(req.getIdKind());
-        data.setIdHold(req.getIdHold());
-        data.setIdNo(req.getIdNo());
-        data.setIdOppo(req.getIdOppo());
-        userIdAuthBO.saveApply(data);
+        // 检验审批状态
+        userIdAuthBO.checkApproveStatus(req.getApplyUser());
+        // 增加申请
+        userIdAuthBO.saveApply(req);
     }
 
     @Override
     public void approve(Long id, String approveResult, String approveUser,
             String remark) {
+
         UserIdAuth data = userIdAuthBO.getUserIdAuth(id);
+        if (!EApproveStatus.TOAPPROVE.getCode().equals(data.getStatus())) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "该申请已审批");
+        }
         if (EResultType.PASS.getCode().equals(approveResult)) {
             data.setStatus(EApproveStatus.PASS.getCode());
             userBO.refreshIdentity(data.getApplyUser(), data.getRealName(),
@@ -80,9 +68,8 @@ public class UserIdAuthAOImpl implements IUserIdAuthAO {
         } else {
             data.setStatus(EApproveStatus.REFUSE.getCode());
         }
-        data.setApproveUser(approveUser);
-        data.setRemark(remark);
-        userIdAuthBO.refreshApprove(data);
+
+        userIdAuthBO.refreshApprove(data, approveUser, remark);
 
     }
 

@@ -18,10 +18,14 @@ import com.ogc.standard.domain.UserFieldApprove;
  */
 public interface IUserFieldApproveBO extends IPaginableBO<UserFieldApprove> {
     // 提交申请
-    public void saveApply(UserFieldApprove data);
+    public void saveApply(String userId, String idHold, String field,
+            String captcha, String type);
 
     // 审核
-    public void refreshApprove(UserFieldApprove data);
+    public void refreshApprove(UserFieldApprove data, String approveUser,
+            String remark);
+
+    public void checkApproveStatus(String applyUser);
 
     public UserFieldApprove getUserFieldApprove(Long id);
 }

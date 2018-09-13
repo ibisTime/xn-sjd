@@ -18,6 +18,7 @@ import com.ogc.standard.bo.IUserIdAuthBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.dao.IUserIdAuthDAO;
 import com.ogc.standard.domain.UserIdAuth;
+import com.ogc.standard.dto.req.XN805160Req;
 import com.ogc.standard.enums.EApproveStatus;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
@@ -35,14 +36,26 @@ public class UserIdAuthBOImpl extends PaginableBOImpl<UserIdAuth>
     private IUserIdAuthDAO userIdAuthDAO;
 
     @Override
-    public void saveApply(UserIdAuth data) {
+    public void saveApply(XN805160Req req) {
+        UserIdAuth data = new UserIdAuth();
+        data.setApplyUser(req.getApplyUser());
+        data.setRealName(req.getRealName());
+        data.setCountry(req.getCountry());
+        data.setIdFace(req.getIdFace());
+        data.setIdKind(req.getIdKind());
+        data.setIdHold(req.getIdHold());
+        data.setIdNo(req.getIdNo());
+        data.setIdOppo(req.getIdOppo());
         data.setApplyDatetime(new Date());
         data.setStatus(EApproveStatus.TOAPPROVE.getCode());
         userIdAuthDAO.insert(data);
     }
 
     @Override
-    public void refreshApprove(UserIdAuth data) {
+    public void refreshApprove(UserIdAuth data, String approveUser,
+            String remark) {
+        data.setApproveUser(approveUser);
+        data.setRemark(remark);
         data.setApproveDatetime(new Date());
         userIdAuthDAO.updateresult(data);
     }
@@ -71,6 +84,22 @@ public class UserIdAuthBOImpl extends PaginableBOImpl<UserIdAuth>
         condition.setId(id);
         data = userIdAuthDAO.select(condition);
         return data;
+    }
+
+    @Override
+    public void checkApproveStatus(String userId) {
+        UserIdAuth condition = new UserIdAuth();
+        condition.setApplyUser(userId);
+        condition.setStatus(EApproveStatus.PASS.getCode());
+        if (userIdAuthDAO.select(condition) != null) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "该用户已认证成功");
+        }
+        condition.setStatus(EApproveStatus.TOAPPROVE.getCode());
+        if (userIdAuthDAO.select(condition) != null) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "该用户已有认证审批中");
+        }
+
     }
 
 }

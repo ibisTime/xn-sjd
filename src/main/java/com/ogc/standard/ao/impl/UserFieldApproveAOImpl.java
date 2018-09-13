@@ -20,6 +20,8 @@ import com.ogc.standard.domain.UserFieldApprove;
 import com.ogc.standard.enums.EApplyType;
 import com.ogc.standard.enums.EApproveStatus;
 import com.ogc.standard.enums.EResultType;
+import com.ogc.standard.exception.BizException;
+import com.ogc.standard.exception.EBizErrorCode;
 
 /** 
  * @author: taojian 
@@ -41,18 +43,14 @@ public class UserFieldApproveAOImpl implements IUserFieldApproveAO {
     @Override
     public void apply(String userId, String idHold, String field,
             String captcha, String type) {
+        userFieldApproveBO.checkApproveStatus(userId);
         if (EApplyType.EMAIL.getCode().equals(type)) {
             smsOutBO.checkCaptcha(field, captcha, "805131");
         } else {
             smsOutBO.checkCaptcha(field, captcha, "805130");
         }
-        UserFieldApprove data = new UserFieldApprove();
-        data.setType(type);
-        data.setApplyUser(userId);
-        data.setIdHold(idHold);
-        data.setField(field);
-        data.setCaptcha(captcha);
-        userFieldApproveBO.saveApply(data);
+
+        userFieldApproveBO.saveApply(userId, idHold, field, captcha, type);
     }
 
     @Override
@@ -63,15 +61,17 @@ public class UserFieldApproveAOImpl implements IUserFieldApproveAO {
             data.setStatus(EApproveStatus.PASS.getCode());
             if (EApplyType.MOBILE.getCode().equals(data.getType())) {
                 userBO.refreshMobile(data.getApplyUser(), data.getField());
-            } else {
+            } else if (EApplyType.EMAIL.getCode().equals(data.getType())) {
                 userBO.refreshEmail(data.getApplyUser(), data.getField());
+            } else {
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                    "不能修改手机号邮箱以外的信息");
             }
         } else {
             data.setStatus(EApproveStatus.REFUSE.getCode());
         }
-        data.setApproveUser(approveUser);
-        data.setRemark(remark);
-        userFieldApproveBO.refreshApprove(data);
+
+        userFieldApproveBO.refreshApprove(data, approveUser, remark);
     }
 
     @Override

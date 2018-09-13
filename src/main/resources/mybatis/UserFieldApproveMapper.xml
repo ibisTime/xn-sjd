@@ -66,6 +66,7 @@
 	<select id="select_user_field_approve" parameterType="userFieldApprove" resultMap="userFieldApprove_DB_Result">
 		SELECT
 		t.id
+		,t.type
 		,t.field
 		,t.captcha
 		,t.id_hold

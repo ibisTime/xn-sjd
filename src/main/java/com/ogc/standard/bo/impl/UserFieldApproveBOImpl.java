@@ -38,15 +38,24 @@ public class UserFieldApproveBOImpl extends PaginableBOImpl<UserFieldApprove>
     private IUserFieldApproveDAO userFieldApproveDAO;
 
     @Override
-    public void saveApply(UserFieldApprove data) {
+    public void saveApply(String userId, String idHold, String field,
+            String captcha, String type) {
+        UserFieldApprove data = new UserFieldApprove();
+        data.setType(type);
+        data.setApplyUser(userId);
+        data.setIdHold(idHold);
+        data.setField(field);
+        data.setCaptcha(captcha);
         data.setApplyDatetime(new Date());
         data.setStatus(EApproveStatus.TOAPPROVE.getCode());
         userFieldApproveDAO.insert(data);
     }
 
     @Override
-    public void refreshApprove(UserFieldApprove data) {
-
+    public void refreshApprove(UserFieldApprove data, String approveUser,
+            String remark) {
+        data.setApproveUser(approveUser);
+        data.setRemark(remark);
         data.setApproveDatetime(new Date());
         userFieldApproveDAO.updateResult(data);
     }
@@ -60,6 +69,17 @@ public class UserFieldApproveBOImpl extends PaginableBOImpl<UserFieldApprove>
             throw new BizException(EBizErrorCode.DEFAULT.getCode(), "不存在该申请");
         }
         return data;
+    }
+
+    @Override
+    public void checkApproveStatus(String applyUser) {
+        UserFieldApprove condition = new UserFieldApprove();
+        condition.setApplyUser(applyUser);
+        condition.setStatus(EApproveStatus.TOAPPROVE.getCode());
+        if (getTotalCount(condition) > 0) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "该用户有申请在审批中");
+        }
     }
 
 }

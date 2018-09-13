@@ -341,10 +341,7 @@
 	<update id="update_bind_mobile" parameterType="user">
 		UPDATE tstd_user
 		SET
-		login_name = #{loginName}
-		,mobile = #{mobile}
-		,login_pwd = #{loginPwd}
-		,login_pwd_strength = #{loginPwdStrength}
+		mobile = #{mobile}
 		WHERE
 		user_id = #{userId}	
 	</update>
