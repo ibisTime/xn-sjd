@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import com.ogc.standard.ao.IHandicapAO;
 import com.ogc.standard.bo.IHandicapBO;
-import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.domain.Handicap;
 import com.ogc.standard.domain.HandicapGrade;
@@ -23,17 +22,6 @@ public class HandicapAOImpl implements IHandicapAO {
 
     @Autowired
     private IHandicapBO handicapBO;
-
-    @Override
-    public Paginable<Handicap> queryHandicapPage(int start, int limit,
-            Handicap condition) {
-        return handicapBO.getPaginable(start, limit, condition);
-    }
-
-    @Override
-    public List<Handicap> queryHandicapList(Handicap condition) {
-        return handicapBO.queryHandicapList(condition);
-    }
 
     @Override
     public XN650065Res getHandicap(String symbol, String toSymbol) {

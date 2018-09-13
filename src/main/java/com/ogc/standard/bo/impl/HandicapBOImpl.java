@@ -60,21 +60,13 @@ public class HandicapBOImpl extends PaginableBOImpl<Handicap>
 
             for (SimuOrder simuOrder : simuOrders) {
 
-                // 盘口为空直接添加
-                if (CollectionUtils.isEmpty(handicaps)) {
-                    saveHandicap(simuOrder);
-                }
-
                 // 重新获取盘口
-                handicaps = queryHandicapList(condition);
+                condition.setOrderCode(simuOrder.getCode());
+                List<Handicap> currentHandicaps = queryHandicapList(condition);
 
-                for (Handicap handicap : handicaps) {
-
-                    // 当前委托单不在盘口内时
-                    if (!handicap.getOrderCode().equals(simuOrder.getCode())) {
-                        saveHandicap(simuOrder);
-                    }
-
+                // 当前委托单不在盘口内时
+                if (CollectionUtils.isEmpty(currentHandicaps)) {
+                    saveHandicap(simuOrder);
                 }
 
             }
