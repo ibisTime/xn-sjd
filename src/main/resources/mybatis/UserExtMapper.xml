@@ -7,7 +7,6 @@
 		<result column="gender" property="gender" />
 		<result column="introduce" property="introduce" />
 		<result column="birthday" property="birthday" />
-		<result column="email" property="email" />
 		<result column="driver_li" property="driverLi" />
 		<result column="passport" property="passport" />
 		<result column="diploma" property="diploma" />
@@ -21,9 +20,6 @@
 		<trim prefix="WHERE" prefixOverrides="AND | OR">			
 			<if test="userId != null and userId != '' ">
 				AND t.user_id = #{userId}
-			</if>
-			<if test="email != null and email != '' ">
-				AND t.email = #{email}
 			</if>
 		</trim>
 	</sql>
@@ -49,7 +45,6 @@
 		,t.gender
 		,t.introduce
 		,t.birthday
-		,t.email
 		,t.driver_li
 		,t.passport
 		,t.diploma
@@ -67,13 +62,6 @@
 		</trim>
 	</select>
 	
-	<update id="bind_email" parameterType="userExt">
-		UPDATE tstd_user_ext
-		SET
-			email=#{email}
-		WHERE
-		user_id=#{userId}
-	</update>
 	
 	<update id="update_userExt" parameterType="userExt">
 		UPDATE tstd_user_ext
@@ -86,9 +74,6 @@
 		</if>
 		<if test="birthday != null and birthday != '' ">
 			,birthday=#{birthday}
-		</if>
-		<if test="email != null and email != '' ">
-			,email=#{email}
 		</if>
 		<if test="driverLi != null and driverLi != '' ">
 			,driver_li=#{driverLi}

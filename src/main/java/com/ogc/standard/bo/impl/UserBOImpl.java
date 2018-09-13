@@ -60,6 +60,18 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     }
 
     @Override
+    public void isEmailExist(String email) {
+        if (StringUtils.isNotBlank(email)) {
+            User condition = new User();
+            condition.setEmail(email);
+            long count = getTotalCount(condition);
+            if (count > 0) {
+                throw new BizException("li01003", "邮箱已经存在");
+            }
+        }
+    }
+
+    @Override
     public void isNicknameExist(String nickname) {
         if (StringUtils.isNotBlank(nickname)) {
             // 判断格式
@@ -172,6 +184,25 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             count = userDAO.updateIdentity(data);
         }
         return count;
+    }
+
+    @Override
+    public int refreshIdentity(String userId, String realName, String idKind,
+            String idNo, String idFace, String idOppo, String idHold) {
+        User data = new User();
+        data.setUserId(userId);
+        data.setRealName(realName);
+        data.setIdKind(idKind);
+        data.setIdNo(idNo);
+        data.setIdFace(idFace);
+        data.setIdOppo(idOppo);
+        data.setIdHold(idHold);
+        int count = 0;
+        if (data != null && StringUtils.isNotBlank(data.getUserId())) {
+            count = userDAO.updateIdentity(data);
+        }
+        return count;
+
     }
 
     @Override
@@ -465,6 +496,26 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         data.setUserId(userId);
         data.setGoogleSecret(secret);
         userDAO.updateGoogleSecret(data);
+    }
+
+    @Override
+    public void refreshTradeRate(String userId, Double tradeRate) {
+        User data = new User();
+        data.setUserId(userId);
+        data.setTradeRate(tradeRate);
+        userDAO.updateTradeRate(data);
+    }
+
+    @Override
+    public int refreshEmail(String userId, String email) {
+        int count = 0;
+        if (StringUtils.isNotBlank(email) && StringUtils.isNotBlank(userId)) {
+            User data = new User();
+            data.setUserId(userId);
+            data.setEmail(email);
+            count = userDAO.updateEmail(data);
+        }
+        return count;
     }
 
 }

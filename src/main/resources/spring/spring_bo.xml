@@ -97,6 +97,14 @@
 		<property name="paginableDAO" ref="userExtDAOImpl"/>
 	</bean>
 	
+	<bean id="userIdAuthBO" class="com.ogc.standard.bo.impl.UserIdAuthBOImpl">
+		<property name="paginableDAO" ref="userIdAuthDAOImpl"/>
+	</bean>
+	
+	<bean id="userFieldApproveBO" class="com.ogc.standard.bo.impl.UserFieldApproveBOImpl">
+		<property name="paginableDAO" ref="userFieldApproveDAOImpl"/>
+	</bean>
+	
 	<bean id="blacklistBO" class="com.ogc.standard.bo.impl.BlacklistBOImpl">
 		<property name="paginableDAO" ref="blacklistDAOImpl"/>
 	</bean>
