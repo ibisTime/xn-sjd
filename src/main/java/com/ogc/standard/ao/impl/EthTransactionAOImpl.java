@@ -22,6 +22,7 @@ import com.ogc.standard.bo.IChargeBO;
 import com.ogc.standard.bo.ICoinBO;
 import com.ogc.standard.bo.ICollectBO;
 import com.ogc.standard.bo.IDepositBO;
+import com.ogc.standard.bo.IEthMAddressBO;
 import com.ogc.standard.bo.IEthTransactionBO;
 import com.ogc.standard.bo.IEthXAddressBO;
 import com.ogc.standard.bo.ITokenEventBO;
@@ -30,6 +31,7 @@ import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.Charge;
 import com.ogc.standard.domain.CtqEthTransaction;
+import com.ogc.standard.domain.EthMAddress;
 import com.ogc.standard.domain.EthTransaction;
 import com.ogc.standard.domain.EthXAddress;
 import com.ogc.standard.domain.TokenEvent;
@@ -59,6 +61,9 @@ public class EthTransactionAOImpl implements IEthTransactionAO {
 
     @Autowired
     private IEthXAddressBO ethXAddressBO;
+
+    @Autowired
+    private IEthMAddressBO ethMAddressBO;
 
     @Autowired
     private IEthTransactionBO ethTransactionBO;
@@ -117,9 +122,6 @@ public class EthTransactionAOImpl implements IEthTransactionAO {
     @Transactional
     public String tokenChargeNotice(CtqEthTransaction ctqEthTransaction,
             TokenEvent tokenEvent) {
-        if (null == tokenEvent) {
-            return "";
-        }
         // 充值地址在X地址表中查询
         EthXAddress ethXAddress = ethXAddressBO
             .getEthXAddressByAddress(tokenEvent.getTokenTo());
@@ -288,10 +290,17 @@ public class EthTransactionAOImpl implements IEthTransactionAO {
     @Override
     @Transactional
     public void ethDepositNotice(CtqEthTransaction ctqEthTransaction) {
-        // 平台冷钱包减钱
+        // 充值地址在M地址表中查询
+        EthMAddress ethMAddress = ethMAddressBO
+            .getEthMAddressByAddress(ctqEthTransaction.getTo());
+        if (ethMAddress == null) {
+            throw new BizException("xn6250000", "充值地址不存在");
+        }
         BigDecimal amount = ctqEthTransaction.getValue();
+        // 获取冷钱包账户
         Account coldAccount = accountBO
             .getAccount(ESystemAccount.SYS_ACOUNT_ETH_COLD.getCode());
+        // 平台冷钱包减钱
         coldAccount = accountBO.changeAmount(coldAccount, amount.negate(),
             EChannelType.Online, ctqEthTransaction.getHash(),
             ctqEthTransaction.getHash(), EJourBizTypeCold.AJ_PAY.getCode(),
@@ -310,7 +319,12 @@ public class EthTransactionAOImpl implements IEthTransactionAO {
     @Transactional
     public void tokenDepositNotice(CtqEthTransaction ctqEthTransaction,
             TokenEvent tokenEvent) {
-        // 平台冷钱包减钱
+        // 充值地址在M地址表中查询
+        EthMAddress ethMAddress = ethMAddressBO
+            .getEthMAddressByAddress(tokenEvent.getTokenTo());
+        if (ethMAddress == null) {
+            throw new BizException("xn6250000", "充值地址不存在");
+        }
         BigDecimal amount = tokenEvent.getTokenValue();
         String symbol = tokenEvent.getSymbol();
         Account coldAccount = accountBO.getAccount(ESystemAccount
@@ -318,6 +332,7 @@ public class EthTransactionAOImpl implements IEthTransactionAO {
         // 同一哈希可对应多条tokenEvent,拼接上logIndex保证唯一
         String hashAndLogIndex = ctqEthTransaction.getHash() + "||"
                 + tokenEvent.getTokenLogIndex();
+        // 平台冷钱包减钱
         coldAccount = accountBO.changeAmount(coldAccount, amount.negate(),
             EChannelType.Online, hashAndLogIndex, hashAndLogIndex,
             EJourBizTypeCold.AJ_PAY.getCode(), symbol + "定存至取现地址(M):"
@@ -330,9 +345,12 @@ public class EthTransactionAOImpl implements IEthTransactionAO {
             ctqEthTransaction.getBlockCreateDatetime());
         // 落地交易记录
         ethTransactionBO.saveEthTransaction(ctqEthTransaction);
+        // 落地tokenEvent
+        tokenEventBO.insertTokenEvent(tokenEvent);
     }
 
     @Override
+    @Transactional
     public void addTransaction(CtqEthTransaction ctqEthTransaction) {
         // 落地交易记录
         ethTransactionBO.saveEthTransaction(ctqEthTransaction);

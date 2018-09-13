@@ -17,4 +17,6 @@ public interface IEthMAddressBO extends IPaginableBO<EthMAddress> {
 
     public EthMAddress getEthMAddressByAddress(String address);
 
+    // 获取可使用的地址，不包括弃用的地址
+    public EthMAddress getNormalEthMAddressByAddress(String address);
 }
