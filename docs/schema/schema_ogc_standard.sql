@@ -1106,7 +1106,8 @@ DROP TABLE IF EXISTS `tstd_user`;
 CREATE TABLE `tstd_user` (
   `user_id` varchar(32) NOT NULL COMMENT '用户编号',
   `login_name` varchar(64) DEFAULT NULL COMMENT '登陆名',
-  `mobile` varchar(16) DEFAULT NULL COMMENT '手机号',
+  `mobile` varchar(32) DEFAULT NULL COMMENT '手机号',
+  `email` varchar(32) DEFAULT NULL COMMENT '邮箱',
   `kind` char(1) DEFAULT NULL COMMENT '用户类型（C 普通用户，M 机器人，D 渠道商）',
   `photo` varchar(255) DEFAULT NULL COMMENT '头像',
   `nickname` varchar(64) DEFAULT NULL COMMENT '昵称',
@@ -1122,6 +1123,7 @@ CREATE TABLE `tstd_user` (
   `id_hold` varchar(255) DEFAULT NULL COMMENT '证件照手持照',
   `trade_pwd` varchar(32) DEFAULT NULL COMMENT '安全密码',
   `trade_pwd_strength` char(1) DEFAULT NULL COMMENT '安全密码强度',
+  `google_secret` varchar(64) DEFAULT NULL COMMENT '谷歌验证密钥',
   `status` varchar(2) DEFAULT NULL COMMENT '状态',
   `province` varchar(255) DEFAULT NULL COMMENT '省',
   `city` varchar(255) DEFAULT NULL COMMENT '市',
@@ -1138,23 +1140,6 @@ CREATE TABLE `tstd_user` (
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
---  Table structure for `tstd_user_edit_apply`
--- ----------------------------
-DROP TABLE IF EXISTS `tstd_user_edit_apply`;
-CREATE TABLE `tstd_user_edit_apply` (
-  `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT 'ID主键',
-  `type` char(1) DEFAULT NULL COMMENT '类型(1=手机,2=邮箱)',
-  `edit_field` varchar(255) DEFAULT NULL COMMENT '修改字段',
-  `captcha` varchar(16) DEFAULT NULL COMMENT '验证码',
-  `id_hold` varchar(255) DEFAULT NULL COMMENT '证件照手持面',
-  `apply_user` varchar(255) DEFAULT NULL COMMENT '申请人',
-  `apply_datetime` datetime DEFAULT NULL COMMENT '申请时间',
-  `approve_user` varchar(4) DEFAULT NULL COMMENT '审核人',
-  `approve_datetime` datetime DEFAULT NULL COMMENT '审核时间',
-  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `tstd_user_ext`
@@ -1174,6 +1159,40 @@ CREATE TABLE `tstd_user_ext` (
   `work_time` varchar(4) DEFAULT NULL COMMENT '工作年限',
   `pdf` varchar(255) DEFAULT NULL COMMENT '用户资料',
   PRIMARY KEY (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+DROP TABLE IF EXISTS `tstd_user_field_approve`;
+CREATE TABLE `tstd_user_field_approve` (
+  `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT 'ID主键',
+  `type` char(1) DEFAULT NULL COMMENT '类型(1=手机,2=邮箱)',
+  `field` varchar(255) DEFAULT NULL COMMENT '修改字段',
+  `captcha` varchar(16) DEFAULT NULL COMMENT '验证码',
+  `id_hold` varchar(255) DEFAULT NULL COMMENT '证件照手持面',
+  `apply_user` varchar(255) DEFAULT NULL COMMENT '申请人',
+  `apply_datetime` datetime DEFAULT NULL COMMENT '申请时间',
+  `status` char(1) DEFAULT NULL COMMENT '状态(0=待审核 1=审核通过 2=审核不通过)',
+  `approve_user` varchar(4) DEFAULT NULL COMMENT '审核人',
+  `approve_datetime` datetime DEFAULT NULL COMMENT '审核时间',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 comment '用户字段修改审核';
+
+DROP TABLE IF EXISTS `tstd_user_id_auth`;
+CREATE TABLE `tstd_user_id_auth` (
+  `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT 'ID主键',
+  `type` char(1) NOT NULL COMMENT '类型(1=身份证,2=护照，3=驾驶证)',
+  `id_kind` char(1) NOT NULL COMMENT '证件类型(1=身份证)',
+  `id_no` varchar(255) NOT NULL COMMENT '证件号码',
+  `id_face` varchar(255) NOT NULL COMMENT '证件照正面',
+  `id_oppo` varchar(255) NOT NULL COMMENT '证件照反面',
+  `id_hold` varchar(255) DEFAULT NULL COMMENT '手持证件照',
+  `apply_user` varchar(32) NOT NULL COMMENT '申请人',
+  `apply_datetime` datetime NOT NULL COMMENT '申请时间',
+  `approve_user` varchar(32) DEFAULT NULL COMMENT '审核人',
+  `approve_datetime` datetime DEFAULT NULL COMMENT '审核时间',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
