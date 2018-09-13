@@ -100,9 +100,6 @@ public class UserRelationAOImpl implements IUserRelationAO {
     @Override
     public void followUser(String userId, String toUserId, String type) {
         User user = userBO.getUser(userId);
-        if (user == null) {
-            throw new BizException("xn702001", "用户不存在");
-        }
         User toUser = userBO.getUser(toUserId);
         if (toUser == null) {
             throw new BizException("xn702001", "关注用户不存在");
@@ -155,9 +152,6 @@ public class UserRelationAOImpl implements IUserRelationAO {
     @Override
     public void unfollowUser(String userId, String toUserId, String type) {
         User user = userBO.getUser(userId);
-        if (user == null) {
-            throw new BizException("xn702001", "用户不存在");
-        }
         User toUser = userBO.getUser(toUserId);
         if (toUser == null) {
             throw new BizException("xn702001", "取消关注用户不存在");

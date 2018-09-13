@@ -325,9 +325,6 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         if (StringUtils.isNotBlank(userId)
                 && StringUtils.isNotBlank(tradePwd)) {
             User user = this.getUser(userId);
-            if (user == null) {
-                throw new BizException("jd00001", "该用户不存在！");
-            }
             if (StringUtils.isBlank(user.getTradePwdStrength())) {
                 throw new BizException("jd00001", "请您先设置支付密码！");
             }
@@ -460,6 +457,14 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             data.setUpdateDatetime(new Date());
             userDAO.updateReferee(data);
         }
+    }
+
+    @Override
+    public void refreshGoogleSecret(String userId, String secret) {
+        User data = new User();
+        data.setUserId(userId);
+        data.setGoogleSecret(secret);
+        userDAO.updateGoogleSecret(data);
     }
 
 }

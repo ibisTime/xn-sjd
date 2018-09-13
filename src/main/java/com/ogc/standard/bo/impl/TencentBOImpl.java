@@ -25,7 +25,6 @@ import com.ogc.standard.bo.ITencentBO;
 import com.ogc.standard.common.SysConstants;
 import com.ogc.standard.dto.res.XN625000Res;
 import com.ogc.standard.enums.EConfigType;
-import com.ogc.standard.enums.ESystemCode;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
 import com.tls.sigcheck.tls_sigcheck;
@@ -66,8 +65,8 @@ public class TencentBOImpl implements ITencentBO {
 
     private String getUrl(String baseUrl) {
         String urlString = null;
-        Map<String, String> sysConfigMap = sysConfigBO.getSYSConfigMap(
-            EConfigType.TENCENT_IM.getCode(), ESystemCode.COIN.getCode());
+        Map<String, String> sysConfigMap = sysConfigBO
+            .getConfigsMap(EConfigType.TENCENT_IM.getCode());
         String txAppCode = sysConfigMap.get(SysConstants.TX_APP_CODE);
         String txAppAdmin = sysConfigMap.get(SysConstants.TX_APP_ADMIN);
         String accessKey = sysConfigMap.get(SysConstants.TX_ACCESS_KEY);
@@ -142,7 +141,7 @@ public class TencentBOImpl implements ITencentBO {
     public XN625000Res getSign(String userId, String companyCode,
             String systemCode) {
         Map<String, String> sysConfigMap = sysConfigBO
-            .getSYSConfigMap(EConfigType.TENCENT_IM.getCode(), systemCode);
+            .getConfigsMap(EConfigType.TENCENT_IM.getCode());
         String txAppCode = sysConfigMap.get(SysConstants.TX_APP_CODE);
         String txAppAdmin = sysConfigMap.get(SysConstants.TX_APP_ADMIN);
         String accessKey = sysConfigMap.get(SysConstants.TX_ACCESS_KEY);

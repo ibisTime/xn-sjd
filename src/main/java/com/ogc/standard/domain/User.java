@@ -67,7 +67,7 @@ public class User extends ABaseDO {
     private String idOppo;
 
     // 证件照手持面
-    private String idHolder;
+    private String idHold;
 
     // 安全密码
     private String tradePwd;
@@ -76,7 +76,7 @@ public class User extends ABaseDO {
     private String tradePwdStrength;
 
     // 谷歌验证码
-    private String googleScrete;
+    private String googleSecret;
 
     // 状态
     private String status;
@@ -630,20 +630,20 @@ public class User extends ABaseDO {
         this.idOppo = idOppo;
     }
 
-    public String getIdHolder() {
-        return idHolder;
+    public String getIdHold() {
+        return idHold;
     }
 
-    public void setIdHolder(String idHolder) {
-        this.idHolder = idHolder;
+    public void setIdHold(String idHolder) {
+        this.idHold = idHolder;
     }
 
-    public String getGoogleScrete() {
-        return googleScrete;
+    public String getGoogleSecret() {
+        return googleSecret;
     }
 
-    public void setGoogleScrete(String googleScrete) {
-        this.googleScrete = googleScrete;
+    public void setGoogleSecret(String googleSecret) {
+        this.googleSecret = googleSecret;
     }
 
     public String getRespArea() {

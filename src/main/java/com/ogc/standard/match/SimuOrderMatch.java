@@ -176,11 +176,11 @@ public class SimuOrderMatch {
 
         // 获取买盘盘口档位
         List<HandicapGrade> bidsGrades = queryHandicapGrades(symbol, toSymbol,
-            ESimuOrderDirection.SELL.getCode());
+            ESimuOrderDirection.BUY.getCode());
 
         // 获取卖盘盘口档位
         List<HandicapGrade> asksGrades = queryHandicapGrades(symbol, toSymbol,
-            ESimuOrderDirection.BUY.getCode());
+            ESimuOrderDirection.SELL.getCode());
 
         for (HandicapGrade bidsGrade : bidsGrades) {
 
@@ -402,11 +402,11 @@ public class SimuOrderMatch {
     private List<HandicapGrade> queryHandicapGrades(String symbol,
             String toSymbol, String direction) {
 
-        // 补充对向盘口
+        // 补充盘口
         handicapBO.stuffHandicap(symbol, toSymbol, direction,
             StringValidater.toInteger(EHandicapQuantity.FIFTY.getCode()));
 
-        // 获取对向盘口档位
+        // 获取盘口档位
         List<HandicapGrade> handicapGrades = handicapBO
             .queryHandicapList(symbol, toSymbol, direction, 5);
 

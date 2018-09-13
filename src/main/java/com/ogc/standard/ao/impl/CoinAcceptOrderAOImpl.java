@@ -56,9 +56,6 @@ public class CoinAcceptOrderAOImpl implements ICoinAcceptOrderAO {
 
         // 校验用户是否存在
         User user = userBO.getUser(req.getUserId());
-        if (user == null) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "用户不存在");
-        }
 
         // 检查 平台 黑名单
         blacklistBO.isAddBlacklist(user.getUserId());
@@ -107,9 +104,6 @@ public class CoinAcceptOrderAOImpl implements ICoinAcceptOrderAO {
 
         // 校验用户是否存在
         User user = userBO.getUser(req.getUserId());
-        if (user == null) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "用户不存在");
-        }
 
         // 检查 平台 黑名单
         blacklistBO.isAddBlacklist(user.getUserId());
