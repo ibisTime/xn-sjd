@@ -57,7 +57,7 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
         return code;
     }
 
-    @Override
+    // @Override
     public String applyOrderOnline(Account account, String payGroup,
             String refNo, String bizType, String bizNote,
             BigDecimal transAmount, EChannelType channelType, String applyUser,
@@ -84,6 +84,35 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
         data.setApplyNote("线上充值");
         data.setApplyDatetime(new Date());
         data.setChannelType(channelType.getCode());
+        chargeDAO.insert(data);
+        return code;
+    }
+
+    @Override
+    public String applyOrderOnline(Account account, String payCardInfo,
+            String fromAddress, BigDecimal transAmount,
+            EChannelType channelType, String channalOrder, String payNote,
+            String hash) {
+        if (transAmount.compareTo(BigDecimal.ZERO) == 0) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "充值金额不能为0");
+        }
+        String code = OrderNoGenerater.generate("CZ");
+        Charge data = new Charge();
+
+        data.setCode(code);
+        data.setAccountNumber(account.getAccountNumber());
+        data.setAccountType(account.getType());
+        data.setAmount(transAmount);
+        data.setCurrency(account.getCurrency());
+
+        data.setPayCardInfo(payCardInfo);
+        data.setStatus(EChargeStatus.Pay_YES.getCode());
+        data.setPayUser(fromAddress);
+        data.setPayNote(payNote);
+        data.setPayDatetime(new Date());
+
+        data.setChannelType(channelType.getCode());
+        data.setChannelOrder(hash);
         chargeDAO.insert(data);
         return code;
     }

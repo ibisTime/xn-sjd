@@ -43,8 +43,8 @@ public class UserExtDAOImpl extends AMybatisTemplate implements IUserExtDAO {
 
     @Override
     public long selectTotalCount(UserExt condition) {
-        // TODO Auto-generated method stub
-        return 0;
+        return super.selectTotalCount(NAMESPACE.concat("select_user_ext_count"),
+            condition);
     }
 
     @Override
@@ -68,6 +68,11 @@ public class UserExtDAOImpl extends AMybatisTemplate implements IUserExtDAO {
     public UserExt getUserExt(UserExt data) {
         return super.select(NAMESPACE.concat("select_userExt"), data,
             UserExt.class);
+    }
+
+    @Override
+    public int bindEmail(UserExt data) {
+        return super.update(NAMESPACE.concat("bind_email"), data);
     }
 
 }

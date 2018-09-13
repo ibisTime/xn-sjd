@@ -118,4 +118,9 @@ public class UserDAOImpl extends AMybatisTemplate implements IUserDAO {
     public int updateReferee(User data) {
         return super.update(NAMESPACE.concat("update_referee"), data);
     }
+
+    @Override
+    public int updateGoogleSecret(User data) {
+        return super.update(NAMESPACE.concat("update_googleSecret"), data);
+    }
 }

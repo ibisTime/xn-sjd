@@ -30,10 +30,10 @@
 				AND t.hash = #{hash}
 			</if>
 			<if test="blockHash != null and blockHash != '' ">
-				AND t.blockHash = #{blockHash}
+				AND t.block_hash = #{blockHash}
 			</if>
 			<if test="blockNumber != null and blockNumber != '' ">
-				AND t.blockNumber = #{blockNumber}
+				AND t.block_number = #{blockNumber}
 			</if>
 			<if test="from != null and from != '' ">
 				AND t.from = #{from}
@@ -84,43 +84,48 @@
 	<insert id="insert_ethTransaction" parameterType="ethTransaction">
 		INSERT INTO
 		tcoin_eth_transaction(
-		id
-		,hash
+		hash
 		,nonce
 		,block_hash
 		,block_number
 		,block_create_datetime
+		
 		,transaction_index
-		,from
-		,to
+		,`from`
+		,`to`
 		,value
 		,sync_datetime
+		
 		,gas_price
 		,gas_limit
 		,gas_used
 		,gas_fee
 		,input
-		,publicKey
+		
+		,public_key
 		,raw
 		,r
 		,s
 		)
 		VALUES(
-		#{id}
-		,#{hash}
+		#{hash}
 		,#{nonce}
 		,#{blockHash}
 		,#{blockNumber}
 		,#{blockCreateDatetime}
+		
 		,#{transactionIndex}
 		,#{from}
 		,#{to}
 		,#{value}
+		,#{syncDatetime}
+		
 		,#{gasPrice}
 		,#{gasLimit}
 		,#{gasUsed}
 		,#{gasFee}
 		,#{input}
+		
 		,#{publicKey}
 		,#{raw}
 		,#{r}

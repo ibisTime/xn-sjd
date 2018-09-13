@@ -104,9 +104,6 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
 
         // 校验用户是否存在
         User user = this.userBO.getUser(buyUser);
-        if (user == null) {
-            throw new BizException("xn00000", "用户不存在");
-        }
         // 是否实名
         if (StringUtils.isBlank(user.getRealName())) {
             throw new BizException("xn00000", "您还未实名认证，请前往个人中心进行认证");
@@ -182,9 +179,6 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
 
         // 校验用户是否存在
         User user = this.userBO.getUser(buyUser);
-        if (null == user) {
-            throw new BizException("xn00000", "用户不存在");
-        }
 
         // 是否实名
         if (StringUtils.isBlank(user.getRealName())) {
@@ -880,7 +874,7 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
         }
 
         // 推荐人为空 return
-        User refereeUser = this.userBO.getUser(rederUserId);
+        User refereeUser = this.userBO.getUserUnCheck(rederUserId);
         if (refereeUser == null) {
             return;
         }

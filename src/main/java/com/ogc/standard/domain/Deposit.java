@@ -42,9 +42,6 @@ public class Deposit extends ABaseDO {
     // 创建时间
     private Date createDatetime;
 
-    // 关联充值单号
-    private String refNo;
-
     // 订单编号模糊查询
     private String codeForQuery;
 
@@ -118,14 +115,6 @@ public class Deposit extends ABaseDO {
 
     public void setCreateDatetime(Date createDatetime) {
         this.createDatetime = createDatetime;
-    }
-
-    public String getRefNo() {
-        return refNo;
-    }
-
-    public void setRefNo(String refNo) {
-        this.refNo = refNo;
     }
 
     public String getCodeForQuery() {

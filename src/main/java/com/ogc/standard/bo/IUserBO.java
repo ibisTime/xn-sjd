@@ -100,6 +100,8 @@ public interface IUserBO extends IPaginableBO<User> {
     // 修改定位信息
     public void refreshLocation(User data);
 
+    public void refreshGoogleSecret(String userId, String secret);
+
     // 修改推荐人
     public void refreshReferee(String userId, String userReferee,
             String updater);
