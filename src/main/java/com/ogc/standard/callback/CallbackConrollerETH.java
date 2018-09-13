@@ -22,6 +22,7 @@ import com.ogc.standard.domain.CtqEthTransaction;
 import com.ogc.standard.domain.EthMAddress;
 import com.ogc.standard.domain.EthXAddress;
 import com.ogc.standard.domain.TokenEvent;
+import com.ogc.standard.util.ListUtil;
 
 /** 
  * @author: haiqingzheng 
@@ -123,10 +124,10 @@ public class CallbackConrollerETH {
         } finally {
             logger.info("*****橙提取交易确认,交易个数为" + hashList.size() + "*****");
             if (CollectionUtils.isNotEmpty(hashList)) {
+                hashList = ListUtil.removeDuplicate(hashList);
                 ctqBO.confirmEth(hashList);
             }
             logger.info("*****complete*****");
         }
     }
-
 }

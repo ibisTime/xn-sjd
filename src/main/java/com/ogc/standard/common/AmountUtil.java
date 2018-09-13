@@ -54,4 +54,8 @@ public class AmountUtil {
         return orgNum.multiply(BigDecimal.TEN.pow(8));
     }
 
+    public static BigDecimal toOriginal(BigDecimal orgNum, Integer unit) {
+        return orgNum.multiply(BigDecimal.TEN.pow(unit));
+    }
+
 }

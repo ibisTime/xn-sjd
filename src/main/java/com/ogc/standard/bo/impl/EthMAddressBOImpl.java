@@ -16,8 +16,8 @@ import com.ogc.standard.domain.EthXAddress;
 import com.ogc.standard.enums.EMAddressStatus;
 
 @Component
-public class EthMAddressBOImpl extends PaginableBOImpl<EthMAddress>
-        implements IEthMAddressBO {
+public class EthMAddressBOImpl extends PaginableBOImpl<EthMAddress> implements
+        IEthMAddressBO {
 
     @Autowired
     private IEthMAddressDAO ethMAddressDAO;
@@ -88,6 +88,22 @@ public class EthMAddressBOImpl extends PaginableBOImpl<EthMAddress>
             data = results.get(0);
         }
         return data;
+    }
+
+    @Override
+    public EthMAddress getNormalEthMAddressByAddress(String address) {
+        EthMAddress data = null;
+        if (null != address) {
+            EthMAddress condition = new EthMAddress();
+            condition.setAddress(address);
+            // condition.setStatus();
+            List<EthMAddress> results = ethMAddressDAO.selectList(condition);
+            if (CollectionUtils.isNotEmpty(results)) {
+                data = results.get(0);
+            }
+        }
+
+        return null;
     }
 
 }
