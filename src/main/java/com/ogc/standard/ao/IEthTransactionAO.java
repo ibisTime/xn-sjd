@@ -9,7 +9,9 @@
 package com.ogc.standard.ao;
 
 import com.ogc.standard.bo.base.Paginable;
+import com.ogc.standard.domain.CtqEthTransaction;
 import com.ogc.standard.domain.EthTransaction;
+import com.ogc.standard.domain.TokenEvent;
 
 /** 
  * @author: haiqingzheng 
@@ -18,14 +20,19 @@ import com.ogc.standard.domain.EthTransaction;
  */
 public interface IEthTransactionAO {
 
-    // // 充值
-    // public String chargeNotice(CtqEthTransaction ctqEthTransaction);
+    // ETH充值
+    public String ethChargeNotice(CtqEthTransaction ctqEthTransaction);
+
+    public String tokenChargeNotice(CtqEthTransaction ctqEthTransaction,
+            TokenEvent tokenEvent);
+
     //
     // // 提现
     // public void withdrawNotice(CtqEthTransaction ctqEthTransaction);
     //
-    // // 归集
+    // 归集
     // public void collection(String address, String chargeCode);
+
     //
     // // 归集交易通知处理
     // public void collectionNotice(CtqEthTransaction ctqEthTransaction);
@@ -33,7 +40,14 @@ public interface IEthTransactionAO {
     // 分页查询广播记录
     public Paginable<EthTransaction> queryEthTransactionPage(int start,
             int limit, EthTransaction condition);
-    //
-    // // 每日定存
-    // public void depositNotice(CtqEthTransaction ctqEthTransaction);
+
+    // ETH每日定存
+    public void ethDepositNotice(CtqEthTransaction ctqEthTransaction);
+
+    // toke 每日定存
+    public void tokenDepositNotice(CtqEthTransaction ctqEthTransaction,
+            TokenEvent tokenEvent);
+
+    // 直接落地，不进行充值逻辑
+    public void addTransaction(CtqEthTransaction ctqEthTransaction);
 }

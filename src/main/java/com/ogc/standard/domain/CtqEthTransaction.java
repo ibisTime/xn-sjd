@@ -1,7 +1,9 @@
 package com.ogc.standard.domain;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
+import java.util.List;
 
 import com.ogc.standard.dao.base.ABaseDO;
 
@@ -15,6 +17,9 @@ public class CtqEthTransaction extends ABaseDO {
 
     private static final long serialVersionUID = 1L;
 
+    // id
+    private BigInteger id;
+
     // 交易hash
     private String hash;
 
@@ -25,9 +30,12 @@ public class CtqEthTransaction extends ABaseDO {
     private String blockHash;
 
     // 区块编号
-    private String blockNumber;
+    private BigInteger blockNumber;
 
-    // transactionIndex
+    // 区块生成时间
+    private Date blockCreateDatetime;
+
+    // 交易index
     private BigInteger transactionIndex;
 
     // 发送地址
@@ -37,29 +45,117 @@ public class CtqEthTransaction extends ABaseDO {
     private String to;
 
     // 数量
-    private String value;
+    private BigDecimal value;
+
+    // 推送状态0未推送1已推送
+    private String status;
+
+    // 同步时间
+    private Date syncDatetime;
 
     // gas价格
-    private String gasPrice;
+    private BigDecimal gasPrice;
 
-    // gaslimit
-    private BigInteger gas;
+    // gasLimit
+    private BigInteger gasLimit;
 
     // 消耗gas
     private BigInteger gasUsed;
 
-    // 区块生成时间
-    private Date blockCreateDatetime;
+    // gas手续费
+    private BigDecimal gasFee;
 
-    // 区块生成时间
-    private Date syncDatetime;
+    // input 输入
+    private String input;
 
-    private String status;
+    // 公钥
+    private String publicKey;
+
+    private String raw;
+
+    private String r;
+
+    private String s;
+
+    public BigInteger getGasUsed() {
+        return gasUsed;
+    }
+
+    public void setGasUsed(BigInteger gasUsed) {
+        this.gasUsed = gasUsed;
+    }
 
     // ################# 一下属性为查询而添加 ##############
+
+    private List<TokenEvent> tokenEventList;
+
     private Date blockCreateDatetimeStart;
 
     private Date blockCreateDatetimeEnd;
+
+    public List<TokenEvent> getTokenEventList() {
+        return tokenEventList;
+    }
+
+    public void setTokenEventList(List<TokenEvent> tokenEventList) {
+        this.tokenEventList = tokenEventList;
+    }
+
+    public BigInteger getId() {
+        return id;
+    }
+
+    public void setId(BigInteger id) {
+        this.id = id;
+    }
+
+    public BigInteger getGasLimit() {
+        return gasLimit;
+    }
+
+    public void setGasLimit(BigInteger gasLimit) {
+        this.gasLimit = gasLimit;
+    }
+
+    public String getInput() {
+        return input;
+    }
+
+    public void setInput(String input) {
+        this.input = input;
+    }
+
+    public String getPublicKey() {
+        return publicKey;
+    }
+
+    public void setPublicKey(String publicKey) {
+        this.publicKey = publicKey;
+    }
+
+    public String getRaw() {
+        return raw;
+    }
+
+    public void setRaw(String raw) {
+        this.raw = raw;
+    }
+
+    public String getR() {
+        return r;
+    }
+
+    public void setR(String r) {
+        this.r = r;
+    }
+
+    public String getS() {
+        return s;
+    }
+
+    public void setS(String s) {
+        this.s = s;
+    }
 
     public Date getBlockCreateDatetimeStart() {
         return blockCreateDatetimeStart;
@@ -105,24 +201,6 @@ public class CtqEthTransaction extends ABaseDO {
         this.status = status;
     }
 
-    // // input
-    // private String input;
-    //
-    // // 创建时间
-    // private String creates;
-    //
-    // // publicKey
-    // private String publicKey;
-    //
-    // // raw
-    // private String raw;
-    //
-    // // r
-    // private String r;
-    //
-    // // s
-    // private String s;
-
     public void setHash(String hash) {
         this.hash = hash;
     }
@@ -145,14 +223,6 @@ public class CtqEthTransaction extends ABaseDO {
 
     public String getBlockHash() {
         return blockHash;
-    }
-
-    public void setBlockNumber(String blockNumber) {
-        this.blockNumber = blockNumber;
-    }
-
-    public String getBlockNumber() {
-        return blockNumber;
     }
 
     public BigInteger getTransactionIndex() {
@@ -179,35 +249,35 @@ public class CtqEthTransaction extends ABaseDO {
         return to;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public BigInteger getBlockNumber() {
+        return blockNumber;
     }
 
-    public String getValue() {
+    public void setBlockNumber(BigInteger blockNumber) {
+        this.blockNumber = blockNumber;
+    }
+
+    public BigDecimal getValue() {
         return value;
     }
 
-    public void setGasPrice(String gasPrice) {
-        this.gasPrice = gasPrice;
+    public void setValue(BigDecimal value) {
+        this.value = value;
     }
 
-    public String getGasPrice() {
+    public BigDecimal getGasPrice() {
         return gasPrice;
     }
 
-    public BigInteger getGasUsed() {
-        return gasUsed;
+    public void setGasPrice(BigDecimal gasPrice) {
+        this.gasPrice = gasPrice;
     }
 
-    public void setGasUsed(BigInteger gasUsed) {
-        this.gasUsed = gasUsed;
+    public BigDecimal getGasFee() {
+        return gasFee;
     }
 
-    public BigInteger getGas() {
-        return gas;
-    }
-
-    public void setGas(BigInteger gas) {
-        this.gas = gas;
+    public void setGasFee(BigDecimal gasFee) {
+        this.gasFee = gasFee;
     }
 }

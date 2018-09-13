@@ -26,7 +26,7 @@ public class DepositDAOImpl extends AMybatisTemplate implements IDepositDAO {
 
     @Override
     public int insert(Deposit data) {
-        return 0;
+        return super.insert(NAMESPACE.concat("insert_deposit"), data);
     }
 
     @Override

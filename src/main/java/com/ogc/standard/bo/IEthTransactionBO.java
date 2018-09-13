@@ -1,12 +1,13 @@
 package com.ogc.standard.bo;
 
 import com.ogc.standard.bo.base.IPaginableBO;
+import com.ogc.standard.domain.CtqEthTransaction;
 import com.ogc.standard.domain.EthTransaction;
 
 public interface IEthTransactionBO extends IPaginableBO<EthTransaction> {
 
-    // public int saveEthTransaction(CtqEthTransaction ctqEthTransaction,
-    // String refNo);
+    public int saveEthTransaction(CtqEthTransaction ctqEthTransaction);
+
     //
     // public List<EthTransaction> queryEthTransactionList(
     // EthTransaction condition);

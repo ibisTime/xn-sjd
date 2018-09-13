@@ -225,6 +225,9 @@
 		<property name="paginableDAO" ref="coinAcceptOrderDAOImpl"/>
 	</bean>
 	
+	<bean id="tokenEventBO" class="com.ogc.standard.bo.impl.TokenEventBOImpl">
+		<property name="paginableDAO" ref="tokenEventDAOImpl"/>
+	</bean>
 	<bean id="bankcardBO" class="com.ogc.standard.bo.impl.BankcardBOImpl">
 		<property name="paginableDAO" ref="bankcardDAOImpl"/>
 	</bean>

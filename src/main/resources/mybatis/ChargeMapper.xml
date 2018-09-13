@@ -149,12 +149,15 @@
 		,pay_card_info
 		,pay_card_no
 		
+		
 		,status
 		,apply_user
 		,apply_note
 		,apply_datetime
-		,channel_type
+		,pay_note
 		
+		,pay_datetime
+		,channel_type
 		,channel_order
 		
 		)
@@ -172,12 +175,15 @@
 		,#{payCardInfo}
 		,#{payCardNo}
 		
+		
 		,#{status}
 		,#{applyUser}
 		,#{applyNote}
 		,#{applyDatetime}
-		,#{channelType}
+		,#{payNote}
 		
+		,#{payDatetime}
+		,#{channelType}
 		,#{channelOrder}
 		
 		)

@@ -5,6 +5,7 @@ import com.ogc.standard.domain.User;
 import com.ogc.standard.dto.req.XN805041Req;
 import com.ogc.standard.dto.req.XN805042Req;
 import com.ogc.standard.dto.req.XN805081Req;
+import com.ogc.standard.dto.res.XN625000Res;
 
 /**
  * @author: xieyj 
@@ -90,9 +91,12 @@ public interface IUserAO {
     public void doModifyTradePwd(String userId, String oldTradePwd,
             String newTradePwd);
 
-    // // 本系统实名认证
-    // public void doIdentify(String userId, String idKind, String idNo,
-    // String realName);
+    // 获取腾讯云签名
+    public XN625000Res getTencentSign(String userId);
+
+//     // 本系统实名认证
+//     public void doIdentify(String userId, String idKind, String idNo,
+//     String realName);
 
     // 修改头像
     public void modifyPhoto(String userId, String photo);
@@ -134,14 +138,14 @@ public interface IUserAO {
     // // 修改用户信息
     // public void doModifyUser(XN805095Req req);
     //
-    // // 两要素实名认证
-    // public void doTwoIdentify(String userId, String idKind, String idNo,
-    // String realName);
-    //
-    // // 三四要素实名认证
-    // public void doFourIdentify(String userId, String idKind, String idNo,
-    // String realName, String cardNo, String bindMobile);
-    //
+//     // 两要素实名认证
+//     public void doTwoIdentify(String userId, String idKind, String idNo,
+//     String realName);
+//    
+//     // 三四要素实名认证
+//     public void doFourIdentify(String userId, String idKind, String idNo,
+//     String realName, String cardNo, String bindMobile);
+
     // // 芝麻认证（支付宝渠道）
     // public Object doAlipayZhimaIdentify(String userId, String idKind,
     // String idNo, String realName);
@@ -182,11 +186,13 @@ public interface IUserAO {
     // // 更新最后一次登录时间
     // public void lastLogin(String userId);
     //
-    // // 开启/修改谷歌认证
-    // public void openGoogleAuth(String userId, String secret, String
-    // smsCaptcha,
-    // String googleCaptcha);
-    //
+    // 开启/修改谷歌认证
+    public void openGoogleAuth(String userId, String secret, String smsCaptcha,
+            String googleCaptcha);
+
+    // 开启/修改谷歌认证
+    public void closeGoogleAuth(String userId, String smsCaptcha,
+            String googleCaptcha);
     // // 关闭认证
     // public void closeGoogleAuth(String userId, String smsCaptcha,
     // String googleCaptcha);

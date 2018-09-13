@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import com.ogc.standard.bo.IEthTransactionBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.dao.IEthTransactionDAO;
+import com.ogc.standard.domain.CtqEthTransaction;
 import com.ogc.standard.domain.EthTransaction;
 import com.ogc.standard.exception.BizException;
 
@@ -20,40 +21,48 @@ public class EthTransactionBOImpl extends PaginableBOImpl<EthTransaction>
     @Autowired
     private IEthTransactionDAO ethTransactionDAO;
 
-    //
-    // @Override
-    // public int saveEthTransaction(CtqEthTransaction ctqEthTransaction,
-    // String refNo) {
-    // int count = 0;
-    // if (ctqEthTransaction != null) {
-    // EthTransaction condition = new EthTransaction();
-    // condition.setHash(ctqEthTransaction.getHash());
-    // if (ethTransactionDAO.selectTotalCount(condition) <= 0) {
-    // EthTransaction transaction = new EthTransaction();
-    // transaction.setHash(ctqEthTransaction.getHash());
-    // transaction.setNonce(ctqEthTransaction.getNonce().toString());
-    // transaction.setBlockHash(ctqEthTransaction.getBlockHash());
-    // transaction.setBlockNumber(ctqEthTransaction.getBlockNumber());
-    // transaction.setTransactionIndex(
-    // ctqEthTransaction.getTransactionIndex().toString());
-    // transaction.setFrom(ctqEthTransaction.getFrom());
-    // transaction.setTo(ctqEthTransaction.getTo());
-    // transaction.setValue(ctqEthTransaction.getValue().toString());
-    // transaction
-    // .setGasPrice(ctqEthTransaction.getGasPrice().toString());
-    // transaction.setGas(ctqEthTransaction.getGas().toString());
-    // transaction
-    // .setGasUsed(ctqEthTransaction.getGasUsed().toString());
-    // transaction.setCreates(DateUtil.dateToStr(
-    // ctqEthTransaction.getBlockCreateDatetime(),
-    // DateUtil.DATA_TIME_PATTERN_1));
-    // transaction.setRefNo(refNo);
-    // count = ethTransactionDAO.insert(transaction);
-    // }
-    // }
-    // return count;
-    // }
-    //
+    @Override
+    public int saveEthTransaction(CtqEthTransaction ctqEthTransaction) {
+        int count = 0;
+        if (ctqEthTransaction != null) {
+            EthTransaction condition = new EthTransaction();
+            condition.setHash(ctqEthTransaction.getHash());
+            // 一条交易记录可能对应多条tokenEvent，如果数据库已经有了，则不插入
+            if (ethTransactionDAO.selectTotalCount(condition) <= 0) {
+                EthTransaction transaction = new EthTransaction();
+
+                transaction.setHash(ctqEthTransaction.getHash());
+                transaction.setNonce(ctqEthTransaction.getNonce());
+                transaction.setBlockHash(ctqEthTransaction.getBlockHash());
+                transaction.setBlockNumber(ctqEthTransaction.getBlockNumber());
+                transaction.setBlockCreateDatetime(ctqEthTransaction
+                    .getBlockCreateDatetime());
+
+                transaction.setTransactionIndex(ctqEthTransaction
+                    .getTransactionIndex());
+                transaction.setFrom(ctqEthTransaction.getFrom());
+                transaction.setTo(ctqEthTransaction.getTo());
+                transaction.setValue(ctqEthTransaction.getValue());
+                transaction
+                    .setSyncDatetime(ctqEthTransaction.getSyncDatetime());
+
+                transaction.setGasPrice(ctqEthTransaction.getGasPrice());
+                transaction.setGasLimit(ctqEthTransaction.getGasLimit());
+                transaction.setGasUsed(ctqEthTransaction.getGasUsed());
+                transaction.setGasFee(ctqEthTransaction.getGasFee());
+                transaction.setInput(ctqEthTransaction.getInput());
+
+                transaction.setPublicKey(ctqEthTransaction.getPublicKey());
+                transaction.setRaw(ctqEthTransaction.getRaw());
+                transaction.setR(ctqEthTransaction.getR());
+                transaction.setS(ctqEthTransaction.getS());
+
+                count = ethTransactionDAO.insert(transaction);
+            }
+        }
+        return count;
+    }
+
     // @Override
     // public List<EthTransaction> queryEthTransactionList(
     // EthTransaction condition) {

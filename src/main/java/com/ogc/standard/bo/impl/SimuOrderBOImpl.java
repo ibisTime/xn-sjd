@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.ogc.standard.bo.ISimuOrderBO;
+import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.ISimuOrderDAO;
@@ -117,7 +118,10 @@ public class SimuOrderBOImpl extends PaginableBOImpl<SimuOrder>
 
         condition.setOrder("price desc, create_datetime desc");
 
-        return simuOrderDAO.selectList(condition, 1, handicapQuantity);
+        Paginable<SimuOrder> pages = getPaginable(1, handicapQuantity,
+            condition);
+
+        return pages.getList();
     }
 
     @Override
@@ -131,7 +135,10 @@ public class SimuOrderBOImpl extends PaginableBOImpl<SimuOrder>
 
         condition.setOrder("price asc, create_datetime asc");
 
-        return simuOrderDAO.selectList(condition, 1, handicapQuantity);
+        Paginable<SimuOrder> pages = getPaginable(1, handicapQuantity,
+            condition);
+
+        return pages.getList();
     }
 
     @Override

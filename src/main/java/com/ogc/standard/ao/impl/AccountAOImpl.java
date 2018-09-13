@@ -130,10 +130,6 @@ public class AccountAOImpl implements IAccountAO {
             List<Account> list = page.getList();
             for (Account account : list) {
                 User user = userBO.getUser(account.getUserId());
-                if (null == user) {
-                    throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                        "用户编号不存在");
-                }
                 account.setRealName(user.getRealName());
                 account.setMobile(user.getMobile());
             }

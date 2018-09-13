@@ -22,6 +22,9 @@
 			<if test="userId != null and userId != '' ">
 				AND t.user_id = #{userId}
 			</if>
+			<if test="email != null and email != '' ">
+				AND t.email = #{email}
+			</if>
 		</trim>
 	</sql>
 	
@@ -34,6 +37,11 @@
 		#{userId}
 		)
 	</insert>
+	
+	<select id="select_user_ext_count" parameterType="userExt" resultType="java.lang.Long">
+		SELECT count(1) FROM tstd_user_ext t 
+		<include refid="where_condition"/>
+	</select>
 	
 	<select id="select_userExt" parameterType="userExt" resultMap="userExt_DB_Result">
 		SELECT
@@ -58,6 +66,14 @@
 			</if>
 		</trim>
 	</select>
+	
+	<update id="bind_email" parameterType="userExt">
+		UPDATE tstd_user_ext
+		SET
+			email=#{email}
+		WHERE
+		user_id=#{userId}
+	</update>
 	
 	<update id="update_userExt" parameterType="userExt">
 		UPDATE tstd_user_ext

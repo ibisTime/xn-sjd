@@ -24,6 +24,7 @@
 		<result column="id_hold" property="idHold" />
 		<result column="trade_pwd" property="tradePwd" />
 		<result column="trade_pwd_strength" property="tradePwdStrength" />
+		<result column="google_secret" property="googleSecret" />
 		<result column="status" property="status" />
 		<result column="province" property="province" />
 		
@@ -141,6 +142,7 @@
 		,t.id_hold
 		
 		,t.trade_pwd_strength
+		,t.google_secret
 		,t.status
 		,t.province
 		,t.city
@@ -149,7 +151,7 @@
 		,t.address
 		,t.longitude
 		,t.latitude
-		,t.resr_area
+		,t.resp_area
 		,t.create_datetime
 		
 		,t.trade_rate
@@ -195,6 +197,7 @@
 		,id_hold
 		,trade_pwd
 		,trade_pwd_strength
+		,google_secret
 		,status
 		,province
 		
@@ -234,6 +237,7 @@
 		,#{idHold}
 		,#{tradePwd}
 		,#{tradePwdStrength}
+		,#{googleSecret}
 		,#{status}
 		,#{province}
 		
@@ -398,7 +402,13 @@
 		user_id = #{userId}		
 	</update>
 	
-	
+	<update id="update_googleSecret" parameterType="user">
+		UPDATE tstd_user
+		SET
+		google_secret = #{googleSecret}
+		WHERE
+		user_id = #{userId}		
+	</update>
 	
 
 	

@@ -21,10 +21,12 @@ import com.ogc.standard.ao.IAccountAO;
 import com.ogc.standard.ao.IUserAO;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.ICoinBO;
+import com.ogc.standard.bo.IGoogleAuthBO;
 import com.ogc.standard.bo.ISYSConfigBO;
 import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.ISignLogBO;
 import com.ogc.standard.bo.ISmsOutBO;
+import com.ogc.standard.bo.ITencentBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.IUserExtBO;
 import com.ogc.standard.bo.base.Paginable;
@@ -40,10 +42,12 @@ import com.ogc.standard.domain.UserExt;
 import com.ogc.standard.dto.req.XN805041Req;
 import com.ogc.standard.dto.req.XN805042Req;
 import com.ogc.standard.dto.req.XN805081Req;
+import com.ogc.standard.dto.res.XN625000Res;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECaptchaType;
 import com.ogc.standard.enums.ECoinStatus;
 import com.ogc.standard.enums.ESignLogType;
+import com.ogc.standard.enums.ESystemCode;
 import com.ogc.standard.enums.EUser;
 import com.ogc.standard.enums.EUserLevel;
 import com.ogc.standard.enums.EUserPwd;
@@ -58,7 +62,10 @@ import com.ogc.standard.exception.BizException;
 @Service
 public class UserAOImpl implements IUserAO {
     @Autowired
-    ISmsOutBO smsOutBO;
+    private ISmsOutBO smsOutBO;
+
+    @Autowired
+    private IGoogleAuthBO googleAuthBO;
 
     @Autowired
     private IUserBO userBO;
@@ -83,6 +90,9 @@ public class UserAOImpl implements IUserAO {
 
     @Autowired
     private ISYSConfigBO sysConfigBO;
+
+    @Autowired
+    private ITencentBO tencentBO;
 
     @Override
     public void doCheckMobile(String mobile) {
@@ -157,6 +167,32 @@ public class UserAOImpl implements IUserAO {
     }
 
     @Override
+    public void openGoogleAuth(String userId, String secret, String smsCaptcha,
+            String googleCaptcha) {
+        User user = this.doGetUser(userId);
+        // 校验谷歌验证码
+        googleAuthBO.checkCode(secret, googleCaptcha,
+            System.currentTimeMillis());
+        // 短信验证码是否正确
+        smsOutBO.checkCaptcha(user.getMobile(), smsCaptcha, "805088");
+        // 修改谷歌验证秘钥
+        userBO.refreshGoogleSecret(userId, secret);
+    }
+
+    @Override
+    public void closeGoogleAuth(String userId, String smsCaptcha,
+            String googleCaptcha) {
+        User user = this.doGetUser(userId);
+        // 校验谷歌验证码
+        googleAuthBO.checkCode(user.getGoogleSecret(), googleCaptcha,
+            System.currentTimeMillis());
+        // 短信验证码是否正确
+        smsOutBO.checkCaptcha(user.getMobile(), smsCaptcha, "805089");
+        // 修改谷歌验证秘钥
+        userBO.refreshGoogleSecret(userId, null);
+    }
+
+    @Override
     @Transactional
     public String doLogin(String loginName, String loginPwd, String client,
             String location) {
@@ -195,9 +231,7 @@ public class UserAOImpl implements IUserAO {
     public void doChangeMoblie(String userId, String newMobile,
             String smsCaptcha) {
         User user = userBO.getUser(userId);
-        if (user == null) {
-            throw new BizException("xn000000", "用户不存在");
-        }
+
         String oldMobile = user.getMobile();
         if (newMobile.equals(oldMobile)) {
             throw new BizException("xn000000", "新手机与原手机一致");
@@ -224,9 +258,7 @@ public class UserAOImpl implements IUserAO {
     public void doChangeMoblie(String userId, String newMobile,
             String smsCaptcha, String tradePwd) {
         User user = userBO.getUser(userId);
-        if (user == null) {
-            throw new BizException("xn000000", "用户不存在");
-        }
+
         String oldMobile = user.getMobile();
         if (newMobile.equals(oldMobile)) {
             throw new BizException("xn000000", "新手机与原手机一致");
@@ -319,9 +351,6 @@ public class UserAOImpl implements IUserAO {
     public void doResetTradePwd(String userId, String newTradePwd,
             String smsCaptcha) {
         User user = userBO.getUser(userId);
-        if (user == null) {
-            throw new BizException("li010004", "用户名不存在");
-        }
         // 短信验证码是否正确
         String mobile = user.getMobile();
         smsOutBO.checkCaptcha(mobile, smsCaptcha, "805067");
@@ -339,9 +368,6 @@ public class UserAOImpl implements IUserAO {
     public void doResetTradePwd(String userId, String newTradePwd,
             String smsCaptcha, String idKind, String idNo) {
         User user = userBO.getUser(userId);
-        if (user == null) {
-            throw new BizException("li01004", "用户名不存在");
-        }
         if (user.getIdKind() == null || user.getIdNo() == null) {
             throw new BizException("li01004", "请先实名认证");
         }
@@ -401,9 +427,6 @@ public class UserAOImpl implements IUserAO {
     @Override
     public void doCloseOpen(String userId, String updater, String remark) {
         User user = userBO.getUser(userId);
-        if (user == null) {
-            throw new BizException("li01004", "用户不存在");
-        }
         // admin 不注销
         if (EUser.ADMIN.getCode().equals(user.getLoginName())) {
             throw new BizException("li01004", "管理员无法注销");
@@ -450,9 +473,7 @@ public class UserAOImpl implements IUserAO {
     @Override
     public User doGetUser(String userId) {
         User user = userBO.getUser(userId);
-        if (user == null) {
-            throw new BizException("li01004", userId + "用户不存在");
-        }
+
         if (StringUtils.isNotBlank(user.getUserReferee())) {
             // 拉取推荐人信息
             User refereeUser = userBO.getUser(user.getUserReferee());
@@ -492,9 +513,6 @@ public class UserAOImpl implements IUserAO {
     public void doBindMobile(String isSendSms, String mobile, String smsCaptcha,
             String userId) {
         User user = userBO.getUser(userId);
-        if (user == null) {
-            throw new BizException("xn000000", "用户不存在");
-        }
 
         if (user.getMobile() != null) {
             throw new BizException("xn000000", "用户已绑定手机");
@@ -520,9 +538,7 @@ public class UserAOImpl implements IUserAO {
     @Override
     public void doChangeLocation(XN805081Req req) {
         User data = userBO.getUser(req.getUserId());
-        if (data == null) {
-            throw new BizException("xn000000", "用户不存在");
-        }
+
         data.setAddress(req.getAdress());
         data.setArea(req.getArea());
         data.setCity(req.getCity());
@@ -538,10 +554,14 @@ public class UserAOImpl implements IUserAO {
     public void doResetReferee(String userId, String userReferee,
             String updater) {
         User data = userBO.getUser(userId);
-        if (data == null) {
-            throw new BizException("xn000000", "用户不存在");
-        }
         userBO.refreshReferee(userId, userReferee, updater);
+    }
+
+    @Override
+    public XN625000Res getTencentSign(String userId) {
+
+        return tencentBO.getSign(userId, ESystemCode.BZ.getCode(),
+            ESystemCode.BZ.getCode());
     }
 
 }
