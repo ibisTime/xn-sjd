@@ -29,6 +29,10 @@ public interface IUserAO {
     public void doBindMobile(String isSendSms, String mobile, String smsCaptcha,
             String userId);
 
+    // 平台代注册渠道商用户
+    public String doAddQDS(String mobile, String idKind, String idNo,
+            String realName, String respArea);
+
     // // 申请注册
     // public String doApplyRegUser(XN805043Req req);
 
@@ -199,6 +203,9 @@ public interface IUserAO {
 
     // 绑定邮箱
     public void bindEmail(String captcha, String email, String userId);
+
+    // 修改负责区域
+    public void editRespArea(String userId, String respArea);
 
     // // 关闭认证
     // public void closeGoogleAuth(String userId, String smsCaptcha,

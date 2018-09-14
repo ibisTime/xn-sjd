@@ -14,7 +14,7 @@ package com.ogc.standard.enums;
  * @history:
  */
 public enum EUserKind {
-    Customer("C", "C端用户");
+    Customer("C", "C端用户"), QDS("Q", "渠道商");
 
     EUserKind(String code, String value) {
         this.code = code;

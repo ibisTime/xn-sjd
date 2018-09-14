@@ -36,7 +36,6 @@ import com.ogc.standard.common.MD5Util;
 import com.ogc.standard.common.PhoneUtil;
 import com.ogc.standard.common.PwdUtil;
 import com.ogc.standard.common.SysConstants;
-import com.ogc.standard.domain.Coin;
 import com.ogc.standard.domain.SignLog;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.domain.UserExt;
@@ -46,7 +45,6 @@ import com.ogc.standard.dto.req.XN805081Req;
 import com.ogc.standard.dto.res.XN625000Res;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECaptchaType;
-import com.ogc.standard.enums.ECoinStatus;
 import com.ogc.standard.enums.EIDKind;
 import com.ogc.standard.enums.ESignLogType;
 import com.ogc.standard.enums.ESystemCode;
@@ -122,8 +120,6 @@ public class UserAOImpl implements IUserAO {
             req.getArea());
         // ext中添加数据
         userExtBO.addUserExt(userId);
-        Coin condition = new Coin();
-        condition.setStatus(ECoinStatus.PUBLISHED.getCode());
 
         // 分配账户
         accountAO.distributeAccount(userId);
@@ -166,6 +162,27 @@ public class UserAOImpl implements IUserAO {
         userId = userBO.doAddUser(user);
 
         // 在userExt中添加一条数据
+        userExtBO.addUserExt(userId);
+        // 分配账户
+        accountAO.distributeAccount(userId);
+        return userId;
+    }
+
+    @Override // 渠道商用户代注册
+    @Transactional
+    public String doAddQDS(String mobile, String idKind, String idNo,
+            String realName, String respArea) {
+        // 检查手机号是否存在
+        userBO.isMobileExist(mobile);
+        // 注册
+        String userId = userBO.doAddQDS(mobile, idKind, idNo, realName,
+            respArea);
+        // 发送短信
+        smsOutBO.sendSmsOut(mobile,
+            String.format(SysConstants.DO_ADD_USER_CN, userId,
+                EUserPwd.InitPwd.getCode()),
+            ESystemCode.BZ.getCode(), ESystemCode.BZ.getCode());
+        // ext中添加数据
         userExtBO.addUserExt(userId);
         // 分配账户
         accountAO.distributeAccount(userId);
@@ -619,6 +636,15 @@ public class UserAOImpl implements IUserAO {
         }
         userBO.isEmailExist(email);
         userBO.refreshEmail(userId, email);
+    }
+
+    @Override
+    public void editRespArea(String userId, String respArea) {
+        // 判断用户是否存在
+        userBO.getUser(userId);
+        //
+//        //修改
+//        userBO.refreshRespArea(String userId,String respArea);
     }
 
 }

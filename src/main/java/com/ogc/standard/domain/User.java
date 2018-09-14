@@ -28,7 +28,7 @@ public class User extends ABaseDO {
     private String email;
 
     // 类型
-    private char kind;
+    private String kind;
 
     // 头像
     private String photo;
@@ -606,11 +606,11 @@ public class User extends ABaseDO {
         this.divRate2 = divRate2;
     }
 
-    public char getKind() {
+    public String getKind() {
         return kind;
     }
 
-    public void setKind(char kind) {
+    public void setKind(String kind) {
         this.kind = kind;
     }
 

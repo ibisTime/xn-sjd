@@ -128,7 +128,7 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
             // 发送提醒短信
             User adsUser = userBO.getUser(ads.getUserId());
             smsOutBO.sendSmsOut(adsUser.getMobile(), SysConstants.ORDER_CONTACT,
-                ESystemCode.COIN.getCode(), ESystemCode.COIN.getCode());
+                ESystemCode.BZ.getCode(), ESystemCode.BZ.getCode());
         }
 
         return code;
@@ -160,7 +160,7 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
             // 发送提醒短信
             User adsUser = userBO.getUser(ads.getUserId());
             smsOutBO.sendSmsOut(adsUser.getMobile(), SysConstants.ORDER_CONTACT,
-                ESystemCode.COIN.getCode(), ESystemCode.COIN.getCode());
+                ESystemCode.BZ.getCode(), ESystemCode.BZ.getCode());
         }
 
         return code;
@@ -240,7 +240,7 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
         // 发送提醒短信
         User adsUser = userBO.getUser(ads.getUserId());
         smsOutBO.sendSmsOut(adsUser.getMobile(), SysConstants.ORDER_SUBMIT,
-            ESystemCode.COIN.getCode(), ESystemCode.COIN.getCode());
+            ESystemCode.BZ.getCode(), ESystemCode.BZ.getCode());
 
         return tradeOrder;
 
@@ -330,7 +330,7 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
         // 发送提醒短信
         User adsUser = userBO.getUser(ads.getUserId());
         smsOutBO.sendSmsOut(adsUser.getMobile(), SysConstants.ORDER_SUBMIT,
-            ESystemCode.COIN.getCode(), ESystemCode.COIN.getCode());
+            ESystemCode.BZ.getCode(), ESystemCode.BZ.getCode());
 
         return tradeOrder;
 
@@ -646,7 +646,7 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
         List<SYSDict> mobiledDicts = sysDictBO.querySYSDictList(condition);
         for (SYSDict sysDict : mobiledDicts) {
             smsOutBO.sendSmsOut(sysDict.getDkey(), content,
-                ESystemCode.COIN.getCode(), ESystemCode.COIN.getCode());
+                ESystemCode.BZ.getCode(), ESystemCode.BZ.getCode());
         }
     }
 
