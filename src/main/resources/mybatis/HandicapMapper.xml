@@ -14,6 +14,9 @@
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="orderCode != null and orderCode != '' ">
+				AND t.order_code = #{orderCode}
+			</if>
 			<if test="direction != null and direction != '' ">
 				AND t.direction = #{direction}
 			</if>

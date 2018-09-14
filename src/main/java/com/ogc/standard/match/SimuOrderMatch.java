@@ -178,10 +178,6 @@ public class SimuOrderMatch {
         List<HandicapGrade> bidsGrades = queryHandicapGrades(symbol, toSymbol,
             ESimuOrderDirection.BUY.getCode());
 
-        // 获取卖盘盘口档位
-        List<HandicapGrade> asksGrades = queryHandicapGrades(symbol, toSymbol,
-            ESimuOrderDirection.SELL.getCode());
-
         for (HandicapGrade bidsGrade : bidsGrades) {
 
             // 用买盘 去扫 卖盘
@@ -198,6 +194,10 @@ public class SimuOrderMatch {
                 if (avilBidsAmount.compareTo(BigDecimal.ZERO) == 0) {
                     break;
                 }
+
+                // 获取卖盘盘口档位
+                List<HandicapGrade> asksGrades = queryHandicapGrades(symbol,
+                    toSymbol, ESimuOrderDirection.SELL.getCode());
 
                 for (HandicapGrade asksGrade : asksGrades) {
 

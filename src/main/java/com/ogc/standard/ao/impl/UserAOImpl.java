@@ -22,6 +22,7 @@ import com.ogc.standard.ao.IUserAO;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.ICoinBO;
 import com.ogc.standard.bo.IGoogleAuthBO;
+import com.ogc.standard.bo.IIdentifyBO;
 import com.ogc.standard.bo.ISYSConfigBO;
 import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.ISignLogBO;
@@ -46,6 +47,7 @@ import com.ogc.standard.dto.res.XN625000Res;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECaptchaType;
 import com.ogc.standard.enums.ECoinStatus;
+import com.ogc.standard.enums.EIDKind;
 import com.ogc.standard.enums.ESignLogType;
 import com.ogc.standard.enums.ESystemCode;
 import com.ogc.standard.enums.EUser;
@@ -53,6 +55,7 @@ import com.ogc.standard.enums.EUserLevel;
 import com.ogc.standard.enums.EUserPwd;
 import com.ogc.standard.enums.EUserStatus;
 import com.ogc.standard.exception.BizException;
+import com.ogc.standard.exception.EBizErrorCode;
 
 /** 
  * @author: dl 
@@ -93,6 +96,9 @@ public class UserAOImpl implements IUserAO {
 
     @Autowired
     private ITencentBO tencentBO;
+
+    @Autowired
+    private IIdentifyBO identifyBO;
 
     @Override
     public void doCheckMobile(String mobile) {
@@ -562,6 +568,57 @@ public class UserAOImpl implements IUserAO {
 
         return tencentBO.getSign(userId, ESystemCode.BZ.getCode(),
             ESystemCode.BZ.getCode());
+    }
+
+    @Override
+    public void doIdentify(String userId, String idKind, String idNo,
+            String realName) {
+        // 更新用户表
+        userBO.refreshIdentity(userId, realName, EIDKind.IDCard.getCode(),
+            idNo);
+    }
+
+    @Override
+    public void doTwoIdentify(String userId, String idKind, String idNo,
+            String realName) {
+        User user = userBO.getUser(userId);
+        identifyBO.doTwoIdentify(ESystemCode.BZ.getCode(),
+            ESystemCode.BZ.getCode(), userId, realName, idKind, idNo);
+        // 更新用户表
+        userBO.refreshIdentity(userId, realName, EIDKind.IDCard.getCode(),
+            idNo);
+
+    }
+
+    @Override
+    public void doFourIdentify(String userId, String idKind, String idNo,
+            String realName, String cardNo, String bindMobile) {
+        // 三方认证
+        identifyBO.doFourIdentify(userId, realName, idKind, idNo, cardNo,
+            bindMobile);
+        // 更新用户表
+        userBO.refreshIdentity(userId, realName, EIDKind.IDCard.getCode(),
+            idNo);
+
+    }
+
+    @Override
+    public void editTradeRate(String userId, Double tradeRate) {
+        // 检验用户是否存在
+        userBO.getUser(userId);
+        // 更新手续费率
+        userBO.refreshTradeRate(userId, tradeRate);
+    }
+
+    @Override
+    public void bindEmail(String captcha, String email, String userId) {
+        smsOutBO.checkCaptcha(email, captcha, "805086");
+        User data = userBO.getUser(userId);
+        if (data.getEmail() != null) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "用户已绑定邮箱");
+        }
+        userBO.isEmailExist(email);
+        userBO.refreshEmail(userId, email);
     }
 
 }
