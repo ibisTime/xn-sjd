@@ -8,6 +8,7 @@
  */
 package com.ogc.standard.bo.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -65,6 +66,7 @@ public class UserRelationBOImpl extends PaginableBOImpl<UserRelation>
             data.setToUser(toUser);
             data.setType(type);
             data.setStatus(EBoolean.YES.getCode());
+            data.setCreateDatetime(new Date());
             userRelationDAO.insert(data);
         }
         return code;

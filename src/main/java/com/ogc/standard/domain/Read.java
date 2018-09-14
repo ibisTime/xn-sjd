@@ -48,6 +48,16 @@ public class Read extends ABaseDO {
     private Date deleteDatetime;
     // ***********db properties***********
 
+    private Sms smsInfo;
+
+    public Sms getSmsInfo() {
+        return smsInfo;
+    }
+
+    public void setSmsInfo(Sms smsInfo) {
+        this.smsInfo = smsInfo;
+    }
+
     public Date getCreateDatetime() {
         return createDatetime;
     }

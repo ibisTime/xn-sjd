@@ -99,11 +99,9 @@ public class UserRelationAOImpl implements IUserRelationAO {
     @Transactional
     @Override
     public void followUser(String userId, String toUserId, String type) {
-        User user = userBO.getUser(userId);
-        User toUser = userBO.getUser(toUserId);
-        if (toUser == null) {
-            throw new BizException("xn702001", "关注用户不存在");
-        }
+        userBO.getUser(userId);
+        userBO.getUser(toUserId);
+
         if (userId.equals(toUserId)) {
             throw new BizException("xn702001", "用户不能和自己建立关系");
         }
@@ -151,11 +149,8 @@ public class UserRelationAOImpl implements IUserRelationAO {
      */
     @Override
     public void unfollowUser(String userId, String toUserId, String type) {
-        User user = userBO.getUser(userId);
-        User toUser = userBO.getUser(toUserId);
-        if (toUser == null) {
-            throw new BizException("xn702001", "取消关注用户不存在");
-        }
+        userBO.getUser(userId);
+        userBO.getUser(toUserId);
         // 判断两者关系是否存在
         if (!userRelationBO.isExistUserRelation(userId, toUserId, type)) {
             throw new BizException("xn702001", "用户关系未建立，无法解除");

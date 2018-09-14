@@ -76,7 +76,7 @@ public class SmsAOImpl implements ISmsAO {
         if (StringUtils.isNotBlank(req.getCode())) {
             Sms sms = smsBO.getSms(req.getCode());
             // 判断该消息是否发布
-            if (sms.getStatus().equals(ESmsStauts.SENDED)) {
+            if (sms.getStatus().equals(ESmsStauts.SENDED.getCode())) {
                 throw new BizException("lh4000", "消息已发布！");
             }
             data.setCode(req.getCode());
@@ -106,6 +106,7 @@ public class SmsAOImpl implements ISmsAO {
     @Override
     public void editStatus(String code, String updater, String remark) {
         smsBO.revokeSms(code, updater, remark);
+        readBO.deleteRead(code);
     }
 
     @Override
