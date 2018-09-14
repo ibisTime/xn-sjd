@@ -9,12 +9,10 @@ import org.springframework.stereotype.Service;
 
 import com.ogc.standard.ao.IHandicapAO;
 import com.ogc.standard.bo.IHandicapBO;
-import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.domain.Handicap;
 import com.ogc.standard.domain.HandicapGrade;
 import com.ogc.standard.domain.HandicapItem;
 import com.ogc.standard.dto.res.XN650065Res;
-import com.ogc.standard.enums.EHandicapGradeNum;
 import com.ogc.standard.enums.ESimuOrderDirection;
 
 @Service
@@ -42,8 +40,7 @@ public class HandicapAOImpl implements IHandicapAO {
         List<HandicapItem> handicapItems = new ArrayList<>();
 
         List<HandicapGrade> asksGrades = handicapBO.queryHandicapList(symbol,
-            toSymbol, direction,
-            StringValidater.toInteger(EHandicapGradeNum.FIVE.getCode()));
+            toSymbol, direction);
 
         for (HandicapGrade handicapGrade : asksGrades) {
             HandicapItem item = new HandicapItem();

@@ -13,4 +13,5 @@ public interface ISimuOrderHistoryBO extends IPaginableBO<SimuOrderHistory> {
     public List<SimuOrderHistory> querySimuOrderHistoryList(
             SimuOrderHistory condition);
 
+    public SimuOrderHistory getSimuOrderHistory(String code);
 }

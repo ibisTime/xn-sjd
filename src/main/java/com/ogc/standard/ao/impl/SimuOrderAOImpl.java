@@ -79,10 +79,8 @@ public class SimuOrderAOImpl implements ISimuOrderAO {
     @Override
     @Transactional
     public void cancel(String code) {
-        SimuOrder data = simuOrderBO.getSimuOrder(code);
-        if (!ESimuOrderStatus.SUBMIT.getCode().equals(data.getStatus())
-                && !ESimuOrderStatus.PART_DEAL.getCode()
-                    .equals(data.getStatus())) {
+        SimuOrder data = simuOrderBO.getSimuOrderCheck(code);
+        if (!ESimuOrderStatus.SUBMIT.getCode().equals(data.getStatus())) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "当前状态下不支持撤单");
         }
@@ -101,6 +99,7 @@ public class SimuOrderAOImpl implements ISimuOrderAO {
 
         // 更新委托单信息
         if (ESimuOrderStatus.SUBMIT.getCode().equals(data.getStatus())) {
+            data.setAvgPrice(BigDecimal.ZERO);
             data.setStatus(ESimuOrderStatus.CANCEL.getCode());
         } else {
             data.setStatus(ESimuOrderStatus.PART_DEAL_CANCEL.getCode());
@@ -110,11 +109,14 @@ public class SimuOrderAOImpl implements ISimuOrderAO {
         // 增加历史委托
         simuOrderHistoryBO.saveSimuOrderHistory(data);
 
+        // 限价单需要删除盘口
+        if (ESimuOrderType.LIMIT.getCode().equals(data.getType())) {
+            handicapBO.removeHandicap(data.getCode());
+        }
+
         // 撤销，并从 存活委托 中删除；
         simuOrderBO.cancel(data);
 
-        // 限价单需要同时删除盘口
-        handicapBO.removeHandicap(data.getCode());
     }
 
     @Override
@@ -130,7 +132,7 @@ public class SimuOrderAOImpl implements ISimuOrderAO {
 
     @Override
     public SimuOrder getSimuOrder(String code) {
-        return simuOrderBO.getSimuOrder(code);
+        return simuOrderBO.getSimuOrderCheck(code);
     }
 
     private SimuOrder submitBuyOrder(XN650050Req req) {

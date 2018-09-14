@@ -35,19 +35,19 @@ public class ExchangePairAOImpl implements IExchangePairAO {
     public void scanPair() {
 
         // 获取平台内的所有交易对
-        List<ExchangePair> pairs = exchangePairBO
-            .queryExchangePairList(new ExchangePair());
-
-        for (ExchangePair pair : pairs) {
-
-            // new Thread() {
-            // public void run() {
-            simuOrderMatch.doMatchTrade(pair.getSymbol().toUpperCase(),
-                pair.getToSymbol().toUpperCase());
-            // }
-            // }.start();
-
-        }
+        // List<ExchangePair> pairs = exchangePairBO
+        // .queryExchangePairList(new ExchangePair());
+        //
+        // for (ExchangePair pair : pairs) {
+        //
+        // // new Thread() {
+        // // public void run() {
+        // simuOrderMatch.doMatchTrade(pair.getSymbol().toUpperCase(),
+        // pair.getToSymbol().toUpperCase());
+        // // }
+        // // }.start();
+        //
+        // }
 
     }
 

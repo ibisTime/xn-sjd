@@ -2,6 +2,7 @@ package com.ogc.standard.bo.impl;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -56,6 +57,18 @@ public class SimuOrderHistoryBOImpl extends PaginableBOImpl<SimuOrderHistory>
     public List<SimuOrderHistory> querySimuOrderHistoryList(
             SimuOrderHistory condition) {
         return simuOrderHistoryDAO.selectList(condition);
+    }
+
+    @Override
+    public SimuOrderHistory getSimuOrderHistory(String code) {
+        SimuOrderHistory data = null;
+        if (StringUtils.isNotBlank(code)) {
+            SimuOrderHistory condition = new SimuOrderHistory();
+            condition.setCode(code);
+            data = simuOrderHistoryDAO.select(condition);
+
+        }
+        return data;
     }
 
 }
