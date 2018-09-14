@@ -173,33 +173,6 @@ CREATE TABLE `tcoin_btc_xaddress` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
---  Table structure for `tcoin_coin`
--- ----------------------------
-DROP TABLE IF EXISTS `tcoin_coin`;
-CREATE TABLE `tcoin_coin` (
-  `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT 'ID',
-  `symbol` varchar(64) NOT NULL DEFAULT '' COMMENT '英文简称',
-  `ename` varchar(64) DEFAULT NULL COMMENT '英文名称',
-  `cname` varchar(64) DEFAULT NULL COMMENT '中文名称',
-  `type` varchar(32) NOT NULL COMMENT '分类 0-以太币 1-比特币 2—万维币 0T-以太token币 2T-万维token币',
-  `unit` int(11) NOT NULL COMMENT '单位',
-  `icon` varchar(255) NOT NULL COMMENT '币种图标',
-  `pic1` varchar(255) DEFAULT NULL COMMENT '图标1',
-  `pic2` varchar(255) DEFAULT NULL COMMENT '图标2',
-  `pic3` varchar(255) DEFAULT NULL COMMENT '图标3',
-  `order_no` int(11) NOT NULL COMMENT 'UI序号',
-  `collect_start` decimal(64,0) NOT NULL COMMENT '归集阀值',
-  `withdraw_fee` decimal(64,0) NOT NULL COMMENT '取现手续费',
-  `contract_address` varchar(255) DEFAULT NULL COMMENT '合约地址',
-  `contract_abi` text COMMENT '合约ABI',
-  `status` varchar(8) NOT NULL COMMENT '状态',
-  `updater` varchar(32) NOT NULL COMMENT '最后操作人',
-  `update_datetime` datetime NOT NULL COMMENT '最后操作时间',
-  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='钱包支持币种';
-
--- ----------------------------
 --  Table structure for `tcoin_currency_rate`
 -- ----------------------------
 DROP TABLE IF EXISTS `tcoin_currency_rate`;
@@ -521,24 +494,41 @@ CREATE TABLE `tforum_team_member_apply` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
---  Table structure for `tmk_coin`
+--  Table structure for `tcoin_coin`
 -- ----------------------------
-DROP TABLE IF EXISTS `tmk_coin`;
-CREATE TABLE `tmk_coin` (
-  `id` bigint(11) NOT NULL COMMENT '序号',
-  `symbol` varchar(32) NOT NULL COMMENT '币种符号',
-  `cname` varchar(255) NOT NULL COMMENT '中文简称',
-  `ename` varchar(255) NOT NULL COMMENT '英文简称',
-  `type` varchar(32) DEFAULT NULL COMMENT '类型',
+DROP TABLE IF EXISTS `tcoin_coin`;
+CREATE TABLE `tcoin_coin` (
+  `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `symbol` varchar(64) NOT NULL DEFAULT '' COMMENT '英文简称',
+  `ename` varchar(64) DEFAULT NULL COMMENT '英文名称',
+  `cname` varchar(64) DEFAULT NULL COMMENT '中文名称',
+  `type` varchar(32) NOT NULL COMMENT '分类 0-以太币 1-比特币 2—万维币 0T-以太token币 2T-万维token币',
   `unit` int(11) NOT NULL COMMENT '单位',
-  `logo` varchar(255) NOT NULL COMMENT '图标',
-  `order_no` bigint(11) DEFAULT NULL COMMENT 'UI序号',
-  `status` varchar(32) DEFAULT NULL COMMENT '状态',
-  `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
-  `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
-  `remark` text COMMENT '备注',
+  `icon` varchar(255) NOT NULL COMMENT '币种图标',
+  `pic1` varchar(255) DEFAULT NULL COMMENT '图标1',
+  `pic2` varchar(255) DEFAULT NULL COMMENT '图标2',
+  `pic3` varchar(255) DEFAULT NULL COMMENT '图标3',
+  `order_no` int(11) NOT NULL COMMENT 'UI序号',
+  `total_supply` varchar(255) DEFAULT NULL COMMENT '流通量',
+  `total_supply_market` varchar(255) DEFAULT NULL COMMENT '流通市值',
+  `max_supply` varchar(255) DEFAULT NULL COMMENT '发行总量',
+  `max_supply_market` varchar(255) DEFAULT NULL COMMENT '发行市值',
+  `rank` varchar(255) DEFAULT NULL COMMENT '市值排名',
+  `white_paper` varchar(255) DEFAULT NULL COMMENT '白皮书',
+  `web_url` varchar(255) DEFAULT NULL COMMENT '官网',
+  `block_url` varchar(255) DEFAULT NULL COMMENT '区块查询',
+  `ico_datetime` varchar(255) DEFAULT NULL COMMENT 'ico时间',
+  
+  `collect_start` decimal(64,0) NOT NULL COMMENT '归集阀值',
+  `withdraw_fee` decimal(64,0) NOT NULL COMMENT '取现手续费',
+  `contract_address` varchar(255) DEFAULT NULL COMMENT '合约地址',
+  `contract_abi` text COMMENT '合约ABI',
+  `status` varchar(8) NOT NULL COMMENT '状态',
+  `updater` varchar(32) NOT NULL COMMENT '最后操作人',
+  `update_datetime` datetime NOT NULL COMMENT '最后操作时间',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='币种';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='币种';
 
 -- ----------------------------
 --  Table structure for `tmk_exchange`
@@ -938,29 +928,6 @@ CREATE TABLE `tstd_collect` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='归集订单';
 
 -- ----------------------------
---  Table structure for `tstd_commission`
--- ----------------------------
-DROP TABLE IF EXISTS `tstd_commission`;
-CREATE TABLE `tstd_commission` (
-  `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT 'ID',
-  `user_id` varchar(32) NOT NULL COMMENT '用户编号',
-  `user_kind` varchar(32) NOT NULL COMMENT '用户种类，1=普通用户 2=渠道商',
-  `rel_user_id` varchar(32) NOT NULL COMMENT '关联用户编号',
-  `currency` char(8) DEFAULT NULL COMMENT '币种',
-  `amount` decimal(64,0) DEFAULT NULL COMMENT '佣金',
-  `order_amount` decimal(64,0) DEFAULT NULL COMMENT '订单金额',
-  `rate` decimal(18,8) DEFAULT NULL COMMENT '佣金比例',
-  `ref_type` char(1) DEFAULT NULL COMMENT '参考类型(1=注册分佣 2=交易分佣)',
-  `ref_code` varchar(32) DEFAULT NULL COMMENT '参考订单编号',
-  `ref_note` varchar(255) DEFAULT NULL COMMENT '参考说明',
-  `status` char(1) NOT NULL COMMENT '状态(0=待分佣 1=已分佣)',
-  `create_datetime` datetime DEFAULT NULL COMMENT '创建时间',
-  `settle_datetime` datetime DEFAULT NULL COMMENT '结算时间',
-  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='分佣记录';
-
--- ----------------------------
 --  Table structure for `tstd_deposit`
 -- ----------------------------
 DROP TABLE IF EXISTS `tstd_deposit`;
@@ -989,13 +956,56 @@ CREATE TABLE `tstd_divide` (
   `amount` decimal(64,0) DEFAULT NULL COMMENT '当时余额',
   `divi_profit` decimal(64,0) DEFAULT NULL COMMENT '分红利润',
   `divi_amount` decimal(64,0) DEFAULT NULL COMMENT '分红余额',
-  `divi_datetime` datetime NOT NULL COMMENT '最后操作时间',
+  `divi_datetime` datetime NOT NULL COMMENT '分红时间',
   `status` varchar(4) NOT NULL COMMENT '状态(0=待分红 1=已分红)',
   `updater` varchar(32) NOT NULL COMMENT '最后操作人',
   `update_datetime` datetime NOT NULL COMMENT '最后操作时间',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='币种分红快照';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='分红快照';
+
+-- ----------------------------
+--  Table structure for `tstd_award`
+-- ----------------------------
+DROP TABLE IF EXISTS `tstd_award`;
+CREATE TABLE `tstd_award` (
+  `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `user_id` varchar(32) NOT NULL COMMENT '用户编号',
+  `user_kind` varchar(32) NOT NULL COMMENT '用户种类',
+  `rel_user_id` varchar(32) NOT NULL COMMENT '关联用户编号',
+  `currency` char(8) DEFAULT NULL COMMENT '币种(X币)',
+  `amount` decimal(64,0) DEFAULT NULL COMMENT '奖励',
+  `order_amount` decimal(64,0) DEFAULT NULL COMMENT '订单金额',
+  `rate` decimal(18,8) DEFAULT NULL COMMENT '奖励比例',
+  `ref_type` char(1) DEFAULT NULL COMMENT '参考类型(1=注册分佣 2=交易分佣)',
+  `ref_code` varchar(32) DEFAULT NULL COMMENT '参考订单编号',
+  `ref_note` varchar(255) DEFAULT NULL COMMENT '参考说明',
+  `status` char(1) NOT NULL COMMENT '状态(0=待结算 1=已结算 2=不结算)',
+  `create_datetime` datetime DEFAULT NULL COMMENT '创建时间',
+  `settle_datetime` datetime DEFAULT NULL COMMENT '结算时间',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='奖励';
+
+-- ----------------------------
+--  Table structure for `tstd_award_settle`
+-- ----------------------------
+DROP TABLE IF EXISTS `tstd_award_settle`;
+CREATE TABLE `tstd_award_settle` (
+  `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `user_id` varchar(32) NOT NULL COMMENT '用户编号',
+  `unsettle_amount` decimal(64,0) DEFAULT NULL COMMENT '未结算金额',
+  `settle_amount` decimal(64,0) DEFAULT NULL COMMENT '结算金额',
+  `nosettle_amount` decimal(64,0) DEFAULT NULL COMMENT '不结算金额',
+  `current_amount` decimal(64,0) DEFAULT NULL COMMENT '当月最后一次结算后余额',
+  `start_date` datetime DEFAULT NULL COMMENT '开始结算日期',
+  `end_date` datetime DEFAULT NULL COMMENT '结束结算日期',
+  `create_datetime` datetime DEFAULT NULL COMMENT '创建时间',
+  `settle_datetime` datetime DEFAULT NULL COMMENT '结算时间',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='奖励结算';
+
 
 -- ----------------------------
 --  Table structure for `tstd_hlorder`
@@ -1161,7 +1171,6 @@ CREATE TABLE `tstd_user_ext` (
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
 DROP TABLE IF EXISTS `tstd_user_field_approve`;
 CREATE TABLE `tstd_user_field_approve` (
   `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT 'ID主键',
@@ -1169,10 +1178,10 @@ CREATE TABLE `tstd_user_field_approve` (
   `field` varchar(255) DEFAULT NULL COMMENT '修改字段',
   `captcha` varchar(16) DEFAULT NULL COMMENT '验证码',
   `id_hold` varchar(255) DEFAULT NULL COMMENT '证件照手持面',
-  `apply_user` varchar(255) DEFAULT NULL COMMENT '申请人',
+  `apply_user` varchar(32) DEFAULT NULL COMMENT '申请人',
   `apply_datetime` datetime DEFAULT NULL COMMENT '申请时间',
   `status` char(1) DEFAULT NULL COMMENT '状态(0=待审核 1=审核通过 2=审核不通过)',
-  `approve_user` varchar(4) DEFAULT NULL COMMENT '审核人',
+  `approve_user` varchar(32) DEFAULT NULL COMMENT '审核人',
   `approve_datetime` datetime DEFAULT NULL COMMENT '审核时间',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
@@ -1181,7 +1190,8 @@ CREATE TABLE `tstd_user_field_approve` (
 DROP TABLE IF EXISTS `tstd_user_id_auth`;
 CREATE TABLE `tstd_user_id_auth` (
   `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT 'ID主键',
-  `type` char(1) NOT NULL COMMENT '类型(1=身份证,2=护照，3=驾驶证)',
+  `country` varchar(32) NOT NULL COMMENT '隶属国家',
+  `real_name` varchar(255) DEFAULT NULL COMMENT '真实姓名',
   `id_kind` char(1) NOT NULL COMMENT '证件类型(1=身份证)',
   `id_no` varchar(255) NOT NULL COMMENT '证件号码',
   `id_face` varchar(255) NOT NULL COMMENT '证件照正面',
@@ -1189,6 +1199,7 @@ CREATE TABLE `tstd_user_id_auth` (
   `id_hold` varchar(255) DEFAULT NULL COMMENT '手持证件照',
   `apply_user` varchar(32) NOT NULL COMMENT '申请人',
   `apply_datetime` datetime NOT NULL COMMENT '申请时间',
+  `status` char(1) DEFAULT NULL COMMENT '状态(0=待审核 1=审核通过 2=审核不通过)',
   `approve_user` varchar(32) DEFAULT NULL COMMENT '审核人',
   `approve_datetime` datetime DEFAULT NULL COMMENT '审核时间',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
