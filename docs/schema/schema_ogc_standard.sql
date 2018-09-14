@@ -1216,10 +1216,7 @@ CREATE TABLE `tstd_user_relation` (
   `to_user` varchar(32) DEFAULT NULL COMMENT '关系人编号',
   `type` varchar(4) DEFAULT NULL COMMENT '关系类型',
   `status` varchar(4) DEFAULT NULL COMMENT '状态',
-  `update_datetime` datetime DEFAULT NULL COMMENT '创建时间',
-  `company_code` varchar(32) DEFAULT NULL COMMENT '公司编号',
-  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
-  PRIMARY KEY (`code`)
+  `create_datetime` datetime DEFAULT NULL COMMENT '创建时间'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
