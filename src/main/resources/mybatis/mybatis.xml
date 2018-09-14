@@ -46,7 +46,8 @@
 		<typeAlias alias="userFieldApprove" type="com.ogc.standard.domain.UserFieldApprove" />
 		<typeAlias alias="userStatistics" type="com.ogc.standard.domain.UserStatistics" />
 		<typeAlias alias="userSettings" type="com.ogc.standard.domain.UserSettings" />	
-		<typeAlias alias="userIdAuth" type="com.ogc.standard.domain.UserIdAuth" />		
+		<typeAlias alias="userIdAuth" type="com.ogc.standard.domain.UserIdAuth" />
+		<typeAlias alias="award" type="com.ogc.standard.domain.Award" />		
 		
 		<typeAlias alias="coin" type="com.ogc.standard.domain.Coin" />
 		<typeAlias alias="account" type="com.ogc.standard.domain.Account" />

@@ -320,6 +320,16 @@
 		user_id = #{userId}	
 	</update>
 	
+	<update id="update_resp_area" parameterType="user">
+		UPDATE tstd_user
+		SET
+		 resp_area = #{respArea}
+		 ,updater=#{updater}
+		 ,update_datetime=#{updateDatetime}
+		WHERE
+		user_id = #{userId}	
+	</update>
+	
 	<update id="update_login_pwd" parameterType="user">
 		UPDATE tstd_user
 		SET

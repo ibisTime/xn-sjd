@@ -29,7 +29,6 @@ import com.ogc.standard.dao.IUserDAO;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.enums.EUserKind;
 import com.ogc.standard.enums.EUserLevel;
-import com.ogc.standard.enums.EUserPwd;
 import com.ogc.standard.enums.EUserStatus;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
@@ -523,9 +522,10 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
 
     @Override
     public String doAddQDS(String mobile, String idKind, String idNo,
-            String realName, String respArea) {
+            String realName, String respArea, String loginPwd) {
         String userId = OrderNoGenerater.generate("U");
         User user = new User();
+        user.setKind(EUserKind.QDS.getCode());
         user.setUserId(userId);
         user.setCreateDatetime(new Date());
         user.setMobile(mobile);
@@ -533,12 +533,28 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         user.setIdKind(idKind);
         user.setIdNo(idNo);
         user.setRealName(realName);
+        double tradeRate = sysConfigBO
+            .getDoubleValue(SysConstants.DEFAULT_USER_RATE);
+        user.setTradeRate(tradeRate);
+        user.setCreateDatetime(new Date());
         user.setRespArea(respArea);
-        user.setLoginPwd(EUserPwd.InitPwd.getCode());
-        user.setLoginPwdStrength(
-            PwdUtil.calculateSecurityLevel(EUserPwd.InitPwd.getCode()));
+        user.setLoginPwd(MD5Util.md5(loginPwd));
+        user.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(loginPwd));
+        user.setNickname(
+            userId.substring(userId.length() - 8, userId.length()));
         userDAO.insert(user);
         return userId;
+    }
+
+    @Override
+    public void refreshRespArea(String userId, String respArea,
+            String updater) {
+        User data = new User();
+        data.setUserId(userId);
+        data.setRespArea(respArea);
+        data.setUpdater(updater);
+        data.setUpdateDatetime(new Date());
+        userDAO.updateRespArea(data);
     }
 
 }

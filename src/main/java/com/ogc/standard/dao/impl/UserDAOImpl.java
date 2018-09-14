@@ -80,6 +80,11 @@ public class UserDAOImpl extends AMybatisTemplate implements IUserDAO {
     }
 
     @Override
+    public int updateRespArea(User data) {
+        return super.update(NAMESPACE.concat("update_resp_area"), data);
+    }
+
+    @Override
     public int updateMobile(User data) {
         return super.update(NAMESPACE.concat("update_bind_mobile"), data);
     }
@@ -133,4 +138,5 @@ public class UserDAOImpl extends AMybatisTemplate implements IUserDAO {
     public int updateEmail(User data) {
         return super.update(NAMESPACE.concat("update_email"), data);
     }
+
 }

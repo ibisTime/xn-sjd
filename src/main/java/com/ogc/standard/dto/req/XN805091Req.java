@@ -25,6 +25,17 @@ public class XN805091Req {
     @NotBlank
     private String respArea;
 
+    @NotBlank
+    private String updater;
+
+    public String getUpdater() {
+        return updater;
+    }
+
+    public void setUpdater(String updater) {
+        this.updater = updater;
+    }
+
     public String getUserId() {
         return userId;
     }

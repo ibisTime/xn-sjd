@@ -205,7 +205,7 @@ public interface IUserAO {
     public void bindEmail(String captcha, String email, String userId);
 
     // 修改负责区域
-    public void editRespArea(String userId, String respArea);
+    public void editRespArea(String userId, String respArea, String updater);
 
     // // 关闭认证
     // public void closeGoogleAuth(String userId, String smsCaptcha,
