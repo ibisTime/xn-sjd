@@ -29,6 +29,12 @@
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
 			</if>
+			<if test="userId != null and userId != '' ">
+				AND t.user_id = #{userId}
+			</if>
+			<if test="direction != null and direction != '' ">
+				AND t.direction = #{direction}
+			</if>
 		</trim>
 	</sql>
 	<select id="select_simuOrderHistory" parameterType="simuOrderHistory" resultMap="simuOrderHistory_DB_Result">

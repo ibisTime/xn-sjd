@@ -142,7 +142,7 @@ public class SimuOrderBOImpl extends PaginableBOImpl<SimuOrder>
     }
 
     @Override
-    public SimuOrder getSimuOrder(String code) {
+    public SimuOrder getSimuOrderCheck(String code) {
         SimuOrder data = null;
         if (StringUtils.isNotBlank(code)) {
             SimuOrder condition = new SimuOrder();
@@ -152,6 +152,17 @@ public class SimuOrderBOImpl extends PaginableBOImpl<SimuOrder>
                 throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                     "委托单号" + code + "不存在");
             }
+        }
+        return data;
+    }
+
+    @Override
+    public SimuOrder getSimuOrder(String code) {
+        SimuOrder data = null;
+        if (StringUtils.isNotBlank(code)) {
+            SimuOrder condition = new SimuOrder();
+            condition.setCode(code);
+            data = simuOrderDAO.select(condition);
         }
         return data;
     }

@@ -23,6 +23,9 @@
 			<if test="orderCode != null and orderCode != '' ">
 				AND t.order_code = #{orderCode}
 			</if>
+			<if test="userId != null and userId != '' ">
+				AND t.user_id = #{userId}
+			</if>
 			<if test="symbol != null and symbol != '' ">
 				AND t.symbol = #{symbol}
 			</if>

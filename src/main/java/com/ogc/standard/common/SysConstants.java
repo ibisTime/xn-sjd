@@ -117,6 +117,8 @@ public class SysConstants {
 
     // ****** 币币交易 ******
 
+    public static Integer handicapLimit = 5; // 盘口数量限制
+
     public static BigDecimal minCountLimit = new BigDecimal("0.00001"); // 最小委托数量
 
     public static BigDecimal maxCountLimit = new BigDecimal("1000000"); // 最大委托数量

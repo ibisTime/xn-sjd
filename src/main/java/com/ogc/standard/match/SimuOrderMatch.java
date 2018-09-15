@@ -110,10 +110,12 @@ public class SimuOrderMatch {
 
             // 获取对向盘口档位
             List<HandicapGrade> handicapGrades = queryHandicapGrades(
-                marketOrder.getSymbol(), marketOrder.getSymbol(),
+                marketOrder.getSymbol(), marketOrder.getToSymbol(),
                 marketOrder.getDirection());
+
             if (CollectionUtils.isEmpty(handicapGrades)) {
-                break;
+                //
+                doMarchMarketDone(marketOrder);
             }
 
             boolean isHGBreak = false; // 盘口档位循环是否可以停止
@@ -123,7 +125,7 @@ public class SimuOrderMatch {
 
                     // 根据盘口获取委托单
                     SimuOrder limitOrder = simuOrderBO
-                        .getSimuOrder(handicap.getOrderCode());
+                        .getSimuOrderCheck(handicap.getOrderCode());
 
                     // 双委托单所有者为同一人
                     if (marketOrder.getUserId()
@@ -176,6 +178,10 @@ public class SimuOrderMatch {
 
         // 获取买盘盘口档位
         List<HandicapGrade> bidsGrades = queryHandicapGrades(symbol, toSymbol,
+            ESimuOrderDirection.SELL.getCode());
+
+        // 每次循环都获取卖盘盘口档位
+        List<HandicapGrade> asksGrades = queryHandicapGrades(symbol, toSymbol,
             ESimuOrderDirection.BUY.getCode());
 
         for (HandicapGrade bidsGrade : bidsGrades) {
@@ -185,7 +191,7 @@ public class SimuOrderMatch {
 
                 // 根据盘口获取委托单
                 SimuOrder bidsOrder = simuOrderBO
-                    .getSimuOrder(bidsHandicap.getOrderCode());
+                    .getSimuOrderCheck(bidsHandicap.getOrderCode());
 
                 // 委托总量减去已成交量：剩余可交易量
                 BigDecimal avilBidsAmount = bidsOrder.getTotalAmount()
@@ -195,9 +201,12 @@ public class SimuOrderMatch {
                     break;
                 }
 
-                // 获取卖盘盘口档位
-                List<HandicapGrade> asksGrades = queryHandicapGrades(symbol,
-                    toSymbol, ESimuOrderDirection.SELL.getCode());
+                // 每次循环都重新获取卖盘盘口档位
+                // asksGrades = handicapBO.queryHandicapList(symbol, toSymbol,
+                // ESimuOrderDirection.SELL.getCode(), 5);
+                //
+                asksGrades = queryHandicapGrades(symbol, toSymbol,
+                    ESimuOrderDirection.BUY.getCode());
 
                 for (HandicapGrade asksGrade : asksGrades) {
 
@@ -205,7 +214,7 @@ public class SimuOrderMatch {
 
                         // 根据盘口获取委托单
                         SimuOrder asksOrder = simuOrderBO
-                            .getSimuOrder(asksHandicap.getOrderCode());
+                            .getSimuOrderCheck(asksHandicap.getOrderCode());
 
                         // 双委托单所有者为同一人
                         if (bidsOrder.getUserId()
@@ -402,13 +411,20 @@ public class SimuOrderMatch {
     private List<HandicapGrade> queryHandicapGrades(String symbol,
             String toSymbol, String direction) {
 
+        // 把当前买卖方向 转换为 对向买卖方向，再去补充盘口
+        if (ESimuOrderDirection.BUY.getCode().equals(direction)) {
+            direction = ESimuOrderDirection.SELL.getCode();
+        } else {
+            direction = ESimuOrderDirection.BUY.getCode();
+        }
+
         // 补充盘口
         handicapBO.stuffHandicap(symbol, toSymbol, direction,
             StringValidater.toInteger(EHandicapQuantity.FIFTY.getCode()));
 
         // 获取盘口档位
         List<HandicapGrade> handicapGrades = handicapBO
-            .queryHandicapList(symbol, toSymbol, direction, 5);
+            .queryHandicapList(symbol, toSymbol, direction);
 
         return handicapGrades;
     }
@@ -435,12 +451,11 @@ public class SimuOrderMatch {
         updateSimuOrderTradeInfo(simuOrder, tradedCount, tradedAmount, status);
 
         // 委托单是限价单时更新盘口信息
-        if (ESimuOrderType.LIMIT.equals(simuOrder.getType())) {
+        if (ESimuOrderType.LIMIT.getCode().equals(simuOrder.getType())) {
             // 更新盘口交易信息
             updateHandicapTradeInfo(simuOrder.getCode(),
                 simuOrder.getTotalCount().subtract(simuOrder.getTradedCount()),
                 status);
-
         }
 
         return orderDetail;

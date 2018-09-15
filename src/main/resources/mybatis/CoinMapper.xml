@@ -8,17 +8,31 @@
 		<result column="ename" property="ename" />
 		<result column="cname" property="cname" />
 		<result column="type" property="type" />
+		
 		<result column="unit" property="unit" />
 		<result column="icon" property="icon" />
 		<result column="pic1" property="pic1" />
 		<result column="pic2" property="pic2" />
 		<result column="pic3" property="pic3" />
+		
 		<result column="order_no" property="orderNo" />
+		<result column="total_supply" property="totalSupply" />
+		<result column="total_supply_market" property="totalSupplyMarket" />
+		<result column="max_supply" property="maxSupply" />
+		<result column="max_supply_market" property="maxSupplyMarket" />
+		
+		<result column="rank" property="rank" />
+		<result column="white_paper" property="whitePaper" />
+		<result column="web_url" property="webUrl" />
+		<result column="block_url" property="blockUrl" />
+		<result column="ico_datetime" property="icoDatetime" />
+		
 		<result column="collect_start" property="collectStart" />
 		<result column="withdraw_fee" property="withdrawFee" />
 		<result column="contract_address" property="contractAddress" />
 		<result column="contract_abi" property="contractAbi" />
 		<result column="status" property="status" />
+		
 		<result column="updater" property="updater" />
 		<result column="update_datetime" property="updateDatetime" />
 		<result column="remark" property="remark" />
@@ -58,17 +72,31 @@
 		,t.ename
 		,t.cname
 		,t.type
+		
 		,t.unit
 		,t.icon
 		,t.pic1
 		,t.pic2
 		,t.pic3
+		
 		,t.order_no
+		,t.total_supply
+		,t.total_supply_market
+		,t.max_supply
+		,t.max_supply_market
+		
+		,t.rank
+		,t.white_paper
+		,t.web_url
+		,t.block_url
+		,t.ico_datetime
+		
 		,t.collect_start
 		,t.withdraw_fee
 		,t.contract_address
 		,t.contract_abi
 		,t.status
+		
 		,t.updater
 		,t.update_datetime
 		,t.remark
@@ -89,11 +117,13 @@
 		,t.ename
 		,t.cname
 		,t.type
+		
 		,t.unit
 		,t.icon
 		,t.pic1
 		,t.pic2
 		,t.pic3
+		
 		,t.order_no
 		,t.withdraw_fee
 		,t.contract_address
@@ -166,12 +196,25 @@
 		,icon = #{icon}
 		,pic1 = #{pic1}
 		,pic2 = #{pic2}
+		
 		,pic3 = #{pic3}
 		,order_no = #{orderNo}
+		,t.total_supply = #{totalSupply}
+		,t.total_supply_market = #{totalSupplyMarket}
+		,t.max_supply = #{maxSupply}
+		
+		,t.max_supply_market = #{maxSupplyMarket}
+		,t.rank = #{rank}
+		,t.white_paper = #{whitePaper}
+		,t.web_url = #{webUrl}
+		,t.block_url = #{blockUrl}
+		
+		,t.ico_datetime = #{icoDatetime}
 		,collect_start = #{collectStart}
 		,withdraw_fee = #{withdrawFee}
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
+		
 		,remark = #{remark}
 		WHERE id = #{id}
 	</update>
