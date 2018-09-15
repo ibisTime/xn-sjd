@@ -605,6 +605,8 @@ INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`r
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('accept_rule','accept_order_min_usd_amount','20','admin',now(),'单笔交易最小额度(美元)');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('accept_rule','accept_order_max_usd_amount','5000','admin',now(),'单笔交易最大额度(美元)');
 
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('simu_order_rule','simu_order_rule_cuser_fee','0.01','admin',now(),'普通用户币币交易手续费率');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('simu_order_rule','simu_order_rule_quser_fee','0.008','admin',now(),'渠道商币币交易手续费率');
 /*
 -- Query: SELECT `type`,`parent_key`,`dkey`,`dvalue`,`updater`,now() as `update_datetime`,`remark`FROM tsys_dict
 LIMIT 0, 1000

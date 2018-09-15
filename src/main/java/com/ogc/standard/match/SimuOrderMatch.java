@@ -10,19 +10,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ogc.standard.bo.IHandicapBO;
+import com.ogc.standard.bo.ISYSConfigBO;
 import com.ogc.standard.bo.ISimuMatchResultBO;
 import com.ogc.standard.bo.ISimuOrderBO;
 import com.ogc.standard.bo.ISimuOrderDetailBO;
 import com.ogc.standard.bo.ISimuOrderHistoryBO;
+import com.ogc.standard.bo.IUserBO;
+import com.ogc.standard.common.SysConstants;
 import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.domain.Handicap;
 import com.ogc.standard.domain.HandicapGrade;
 import com.ogc.standard.domain.SimuOrder;
 import com.ogc.standard.domain.SimuOrderDetail;
+import com.ogc.standard.domain.User;
 import com.ogc.standard.enums.EHandicapQuantity;
 import com.ogc.standard.enums.ESimuOrderDirection;
 import com.ogc.standard.enums.ESimuOrderStatus;
 import com.ogc.standard.enums.ESimuOrderType;
+import com.ogc.standard.enums.EUserKind;
 
 /**
  * 币币交易撮合类
@@ -47,6 +52,12 @@ public class SimuOrderMatch {
 
     @Autowired
     private ISimuMatchResultBO simuMatchResultBO;
+
+    @Autowired
+    private IUserBO userBO;
+
+    @Autowired
+    private ISYSConfigBO sysConfigBO;
 
     /**
     * 按交易对查找委托单进行撮合逻辑
@@ -443,7 +454,7 @@ public class SimuOrderMatch {
             BigDecimal tradedAmount, String status) {
 
         // 新增成交单并更新委托单
-        BigDecimal tradedFee = getFee(tradedAmount);
+        BigDecimal tradedFee = getFee(simuOrder.getUserId(), tradedAmount);
         SimuOrderDetail orderDetail = simuOrderDetailBO.saveSimuOrderDetail(
             simuOrder, tradedPrice, tradedCount, tradedAmount, tradedFee);
 
@@ -522,8 +533,8 @@ public class SimuOrderMatch {
             simuOrder
                 .setTradedAmount(simuOrder.getTradedAmount().add(tradedAmount));
             // 交易手续费
-            simuOrder.setTradedFee(
-                simuOrder.getTradedFee().add(getFee(tradedAmount)));
+            simuOrder.setTradedFee(simuOrder.getTradedFee()
+                .add(getFee(simuOrder.getUserId(), tradedAmount)));
 
             simuOrderBO.refreshLimitSimuOrder(simuOrder);
 
@@ -532,7 +543,7 @@ public class SimuOrderMatch {
             simuOrder.setTradedCount(tradedCount);
             simuOrder.setTradedAmount(tradedAmount);
             // 交易手续费
-            simuOrder.setTradedFee(getFee(tradedAmount));
+            simuOrder.setTradedFee(getFee(simuOrder.getUserId(), tradedAmount));
 
             // 放入历史委托单
             moveToHistory(simuOrder);
@@ -589,10 +600,22 @@ public class SimuOrderMatch {
      * @create: 2018年9月4日 下午8:16:58 lei
      * @history:
      */
-    private BigDecimal getFee(BigDecimal tradeAmount) {
+    private BigDecimal getFee(String userId, BigDecimal tradeAmount) {
+
+        User user = userBO.getUser(userId);
+
+        BigDecimal rate = BigDecimal.ZERO;
+
+        if (EUserKind.Customer.getCode().equals(user.getKind())) {
+            rate = sysConfigBO
+                .getBigDecimalValue(SysConstants.SIMU_ORDER_RULE_CUSER_FEE);
+        } else {
+            rate = sysConfigBO
+                .getBigDecimalValue(SysConstants.SIMU_ORDER_RULE_QUSER_FEE);
+        }
 
         BigDecimal fee = BigDecimal.ZERO;
-        fee = tradeAmount.multiply(BigDecimal.ONE);
+        fee = tradeAmount.multiply(rate);
 
         return fee;
     }

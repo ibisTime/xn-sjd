@@ -2,6 +2,7 @@ package com.ogc.standard.ao.impl;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,6 +97,11 @@ public class HandicapAOImpl implements IHandicapAO {
             item.setCount(count);
 
             marketDepthItems.add(item);
+        }
+
+        // 将深度倒序，方便前端展示
+        if (ESimuOrderDirection.BUY.getCode().equals(direction)) {
+            Collections.reverse(marketDepthItems);
         }
 
         return marketDepthItems;
