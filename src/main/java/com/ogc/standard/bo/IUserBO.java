@@ -42,6 +42,10 @@ public interface IUserBO extends IPaginableBO<User> {
     public String doRegister(String mobile, String nickname, String loginPwd,
             User refereeUser, String province, String city, String area);
 
+    // 渠道商代注册
+    public String doAddQDS(String mobile, String idKind, String idNo,
+            String realName, String respArea, String loginPwd);
+
     public String doAddUser(User data);
 
     public String saveUser(String mobile, String kind, String companyCode,
@@ -111,6 +115,9 @@ public interface IUserBO extends IPaginableBO<User> {
     public void refreshTradeRate(String userId, Double tradeRate);
 
     public void refreshGoogleSecret(String userId, String secret);
+
+    // 修改渠道商负责区域
+    public void refreshRespArea(String userId, String respArea, String updater);
 
     // 修改推荐人
     public void refreshReferee(String userId, String userReferee,

@@ -38,7 +38,7 @@ public class CoinAOImpl implements ICoinAO {
     @Transactional
     public void addCoinAndPublish(XN802000Req req) {
 
-        if (ECoinType.HPM.getCode().equals(req.getType())) {
+        if (ECoinType.X.getCode().equals(req.getType())) {
             addEthToken(req);
         } else {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
@@ -60,7 +60,7 @@ public class CoinAOImpl implements ICoinAO {
                 "币种符号" + req.getSymbol() + "已经被使用");
         }
         // 检查币种符号是否已经在平台内存在
-        if (coinBO.isContractAddressExist(ECoinType.HPM.getCode(),
+        if (coinBO.isContractAddressExist(ECoinType.X.getCode(),
             req.getContractAddress())) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "合约地址" + req.getContractAddress() + "已经被使用");
@@ -75,7 +75,7 @@ public class CoinAOImpl implements ICoinAO {
         data.setSymbol(req.getSymbol());
         data.setEname(req.getEname());
         data.setCname(req.getCname());
-        data.setType(ECoinType.HPM.getCode());
+        data.setType(ECoinType.X.getCode());
         data.setUnit(StringValidater.toInteger(req.getUnit()));
 
         data.setIcon(req.getIcon());

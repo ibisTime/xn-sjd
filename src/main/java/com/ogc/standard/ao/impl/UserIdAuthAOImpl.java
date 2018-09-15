@@ -42,7 +42,7 @@ public class UserIdAuthAOImpl implements IUserIdAuthAO {
     @Override
     public void apply(XN805160Req req) {
         User applyUser = userBO.getUser(req.getApplyUser());
-        if (applyUser.getRealName() != null) {
+        if (applyUser.getIdKind() != null && applyUser.getIdNo() != null) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(), "该用户已认证成功");
         }
         // 检验审批状态

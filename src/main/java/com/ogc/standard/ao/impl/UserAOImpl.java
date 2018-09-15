@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ogc.standard.ao.IAccountAO;
 import com.ogc.standard.ao.IUserAO;
 import com.ogc.standard.bo.IAccountBO;
+import com.ogc.standard.bo.IAwardBO;
 import com.ogc.standard.bo.ICoinBO;
 import com.ogc.standard.bo.IGoogleAuthBO;
 import com.ogc.standard.bo.IIdentifyBO;
@@ -36,7 +37,6 @@ import com.ogc.standard.common.MD5Util;
 import com.ogc.standard.common.PhoneUtil;
 import com.ogc.standard.common.PwdUtil;
 import com.ogc.standard.common.SysConstants;
-import com.ogc.standard.domain.Coin;
 import com.ogc.standard.domain.SignLog;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.domain.UserExt;
@@ -46,11 +46,11 @@ import com.ogc.standard.dto.req.XN805081Req;
 import com.ogc.standard.dto.res.XN625000Res;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECaptchaType;
-import com.ogc.standard.enums.ECoinStatus;
 import com.ogc.standard.enums.EIDKind;
 import com.ogc.standard.enums.ESignLogType;
 import com.ogc.standard.enums.ESystemCode;
 import com.ogc.standard.enums.EUser;
+import com.ogc.standard.enums.EUserKind;
 import com.ogc.standard.enums.EUserLevel;
 import com.ogc.standard.enums.EUserPwd;
 import com.ogc.standard.enums.EUserStatus;
@@ -66,6 +66,9 @@ import com.ogc.standard.exception.EBizErrorCode;
 public class UserAOImpl implements IUserAO {
     @Autowired
     private ISmsOutBO smsOutBO;
+
+    @Autowired
+    private IAwardBO awardBO;
 
     @Autowired
     private IGoogleAuthBO googleAuthBO;
@@ -120,10 +123,14 @@ public class UserAOImpl implements IUserAO {
         String userId = userBO.doRegister(req.getMobile(), req.getNickname(),
             req.getLoginPwd(), refereeUser, req.getProvince(), req.getCity(),
             req.getArea());
+        if (refereeUser != null) {
+            // 推荐人分佣
+            awardBO.saveRegistAward(refereeUser.getUserId(),
+                refereeUser.getKind(), userId, "用户注册推荐人分佣");
+        }
+
         // ext中添加数据
         userExtBO.addUserExt(userId);
-        Coin condition = new Coin();
-        condition.setStatus(ECoinStatus.PUBLISHED.getCode());
 
         // 分配账户
         accountAO.distributeAccount(userId);
@@ -158,7 +165,6 @@ public class UserAOImpl implements IUserAO {
         Date date = new Date();
         user.setCreateDatetime(date);
         user.setUpdater(req.getUpdater());
-        user.setUpdateDatetime(date);
         user.setRemark(req.getRemark());
         double tradeRate = sysConfigBO
             .getDoubleValue(SysConstants.DEFAULT_USER_RATE);
@@ -169,6 +175,28 @@ public class UserAOImpl implements IUserAO {
         userExtBO.addUserExt(userId);
         // 分配账户
         accountAO.distributeAccount(userId);
+        return userId;
+    }
+
+    @Override // 渠道商用户代注册
+    @Transactional
+    public String doAddQDS(String mobile, String idKind, String idNo,
+            String realName, String respArea) {
+        // 检查手机号是否存在
+        userBO.isMobileExist(mobile);
+        // 注册
+        String loginPwd = (int) ((Math.random() * 9 + 1) * 100000) + "";
+        String userId = userBO.doAddQDS(mobile, idKind, idNo, realName,
+            respArea, loginPwd);
+        // ext中添加数据
+        userExtBO.addUserExt(userId);
+        // 分配账户
+        accountAO.distributeAccount(userId);
+        // 发送短信
+        String content = String.format(SysConstants.DO_ADD_USER_CN,
+            PhoneUtil.hideMobile(mobile), loginPwd);
+        smsOutBO.sendSmsOut(mobile, content, ESystemCode.BZ.getCode(),
+            ESystemCode.BZ.getCode());
         return userId;
     }
 
@@ -619,6 +647,18 @@ public class UserAOImpl implements IUserAO {
         }
         userBO.isEmailExist(email);
         userBO.refreshEmail(userId, email);
+    }
+
+    @Override
+    public void editRespArea(String userId, String respArea, String updater) {
+        // 判断用户是否存在
+        User user = userBO.getUser(userId);
+        // 判断是否为渠道商
+        if (!EUserKind.QDS.getCode().equals(user.getKind())) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "用户不是渠道商");
+        }
+        // 修改
+        userBO.refreshRespArea(userId, respArea, updater);
     }
 
 }

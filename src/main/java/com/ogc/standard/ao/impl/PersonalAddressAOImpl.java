@@ -58,7 +58,7 @@ public class PersonalAddressAOImpl implements IPersonalAddressAO {
 
     private void verifyAddress(Coin coin, String address) {
         if (ECoinType.ETH.getCode().equals(coin.getType())
-                || ECoinType.HPM.getCode().equals(coin.getType())) {
+                || ECoinType.X.getCode().equals(coin.getType())) {
             // 地址有效性校验
             if (!WalletUtils.isValidAddress(address)) {
                 throw new BizException(EBizErrorCode.DEFAULT.getCode(),

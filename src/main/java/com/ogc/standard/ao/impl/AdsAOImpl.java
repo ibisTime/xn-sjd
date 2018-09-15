@@ -370,7 +370,7 @@ public class AdsAOImpl implements IAdsAO {
 
             ads.setTruePrice(truePrice);
 
-        } else if (ECoinType.HPM.getCode().equals(coin.getType())) {
+        } else if (ECoinType.X.getCode().equals(coin.getType())) {
             ads.setMarketPrice(data.getTruePrice());
             ads.setTruePrice(data.getTruePrice());
         } else {
