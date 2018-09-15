@@ -14,7 +14,7 @@ public class MarketDepthItem {
     private BigDecimal price;
 
     // 数量
-    private BigDecimal amount;
+    private BigDecimal count;
 
     public BigDecimal getPrice() {
         return price;
@@ -24,17 +24,17 @@ public class MarketDepthItem {
         this.price = price;
     }
 
-    public BigDecimal getAmount() {
-        return amount;
+    public BigDecimal getCount() {
+        return count;
     }
 
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
+    public void setCount(BigDecimal count) {
+        this.count = count;
     }
 
     @Override
     public String toString() {
-        return "MarketDepthItem [price=" + price + ", amount=" + amount + "]";
+        return "MarketDepthItem [price=" + price + ", count=" + count + "]";
     }
 
 }

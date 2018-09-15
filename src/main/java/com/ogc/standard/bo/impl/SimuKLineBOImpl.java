@@ -10,10 +10,12 @@ import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.ogc.standard.ao.impl.MarketAOImpl;
 import com.ogc.standard.bo.ISimuKLineBO;
 import com.ogc.standard.bo.ISimuOrderDetailBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.common.DateUtil;
+import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.dao.ISimuKLineDAO;
 import com.ogc.standard.domain.ExchangePair;
 import com.ogc.standard.domain.SimuKLine;
@@ -30,6 +32,9 @@ public class SimuKLineBOImpl extends PaginableBOImpl<SimuKLine>
     @Autowired
     private ISimuOrderDetailBO simuOrderDetailBO;
 
+    @Autowired
+    private MarketAOImpl marketAOImpl;
+
     /**
      * 落地K线
      * @param orderDetail 
@@ -37,12 +42,14 @@ public class SimuKLineBOImpl extends PaginableBOImpl<SimuKLine>
      * @history:
      */
     @Override
-    public void saveSimuKLine(ExchangePair pair, BigDecimal volume,
-            BigDecimal quantity, BigDecimal amount, BigDecimal open,
-            BigDecimal close, BigDecimal high, BigDecimal low) {
+    public void saveSimuKLine(ExchangePair pair, String period,
+            BigDecimal volume, BigDecimal quantity, BigDecimal amount,
+            BigDecimal open, BigDecimal close, BigDecimal high,
+            BigDecimal low) {
         SimuKLine simuKLine = new SimuKLine();
         simuKLine.setSymbol(pair.getSymbol());
         simuKLine.setToSymbol(pair.getToSymbol());
+        simuKLine.setPeriod(period);
         simuKLine.setVolume(volume);
         simuKLine.setQuantity(quantity);
         simuKLine.setAmount(amount);
@@ -80,7 +87,12 @@ public class SimuKLineBOImpl extends PaginableBOImpl<SimuKLine>
     }
 
     @Override
-    public void saveKLineByPeriod(ExchangePair pair, int unitMin) {
+    public void saveKLineByPeriod(ExchangePair pair, String period) {
+
+        ESimuKLinePeriod linePeriod = ESimuKLinePeriod
+            .getESimuKLinePeriod(period);
+
+        int unitMin = StringValidater.toInteger(linePeriod.getValue());
 
         List<SimuOrderDetail> simuOrderDetails = getSimuOrderDetails(pair,
             unitMin);
@@ -145,7 +157,11 @@ public class SimuKLineBOImpl extends PaginableBOImpl<SimuKLine>
 
         }
 
-        saveSimuKLine(pair, volume, quantity, amount, open, close, high, low);
+        saveSimuKLine(pair, period, volume, quantity, amount, open, close, high,
+            low);
+
+        marketAOImpl.saveMarket(pair.getSymbol(), "HappyMoney",
+            pair.getToSymbol(), "", close);
     }
 
     /**

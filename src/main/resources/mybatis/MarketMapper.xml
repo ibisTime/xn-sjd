@@ -15,34 +15,59 @@
     <result column="high" jdbcType="DECIMAL" property="high" />
     <result column="volume" jdbcType="VARCHAR" property="volume" />
     <result column="update_datetime" jdbcType="TIMESTAMP" property="updateDatetime" />
+    <result column="coinmarketcap_id" jdbcType="VARCHAR" property="coinmarketcapId" />
   </resultMap>
 
   <sql id="Base_Column_List">
-    id, coin, refer_currency, origin, last_price, bid, ask, mid, low, high, volume,
-    update_datetime
+    id, symbol, refer_currency, origin, last_price, bid, ask, mid, low, high, volume,
+    update_datetime, coinmarketcap_id
   </sql>
 
   <sql id="whereCondation">
     <trim prefix="where" prefixOverrides="AND | OR">
-      <if test="origin != null and origin != ''">
-        AND origin = #{origin}
+      <if test="symbol != null and symbol != ''">
+        AND symbol = #{symbol}
       </if>
-      <if test="coin != null and coin != ''">
-        AND coin = #{coin}
-      </if>
-      <if test="coinList != null">
-        AND coin in
-        <foreach collection="coinList" item="coin" open="(" close=")" separator=",">
-          #{coin}
-        </foreach>
+      <if test="referCurrency != null and referCurrency != ''">
+        AND refer_currency = #{referCurrency}
       </if>
     </trim>
   </sql>
 
   <update id="update" parameterType="com.ogc.standard.domain.Market">
-    update tcoin_market
-    set
+  	INSERT INTO
+  	tcoin_market(
+  	symbol
+  	,refer_currency
+  	,origin
+  	,last_price
+  	,bid
+  	,ask
+  	,mid
+  	,low
+  	,high
+  	,volume
+  	,update_datetime
+  	,coinmarketcap_id
+  	)
+  	VALUE(
+  	#{symbol,jdbcType=VARCHAR}
+  	 ,#{referCurrency,jdbcType=VARCHAR}
+  	 ,#{origin,jdbcType=VARCHAR}
+  	 ,#{lastPrice,jdbcType=DECIMAL}
+  	 ,#{bid,jdbcType=DECIMAL}
+  	 ,#{ask,jdbcType=DECIMAL}
+  	 ,#{mid,jdbcType=DECIMAL}
+  	 ,#{low,jdbcType=DECIMAL}
+  	 ,#{high,jdbcType=DECIMAL}
+  	 ,#{volume,jdbcType=VARCHAR}
+  	 ,#{updateDatetime,jdbcType=TIMESTAMP}
+  	 ,#{coinmarketcapId,jdbcType=VARCHAR}
+  	)
+   	on DUPLICATE key update
+   	symbol = #{symbol,jdbcType=VARCHAR},
     refer_currency = #{referCurrency,jdbcType=VARCHAR},
+    origin = #{origin,jdbcType=VARCHAR},
     last_price = #{lastPrice,jdbcType=DECIMAL},
     bid = #{bid,jdbcType=DECIMAL},
     ask = #{ask,jdbcType=DECIMAL},
@@ -50,8 +75,8 @@
     low = #{low,jdbcType=DECIMAL},
     high = #{high,jdbcType=DECIMAL},
     volume = #{volume,jdbcType=VARCHAR},
-    update_datetime = #{updateDatetime,jdbcType=TIMESTAMP}
-    where coin = #{coin} and origin = #{origin}
+    update_datetime = #{updateDatetime,jdbcType=TIMESTAMP},
+	coinmarketcap_id = #{coinmarketcapId,jdbcType=VARCHAR}
   </update>
 
   <select id="selectedByCoinTypeAndOrigin" parameterType="com.ogc.standard.domain.Market" resultMap="BaseResultMap" >

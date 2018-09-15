@@ -1,39 +1,37 @@
 package com.ogc.standard.api.impl;
 
-import com.ogc.standard.ao.ICoinAO;
+import com.ogc.standard.ao.IHandicapAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.ObjValidater;
-import com.ogc.standard.dto.req.XN802002Req;
-import com.ogc.standard.dto.res.BooleanRes;
+import com.ogc.standard.dto.req.XN650064Req;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
 
 /** 
- * 修改币种信息
- * @author: haiqingzheng 
- * @since: 2018年3月13日 上午11:12:25 
+ * 交易深度
+ * @author: lei 
+ * @since: 2018年8月29日 下午3:51:38 
  * @history:
  */
-public class XN802002 extends AProcessor {
+public class XN650064 extends AProcessor {
 
-    private ICoinAO coinAO = SpringContextHolder.getBean(ICoinAO.class);
+    private IHandicapAO handicapAO = SpringContextHolder
+        .getBean(IHandicapAO.class);
 
-    private XN802002Req req = null;
+    private XN650064Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        synchronized (XN802002.class) {
-            coinAO.editCoin(req);
-        }
-        return new BooleanRes(true);
+
+        return handicapAO.getMarketDepth(req.getSymbol(), req.getToSymbol());
     }
 
     @Override
     public void doCheck(String inputparams, String operator)
             throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN802002Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN650064Req.class);
         ObjValidater.validateReq(req);
     }
 

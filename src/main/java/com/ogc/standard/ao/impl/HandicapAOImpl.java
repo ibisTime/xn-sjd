@@ -14,6 +14,8 @@ import com.ogc.standard.domain.HandicapGrade;
 import com.ogc.standard.domain.HandicapItem;
 import com.ogc.standard.dto.res.XN650065Res;
 import com.ogc.standard.enums.ESimuOrderDirection;
+import com.ogc.standard.market.MarketDepth;
+import com.ogc.standard.market.MarketDepthItem;
 
 @Service
 public class HandicapAOImpl implements IHandicapAO {
@@ -57,5 +59,45 @@ public class HandicapAOImpl implements IHandicapAO {
 
         return handicapItems;
 
+    }
+
+    @Override
+    public MarketDepth getMarketDepth(String symbol, String toSymbol) {
+
+        MarketDepth marketDepth = new MarketDepth();
+
+        marketDepth.setAsks(formatMarketDepth(symbol, toSymbol,
+            ESimuOrderDirection.SELL.getCode()));
+
+        marketDepth.setBids(formatMarketDepth(symbol, toSymbol,
+            ESimuOrderDirection.BUY.getCode()));
+
+        return marketDepth;
+    }
+
+    private List<MarketDepthItem> formatMarketDepth(String symbol,
+            String toSymbol, String direction) {
+
+        List<MarketDepthItem> marketDepthItems = new ArrayList<>();
+
+        // 获取档位
+        List<HandicapItem> handicapItems = formatHandicap(symbol, toSymbol,
+            direction);
+
+        for (int i = 0; i < handicapItems.size(); i++) {
+
+            MarketDepthItem item = new MarketDepthItem();
+            item.setPrice(handicapItems.get(i).getPrice());
+
+            BigDecimal count = BigDecimal.ZERO;
+            for (int j = 0; j == i; j++) {
+                count = count.add(handicapItems.get(j).getCount());
+            }
+            item.setCount(count);
+
+            marketDepthItems.add(item);
+        }
+
+        return marketDepthItems;
     }
 }

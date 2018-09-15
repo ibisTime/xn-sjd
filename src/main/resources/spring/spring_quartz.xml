@@ -19,20 +19,32 @@
 		<property name="triggers">
 			<list>
 			
-				<!-- 模拟交易 -->
-       		    <!-- <ref bean="doCheckDealTrigger"/> -->
-       		    <!-- <ref bean="doRefreshDayMarketAmountTrigger"/> -->
+				<!-- 行情 -->
+       		    <!-- <ref bean="marketTrigger"/>  -->
 
-       		    <ref bean="doScanPairTrigger"/>
+       		    <!-- <ref bean="doScanPairTrigger"/>
        		    <ref bean="doSaveKLineTrigger"/>
-       		    <ref bean="doScanMatchResultTrigger"/>
+       		    <ref bean="doScanMatchResultTrigger"/> -->
 
        		    
 			</list>
 		</property>
 		<property name="autoStartup" value="true" />
 	</bean>
-	
+
+	<!-- 定时获取行情 -->
+	<bean id="marketTrigger"
+		  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="market" />
+		<property name="cronExpression" value="*/30 * * * * ?" />
+	</bean>
+	<bean id="market"
+		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="marketAOImpl" />
+		<property name="targetMethod" value="obtainMarket" />
+		<property name="concurrent" value="false" />
+		<!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程 -->
+	</bean>	
 
 	<!-- 扫描交易对 -->
 	<bean id="doScanPairTrigger"
@@ -53,7 +65,7 @@
 	<bean id="doSaveKLineTrigger"
 		  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="doSaveKLine" />
-		<property name="cronExpression" value="* 0/1 * * * ?" />
+		<property name="cronExpression" value="0 */1 * * * ?" />
 	</bean>
 	
 	<bean id="doSaveKLine"

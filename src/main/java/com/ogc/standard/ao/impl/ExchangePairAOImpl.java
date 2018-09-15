@@ -10,6 +10,7 @@ import com.ogc.standard.bo.IExchangePairBO;
 import com.ogc.standard.bo.ISimuKLineBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.ExchangePair;
+import com.ogc.standard.enums.ESimuKLinePeriod;
 import com.ogc.standard.match.SimuOrderMatch;
 
 @Service
@@ -35,19 +36,19 @@ public class ExchangePairAOImpl implements IExchangePairAO {
     public void scanPair() {
 
         // 获取平台内的所有交易对
-        // List<ExchangePair> pairs = exchangePairBO
-        // .queryExchangePairList(new ExchangePair());
-        //
-        // for (ExchangePair pair : pairs) {
-        //
-        // // new Thread() {
-        // // public void run() {
-        // simuOrderMatch.doMatchTrade(pair.getSymbol().toUpperCase(),
-        // pair.getToSymbol().toUpperCase());
-        // // }
-        // // }.start();
-        //
-        // }
+        List<ExchangePair> pairs = exchangePairBO
+            .queryExchangePairList(new ExchangePair());
+
+        for (ExchangePair pair : pairs) {
+            //
+            // // new Thread() {
+            // // public void run() {
+            simuOrderMatch.doMatchTrade(pair.getSymbol().toUpperCase(),
+                pair.getToSymbol().toUpperCase());
+            // // }
+            // // }.start();
+            //
+        }
 
     }
 
@@ -59,8 +60,8 @@ public class ExchangePairAOImpl implements IExchangePairAO {
             .queryExchangePairList(new ExchangePair());
 
         for (ExchangePair pair : pairs) {
-
-            simuKLineBO.saveKLineByPeriod(pair, -1);
+            simuKLineBO.saveKLineByPeriod(pair,
+                ESimuKLinePeriod.MIN1.getCode());
 
         }
 

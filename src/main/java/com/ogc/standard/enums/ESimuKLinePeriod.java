@@ -1,5 +1,10 @@
 package com.ogc.standard.enums;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import com.ogc.standard.exception.BizException;
+
 /**
  * 
  * @author: lei 
@@ -8,8 +13,25 @@ package com.ogc.standard.enums;
  */
 public enum ESimuKLinePeriod {
 
-    MIN1("1min", "1分钟"), MIN5("5min", "5分钟"), MIN15("15min",
-            "15分钟"), MIN30("30min", "30分钟");
+    MIN1("1min", "-1"), MIN5("5min", "-5"), MIN15("15min",
+            "-15"), MIN30("30min", "-30");
+
+    public static Map<String, ESimuKLinePeriod> getJourKindResultMap() {
+        Map<String, ESimuKLinePeriod> map = new HashMap<String, ESimuKLinePeriod>();
+        for (ESimuKLinePeriod type : ESimuKLinePeriod.values()) {
+            map.put(type.getCode(), type);
+        }
+        return map;
+    }
+
+    public static ESimuKLinePeriod getESimuKLinePeriod(String code) {
+        Map<String, ESimuKLinePeriod> map = getJourKindResultMap();
+        ESimuKLinePeriod result = map.get(code);
+        if (result == null) {
+            throw new BizException("XN0000", code + "对应的ESimuKLinePeriod不存在");
+        }
+        return result;
+    }
 
     ESimuKLinePeriod(String code, String value) {
         this.code = code;
