@@ -24,6 +24,8 @@ public interface IUserBO extends IPaginableBO<User> {
     // 根据手机号和类型判断手机号是否存在
     public void isMobileExist(String mobile);
 
+    public void isEmailExist(String email);
+
     // 判断昵称是否存在
     public void isNicknameExist(String nickname);
 
@@ -39,6 +41,10 @@ public interface IUserBO extends IPaginableBO<User> {
     // 前端用户注册
     public String doRegister(String mobile, String nickname, String loginPwd,
             User refereeUser, String province, String city, String area);
+
+    // 渠道商代注册
+    public String doAddQDS(String mobile, String idKind, String idNo,
+            String realName, String respArea, String loginPwd);
 
     public String doAddUser(User data);
 
@@ -67,6 +73,9 @@ public interface IUserBO extends IPaginableBO<User> {
     public int refreshIdentity(String userId, String realName, String idKind,
             String idNo);
 
+    public int refreshIdentity(String userId, String realName, String idKind,
+            String idNo, String idFace, String idOppo, String idHold);
+
     public int refreshRealName(String userId, String realName);
 
     public int refreshLoginPwd(String userId, String loginPwd);
@@ -74,6 +83,8 @@ public interface IUserBO extends IPaginableBO<User> {
     public int refreshTradePwd(String userId, String tradePwd);
 
     public int refreshMobile(String userId, String mobile);
+
+    public int refreshEmail(String userId, String email);
 
     public User getUser(String userId);
 
@@ -100,7 +111,13 @@ public interface IUserBO extends IPaginableBO<User> {
     // 修改定位信息
     public void refreshLocation(User data);
 
+    // 修改手续费率
+    public void refreshTradeRate(String userId, Double tradeRate);
+
     public void refreshGoogleSecret(String userId, String secret);
+
+    // 修改渠道商负责区域
+    public void refreshRespArea(String userId, String respArea, String updater);
 
     // 修改推荐人
     public void refreshReferee(String userId, String userReferee,

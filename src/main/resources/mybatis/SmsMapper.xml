@@ -62,7 +62,7 @@
 	<update id="update_status" parameterType="sms">
 		UPDATE tstd_sms
 		SET
-		,status=#{status}
+		status=#{status}
 		,updater=#{updater}
 		,update_datetime=#{updateDatetime}
 		,remark=#{remark}

@@ -114,6 +114,12 @@
 		</foreach>
 		
 	</insert>
+	
+	<delete id="delete_read" parameterType="read">
+		DELETE FROM tstd_read
+		WHERE
+		sms_code = #{smsCode}			
+	</delete>
 
 	<select id="select_read_count" parameterType="read"
 		resultType="java.lang.Long">

@@ -24,8 +24,14 @@ public interface IUserAO {
     // 代注册
     public String doAddUser(XN805042Req req);
 
+    public void editTradeRate(String userId, Double tradeRate);
+
     public void doBindMobile(String isSendSms, String mobile, String smsCaptcha,
             String userId);
+
+    // 平台代注册渠道商用户
+    public String doAddQDS(String mobile, String idKind, String idNo,
+            String realName, String respArea);
 
     // // 申请注册
     // public String doApplyRegUser(XN805043Req req);
@@ -94,9 +100,9 @@ public interface IUserAO {
     // 获取腾讯云签名
     public XN625000Res getTencentSign(String userId);
 
-//     // 本系统实名认证
-//     public void doIdentify(String userId, String idKind, String idNo,
-//     String realName);
+    // 本系统实名认证
+    public void doIdentify(String userId, String idKind, String idNo,
+            String realName);
 
     // 修改头像
     public void modifyPhoto(String userId, String photo);
@@ -130,6 +136,7 @@ public interface IUserAO {
     //
     // 修改昵称
     public void doModifyNickname(String userId, String nickname);
+
     //
     // // 审核注册用户
     // public void doApproveUser(String userId, String approver,
@@ -138,13 +145,13 @@ public interface IUserAO {
     // // 修改用户信息
     // public void doModifyUser(XN805095Req req);
     //
-//     // 两要素实名认证
-//     public void doTwoIdentify(String userId, String idKind, String idNo,
-//     String realName);
-//    
-//     // 三四要素实名认证
-//     public void doFourIdentify(String userId, String idKind, String idNo,
-//     String realName, String cardNo, String bindMobile);
+    // 两要素实名认证
+    public void doTwoIdentify(String userId, String idKind, String idNo,
+            String realName);
+
+    // 三四要素实名认证
+    public void doFourIdentify(String userId, String idKind, String idNo,
+            String realName, String cardNo, String bindMobile);
 
     // // 芝麻认证（支付宝渠道）
     // public Object doAlipayZhimaIdentify(String userId, String idKind,
@@ -193,6 +200,13 @@ public interface IUserAO {
     // 开启/修改谷歌认证
     public void closeGoogleAuth(String userId, String smsCaptcha,
             String googleCaptcha);
+
+    // 绑定邮箱
+    public void bindEmail(String captcha, String email, String userId);
+
+    // 修改负责区域
+    public void editRespArea(String userId, String respArea, String updater);
+
     // // 关闭认证
     // public void closeGoogleAuth(String userId, String smsCaptcha,
     // String googleCaptcha);

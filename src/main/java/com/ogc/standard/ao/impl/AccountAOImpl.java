@@ -65,7 +65,7 @@ public class AccountAOImpl implements IAccountAO {
             for (Coin coin : coins) {
                 // 有几个币种创建几个账户，有几个原生币就加几个地址（代币用原生币地址）
                 if (ECoinType.ETH.getCode().equals(coin.getType())
-                        || ECoinType.HPM.getCode().equals(coin.getType())) {
+                        || ECoinType.X.getCode().equals(coin.getType())) {
                     if (ethXAddress == null) {
                         ethXAddress = ethXAddressBO.generateAddress(userId);
                     }
@@ -107,7 +107,7 @@ public class AccountAOImpl implements IAccountAO {
 
         String address = null;
         if (ECoinType.ETH.getCode().equals(coin.getType())
-                || ECoinType.HPM.getCode().equals(coin.getType())) {
+                || ECoinType.X.getCode().equals(coin.getType())) {
             address = ethXAddressBO.generateAddress(userId);
         } else if (ECoinType.BTC.getCode().equals(coin.getType())) {
             address = btcXAddressBO.generateAddress(userId);

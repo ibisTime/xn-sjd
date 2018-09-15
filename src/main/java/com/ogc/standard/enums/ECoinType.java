@@ -19,7 +19,7 @@ public enum ECoinType {
     ETH("0", "以太币"), BTC("1", "比特币")
 
     // 基于某条公链的token币
-    , HPM("0T", "以太token币");
+    , X("0T", "以太token币");
 
     ECoinType(String code, String value) {
         this.code = code;

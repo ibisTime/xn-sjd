@@ -24,8 +24,11 @@ public class User extends ABaseDO {
     // 手机号
     private String mobile;
 
+    // 邮件
+    private String email;
+
     // 类型
-    private char kind;
+    private String kind;
 
     // 头像
     private String photo;
@@ -182,9 +185,6 @@ public class User extends ABaseDO {
 
     // 生日
     private String birthday;
-
-    // 邮箱
-    private String email;
 
     // 学位
     private String diploma;
@@ -606,11 +606,11 @@ public class User extends ABaseDO {
         this.divRate2 = divRate2;
     }
 
-    public char getKind() {
+    public String getKind() {
         return kind;
     }
 
-    public void setKind(char kind) {
+    public void setKind(String kind) {
         this.kind = kind;
     }
 
@@ -634,8 +634,8 @@ public class User extends ABaseDO {
         return idHold;
     }
 
-    public void setIdHold(String idHolder) {
-        this.idHold = idHolder;
+    public void setIdHold(String idHold) {
+        this.idHold = idHold;
     }
 
     public String getGoogleSecret() {
