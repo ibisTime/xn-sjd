@@ -15,9 +15,16 @@
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
-			<if test="code != null and code != '' ">
-				AND t.code = #{code}
+			<if test="id != null and id != '' ">
+				AND t.id = #{id}
 			</if>
+			<if test="userId != null and userId != '' ">
+				AND t.user_id = #{userId}
+			</if>
+			<if test="divideId != null and divideId != '' ">
+				AND t.divide_id = #{divideId}
+			</if>
+		
 		</trim>
 	</sql>
 	<select id="select_divideDetail" parameterType="divideDetail" resultMap="divideDetail_DB_Result">

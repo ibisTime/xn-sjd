@@ -35,28 +35,60 @@ public class DivideAOImpl implements IDivideAO {
     private IAccountBO accountBO;
 
     @Override
-    public void addDivide() {
-        divideBO.saveDivide();
-    }
-
-    @Override
     public Paginable<Divide> queryDividePage(int start, int limit,
             Divide condition) {
         return divideBO.getPaginable(start, limit, condition);
     }
 
     @Override
-    public List<Divide> queryDivideList(Divide condition) {
-        return divideBO.queryDivideList(condition);
+    public void doDivide(String divideId, String divideProfit,
+            String divideUser, String remark) {
+
+        DivideDetail condition = new DivideDetail();
+        condition.setDivideId(divideId);
+        List<DivideDetail> divideDetails = divideDetailBO
+            .queryDivideDetailList(condition);
+
+        // 本次分红币的总个数
+        BigDecimal totalAmount = BigDecimal.ZERO;
+        for (DivideDetail divideDetail : divideDetails) {
+            totalAmount = totalAmount.add(divideDetail.getAmount());
+        }
+
+        if (totalAmount.compareTo(BigDecimal.ZERO) == 0) {
+            return;
+        }
+
+        // 个人分红额=可分配利润/币的总个数*持币个数
+        BigDecimal totalDivideAmount = BigDecimal.ZERO;
+        for (DivideDetail divideDetail : divideDetails) {
+            BigDecimal divideAmount = StringValidater.toBigDecimal(divideProfit)
+                .divide(totalAmount, 4, BigDecimal.ROUND_DOWN)
+                .multiply(divideDetail.getAmount());
+
+            // 本次分红总金额
+            totalDivideAmount = totalDivideAmount.add(divideAmount);
+
+            divideDetail.setDivideAmount(divideAmount);
+            divideDetail.setDivideDatetime(new Date());
+            divideDetailBO.refreshDivideDetail(divideDetail);
+
+            // Account account = accountBO
+            // .getAccountByUser(divideDetail.getUserId(), ECoin.X.getCode());
+            // accountBO.changeAmount(account, divideAmount,
+            // EChannelType.Divide.getCode(), EChannelType.Divide.getValue(),
+            // divideDetail.getId(), EJourBizType., bizNote)
+        }
+
+        divideBO.refreshDivide(divideId,
+            StringValidater.toBigDecimal(divideProfit), totalDivideAmount,
+            divideUser, remark);
     }
 
-    // @Override
-    // public Divide getDivide(String code) {
-    // return divideBO.getDivide(code);
-    // }
-
     // 遍历user落地分红快照
-    public void name(String divideId) {
+    public void divide() {
+
+        String divideId = divideBO.saveDivide().getId();
 
         // 查询所有的C端用户
         List<User> users = userBO.queryUserList(new User());
@@ -70,38 +102,5 @@ public class DivideAOImpl implements IDivideAO {
                 amount, divideId);
         }
 
-    }
-
-    public void divide(String divideId, String divideProfit, String divideUser,
-            String remark) {
-        DivideDetail condition = new DivideDetail();
-        condition.setDivideId(divideId);
-        List<DivideDetail> divideDetails = divideDetailBO
-            .queryDivideDetailList(condition);
-
-        // 本次分红币的总个数
-        BigDecimal totalAmount = BigDecimal.ZERO;
-        for (DivideDetail divideDetail : divideDetails) {
-            totalAmount = totalAmount.add(divideDetail.getAmount());
-        }
-
-        // 个人分红额=可分配利润/币的总个数*持币个数
-        BigDecimal totalDivideAmount = BigDecimal.ZERO;
-        for (DivideDetail divideDetail : divideDetails) {
-            BigDecimal divideAmount = StringValidater.toBigDecimal(divideProfit)
-                .divide(totalAmount).multiply(divideDetail.getAmount());
-
-            // 本次分红总金额
-            totalDivideAmount = totalDivideAmount.add(divideAmount);
-
-            divideDetail.setDivideAmount(divideAmount);
-            divideDetail.setDivideDatetime(new Date());
-            divideDetailBO.refreshDivideDetail(divideDetail);
-
-        }
-
-        divideBO.refreshDivide(divideId,
-            StringValidater.toBigDecimal(divideProfit), totalDivideAmount,
-            divideUser, remark);
     }
 }

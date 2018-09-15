@@ -48,6 +48,9 @@ public class Coin extends ABaseDO {
     // UI序号
     private Integer orderNo;
 
+    // 简介
+    private String introduction;
+
     // 流通量
     private String totalSupply;
 
@@ -196,6 +199,14 @@ public class Coin extends ABaseDO {
 
     public void setTotalSupply(String totalSupply) {
         this.totalSupply = totalSupply;
+    }
+
+    public String getIntroduction() {
+        return introduction;
+    }
+
+    public void setIntroduction(String introduction) {
+        this.introduction = introduction;
     }
 
     public String getTotalSupplyMarket() {

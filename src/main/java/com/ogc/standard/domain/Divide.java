@@ -39,6 +39,14 @@ public class Divide extends ABaseDO {
     // 备注
     private String remark;
 
+    // ******************db properties**************
+
+    // 创建时间起
+    private Date createDatetimeStart;
+
+    // 创建时间止
+    private Date createDatetimeEnd;
+
     public String getId() {
         return id;
     }
@@ -101,6 +109,22 @@ public class Divide extends ABaseDO {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public Date getCreateDatetimeStart() {
+        return createDatetimeStart;
+    }
+
+    public void setCreateDatetimeStart(Date createDatetimeStart) {
+        this.createDatetimeStart = createDatetimeStart;
+    }
+
+    public Date getCreateDatetimeEnd() {
+        return createDatetimeEnd;
+    }
+
+    public void setCreateDatetimeEnd(Date createDatetimeEnd) {
+        this.createDatetimeEnd = createDatetimeEnd;
     }
 
 }

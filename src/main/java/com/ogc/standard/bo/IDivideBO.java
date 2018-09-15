@@ -8,7 +8,7 @@ import com.ogc.standard.domain.Divide;
 
 public interface IDivideBO extends IPaginableBO<Divide> {
 
-    public void saveDivide();
+    public Divide saveDivide();
 
     public void refreshDivide(String divideId, BigDecimal divideProfit,
             BigDecimal divideAmount, String divideUser, String remark);

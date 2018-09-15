@@ -20,11 +20,12 @@ public class DivideBOImpl extends PaginableBOImpl<Divide> implements IDivideBO {
     private IDivideDAO divideDAO;
 
     @Override
-    public void saveDivide() {
+    public Divide saveDivide() {
         Divide data = new Divide();
         data.setStatus(EDivideStatus.TO_DIVIDE.getCode());
         data.setCreateDatetime(new Date());
         divideDAO.insert(data);
+        return data;
     }
 
     @Override

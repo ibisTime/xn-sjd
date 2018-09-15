@@ -1,11 +1,3 @@
-/**
- * @Title XN802250.java 
- * @Package com.ogc.standard.api.impl 
- * @Description 
- * @author haiqingzheng  
- * @date 2018年3月13日 上午11:12:25 
- * @version V1.0   
- */
 package com.ogc.standard.api.impl;
 
 import com.ogc.standard.ao.ICoinAO;

@@ -84,6 +84,18 @@ public class CoinAOImpl implements ICoinAO {
         data.setPic3(req.getPic3());
         data.setOrderNo(StringValidater.toInteger(req.getOrderNo()));
 
+        data.setIntroduction(req.getIntroduction());
+        data.setTotalSupply(req.getTotalSupply());
+        data.setTotalSupplyMarket(req.getTotalSupplyMarket());
+        data.setMaxSupply(req.getMaxSupply());
+        data.setMaxSupplyMarket(req.getMaxSupplyMarket());
+
+        data.setRank(req.getRank());
+        data.setWhitePaper(req.getWhitePaper());
+        data.setWebUrl(req.getWebUrl());
+        data.setBlockUrl(req.getBlockUrl());
+        data.setIcoDatetime(req.getIcoDatetime());
+
         data.setCollectStart(CoinUtil.toMinUnit(
             StringValidater.toBigDecimal(req.getCollectStart()),
             StringValidater.toInteger(req.getUnit())));
@@ -120,24 +132,25 @@ public class CoinAOImpl implements ICoinAO {
         data.setPic2(req.getPic2());
         data.setPic3(req.getPic3());
         data.setOrderNo(StringValidater.toInteger(req.getOrderNo()));
-
+        data.setIntroduction(req.getIntroduction());
         data.setTotalSupply(req.getTotalSupply());
+
         data.setTotalSupplyMarket(req.getTotalSupplyMarket());
         data.setMaxSupply(req.getMaxSupply());
         data.setMaxSupplyMarket(req.getMaxSupplyMarket());
         data.setRank(req.getRank());
-
         data.setWhitePaper(req.getWhitePaper());
+
         data.setWebUrl(req.getWebUrl());
         data.setBlockUrl(req.getBlockUrl());
         data.setIcoDatetime(req.getIcoDatetime());
         data.setCollectStart(CoinUtil.toMinUnit(
             StringValidater.toBigDecimal(req.getCollectStart()),
             data.getUnit()));
-
         data.setWithdrawFee(CoinUtil.toMinUnit(
             StringValidater.toBigDecimal(req.getWithdrawFee()),
             data.getUnit()));
+
         data.setUpdater(req.getUpdater());
         data.setUpdateDatetime(new Date());
         data.setRemark(req.getRemark());
@@ -186,6 +199,11 @@ public class CoinAOImpl implements ICoinAO {
     @Override
     public Coin getCoin(long id) {
         return coinBO.getCoin(id);
+    }
+
+    @Override
+    public Coin getCoin(String symbol) {
+        return coinBO.getCoin(symbol);
     }
 
     // @Override

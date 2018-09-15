@@ -43,6 +43,9 @@ public class XN802002Req {
     @NotBlank
     private String orderNo;
 
+    // 简介
+    private String introduction;
+
     // 流通量
     private String totalSupply;
 
@@ -147,6 +150,14 @@ public class XN802002Req {
 
     public void setOrderNo(String orderNo) {
         this.orderNo = orderNo;
+    }
+
+    public String getIntroduction() {
+        return introduction;
+    }
+
+    public void setIntroduction(String introduction) {
+        this.introduction = introduction;
     }
 
     public String getTotalSupply() {

@@ -15,8 +15,14 @@
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
-			<if test="code != null and code != '' ">
-				AND t.code = #{code}
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+			<if test="createDatetimeStart != null and createDatetimeStart != '' ">
+				<![CDATA[AND t.create_datetime >= #{createDatetimeEnd}]]>
+			</if>
+			<if test="createDatetimeEnd != null and createDatetimeEnd != '' ">
+				<![CDATA[AND t.create_datetime <= #{createDatetimeEnd}]]>
 			</if>
 		</trim>
 	</sql>
@@ -47,7 +53,7 @@
 		<include refid="where_condition" />
 	</select>
 
-	<insert id="insert_divide" parameterType="divide">
+	<insert id="insert_divide" useGeneratedKeys="true" keyProperty="id" parameterType="divide">
 		INSERT INTO
 		tstd_divide(
 		id

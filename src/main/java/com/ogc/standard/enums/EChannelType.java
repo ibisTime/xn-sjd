@@ -13,7 +13,7 @@ import com.ogc.standard.exception.BizException;
  */
 public enum EChannelType {
     TRADE("TRD", "模拟交易"), NBZ("0", "内部账"), Online("1", "线上"), Offline("90",
-            "人工线下");
+            "人工线下"), Divide("91", "分红");
 
     public static Map<String, EChannelType> getChannelTypeResultMap() {
         Map<String, EChannelType> map = new HashMap<String, EChannelType>();

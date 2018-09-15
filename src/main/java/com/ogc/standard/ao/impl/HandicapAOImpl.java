@@ -90,7 +90,7 @@ public class HandicapAOImpl implements IHandicapAO {
             item.setPrice(handicapItems.get(i).getPrice());
 
             BigDecimal count = BigDecimal.ZERO;
-            for (int j = 0; j == i; j++) {
+            for (int j = 0; j <= i; j++) {
                 count = count.add(handicapItems.get(j).getCount());
             }
             item.setCount(count);

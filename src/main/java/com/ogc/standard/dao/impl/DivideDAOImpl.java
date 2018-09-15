@@ -47,7 +47,7 @@ public class DivideDAOImpl extends AMybatisTemplate implements IDivideDAO {
 
     @Override
     public int update(Divide data) {
-        return super.update(NAMESPACE.concat("uodate_divide"), data);
+        return super.update(NAMESPACE.concat("update_divide"), data);
     }
 
 }
