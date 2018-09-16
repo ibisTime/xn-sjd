@@ -182,12 +182,12 @@ public class HuobiproAOImpl implements IHuobiproAO {
 
                     MarketDepthItem bid = new MarketDepthItem();
                     bid.setPrice(bids.getJSONArray(i).getBigDecimal(0));
-                    bid.setAmount(bids.getJSONArray(i).getBigDecimal(1));
+                    bid.setCount(bids.getJSONArray(i).getBigDecimal(1));
                     bidsList.add(bid);
 
                     MarketDepthItem ask = new MarketDepthItem();
                     ask.setPrice(asks.getJSONArray(i).getBigDecimal(0));
-                    ask.setAmount(asks.getJSONArray(i).getBigDecimal(1));
+                    ask.setCount(asks.getJSONArray(i).getBigDecimal(1));
                     asksList.add(ask);
 
                 }

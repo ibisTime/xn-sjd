@@ -14,7 +14,10 @@ import com.ogc.standard.enums.ECoin;
 import com.ogc.standard.exception.BizException;
 
 /**
- * Created by tianlei on 2017/十一月/13.
+ * 
+ * @author: lei 
+ * @since: 2018年9月14日 下午1:59:53 
+ * @history:
  */
 @Component
 public class MarketBOImpl implements IMarketBO {

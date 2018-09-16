@@ -1,11 +1,3 @@
-/**
- * @Title UserKind.java 
- * @Package com.ibis.pz.enums 
- * @Description 
- * @author miyb  
- * @date 2015-3-7 上午8:51:05 
- * @version V1.0   
- */
 package com.ogc.standard.enums;
 
 /** 

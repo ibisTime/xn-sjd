@@ -1,11 +1,3 @@
-/**
- * @Title XN802250.java 
- * @Package com.ogc.standard.api.impl 
- * @Description 
- * @author haiqingzheng  
- * @date 2018年3月13日 上午11:12:25 
- * @version V1.0   
- */
 package com.ogc.standard.api.impl;
 
 import com.ogc.standard.ao.ICoinAO;
@@ -30,9 +22,6 @@ public class XN802002 extends AProcessor {
 
     private XN802002Req req = null;
 
-    /** 
-     * @see com.ogc.standard.api.IProcessor#doBusiness()
-     */
     @Override
     public Object doBusiness() throws BizException {
         synchronized (XN802002.class) {
@@ -41,9 +30,6 @@ public class XN802002 extends AProcessor {
         return new BooleanRes(true);
     }
 
-    /** 
-     * @see com.ogc.standard.api.IProcessor#doCheck(java.lang.String, java.lang.String)
-     */
     @Override
     public void doCheck(String inputparams, String operator)
             throws ParaException {

@@ -14,10 +14,10 @@ public class SCDM_IDAO {
     private static String author = "lei";
 
     // 实体
-    private static String key = "coinAcceptOrder";
+    private static String key = "divideDetail";
 
     // 实体名称
-    private static String keyName = "承兑交易订单";
+    private static String keyName = "分红明细";
 
     // 包路径
     private static String packge = "com.ogc.standard.";
@@ -25,21 +25,14 @@ public class SCDM_IDAO {
     // 表名
     private static String path = "/Users/lei/Desktop/temp";
 
-    private static String dbname = "tcoin_accept_order";
+    private static String dbname = "tstd_divide_detail";
 
-    private static String[] DBwords = { "code", "type", "user_id",
-            "accept_user", "trade_currency", "trade_coin", "trade_price",
-            "count", "trade_amount", "fee", "invalid_datetime", "pay_type",
-            "pay_info", "pay_bank", "pay_card_no", "receive_type",
-            "receive_info", "receive_bank", "receive_card_no", "status",
-            "mark_datetime", "mark_note", "release_datetime", "create_datetime",
-            "updater", "update_datetime", "remark" };
+    private static String[] DBwords = { "id", "user_id", "currency", "amount",
+            "divide_amount", "create_datetime", "divide_datetime",
+            "divide_id" };
 
-    private static String[] DBwordsName = { "编号", "类型(0买入/1卖出)", "用户编号", "承兑商",
-            "交易币种", "交易数字货币", "交易单价", "交易数量", "交易总额", "手续费", "支付超时时间", "付款方式",
-            "付款信息", "付款银行", "付款卡号", "收款方式", "收款信息", "收款银行", "收款卡号",
-            "状态(0=待支付 1=已支付 2=已释放 3=已取消)", "打款时间", "打款说明", "币释放时间", "创建时间",
-            "最后更新人", "最后更新时间", "备注" };
+    private static String[] DBwordsName = { "编号", "用户编号", "币种(X币)", "当时余额",
+            "分红金额", "创建时间", "分红时间", "分红ID" };
 
     private static String[] DOwords = getDOwords();
 
@@ -59,7 +52,7 @@ public class SCDM_IDAO {
 
     public static void main(String[] args) {
 
-        System.out.println(getTimeByMinute(-1));
+        // System.out.println(getTimeByMinute(-1));
 
         File DOMAINfile = new File(path, Key + ".java");
 

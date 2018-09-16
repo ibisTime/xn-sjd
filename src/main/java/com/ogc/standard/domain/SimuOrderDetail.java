@@ -50,6 +50,9 @@ public class SimuOrderDetail extends ABaseDO {
 
     // ******************db properties**************
 
+    // 买卖方向（买入/卖出）
+    private String direction;
+
     // 成交时间起
     private Date createDatetimeStart;
 
@@ -142,6 +145,14 @@ public class SimuOrderDetail extends ABaseDO {
 
     public void setCreateDatetime(Date createDatetime) {
         this.createDatetime = createDatetime;
+    }
+
+    public String getDirection() {
+        return direction;
+    }
+
+    public void setDirection(String direction) {
+        this.direction = direction;
     }
 
     public Date getCreateDatetimeStart() {

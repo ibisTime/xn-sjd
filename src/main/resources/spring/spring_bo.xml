@@ -264,4 +264,12 @@
 		<property name="paginableDAO" ref="simuMatchResultHistoryDAOImpl"/>
 	</bean>
 	
+	<bean id="divideBO" class="com.ogc.standard.bo.impl.DivideBOImpl">
+		<property name="paginableDAO" ref="divideDAOImpl"/>
+	</bean>
+	
+	<bean id="divideDetailBO" class="com.ogc.standard.bo.impl.DivideDetailBOImpl">
+		<property name="paginableDAO" ref="divideDetailDAOImpl"/>
+	</bean>
+	
 </beans>

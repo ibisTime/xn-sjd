@@ -42,6 +42,8 @@ public interface ISimuOrderBO extends IPaginableBO<SimuOrder> {
     public List<SimuOrder> queryAsksHandicapList(int handicapQuantity,
             String symbol, String toSymbol);
 
+    public SimuOrder getSimuOrderCheck(String code);
+
     public SimuOrder getSimuOrder(String code);
 
 }

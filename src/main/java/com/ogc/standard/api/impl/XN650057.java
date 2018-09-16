@@ -30,7 +30,10 @@ public class XN650057 extends AProcessor {
     public Object doBusiness() throws BizException {
 
         SimuOrderDetail condition = new SimuOrderDetail();
-        condition.setOrderCode(req.getCode());
+        condition.setOrderCode(req.getOrderCode());
+        condition.setUserId(req.getUserId());
+        condition.setSymbol(req.getSymbol());
+        condition.setToSymbol(req.getToSymbol());
 
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {

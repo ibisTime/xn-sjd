@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import com.ogc.standard.bo.IHandicapBO;
 import com.ogc.standard.bo.ISimuOrderBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
+import com.ogc.standard.common.SysConstants;
 import com.ogc.standard.dao.IHandicapDAO;
 import com.ogc.standard.domain.Handicap;
 import com.ogc.standard.domain.HandicapGrade;
@@ -54,6 +55,7 @@ public class HandicapBOImpl extends PaginableBOImpl<Handicap>
                 simuOrders = simuOrderBO.queryBidsHandicapList(querryQuantity,
                     symbol, toSymbol);
             } else {
+
                 simuOrders = simuOrderBO.queryAsksHandicapList(querryQuantity,
                     symbol, toSymbol);
             }
@@ -75,7 +77,8 @@ public class HandicapBOImpl extends PaginableBOImpl<Handicap>
 
     }
 
-    private void saveHandicap(SimuOrder simuOrder) {
+    @Override
+    public void saveHandicap(SimuOrder simuOrder) {
         Handicap data = new Handicap();
         data.setOrderCode(simuOrder.getCode());
         data.setPrice(simuOrder.getPrice());
@@ -111,7 +114,7 @@ public class HandicapBOImpl extends PaginableBOImpl<Handicap>
 
     @Override
     public List<HandicapGrade> queryHandicapList(String symbol, String toSymbol,
-            String direction, int handicapGradeQuantity) {
+            String direction) {
 
         // 根据条件查找
         Handicap condition = new Handicap();
@@ -159,7 +162,7 @@ public class HandicapBOImpl extends PaginableBOImpl<Handicap>
                 }
             }
 
-            if (handicapGrades.size() >= handicapGradeQuantity) {
+            if (handicapGrades.size() >= SysConstants.handicapLimit) {
                 // 档位限制
                 break;
             }

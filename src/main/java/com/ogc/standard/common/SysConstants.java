@@ -121,6 +121,12 @@ public class SysConstants {
 
     // ****** 币币交易 ******
 
+    public static final String SIMU_ORDER_RULE_CUSER_FEE = "simu_order_rule_cuser_fee"; // 普通用户币币交易手续费率
+
+    public static final String SIMU_ORDER_RULE_QUSER_FEE = "simu_order_rule_quser_fee"; // 渠道商币币交易手续费率
+
+    public static Integer handicapLimit = 5; // 盘口数量限制
+
     public static BigDecimal minCountLimit = new BigDecimal("0.00001"); // 最小委托数量
 
     public static BigDecimal maxCountLimit = new BigDecimal("1000000"); // 最大委托数量

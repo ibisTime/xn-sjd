@@ -1,12 +1,13 @@
 package com.ogc.standard.dao.impl;
 
+import java.math.BigDecimal;
+import java.util.List;
+
+import org.springframework.stereotype.Repository;
+
 import com.ogc.standard.dao.IMarketDAO;
 import com.ogc.standard.dao.base.support.AMybatisTemplate;
 import com.ogc.standard.domain.Market;
-import org.springframework.stereotype.Repository;
-
-import java.math.BigDecimal;
-import java.util.List;
 
 /**
  * Created by tianlei on 2017/十一月/13.
@@ -26,24 +27,25 @@ public class MarketDAOImpl extends AMybatisTemplate implements IMarketDAO {
 
     @Override
     public long selectTotalCount(Market condition) {
-        return super.selectTotalCount(NAMESPACE.concat("selectTotalCount"), condition);
+        return super.selectTotalCount(NAMESPACE.concat("selectTotalCount"),
+            condition);
     }
 
     @Override
     public Market select(Market condition) {
 
-        return super.select(NAMESPACE.concat("selectedByCoinTypeAndOrigin"), condition, Market.class);
+        return super.select(NAMESPACE.concat("selectedByCoinTypeAndOrigin"),
+            condition, Market.class);
 
     }
 
     @Override
     public BigDecimal selectMarketAvg(Market condition) {
 
-        return super.select(NAMESPACE.concat("selectMarketAvg"), condition, BigDecimal.class);
+        return super.select(NAMESPACE.concat("selectMarketAvg"), condition,
+            BigDecimal.class);
 
     }
-
-
 
     @Override
     public int update(Market market) {
@@ -52,14 +54,15 @@ public class MarketDAOImpl extends AMybatisTemplate implements IMarketDAO {
 
     @Override
     public List<Market> selectList(Market condition, int start, int count) {
-        return super.selectList(NAMESPACE.concat("select"), start, count, condition, Market.class);
+        return super.selectList(NAMESPACE.concat("select"), start, count,
+            condition, Market.class);
     }
 
     @Override
     public List<Market> selectList(Market condition) {
 
-        return super.selectList(NAMESPACE.concat("select"), condition, Market.class);
+        return super.selectList(NAMESPACE.concat("select"), condition,
+            Market.class);
 
     }
 }
-

@@ -9,14 +9,14 @@ import com.ogc.standard.domain.SimuKLine;
 
 public interface ISimuKLineBO extends IPaginableBO<SimuKLine> {
 
-    public void saveSimuKLine(ExchangePair pair, BigDecimal volume,
-            BigDecimal quantity, BigDecimal amount, BigDecimal open,
-            BigDecimal close, BigDecimal high, BigDecimal low);
+    public void saveSimuKLine(ExchangePair pair, String period,
+            BigDecimal volume, BigDecimal quantity, BigDecimal amount,
+            BigDecimal open, BigDecimal close, BigDecimal high, BigDecimal low);
 
     public List<SimuKLine> querySimuKLineList(SimuKLine condition);
 
     public SimuKLine getLatestSimuKLine(String symbol, String toSymbol,
             String period);
 
-    public void saveKLineByPeriod(ExchangePair pair, int unitMin);
+    public void saveKLineByPeriod(ExchangePair pair, String period);
 }
