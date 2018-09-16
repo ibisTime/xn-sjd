@@ -5,12 +5,12 @@ package com.ogc.standard.enums;
  * @since: 2015-3-7 上午8:41:50 
  * @history:
  */
-public enum EConfigType {
+public enum ESysConfigType {
 
-    QINIU("qiniu", "七牛"), TENCENT_IM("tencent_im", "腾讯IM"), USER("user_rate",
-            "用户广告费率");
+    QINIU("qiniu", "七牛"), TENCENT_IM("tencent_im", "腾讯IM"), ADS_USER(
+            "ads_user_rate", "用户广告费率"), ACCEPT_RULE("accept_rule", "承兑商规则");
 
-    EConfigType(String code, String value) {
+    ESysConfigType(String code, String value) {
         this.code = code;
         this.value = value;
     }

@@ -54,7 +54,7 @@ public class MarketAOImpl implements IMarketAO {
     }
 
     @Override
-    public Market coinPriceByPlatform(String coin) {
+    public Market coinPriceByPlatform(String coin, String refCurrency) {
 
         // 获取平台调控值
         BigDecimal x = BigDecimal.ZERO;
@@ -64,10 +64,10 @@ public class MarketAOImpl implements IMarketAO {
             eCoin = ECoin.ETH;
             x = this.sysConfigBO
                 .getBigDecimalValue(SysConstants.ETH_COIN_PRICE_X);
-        } else if (coin.equals(ECoin.HPM.getCode())) {
-            eCoin = ECoin.HPM;
+        } else if (coin.equals(ECoin.X.getCode())) {
+            eCoin = ECoin.X;
             x = this.sysConfigBO
-                .getBigDecimalValue(SysConstants.HPM_COIN_PRICE_X);
+                .getBigDecimalValue(SysConstants.X_COIN_PRICE_X);
         } else if (coin.equals(ECoin.BTC.getCode())) {
             eCoin = ECoin.BTC;
             x = this.sysConfigBO
@@ -78,12 +78,10 @@ public class MarketAOImpl implements IMarketAO {
             throw new BizException("xn000", coin + "不支持的货币类型");
         }
 
-        Market market = this.marketBO.standardMarket(eCoin);
+        Market market = this.marketBO.standardMarket(eCoin, refCurrency);
 
         // 计算平台调控过的值
         market.setMid(market.getMid().add(x));
-
-        //
         return market;
 
     }

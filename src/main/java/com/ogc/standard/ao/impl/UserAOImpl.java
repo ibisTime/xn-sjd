@@ -167,7 +167,7 @@ public class UserAOImpl implements IUserAO {
         user.setUpdater(req.getUpdater());
         user.setRemark(req.getRemark());
         double tradeRate = sysConfigBO
-            .getDoubleValue(SysConstants.DEFAULT_USER_RATE);
+            .getDoubleValue(SysConstants.DEFAULT_ADS_USER_RATE);
         user.setTradeRate(tradeRate);
         userId = userBO.doAddUser(user);
 

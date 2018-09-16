@@ -23,12 +23,13 @@ public class MarketBOImpl implements IMarketBO {
     IMarketDAO marketDAO;
 
     @Override
-    public Market standardMarket(ECoin coin) {
+    public Market standardMarket(ECoin coin, String refCurrency) {
 
         Market avgCondition = new Market();
         avgCondition.setSymbol(coin.getCode());
+        avgCondition.setReferCurrency(refCurrency);
         BigDecimal avg = this.marketDAO.selectMarketAvg(avgCondition);
-        avg = avg.setScale(2, BigDecimal.ROUND_HALF_EVEN);
+        avg = avg.setScale(4, BigDecimal.ROUND_HALF_EVEN);
         if (avg == null) {
             throw new BizException("xn000", "行情加权值获取异常");
         }

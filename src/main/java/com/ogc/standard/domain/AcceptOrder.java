@@ -11,12 +11,15 @@ import com.ogc.standard.dao.base.ABaseDO;
 * @since: 2018年09月10日 下午04:34:54
 * @history:
 */
-public class CoinAcceptOrder extends ABaseDO {
+public class AcceptOrder extends ABaseDO {
 
     private static final long serialVersionUID = -543164987108114191L;
 
     // 编号
     private String code;
+
+    // 订单序号
+    private Long orderUid;
 
     // 类型(0买入/1卖出)
     private String type;
@@ -25,7 +28,7 @@ public class CoinAcceptOrder extends ABaseDO {
     private String userId;
 
     // 承兑商
-    private String acceptUser;
+    private String acceptUserId;
 
     // 交易币种
     private String tradeCurrency;
@@ -48,18 +51,6 @@ public class CoinAcceptOrder extends ABaseDO {
     // 支付超时时间
     private Date invalidDatetime;
 
-    // 付款方式
-    private String payType;
-
-    // 付款信息
-    private String payInfo;
-
-    // 付款银行
-    private String payBank;
-
-    // 付款卡号
-    private String payCardNo;
-
     // 收款方式
     private String receiveType;
 
@@ -72,20 +63,17 @@ public class CoinAcceptOrder extends ABaseDO {
     // 收款卡号
     private String receiveCardNo;
 
-    // 状态(0=待支付 1=已支付 2=已释放 3=已取消)
+    // 状态
     private String status;
+
+    // 创建时间
+    private Date createDatetime;
 
     // 打款时间
     private Date markDatetime;
 
     // 打款说明
     private String markNote;
-
-    // 币释放时间
-    private Date releaseDatetime;
-
-    // 创建时间
-    private Date createDatetime;
 
     // 最后更新人
     private String updater;
@@ -104,6 +92,14 @@ public class CoinAcceptOrder extends ABaseDO {
         this.code = code;
     }
 
+    public Long getOrderUid() {
+        return orderUid;
+    }
+
+    public void setOrderUid(Long orderUid) {
+        this.orderUid = orderUid;
+    }
+
     public String getType() {
         return type;
     }
@@ -120,12 +116,12 @@ public class CoinAcceptOrder extends ABaseDO {
         this.userId = userId;
     }
 
-    public String getAcceptUser() {
-        return acceptUser;
+    public String getAcceptUserId() {
+        return acceptUserId;
     }
 
-    public void setAcceptUser(String acceptUser) {
-        this.acceptUser = acceptUser;
+    public void setAcceptUserId(String acceptUserId) {
+        this.acceptUserId = acceptUserId;
     }
 
     public String getTradeCurrency() {
@@ -184,38 +180,6 @@ public class CoinAcceptOrder extends ABaseDO {
         this.invalidDatetime = invalidDatetime;
     }
 
-    public String getPayType() {
-        return payType;
-    }
-
-    public void setPayType(String payType) {
-        this.payType = payType;
-    }
-
-    public String getPayInfo() {
-        return payInfo;
-    }
-
-    public void setPayInfo(String payInfo) {
-        this.payInfo = payInfo;
-    }
-
-    public String getPayBank() {
-        return payBank;
-    }
-
-    public void setPayBank(String payBank) {
-        this.payBank = payBank;
-    }
-
-    public String getPayCardNo() {
-        return payCardNo;
-    }
-
-    public void setPayCardNo(String payCardNo) {
-        this.payCardNo = payCardNo;
-    }
-
     public String getReceiveType() {
         return receiveType;
     }
@@ -256,6 +220,14 @@ public class CoinAcceptOrder extends ABaseDO {
         this.status = status;
     }
 
+    public Date getCreateDatetime() {
+        return createDatetime;
+    }
+
+    public void setCreateDatetime(Date createDatetime) {
+        this.createDatetime = createDatetime;
+    }
+
     public Date getMarkDatetime() {
         return markDatetime;
     }
@@ -270,22 +242,6 @@ public class CoinAcceptOrder extends ABaseDO {
 
     public void setMarkNote(String markNote) {
         this.markNote = markNote;
-    }
-
-    public Date getReleaseDatetime() {
-        return releaseDatetime;
-    }
-
-    public void setReleaseDatetime(Date releaseDatetime) {
-        this.releaseDatetime = releaseDatetime;
-    }
-
-    public Date getCreateDatetime() {
-        return createDatetime;
-    }
-
-    public void setCreateDatetime(Date createDatetime) {
-        this.createDatetime = createDatetime;
     }
 
     public String getUpdater() {

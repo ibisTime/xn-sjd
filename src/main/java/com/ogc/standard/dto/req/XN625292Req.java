@@ -10,6 +10,17 @@ public class XN625292Req {
     @NotBlank
     private String coin;
 
+    @NotBlank(message = "对应币种缺少")
+    private String refCurrency;
+
+    public String getRefCurrency() {
+        return refCurrency;
+    }
+
+    public void setRefCurrency(String refCurrency) {
+        this.refCurrency = refCurrency;
+    }
+
     public String getCoin() {
         return coin;
     }
