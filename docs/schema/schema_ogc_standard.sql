@@ -275,7 +275,7 @@ CREATE TABLE `tcoin_market` (
   `update_datetime` datetime NOT NULL COMMENT '更新时间',
   `coinmarketcap_id` int(10) NOT NULL COMMENT 'coinmarketcap中的币种id',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `origin` (`origin`,`symbol`) USING BTREE
+  UNIQUE KEY `origin` (`origin`,`symbol`,`refer_currency`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='币种行情';
 
 -- ----------------------------
@@ -953,8 +953,8 @@ CREATE TABLE `tstd_divide` (
   `status` varchar(4) NOT NULL COMMENT '状态(0=待分红 1=已分红)',
   `create_datetime` datetime NOT NULL COMMENT '创建时间',
   
-  `divide_datetime` datetime NOT NULL COMMENT '分红时间',
-  `divide_user` varchar(32) NOT NULL COMMENT '分红人',
+  `divide_datetime` datetime DEFAULT NULL COMMENT '分红时间',
+  `divide_user` varchar(32) DEFAULT NULL COMMENT '分红人',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='分红';
@@ -970,8 +970,8 @@ CREATE TABLE `tstd_divide_detail` (
   `amount` decimal(64,0) DEFAULT NULL COMMENT '当时余额',
   `divide_amount` decimal(64,0) DEFAULT NULL COMMENT '分红金额',
   `create_datetime` datetime NOT NULL COMMENT '创建时间',
-  `divide_datetime` datetime NOT NULL COMMENT '分红时间', 
-  `divide_id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT '分红ID',
+  `divide_datetime` datetime DEFAULT NULL COMMENT '分红时间',
+  `divide_id` bigint(32) NOT NULL COMMENT '分红ID',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='分红明细';
 
