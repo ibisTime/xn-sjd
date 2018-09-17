@@ -42,8 +42,11 @@ public enum EJourBizTypeUser {
     AJ_HC("hc", "红冲"), 
     AJ_LB("lb", "蓝补"),
     
-    AJ_AWARD("award", "奖励"), 
     AJ_DIVIDE("divide", "分红"),
+    AJ_AWARD_REG("award_reg", "拉新奖励"),
+    AJ_AWARD_SPECIAL("award_special", "特殊奖励"),
+    AJ_AWARD_CCORDER("award_ccorder", "场外交易奖励"),
+    AJ_AWARD_BBORDER("award_bborder", "币币交易奖励"),
 
     AJ_GAME_IN("game_in", "游戏转入"), // 转账记录用type区分类型
     AJ_GAME_OUT("game_out", "游戏转出"); // 转账记录用type区分类型
