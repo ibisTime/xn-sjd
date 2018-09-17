@@ -9,6 +9,9 @@ public class XN805120Req extends APageReq {
     // 手机号(选填)
     private String mobile;
 
+    // 用户类型
+    private String kind;
+
     // 昵称(选填)
     private String nickname;
 
@@ -188,6 +191,14 @@ public class XN805120Req extends APageReq {
 
     public void setUpdater(String updater) {
         this.updater = updater;
+    }
+
+    public String getKind() {
+        return kind;
+    }
+
+    public void setKind(String kind) {
+        this.kind = kind;
     }
 
 }

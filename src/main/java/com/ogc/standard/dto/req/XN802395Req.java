@@ -8,10 +8,8 @@
  */
 package com.ogc.standard.dto.req;
 
-import org.hibernate.validator.constraints.NotBlank;
-
 /** 
- * 统计渠道商上月未结算记录分页查询
+ * 用户佣金明细分页查询
  * @author: taojian 
  * @since: 2018年9月14日 下午7:14:12 
  * @history:
@@ -19,19 +17,18 @@ import org.hibernate.validator.constraints.NotBlank;
 public class XN802395Req extends APageReq {
     private static final long serialVersionUID = -8880822311117884892L;
 
-    // 状态
-    @NotBlank
-    private String status;
-
     // 用户编号
     private String userId;
 
-    public String getStatus() {
-        return status;
+    // 用户类型
+    private String userKind;
+
+    public String getUserKind() {
+        return userKind;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setUserKind(String userKind) {
+        this.userKind = userKind;
     }
 
     public String getUserId() {

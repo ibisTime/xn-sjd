@@ -25,7 +25,12 @@ public interface IAwardBO extends IPaginableBO<Award> {
 
     // 推荐用户交易分成
     public void saveTradeAward(String refereeUserId, String userKind,
-            String refCode, String refNote, BigDecimal tradeCount);
+            String refCode, String refNote, String tradeCoin,
+            BigDecimal tradeCount);
+
+    public void saveOTCAward(String refereeUserId, String userKind,
+            String refCode, String refNote, String tradeCoin,
+            BigDecimal tradeCount);
 
     public void saveRegistAward(String userId, String userKind, String refCode,
             String refNote);

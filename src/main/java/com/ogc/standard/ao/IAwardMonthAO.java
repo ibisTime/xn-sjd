@@ -10,6 +10,7 @@ package com.ogc.standard.ao;
 
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.AwardMonth;
+import com.ogc.standard.dto.res.XN802397Res;
 
 /** 
  * @author: taojian 
@@ -23,4 +24,6 @@ public interface IAwardMonthAO {
             AwardMonth condition);
 
     public AwardMonth getAwardMonth(AwardMonth condition);
+
+    public XN802397Res statistics(String userId);
 }

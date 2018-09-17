@@ -8,13 +8,10 @@
  */
 package com.ogc.standard.api.impl;
 
-import com.ogc.standard.ao.IAwardAO;
+import com.ogc.standard.ao.IAwardMonthAO;
 import com.ogc.standard.api.AProcessor;
-import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.ObjValidater;
-import com.ogc.standard.core.StringValidater;
-import com.ogc.standard.domain.Award;
 import com.ogc.standard.dto.req.XN802397Req;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
@@ -28,22 +25,14 @@ import com.ogc.standard.spring.SpringContextHolder;
  */
 public class XN802397 extends AProcessor {
 
-    private IAwardAO awardAO = SpringContextHolder.getBean(IAwardAO.class);
+    private IAwardMonthAO awardAO = SpringContextHolder
+        .getBean(IAwardMonthAO.class);
 
     private XN802397Req req;
 
     @Override
     public Object doBusiness() throws BizException {
-        Award condition = new Award();
-        condition.setUserId(req.getUserId());
-        condition.setUserKind(req.getUserKind());
-        condition.setCreateDatetimeStart(
-            DateUtil.getStartDatetime(req.getDateStart()));
-        condition
-            .setCreateDatetimeEnd(DateUtil.getEndDatetime(req.getDateEnd()));
-        int start = StringValidater.toInteger(req.getStart());
-        int limit = StringValidater.toInteger(req.getLimit());
-        return awardAO.queryAwardPage(start, limit, condition);
+        return awardAO.statistics(req.getUserId());
     }
 
     @Override

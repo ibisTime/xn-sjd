@@ -98,14 +98,6 @@
 		<include refid="where_condition" />
 	</select>
 	
-	<!-- <update id="update_award_unsettle_next" parameterType="awardMonth">
-		UPDATE tstd_award_month
-		SET
-		unsettle_count=#{unsettleCount}
-		WHERE
-		id=#{id}
-	</update>
-	 -->
 	<update id="update_award_unsettle" parameterType="awardMonth">
 		UPDATE tstd_award_month
 		SET

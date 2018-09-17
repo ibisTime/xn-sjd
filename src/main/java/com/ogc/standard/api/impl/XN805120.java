@@ -30,6 +30,7 @@ public class XN805120 extends AProcessor {
         User condition = new User();
         condition.setLoginName(req.getLoginName());
         condition.setMobileForQuery(req.getMobile());
+        condition.setKind(req.getKind());
         condition.setNicknameForQuery(req.getNickname());
         condition.setLevel(req.getLevel());
         condition.setUserReferee(req.getUserReferee());

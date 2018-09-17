@@ -64,14 +64,15 @@ public class AwardBOImpl extends PaginableBOImpl<Award> implements IAwardBO {
 
     @Override
     public void saveTradeAward(String refereeUserId, String userKind,
-            String refCode, String refNote, BigDecimal tradeCount) {
+            String refCode, String refNote, String tradeCoin,
+            BigDecimal tradeCount) {
         Award data = new Award();
         data.setUserId(refereeUserId);
         data.setUserKind(userKind);
         data.setRefCode(refCode);
         data.setRefNote(refNote);
-        data.setCurrency(ECoinType.X.getCode());
-        data.setRefType(ERefType.TRADE.getCode());
+        data.setCurrency(tradeCoin);
+        data.setRefType(ERefType.CCTRADE.getCode());
         data.setCreateDatetime(new Date());
         data.setStatus(EAwardStatus.TOHAND.getCode());
         if (userKind.equals(EUserKind.QDS.getCode())) {
@@ -88,7 +89,42 @@ public class AwardBOImpl extends PaginableBOImpl<Award> implements IAwardBO {
         data.setRemark("推荐用户交易分成");
         awardDAO.insert(data);
         // 记录
-        if (awardMonthBO.isAwardMonthExist(new Date())) {
+        if (awardMonthBO.isAwardMonthExist(refereeUserId, tradeCoin)) {
+            awardMonthBO.refreshAwardMonthUnsettle(data.getUserId(),
+                data.getCount());
+        } else {
+            awardMonthBO.addAwardMonth(data, refNote);
+        }
+    }
+
+    @Override
+    public void saveOTCAward(String refereeUserId, String userKind,
+            String refCode, String refNote, String tradeCoin,
+            BigDecimal tradeCount) {
+        Award data = new Award();
+        data.setUserId(refereeUserId);
+        data.setUserKind(userKind);
+        data.setRefCode(refCode);
+        data.setRefNote(refNote);
+        data.setCurrency(tradeCoin);
+        data.setRefType(ERefType.CCTRADE.getCode());
+        data.setCreateDatetime(new Date());
+        data.setStatus(EAwardStatus.TOHAND.getCode());
+        if (userKind.equals(EUserKind.QDS.getCode())) {
+            BigDecimal rate = sysConfigBO
+                .getBigDecimalValue(SysConstants.REFEREE_DUSER_FEE_RATE);
+            data.setRate(rate);
+            data.setCount(rate.multiply(tradeCount));
+        } else {
+            BigDecimal rate = sysConfigBO
+                .getBigDecimalValue(SysConstants.REFEREE_CUSER_FEE_RATE);
+            data.setRate(rate);
+            data.setCount(rate.multiply(tradeCount));
+        }
+        data.setRemark("推荐用户交易分成");
+        awardDAO.insert(data);
+        // 记录
+        if (awardMonthBO.isAwardMonthExist(refereeUserId, tradeCoin)) {
             awardMonthBO.refreshAwardMonthUnsettle(data.getUserId(),
                 data.getCount());
         } else {
@@ -118,7 +154,7 @@ public class AwardBOImpl extends PaginableBOImpl<Award> implements IAwardBO {
         data.setRemark("推荐注册分成");
         awardDAO.insert(data);
         // 记录
-        if (awardMonthBO.isAwardMonthExist(new Date())) {
+        if (awardMonthBO.isAwardMonthExist(userId, data.getCurrency())) {
             awardMonthBO.refreshAwardMonthUnsettle(data.getUserId(),
                 data.getCount());
         } else {
@@ -137,7 +173,8 @@ public class AwardBOImpl extends PaginableBOImpl<Award> implements IAwardBO {
         data.setHandleNote(remark);
         awardDAO.updateStauts(data);
         // 记录
-        if (awardMonthBO.isAwardMonthExist(new Date())) {
+        if (awardMonthBO.isAwardMonthExist(data.getUserId(),
+            data.getCurrency())) {
             awardMonthBO.refreshAwardMonthUnsettle(data.getUserId(),
                 data.getCount());
         } else {
@@ -165,7 +202,8 @@ public class AwardBOImpl extends PaginableBOImpl<Award> implements IAwardBO {
         data.setRemark(remark);
         awardDAO.insert(data);
         // 记录
-        if (awardMonthBO.isAwardMonthExist(new Date())) {
+        if (awardMonthBO.isAwardMonthExist(user.getUserId(),
+            data.getCurrency())) {
             awardMonthBO.refreshAwardMonthUnsettle(data.getUserId(),
                 data.getCount());
         } else {

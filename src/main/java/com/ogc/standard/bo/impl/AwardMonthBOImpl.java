@@ -20,8 +20,10 @@ import com.ogc.standard.bo.IAwardMonthBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.dao.IAwardMonthDAO;
+import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.Award;
 import com.ogc.standard.domain.AwardMonth;
+import com.ogc.standard.enums.EBoolean;
 
 /** 
  * @author: taojian 
@@ -38,9 +40,10 @@ public class AwardMonthBOImpl extends PaginableBOImpl<AwardMonth>
     private IAccountBO accountBO;
 
     @Override
-    public boolean isAwardMonthExist(Date date) {
+    public boolean isAwardMonthExist(String userId, String tradeCoin) {
         AwardMonth condition = new AwardMonth();
-        condition.setNow(date);
+        condition.setUserId(userId);
+        condition.setNow(new Date());
         if (this.getTotalCount(condition) > 0) {
             return true;
         }
@@ -93,8 +96,29 @@ public class AwardMonthBOImpl extends PaginableBOImpl<AwardMonth>
 
     @Override
     public void refreshAwardMonthSettle(String userId, BigDecimal count,
-            String handleResult) {
-
+            String symbol, String handleResult) {
+        Date now = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(now); // 设置为当前时间
+        calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH) - 1); // 设置为上一个月
+        Date date = calendar.getTime();
+        AwardMonth condition = new AwardMonth();
+        condition.setUserId(userId);
+        condition.setNow(date);
+        AwardMonth awardMonth = awardMonthDAO.select(condition);
+        awardMonth
+            .setUnsettleCount(awardMonth.getUnsettleCount().subtract(count));
+        Account dbAccount = accountBO.getAccountByUser(userId, symbol);
+        awardMonth.setCurrentCount(dbAccount.getAmount());
+        awardMonth.setSettleDatetime(now);
+        if (EBoolean.YES.getCode().equals(handleResult)) {
+            awardMonth.setSettleCount(awardMonth.getSettleCount().add(count));
+        } else {
+            awardMonth
+                .setNosettleCount(awardMonth.getNosettleCount().add(count));
+        }
+        awardMonth.setRemark("结算奖励");
+        awardMonthDAO.updateSettle(awardMonth);
     }
 
     @Override
