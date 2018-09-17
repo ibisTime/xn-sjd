@@ -79,4 +79,38 @@ public class CollectDAOImpl extends AMybatisTemplate implements ICollectDAO {
             BigDecimal.class);
     }
 
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @Override
+    public void insertList(List<Collect> dataList) {
+        super.insertBatch(NAMESPACE.concat("insert_collect_list"),
+            (List) dataList);
+    }
+
+    @Override
+    public int collectBroadcastSuccess(Collect data) {
+        return super.update(NAMESPACE.concat("update_collectBroadcastSuccess"),
+            data);
+    }
+
+    @Override
+    public int collectFeeBroadcastSuccess(Collect data) {
+        return super.update(
+            NAMESPACE.concat("update_collectFeeBroadcastSuccess"), data);
+    }
+
+    @Override
+    public int collectFailed(Collect data) {
+        return super.update(NAMESPACE.concat("update_collectFailed"), data);
+    }
+
+    @Override
+    public int collectFeeTxSuccess(Collect data) {
+        return super.update(NAMESPACE.concat("update_collectFeeTxSuccess"),
+            data);
+    }
+
+    @Override
+    public int collectTxSuccess(Collect data) {
+        return super.update(NAMESPACE.concat("update_collectTxSuccess"), data);
+    }
 }

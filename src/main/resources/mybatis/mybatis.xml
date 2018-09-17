@@ -77,6 +77,7 @@
 		<typeAlias alias="simuKLine" type="com.ogc.standard.domain.SimuKLine" />
 		<typeAlias alias="simuMatchResult" type="com.ogc.standard.domain.SimuMatchResult" />
 		<typeAlias alias="simuMatchResultHistory" type="com.ogc.standard.domain.SimuMatchResultHistory" />
+		<typeAlias alias="ethSAddress" type="com.ogc.standard.domain.EthSAddress"/>
 		
 	</typeAliases>
 </configuration>

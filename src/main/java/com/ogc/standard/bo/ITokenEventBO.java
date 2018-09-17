@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.ogc.standard.domain.TokenEvent;
+import com.ogc.standard.token.OrangeCoinToken.TransferEventResponse;
 
 @Component
 public interface ITokenEventBO {
@@ -16,4 +17,7 @@ public interface ITokenEventBO {
     public void insertTokenEvent(TokenEvent tokenEvent);
 
     public long getTotalCount(TokenEvent condition);
+
+    TokenEvent convertTokenEvent(TransferEventResponse transferEventResponse,
+            String hash, String symbol);
 }

@@ -252,4 +252,8 @@
 		<property name="paginableDAO" ref="simuMatchResultHistoryDAOImpl"/>
 	</bean>
 	
+	<bean id="ethSAddressBO" class="com.ogc.standard.bo.impl.EthSAddressBOImpl">
+		<property name="paginableDAO" ref="ethSAddressDAOImpl"/>
+	</bean>
+	
 </beans>

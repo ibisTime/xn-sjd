@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ogc.standard.dao.IEthXAddressDAO">
-	<resultMap id="ethXAddress_DB_Result" type="ethXAddress">
+<mapper namespace="com.ogc.standard.dao.IEthSAddressDAO">
+	<resultMap id="EthSAddress_DB_Result" type="EthSAddress">
 		<result column="id" property="id" />
 		<result column="address" property="address" />
+		<result column="keystore_pwd" property="keystorePwd" />
 		<result column="keystore_name" property="keystoreName" />
 		<result column="keystore_content" property="keystoreContent" />
-		<result column="keystore_pwd" property="keystorePwd" />
-		<result column="user_id" property="userId" />
+		<result column="status" property="status" />
 		<result column="create_datetime" property="createDatetime" />
+		<result column="abandon_datetime" property="abandonDatetime" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
@@ -22,19 +23,20 @@
 			<if test="addressForQuery != null and addressForQuery != '' ">
 				AND t.address like "%"#{addressForQuery}"%"
 			</if>
-			<if test="userId != null and userId != '' ">
-				AND t.user_id = #{userId}
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
 			</if>
 		</trim>
 	</sql>
-	<select id="select_ethXAddress" parameterType="ethXAddress" resultMap="ethXAddress_DB_Result">
+	<select id="select_ethSAddress" parameterType="EthSAddress" resultMap="EthSAddress_DB_Result">
 		SELECT
 		t.id
 		,t.address
-		,t.user_id
+		,t.status
 		,t.create_datetime
+		,t.abandon_datetime
 		FROM
-		tcoin_eth_xaddress t
+		tcoin_eth_saddress t
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -43,48 +45,36 @@
 		</trim>
 	</select>
 	
-	<select id="select_ethXAddress_secret" parameterType="ethXAddress" resultMap="ethXAddress_DB_Result">
+	<select id="select_ethSAddress_secret" parameterType="EthSAddress" resultMap="EthSAddress_DB_Result">
 		SELECT
 		t.id
 		,t.address
 		,t.keystore_pwd
 		,t.keystore_name
 		,t.keystore_content
-		,t.user_id
+		,t.status
 		,t.create_datetime
+		,t.abandon_datetime
 		FROM
-		tcoin_eth_xaddress t
+		tcoin_eth_saddress t
 		<include refid="where_condition" />
 	</select>
 
-	<select id="select_ethXAddress_count" parameterType="ethXAddress"
+	<select id="select_ethSAddress_count" parameterType="EthSAddress"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tcoin_eth_xaddress t
+		SELECT count(1) FROM tcoin_eth_saddress t
 		<include refid="where_condition" />
 	</select>
 	
-	<select id="select_need_collect_list" parameterType="ethXAddress" resultMap="ethXAddress_DB_Result">
-		SELECT
-		t.id
-		,t.address
-		,t.user_id
-		,t.keystore_pwd
-		,t.keystore_name
-		,t.keystore_content
-		,t.create_datetime
-		FROM tcoin_eth_xaddress t LEFT JOIN tstd_account a ON t.address = a.address
-		WHERE a.currency = #{symbol} AND a.amount >= #{balance}
-	</select>
-	
-	<insert id="insert_ethXAddress" parameterType="ethXAddress">
+	<insert id="insert_ethSAddress" parameterType="EthSAddress">
 		INSERT INTO
-		tcoin_eth_xaddress(
+		tcoin_eth_saddress(
 		
 		address
 		,keystore_pwd
 		,keystore_name
 		,keystore_content
-		,user_id
+		,status
 		,create_datetime
 		
 		)
@@ -94,11 +84,26 @@
 		,#{keystorePwd}
 		,#{keystoreName}
 		,#{keystoreContent}
-		,#{userId}
+		,#{status}
 		,#{createDatetime}
 		
 		)
 	</insert>
+	
+	<update id="update_status" parameterType="EthSAddress">
+		UPDATE tcoin_eth_saddress
+		SET
+		status = #{status}
+		WHERE id = #{id}
+	</update>
+	
+	 <update id="update_abandon" parameterType="EthSAddress">
+		UPDATE tcoin_eth_saddress
+		SET
+		status = #{status}
+		,abandon_datetime = #{abandonDatetime}
+		WHERE id = #{id}
+	</update>
 
 
 </mapper>

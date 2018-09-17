@@ -1,19 +1,22 @@
 package com.ogc.standard.domain;
 
-import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 import com.ogc.standard.dao.base.ABaseDO;
 
 /**
- * ETH用户分发地址
+ * ETH平台补给地址
  * @author: haiqingzheng 
- * @since: 2018年8月26日 下午2:37:44 
+ * @since: 2018年8月26日 下午2:40:29 
  * @history:
  */
-public class EthXAddress extends ABaseDO {
+public class EthSAddress extends ABaseDO {
 
-    private static final long serialVersionUID = 3965170382137877195L;
+    /** 
+     * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
+     */
+    private static final long serialVersionUID = 7107887978357391058L;
 
     // ID主键
     private Long id;
@@ -30,41 +33,32 @@ public class EthXAddress extends ABaseDO {
     // keystore文件内容
     private String keystoreContent;
 
-    // 用户编号
-    private String userId;
+    // 状态
+    private String status;
 
     // 创建时间
     private Date createDatetime;
+
+    // 弃用时间
+    private Date abandonDatetime;
 
     // ******** db propertity end *********
 
     // 所属用户信息
     private User userInfo;
 
+    private List<String> statusList;
+
+    public List<String> getStatusList() {
+        return statusList;
+    }
+
+    public void setStatusList(List<String> statusList) {
+        this.statusList = statusList;
+    }
+
     // 地址模糊查询
     private String addressForQuery;
-
-    // 余额
-    private BigDecimal balance;
-
-    // 币种
-    private String symbol;
-
-    public String getSymbol() {
-        return symbol;
-    }
-
-    public void setSymbol(String symbol) {
-        this.symbol = symbol;
-    }
-
-    public BigDecimal getBalance() {
-        return balance;
-    }
-
-    public void setBalance(BigDecimal balance) {
-        this.balance = balance;
-    }
 
     public Long getId() {
         return id;
@@ -106,12 +100,12 @@ public class EthXAddress extends ABaseDO {
         this.keystoreContent = keystoreContent;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getStatus() {
+        return status;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public Date getCreateDatetime() {
@@ -120,6 +114,14 @@ public class EthXAddress extends ABaseDO {
 
     public void setCreateDatetime(Date createDatetime) {
         this.createDatetime = createDatetime;
+    }
+
+    public Date getAbandonDatetime() {
+        return abandonDatetime;
+    }
+
+    public void setAbandonDatetime(Date abandonDatetime) {
+        this.abandonDatetime = abandonDatetime;
     }
 
     public User getUserInfo() {

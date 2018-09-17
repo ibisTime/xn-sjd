@@ -1,5 +1,7 @@
 package com.ogc.standard.ao;
 
+import java.math.BigDecimal;
+
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Collect;
 
@@ -14,12 +16,16 @@ public interface ICollectAO {
 
     // public BigDecimal getTotalCollect(String currency);
     //
-    // // // 手动归集
-    // // public void collectionManual(BigDecimal balanceStart, String
-    // currency);
-    //
-    // // 归集
-    // public void collect(BigDecimal balanceStart, String currency, String
-    // refNo);
+    // // 手动归集
+    // public void collectionManual(BigDecimal balanceStart, String currency);
 
+    // btc,eth,wan归集
+    public void collect(BigDecimal balanceStart, String currency, String refNo);
+
+    // eth token的手动归集
+    public void ethTokenCollect(String balanceStart, String currency,
+            String refNo);
+
+    // eth token的自动归集
+    public void ethTokenCollectAuto(String address, String symbol, String refNo);
 }
