@@ -8,11 +8,14 @@
  */
 package com.ogc.standard.ao.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ogc.standard.ao.IReadAO;
 import com.ogc.standard.bo.IReadBO;
+import com.ogc.standard.bo.ISmsBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Read;
 
@@ -27,6 +30,9 @@ public class ReadAOImpl implements IReadAO {
     @Autowired
     private IReadBO readBO;
 
+    @Autowired
+    private ISmsBO smsBO;
+
     @Override
     public void editStatusRead(long id) {
         readBO.refreshStatusRead(id);
@@ -40,12 +46,20 @@ public class ReadAOImpl implements IReadAO {
 
     @Override
     public Paginable<Read> queryReadPage(int start, int limit, Read condition) {
-        return readBO.getPaginable(start, limit, condition);
+
+        Paginable<Read> page = readBO.getPaginable(start, limit, condition);
+        List<Read> readList = page.getList();
+        for (Read read : readList) {
+            read.setSmsInfo(smsBO.getSms(read.getSmsCode()));
+        }
+        return page;
     }
 
     @Override
     public Read getRead(long id) {
-        return readBO.getRead(id);
+        Read read = readBO.getRead(id);
+        read.setSmsInfo(smsBO.getSms(read.getSmsCode()));
+        return read;
     }
 
 }

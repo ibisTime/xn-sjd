@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.web3j.protocol.core.methods.response.EthBlock;
 import org.web3j.protocol.core.methods.response.Transaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
@@ -230,7 +229,7 @@ public class CollectAOImpl implements ICollectAO {
 
         Collect condition = new Collect();
         condition.setStatus(ECollectStatus.TO_COLLECT.getCode());
-        condition.setCoinType(ECoinType.HPM.getCode());
+        condition.setCoinType(ECoinType.X.getCode());
 
         List<Collect> collectList = collectBO.queryCollectList(condition);
         if (CollectionUtils.isEmpty(collectList)) {
@@ -324,7 +323,7 @@ public class CollectAOImpl implements ICollectAO {
 
         Collect condition = new Collect();
         condition.setStatus(ECollectStatus.FEE_BROADCAST.getCode());
-        condition.setCoinType(ECoinType.HPM.getCode());
+        condition.setCoinType(ECoinType.X.getCode());
 
         List<Collect> collectList = collectBO.queryCollectList(condition);
         if (CollectionUtils.isEmpty(collectList)) {
@@ -378,7 +377,7 @@ public class CollectAOImpl implements ICollectAO {
 
         Collect condition = new Collect();
         condition.setStatus(ECollectStatus.BROADCAST.getCode());
-        condition.setCoinType(ECoinType.HPM.getCode());
+        condition.setCoinType(ECoinType.X.getCode());
 
         List<Collect> collectList = collectBO.queryCollectList(condition);
         if (CollectionUtils.isEmpty(collectList)) {
@@ -467,8 +466,7 @@ public class CollectAOImpl implements ICollectAO {
         logger.info("****** 扫描eth正在归集的订单结束 ******");
     }
 
-    @Transactional
-    public void collectionNotice(CtqEthTransaction ctqEthTransaction) {
+    private void collectionNotice(CtqEthTransaction ctqEthTransaction) {
         // 根据交易hash查询归集记录
         Collect collect = collectBO.getCollectByTxHash(ctqEthTransaction
             .getHash());

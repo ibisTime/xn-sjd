@@ -8,6 +8,9 @@ import java.util.List;
 import com.ogc.standard.dao.base.ABaseDO;
 
 public class Market extends ABaseDO implements Serializable {
+
+    private static final long serialVersionUID = -1085440748192863387L;
+
     private Long id;
 
     public Long getId() {
@@ -26,6 +29,8 @@ public class Market extends ABaseDO implements Serializable {
 
     private BigDecimal lastPrice;// Last
 
+    private BigDecimal percentChange24h;// 24h
+
     private BigDecimal bid;// Bid
 
     private BigDecimal ask;// Ask
@@ -42,22 +47,14 @@ public class Market extends ABaseDO implements Serializable {
 
     private List<String> coinList;
 
-    public List<String> getCoinList() {
-        return coinList;
-    }
-
-    public void setCoinList(List<String> coinList) {
-        this.coinList = coinList;
-    }
-
-    private static final long serialVersionUID = 1L;
+    private String CoinmarketcapId;
 
     public String getSymbol() {
         return symbol;
     }
 
-    public void setSymbol(String coin) {
-        this.symbol = coin == null ? null : coin.trim();
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
     }
 
     public String getReferCurrency() {
@@ -65,8 +62,7 @@ public class Market extends ABaseDO implements Serializable {
     }
 
     public void setReferCurrency(String referCurrency) {
-        this.referCurrency = referCurrency == null ? null : referCurrency
-            .trim();
+        this.referCurrency = referCurrency;
     }
 
     public String getOrigin() {
@@ -74,7 +70,7 @@ public class Market extends ABaseDO implements Serializable {
     }
 
     public void setOrigin(String origin) {
-        this.origin = origin == null ? null : origin.trim();
+        this.origin = origin;
     }
 
     public BigDecimal getLastPrice() {
@@ -83,6 +79,14 @@ public class Market extends ABaseDO implements Serializable {
 
     public void setLastPrice(BigDecimal lastPrice) {
         this.lastPrice = lastPrice;
+    }
+
+    public BigDecimal getPercentChange24h() {
+        return percentChange24h;
+    }
+
+    public void setPercentChange24h(BigDecimal percentChange24h) {
+        this.percentChange24h = percentChange24h;
     }
 
     public BigDecimal getBid() {
@@ -130,7 +134,7 @@ public class Market extends ABaseDO implements Serializable {
     }
 
     public void setVolume(String volume) {
-        this.volume = volume == null ? null : volume.trim();
+        this.volume = volume;
     }
 
     public Date getUpdateDatetime() {
@@ -140,4 +144,21 @@ public class Market extends ABaseDO implements Serializable {
     public void setUpdateDatetime(Date updateDatetime) {
         this.updateDatetime = updateDatetime;
     }
+
+    public List<String> getCoinList() {
+        return coinList;
+    }
+
+    public void setCoinList(List<String> coinList) {
+        this.coinList = coinList;
+    }
+
+    public String getCoinmarketcapId() {
+        return CoinmarketcapId;
+    }
+
+    public void setCoinmarketcapId(String coinmarketcapId) {
+        CoinmarketcapId = coinmarketcapId;
+    }
+
 }

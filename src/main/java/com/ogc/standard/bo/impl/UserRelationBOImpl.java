@@ -8,19 +8,19 @@
  */
 package com.ogc.standard.bo.impl;
 
+import java.util.Date;
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.ogc.standard.bo.IUserRelationBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.IUserRelationDAO;
 import com.ogc.standard.domain.UserRelation;
 import com.ogc.standard.enums.EBoolean;
-import com.ogc.standard.enums.EUserReleationType;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import java.util.Date;
-import java.util.List;
 
 /**
  * 用户关系BO
@@ -29,8 +29,8 @@ import java.util.List;
  * @history:
  */
 @Component
-public class UserRelationBOImpl extends PaginableBOImpl<UserRelation> implements
-        IUserRelationBO {
+public class UserRelationBOImpl extends PaginableBOImpl<UserRelation>
+        implements IUserRelationBO {
     @Autowired
     private IUserRelationDAO userRelationDAO;
 
@@ -38,7 +38,8 @@ public class UserRelationBOImpl extends PaginableBOImpl<UserRelation> implements
      * @see com.std.user.bo.IUserRelationBO#isExistUserRelation(java.lang.String, java.lang.String)
      */
     @Override
-    public boolean isExistUserRelation(String userId, String toUser, String type) {
+    public boolean isExistUserRelation(String userId, String toUser,
+            String type) {
         UserRelation condition = new UserRelation();
         condition.setUserId(userId);
         condition.setToUser(toUser);
@@ -55,7 +56,7 @@ public class UserRelationBOImpl extends PaginableBOImpl<UserRelation> implements
      */
     @Override
     public String saveUserRelation(String userId, String toUser, String type,
-                                   String systemCode) {
+            String systemCode) {
         String code = null;
         if (StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(toUser)) {
             UserRelation data = new UserRelation();
@@ -65,16 +66,12 @@ public class UserRelationBOImpl extends PaginableBOImpl<UserRelation> implements
             data.setToUser(toUser);
             data.setType(type);
             data.setStatus(EBoolean.YES.getCode());
-            data.setUpdateDatetime(new Date());
-            data.setSystemCode(systemCode);
+            data.setCreateDatetime(new Date());
             userRelationDAO.insert(data);
         }
         return code;
     }
 
-    /**
-     * @see com.std.user.bo.IUserRelationBO#refreshUserRelation(java.lang.String, java.lang.String)
-     */
     @Override
     public int refreshUserRelation(String userId, String toUser, String type) {
         int count = 0;
@@ -89,9 +86,6 @@ public class UserRelationBOImpl extends PaginableBOImpl<UserRelation> implements
         return count;
     }
 
-    /**
-     * @see com.std.user.bo.IUserRelationBO#removeUserRelation(java.lang.String, java.lang.String)
-     */
     @Override
     public int removeUserRelation(String userId, String toUser, String type) {
         int count = 0;
@@ -106,7 +100,8 @@ public class UserRelationBOImpl extends PaginableBOImpl<UserRelation> implements
     }
 
     @Override
-    public List<UserRelation> queryUserRelationList(String userId, String toUser, String type) {
+    public List<UserRelation> queryUserRelationList(String userId,
+            String toUser, String type) {
         UserRelation condition = new UserRelation();
         condition.setUserId(userId);
         condition.setToUser(toUser);

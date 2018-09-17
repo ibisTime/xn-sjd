@@ -127,7 +127,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
 
     private void verifyPayCardNo(Coin coin, String payCardNo) {
         if (ECoinType.ETH.getCode().equals(coin.getSymbol())
-                || ECoinType.HPM.getCode().equals(coin.getSymbol())) {
+                || ECoinType.X.getCode().equals(coin.getSymbol())) {
             if (!WalletUtils.isValidAddress(payCardNo)) {
                 throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                     "提现地址不符合" + ECoinType.ETH.getCode() + "规则，请仔细核对");
@@ -177,8 +177,9 @@ public class WithdrawAOImpl implements IWithdrawAO {
                 throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                     "散取地址不能为空");
             }
+
             doEthBroadcast(withdraw, mAddressId, approveUser);
-        } else if (ECoinType.HPM.getCode().equals(coin.getType())) {
+        } else if (ECoinType.X.getCode().equals(coin.getType())) {
             if (mAddressId == null) {
                 throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                     "散取地址不能为空");

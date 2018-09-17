@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.ogc.standard.bo.IReadBO;
-import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.dao.IReadDAO;
 import com.ogc.standard.domain.Read;
@@ -32,22 +31,6 @@ public class ReadBOImpl extends PaginableBOImpl<Read> implements IReadBO {
 
     @Autowired
     private IReadDAO readDAO;
-
-    @Override
-    public long getTotalCount(Read condition) {
-        return 0;
-    }
-
-    @Override
-    public Paginable<Read> getPaginable(int start, Read condition) {
-        return null;
-    }
-
-    @Override
-    public Paginable<Read> getPaginable(int start, int pageSize,
-            Read condition) {
-        return null;
-    }
 
     @Override
     public void saveToRead(List<Read> dataList) {
@@ -100,6 +83,13 @@ public class ReadBOImpl extends PaginableBOImpl<Read> implements IReadBO {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void deleteRead(String smsCode) {
+        Read condition = new Read();
+        condition.setSmsCode(smsCode);
+        readDAO.delete(condition);
     }
 
 }

@@ -9,7 +9,7 @@
 		<result column="to_user" property="toUser" />
 		<result column="status" property="status" />
 		<result column="type" property="type" />
-		<result column="update_datetime" property="updateDatetime" />
+		<result column="create_datetime" property="createDatetime" />
 	</resultMap>
 	
 	<sql id="where_condition">
@@ -26,12 +26,6 @@
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
 			</if>
-			<if test="companyCode != null and companyCode != '' ">
-				AND t.company_code = #{companyCode}
-			</if>
-			<if test="systemCode != null and systemCode != '' ">
-				AND t.system_code = #{systemCode}
-			</if>
 		</trim>
 	</sql>
 	
@@ -42,9 +36,7 @@
 		,t.to_user
 		,t.status
 		,t.type
-		,t.update_datetime
-		,t.company_code
-		,t.system_code
+		,t.create_datetime
 		FROM
 		tstd_user_relation t
 		<include refid="where_condition" />
@@ -66,8 +58,7 @@
 		,to_user
 	    ,type
 		,status
-		,update_datetime
-		,system_code
+		,create_datetime
 		)
 		VALUES(
 		#{code}
@@ -75,8 +66,7 @@
 		,#{toUser}
 		,#{type}
 		,#{status}
-		,#{updateDatetime}
-		,#{systemCode}
+		,#{createDatetime}
 		)
 	</insert>
 	
@@ -90,7 +80,6 @@
 		UPDATE tstd_user_relation
 		SET
 		status= #{status}
-		,update_datetime= #{updateDatetime}
 		WHERE user_id = #{userId} AND to_user = #{toUser} AND type = #{type}
 	</update>
 	

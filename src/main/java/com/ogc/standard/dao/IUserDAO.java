@@ -26,17 +26,26 @@ public interface IUserDAO extends IBaseDAO<User> {
     // 实名认证
     public int updateIdentity(User data);
 
+    // 修改手续费率
+    public int updateTradeRate(User data);
+
     // 设置支付密码
     public int updateTradePwd(User data);
 
     // 更改位置信息
     public int updateLocation(User data);
 
+    // 更改负责区域
+    public int updateRespArea(User data);
+
     // 设置登录密码
     public int updateLoginPwd(User data);
 
     // 更新手机号
     public int updateMobile(User data);
+
+    // 更新邮箱
+    public int updateEmail(User data);
 
     // 更新状态
     public int updateStatus(User data);

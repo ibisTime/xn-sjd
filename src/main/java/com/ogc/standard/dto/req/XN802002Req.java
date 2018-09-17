@@ -1,12 +1,6 @@
-/**
- * @Title XN802250Req.java 
- * @Package com.ogc.standard.dto.req 
- * @Description 
- * @author haiqingzheng  
- * @date 2018年3月13日 上午11:13:30 
- * @version V1.0   
- */
 package com.ogc.standard.dto.req;
+
+import java.util.Date;
 
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -17,7 +11,7 @@ import org.hibernate.validator.constraints.NotBlank;
  */
 public class XN802002Req {
 
-    // 英文简称
+    // ID
     @NotBlank
     private String id;
 
@@ -48,6 +42,36 @@ public class XN802002Req {
     // UI序号
     @NotBlank
     private String orderNo;
+
+    // 简介
+    private String introduction;
+
+    // 流通量
+    private String totalSupply;
+
+    // 流通市值
+    private String totalSupplyMarket;
+
+    // 发行总量
+    private String maxSupply;
+
+    // 发行市值
+    private String maxSupplyMarket;
+
+    // 市值排名
+    private String rank;
+
+    // 白皮书
+    private String whitePaper;
+
+    // 官网
+    private String webUrl;
+
+    // 区块查询
+    private String blockUrl;
+
+    // ico时间
+    private Date icoDatetime;
 
     // 归集阀值
     @NotBlank
@@ -126,6 +150,86 @@ public class XN802002Req {
 
     public void setOrderNo(String orderNo) {
         this.orderNo = orderNo;
+    }
+
+    public String getIntroduction() {
+        return introduction;
+    }
+
+    public void setIntroduction(String introduction) {
+        this.introduction = introduction;
+    }
+
+    public String getTotalSupply() {
+        return totalSupply;
+    }
+
+    public void setTotalSupply(String totalSupply) {
+        this.totalSupply = totalSupply;
+    }
+
+    public String getTotalSupplyMarket() {
+        return totalSupplyMarket;
+    }
+
+    public void setTotalSupplyMarket(String totalSupplyMarket) {
+        this.totalSupplyMarket = totalSupplyMarket;
+    }
+
+    public String getMaxSupply() {
+        return maxSupply;
+    }
+
+    public void setMaxSupply(String maxSupply) {
+        this.maxSupply = maxSupply;
+    }
+
+    public String getMaxSupplyMarket() {
+        return maxSupplyMarket;
+    }
+
+    public void setMaxSupplyMarket(String maxSupplyMarket) {
+        this.maxSupplyMarket = maxSupplyMarket;
+    }
+
+    public String getRank() {
+        return rank;
+    }
+
+    public void setRank(String rank) {
+        this.rank = rank;
+    }
+
+    public String getWhitePaper() {
+        return whitePaper;
+    }
+
+    public void setWhitePaper(String whitePaper) {
+        this.whitePaper = whitePaper;
+    }
+
+    public String getWebUrl() {
+        return webUrl;
+    }
+
+    public void setWebUrl(String webUrl) {
+        this.webUrl = webUrl;
+    }
+
+    public String getBlockUrl() {
+        return blockUrl;
+    }
+
+    public void setBlockUrl(String blockUrl) {
+        this.blockUrl = blockUrl;
+    }
+
+    public Date getIcoDatetime() {
+        return icoDatetime;
+    }
+
+    public void setIcoDatetime(Date icoDatetime) {
+        this.icoDatetime = icoDatetime;
     }
 
     public String getCollectStart() {

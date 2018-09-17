@@ -5,8 +5,11 @@ import java.util.List;
 import com.ogc.standard.bo.base.IPaginableBO;
 import com.ogc.standard.domain.Handicap;
 import com.ogc.standard.domain.HandicapGrade;
+import com.ogc.standard.domain.SimuOrder;
 
 public interface IHandicapBO extends IPaginableBO<Handicap> {
+
+    public void saveHandicap(SimuOrder simuOrder);
 
     public void stuffHandicap(String symbol, String toSymbol, String direction,
             int stuffHandicapQuantity);
@@ -18,6 +21,6 @@ public interface IHandicapBO extends IPaginableBO<Handicap> {
     public List<Handicap> queryHandicapList(Handicap condition);
 
     public List<HandicapGrade> queryHandicapList(String symbol, String toSymbol,
-            String direction, int handicapQuantity);
+            String direction);
 
 }

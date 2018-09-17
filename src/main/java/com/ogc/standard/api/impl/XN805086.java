@@ -8,7 +8,7 @@
  */
 package com.ogc.standard.api.impl;
 
-import com.ogc.standard.ao.IUserExtAO;
+import com.ogc.standard.ao.IUserAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.ObjValidater;
@@ -27,12 +27,11 @@ import com.ogc.standard.spring.SpringContextHolder;
 public class XN805086 extends AProcessor {
     private XN805086Req req = null;
 
-    private IUserExtAO userExtAO = SpringContextHolder
-        .getBean(IUserExtAO.class);
+    private IUserAO userAO = SpringContextHolder.getBean(IUserAO.class);
 
     @Override
     public Object doBusiness() throws BizException {
-        userExtAO.bindEmail(req.getCaptcha(), req.getEmail(), req.getUserId());
+        userAO.bindEmail(req.getCaptcha(), req.getEmail(), req.getUserId());
         return new BooleanRes(true);
     }
 

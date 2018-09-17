@@ -43,6 +43,7 @@ import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECoin;
 import com.ogc.standard.enums.ECoinStatus;
 import com.ogc.standard.enums.ECoinType;
+import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EJourBizTypeUser;
 import com.ogc.standard.enums.ETradeType;
 import com.ogc.standard.enums.EUserReleationType;
@@ -350,7 +351,8 @@ public class AdsAOImpl implements IAdsAO {
             //
             // BigDecimal platPrice = this.getPlatformPrice(market);
             BigDecimal platPrice = marketAO
-                .coinPriceByPlatform(ads.getTradeCoin()).getMid();
+                .coinPriceByPlatform(ads.getTradeCoin(), ads.getTradeCurrency())
+                .getMid();
             ads.setMarketPrice(platPrice);
             BigDecimal truePrice = platPrice
                 .multiply(BigDecimal.ONE.add(data.getPremiumRate()));
@@ -370,7 +372,7 @@ public class AdsAOImpl implements IAdsAO {
 
             ads.setTruePrice(truePrice);
 
-        } else if (ECoinType.HPM.getCode().equals(coin.getType())) {
+        } else if (ECoinType.X.getCode().equals(coin.getType())) {
             ads.setMarketPrice(data.getTruePrice());
             ads.setTruePrice(data.getTruePrice());
         } else {
@@ -678,9 +680,12 @@ public class AdsAOImpl implements IAdsAO {
     // 定时刷新行情价格
     public void refreshMarketPrice() {
 
-        Market marketEth = this.marketBO.standardMarket(ECoin.ETH);
-        Market marketSc = this.marketBO.standardMarket(ECoin.SC);
-        Market marketBtc = this.marketBO.standardMarket(ECoin.BTC);
+        Market marketEth = this.marketBO.standardMarket(ECoin.ETH,
+            ECurrency.CNY.getCode());
+        Market marketSc = this.marketBO.standardMarket(ECoin.X,
+            ECurrency.CNY.getCode());
+        Market marketBtc = this.marketBO.standardMarket(ECoin.BTC,
+            ECurrency.CNY.getCode());
         // 1.只刷新上架状态的
         List<Ads> shangJiaAdsList = this.adsBO.queryShangJiaAdsList();
 

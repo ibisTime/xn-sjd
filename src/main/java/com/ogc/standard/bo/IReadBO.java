@@ -34,5 +34,7 @@ public interface IReadBO extends IPaginableBO<Read> {
     // 分页查我的消息
     public List<Read> queryReadList(Read condition);
 
+    public void deleteRead(String smsCode);
+
     public Read getRead(long id);
 }

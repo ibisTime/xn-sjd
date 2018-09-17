@@ -31,6 +31,9 @@ public interface ICoinAO {
     // 详情查
     public Coin getCoin(long id);
 
+    // 详情查
+    public Coin getCoin(String symbol);
+
     // 查询币种余额
     // public XN802270Res queryCoinBalance(XN802270Req req);
 

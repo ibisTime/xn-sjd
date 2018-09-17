@@ -97,6 +97,14 @@
 		<property name="paginableDAO" ref="userExtDAOImpl"/>
 	</bean>
 	
+	<bean id="userIdAuthBO" class="com.ogc.standard.bo.impl.UserIdAuthBOImpl">
+		<property name="paginableDAO" ref="userIdAuthDAOImpl"/>
+	</bean>
+	
+	<bean id="userFieldApproveBO" class="com.ogc.standard.bo.impl.UserFieldApproveBOImpl">
+		<property name="paginableDAO" ref="userFieldApproveDAOImpl"/>
+	</bean>
+	
 	<bean id="blacklistBO" class="com.ogc.standard.bo.impl.BlacklistBOImpl">
 		<property name="paginableDAO" ref="blacklistDAOImpl"/>
 	</bean>
@@ -151,6 +159,10 @@
 	
 	<bean id="coinBO" class="com.ogc.standard.bo.impl.CoinBOImpl">
 		<property name="paginableDAO" ref="coinDAOImpl"/>
+	</bean>
+	
+	<bean id="awardBO" class="com.ogc.standard.bo.impl.AwardBOImpl">
+		<property name="paginableDAO" ref="awardDAOImpl"/>
 	</bean>
 	
 	<bean id="personalAddressBO" class="com.ogc.standard.bo.impl.PersonalAddressBOImpl">
@@ -221,8 +233,8 @@
 		<property name="paginableDAO" ref="tradeOrderDAOImpl"/>
 	</bean>
 	
-	<bean id="coinAcceptOrderBO" class="com.ogc.standard.bo.impl.CoinAcceptOrderBOImpl">
-		<property name="paginableDAO" ref="coinAcceptOrderDAOImpl"/>
+	<bean id="acceptOrderBO" class="com.ogc.standard.bo.impl.AcceptOrderBOImpl">
+		<property name="paginableDAO" ref="acceptOrderDAOImpl"/>
 	</bean>
 	
 	<bean id="tokenEventBO" class="com.ogc.standard.bo.impl.TokenEventBOImpl">
@@ -254,6 +266,14 @@
 	
 	<bean id="ethSAddressBO" class="com.ogc.standard.bo.impl.EthSAddressBOImpl">
 		<property name="paginableDAO" ref="ethSAddressDAOImpl"/>
+	</bean>
+		
+	<bean id="divideBO" class="com.ogc.standard.bo.impl.DivideBOImpl">
+		<property name="paginableDAO" ref="divideDAOImpl"/>
+	</bean>
+	
+	<bean id="divideDetailBO" class="com.ogc.standard.bo.impl.DivideDetailBOImpl">
+		<property name="paginableDAO" ref="divideDetailDAOImpl"/>
 	</bean>
 	
 </beans>

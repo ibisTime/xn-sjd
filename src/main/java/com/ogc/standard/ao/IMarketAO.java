@@ -1,10 +1,10 @@
 package com.ogc.standard.ao;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.ogc.standard.domain.Market;
-import com.ogc.standard.dto.req.XN625291Req;
-import com.ogc.standard.market.MarketDepth;
+import com.ogc.standard.dto.req.XN650101Req;
 
 /** 
  * 
@@ -14,8 +14,12 @@ import com.ogc.standard.market.MarketDepth;
  */
 public interface IMarketAO {
 
-    public MarketDepth getMarketDepth(String symbolPair, String exchange);
+    public List<Market> marketListByReq(XN650101Req req);
+
+    public void saveMarket(String coin, String origin, String currency,
+            String coinId, BigDecimal price);
 
     // 获取平台干预后的，货币价格
-    Market coinPriceByPlatform(String coin);
+
+    public Market coinPriceByPlatform(String coin, String refCurrency);
 }

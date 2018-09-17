@@ -8,9 +8,9 @@
  */
 package com.ogc.standard.domain;
 
-import com.ogc.standard.dao.base.ABaseDO;
-
 import java.util.Date;
+
+import com.ogc.standard.dao.base.ABaseDO;
 
 /** 
  * @author: xieyj 
@@ -18,9 +18,6 @@ import java.util.Date;
  * @history:
  */
 public class UserRelation extends ABaseDO {
-    /** 
-     * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
-     */
     private static final long serialVersionUID = 1L;
 
     // 编号
@@ -38,14 +35,8 @@ public class UserRelation extends ABaseDO {
     // @see EUserReleationType
     private String type;
 
-    // 更新时间
-    private Date updateDatetime;
-
-    // 系统编号
-    private String companyCode;
-
-    // 系统编号
-    private String systemCode;
+    // 创建时间
+    private Date createDatetime;
 
     // 用户
     private User fromUserInfo;
@@ -85,30 +76,6 @@ public class UserRelation extends ABaseDO {
         this.status = status;
     }
 
-    public Date getUpdateDatetime() {
-        return updateDatetime;
-    }
-
-    public void setUpdateDatetime(Date updateDatetime) {
-        this.updateDatetime = updateDatetime;
-    }
-
-    public String getCompanyCode() {
-        return companyCode;
-    }
-
-    public void setCompanyCode(String companyCode) {
-        this.companyCode = companyCode;
-    }
-
-    public String getSystemCode() {
-        return systemCode;
-    }
-
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
-    }
-
     public User getFromUserInfo() {
         return fromUserInfo;
     }
@@ -127,6 +94,14 @@ public class UserRelation extends ABaseDO {
 
     public String getType() {
         return type;
+    }
+
+    public Date getCreateDatetime() {
+        return createDatetime;
+    }
+
+    public void setCreateDatetime(Date createDatetime) {
+        this.createDatetime = createDatetime;
     }
 
     public void setType(String type) {

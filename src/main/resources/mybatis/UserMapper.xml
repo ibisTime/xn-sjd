@@ -6,6 +6,7 @@
 		<result column="user_id" property="userId" />
 		<result column="login_name" property="loginName" />
 		<result column="mobile" property="mobile" />
+		<result column="email" property="email" />
 		<result column="kind" property="kind" />
 		<result column="photo" property="photo" />
 		
@@ -68,6 +69,9 @@
 			<if test="mobile != null and mobile != '' ">
 				AND t.mobile = #{mobile}
 			</if>
+			<if test="email != null and email != '' ">
+				AND t.email = #{email}
+			</if>
 			<if test="mobileForQuery != null and mobileForQuery != '' ">
 				AND t.mobile like "%"#{mobileForQuery}"%"
 			</if>
@@ -126,6 +130,7 @@
 		t.user_id
 		,t.login_name
 		,t.mobile
+		,t.email
 		,t.kind
 		,t.photo
 		
@@ -179,6 +184,7 @@
 		user_id
 		,login_name
 		,mobile
+		,email
 		,kind
 		,photo
 		
@@ -219,6 +225,7 @@
 		#{userId}
 		,#{loginName}
 		,#{mobile}
+		,#{email}
 		,#{kind}
 		,#{photo}
 		
@@ -263,6 +270,9 @@
 		 real_name= #{realName}
 		,id_kind = #{idKind}
 		,id_no = #{idNo}
+		,id_face=#{idFace}
+		,id_oppo=#{idOppo}
+		,id_hold=#{idHold}
 		WHERE
 		user_id = #{userId}	
 	</update>
@@ -285,11 +295,37 @@
 		user_id = #{userId}
 	</update>
 	
+	<update id="update_email" parameterType="user">
+		UPDATE tstd_user
+		SET
+		email= #{email}
+		WHERE
+		user_id = #{userId}
+	</update>
+	
 	<update id="update_trade_pwd" parameterType="user">
 		UPDATE tstd_user
 		SET
 		 trade_pwd = #{tradePwd}
 		,trade_pwd_strength = #{tradePwdStrength}
+		WHERE
+		user_id = #{userId}	
+	</update>
+	
+	<update id="update_trade_rate" parameterType="user">
+		UPDATE tstd_user
+		SET
+		 trade_rate = #{tradeRate}
+		WHERE
+		user_id = #{userId}	
+	</update>
+	
+	<update id="update_resp_area" parameterType="user">
+		UPDATE tstd_user
+		SET
+		 resp_area = #{respArea}
+		 ,updater=#{updater}
+		 ,update_datetime=#{updateDatetime}
 		WHERE
 		user_id = #{userId}	
 	</update>
@@ -315,10 +351,7 @@
 	<update id="update_bind_mobile" parameterType="user">
 		UPDATE tstd_user
 		SET
-		login_name = #{loginName}
-		,mobile = #{mobile}
-		,login_pwd = #{loginPwd}
-		,login_pwd_strength = #{loginPwdStrength}
+		mobile = #{mobile}
 		WHERE
 		user_id = #{userId}	
 	</update>

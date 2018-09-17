@@ -4,26 +4,23 @@ import org.hibernate.validator.constraints.NotBlank;
 
 /** 
  * 购买X币
- * @author: lei 
- * @since: 2018年9月10日 下午8:07:48 
+ * @author: taojian 
+ * @since: 2018年9月15日 下午3:25:34 
  * @history:
  */
 public class XN625270Req {
 
-    // 必填,付款卡号
+    // 必填,收款方式
     @NotBlank
-    private String payCardNo;
-
-    // 条件必填,银行卡号
-    private String payBank;
-
-    // 必填,付款方式
-    @NotBlank
-    private String payType;
+    private String receiveType;
 
     // 必填,付款金额
     @NotBlank
     private String tradeAmount;
+
+    // 购买数量
+    @NotBlank
+    private String count;
 
     // 必填,交易币种
     @NotBlank
@@ -33,36 +30,16 @@ public class XN625270Req {
     @NotBlank
     private String tradePrice;
 
-    // 必填,交易数量，当时行情价
-    @NotBlank
-    private String count;
-
     // 必填,购买用户编号
     @NotBlank
     private String userId;
 
-    public String getPayCardNo() {
-        return payCardNo;
+    public String getReceiveType() {
+        return receiveType;
     }
 
-    public void setPayCardNo(String payCardNo) {
-        this.payCardNo = payCardNo;
-    }
-
-    public String getPayBank() {
-        return payBank;
-    }
-
-    public void setPayBank(String payBank) {
-        this.payBank = payBank;
-    }
-
-    public String getPayType() {
-        return payType;
-    }
-
-    public void setPayType(String payType) {
-        this.payType = payType;
+    public void setReceiveType(String receiveType) {
+        this.receiveType = receiveType;
     }
 
     public String getTradeAmount() {
@@ -85,16 +62,16 @@ public class XN625270Req {
         return tradePrice;
     }
 
-    public void setTradePrice(String tradePrice) {
-        this.tradePrice = tradePrice;
-    }
-
     public String getCount() {
         return count;
     }
 
     public void setCount(String count) {
         this.count = count;
+    }
+
+    public void setTradePrice(String tradePrice) {
+        this.tradePrice = tradePrice;
     }
 
     public String getUserId() {

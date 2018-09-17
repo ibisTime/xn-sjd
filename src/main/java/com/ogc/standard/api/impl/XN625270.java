@@ -1,6 +1,6 @@
 package com.ogc.standard.api.impl;
 
-import com.ogc.standard.ao.ICoinAcceptOrderAO;
+import com.ogc.standard.ao.IAcceptOrderAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.ObjValidater;
@@ -18,15 +18,15 @@ import com.ogc.standard.spring.SpringContextHolder;
  */
 public class XN625270 extends AProcessor {
 
-    private ICoinAcceptOrderAO coinAcceptOrderAO = SpringContextHolder
-        .getBean(ICoinAcceptOrderAO.class);
+    private IAcceptOrderAO acceptOrderAO = SpringContextHolder
+        .getBean(IAcceptOrderAO.class);
 
     private XN625270Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-
-        return new PKCodeRes(coinAcceptOrderAO.buyOrder(req));
+        String code = acceptOrderAO.buyOrder(req);
+        return new PKCodeRes(code);
     }
 
     @Override
