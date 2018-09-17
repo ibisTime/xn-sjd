@@ -8,6 +8,7 @@
  */
 package com.ogc.standard.bo;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.ogc.standard.bo.base.IPaginableBO;
@@ -20,6 +21,10 @@ import com.ogc.standard.domain.Award;
  */
 public interface IAwardBO extends IPaginableBO<Award> {
     public Award getAward(Long id);
+
+    // 推荐用户交易分成
+    public void saveTradeAward(String refereeUserId, String userKind,
+            String refCode, String refNote, BigDecimal tradeCount);
 
     public void saveRegistAward(String userId, String userKind, String refCode,
             String refNote);

@@ -34,9 +34,6 @@ public class XN805087 extends AProcessor {
         return userAO.getTencentSign(req.getUserId());
     }
 
-    /** 
-     * @see com.ogc.standard.api.IProcessor#doCheck(java.lang.String, java.lang.String)
-     */
     @Override
     public void doCheck(String inputparams, String operator)
             throws ParaException {
