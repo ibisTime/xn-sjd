@@ -1005,8 +1005,8 @@ CREATE TABLE `tstd_award` (
   `user_id` varchar(32) NOT NULL COMMENT '用户编号',
   `user_kind` varchar(32) NOT NULL COMMENT '用户种类',
   `currency` char(8) DEFAULT NULL COMMENT '币种(X币)',
-  `amount` decimal(64,0) DEFAULT NULL COMMENT '奖励',
-  `order_amount` decimal(64,0) DEFAULT NULL COMMENT '订单金额',
+  `count` decimal(64,0) DEFAULT NULL COMMENT '奖励数量',
+  `order_count` decimal(64,0) DEFAULT NULL COMMENT '订单数量',
   `rate` decimal(18,8) DEFAULT NULL COMMENT '奖励比例',
   `ref_type` char(1) DEFAULT NULL COMMENT '参考类型(1=注册分佣 2=交易分佣)',
   `ref_code` varchar(32) DEFAULT NULL COMMENT '参考订单编号',
@@ -1014,21 +1014,23 @@ CREATE TABLE `tstd_award` (
   `status` char(1) NOT NULL COMMENT '状态(0=待结算 1=已结算 2=不结算)',
   `create_datetime` datetime DEFAULT NULL COMMENT '创建时间',
   `handle_datetime` datetime DEFAULT NULL COMMENT '处理时间',
+  `handle_note` varchar(255) DEFAULT NULL COMMENT '处理说明',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='奖励';
 
 -- ----------------------------
---  Table structure for `tstd_award_settle`
+--  Table structure for `tstd_award_month`
 -- ----------------------------
-DROP TABLE IF EXISTS `tstd_award_settle`;
-CREATE TABLE `tstd_award_settle` (
+DROP TABLE IF EXISTS `tstd_award_month`;
+CREATE TABLE `tstd_award_month` (
   `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `user_id` varchar(32) NOT NULL COMMENT '用户编号',
-  `unsettle_amount` decimal(64,0) DEFAULT NULL COMMENT '未结算金额',
-  `settle_amount` decimal(64,0) DEFAULT NULL COMMENT '结算金额',
-  `nosettle_amount` decimal(64,0) DEFAULT NULL COMMENT '不结算金额',
-  `current_amount` decimal(64,0) DEFAULT NULL COMMENT '当月最后一次结算后余额',
+  `unsettle_count` decimal(64,0) DEFAULT NULL COMMENT '未结算数量',
+  `settle_count` decimal(64,0) DEFAULT NULL COMMENT '结算数量',
+  `nosettle_count` decimal(64,0) DEFAULT NULL COMMENT '不结算数量',
+  `next_unsettle_count` decimal(64,0) DEFAULT NULL COMMENT '下个月未结算数量',
+  `current_count` decimal(64,0) DEFAULT NULL COMMENT '当月最后一次结算后余额',
   `start_date` datetime DEFAULT NULL COMMENT '开始结算日期',
   `end_date` datetime DEFAULT NULL COMMENT '结束结算日期',
   `create_datetime` datetime DEFAULT NULL COMMENT '创建时间',
@@ -1036,7 +1038,6 @@ CREATE TABLE `tstd_award_settle` (
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='奖励结算';
-
 
 -- ----------------------------
 --  Table structure for `tstd_hlorder`

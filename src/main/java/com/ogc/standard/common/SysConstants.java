@@ -23,6 +23,11 @@ public class SysConstants {
     public static final String CUSER_REG = "cuser_reg"; // 普通用户推荐送X币
 
     public static final String DUSER_REG = "duser_reg"; // 渠道商推荐送X币
+
+    public static final String REFEREE_CUSER_FEE_RATE = "referee_cuser_fee_rate"; // 普通用户推荐用户交易分成
+
+    public static final String REFEREE_DUSER_FEE_RATE = "referee_duser_fee_rate"; // 普通用户推荐用户交易分成
+
     // 七牛云图片配置
 
     public static String QINIU_ACCESS_KEY = "qiniu_access_key";

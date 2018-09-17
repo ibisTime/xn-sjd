@@ -681,14 +681,19 @@ INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_d
 /*
 -- Query: SELECT `account_number`,`user_id`,`currency`,`address`,`type`,`status`,`amount`,`frozen_amount`,`md5`,`in_amount`,`out_amount`,`create_datetime`,`last_order` FROM tstd_account where user_id in ('SYS_USER_COLD')
 LIMIT 0, 5000
-
 -- Date: 2018-09-12 15:27
 */
 INSERT INTO `tstd_account` (`account_number`,`user_id`,`currency`,`address`,`type`,`status`,`amount`,`frozen_amount`,`md5`,`in_amount`,`out_amount`,`create_datetime`,`last_order`) VALUES ('SYS_ACOUNT_BTC_COLD','SYS_USER_COLD','BTC',NULL,'P','0',0,0,'b99e0407fedc3d160f73fec8d1fa9a0c',0,0,now(),NULL);
-INSERT INTO `tstd_account` (`account_number`,`user_id`,`currency`,`address`,`type`,`status`,`amount`,`frozen_amount`,`md5`,`in_amount`,`out_amount`,`create_datetime`,`last_order`) VALUES ('SYS_ACOUNT_ETH_COLD','SYS_USER_COLD','ETH',NULL,'P','0',300000000000000000000,0,'811a1aeb3577b3108caa1ff46244f333',0,0,now(),'AJ201809101725344704294');
+INSERT INTO `tstd_account` (`account_number`,`user_id`,`currency`,`address`,`type`,`status`,`amount`,`frozen_amount`,`md5`,`in_amount`,`out_amount`,`create_datetime`,`last_order`) VALUES ('SYS_ACOUNT_ETH_COLD','SYS_USER_COLD','ETH',NULL,'P','0',0,0,'811a1aeb3577b3108caa1ff46244f333',0,0,now(),NULL);
 INSERT INTO `tstd_account` (`account_number`,`user_id`,`currency`,`address`,`type`,`status`,`amount`,`frozen_amount`,`md5`,`in_amount`,`out_amount`,`create_datetime`,`last_order`) VALUES ('SYS_ACOUNT_X_COLD','SYS_USER_COLD','X',NULL,'P','0',0,0,'b99e0407fedc3d160f73fec8d1fa9a0c',0,0,now(),NULL);
 
-INSERT INTO `tstd_account` (`account_number`,`user_id`,`currency`,`address`,`type`,`status`,`amount`,`frozen_amount`,`md5`,`in_amount`,`out_amount`,`create_datetime`,`last_order`) VALUES ('SYS_ACOUNT_X_AWARD','SYS_USER','X',NULL,'P','0',0,0,'b99e0407fedc3d160f73fec8d1fa9a0c',0,0,now(),NULL);
+INSERT INTO `tstd_account` (`account_number`,`user_id`,`currency`,`address`,`type`,`status`,`amount`,`frozen_amount`,`md5`,`in_amount`,`out_amount`,`create_datetime`,`last_order`) VALUES ('SYS_ACOUNT_BTC_M','SYS_USER_M','BTC',NULL,'P','0',0,0,'b99e0407fedc3d160f73fec8d1fa9a0c',0,0,now(),NULL);
+INSERT INTO `tstd_account` (`account_number`,`user_id`,`currency`,`address`,`type`,`status`,`amount`,`frozen_amount`,`md5`,`in_amount`,`out_amount`,`create_datetime`,`last_order`) VALUES ('SYS_ACOUNT_ETH_M','SYS_USER_M','ETH',NULL,'P','0',0,0,'811a1aeb3577b3108caa1ff46244f333',0,0,now(),NULL);
+INSERT INTO `tstd_account` (`account_number`,`user_id`,`currency`,`address`,`type`,`status`,`amount`,`frozen_amount`,`md5`,`in_amount`,`out_amount`,`create_datetime`,`last_order`) VALUES ('SYS_ACOUNT_X_M','SYS_USER_M','X',NULL,'P','0',0,0,'b99e0407fedc3d160f73fec8d1fa9a0c',0,0,now(),NULL);
+
+INSERT INTO `tstd_account` (`account_number`,`user_id`,`currency`,`address`,`type`,`status`,`amount`,`frozen_amount`,`md5`,`in_amount`,`out_amount`,`create_datetime`,`last_order`) VALUES ('SYS_ACOUNT_BTC','SYS_USER','BTC',NULL,'P','0',0,0,'b99e0407fedc3d160f73fec8d1fa9a0c',0,0,now(),NULL);
+INSERT INTO `tstd_account` (`account_number`,`user_id`,`currency`,`address`,`type`,`status`,`amount`,`frozen_amount`,`md5`,`in_amount`,`out_amount`,`create_datetime`,`last_order`) VALUES ('SYS_ACOUNT_ETH','SYS_USER','ETH',NULL,'P','0',0,0,'b99e0407fedc3d160f73fec8d1fa9a0c',0,0,now(),NULL);
+INSERT INTO `tstd_account` (`account_number`,`user_id`,`currency`,`address`,`type`,`status`,`amount`,`frozen_amount`,`md5`,`in_amount`,`out_amount`,`create_datetime`,`last_order`) VALUES ('SYS_ACOUNT_X','SYS_USER','X',NULL,'P','0',0,0,'b99e0407fedc3d160f73fec8d1fa9a0c',0,0,now(),NULL);
 
 /*
 -- Query: SELECT `symbol`,`ename`,`cname`,`type`,`unit`,`icon`,`pic1`,`pic2`,`pic3`,`order_no`,`collect_start`,`withdraw_fee`,`contract_address`,`contract_abi`,`status`,`updater`,`update_datetime`,`remark` FROM ogc_standard.tcoin_coin
