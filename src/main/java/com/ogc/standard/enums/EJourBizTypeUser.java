@@ -6,47 +6,50 @@ import java.util.Map;
 import com.ogc.standard.exception.BizException;
 
 /**
- * @author: xieyj 
- * @since: 2016年11月11日 上午10:09:32 
+ * 
+ * @author: lei 
+ * @since: 2018年8月23日 下午10:04:20 
  * @history:
  */
 public enum EJourBizTypeUser {
-    AJ_BUY("buy", "交易买入"),
 
-    AJ_SELL("sell", "交易卖出"),
+    AJ_CHARGE("charge", "充币"), 
+    AJ_WITHDRAW("withdraw", "提币"), 
+    AJ_WITHDRAW_FEE("withdraw_fee", "提币手续费"),
+    AJ_WITHDRAW_FROZEN("withdraw_frozen", "提币冻结"),
+    AJ_WITHDRAW_UNFROZEN("withdraw_unfrozen", "提币解冻"),
 
-    AJ_CHARGE("charge", "充值"),
+    AJ_ACCPET_BUY("accept_buy", "场外承兑商购买"), 
+    AJ_ACCPET_SELL("accept_sell","场外承兑商出售"), 
+    AJ_ACCPET_FEE("accept_fee", "场外承兑商手续费"),
+    AJ_ACCPET_FROZEN("withdraw_frozen", "场外承兑商冻结"),
+    AJ_ACCPET_UNFROZEN("withdraw_unfrozen", "场外承兑商解冻"),
+    
+    AJ_CCORDER_BUY("ccorder_buy", "场外cc买入"), 
+    AJ_CCORDER_SELL("ccorder_sell", "场外cc卖出"), 
+    AJ_CCORDER_FEE("ccorder_fee", "场外cc手续费"),
+    AJ_CCORDER_FROZEN("ccorder_frozen", "场外cc冻结"),
+    AJ_CCORDER_UNFROZEN_REVOKE("ccorder_unfrozen_revoke", "场外cc撤单解冻"),
+    AJ_CCORDER_UNFROZEN_TRADE("ccorder_unfrozen_trade", "场外cc成交解冻"),
 
-    AJ_WITHDRAW("withdraw", "取现"),
+    AJ_BBORDER_BUY("bborder_buy", "币币交易兑入"), 
+    AJ_BBORDER_SELL("bborder_sell", "币币交易兑出"), 
+    AJ_BBORDER_FEE("bborder_fee", "币币交易手续费"),
+    AJ_BBORDER_FROZEN("bborder_frozen", "币币交易冻结"),
+    AJ_BBORDER_UNFROZEN_REVOKE("bborder_unfrozen_revoke", "币币撤单解冻"),
+    AJ_BBORDER_UNFROZEN_TRADE("bborder_unfrozen_trade", "币币交易解冻"),
 
-    AJ_WITHDRAWFEE("withdrawfee", "取现手续费"),
-
-    AJ_HC("hc", "红冲"),
-
+    AJ_HC("hc", "红冲"), 
     AJ_LB("lb", "蓝补"),
+    
+    AJ_AWARD("award", "奖励"), 
+    AJ_DIVIDE("divide", "分红"),
 
-    AJ_INVITE("invite", "推荐好友分成"),
+    AJ_GAME_IN("game_in", "游戏转入"), // 转账记录用type区分类型
+    AJ_GAME_OUT("game_out", "游戏转出"); // 转账记录用type区分类型
 
-    AJ_TRADEFEE("tradefee", "交易广告费"),
-
-    AJ_TRANSFER_IN("transfer_in", "转账收入"),
-
-    AJ_TRANSFER_OUT("transfer_out", "转账支出"),
-
-    AJ_WITHDRAW_FROZEN("withdrawfrozen", "取现冻结"),
-
-    AJ_ADS_FROZEN("tradefrozen", "广告交易冻结"),
-
-    AJ_ADS_UNFROZEN("tradeunfrozen", "广告交易解冻"),
-
-    AJ_WITHDRAW_UNFROZEN("withdrawunfrozen", "取现解冻"),
-
-    AJ_CANCEL_UNFROZEN("cancelunfrozen", "交易取消解冻"),
-
-    AJ_ACCEPT_FROZEN("accept_frozen", "售卖交易冻结"),
-
-    AJ_ACCEPT_UNFROZEN("accept_unfrozen", "售卖交易解冻");
-
+   
+    
     public static EJourBizTypeUser getBizType(String code) {
         Map<String, EJourBizTypeUser> map = getBizTypeMap();
         EJourBizTypeUser result = map.get(code);

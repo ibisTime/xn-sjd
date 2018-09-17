@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.ISimuOrderAO;
+import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IHandicapBO;
 import com.ogc.standard.bo.ISimuKLineBO;
 import com.ogc.standard.bo.ISimuOrderBO;
@@ -18,10 +19,12 @@ import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.SysConstants;
 import com.ogc.standard.core.StringValidater;
+import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.SimuKLine;
 import com.ogc.standard.domain.SimuOrder;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.dto.req.XN650050Req;
+import com.ogc.standard.enums.EJourBizTypeUser;
 import com.ogc.standard.enums.ESimuKLinePeriod;
 import com.ogc.standard.enums.ESimuOrderDirection;
 import com.ogc.standard.enums.ESimuOrderStatus;
@@ -46,6 +49,9 @@ public class SimuOrderAOImpl implements ISimuOrderAO {
 
     @Autowired
     private ISimuKLineBO simuKLineBO;
+
+    @Autowired
+    private IAccountBO accountBO;
 
     @Override
     @Transactional
@@ -85,17 +91,15 @@ public class SimuOrderAOImpl implements ISimuOrderAO {
                 "当前状态下不支持撤单");
         }
 
-        // **买入订单解冻计价币种数量
-        // if (ESimuOrderDirection.BUY.getCode().equals(data.getDirection())) {
-        //
-        // GroupCoin gcAccount = groupCoinBO.getGroupCoin(data.getGroupCode(),
-        // data.getUserId(), data.getToSymbol());
-        // groupCoinBO.unfrozenAmount(gcAccount, data.getTotalCount(),
-        // EJourBizType.BUY_ORDER_UNFROZEN.getCode(),
-        // "提交购买[" + SymbolUtil.getSymbolPair(data.getSymbol(),
-        // data.getToSymbol()) + "]委托撤单",
-        // code);
-        // }
+        // 买入订单解冻计价币种数量
+        if (ESimuOrderDirection.BUY.getCode().equals(data.getDirection())) {
+
+            Account account = accountBO.getAccountByUser(data.getUserId(),
+                data.getToSymbol());
+            accountBO.unfrozenAmount(account, data.getTotalCount(),
+                EJourBizTypeUser.AJ_BBORDER_UNFROZEN_REVOKE.getCode(),
+                EJourBizTypeUser.AJ_BBORDER_UNFROZEN_REVOKE.getValue(), code);
+        }
 
         // 更新委托单信息
         if (ESimuOrderStatus.SUBMIT.getCode().equals(data.getStatus())) {
@@ -159,14 +163,14 @@ public class SimuOrderAOImpl implements ISimuOrderAO {
 
         User user = userBO.getUser(req.getUserId());
 
-        // **检查计价币种是否存在 和 账户余额
-        // GroupCoin groupCoin = groupCoinBO.getGroupCoin(req.getGroupCode(),
-        // req.getUserId(), req.getToSymbol());
-        // if (groupCoin.getCount().subtract(groupCoin.getFrozenCount())
-        // .compareTo(totalAmount) < 0) {
-        // throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-        // "当前组合" + groupCoin.getSymbol() + "资产可用余额不足");
-        // }
+        // 检查计价币种是否存在 和 账户余额
+        Account account = accountBO.getAccountByUser(req.getUserId(),
+            req.getToSymbol());
+        if (groupCoin.getCount().subtract(groupCoin.getFrozenCount())
+            .compareTo(totalAmount) < 0) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "当前组合" + groupCoin.getSymbol() + "资产可用余额不足");
+        }
 
         // 落地委托单
         SimuOrder simuOrder = simuOrderBO.saveSimuOrder(req, totalCount, price,

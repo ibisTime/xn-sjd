@@ -11,11 +11,23 @@ import com.ogc.standard.exception.BizException;
  * @history:
  */
 public enum EJourBizTypePlat {
-    AJ_BUY("buy", "交易买入"), AJ_SELL("sell", "交易卖出"), AJ_TRADEFEE("tradefee",
-            "交易广告费收入"), AJ_WITHDRAWFEE("withdrawfee", "取现手续费收入"), AJ_WFEE(
-                    "mfee",
-                    "取现矿工费"), AJ_MFEE("wfee", "归集矿工费"), AJ_INVITE("invite",
-                            "推荐人分成支出"), AJ_HC("hc", "红冲"), AJ_LB("lb", "蓝补");
+
+    AJ_DEPOSIT("deposit", "定存"), 
+    AJ_COLLECT("collect", "归集"), 
+    AJ_WITHDRAW("withdraw", "提币"),
+
+    AJ_WITHDRAW_FEE("withdraw_fee", "提币手续费"), 
+    AJ_CCORDER_FEE("ccorder_fee", "场外cc手续费"), 
+    AJ_BBORDER_FEE("bborder_fee", "币币交易手续费"), 
+    AJ_WITHDRAW_MINING_FEE("withdraw_mining_fee", "提币矿工费"), 
+    AJ_COLLECT_FIRST_MINING_FEE("collect_first_mining_fee", "一级归集矿工费"), 
+    AJ_DEPOSIT_MINING_FEE("deposit_mining_fee", "定存矿工费"),
+
+    AJ_WITHDRAW_SUPPLY_MINING_FEE_ERC20("withdraw_supply_mining_fee_erc20", "ERC20币的矿工费补给"), 
+    AJ_WITHDRAW_MINING_FEE_ERC20("withdraw_mining_fee_erc20", "ERC20币提币矿工费"), 
+    AJ_COLLECT_MINING_FEE_ERC20("collect_first_mining_fee_erc20", "ERC20币一级归集矿工费"), 
+    AJ_DEPOSIT_MINING_FEE_ERC20("deposit_mining_fee_erc20", "ERC20币定存矿工费");
+
     public static EJourBizTypePlat getBizType(String code) {
         Map<String, EJourBizTypePlat> map = getBizTypeMap();
         EJourBizTypePlat result = map.get(code);
