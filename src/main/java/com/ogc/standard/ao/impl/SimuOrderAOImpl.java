@@ -31,6 +31,7 @@ import com.ogc.standard.enums.ESimuOrderStatus;
 import com.ogc.standard.enums.ESimuOrderType;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
+import com.ogc.standard.util.SymbolUtil;
 
 @Service
 public class SimuOrderAOImpl implements ISimuOrderAO {
@@ -164,26 +165,23 @@ public class SimuOrderAOImpl implements ISimuOrderAO {
         User user = userBO.getUser(req.getUserId());
 
         // 检查计价币种是否存在 和 账户余额
-        Account account = accountBO.getAccountByUser(req.getUserId(),
+        Account account = accountBO.getAccountByUser(user.getUserId(),
             req.getToSymbol());
-        if (groupCoin.getCount().subtract(groupCoin.getFrozenCount())
+        if (account.getAmount().subtract(account.getFrozenAmount())
             .compareTo(totalAmount) < 0) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "当前组合" + groupCoin.getSymbol() + "资产可用余额不足");
+                "当前组合" + account.getCurrency() + "资产可用余额不足");
         }
 
         // 落地委托单
         SimuOrder simuOrder = simuOrderBO.saveSimuOrder(req, totalCount, price,
             totalAmount);
 
-        // 落地盘口，只有限价单可以进入盘口
-        // saveHandicap(simuOrder);
-
-        // **冻结计价币种
-        // groupCoinBO.frozenCount(groupCoin, totalAmount,
-        // EJourBizType.BUY_ORDER_FROZEN.getCode(), "提交购买[" + SymbolUtil
-        // .getSymbolPair(req.getSymbol(), req.getToSymbol()) + "]委托单",
-        // code);
+        // 冻结计价币种
+        accountBO.frozenAmount(account, totalAmount,
+            EJourBizTypeUser.AJ_BBORDER_FROZEN.getCode(), "提交购买[" + SymbolUtil
+                .getSymbolPair(req.getSymbol(), req.getToSymbol()) + "]委托单",
+            simuOrder.getCode());
 
         return simuOrder;
     }
@@ -211,27 +209,24 @@ public class SimuOrderAOImpl implements ISimuOrderAO {
 
         User user = userBO.getUser(req.getUserId());
 
-        // **检查卖出币种账户 和 账户余额
-        // GroupCoin groupCoin = groupCoinBO.getGroupCoin(req.getGroupCode(),
-        // req.getUserId(), req.getSymbol());
-        // if (groupCoin.getCount().subtract(groupCoin.getFrozenCount())
-        // .compareTo(totalCount) < 0) {
-        // throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-        // "当前组合" + req.getSymbol() + "资产可用余额不足");
-        // }
+        // 检查卖出币种账户 和 账户余额
+        Account account = accountBO.getAccountByUser(user.getUserId(),
+            req.getSymbol());
+        if (account.getAmount().subtract(account.getFrozenAmount())
+            .compareTo(totalCount) < 0) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "当前组合" + req.getSymbol() + "资产可用余额不足");
+        }
 
         // 落地委托单
         SimuOrder simuOrder = simuOrderBO.saveSimuOrder(req, totalCount, price,
             totalAmount);
 
-        // 落地盘口，只有限价单可以进入盘口
-        // saveHandicap(simuOrder);
-
-        // **冻结出售币种资产
-        // groupCoinBO.frozenCount(groupCoin, totalAmount,
-        // EJourBizType.SELL_ORDER_FROZEN.getCode(), "提交卖出[" + SymbolUtil
-        // .getSymbolPair(req.getSymbol(), req.getToSymbol()) + "]委托单",
-        // code);
+        // 冻结出售币种资产
+        accountBO.frozenAmount(account, totalAmount,
+            EJourBizTypeUser.AJ_BBORDER_SELL.getCode(), "提交卖出[" + SymbolUtil
+                .getSymbolPair(req.getSymbol(), req.getToSymbol()) + "]委托单",
+            simuOrder.getCode());
 
         return simuOrder;
 
