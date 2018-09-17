@@ -1,5 +1,6 @@
 package com.ogc.standard.bo.impl;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -14,8 +15,8 @@ import com.ogc.standard.dao.IEthXAddressDAO;
 import com.ogc.standard.domain.EthXAddress;
 
 @Component
-public class EthXAddressBOImpl extends PaginableBOImpl<EthXAddress>
-        implements IEthXAddressBO {
+public class EthXAddressBOImpl extends PaginableBOImpl<EthXAddress> implements
+        IEthXAddressBO {
 
     @Autowired
     private IEthXAddressDAO ethXAddressDAO;
@@ -69,6 +70,28 @@ public class EthXAddressBOImpl extends PaginableBOImpl<EthXAddress>
         if (CollectionUtils.isNotEmpty(results)) {
             data = results.get(0);
         }
+        return data;
+    }
+
+    @Override
+    public List<EthXAddress> queryNeedCollectAddressPage(
+            BigDecimal balanceStart, String symbol, int start, int limit) {
+        EthXAddress condition = new EthXAddress();
+        condition.setBalance(balanceStart);
+        condition.setSymbol(symbol);
+        return ethXAddressDAO.selectNeedCollectList(condition, start, limit);
+    }
+
+    @Override
+    public EthXAddress getEthXAddressSecret(Long id) {
+        EthXAddress data = null;
+
+        if (id != null) {
+            EthXAddress condition = new EthXAddress();
+            condition.setId(id);
+            data = ethXAddressDAO.selectSecret(condition);
+        }
+
         return data;
     }
 

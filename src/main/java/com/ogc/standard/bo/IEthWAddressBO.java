@@ -15,4 +15,6 @@ public interface IEthWAddressBO extends IPaginableBO<EthWAddress> {
 
     public EthWAddress getEthWAddress(Long id);
 
+    // 获取今日归集订单
+    public EthWAddress getWEthAddressToday();
 }

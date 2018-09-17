@@ -16,7 +16,7 @@ public enum EGeneratePrefix {
 
     SIMU_ORDER("SO", "币币交易委托单"), SIMU_ORDER_DETAIL("SOMX", "币币交易委托单明细"), SIMU_ORDER_HISTORY(
             "SOT", "币币交易历史委托单"), Account("A", "账户"), AJour("AJ", "账户流水"), DEPOSIT(
-            "DT", "定存记录"),
+            "DT", "定存记录"), Collect("GJ", "归集订单"),
 
     Match("M", "赛事"), MatchApply("MA", "参赛申请"), Team("T", "战队"), TeamMemberApply(
             "TMA", "战队成员申请"), GROUP("GP", "组合"), ATTENTION("AT", "关注/提醒"), Post(

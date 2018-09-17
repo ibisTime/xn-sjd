@@ -1,9 +1,9 @@
 package com.ogc.standard.enums;
 
-public enum ECollectionStatus {
-    Broadcast("0", "广播中"), Broadcast_YES("1", "广播成功"), Broadcast_NO("2", "广播失败");
+public enum ESAddressStatus {
+    VALID("0", "可使用"), IN_USE("1", "广播使用中"), INVALID("2", "已弃用");
 
-    ECollectionStatus(String code, String value) {
+    ESAddressStatus(String code, String value) {
         this.code = code;
         this.value = value;
     }

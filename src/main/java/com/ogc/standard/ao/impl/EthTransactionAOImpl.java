@@ -12,10 +12,12 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ogc.standard.ao.ICollectAO;
 import com.ogc.standard.ao.IEthTransactionAO;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IChargeBO;
@@ -28,8 +30,10 @@ import com.ogc.standard.bo.IEthXAddressBO;
 import com.ogc.standard.bo.ITokenEventBO;
 import com.ogc.standard.bo.IWithdrawBO;
 import com.ogc.standard.bo.base.Paginable;
+import com.ogc.standard.core.EthClient;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.Charge;
+import com.ogc.standard.domain.Coin;
 import com.ogc.standard.domain.CtqEthTransaction;
 import com.ogc.standard.domain.EthMAddress;
 import com.ogc.standard.domain.EthTransaction;
@@ -49,6 +53,8 @@ import com.ogc.standard.exception.BizException;
  */
 @Service
 public class EthTransactionAOImpl implements IEthTransactionAO {
+
+    private static Logger logger = Logger.getLogger(EthTransactionAOImpl.class);
 
     @Autowired
     private IChargeBO chargeBO;
@@ -80,12 +86,16 @@ public class EthTransactionAOImpl implements IEthTransactionAO {
     @Autowired
     private IDepositBO depositBO;
 
+    @Autowired
+    private ICollectAO collectAO;
+
     @Override
     @Transactional
     public String ethChargeNotice(CtqEthTransaction ctqEthTransaction) {
         // 充值地址在X地址表中查询
+        String toAddress = ctqEthTransaction.getTo();
         EthXAddress ethXAddress = ethXAddressBO
-            .getEthXAddressByAddress(ctqEthTransaction.getTo());
+            .getEthXAddressByAddress(toAddress);
         if (ethXAddress == null) {
             throw new BizException("xn6250000", "充值地址不存在");
         }
@@ -95,8 +105,11 @@ public class EthTransactionAOImpl implements IEthTransactionAO {
         if (chargeBO.getTotalCount(condition) > 0) {
             return "";
         }
+        // 落地交易记录
+        String symobl = EOriginialCoin.ETH.getCode();
+        ethTransactionBO.saveEthTransaction(ctqEthTransaction);
         Account account = accountBO.getAccountByUser(ethXAddress.getUserId(),
-            EOriginialCoin.ETH.getCode());
+            symobl);
         BigDecimal amount = ctqEthTransaction.getValue();
         // 哪一条链
         String cardNoInfo = EOriginialCoin.ETH.getCode();
@@ -104,17 +117,21 @@ public class EthTransactionAOImpl implements IEthTransactionAO {
         // 充值订单落地
         String code = chargeBO.applyOrderOnline(account, cardNoInfo,
             fromAddress, amount, EChannelType.Online,
-            ctqEthTransaction.getHash(),
-            "ETH充值-来自地址：" + ctqEthTransaction.getFrom(),
+            ctqEthTransaction.getHash(), "ETH充值-来自地址：" + fromAddress,
             ctqEthTransaction.getHash());
-
         // 账户加钱
         accountBO.changeAmount(account, amount, EChannelType.Online,
             ctqEthTransaction.getHash(), code,
             EJourBizTypeUser.AJ_CHARGE.getCode(), "ETH充值-来自地址："
                     + ctqEthTransaction.getFrom());
-        // 落地交易记录
-        ethTransactionBO.saveEthTransaction(ctqEthTransaction);
+        // 归集结果不影响充值
+
+        try {
+            collection(toAddress, code, symobl);
+        } catch (Exception e) {
+            logger.info("自动归集异常，原因：" + e.getMessage());
+        }
+
         return code;
     }
 
@@ -142,21 +159,28 @@ public class EthTransactionAOImpl implements IEthTransactionAO {
         // 哪一条链
         String cardNoInfo = EOriginialCoin.ETH.getCode();
         String fromAddress = tokenEvent.getTokenFrom();
+        // 落地交易记录
+        ethTransactionBO.saveEthTransaction(ctqEthTransaction);
+        // 落地tokenEvent
+        tokenEventBO.insertTokenEvent(tokenEvent);
         // 充值订单落地
         String code = chargeBO.applyOrderOnline(account, cardNoInfo,
             fromAddress, amount, EChannelType.Online,
             ctqEthTransaction.getHash(), symbol + "充值-来自地址："
                     + ctqEthTransaction.getFrom(), ctqEthTransaction.getHash());
-
         // 账户加钱
         accountBO.changeAmount(account, amount, EChannelType.Online,
             ctqEthTransaction.getHash(), code,
             EJourBizTypeUser.AJ_CHARGE.getCode(), symbol + "充值-来自地址："
                     + ctqEthTransaction.getFrom());
-        // 落地交易记录
-        ethTransactionBO.saveEthTransaction(ctqEthTransaction);
-        // 落地tokenEvent
-        tokenEventBO.insertTokenEvent(tokenEvent);
+        collectAO.ethTokenCollectAuto(tokenEvent.getTokenTo(), symbol, code);
+        // 归集结果不影响充值
+        // try {
+        // collectAO
+        // .ethTokenCollectAuto(tokenEvent.getTokenTo(), code, symbol);
+        // } catch (Exception e) {
+        // logger.info("自动归集异常，原因：" + e.getMessage());
+        // }
         return code;
     }
 
@@ -236,19 +260,28 @@ public class EthTransactionAOImpl implements IEthTransactionAO {
     //
     // }
     //
-    /*
-     * @Override
-     * @Transactional public void collection(String address, String chargeCode)
-     * { // 获取地址信息 EthAddress xEthAddress =
-     * ethAddressBO.getEthAddress(EAddressType.X, address); if (xEthAddress ==
-     * null) { throw new BizException("xn625000", "该地址不能归集"); } Coin coin =
-     * coinBO.getCoin(EOriginialCoin.ETH.getCode()); BigDecimal limit =
-     * coin.getCollectStart(); BigDecimal balance =
-     * ethAddressBO.getEthBalance(address); // 余额大于配置值时，进行归集 if
-     * (balance.compareTo(limit) < 0) { throw new BizException("xn625000",
-     * "未达到归集条件，无需归集"); } // 开始归集 collectBO.doETHCollection(xEthAddress,
-     * chargeCode); }
-     */
+
+    @Override
+    @Transactional
+    public void collection(String address, String chargeCode, String symbol) {
+        // 获取地址信息
+        EthXAddress xEthAddress = ethXAddressBO
+            .getEthXAddressByAddress(address);
+        if (xEthAddress == null) {
+            throw new BizException("xn625000", "该地址不能归集");
+        }
+        EthXAddress fromAddressSecret = ethXAddressBO
+            .getEthXAddressSecret(xEthAddress.getId());
+
+        Coin coin = coinBO.getCoin(symbol);
+        BigDecimal limit = coin.getCollectStart();
+        BigDecimal balance = EthClient.getBalance(address); // 余额大于配置值时，进行归集
+        if (balance.compareTo(limit) < 0) {
+            throw new BizException("xn625000", "未达到归集条件，无需归集");
+        }
+        // 开始归集
+        collectBO.doETHCollect(fromAddressSecret, chargeCode, balance);
+    }
 
     /*
      * @Override
@@ -300,19 +333,19 @@ public class EthTransactionAOImpl implements IEthTransactionAO {
         // 获取冷钱包账户
         Account coldAccount = accountBO
             .getAccount(ESystemAccount.SYS_ACOUNT_ETH_COLD.getCode());
+        // 落地交易记录
+        ethTransactionBO.saveEthTransaction(ctqEthTransaction);
+        // 落地定存记录
+        String symbol = EOriginialCoin.ETH.getCode();
+        depositBO.saveDeposit(symbol, ctqEthTransaction.getFrom(),
+            ctqEthTransaction.getTo(), ctqEthTransaction.getValue(),
+            ctqEthTransaction.getHash(), ctqEthTransaction.getGasFee(),
+            ctqEthTransaction.getBlockCreateDatetime());
         // 平台冷钱包减钱
         coldAccount = accountBO.changeAmount(coldAccount, amount.negate(),
             EChannelType.Online, ctqEthTransaction.getHash(),
             ctqEthTransaction.getHash(), EJourBizTypeCold.AJ_PAY.getCode(),
             "ETH定存至取现地址(M):" + ctqEthTransaction.getTo());
-        String symbol = EOriginialCoin.ETH.getCode();
-        // 落地定存记录
-        depositBO.saveDeposit(symbol, ctqEthTransaction.getFrom(),
-            ctqEthTransaction.getTo(), ctqEthTransaction.getValue(),
-            ctqEthTransaction.getHash(), ctqEthTransaction.getGasFee(),
-            ctqEthTransaction.getBlockCreateDatetime());
-        // 落地交易记录
-        ethTransactionBO.saveEthTransaction(ctqEthTransaction);
     }
 
     @Override
@@ -325,20 +358,8 @@ public class EthTransactionAOImpl implements IEthTransactionAO {
         if (ethMAddress == null) {
             throw new BizException("xn6250000", "充值地址不存在");
         }
-        BigDecimal amount = tokenEvent.getTokenValue();
-        String symbol = tokenEvent.getSymbol();
-        Account coldAccount = accountBO.getAccount(ESystemAccount
-            .getPlatColdAccount(symbol));
-        // 同一哈希可对应多条tokenEvent,拼接上logIndex保证唯一
-        String hashAndLogIndex = ctqEthTransaction.getHash() + "||"
-                + tokenEvent.getTokenLogIndex();
-        // 平台冷钱包减钱
-        coldAccount = accountBO.changeAmount(coldAccount, amount.negate(),
-            EChannelType.Online, hashAndLogIndex, hashAndLogIndex,
-            EJourBizTypeCold.AJ_PAY.getCode(), symbol + "定存至取现地址(M):"
-                    + tokenEvent.getTokenTo());
-
         // 落地定存记录
+        String symbol = tokenEvent.getSymbol();
         depositBO.saveDeposit(symbol, tokenEvent.getTokenFrom(),
             tokenEvent.getTokenTo(), tokenEvent.getTokenValue(),
             ctqEthTransaction.getHash(), ctqEthTransaction.getGasFee(),
@@ -347,6 +368,17 @@ public class EthTransactionAOImpl implements IEthTransactionAO {
         ethTransactionBO.saveEthTransaction(ctqEthTransaction);
         // 落地tokenEvent
         tokenEventBO.insertTokenEvent(tokenEvent);
+        // 同一哈希可对应多条tokenEvent,拼接上logIndex保证唯一
+        String hashAndLogIndex = ctqEthTransaction.getHash() + "||"
+                + tokenEvent.getTokenLogIndex();
+        BigDecimal amount = tokenEvent.getTokenValue();
+        Account coldAccount = accountBO.getAccount(ESystemAccount
+            .getPlatColdAccount(symbol));
+        // 平台冷钱包减钱
+        coldAccount = accountBO.changeAmount(coldAccount, amount.negate(),
+            EChannelType.Online, hashAndLogIndex, hashAndLogIndex,
+            EJourBizTypeCold.AJ_PAY.getCode(), symbol + "定存至取现地址(M):"
+                    + tokenEvent.getTokenTo());
     }
 
     @Override

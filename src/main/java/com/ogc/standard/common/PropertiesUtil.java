@@ -57,6 +57,7 @@ public class PropertiesUtil {
         public static String BTC_CORE_PORT = props.getProperty("BTC_CORE_PORT");
 
         public static String TOKEN_URL = props.getProperty("TOKEN_URL");
-
+        
+        public static String KEY_STORE_PATH = props.getProperty("KEY_STORE_PATH");
     }
 }

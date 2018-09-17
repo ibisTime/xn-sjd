@@ -7,7 +7,7 @@
 		<result column="address" property="address" />
 		<result column="keystore_name" property="keystoreName" />
 		<result column="keystore_content" property="keystoreContent" />
-		<result column="keystore_pwd" property="password" />
+		<result column="keystore_pwd" property="keystorePwd" />
 		<result column="user_id" property="userId" />
 		<result column="create_datetime" property="createDatetime" />
 	</resultMap>
@@ -61,6 +61,19 @@
 		resultType="java.lang.Long">
 		SELECT count(1) FROM tcoin_eth_xaddress t
 		<include refid="where_condition" />
+	</select>
+	
+	<select id="select_need_collect_list" parameterType="ethXAddress" resultMap="ethXAddress_DB_Result">
+		SELECT
+		t.id
+		,t.address
+		,t.user_id
+		,t.keystore_pwd
+		,t.keystore_name
+		,t.keystore_content
+		,t.create_datetime
+		FROM tcoin_eth_xaddress t LEFT JOIN tstd_account a ON t.address = a.address
+		WHERE a.currency = #{symbol} AND a.amount >= #{balance}
 	</select>
 	
 	<insert id="insert_ethXAddress" parameterType="ethXAddress">

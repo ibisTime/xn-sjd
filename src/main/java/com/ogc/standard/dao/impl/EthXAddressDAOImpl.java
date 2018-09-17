@@ -9,8 +9,8 @@ import com.ogc.standard.dao.base.support.AMybatisTemplate;
 import com.ogc.standard.domain.EthXAddress;
 
 @Repository("ethXAddressDAOImpl")
-public class EthXAddressDAOImpl extends AMybatisTemplate
-        implements IEthXAddressDAO {
+public class EthXAddressDAOImpl extends AMybatisTemplate implements
+        IEthXAddressDAO {
 
     @Override
     public int insert(EthXAddress data) {
@@ -51,6 +51,13 @@ public class EthXAddressDAOImpl extends AMybatisTemplate
     public EthXAddress selectSecret(EthXAddress condition) {
         return super.select(NAMESPACE.concat("select_ethXAddress_secret"),
             condition, EthXAddress.class);
+    }
+
+    @Override
+    public List<EthXAddress> selectNeedCollectList(EthXAddress condition,
+            int start, int limit) {
+        return super.selectList(NAMESPACE.concat("select_need_collect_list"),
+            start, limit, condition, EthXAddress.class);
     }
 
 }

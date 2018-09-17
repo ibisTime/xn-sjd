@@ -91,19 +91,12 @@ public class EthMAddressBOImpl extends PaginableBOImpl<EthMAddress> implements
     }
 
     @Override
-    public EthMAddress getNormalEthMAddressByAddress(String address) {
-        EthMAddress data = null;
-        if (null != address) {
-            EthMAddress condition = new EthMAddress();
-            condition.setAddress(address);
-            // condition.setStatus();
-            List<EthMAddress> results = ethMAddressDAO.selectList(condition);
-            if (CollectionUtils.isNotEmpty(results)) {
-                data = results.get(0);
-            }
+    public int refreshStatus(EthMAddress ethMAddress, String status) {
+        int count = 0;
+        if (null != ethMAddress) {
+            ethMAddress.setStatus(status);
+            count = ethMAddressDAO.updateStatus(ethMAddress);
         }
-
-        return null;
+        return count;
     }
-
 }

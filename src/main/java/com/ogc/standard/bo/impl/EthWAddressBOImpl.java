@@ -12,10 +12,11 @@ import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.dao.IEthWAddressDAO;
 import com.ogc.standard.domain.EthWAddress;
 import com.ogc.standard.enums.EWAddressStatus;
+import com.ogc.standard.exception.BizException;
 
 @Component
-public class EthWAddressBOImpl extends PaginableBOImpl<EthWAddress>
-        implements IEthWAddressBO {
+public class EthWAddressBOImpl extends PaginableBOImpl<EthWAddress> implements
+        IEthWAddressBO {
 
     @Autowired
     private IEthWAddressDAO ethWAddressDAO;
@@ -66,6 +67,18 @@ public class EthWAddressBOImpl extends PaginableBOImpl<EthWAddress>
         }
 
         return data;
+    }
+
+    @Override
+    public EthWAddress getWEthAddressToday() {
+        EthWAddress condition = new EthWAddress();
+        condition.setStatus(EWAddressStatus.VALID.getCode());
+        condition.setOrder("create_datetime", "desc");
+        List<EthWAddress> wList = ethWAddressDAO.selectList(condition);
+        if (CollectionUtils.isEmpty(wList)) {
+            throw new BizException("xn625000", "未找到可用的归集地址");
+        }
+        return wList.get(0);
     }
 
 }

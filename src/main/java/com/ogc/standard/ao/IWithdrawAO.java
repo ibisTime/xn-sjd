@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import com.ogc.standard.bo.base.Paginable;
+import com.ogc.standard.domain.CtqEthTransaction;
+import com.ogc.standard.domain.TokenEvent;
 import com.ogc.standard.domain.Withdraw;
 import com.ogc.standard.dto.res.XN802356Res;
 import com.ogc.standard.spring.ServiceModule;
@@ -22,7 +24,7 @@ public interface IWithdrawAO {
             String approveResult, String approveNote);
 
     // 取现广播
-    public void broadcast(String code, String mAddressCode, String approveUser);
+    public void broadcast(String code, Long mAddressId, String approveUser);
 
     // 打回取现订单
     public void returnOrder(String code, String payUser, String payNote);
@@ -40,4 +42,7 @@ public interface IWithdrawAO {
     public XN802356Res getWithdrawCheckInfo(String code);
 
     public BigDecimal getTotalWithdraw(String currency);
+
+    public void tokenEventListokenwithdrawNotice(CtqEthTransaction ctqEthTransaction,
+            List<TokenEvent> tokenEventList, Withdraw withdraw);
 }

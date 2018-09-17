@@ -82,6 +82,7 @@
 		<typeAlias alias="simuKLine" type="com.ogc.standard.domain.SimuKLine" />
 		<typeAlias alias="simuMatchResult" type="com.ogc.standard.domain.SimuMatchResult" />
 		<typeAlias alias="simuMatchResultHistory" type="com.ogc.standard.domain.SimuMatchResultHistory" />
+		<typeAlias alias="ethSAddress" type="com.ogc.standard.domain.EthSAddress"/>
 		
 		<typeAlias alias="market" type="com.ogc.standard.domain.Market" />
 		<typeAlias alias="divide" type="com.ogc.standard.domain.Divide" />

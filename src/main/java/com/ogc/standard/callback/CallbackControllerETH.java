@@ -30,9 +30,10 @@ import com.ogc.standard.util.ListUtil;
  * @history:
  */
 @Controller
-public class CallbackConrollerETH {
+public class CallbackControllerETH {
 
-    private static Logger logger = Logger.getLogger(CallbackConrollerETH.class);
+    private static Logger logger = Logger
+        .getLogger(CallbackControllerETH.class);
 
     @Autowired
     private IEthXAddressBO ethXAddressBO;
@@ -93,13 +94,7 @@ public class CallbackConrollerETH {
                     xToAddress = ethXAddressBO
                         .getEthXAddressByAddress(ctqEthTransaction.getTo());
                     if (null != xToAddress) {// toAddress=X 充值
-                        String code = ethTransactionAO
-                            .ethChargeNotice(ctqEthTransaction);
-                        // if (StringUtils.isNotBlank(code)) {
-                        // //充值订单自动触发归集
-                        // ethTransactionAO.collection(
-                        // ctqEthTransaction.getTo(), code);
-                        // }
+                        ethTransactionAO.ethChargeNotice(ctqEthTransaction);
                         hashList.add(ctqEthTransaction.getHash());
                         continue;
                     }
