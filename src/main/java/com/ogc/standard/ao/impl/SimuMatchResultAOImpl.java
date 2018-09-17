@@ -7,8 +7,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.ISimuMatchResultAO;
+import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.ISimuMatchResultBO;
 import com.ogc.standard.bo.ISimuMatchResultHistoryBO;
+import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.SimuMatchResult;
 import com.ogc.standard.domain.SimuMatchResultHistory;
 
@@ -21,6 +23,9 @@ public class SimuMatchResultAOImpl implements ISimuMatchResultAO {
     @Autowired
     private ISimuMatchResultHistoryBO simuMatchResultHistoryBO;
 
+    @Autowired
+    private IAccountBO accountBo;
+
     @Transactional
     public void doCheckMatchResult() {
 
@@ -31,11 +36,32 @@ public class SimuMatchResultAOImpl implements ISimuMatchResultAO {
         // 根据撮合结果 改变 账户
         for (SimuMatchResult matchResult : matchResults) {
 
+            // 放入历史撮合结果
+            SimuMatchResultHistory data = new SimuMatchResultHistory();
+            data.setId(matchResult.getId());
+            data.setBuyOrderCode(matchResult.getBuyOrderCode());
+            data.setSellOrderCode(matchResult.getSellOrderCode());
+            data.setBuyOrderDetailCode(matchResult.getBuyOrderDetailCode());
+            data.setSellOrderDetailCode(matchResult.getSellOrderDetailCode());
+            data.setSymbol(matchResult.getSymbol());
+            data.setToSymbol(matchResult.getToSymbol());
+
+            data.setBuyUserId(matchResult.getBuyUserId());
+            data.setSellUserId(matchResult.getSellUserId());
+            data.setBuyAmount(matchResult.getBuyAmount());
+            data.setSellAmount(matchResult.getSellAmount());
+            data.setFee(matchResult.getFee());
+
+            data.setCreateDatetime(matchResult.getCreateDatetime());
+            simuMatchResultHistoryBO.saveSimuMatchResultHistory(data);
+
+            // 删除存活撮合结果
+            simuMatchResultBO.removeSimuMatchResult(matchResult.getId());
+
             // 买家
-            // GroupCoin gcAccount =
-            // groupCoinBO.getGroupCoin(simuOrder.getGroupCode(),
-            // simuOrder.getUserId(), simuOrder.getToSymbol());
-            //
+            Account account = accountBo.getAccountByUser(
+                matchResult.getBuyUserId(), matchResult.getToSymbol());
+
             // // 解冻金额
             // gcAccount = groupCoinBO.unfrozenAmount(gcAccount,
             // simuOrder.getTotalCount(),
@@ -83,25 +109,6 @@ public class SimuMatchResultAOImpl implements ISimuMatchResultAO {
             // EJourBizType.BUY_ORDER_SUCCESS.getCode(),
             // EJourBizType.BUY_ORDER_SUCCESS.getValue());
 
-            // 放入历史撮合结果
-            SimuMatchResultHistory data = new SimuMatchResultHistory();
-            data.setId(matchResult.getId());
-            data.setBuyOrderCode(matchResult.getBuyOrderCode());
-            data.setSellOrderCode(matchResult.getSellOrderCode());
-            data.setSymbol(matchResult.getSymbol());
-            data.setToSymbol(matchResult.getToSymbol());
-
-            data.setBuyUserId(matchResult.getBuyUserId());
-            data.setSellUserId(matchResult.getSellUserId());
-            data.setBuyAmount(matchResult.getBuyAmount());
-            data.setSellAmount(matchResult.getSellAmount());
-            data.setFee(matchResult.getFee());
-
-            data.setCreateDatetime(matchResult.getCreateDatetime());
-            simuMatchResultHistoryBO.saveSimuMatchResultHistory(data);
-
-            // 删除存活撮合结果
-            simuMatchResultBO.removeSimuMatchResult(matchResult.getId());
         }
 
     }
