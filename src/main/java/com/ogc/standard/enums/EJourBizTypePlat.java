@@ -31,8 +31,15 @@ public enum EJourBizTypePlat {
     AJ_WITHDRAW_SUPPLY_MINING_FEE_ERC20("withdraw_supply_mining_fee_erc20", "ERC20币的矿工费补给"), 
     AJ_WITHDRAW_MINING_FEE_ERC20("withdraw_mining_fee_erc20", "ERC20币提币矿工费"), 
     AJ_COLLECT_MINING_FEE_ERC20("collect_first_mining_fee_erc20", "ERC20币一级归集矿工费"), 
-    AJ_DEPOSIT_MINING_FEE_ERC20("deposit_mining_fee_erc20", "ERC20币定存矿工费");
+    AJ_DEPOSIT_MINING_FEE_ERC20("deposit_mining_fee_erc20", "ERC20币定存矿工费"),
 
+    AJ_AWARD_REG("award_reg", "拉新奖励"),
+    AJ_AWARD_SPECIAL("award_special", "特殊奖励"),
+    AJ_AWARD_CCORDER("award_ccorder", "场外交易奖励"),
+    AJ_AWARD_BBORDER("award_bborder", "币币交易奖励");
+    
+    
+    
     public static EJourBizTypePlat getBizType(String code) {
         Map<String, EJourBizTypePlat> map = getBizTypeMap();
         EJourBizTypePlat result = map.get(code);
