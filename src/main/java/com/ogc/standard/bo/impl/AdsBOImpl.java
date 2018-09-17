@@ -117,13 +117,10 @@ public class AdsBOImpl extends PaginableBOImpl<Ads> implements IAdsBO {
 
     // 前端分页
     @Override
-    public Paginable<Ads> frontPage(Integer start, Integer limit,
-            Ads condition) {
+    public Paginable<Ads> frontPage(Integer start, Integer limit, Ads condition) {
 
-        if (condition.getMaxPrice() != null
-                && condition.getMinPrice() != null) {
-            if (condition.getMaxPrice()
-                .compareTo(condition.getMinPrice()) <= 0) {
+        if (condition.getMaxPrice() != null && condition.getMinPrice() != null) {
+            if (condition.getMaxPrice().compareTo(condition.getMinPrice()) <= 0) {
                 throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                     "最大金额需大于等于最小金额");
             }
@@ -188,7 +185,7 @@ public class AdsBOImpl extends PaginableBOImpl<Ads> implements IAdsBO {
         List<String> currencyList = new ArrayList<>();
         currencyList.add(ECoin.BTC.getCode());
         currencyList.add(ECoin.ETH.getCode());
-        currencyList.add(ECoin.SC.getCode());
+        currencyList.add(ECoin.X.getCode());
         return currencyList;
 
     }

@@ -43,7 +43,7 @@ import com.ogc.standard.enums.EJourBizTypePlat;
 import com.ogc.standard.enums.EOriginialCoin;
 import com.ogc.standard.enums.ESAddressStatus;
 import com.ogc.standard.enums.ESystemAccount;
-import com.ogc.standard.enums.ETransactionRecetptStatus;
+import com.ogc.standard.enums.ETransactionReceiptStatus;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
 import com.ogc.standard.token.OrangeCoinToken.TransferEventResponse;
@@ -336,7 +336,7 @@ public class CollectAOImpl implements ICollectAO {
 
             TransactionReceipt transactionReceipt = EthClient
                 .getTransactionReceipt(collect.getPreTxHash()).get();
-            if (!ETransactionRecetptStatus.SUCCESS.getCode()
+            if (!ETransactionReceiptStatus.SUCCESS.getCode()
                 .equals(transactionReceipt.getStatus())) {
                 Transaction transaction = EthClient
                     .getEthTransactionByHash(collect.getPreTxHash());
@@ -391,7 +391,7 @@ public class CollectAOImpl implements ICollectAO {
 
             TransactionReceipt transactionReceipt = EthClient
                 .getTransactionReceipt(collect.getTxHash()).get();
-            if (!ETransactionRecetptStatus.SUCCESS.getCode()
+            if (!ETransactionReceiptStatus.SUCCESS.getCode()
                 .equals(transactionReceipt.getStatus())) {
                 List<TokenEvent> tokenEventList = new ArrayList<TokenEvent>();
                 // 向下获取event
@@ -453,7 +453,7 @@ public class CollectAOImpl implements ICollectAO {
 
             TransactionReceipt transactionReceipt = EthClient
                 .getTransactionReceipt(collect.getTxHash()).get();
-            if (!ETransactionRecetptStatus.SUCCESS.getCode()
+            if (!ETransactionReceiptStatus.SUCCESS.getCode()
                 .equals(transactionReceipt.getStatus())) {
                 Transaction transaction = EthClient
                     .getEthTransactionByHash(collect.getTxHash());

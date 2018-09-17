@@ -22,7 +22,6 @@ import com.ogc.standard.domain.GroupCoinJour;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.enums.EGroupStatus;
-import com.ogc.standard.enums.EJourBizType;
 import com.ogc.standard.exception.BizException;
 
 @Component
@@ -79,9 +78,9 @@ public class GroupBOImpl extends PaginableBOImpl<Group> implements IGroupBO {
                 group.getTotalAssets(), 1.0);
 
             // 记录流水
-            groupCoinJourBO.addJour(dbAccount, group.getCode(),
-                EJourBizType.DISTRIBUTE_ACCOUNT.getCode(),
-                EJourBizType.DISTRIBUTE_ACCOUNT.getValue(), initAmount);
+            // groupCoinJourBO.addJour(dbAccount, group.getCode(),
+            // EJourBizType.DISTRIBUTE_ACCOUNT.getCode(),
+            // EJourBizType.DISTRIBUTE_ACCOUNT.getValue(), initAmount);
         }
         return code;
     }
