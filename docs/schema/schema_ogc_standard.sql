@@ -228,6 +228,18 @@ CREATE TABLE `tcoin_eth_transaction` (
   UNIQUE KEY `hash_UNIQUE` (`hash`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='ETH交易记录';
 
+DROP TABLE IF EXISTS `tcoin_token_event`;
+CREATE TABLE `tcoin_token_event` (
+  `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `hash` varchar(255) NOT NULL COMMENT '交易哈希',
+  `token_from` varchar(255) DEFAULT NULL COMMENT 'token币发起地址',
+  `token_to` varchar(255) DEFAULT NULL COMMENT 'token币接收地址',
+  `token_value` decimal(64,0) DEFAULT NULL COMMENT 'token币数量',
+  `token_log_index` bigint(32) DEFAULT NULL COMMENT 'event_log_index',
+  `symbol` varchar(32) NOT NULL COMMENT '币种符号',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='ETHtoken交易event';
+
 -- ----------------------------
 --  Table structure for `tcoin_eth_waddress`
 -- ----------------------------
@@ -275,7 +287,7 @@ CREATE TABLE `tcoin_market` (
   `update_datetime` datetime NOT NULL COMMENT '更新时间',
   `coinmarketcap_id` int(10) NOT NULL COMMENT 'coinmarketcap中的币种id',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `origin` (`origin`,`symbol`) USING BTREE
+  UNIQUE KEY `origin` (`origin`,`symbol`,`refer_currency`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='币种行情';
 
 -- ----------------------------
@@ -900,7 +912,7 @@ CREATE TABLE `tstd_charge` (
   `pay_note` varchar(255) DEFAULT NULL COMMENT '支付渠道说明',
   `pay_datetime` datetime DEFAULT NULL COMMENT '支付时间',
   `channel_type` varchar(32) DEFAULT NULL COMMENT '支付渠道',
-  `channel_order` varchar(64) DEFAULT NULL COMMENT '支付渠道单号',
+  `channel_order` varchar(255) DEFAULT NULL COMMENT '支付渠道单号',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='充值订单';
 
@@ -921,6 +933,15 @@ CREATE TABLE `tstd_collect` (
   `confirm_datetime` datetime DEFAULT NULL COMMENT '网络记账时间',
   `finish_datetime` datetime DEFAULT NULL COMMENT '完成时间',
   `ref_no` varchar(32) DEFAULT NULL COMMENT '关联订单号',
+  `coin_type` varchar(32) DEFAULT NULL COMMENT '币种类型',
+  `pre_from` varchar(255) DEFAULT NULL COMMENT '矿工费补给地址',
+  `pre_to` varchar(255) DEFAULT NULL COMMENT '矿工费收款地址',
+  `pre_amount` decimal(64,0) DEFAULT NULL COMMENT '矿工费补给数量',
+  `pre_tx_hash` varchar(255) DEFAULT NULL COMMENT '矿工费补给交易hash',
+  `pre_tx_fee` decimal(64,0) DEFAULT NULL COMMENT '矿工费补给交易矿工费',
+  `pre_create_datetime` datetime DEFAULT NULL COMMENT '矿工费补给发起时间',
+  `pre_confirm_datetime` datetime DEFAULT NULL COMMENT '矿工费补给网络记账时间',
+  `remark` text COMMENT '备注',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='归集订单';
 
@@ -953,8 +974,8 @@ CREATE TABLE `tstd_divide` (
   `status` varchar(4) NOT NULL COMMENT '状态(0=待分红 1=已分红)',
   `create_datetime` datetime NOT NULL COMMENT '创建时间',
   
-  `divide_datetime` datetime NOT NULL COMMENT '分红时间',
-  `divide_user` varchar(32) NOT NULL COMMENT '分红人',
+  `divide_datetime` datetime DEFAULT NULL COMMENT '分红时间',
+  `divide_user` varchar(32) DEFAULT NULL COMMENT '分红人',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='分红';
@@ -970,8 +991,8 @@ CREATE TABLE `tstd_divide_detail` (
   `amount` decimal(64,0) DEFAULT NULL COMMENT '当时余额',
   `divide_amount` decimal(64,0) DEFAULT NULL COMMENT '分红金额',
   `create_datetime` datetime NOT NULL COMMENT '创建时间',
-  `divide_datetime` datetime NOT NULL COMMENT '分红时间', 
-  `divide_id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT '分红ID',
+  `divide_datetime` datetime DEFAULT NULL COMMENT '分红时间',
+  `divide_id` bigint(32) NOT NULL COMMENT '分红ID',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='分红明细';
 

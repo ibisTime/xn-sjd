@@ -69,7 +69,7 @@
 		<typeAlias alias="btcTransaction" type="com.ogc.standard.domain.BtcTransaction"/>
 		<typeAlias alias="btcUtxo" type="com.ogc.standard.domain.BtcUtxo"/>
 		
-		<typeAlias alias="coinAcceptOrder" type="com.ogc.standard.domain.CoinAcceptOrder"/>
+		<typeAlias alias="acceptOrder" type="com.ogc.standard.domain.AcceptOrder"/>
 		<typeAlias alias="tokenEvent" type="com.ogc.standard.domain.TokenEvent"/>
 		<typeAlias alias="bankcard" type="com.ogc.standard.domain.Bankcard"/>
 		
@@ -80,6 +80,7 @@
 		<typeAlias alias="simuKLine" type="com.ogc.standard.domain.SimuKLine" />
 		<typeAlias alias="simuMatchResult" type="com.ogc.standard.domain.SimuMatchResult" />
 		<typeAlias alias="simuMatchResultHistory" type="com.ogc.standard.domain.SimuMatchResultHistory" />
+		<typeAlias alias="ethSAddress" type="com.ogc.standard.domain.EthSAddress"/>
 		
 		<typeAlias alias="market" type="com.ogc.standard.domain.Market" />
 		<typeAlias alias="divide" type="com.ogc.standard.domain.Divide" />

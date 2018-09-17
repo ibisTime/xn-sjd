@@ -14,13 +14,6 @@ public class XN625273Req {
     @NotBlank
     private String code;
 
-    // 选填，标记说明
-    private String note;
-
-    // 必填，打款截图
-    @NotBlank
-    private String pdf;
-
     // 必填，用户编号
     @NotBlank
     private String userId;
@@ -31,22 +24,6 @@ public class XN625273Req {
 
     public void setCode(String code) {
         this.code = code;
-    }
-
-    public String getNote() {
-        return note;
-    }
-
-    public void setNote(String note) {
-        this.note = note;
-    }
-
-    public String getPdf() {
-        return pdf;
-    }
-
-    public void setPdf(String pdf) {
-        this.pdf = pdf;
     }
 
     public String getUserId() {

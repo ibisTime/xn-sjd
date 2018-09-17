@@ -25,7 +25,7 @@ public class XN802353 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         synchronized (XN802353.class) {
-            withdrawAO.broadcast(req.getCode(), req.getmAddressCode(),
+            withdrawAO.broadcast(req.getCode(), req.getmAddressId(),
                 req.getApproveUser());
             return new BooleanRes(true);
         }

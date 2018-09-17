@@ -16,9 +16,10 @@ public interface IMarketAO {
 
     public List<Market> marketListByReq(XN650101Req req);
 
-    // 获取平台干预后的，货币价格
-    public Market coinPriceByPlatform(String coin);
-
     public void saveMarket(String coin, String origin, String currency,
             String coinId, BigDecimal price);
+
+    // 获取平台干预后的，货币价格
+
+    public Market coinPriceByPlatform(String coin, String refCurrency);
 }

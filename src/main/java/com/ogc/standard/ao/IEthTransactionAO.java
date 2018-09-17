@@ -31,7 +31,7 @@ public interface IEthTransactionAO {
     // public void withdrawNotice(CtqEthTransaction ctqEthTransaction);
     //
     // 归集
-    // public void collection(String address, String chargeCode);
+    public void collection(String address, String chargeCode, String symbol);
 
     //
     // // 归集交易通知处理

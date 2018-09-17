@@ -14,17 +14,9 @@ public class XN625271Req {
     @NotBlank
     private String receiveCardNo;
 
-    // 必填，收款银行
-    @NotBlank
-    private String receiveBank;
-
     // 必填，收款方式
     @NotBlank
     private String receiveType;
-
-    // 必填,出售金额
-    @NotBlank
-    private String tradeAmount;
 
     // 必填,交易币种
     @NotBlank
@@ -42,6 +34,17 @@ public class XN625271Req {
     @NotBlank
     private String userId;
 
+    @NotBlank
+    private String tradeAmount;
+
+    public String getTradeAmount() {
+        return tradeAmount;
+    }
+
+    public void setTradeAmount(String tradeAmount) {
+        this.tradeAmount = tradeAmount;
+    }
+
     public String getReceiveCardNo() {
         return receiveCardNo;
     }
@@ -50,28 +53,12 @@ public class XN625271Req {
         this.receiveCardNo = receiveCardNo;
     }
 
-    public String getReceiveBank() {
-        return receiveBank;
-    }
-
-    public void setReceiveBank(String receiveBank) {
-        this.receiveBank = receiveBank;
-    }
-
     public String getReceiveType() {
         return receiveType;
     }
 
     public void setReceiveType(String receiveType) {
         this.receiveType = receiveType;
-    }
-
-    public String getTradeAmount() {
-        return tradeAmount;
-    }
-
-    public void setTradeAmount(String tradeAmount) {
-        this.tradeAmount = tradeAmount;
     }
 
     public String getTradeCurrency() {

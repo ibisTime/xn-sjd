@@ -233,8 +233,8 @@
 		<property name="paginableDAO" ref="tradeOrderDAOImpl"/>
 	</bean>
 	
-	<bean id="coinAcceptOrderBO" class="com.ogc.standard.bo.impl.CoinAcceptOrderBOImpl">
-		<property name="paginableDAO" ref="coinAcceptOrderDAOImpl"/>
+	<bean id="acceptOrderBO" class="com.ogc.standard.bo.impl.AcceptOrderBOImpl">
+		<property name="paginableDAO" ref="acceptOrderDAOImpl"/>
 	</bean>
 	
 	<bean id="tokenEventBO" class="com.ogc.standard.bo.impl.TokenEventBOImpl">
@@ -264,6 +264,10 @@
 		<property name="paginableDAO" ref="simuMatchResultHistoryDAOImpl"/>
 	</bean>
 	
+	<bean id="ethSAddressBO" class="com.ogc.standard.bo.impl.EthSAddressBOImpl">
+		<property name="paginableDAO" ref="ethSAddressDAOImpl"/>
+	</bean>
+		
 	<bean id="divideBO" class="com.ogc.standard.bo.impl.DivideBOImpl">
 		<property name="paginableDAO" ref="divideDAOImpl"/>
 	</bean>

@@ -14,8 +14,8 @@ public class XN802353Req {
     @NotBlank
     private String code;
 
-    // 散取地址编号(币种为以太坊时必填)
-    private String mAddressCode;
+    // 散取地址编id号(币种为以太坊时必填)
+    private Long mAddressId;
 
     // 操作人(必填)
     @NotBlank
@@ -29,12 +29,12 @@ public class XN802353Req {
         this.code = code;
     }
 
-    public String getmAddressCode() {
-        return mAddressCode;
+    public Long getmAddressId() {
+        return mAddressId;
     }
 
-    public void setmAddressCode(String mAddressCode) {
-        this.mAddressCode = mAddressCode;
+    public void setmAddressId(Long mAddressId) {
+        this.mAddressId = mAddressId;
     }
 
     public String getApproveUser() {

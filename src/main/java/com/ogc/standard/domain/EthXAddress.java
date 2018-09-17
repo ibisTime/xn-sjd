@@ -1,5 +1,6 @@
 package com.ogc.standard.domain;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import com.ogc.standard.dao.base.ABaseDO;
@@ -42,6 +43,28 @@ public class EthXAddress extends ABaseDO {
 
     // 地址模糊查询
     private String addressForQuery;
+
+    // 余额
+    private BigDecimal balance;
+
+    // 币种
+    private String symbol;
+
+    public String getSymbol() {
+        return symbol;
+    }
+
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
+    }
+
+    public BigDecimal getBalance() {
+        return balance;
+    }
+
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
+    }
 
     public Long getId() {
         return id;

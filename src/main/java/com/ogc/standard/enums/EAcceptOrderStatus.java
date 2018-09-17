@@ -9,19 +9,19 @@ import java.util.Map;
  * @since: 2018年9月10日 下午8:53:33 
  * @history:
  */
-public enum ECoinAcceptOrderStatus {
+public enum EAcceptOrderStatus {
 
-    TO_PAY("0", "待支付"), PAYED("1", "已支付"), RELEASED("2", "已释放"), CANCELED("3",
-            "已取消");
+    TO_PAY("0", "待支付"), PAYED("1", "已支付"), RELEASED("2", "已释放"), CCANCELED("3",
+            "用户取消"), PCANCELED("4", "平台取消");
 
-    ECoinAcceptOrderStatus(String code, String value) {
+    EAcceptOrderStatus(String code, String value) {
         this.code = code;
         this.value = value;
     }
 
-    public static Map<String, ECoinAcceptOrderStatus> getMap() {
-        Map<String, ECoinAcceptOrderStatus> map = new HashMap<String, ECoinAcceptOrderStatus>();
-        for (ECoinAcceptOrderStatus accpetOrderStatus : ECoinAcceptOrderStatus
+    public static Map<String, EAcceptOrderStatus> getMap() {
+        Map<String, EAcceptOrderStatus> map = new HashMap<String, EAcceptOrderStatus>();
+        for (EAcceptOrderStatus accpetOrderStatus : EAcceptOrderStatus
             .values()) {
             map.put(accpetOrderStatus.getCode(), accpetOrderStatus);
         }
