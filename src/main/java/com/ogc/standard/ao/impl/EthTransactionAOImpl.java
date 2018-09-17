@@ -122,8 +122,8 @@ public class EthTransactionAOImpl implements IEthTransactionAO {
         // 账户加钱
         accountBO.changeAmount(account, amount, EChannelType.Online,
             ctqEthTransaction.getHash(), code,
-            EJourBizTypeUser.AJ_CHARGE.getCode(), "ETH充值-来自地址："
-                    + ctqEthTransaction.getFrom());
+            EJourBizTypeUser.AJ_CHARGE.getCode(),
+            "ETH充值-来自地址：" + ctqEthTransaction.getFrom());
         // 归集结果不影响充值
 
         try {
@@ -166,13 +166,14 @@ public class EthTransactionAOImpl implements IEthTransactionAO {
         // 充值订单落地
         String code = chargeBO.applyOrderOnline(account, cardNoInfo,
             fromAddress, amount, EChannelType.Online,
-            ctqEthTransaction.getHash(), symbol + "充值-来自地址："
-                    + ctqEthTransaction.getFrom(), ctqEthTransaction.getHash());
+            ctqEthTransaction.getHash(),
+            symbol + "充值-来自地址：" + ctqEthTransaction.getFrom(),
+            ctqEthTransaction.getHash());
         // 账户加钱
         accountBO.changeAmount(account, amount, EChannelType.Online,
             ctqEthTransaction.getHash(), code,
-            EJourBizTypeUser.AJ_CHARGE.getCode(), symbol + "充值-来自地址："
-                    + ctqEthTransaction.getFrom());
+            EJourBizTypeUser.AJ_CHARGE.getCode(),
+            symbol + "充值-来自地址：" + ctqEthTransaction.getFrom());
         collectAO.ethTokenCollectAuto(tokenEvent.getTokenTo(), symbol, code);
         // 归集结果不影响充值
         // try {
@@ -344,7 +345,7 @@ public class EthTransactionAOImpl implements IEthTransactionAO {
         // 平台冷钱包减钱
         coldAccount = accountBO.changeAmount(coldAccount, amount.negate(),
             EChannelType.Online, ctqEthTransaction.getHash(),
-            ctqEthTransaction.getHash(), EJourBizTypeCold.AJ_PAY.getCode(),
+            ctqEthTransaction.getHash(), EJourBizTypeCold.AJ_DEPOSIT.getCode(),
             "ETH定存至取现地址(M):" + ctqEthTransaction.getTo());
     }
 
@@ -372,13 +373,13 @@ public class EthTransactionAOImpl implements IEthTransactionAO {
         String hashAndLogIndex = ctqEthTransaction.getHash() + "||"
                 + tokenEvent.getTokenLogIndex();
         BigDecimal amount = tokenEvent.getTokenValue();
-        Account coldAccount = accountBO.getAccount(ESystemAccount
-            .getPlatColdAccount(symbol));
+        Account coldAccount = accountBO
+            .getAccount(ESystemAccount.getPlatColdAccount(symbol));
         // 平台冷钱包减钱
         coldAccount = accountBO.changeAmount(coldAccount, amount.negate(),
             EChannelType.Online, hashAndLogIndex, hashAndLogIndex,
-            EJourBizTypeCold.AJ_PAY.getCode(), symbol + "定存至取现地址(M):"
-                    + tokenEvent.getTokenTo());
+            EJourBizTypeCold.AJ_DEPOSIT.getCode(),
+            symbol + "定存至取现地址(M):" + tokenEvent.getTokenTo());
     }
 
     @Override

@@ -13,6 +13,7 @@ import java.util.List;
 
 import com.ogc.standard.bo.base.IPaginableBO;
 import com.ogc.standard.domain.Award;
+import com.ogc.standard.domain.User;
 
 /** 
  * @author: taojian 
@@ -28,6 +29,8 @@ public interface IAwardBO extends IPaginableBO<Award> {
 
     public void saveRegistAward(String userId, String userKind, String refCode,
             String refNote);
+
+    public void saveSpecialAward(User user, BigDecimal count, String remark);
 
     public void refreshStatus(Award data, String isSettle, String remark);
 

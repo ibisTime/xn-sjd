@@ -21,6 +21,7 @@ public enum EJourBizTypePlat {
     AJ_ACCEPT_BUY("accept_buy","承兑商买币"),
     AJ_ACCEPT_FEE("accept_fee","承兑商交易手续费"),
 
+    AJ_SUBSIDY("subsidy","平台补贴"),
     AJ_WITHDRAW_FEE("withdraw_fee", "提币手续费"), 
     AJ_CCORDER_FEE("ccorder_fee", "场外cc手续费"), 
     AJ_BBORDER_FEE("bborder_fee", "币币交易手续费"), 
@@ -32,6 +33,7 @@ public enum EJourBizTypePlat {
     AJ_WITHDRAW_MINING_FEE_ERC20("withdraw_mining_fee_erc20", "ERC20币提币矿工费"), 
     AJ_COLLECT_MINING_FEE_ERC20("collect_first_mining_fee_erc20", "ERC20币一级归集矿工费"), 
     AJ_DEPOSIT_MINING_FEE_ERC20("deposit_mining_fee_erc20", "ERC20币定存矿工费"),
+    
 
     AJ_AWARD_REG("award_reg", "拉新奖励"),
     AJ_AWARD_SPECIAL("award_special", "特殊奖励"),

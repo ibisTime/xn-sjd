@@ -8,6 +8,7 @@
  */
 package com.ogc.standard.ao;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.ogc.standard.bo.base.Paginable;
@@ -26,4 +27,6 @@ public interface IAwardAO {
             Award condition);
 
     public List<Award> queryAwardList(Award condition);
+
+    public void addSpecialAward(String userId, BigDecimal count, String remark);
 }

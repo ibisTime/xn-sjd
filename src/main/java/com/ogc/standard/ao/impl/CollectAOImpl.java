@@ -105,7 +105,8 @@ public class CollectAOImpl implements ICollectAO {
     java.lang.String, java.lang.String)
     */
     @Override
-    public void collect(BigDecimal balanceStart, String currency, String refNo) {
+    public void collect(BigDecimal balanceStart, String currency,
+            String refNo) {
         if (EOriginialCoin.ETH.getCode().equals(currency)) {
             doCollectManualETH(balanceStart);
         }
@@ -137,8 +138,8 @@ public class CollectAOImpl implements ICollectAO {
             // 开始归集逻辑
             for (EthXAddress ethXAddress : ethXAddresseList) {
                 try {
-                    BigDecimal balance = EthClient.getBalance(ethXAddress
-                        .getAddress()); // 余额大于配置值时，进行归集
+                    BigDecimal balance = EthClient
+                        .getBalance(ethXAddress.getAddress()); // 余额大于配置值时，进行归集
                     collectBO.doETHCollect(ethXAddress, null, balance);
                 } catch (Exception e) {
                     logger.info("地址" + ethXAddress.getAddress() + "手动归集失败，原因："
@@ -184,13 +185,14 @@ public class CollectAOImpl implements ICollectAO {
         if (null == coin) {
             throw new BizException("0000", "暂不支持" + currency + "币种");
         }
-        BigDecimal tokenBalanceStart = AmountUtil.toOriginal(new BigDecimal(
-            balanceStart), coin.getUnit());
+        BigDecimal tokenBalanceStart = AmountUtil
+            .toOriginal(new BigDecimal(balanceStart), coin.getUnit());
         doCollectTokenOfEth(tokenBalanceStart, coin, refNo);
     }
 
     @Override
-    public void ethTokenCollectAuto(String address, String symbol, String refNo) {
+    public void ethTokenCollectAuto(String address, String symbol,
+            String refNo) {
         // 获取地址信息
         EthXAddress xEthAddress = ethXAddressBO
             .getEthXAddressByAddress(address);
@@ -247,8 +249,8 @@ public class CollectAOImpl implements ICollectAO {
                 return;
             }
 
-            BigDecimal ethBalance = EthClient.getBalance(collect
-                .getFromAddress());
+            BigDecimal ethBalance = EthClient
+                .getBalance(collect.getFromAddress());
             if (ethBalance.compareTo(minBalance) < 0) {
 
                 BigDecimal need = minBalance.subtract(ethBalance);
@@ -267,8 +269,8 @@ public class CollectAOImpl implements ICollectAO {
                 }
                 EthSAddress secretFrom = ethSAddressBO
                     .getEthSAddressSecret(sEthAddress.getId());
-                BigDecimal sEthBalance = EthClient.getBalance(sEthAddress
-                    .getAddress());
+                BigDecimal sEthBalance = EthClient
+                    .getBalance(sEthAddress.getAddress());
                 BigDecimal gasUse = new BigDecimal(21000);
                 BigDecimal gasPrice = EthClient.getGasPrice();
                 BigDecimal txFee = gasPrice.multiply(gasUse);
@@ -334,8 +336,8 @@ public class CollectAOImpl implements ICollectAO {
 
             TransactionReceipt transactionReceipt = EthClient
                 .getTransactionReceipt(collect.getPreTxHash()).get();
-            if (!ETransactionRecetptStatus.SUCCESS.getCode().equals(
-                transactionReceipt.getStatus())) {
+            if (!ETransactionRecetptStatus.SUCCESS.getCode()
+                .equals(transactionReceipt.getStatus())) {
                 Transaction transaction = EthClient
                     .getEthTransactionByHash(collect.getPreTxHash());
                 BigDecimal gasUsed = new BigDecimal(
@@ -343,11 +345,12 @@ public class CollectAOImpl implements ICollectAO {
                 BigDecimal gasPrice = new BigDecimal(transaction.getGasPrice());
                 BigDecimal txfee = gasUsed.multiply(gasPrice);
 
-                EthBlock.Block block = EthClient.getEthBlockByHash(transaction
-                    .getBlockHash());
+                EthBlock.Block block = EthClient
+                    .getEthBlockByHash(transaction.getBlockHash());
 
-                Date confirmTime = DateUtil.TimeStamp2Date(block.getTimestamp()
-                    .toString(), DateUtil.DATA_TIME_PATTERN_1);
+                Date confirmTime = DateUtil.TimeStamp2Date(
+                    block.getTimestamp().toString(),
+                    DateUtil.DATA_TIME_PATTERN_1);
                 // 转成 ctqEthTransaction
                 CtqEthTransaction ctqEthTransaction = ethTransactionBO
                     .convertTx(transaction, transactionReceipt.getGasUsed(),
@@ -388,8 +391,8 @@ public class CollectAOImpl implements ICollectAO {
 
             TransactionReceipt transactionReceipt = EthClient
                 .getTransactionReceipt(collect.getTxHash()).get();
-            if (!ETransactionRecetptStatus.SUCCESS.getCode().equals(
-                transactionReceipt.getStatus())) {
+            if (!ETransactionRecetptStatus.SUCCESS.getCode()
+                .equals(transactionReceipt.getStatus())) {
                 List<TokenEvent> tokenEventList = new ArrayList<TokenEvent>();
                 // 向下获取event
                 List<TransferEventResponse> transferEventList = TokenClient
@@ -397,8 +400,8 @@ public class CollectAOImpl implements ICollectAO {
 
                 for (TransferEventResponse transferEventResponse : transferEventList) {
                     // token地址不是提现地址则跳过
-                    if (!collect.getFromAddress().equals(
-                        transferEventResponse.from)) {
+                    if (!collect.getFromAddress()
+                        .equals(transferEventResponse.from)) {
                         continue;
                     }
                     TokenEvent tokenEvent = tokenEventBO.convertTokenEvent(
@@ -415,8 +418,9 @@ public class CollectAOImpl implements ICollectAO {
                 CtqEthTransaction ctqEthTransaction = ethTransactionBO
                     .convertTx(transaction, transactionReceipt.getGasUsed(),
                         block.getTimestamp());
-                Date confirmTime = DateUtil.TimeStamp2Date(block.getTimestamp()
-                    .toString(), DateUtil.DATA_TIME_PATTERN_1);
+                Date confirmTime = DateUtil.TimeStamp2Date(
+                    block.getTimestamp().toString(),
+                    DateUtil.DATA_TIME_PATTERN_1);
                 collectBO.collectTxSuccess(collect,
                     ctqEthTransaction.getGasFee(), confirmTime);
                 // 落地交易记录
@@ -449,12 +453,12 @@ public class CollectAOImpl implements ICollectAO {
 
             TransactionReceipt transactionReceipt = EthClient
                 .getTransactionReceipt(collect.getTxHash()).get();
-            if (!ETransactionRecetptStatus.SUCCESS.getCode().equals(
-                transactionReceipt.getStatus())) {
+            if (!ETransactionRecetptStatus.SUCCESS.getCode()
+                .equals(transactionReceipt.getStatus())) {
                 Transaction transaction = EthClient
                     .getEthTransactionByHash(collect.getTxHash());
-                EthBlock.Block block = EthClient.getEthBlockByHash(transaction
-                    .getBlockHash());
+                EthBlock.Block block = EthClient
+                    .getEthBlockByHash(transaction.getBlockHash());
                 // 转成 ctqEthTransaction
                 CtqEthTransaction ctqEthTransaction = ethTransactionBO
                     .convertTx(transaction, transactionReceipt.getGasUsed(),
@@ -468,8 +472,8 @@ public class CollectAOImpl implements ICollectAO {
 
     private void collectionNotice(CtqEthTransaction ctqEthTransaction) {
         // 根据交易hash查询归集记录
-        Collect collect = collectBO.getCollectByTxHash(ctqEthTransaction
-            .getHash());
+        Collect collect = collectBO
+            .getCollectByTxHash(ctqEthTransaction.getHash());
         if (collect == null) {
             return;
         }
@@ -486,14 +490,14 @@ public class CollectAOImpl implements ICollectAO {
         BigDecimal amount = ctqEthTransaction.getValue();
         accountBO.changeAmount(coldAccount, amount, EChannelType.Online,
             ctqEthTransaction.getHash(), collect.getCode(),
-            EJourBizTypeCold.AJ_INCOME.getCode(),
+            EJourBizTypeCold.AJ_COLLECT.getCode(),
             "归集-来自地址：" + collect.getFromAddress());
         // 平台盈亏账户记入矿工费
-        Account sysAccount = accountBO.getAccount(ESystemAccount.SYS_ACOUNT_ETH
-            .getCode());
+        Account sysAccount = accountBO
+            .getAccount(ESystemAccount.SYS_ACOUNT_ETH.getCode());
         accountBO.changeAmount(sysAccount, txFee.negate(), EChannelType.Online,
             ctqEthTransaction.getHash(), collect.getCode(),
-            EJourBizTypePlat.AJ_MFEE.getCode(),
+            EJourBizTypePlat.AJ_DEPOSIT_MINING_FEE.getCode(),
             "归集地址：" + collect.getFromAddress());
         // 落地交易记录
         ethTransactionBO.saveEthTransaction(ctqEthTransaction);

@@ -62,6 +62,9 @@ public class Award extends ABaseDO {
     // 处理时间
     private Date handleDatetime;
 
+    // 处理说明
+    private String handleNote;
+
     // 备注
     private String remark;
 
@@ -73,6 +76,14 @@ public class Award extends ABaseDO {
     private User user;
 
     private User relUser;
+
+    public String getHandleNote() {
+        return handleNote;
+    }
+
+    public void setHandleNote(String handleNote) {
+        this.handleNote = handleNote;
+    }
 
     public User getUser() {
         return user;

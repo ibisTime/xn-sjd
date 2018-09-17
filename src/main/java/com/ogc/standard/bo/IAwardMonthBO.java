@@ -8,9 +8,11 @@
  */
 package com.ogc.standard.bo;
 
-import org.springframework.stereotype.Component;
+import java.math.BigDecimal;
+import java.util.Date;
 
 import com.ogc.standard.bo.base.IPaginableBO;
+import com.ogc.standard.domain.Award;
 import com.ogc.standard.domain.AwardMonth;
 
 /** 
@@ -18,10 +20,20 @@ import com.ogc.standard.domain.AwardMonth;
  * @since: 2018年9月17日 下午1:44:09 
  * @history:
  */
-@Component
 public interface IAwardMonthBO extends IPaginableBO<AwardMonth> {
+    public boolean isAwardMonthExist(Date date);
 
-    public void addAwardMonth();
+    public AwardMonth getAwardMonth(Long id);
 
-    public void refreshAwardMonth();
+    public AwardMonth getAwardMonth(AwardMonth condition);
+
+    public int addAwardMonth(Award award, String remark);
+
+    public void refreshAwardMonthSettle(String userId, BigDecimal count,
+            String handleResult);
+
+    public void addNewAwardMonth(String userId);
+
+    public void refreshAwardMonthUnsettle(String userId, BigDecimal count);
+
 }

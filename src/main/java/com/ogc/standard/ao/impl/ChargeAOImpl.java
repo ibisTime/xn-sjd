@@ -26,10 +26,9 @@ import com.ogc.standard.domain.Jour;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.dto.res.XN802347Res;
 import com.ogc.standard.enums.EBoolean;
-import com.ogc.standard.enums.EChannelType;
 import com.ogc.standard.enums.EChargeStatus;
 import com.ogc.standard.enums.ECoinType;
-import com.ogc.standard.enums.EJourBizTypeCold;
+import com.ogc.standard.enums.EJourBizTypePlat;
 import com.ogc.standard.enums.EJourBizTypeUser;
 import com.ogc.standard.enums.EJourType;
 import com.ogc.standard.enums.ESystemAccount;
@@ -103,19 +102,13 @@ public class ChargeAOImpl implements IChargeAO {
         Coin coin = coinBO.getCoin(data.getCurrency());
         String symbol = coin.getSymbol();
 
-        // 用户账户加钱
-        userAccount = accountBO.changeAmount(userAccount, data.getAmount(),
-            EChannelType.Offline, null, data.getCode(),
-            EJourBizTypeUser.AJ_CHARGE.getCode(), symbol + "线下充值");
-
-        Account coldAccount = accountBO
-            .getAccount(ESystemAccount.getPlatColdAccount(symbol));
-
-        // 冷钱包加钱
-        accountBO.changeAmount(coldAccount, data.getAmount(),
-            EChannelType.Offline, null, data.getCode(),
-            EJourBizTypeCold.AJ_INCOME.getCode(),
-            symbol + "线下充值，充值账户：" + user.getRealName());
+        Account platAccount = accountBO
+            .getAccount(ESystemAccount.getPlatAccount(symbol));
+        accountBO.transAmount(platAccount, userAccount, data.getAmount(),
+            EJourBizTypePlat.AJ_SUBSIDY.getCode(),
+            EJourBizTypeUser.AJ_CHARGE.getCode(),
+            EJourBizTypePlat.AJ_SUBSIDY.getValue(),
+            EJourBizTypeUser.AJ_CHARGE.getValue(), "用户充值");
 
     }
 

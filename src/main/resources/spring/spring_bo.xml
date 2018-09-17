@@ -165,6 +165,10 @@
 		<property name="paginableDAO" ref="awardDAOImpl"/>
 	</bean>
 	
+	<bean id="awardMonthBO" class="com.ogc.standard.bo.impl.AwardMonthBOImpl">
+		<property name="paginableDAO" ref="awardMonthDAOImpl"/>
+	</bean>
+	
 	<bean id="personalAddressBO" class="com.ogc.standard.bo.impl.PersonalAddressBOImpl">
 		<property name="paginableDAO" ref="personalAddressDAOImpl"/>
 	</bean>

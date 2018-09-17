@@ -169,14 +169,14 @@ public class AcceptOrderAOImpl implements IAcceptOrderAO {
                     .getAccount(ESystemAccount.SYS_ACOUNT_CNY_ACCEPT.getCode());
                 accountBO.changeAmount(cnyAccount, order.getTradeAmount(),
                     EChannelType.NBZ, null, order.getCode(),
-                    EJourBizTypePlat.AJ_SELL.getCode(), "平台卖币法币账户加钱");
+                    EJourBizTypePlat.AJ_ACCEPT_SELL.getCode(), "平台卖币法币账户加钱");
             } else if (ECurrency.USD.getCode()
                 .equals(order.getTradeCurrency())) {
                 Account usdAccount = accountBO
                     .getAccount(ESystemAccount.SYS_ACOUNT_USD_ACCEPT.getCode());
                 accountBO.changeAmount(usdAccount, order.getTradeAmount(),
                     EChannelType.NBZ, null, order.getCode(),
-                    EJourBizTypePlat.AJ_SELL.getCode(), "平台卖币法币账户加钱");
+                    EJourBizTypePlat.AJ_ACCEPT_SELL.getCode(), "平台卖币法币账户加钱");
             } else {
                 throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                     "不支持的法币交易");
@@ -194,19 +194,19 @@ public class AcceptOrderAOImpl implements IAcceptOrderAO {
                 .getAccount(ESystemAccount.SYS_ACOUNT_X_ACCEPT.getCode());
             // 交易金额
             accountBO.transAmount(platAccount, dbAccount, order.getCount(),
-                EJourBizTypePlat.AJ_SELL.getCode(),
-                EJourBizTypeUser.AJ_BUY.getCode(),
-                EJourBizTypePlat.AJ_SELL.getValue(),
-                EJourBizTypeUser.AJ_BUY.getValue(), order.getCode());
+                EJourBizTypePlat.AJ_ACCEPT_SELL.getCode(),
+                EJourBizTypeUser.AJ_ACCEPT_BUY.getCode(),
+                EJourBizTypePlat.AJ_ACCEPT_SELL.getValue(),
+                EJourBizTypeUser.AJ_ACCEPT_BUY.getValue(), order.getCode());
 
             Account feeAccount = accountBO
                 .getAccount(ESystemAccount.SYS_ACOUNT_X_FEE.getCode());
             // 手续费
             accountBO.transAmount(dbAccount, feeAccount, order.getFee(),
-                EJourBizTypeUser.AJ_TRADEFEE.getCode(),
-                EJourBizTypePlat.AJ_TRADEFEE.getCode(),
-                EJourBizTypeUser.AJ_TRADEFEE.getValue(),
-                EJourBizTypePlat.AJ_TRADEFEE.getValue(), order.getCode());
+                EJourBizTypeUser.AJ_ACCEPT_FEE.getCode(),
+                EJourBizTypePlat.AJ_ACCEPT_FEE.getCode(),
+                EJourBizTypeUser.AJ_ACCEPT_FEE.getValue(),
+                EJourBizTypePlat.AJ_ACCEPT_FEE.getValue(), order.getCode());
 
             acceptOrderBO.platMarkPay(order, updater, "收款成功并释放币");
         } else {
@@ -226,7 +226,7 @@ public class AcceptOrderAOImpl implements IAcceptOrderAO {
                     .getAccount(ESystemAccount.SYS_ACOUNT_CNY_ACCEPT.getCode());
                 accountBO.changeAmount(cnyAccount,
                     order.getTradeAmount().negate(), EChannelType.NBZ, null,
-                    order.getCode(), EJourBizTypePlat.AJ_BUY.getCode(),
+                    order.getCode(), EJourBizTypePlat.AJ_ACCEPT_BUY.getCode(),
                     "平台卖币法币账户减钱");
             } else if (ECurrency.USD.getCode()
                 .equals(order.getTradeCurrency())) {
@@ -234,7 +234,7 @@ public class AcceptOrderAOImpl implements IAcceptOrderAO {
                     .getAccount(ESystemAccount.SYS_ACOUNT_USD_ACCEPT.getCode());
                 accountBO.changeAmount(usdAccount,
                     order.getTradeAmount().negate(), EChannelType.NBZ, null,
-                    order.getCode(), EJourBizTypePlat.AJ_BUY.getCode(),
+                    order.getCode(), EJourBizTypePlat.AJ_ACCEPT_BUY.getCode(),
                     "平台卖币法币账户减钱");
             } else {
                 throw new BizException(EBizErrorCode.DEFAULT.getCode(),
@@ -256,23 +256,23 @@ public class AcceptOrderAOImpl implements IAcceptOrderAO {
                 order.getCode());
             // 解冻交易手续费
             accountBO.unfrozenAmount(dbAccount, order.getFee(),
-                EJourBizTypeUser.AJ_TRADEFEE.getCode(), "交易手续费解冻",
+                EJourBizTypeUser.AJ_ACCEPT_FEE.getCode(), "交易手续费解冻",
                 order.getCode());
             // 交易金额
             accountBO.transAmount(dbAccount, platAccount, order.getCount(),
-                EJourBizTypeUser.AJ_SELL.getValue(),
-                EJourBizTypePlat.AJ_BUY.getValue(),
-                EJourBizTypeUser.AJ_SELL.getCode(),
-                EJourBizTypePlat.AJ_BUY.getCode(), order.getCode());
+                EJourBizTypeUser.AJ_ACCEPT_SELL.getValue(),
+                EJourBizTypePlat.AJ_ACCEPT_BUY.getValue(),
+                EJourBizTypeUser.AJ_ACCEPT_SELL.getCode(),
+                EJourBizTypePlat.AJ_ACCEPT_BUY.getCode(), order.getCode());
 
             Account feeAccount = accountBO
                 .getAccount(ESystemAccount.SYS_ACOUNT_X_FEE.getCode());
             // 手续费
             accountBO.transAmount(dbAccount, feeAccount, order.getFee(),
-                EJourBizTypeUser.AJ_TRADEFEE.getCode(),
-                EJourBizTypePlat.AJ_TRADEFEE.getCode(),
-                EJourBizTypeUser.AJ_TRADEFEE.getValue(),
-                EJourBizTypePlat.AJ_TRADEFEE.getValue(), order.getCode());
+                EJourBizTypeUser.AJ_ACCEPT_FEE.getCode(),
+                EJourBizTypePlat.AJ_ACCEPT_FEE.getCode(),
+                EJourBizTypeUser.AJ_ACCEPT_FEE.getValue(),
+                EJourBizTypePlat.AJ_ACCEPT_FEE.getValue(), order.getCode());
             // 改订单状态
             acceptOrderBO.platMarkPay(order, updater, "已打款并完成交易");
         } else {
@@ -284,11 +284,11 @@ public class AcceptOrderAOImpl implements IAcceptOrderAO {
                 ECoin.X.getCode());
             // 解冻交易金额
             accountBO.unfrozenAmount(dbAccount, order.getCount(),
-                EJourBizTypeUser.AJ_CANCEL_UNFROZEN.getCode(), "平台取消订单",
+                EJourBizTypeUser.AJ_ACCEPT_UNFROZEN.getCode(), "平台取消订单",
                 order.getCode());
             // 解冻交易费率
             accountBO.unfrozenAmount(dbAccount, order.getFee(),
-                EJourBizTypeUser.AJ_TRADEFEE.getCode(), "平台取消订单",
+                EJourBizTypeUser.AJ_ACCEPT_UNFROZEN.getCode(), "平台取消订单",
                 order.getCode());
         }
 

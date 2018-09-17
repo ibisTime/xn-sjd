@@ -17,19 +17,17 @@ import org.springframework.stereotype.Component;
 
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IAwardBO;
+import com.ogc.standard.bo.IAwardMonthBO;
 import com.ogc.standard.bo.ISYSConfigBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.common.SysConstants;
 import com.ogc.standard.dao.IAwardDAO;
 import com.ogc.standard.domain.Award;
+import com.ogc.standard.domain.User;
 import com.ogc.standard.enums.EAwardStatus;
 import com.ogc.standard.enums.EBoolean;
-import com.ogc.standard.enums.ECoin;
 import com.ogc.standard.enums.ECoinType;
-import com.ogc.standard.enums.EJourBizTypePlat;
-import com.ogc.standard.enums.EJourBizTypeUser;
 import com.ogc.standard.enums.ERefType;
-import com.ogc.standard.enums.ESysUser;
 import com.ogc.standard.enums.EUserKind;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
@@ -44,6 +42,9 @@ public class AwardBOImpl extends PaginableBOImpl<Award> implements IAwardBO {
 
     @Autowired
     private IAwardDAO awardDAO;
+
+    @Autowired
+    private IAwardMonthBO awardMonthBO;
 
     @Autowired
     private ISYSConfigBO sysConfigBO;
@@ -74,15 +75,25 @@ public class AwardBOImpl extends PaginableBOImpl<Award> implements IAwardBO {
         data.setCreateDatetime(new Date());
         data.setStatus(EAwardStatus.TOHAND.getCode());
         if (userKind.equals(EUserKind.QDS.getCode())) {
-            data.setCount(sysConfigBO
-                .getBigDecimalValue(SysConstants.REFEREE_DUSER_FEE_RATE)
-                .multiply(tradeCount));
+            BigDecimal rate = sysConfigBO
+                .getBigDecimalValue(SysConstants.REFEREE_DUSER_FEE_RATE);
+            data.setRate(rate);
+            data.setCount(rate.multiply(tradeCount));
         } else {
-            data.setCount(sysConfigBO
-                .getBigDecimalValue(SysConstants.REFEREE_CUSER_FEE_RATE)
-                .multiply(tradeCount));
+            BigDecimal rate = sysConfigBO
+                .getBigDecimalValue(SysConstants.REFEREE_CUSER_FEE_RATE);
+            data.setRate(rate);
+            data.setCount(rate.multiply(tradeCount));
         }
+        data.setRemark("推荐用户交易分成");
         awardDAO.insert(data);
+        // 记录
+        if (awardMonthBO.isAwardMonthExist(new Date())) {
+            awardMonthBO.refreshAwardMonthUnsettle(data.getUserId(),
+                data.getCount());
+        } else {
+            awardMonthBO.addAwardMonth(data, refNote);
+        }
     }
 
     @Override
@@ -104,29 +115,62 @@ public class AwardBOImpl extends PaginableBOImpl<Award> implements IAwardBO {
             data.setCount(
                 sysConfigBO.getBigDecimalValue(SysConstants.CUSER_REG));
         }
+        data.setRemark("推荐注册分成");
         awardDAO.insert(data);
+        // 记录
+        if (awardMonthBO.isAwardMonthExist(new Date())) {
+            awardMonthBO.refreshAwardMonthUnsettle(data.getUserId(),
+                data.getCount());
+        } else {
+            awardMonthBO.addAwardMonth(data, refNote);
+        }
     }
 
     @Override
     public void refreshStatus(Award data, String isSettle, String remark) {
         if (isSettle.equals(EBoolean.YES.getCode())) {
             data.setStatus(EAwardStatus.HANDLE.getCode());
-            accountBO.transAmount(ESysUser.SYS_USER.getCode(),
-                ECoin.X.getCode(), data.getUserId(), ECoin.X.getCode(),
-                data.getCount(), EJourBizTypePlat.AJ_INVITE.getCode(),
-                EJourBizTypeUser.AJ_INVITE.getCode(), "渠道商分成支出", "推荐注册分佣",
-                data.getRefCode());
         } else {
             data.setStatus(EAwardStatus.NOHANDLE.getCode());
         }
         data.setHandleDatetime(new Date());
-        data.setRemark(remark);
+        data.setHandleNote(remark);
         awardDAO.updateStauts(data);
+        // 记录
+        if (awardMonthBO.isAwardMonthExist(new Date())) {
+            awardMonthBO.refreshAwardMonthUnsettle(data.getUserId(),
+                data.getCount());
+        } else {
+            awardMonthBO.addAwardMonth(data, remark);
+        }
     }
 
     @Override
     public List<Award> queryAwardList(Award condition) {
         return awardDAO.selectList(condition);
+    }
+
+    @Override
+    public void saveSpecialAward(User user, BigDecimal count, String remark) {
+        Award data = new Award();
+        data.setUserId(user.getUserId());
+        data.setUserKind(user.getKind());
+//        data.setRefCode(refCode);
+//        data.setRefNote(refNote);
+        data.setCurrency(ECoinType.X.getCode());
+        data.setRefType(ERefType.SPECIAL.getCode());
+        data.setCreateDatetime(new Date());
+        data.setStatus(EAwardStatus.TOHAND.getCode());
+        data.setCount(count);
+        data.setRemark(remark);
+        awardDAO.insert(data);
+        // 记录
+        if (awardMonthBO.isAwardMonthExist(new Date())) {
+            awardMonthBO.refreshAwardMonthUnsettle(data.getUserId(),
+                data.getCount());
+        } else {
+            awardMonthBO.addAwardMonth(data, remark);
+        }
     }
 
 }

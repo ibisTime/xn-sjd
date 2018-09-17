@@ -141,7 +141,8 @@ public class WithdrawAOImpl implements IWithdrawAO {
             String approveResult, String approveNote) {
         Withdraw data = withdrawBO.getWithdraw(code);
         if (null == data) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "取现订单编号不存在");
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "取现订单编号不存在");
         }
         if (!EWithdrawStatus.toApprove.getCode().equals(data.getStatus())) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
@@ -160,8 +161,8 @@ public class WithdrawAOImpl implements IWithdrawAO {
         // 取现记录验证
         Withdraw withdraw = withdrawBO.getWithdraw(code);
         if (withdraw == null) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "不存在编号为"
-                    + code + "的订单");
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "不存在编号为" + code + "的订单");
         }
         if (!EWithdrawStatus.Approved_YES.getCode()
             .equals(withdraw.getStatus())) {
@@ -189,8 +190,8 @@ public class WithdrawAOImpl implements IWithdrawAO {
 
     }
 
-    private void doTokenBroadcast(Coin coin, Withdraw withdraw,
-            Long mAddressId, String approveUser) {
+    private void doTokenBroadcast(Coin coin, Withdraw withdraw, Long mAddressId,
+            String approveUser) {
         // 获取今日散取地址
         EthMAddress mEthAddress = ethMAddressBO.getEthMAddress(mAddressId);
 
@@ -208,8 +209,8 @@ public class WithdrawAOImpl implements IWithdrawAO {
         }
 
         String address = mEthAddress.getAddress();
-        EthMAddress secret = ethMAddressBO.getEthMAddressSecret(mEthAddress
-            .getId());
+        EthMAddress secret = ethMAddressBO
+            .getEthMAddressSecret(mEthAddress.getId());
 
         // 实际到账金额=取现金额-取现手续费
         BigDecimal realAmount = withdraw.getAmount()
@@ -221,8 +222,8 @@ public class WithdrawAOImpl implements IWithdrawAO {
         logger.info("地址" + address + coin.getSymbol() + "余额："
                 + tokenBalance.toString());
         if (tokenBalance.compareTo(realAmount) < 0) {
-            throw new BizException("xn625000", "地址" + address
-                    + coin.getSymbol() + "余额不足以支付提现金额！");
+            throw new BizException("xn625000",
+                "地址" + address + coin.getSymbol() + "余额不足以支付提现金额！");
         }
 
         // 预估矿工费用
@@ -234,14 +235,14 @@ public class WithdrawAOImpl implements IWithdrawAO {
         BigDecimal balance = EthClient.getBalance(address);
         logger.info("地址" + address + "余额：" + balance.toString());
         if (balance.compareTo(txFee) < 0) {
-            throw new BizException("xn625000", "散取地址" + address
-                    + "ETH余额不足以支付提现矿工费！");
+            throw new BizException("xn625000",
+                "散取地址" + address + "ETH余额不足以支付提现矿工费！");
         }
 
         // 广播
         if (!WalletUtils.isValidAddress(withdraw.getPayCardNo())) {
-            throw new BizException("xn625000", "无效的取现地址："
-                    + withdraw.getPayCardInfo());
+            throw new BizException("xn625000",
+                "无效的取现地址：" + withdraw.getPayCardInfo());
         }
 
         String txHash = TokenClient.transfer(secret.getAddress(),
@@ -277,8 +278,8 @@ public class WithdrawAOImpl implements IWithdrawAO {
         }
 
         String address = mEthAddress.getAddress();
-        EthMAddress secret = ethMAddressBO.getEthMAddressSecret(mEthAddress
-            .getId());
+        EthMAddress secret = ethMAddressBO
+            .getEthMAddressSecret(mEthAddress.getId());
 
         // 实际到账金额=取现金额-取现手续费
         BigDecimal realAmount = withdraw.getAmount()
@@ -293,13 +294,13 @@ public class WithdrawAOImpl implements IWithdrawAO {
         BigDecimal balance = EthClient.getBalance(address);
         logger.info("地址" + address + "余额：" + balance.toString());
         if (balance.compareTo(realAmount.add(txFee)) < 0) {
-            throw new BizException("xn625000", "散取地址" + address
-                    + "余额不足以支付提现金额和矿工费！");
+            throw new BizException("xn625000",
+                "散取地址" + address + "余额不足以支付提现金额和矿工费！");
         }
         // 广播
         if (!WalletUtils.isValidAddress(withdraw.getPayCardNo())) {
-            throw new BizException("xn625000", "无效的取现地址："
-                    + withdraw.getPayCardInfo());
+            throw new BizException("xn625000",
+                "无效的取现地址：" + withdraw.getPayCardInfo());
         }
 
         String txHash = ethTransactionBO.broadcast(address,
@@ -323,8 +324,8 @@ public class WithdrawAOImpl implements IWithdrawAO {
             String payNote, String channelOrder) {
         Withdraw data = withdrawBO.getWithdraw(code);
         if (data == null) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "不存在编号为"
-                    + code + "的订单");
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "不存在编号为" + code + "的订单");
         }
         if (!EWithdrawStatus.Approved_YES.getCode().equals(data.getStatus())) {
             throw new BizException("xn000000", "申请记录状态不是待支付状态，无法支付");
@@ -338,8 +339,8 @@ public class WithdrawAOImpl implements IWithdrawAO {
 
     private void approveOrderYES(Withdraw data, String approveUser,
             String approveNote) {
-        withdrawBO.approveOrder(data, EWithdrawStatus.Approved_YES,
-            approveUser, approveNote);
+        withdrawBO.approveOrder(data, EWithdrawStatus.Approved_YES, approveUser,
+            approveNote);
     }
 
     private void approveOrderNO(Withdraw data, String approveUser,
@@ -484,8 +485,8 @@ public class WithdrawAOImpl implements IWithdrawAO {
     public void returnOrder(String code, String payUser, String payNote) {
         Withdraw data = withdrawBO.getWithdraw(code);
         if (data == null) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "不存在编号为"
-                    + code + "的订单");
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "不存在编号为" + code + "的订单");
         }
         if (!EWithdrawStatus.Approved_YES.getCode().equals(data.getStatus())) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
@@ -520,12 +521,12 @@ public class WithdrawAOImpl implements IWithdrawAO {
         }
         for (Withdraw withdraw : withdrawList) {
             String transactionHash = withdraw.getChannelOrder();
-            TransactionReceipt tx = EthClient.getTransactionReceipt(
-                transactionHash).get();
+            TransactionReceipt tx = EthClient
+                .getTransactionReceipt(transactionHash).get();
             if (!ETransactionRecetptStatus.SUCCESS.equals(tx.getStatus())) {
                 // 获取区块信息
-                EthBlock.Block block = EthClient.getEthBlockByHash(tx
-                    .getBlockHash());
+                EthBlock.Block block = EthClient
+                    .getEthBlockByHash(tx.getBlockHash());
                 // 交易信息
                 Transaction transaction = EthClient
                     .getEthTransactionByHash(withdraw.getChannelOrder());
@@ -533,7 +534,8 @@ public class WithdrawAOImpl implements IWithdrawAO {
                 CtqEthTransaction ctqEthTransaction = ethTransactionBO
                     .convertTx(transaction, tx.getGasUsed(),
                         block.getTimestamp());
-                if (EOriginialCoin.ETH.getCode().equals(withdraw.getCurrency())) {// eth交易
+                if (EOriginialCoin.ETH.getCode()
+                    .equals(withdraw.getCurrency())) {// eth交易
                     ethWithdrawNotice(ctqEthTransaction, withdraw);
                 } else {// ecr20交易
                     List<TokenEvent> tokenEventList = new ArrayList<TokenEvent>();
@@ -542,8 +544,8 @@ public class WithdrawAOImpl implements IWithdrawAO {
                         .loadTransferEvents(tx);
                     for (TransferEventResponse transferEventResponse : transferEventList) {
                         // token地址不是提现地址则跳过
-                        if (!withdraw.getPayCardNo().equals(
-                            transferEventResponse.to)) {
+                        if (!withdraw.getPayCardNo()
+                            .equals(transferEventResponse.to)) {
                             continue;
                         }
                         TokenEvent tokenEvent = tokenEventBO.convertTokenEvent(
@@ -589,42 +591,37 @@ public class WithdrawAOImpl implements IWithdrawAO {
             EJourBizTypeUser.AJ_WITHDRAW_UNFROZEN.getValue(),
             withdraw.getCode());
         // 取现金额扣减
-        userAccount = accountBO.changeAmount(
-            userAccount,
+        userAccount = accountBO.changeAmount(userAccount,
             withdraw.getAmount().subtract(withdraw.getFee()).negate(),
-            EChannelType.Online,
-            ctqEthTransaction.getHash(),
-            withdraw.getCode(),
-            EJourBizTypeUser.AJ_WITHDRAW.getCode(),
+            EChannelType.Online, ctqEthTransaction.getHash(),
+            withdraw.getCode(), EJourBizTypeUser.AJ_WITHDRAW.getCode(),
             EJourBizTypeUser.AJ_WITHDRAW.getValue() + "-外部地址："
                     + withdraw.getPayCardNo());
         if (withdraw.getFee().compareTo(BigDecimal.ZERO) > 0) {
             // 取现手续费扣减
-            userAccount = accountBO.changeAmount(userAccount, withdraw.getFee()
-                .negate(), EChannelType.Online, ctqEthTransaction.getHash(),
-                withdraw.getCode(), EJourBizTypeUser.AJ_WITHDRAWFEE.getCode(),
-                EJourBizTypeUser.AJ_WITHDRAWFEE.getValue());
+            userAccount = accountBO.changeAmount(userAccount,
+                withdraw.getFee().negate(), EChannelType.Online,
+                ctqEthTransaction.getHash(), withdraw.getCode(),
+                EJourBizTypeUser.AJ_WITHDRAW_FEE.getCode(),
+                EJourBizTypeUser.AJ_WITHDRAW_FEE.getValue());
         }
 
         // 平台盈亏账户记入取现手续费
-        Account sysAccount = accountBO.getAccount(ESystemAccount.SYS_ACOUNT_ETH
-            .getCode());
+        Account sysAccount = accountBO
+            .getAccount(ESystemAccount.SYS_ACOUNT_ETH.getCode());
         if (withdraw.getFee().compareTo(BigDecimal.ZERO) > 0) {
             sysAccount = accountBO.changeAmount(sysAccount, withdraw.getFee(),
                 EChannelType.Online, ctqEthTransaction.getHash(),
-                withdraw.getCode(), EJourBizTypePlat.AJ_WITHDRAWFEE.getCode(),
-                EJourBizTypePlat.AJ_WITHDRAWFEE.getValue() + "-外部地址："
+                withdraw.getCode(), EJourBizTypePlat.AJ_WITHDRAW_FEE.getCode(),
+                EJourBizTypePlat.AJ_WITHDRAW_FEE.getValue() + "-外部地址："
                         + withdraw.getPayCardNo());
         }
         // 平台盈亏账户记入取现矿工费
-        sysAccount = accountBO.changeAmount(
-            sysAccount,
-            txFee.negate(),
-            EChannelType.Online,
-            ctqEthTransaction.getHash(),
+        sysAccount = accountBO.changeAmount(sysAccount, txFee.negate(),
+            EChannelType.Online, ctqEthTransaction.getHash(),
             withdraw.getCode(),
-            EJourBizTypePlat.AJ_WFEE.getCode(),
-            EJourBizTypePlat.AJ_WFEE.getValue() + "-外部地址："
+            EJourBizTypePlat.AJ_WITHDRAW_MINING_FEE.getCode(),
+            EJourBizTypePlat.AJ_WITHDRAW_MINING_FEE.getValue() + "-外部地址："
                     + withdraw.getPayCardNo());
 
     }
@@ -634,8 +631,8 @@ public class WithdrawAOImpl implements IWithdrawAO {
             CtqEthTransaction ctqEthTransaction,
             List<TokenEvent> tokenEventList, Withdraw withdraw) {
         // 根据交易hash查询取现订单
-        if (ctqEthTransaction == null
-                || CollectionUtils.isEmpty(tokenEventList) || withdraw == null) {
+        if (ctqEthTransaction == null || CollectionUtils.isEmpty(tokenEventList)
+                || withdraw == null) {
             return;
         }
         if (!EWithdrawStatus.Broadcast.getCode().equals(withdraw.getStatus())) {
@@ -661,8 +658,8 @@ public class WithdrawAOImpl implements IWithdrawAO {
         // 更新地址余额
         String symbol = withdraw.getCurrency();
         Coin coin = coinBO.getCoin(symbol);
-        EthMAddress from = ethMAddressBO.getEthMAddressByAddress(tokenEvent
-            .getTokenFrom());
+        EthMAddress from = ethMAddressBO
+            .getEthMAddressByAddress(tokenEvent.getTokenFrom());
 
         // 修改散取地址状态为可使用
         ethMAddressBO.refreshStatus(from, EMAddressStatus.VALID.getCode());
@@ -675,31 +672,29 @@ public class WithdrawAOImpl implements IWithdrawAO {
             EJourBizTypeUser.AJ_WITHDRAW_UNFROZEN.getValue(),
             withdraw.getCode());
         // 取现金额扣减
-        userAccount = accountBO.changeAmount(
-            userAccount,
+        userAccount = accountBO.changeAmount(userAccount,
             withdraw.getAmount().subtract(withdraw.getFee()).negate(),
-            EChannelType.Online,
-            ctqEthTransaction.getHash(),
-            withdraw.getCode(),
-            EJourBizTypeUser.AJ_WITHDRAW.getCode(),
+            EChannelType.Online, ctqEthTransaction.getHash(),
+            withdraw.getCode(), EJourBizTypeUser.AJ_WITHDRAW.getCode(),
             EJourBizTypeUser.AJ_WITHDRAW.getValue() + "-外部地址："
                     + withdraw.getPayCardNo());
         if (withdraw.getFee().compareTo(BigDecimal.ZERO) > 0) {
             // 取现手续费扣减
-            userAccount = accountBO.changeAmount(userAccount, withdraw.getFee()
-                .negate(), EChannelType.Online, ctqEthTransaction.getHash(),
-                withdraw.getCode(), EJourBizTypeUser.AJ_WITHDRAWFEE.getCode(),
-                EJourBizTypeUser.AJ_WITHDRAWFEE.getValue());
+            userAccount = accountBO.changeAmount(userAccount,
+                withdraw.getFee().negate(), EChannelType.Online,
+                ctqEthTransaction.getHash(), withdraw.getCode(),
+                EJourBizTypeUser.AJ_WITHDRAW_FEE.getCode(),
+                EJourBizTypeUser.AJ_WITHDRAW_FEE.getValue());
         }
 
         // 平台盈亏账户记入取现手续费
-        Account sysAccount = accountBO.getAccount(ESystemAccount
-            .getPlatAccount(symbol));
+        Account sysAccount = accountBO
+            .getAccount(ESystemAccount.getPlatAccount(symbol));
         if (withdraw.getFee().compareTo(BigDecimal.ZERO) > 0) {
             sysAccount = accountBO.changeAmount(sysAccount, withdraw.getFee(),
                 EChannelType.Online, ctqEthTransaction.getHash(),
-                withdraw.getCode(), EJourBizTypePlat.AJ_WITHDRAWFEE.getCode(),
-                EJourBizTypePlat.AJ_WITHDRAWFEE.getValue() + "-外部地址："
+                withdraw.getCode(), EJourBizTypePlat.AJ_WITHDRAW_FEE.getCode(),
+                EJourBizTypePlat.AJ_WITHDRAW_FEE.getValue() + "-外部地址："
                         + withdraw.getPayCardNo());
         }
     }

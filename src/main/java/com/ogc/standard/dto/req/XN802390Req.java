@@ -15,10 +15,10 @@ public class XN802390Req {
 
     // 是否结算
     @NotBlank
-    private String isSettle;
+    private String handleResult;
 
     // 备注
-    private String remark;
+    private String handleNote;
 
     public String getId() {
         return id;
@@ -29,18 +29,18 @@ public class XN802390Req {
     }
 
     public String getIsSettle() {
-        return isSettle;
+        return handleResult;
     }
 
     public void setIsSettle(String isSettle) {
-        this.isSettle = isSettle;
+        this.handleResult = isSettle;
     }
 
     public String getRemark() {
-        return remark;
+        return handleNote;
     }
 
     public void setRemark(String remark) {
-        this.remark = remark;
+        this.handleNote = remark;
     }
 }

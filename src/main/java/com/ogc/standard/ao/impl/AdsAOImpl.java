@@ -620,18 +620,12 @@ public class AdsAOImpl implements IAdsAO {
             Account dbAccount = accountBO.getAccountByUser(ads.getUserId(),
                 ads.getTradeCoin());
             // 解冻 未卖出金额
-            accountBO.unfrozenAmount(dbAccount, ads.getLeftCount(),
-                EJourBizTypeUser.AJ_ADS_UNFROZEN.getCode(),
-                EJourBizTypeUser.AJ_ADS_UNFROZEN.getValue() + "-广告未卖出部分解冻",
+            accountBO.unfrozenAmount(dbAccount, ads.getLeftCount().add(backFee),
+                EJourBizTypeUser.AJ_CCORDER_UNFROZEN_REVOKE.getCode(),
+                EJourBizTypeUser.AJ_CCORDER_UNFROZEN_REVOKE.getValue()
+                        + "-广告未卖出部分解冻",
                 ads.getCode());
 
-            if (backFee.compareTo(BigDecimal.ZERO) > 0) {
-                // 解冻广告费
-                accountBO.unfrozenAmount(dbAccount, backFee,
-                    EJourBizTypeUser.AJ_ADS_UNFROZEN.getCode(),
-                    EJourBizTypeUser.AJ_ADS_UNFROZEN.getValue() + "-广告费解冻",
-                    ads.getCode());
-            }
         }
     }
 
@@ -642,15 +636,10 @@ public class AdsAOImpl implements IAdsAO {
         Account dbAccount = accountBO.getAccountByUser(ads.getUserId(),
             ads.getTradeCoin());
         // 冻结交易金额
-        accountBO.frozenAmount(dbAccount, ads.getTotalCount(),
-            EJourBizTypeUser.AJ_ADS_FROZEN.getCode(),
-            EJourBizTypeUser.AJ_ADS_FROZEN.getValue(), ads.getCode());
+        accountBO.frozenAmount(dbAccount, ads.getTotalCount().add(fee),
+            EJourBizTypeUser.AJ_CCORDER_FROZEN.getCode(),
+            EJourBizTypeUser.AJ_CCORDER_FROZEN.getValue(), ads.getCode());
 
-        // 冻结 对应的广告费
-        accountBO.frozenAmount(dbAccount, fee,
-            EJourBizTypeUser.AJ_ADS_FROZEN.getCode(),
-            EJourBizTypeUser.AJ_ADS_FROZEN.getValue() + "-交易广告费冻结",
-            ads.getCode());
     }
 
     @Override
