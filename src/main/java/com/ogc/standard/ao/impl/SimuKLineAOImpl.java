@@ -23,6 +23,7 @@ public class SimuKLineAOImpl implements ISimuKLineAO {
         condition.setSymbol(symbol);
         condition.setToSymbol(toSymbol);
         condition.setPeriod(period);
+        condition.setOrder("create_datetime asc");
 
         return simuKLineBO.querySimuKLineList(condition);
     }

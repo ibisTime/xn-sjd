@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ogc.standard.dao.ICoinAcceptOrderDAO">
-	<resultMap id="coinAcceptOrder_DB_Result" type="coinAcceptOrder">
+<mapper namespace="com.ogc.standard.dao.IAcceptOrderDAO">
+	<resultMap id="coinAcceptOrder_DB_Result" type="acceptOrder">
 		<result column="code" property="code" />
+		<result column="order_uid" property="orderUid" />
 		<result column="type" property="type" />
 		<result column="user_id" property="userId" />
-		<result column="accept_user" property="acceptUser" />
+		<result column="accept_user_id" property="acceptUserId" />
 		<result column="trade_currency" property="tradeCurrency" />
 		
 		<result column="trade_coin" property="tradeCoin" />
@@ -16,23 +17,16 @@
 		<result column="fee" property="fee" />
 		
 		<result column="invalid_datetime" property="invalidDatetime" />
-		<result column="pay_type" property="payType" />
-		<result column="pay_info" property="payInfo" />
-		<result column="pay_bank" property="payBank" />
-		<result column="pay_card_no" property="payCardNo" />
-		
 		<result column="receive_type" property="receiveType" />
 		<result column="receive_info" property="receiveInfo" />
 		<result column="receive_bank" property="receiveBank" />
 		<result column="receive_card_no" property="receiveCardNo" />
 		<result column="status" property="status" />
 		
+		<result column="create_datetime" property="createDatetime" />
 		<result column="mark_datetime" property="markDatetime" />
 		<result column="mark_note" property="markNote" />
-		<result column="release_datetime" property="releaseDatetime" />
-		<result column="create_datetime" property="createDatetime" />
 		<result column="updater" property="updater" />
-		
 		<result column="update_datetime" property="updateDatetime" />
 		<result column="remark" property="remark" />
 	</resultMap>
@@ -46,13 +40,6 @@
                 AND `user_id` = #{userId}
             </if>
             
-            <if test="payCardNo != null and payCardNo != '' ">
-                AND `pay_card_no` = #{payCardNo}
-            </if>
-            
-            <if test="payType != null and payType != '' ">
-                AND `pay_type` = #{payType}
-            </if>
             
             <if test="receiveCardNo != null and receiveCardNo != '' ">
                 AND `receive_card_no` = #{receiveCardNo}
@@ -62,8 +49,8 @@
                 AND `receive_type` = #{receiveType}
             </if>
             
-            <if test="acceptUser != null and acceptUser != '' ">
-                AND `accept_user` = #{acceptUser}
+            <if test="acceptUserId != null and acceptUserId != '' ">
+                AND `accept_user_id` = #{acceptUserId}
             </if>
             
             <if test="status != null and status != '' ">
@@ -83,12 +70,13 @@
             </if>
 		</trim>
 	</sql>
-	<select id="select_coinAcceptOrder" parameterType="coinAcceptOrder" resultMap="coinAcceptOrder_DB_Result">
+	<select id="select_coinAcceptOrder" parameterType="acceptOrder" resultMap="coinAcceptOrder_DB_Result">
 		SELECT
 		t.code
+		,t.order_uid
 		,t.type
 		,t.user_id
-		,t.accept_user
+		,t.accept_user_id
 		,t.trade_currency
 		
 		,t.trade_coin
@@ -98,23 +86,16 @@
 		,t.fee
 		
 		,t.invalid_datetime
-		,t.pay_type
-		,t.pay_info
-		,t.pay_bank
-		,t.pay_card_no
-		
 		,t.receive_type
 		,t.receive_info
 		,t.receive_bank
 		,t.receive_card_no
-		,t.status
 		
+		,t.status
+		,t.create_datetime
 		,t.mark_datetime
 		,t.mark_note
-		,t.release_datetime
-		,t.create_datetime
 		,t.updater
-		
 		,t.update_datetime
 		,t.remark
 		FROM
@@ -128,19 +109,19 @@
 		</trim>
 	</select>
 
-	<select id="select_coinAcceptOrder_count" parameterType="coinAcceptOrder"
+	<select id="select_coinAcceptOrder_count" parameterType="acceptOrder"
 		resultType="java.lang.Long">
 		SELECT count(1) FROM tcoin_accept_order t
 		<include refid="where_condition" />
 	</select>
 
-	<insert id="insert_coinAcceptOrder" parameterType="coinAcceptOrder">
+	<insert id="insert_coinAcceptOrder" parameterType="acceptOrder">
 		INSERT INTO
 		tcoin_accept_order(
 		code
 		,type
 		,user_id
-		,accept_user
+		,accept_user_id
 		,trade_currency
 		
 		,trade_coin
@@ -150,21 +131,15 @@
 		,fee
 		
 		,invalid_datetime
-		,pay_type
-		,pay_info
-		,pay_bank
-		
-		,pay_card_no
 		,receive_type
 		,receive_info
 		,receive_bank
 		,receive_card_no
 		
 		,status
+		,create_datetime
 		,mark_datetime
 		,mark_note
-		,release_datetime
-		,create_datetime
 		,updater
 		
 		,update_datetime
@@ -174,7 +149,7 @@
 		#{code}
 		,#{type}
 		,#{userId}
-		,#{acceptUser}
+		,#{acceptUserId}
 		,#{tradeCurrency}
 		
 		,#{tradeCoin}
@@ -184,21 +159,15 @@
 		,#{fee}
 		
 		,#{invalidDatetime}
-		,#{payType}
-		,#{payInfo}
-		,#{payBank}
-		,#{payCardNo}
-		
 		,#{receiveType}
 		,#{receiveInfo}
 		,#{receiveBank}
 		,#{receiveCardNo}
 		
 		,#{status}
+		,#{createDatetime}
 		,#{markDatetime}
 		,#{markNote}
-		,#{releaseDatetime}
-		,#{createDatetime}
 		,#{updater}
 		
 		,#{updateDatetime}
@@ -206,12 +175,12 @@
 		)
 	</insert>
 
-	<update id="update_coinAcceptOrder" parameterType="coinAcceptOrder">
+	<update id="update_coinAcceptOrder" parameterType="acceptOrder">
 		UPDATE tcoin_accept_order
 		SET
 		type = #{type}
 		,user_id = #{userId}
-		,accept_user = #{acceptUser}
+		,accept_user_id = #{acceptUserId}
 		,trade_currency = #{tradeCurrency}
 		,trade_coin = #{tradeCoin}
 		,trade_price = #{tradePrice}
@@ -219,10 +188,6 @@
 		,trade_amount = #{tradeAmount}
 		,fee = #{fee}
 		,invalid_datetime = #{invalidDatetime}
-		,pay_type = #{payType}
-		,pay_info = #{payInfo}
-		,pay_bank = #{payBank}
-		,pay_card_no = #{payCardNo}
 		,receive_type = #{receiveType}
 		,receive_info = #{receiveInfo}
 		,receive_bank = #{receiveBank}
@@ -230,7 +195,6 @@
 		,status = #{status}
 		,mark_datetime = #{markDatetime}
 		,mark_note = #{markNote}
-		,release_datetime = #{releaseDatetime}
 		,create_datetime = #{createDatetime}
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
@@ -238,7 +202,7 @@
 		WHERE code = #{code}
 	</update>
 
-	<update id="update_cancel" parameterType="coinAcceptOrder">
+	<update id="update_cancel" parameterType="acceptOrder">
         UPDATE tcoin_accept_order
         SET
             status            = #{status}
@@ -248,11 +212,12 @@
         WHERE code = #{code}
     </update>
 
-    <update id="update_markPay" parameterType="coinAcceptOrder">
+    <update id="update_markPay" parameterType="acceptOrder">
         UPDATE tcoin_accept_order
         SET
             status            = #{status}
             , mark_datetime   = #{markDatetime}
+            , mark_note		  = #{markNote}
             , updater         = #{updater}
             , update_datetime = #{updateDatetime}
             , remark          = #{remark}

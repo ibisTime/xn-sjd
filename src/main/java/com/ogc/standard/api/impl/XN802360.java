@@ -8,21 +8,31 @@
  */
 package com.ogc.standard.api.impl;
 
+import java.math.BigDecimal;
+
+import org.web3j.utils.Convert;
+import org.web3j.utils.Convert.Unit;
+
+import com.ogc.standard.ao.ICollectAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
+import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.dto.req.XN802360Req;
 import com.ogc.standard.dto.res.BooleanRes;
+import com.ogc.standard.enums.EOriginialCoin;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
-import com.ogc.standard.http.BizConnecter;
+import com.ogc.standard.spring.SpringContextHolder;
 
 /** 
- * SC手动归集
+ * ETH手动归集
  * @author: haiqingzheng 
  * @since: 2017年11月9日 下午7:00:49 
  * @history:
  */
 public class XN802360 extends AProcessor {
+    private ICollectAO collectAO = SpringContextHolder
+        .getBean(ICollectAO.class);
 
     private XN802360Req req = null;
 
@@ -31,8 +41,9 @@ public class XN802360 extends AProcessor {
      */
     @Override
     public Object doBusiness() throws BizException {
-        BizConnecter.getBizData("802160", JsonUtil.Object2Json(req),
-            Object.class);
+        BigDecimal balanceStart = Convert.toWei(
+            StringValidater.toBigDecimal(req.getBalanceStart()), Unit.ETHER);
+        collectAO.collect(balanceStart, EOriginialCoin.ETH.getCode(), null);
         return new BooleanRes(true);
     }
 

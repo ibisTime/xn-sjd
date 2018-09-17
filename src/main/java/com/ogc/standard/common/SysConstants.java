@@ -18,11 +18,16 @@ public class SysConstants {
 
     public static final String BTC_COIN_PRICE_X = "btc_coin_price_x"; // BTC价格计算因子
 
-    public static final String HPM_COIN_PRICE_X = "HPM_COIN_PRICE_X"; // BTC价格计算因子
+    public static final String X_COIN_PRICE_X = "X_COIN_PRICE_X"; // X价格计算因子
 
     public static final String CUSER_REG = "cuser_reg"; // 普通用户推荐送X币
 
     public static final String DUSER_REG = "duser_reg"; // 渠道商推荐送X币
+
+    public static final String REFEREE_CUSER_FEE_RATE = "referee_cuser_fee_rate"; // 普通用户推荐用户交易分成
+
+    public static final String REFEREE_DUSER_FEE_RATE = "referee_duser_fee_rate"; // 普通用户推荐用户交易分成
+
     // 七牛云图片配置
 
     public static String QINIU_ACCESS_KEY = "qiniu_access_key";
@@ -34,7 +39,7 @@ public class SysConstants {
     public static String QINIU_DOMAIN = "qiniu_domain";
 
     // 用户广告费率配置
-    public static String DEFAULT_USER_RATE = "default_user_trade_rate";
+    public static String DEFAULT_ADS_USER_RATE = "default_ads_user_rate";
 
     // 腾讯云配置
     public static String TX_APP_CODE = "tx_app_code";// 应用编号
@@ -59,11 +64,6 @@ public class SysConstants {
     public static String TRANSAMOUNTBS = "TRANSAMOUNTBS"; // C端2C端转账金额倍数
 
     public static String QXDBZDJE = "QXDBZDJE"; // 取现单笔最大金额
-
-    // 红包规则
-    public static String RED_PACKET_NUM_MAX = "red_packet_num_max"; // 最大红包个数
-
-    public static String RED_PACKET_AMOUNT_MAX = "red_packet_amount_max"; // 最大红包总额
 
     // 短信通知配置
     public static String ZC_SMS_NOTICE = "zc_sms_notice"; // 仲裁短信通知
@@ -112,8 +112,17 @@ public class SysConstants {
     public static String DO_BIND_MOBILE_CN = "尊敬的%s用户，您于%s提交的绑定手机号码服务已完成，现绑定手机号码为%s，请妥善保管您的账户相关信息。";
 
     // ****** OTC ******
+    public static final String ACCEPT_ORDER_LIMIT_TIME = "accept_order_pay_limit_time"; // 承兑商支付超时时间
 
-    public static Integer ACCEPT_ORDER_PAY_LIMIT = 10; // 承兑商支付超时时间
+    public static final String ACCEPT_ORDER_BUY_FEE_RATE = "accept_order_buy_fee_rate"; // 买入交易手续费
+
+    public static final String ACCEPT_ORDER_SELL_FEE_RATE = "accept_order_sell_fee_rate";// 卖出交易手续费
+
+    public static final String ACCEPT_ORDER_CANCEL_MAX_TIME = "accept_order_cancel_max_time";// 每天交易取消最大次数
+
+    public static final String ACCEPT_ORDER_MIN_AMOUNT = "accept_order_min_amount";// 单笔交易最小额度(人民币)
+
+    public static final String ACCEPT_ORDER_MAX_AMOUNT = "accept_order_max_amount";// 单笔交易最大额度(人民币)
 
     // ****** 币币交易 ******
 

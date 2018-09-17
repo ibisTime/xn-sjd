@@ -17,7 +17,7 @@ import org.hibernate.validator.constraints.NotBlank;
  */
 public class XN802360Req {
 
-    @NotBlank(message = "请先设置SC归集阀值")
+    @NotBlank(message = "请先设置ETH归集阀值")
     private String balanceStart; // 归集阀值
 
     public String getBalanceStart() {

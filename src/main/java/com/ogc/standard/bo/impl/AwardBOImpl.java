@@ -8,6 +8,7 @@
  */
 package com.ogc.standard.bo.impl;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -28,6 +29,7 @@ import com.ogc.standard.enums.ECoinType;
 import com.ogc.standard.enums.EJourBizTypePlat;
 import com.ogc.standard.enums.EJourBizTypeUser;
 import com.ogc.standard.enums.ERefType;
+import com.ogc.standard.enums.ESysUser;
 import com.ogc.standard.enums.EUserKind;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
@@ -60,6 +62,30 @@ public class AwardBOImpl extends PaginableBOImpl<Award> implements IAwardBO {
     }
 
     @Override
+    public void saveTradeAward(String refereeUserId, String userKind,
+            String refCode, String refNote, BigDecimal tradeCount) {
+        Award data = new Award();
+        data.setUserId(refereeUserId);
+        data.setUserKind(userKind);
+        data.setRefCode(refCode);
+        data.setRefNote(refNote);
+        data.setCurrency(ECoinType.X.getCode());
+        data.setRefType(ERefType.TRADE.getCode());
+        data.setCreateDatetime(new Date());
+        data.setStatus(EAwardStatus.TOHAND.getCode());
+        if (userKind.equals(EUserKind.QDS.getCode())) {
+            data.setCount(sysConfigBO
+                .getBigDecimalValue(SysConstants.REFEREE_DUSER_FEE_RATE)
+                .multiply(tradeCount));
+        } else {
+            data.setCount(sysConfigBO
+                .getBigDecimalValue(SysConstants.REFEREE_CUSER_FEE_RATE)
+                .multiply(tradeCount));
+        }
+        awardDAO.insert(data);
+    }
+
+    @Override
     public void saveRegistAward(String userId, String userKind, String refCode,
             String refNote) {
         Award data = new Award();
@@ -72,10 +98,10 @@ public class AwardBOImpl extends PaginableBOImpl<Award> implements IAwardBO {
         data.setCreateDatetime(new Date());
         data.setStatus(EAwardStatus.TOHAND.getCode());
         if (userKind.equals(EUserKind.QDS.getCode())) {
-            data.setAmount(
+            data.setCount(
                 sysConfigBO.getBigDecimalValue(SysConstants.DUSER_REG));
         } else {
-            data.setAmount(
+            data.setCount(
                 sysConfigBO.getBigDecimalValue(SysConstants.CUSER_REG));
         }
         awardDAO.insert(data);
@@ -85,9 +111,9 @@ public class AwardBOImpl extends PaginableBOImpl<Award> implements IAwardBO {
     public void refreshStatus(Award data, String isSettle, String remark) {
         if (isSettle.equals(EBoolean.YES.getCode())) {
             data.setStatus(EAwardStatus.HANDLE.getCode());
-            accountBO.transAmount("SYS_USER", ECoin.X.getCode(),
-                data.getUserId(), ECoin.X.getCode(), data.getAmount(),
-                EJourBizTypePlat.AJ_INVITE.getCode(),
+            accountBO.transAmount(ESysUser.SYS_USER.getCode(),
+                ECoin.X.getCode(), data.getUserId(), ECoin.X.getCode(),
+                data.getCount(), EJourBizTypePlat.AJ_INVITE.getCode(),
                 EJourBizTypeUser.AJ_INVITE.getCode(), "渠道商分成支出", "推荐注册分佣",
                 data.getRefCode());
         } else {

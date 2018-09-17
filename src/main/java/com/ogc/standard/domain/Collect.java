@@ -51,8 +51,107 @@ public class Collect extends ABaseDO {
     // 关联充值单号
     private String refNo;
 
+    // 币种类型
+    private String coinType;
+
+    // 矿工费补给地址
+    private String preFrom;
+
+    // 矿工费收款地址
+    private String preTo;
+
+    // 矿工费补给数量
+    private BigDecimal preAmount;
+
+    // 矿工费补给交易hash
+    private String preTxHash;
+
+    // 矿工费补给交易矿工费
+    private BigDecimal preTxFee;
+
+    // 矿工费补给发起时间
+    private Date preCreateDatetime;
+
+    // 矿工费补给网络记账时间
+    private Date preConfirmDatetime;
+
+    // 备注
+    private String remark;
+
     // 订单编号模糊查询
     private String codeForQuery;
+
+    public String getCoinType() {
+        return coinType;
+    }
+
+    public void setCoinType(String coinType) {
+        this.coinType = coinType;
+    }
+
+    public String getPreFrom() {
+        return preFrom;
+    }
+
+    public void setPreFrom(String preFrom) {
+        this.preFrom = preFrom;
+    }
+
+    public String getPreTo() {
+        return preTo;
+    }
+
+    public void setPreTo(String preTo) {
+        this.preTo = preTo;
+    }
+
+    public BigDecimal getPreAmount() {
+        return preAmount;
+    }
+
+    public void setPreAmount(BigDecimal preAmount) {
+        this.preAmount = preAmount;
+    }
+
+    public String getPreTxHash() {
+        return preTxHash;
+    }
+
+    public void setPreTxHash(String preTxHash) {
+        this.preTxHash = preTxHash;
+    }
+
+    public BigDecimal getPreTxFee() {
+        return preTxFee;
+    }
+
+    public void setPreTxFee(BigDecimal preTxFee) {
+        this.preTxFee = preTxFee;
+    }
+
+    public Date getPreCreateDatetime() {
+        return preCreateDatetime;
+    }
+
+    public void setPreCreateDatetime(Date preCreateDatetime) {
+        this.preCreateDatetime = preCreateDatetime;
+    }
+
+    public Date getPreConfirmDatetime() {
+        return preConfirmDatetime;
+    }
+
+    public void setPreConfirmDatetime(Date preConfirmDatetime) {
+        this.preConfirmDatetime = preConfirmDatetime;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 
     public String getCode() {
         return code;

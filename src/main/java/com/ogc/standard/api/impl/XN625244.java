@@ -14,6 +14,7 @@ import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.ObjValidater;
 import com.ogc.standard.dto.req.XN625244Req;
 import com.ogc.standard.dto.res.BooleanRes;
+import com.ogc.standard.enums.EReleaserKind;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
@@ -31,20 +32,15 @@ public class XN625244 extends AProcessor {
 
     private XN625244Req req;
 
-    /**
-     * @see com.ogc.standard.api.IProcessor#doBusiness()
-     */
     @Override
     public Object doBusiness() throws BizException {
 
-        tradeOrderAO.release(req.getCode(), req.getUpdater(), "卖家已释放", "S");
+        tradeOrderAO.release(req.getCode(), req.getUpdater(), "卖家已释放",
+            EReleaserKind.seller.getCode());
         return new BooleanRes(true);
 
     }
 
-    /**
-     * @see com.ogc.standard.api.IProcessor#doCheck(java.lang.String)
-     */
     @Override
     public void doCheck(String inputparams, String operator)
             throws ParaException {

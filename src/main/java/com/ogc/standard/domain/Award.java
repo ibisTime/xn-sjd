@@ -36,10 +36,10 @@ public class Award extends ABaseDO {
     private String currency;
 
     // 奖励
-    private BigDecimal amount;
+    private BigDecimal count;
 
     // 订单金额
-    private BigDecimal orderAmount;
+    private BigDecimal orderCount;
 
     // 奖励比例
     private BigDecimal rate;
@@ -90,12 +90,12 @@ public class Award extends ABaseDO {
         this.relUser = relUser;
     }
 
-    public BigDecimal getOrderAmount() {
-        return orderAmount;
+    public BigDecimal getOrderCount() {
+        return orderCount;
     }
 
-    public void setOrderAmount(BigDecimal orderAmount) {
-        this.orderAmount = orderAmount;
+    public void setOrderCount(BigDecimal orderCount) {
+        this.orderCount = orderCount;
     }
 
     public Date getCreateDatetimeStart() {
@@ -146,12 +146,12 @@ public class Award extends ABaseDO {
         this.currency = currency;
     }
 
-    public BigDecimal getAmount() {
-        return amount;
+    public BigDecimal getCount() {
+        return count;
     }
 
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
+    public void setCount(BigDecimal count) {
+        this.count = count;
     }
 
     public BigDecimal getRate() {

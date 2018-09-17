@@ -17,11 +17,16 @@ public interface IBankcardBO extends IPaginableBO<Bankcard> {
 
     public List<Bankcard> queryBankcardList(Bankcard condition);
 
+    public int getTotalBankcard(String userId, String bankCode);
+
     public Bankcard getBankcard(String code);
 
     public Bankcard getBankcardInfo(String code);
 
     public Bankcard getBankcardByBankcardNumber(String bankcardNumber);
 
-    public List<Bankcard> queryBankcardList(String userId, String systemCode);
+    public List<Bankcard> queryBankcardList(String userId);
+
+    public List<Bankcard> queryBankcardList(String userId, String bankCode);
+
 }

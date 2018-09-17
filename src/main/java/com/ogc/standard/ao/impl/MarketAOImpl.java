@@ -77,41 +77,6 @@ public class MarketAOImpl implements IMarketAO {
 
     }
 
-    @Override
-    public Market coinPriceByPlatform(String coin) {
-
-        // 获取平台调控值
-        BigDecimal x = BigDecimal.ZERO;
-
-        ECoin eCoin = null;
-        if (coin.equals(ECoin.ETH.getCode())) {
-            eCoin = ECoin.ETH;
-            x = this.sysConfigBO
-                .getBigDecimalValue(SysConstants.ETH_COIN_PRICE_X);
-        } else if (coin.equals(ECoin.HPM.getCode())) {
-            eCoin = ECoin.HPM;
-            x = this.sysConfigBO
-                .getBigDecimalValue(SysConstants.HPM_COIN_PRICE_X);
-        } else if (coin.equals(ECoin.BTC.getCode())) {
-            eCoin = ECoin.BTC;
-            x = this.sysConfigBO
-                .getBigDecimalValue(SysConstants.BTC_COIN_PRICE_X);
-        }
-
-        if (eCoin == null) {
-            throw new BizException("xn000", coin + "不支持的货币类型");
-        }
-
-        Market market = this.marketBO.standardMarket(eCoin);
-
-        // 计算平台调控过的值
-        market.setMid(market.getMid().add(x));
-
-        //
-        return market;
-
-    }
-
     // 获取多个币种的行情列表
     @Scheduled(cron = "*/30 * * * * ?")
     public void obtainMarketDetailList() {
@@ -276,6 +241,39 @@ public class MarketAOImpl implements IMarketAO {
         // 保存 存在就更新，不存在就插入
         this.marketBO.updateMarket(EMarketOrigin.COINMARKETCAP.getCode(), coin,
             cnyMarket);
+
+    }
+
+    @Override
+    public Market coinPriceByPlatform(String coin, String refCurrency) {
+
+        // 获取平台调控值
+        BigDecimal x = BigDecimal.ZERO;
+
+        ECoin eCoin = null;
+        if (coin.equals(ECoin.ETH.getCode())) {
+            eCoin = ECoin.ETH;
+            x = this.sysConfigBO
+                .getBigDecimalValue(SysConstants.ETH_COIN_PRICE_X);
+        } else if (coin.equals(ECoin.X.getCode())) {
+            eCoin = ECoin.X;
+            x = this.sysConfigBO
+                .getBigDecimalValue(SysConstants.X_COIN_PRICE_X);
+        } else if (coin.equals(ECoin.BTC.getCode())) {
+            eCoin = ECoin.BTC;
+            x = this.sysConfigBO
+                .getBigDecimalValue(SysConstants.BTC_COIN_PRICE_X);
+        }
+
+        if (eCoin == null) {
+            throw new BizException("xn000", coin + "不支持的货币类型");
+        }
+
+        Market market = this.marketBO.standardMarket(eCoin, refCurrency);
+
+        // 计算平台调控过的值
+        market.setMid(market.getMid().add(x));
+        return market;
 
     }
 

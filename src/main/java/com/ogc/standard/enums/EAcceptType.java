@@ -1,9 +1,14 @@
 package com.ogc.standard.enums;
 
-public enum ECollectionStatus {
-    Broadcast("0", "广播中"), Broadcast_YES("1", "广播成功"), Broadcast_NO("2", "广播失败");
+/**
+ * @author: taojian 
+ * @since: 2018年9月15日 下午9:40:33 
+ * @history:
+ */
+public enum EAcceptType {
+    IN("0", "买入"), OUT("1", "卖出");
 
-    ECollectionStatus(String code, String value) {
+    EAcceptType(String code, String value) {
         this.code = code;
         this.value = value;
     }

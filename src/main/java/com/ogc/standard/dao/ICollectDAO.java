@@ -1,6 +1,7 @@
 package com.ogc.standard.dao;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import com.ogc.standard.dao.base.IBaseDAO;
 import com.ogc.standard.domain.Collect;
@@ -22,4 +23,15 @@ public interface ICollectDAO extends IBaseDAO<Collect> {
 
     public int updateNoticeWAN(Collect data);
 
+    public void insertList(List<Collect> collectList);
+
+    public int collectBroadcastSuccess(Collect data);
+
+    public int collectFeeBroadcastSuccess(Collect data);
+
+    public int collectFailed(Collect data);
+
+    public int collectFeeTxSuccess(Collect data);
+
+    public int collectTxSuccess(Collect data);
 }

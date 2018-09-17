@@ -8,11 +8,15 @@
  */
 package com.ogc.standard.core;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.bitcoinj.core.Utils;
@@ -25,14 +29,23 @@ import org.ethereum.crypto.ECKey;
 import org.spongycastle.util.encoders.Hex;
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.ECKeyPair;
+import org.web3j.crypto.RawTransaction;
+import org.web3j.crypto.TransactionEncoder;
 import org.web3j.crypto.Wallet;
 import org.web3j.crypto.WalletFile;
+import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.admin.Admin;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.DefaultBlockParameterName;
+import org.web3j.protocol.core.methods.response.EthBlock;
 import org.web3j.protocol.core.methods.response.EthGasPrice;
 import org.web3j.protocol.core.methods.response.EthGetBalance;
+import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
+import org.web3j.protocol.core.methods.response.EthSendTransaction;
+import org.web3j.protocol.core.methods.response.Transaction;
+import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.http.HttpService;
+import org.web3j.utils.Numeric;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ogc.standard.common.PropertiesUtil;
@@ -85,8 +98,8 @@ public class EthClient {
             // 临时解决web3jbug
             String findStr = "\"kdf\":\"scrypt\",";
             String keystoreContentCopy = keystoreContent;
-            String newkeystoreContent = keystoreContentCopy
-                .replaceFirst(findStr, "");
+            String newkeystoreContent = keystoreContentCopy.replaceFirst(
+                findStr, "");
             int index = newkeystoreContent.indexOf(findStr);
             if (index != -1) {
                 keystoreContent = newkeystoreContent;
@@ -114,8 +127,7 @@ public class EthClient {
                 "以太坊地址创建发生异常，原因：" + e.getMessage());
         }
         if (ethAddress == null) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "以太坊地址创建失败");
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "以太坊地址创建失败");
         }
         return ethAddress;
     }
@@ -123,17 +135,15 @@ public class EthClient {
     public static BigDecimal getBalance(String address) {
         try {
             DefaultBlockParameter defaultBlockParameter = DefaultBlockParameterName.LATEST;
-            EthGetBalance ethGetBalance = getClient()
-                .ethGetBalance(address, defaultBlockParameter).send();
+            EthGetBalance ethGetBalance = getClient().ethGetBalance(address,
+                defaultBlockParameter).send();
             if (ethGetBalance != null) {
                 return new BigDecimal(ethGetBalance.getBalance().toString());
             } else {
-                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                    "以太坊余额查询失败");
+                throw new BizException("xn625000", "以太坊余额查询失败");
             }
         } catch (Exception e) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "以太坊余额查询异常，原因：" + e.getMessage());
+            throw new BizException("xn625000", "以太坊余额查询异常，原因：" + e.getMessage());
         }
     }
 
@@ -155,7 +165,7 @@ public class EthClient {
     public static void main(String[] args) {
 
         // System.out.println(getGasPrice());
-        System.out.println(newAccount().getAddress());
+        // getBalance("0xd6095084132581043451cce50351d4beb2b4da15");
 
     }
 
@@ -252,4 +262,112 @@ public class EthClient {
         return mnemonicList;
     }
 
+    // 转账
+    public static String transfer(String fromAddress, String keyStoreName,
+            String keyStorePwd, String keystoreContent, String toAddress,
+            BigDecimal value) {
+        String txHash = null;
+        try {
+
+            Credentials credentials = getCredentials(fromAddress,
+                keystoreContent, keyStorePwd);
+
+            //
+            EthGetTransactionCount ethGetTransactionCount = getClient()
+                .ethGetTransactionCount(fromAddress,
+                    DefaultBlockParameterName.LATEST).sendAsync().get();
+            //
+            BigInteger nonce = ethGetTransactionCount.getTransactionCount();
+
+            // TODO 动态获取
+            BigInteger gasLimit = BigInteger.valueOf(21000);
+            BigInteger gasPrice = getClient().ethGasPrice().send()
+                .getGasPrice();
+
+            // 本地签名的
+            RawTransaction rawTransaction = RawTransaction.createTransaction(
+                nonce, gasPrice, gasLimit, toAddress,
+                new BigInteger(value.toString()), "");
+
+            // 签名
+            byte[] signedMessage = TransactionEncoder.signMessage(
+                rawTransaction, credentials);
+            txHash = Numeric.toHexString(signedMessage);
+            EthSendTransaction ethSendTransaction = getClient()
+                .ethSendRawTransaction(txHash).sendAsync().get();
+
+            if (ethSendTransaction.getError() != null) {
+                // failure
+            }
+            txHash = ethSendTransaction.getTransactionHash();
+
+        } catch (Exception e) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "以太坊转账交易广播失败，原因：" + e.getMessage());
+        }
+        return txHash;
+    }
+
+    private static Credentials getCredentials(String keystoreName,
+            String keystoreContent, String keyStorePwd) {
+        String fileDirPath = PropertiesUtil.Config.KEY_STORE_PATH;
+        File keystoreFile = new File(fileDirPath + "/" + keystoreName);
+        if (!keystoreFile.exists()) {
+            try {
+                keystoreFile.createNewFile();
+                FileWriter fw = null;
+                BufferedWriter bw = null;
+                fw = new FileWriter(keystoreFile.getAbsoluteFile(), true); // true表示可以追加新内容
+                // fw=new FileWriter(f.getAbsoluteFile()); //表示不追加
+                bw = new BufferedWriter(fw);
+                bw.write(keystoreContent);
+                bw.close();
+            } catch (Exception e) {
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                    "keystore文件写入异常，原因" + e.getMessage());
+            }
+        }
+        Credentials credentials;
+        try {
+            credentials = WalletUtils
+                .loadCredentials(keyStorePwd, keystoreFile);
+            return credentials;
+        } catch (Exception e) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "创建以太坊credentials失败，原因" + e.getMessage());
+        }
+    }
+
+    public static Optional<TransactionReceipt> getTransactionReceipt(
+            String txHash) {
+        try {
+            Optional<TransactionReceipt> transactionReceipt = getClient()
+                .ethGetTransactionReceipt(txHash).send()
+                .getTransactionReceipt();
+            return transactionReceipt;
+        } catch (Exception e) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "以太坊交易查询异常，原因：" + e.getMessage());
+        }
+    }
+
+    public static Transaction getEthTransactionByHash(String txHash) {
+        try {
+            return getClient().ethGetTransactionByHash(txHash).send()
+                .getResult();
+        } catch (Exception e) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "以太坊交易查询异常，原因：" + e.getMessage());
+        }
+    }
+
+    public static EthBlock.Block getEthBlockByHash(String hash) {
+        try {
+            return getClient().ethGetBlockByHash(hash, false).send()
+                .getResult();
+        } catch (Exception e) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "以太坊区块查询异常，原因：" + e.getMessage());
+        }
+    }
 }

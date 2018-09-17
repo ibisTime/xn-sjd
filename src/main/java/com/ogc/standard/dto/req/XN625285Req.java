@@ -13,12 +13,6 @@ public class XN625285Req extends APageReq {
     // 选填，买方
     private String buyUser;
 
-    // 选填，付款卡号
-    private String payCardNo;
-
-    // 选填，付款方式
-    private String payType;
-
     // 选填，收款卡号
     private String receiveCardNo;
 
@@ -46,22 +40,6 @@ public class XN625285Req extends APageReq {
 
     public void setBuyUser(String buyUser) {
         this.buyUser = buyUser;
-    }
-
-    public String getPayCardNo() {
-        return payCardNo;
-    }
-
-    public void setPayCardNo(String payCardNo) {
-        this.payCardNo = payCardNo;
-    }
-
-    public String getPayType() {
-        return payType;
-    }
-
-    public void setPayType(String payType) {
-        this.payType = payType;
     }
 
     public String getReceiveCardNo() {

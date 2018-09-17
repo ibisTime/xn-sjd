@@ -25,10 +25,6 @@ public enum EJourBizTypeUser {
 
     AJ_LB("lb", "蓝补"),
 
-    AJ_O2O_IN("o2o_in", "o2o店铺消费收入"),
-
-    AJ_O2O_OUT("o2o_out", "o2o店铺消费支出"),
-
     AJ_INVITE("invite", "推荐好友分成"),
 
     AJ_TRADEFEE("tradefee", "交易广告费"),
@@ -39,11 +35,17 @@ public enum EJourBizTypeUser {
 
     AJ_WITHDRAW_FROZEN("withdrawfrozen", "取现冻结"),
 
-    AJ_ADS_FROZEN("tradefrozen", "交易冻结"),
+    AJ_ADS_FROZEN("tradefrozen", "广告交易冻结"),
 
-    AJ_ADS_UNFROZEN("tradeunfrozen", "交易解冻"),
+    AJ_ADS_UNFROZEN("tradeunfrozen", "广告交易解冻"),
 
-    AJ_WITHDRAW_UNFROZEN("withdrawunfrozen", "取现解冻");
+    AJ_WITHDRAW_UNFROZEN("withdrawunfrozen", "取现解冻"),
+
+    AJ_CANCEL_UNFROZEN("cancelunfrozen", "交易取消解冻"),
+
+    AJ_ACCEPT_FROZEN("accept_frozen", "售卖交易冻结"),
+
+    AJ_ACCEPT_UNFROZEN("accept_unfrozen", "售卖交易解冻");
 
     public static EJourBizTypeUser getBizType(String code) {
         Map<String, EJourBizTypeUser> map = getBizTypeMap();
