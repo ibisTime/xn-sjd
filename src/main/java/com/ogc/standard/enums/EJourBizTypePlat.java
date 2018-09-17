@@ -11,10 +11,15 @@ import com.ogc.standard.exception.BizException;
  * @history:
  */
 public enum EJourBizTypePlat {
+    AJ_REG("reg","注册分佣"),
 
     AJ_DEPOSIT("deposit", "定存"), 
     AJ_COLLECT("collect", "归集"), 
     AJ_WITHDRAW("withdraw", "提币"),
+    
+    AJ_ACCEPT_SELL("accept_sell","承兑商卖币"),
+    AJ_ACCEPT_BUY("accept_buy","承兑商买币"),
+    AJ_ACCEPT_FEE("accept_fee","承兑商交易手续费"),
 
     AJ_WITHDRAW_FEE("withdraw_fee", "提币手续费"), 
     AJ_CCORDER_FEE("ccorder_fee", "场外cc手续费"), 
