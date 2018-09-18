@@ -199,6 +199,20 @@ CREATE TABLE `tcoin_eth_maddress` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='ETH平台散取地址';
 
+DROP TABLE IF EXISTS `tcoin_eth_saddress`;
+CREATE TABLE `tcoin_eth_saddress` (
+  `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `address` varchar(255) DEFAULT NULL COMMENT '以太坊地址',
+  `keystore_pwd` varchar(255) NOT NULL COMMENT 'keystore密码',
+  `keystore_name` text COMMENT 'keystore文件名',
+  `keystore_content` text COMMENT 'keystore文件内容',
+  `status` varchar(32) DEFAULT NULL COMMENT '状态',
+  `create_datetime` datetime DEFAULT NULL COMMENT '创建时间',
+  `abandon_datetime` datetime DEFAULT NULL COMMENT '弃用时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='ETH平台散取地址';
+
+
 -- ----------------------------
 --  Table structure for `tcoin_eth_transaction`
 -- ----------------------------
@@ -713,7 +727,8 @@ CREATE TABLE `tsimu_match_result` (
   `sell_user_id` varchar(32) DEFAULT NULL COMMENT '卖方用户编号',
   `buy_amount` decimal(64,8) DEFAULT NULL COMMENT '交易数量',
   `sell_amount` decimal(64,8) DEFAULT NULL COMMENT '计价数量',
-  `fee` decimal(64,8) DEFAULT NULL COMMENT '手续费',
+  `buy_fee` decimal(64,8) DEFAULT NULL COMMENT '买方手续费',
+  `sell_fee` decimal(64,8) DEFAULT NULL COMMENT '卖方手续费',
   `create_datetime` datetime DEFAULT NULL COMMENT '撮合时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='撮合结果';
@@ -732,7 +747,8 @@ CREATE TABLE `tsimu_match_result_history` (
   `sell_user_id` varchar(32) DEFAULT NULL COMMENT '卖方用户编号',
   `buy_amount` decimal(64,8) DEFAULT NULL COMMENT '交易数量',
   `sell_amount` decimal(64,8) DEFAULT NULL COMMENT '计价数量',
-  `fee` decimal(64,8) DEFAULT NULL COMMENT '手续费',
+  `buy_fee` decimal(64,8) DEFAULT NULL COMMENT '买方手续费',
+  `sell_fee` decimal(64,8) DEFAULT NULL COMMENT '卖方手续费',
   `create_datetime` datetime DEFAULT NULL COMMENT '撮合时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='撮合结果历史';
@@ -959,7 +975,6 @@ CREATE TABLE `tstd_deposit` (
   `tx_fee` decimal(64,0) DEFAULT NULL COMMENT '矿工费',
   `confirm_datetime` datetime DEFAULT NULL COMMENT '网络记账时间',
   `create_datetime` datetime DEFAULT NULL COMMENT '创建时间',
-  `ref_no` varchar(32) DEFAULT NULL COMMENT '关联订单号',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='定存订单';
 
