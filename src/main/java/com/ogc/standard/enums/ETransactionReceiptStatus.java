@@ -1,9 +1,9 @@
 package com.ogc.standard.enums;
 
-public enum ETransactionRecetptStatus {
+public enum ETransactionReceiptStatus {
     FAILED("0x0", "失败"), SUCCESS("0x1", "成功");
 
-    ETransactionRecetptStatus(String code, String value) {
+    ETransactionReceiptStatus(String code, String value) {
         this.code = code;
         this.value = value;
     }

@@ -45,7 +45,7 @@ import com.ogc.standard.enums.EJourType;
 import com.ogc.standard.enums.EMAddressStatus;
 import com.ogc.standard.enums.EOriginialCoin;
 import com.ogc.standard.enums.ESystemAccount;
-import com.ogc.standard.enums.ETransactionRecetptStatus;
+import com.ogc.standard.enums.ETransactionReceiptStatus;
 import com.ogc.standard.enums.EWithdrawStatus;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
@@ -523,7 +523,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
             String transactionHash = withdraw.getChannelOrder();
             TransactionReceipt tx = EthClient
                 .getTransactionReceipt(transactionHash).get();
-            if (!ETransactionRecetptStatus.SUCCESS.equals(tx.getStatus())) {
+            if (!ETransactionReceiptStatus.SUCCESS.equals(tx.getStatus())) {
                 // 获取区块信息
                 EthBlock.Block block = EthClient
                     .getEthBlockByHash(tx.getBlockHash());

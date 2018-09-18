@@ -24,7 +24,7 @@ public class XN805041 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         synchronized (IUserAO.class) {
-            return new PKCodeRes(userAO.doRegister(req));
+            return new PKCodeRes(userAO.doRegisterByMobile(req));
         }
     }
 

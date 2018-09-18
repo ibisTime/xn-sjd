@@ -13,6 +13,7 @@ import java.util.List;
 
 import com.ogc.standard.bo.base.IPaginableBO;
 import com.ogc.standard.domain.Award;
+import com.ogc.standard.domain.TradeOrder;
 import com.ogc.standard.domain.User;
 
 /** 
@@ -27,6 +28,9 @@ public interface IAwardBO extends IPaginableBO<Award> {
     public void saveTradeAward(String refereeUserId, String userKind,
             String refCode, String refNote, BigDecimal tradeCount);
 
+    public void saveOTCAward(String refereeUserId, String userKind,
+            String refCode, String refNote, BigDecimal tradeCount);
+
     public void saveRegistAward(String userId, String userKind, String refCode,
             String refNote);
 
@@ -34,5 +38,12 @@ public interface IAwardBO extends IPaginableBO<Award> {
 
     public void refreshStatus(Award data, String isSettle, String remark);
 
+    public BigDecimal count(Award condition);
+
+    public BigDecimal tradeCount(TradeOrder condition);
+
     public List<Award> queryAwardList(Award condition);
+
+    public Award getAwardByRefCode(String refCode);
+
 }

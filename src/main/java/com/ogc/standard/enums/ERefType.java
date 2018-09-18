@@ -7,7 +7,8 @@ package com.ogc.standard.enums;
  */
 public enum ERefType {
 
-    REGIST("1", "注册分佣"), TRADE("2", "交易分成"), SPECIAL("3", "特殊奖励");
+    REGIST("1", "注册分佣"), CCTRADE("2", "场外交易分成"), BBTRADE("3",
+            "币币交易分成"), SPECIAL("4", "特殊奖励");
 
     ERefType(String code, String value) {
         this.code = code;

@@ -67,6 +67,16 @@ public class AwardMonth extends ABaseDO {
 
     private Date now;
 
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public Date getCreateDatetimeStart() {
         return createDatetimeStart;
     }

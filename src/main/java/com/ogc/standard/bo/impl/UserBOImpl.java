@@ -27,6 +27,7 @@ import com.ogc.standard.common.SysConstants;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.IUserDAO;
 import com.ogc.standard.domain.User;
+import com.ogc.standard.dto.req.XN805043Req;
 import com.ogc.standard.enums.EUserKind;
 import com.ogc.standard.enums.EUserLevel;
 import com.ogc.standard.enums.EUserStatus;
@@ -140,7 +141,10 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             user.setLoginPwd(MD5Util.md5(loginPwd));
             user.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(loginPwd));
         }
-
+        if (nickname == null) {
+            user.setNickname(
+                userId.substring(userId.length() - 8, userId.length()));
+        }
         user.setNickname(nickname);
         if (refereeUser != null) {
             user.setUserReferee(refereeUser.getUserId());
@@ -153,10 +157,41 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         Date date = new Date();
         user.setCreateDatetime(date);
         user.setTradeRate(
-            sysConfigBO.getDoubleValue(SysConstants.DEFAULT_ADS_USER_RATE));
+            sysConfigBO.getDoubleValue(SysConstants.DEFAULT_USER_TRADE_RATE));
 
         userDAO.insert(user);
         return userId;
+    }
+
+    // 邮箱注册
+    @Override
+    public String doRegistByEmail(XN805043Req req) {
+        User data = new User();
+        String userId = OrderNoGenerater.generate("U");
+        data.setUserId(userId);
+        data.setLoginName(req.getEmail());
+        data.setEmail(req.getEmail());
+        data.setKind(EUserKind.Customer.getCode());
+        data.setNickname(
+            userId.substring(userId.length() - 8, userId.length()));
+        if (StringUtils.isNotBlank(req.getLoginPwd())) {
+            data.setLoginPwd(MD5Util.md5(req.getLoginPwd()));
+            data.setLoginPwdStrength(
+                PwdUtil.calculateSecurityLevel(req.getLoginPwd()));
+        }
+        data.setLevel(EUserLevel.ONE.getCode());
+        data.setStatus(EUserStatus.NORMAL.getCode());
+        data.setProvince(req.getProvince());
+        data.setCity(req.getCity());
+        data.setArea(req.getArea());
+        Date date = new Date();
+        data.setCreateDatetime(date);
+        data.setTradeRate(
+            sysConfigBO.getDoubleValue(SysConstants.DEFAULT_USER_TRADE_RATE));
+
+        userDAO.insert(data);
+        return userId;
+
     }
 
     @Override
@@ -534,7 +569,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         user.setIdNo(idNo);
         user.setRealName(realName);
         double tradeRate = sysConfigBO
-            .getDoubleValue(SysConstants.DEFAULT_ADS_USER_RATE);
+            .getDoubleValue(SysConstants.DEFAULT_USER_TRADE_RATE);
         user.setTradeRate(tradeRate);
         user.setCreateDatetime(new Date());
         user.setRespArea(respArea);

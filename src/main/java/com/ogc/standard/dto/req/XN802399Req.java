@@ -11,12 +11,14 @@ package com.ogc.standard.dto.req;
 import org.hibernate.validator.constraints.NotBlank;
 
 /** 
- * 单个渠道商佣金分布统计
+ * 直推用户分页查询
  * @author: taojian 
  * @since: 2018年9月14日 下午8:40:29 
  * @history:
  */
-public class XN802398Req {
+public class XN802399Req extends APageReq {
+
+    private static final long serialVersionUID = -3866743829780973071L;
 
     // 用户编号
     @NotBlank

@@ -11,6 +11,7 @@ package com.ogc.standard.bo.impl;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,8 +21,12 @@ import com.ogc.standard.bo.IAwardMonthBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.dao.IAwardMonthDAO;
+import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.Award;
 import com.ogc.standard.domain.AwardMonth;
+import com.ogc.standard.enums.EBoolean;
+import com.ogc.standard.exception.BizException;
+import com.ogc.standard.exception.EBizErrorCode;
 
 /** 
  * @author: taojian 
@@ -38,9 +43,10 @@ public class AwardMonthBOImpl extends PaginableBOImpl<AwardMonth>
     private IAccountBO accountBO;
 
     @Override
-    public boolean isAwardMonthExist(Date date) {
+    public boolean isAwardMonthExist(String userId) {
         AwardMonth condition = new AwardMonth();
-        condition.setNow(date);
+        condition.setUserId(userId);
+        condition.setNow(new Date());
         if (this.getTotalCount(condition) > 0) {
             return true;
         }
@@ -92,9 +98,34 @@ public class AwardMonthBOImpl extends PaginableBOImpl<AwardMonth>
     }
 
     @Override
-    public void refreshAwardMonthSettle(String userId, BigDecimal count,
-            String handleResult) {
-
+    public void refreshAwardMonthSettle(Award data, String handleResult) {
+        Date now = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(now); // 设置为当前时间
+        calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH) - 1); // 设置为上一个月
+        Date date = calendar.getTime();
+        AwardMonth condition = new AwardMonth();
+        condition.setUserId(data.getUserId());
+        condition.setNow(date);
+        AwardMonth awardMonth = awardMonthDAO.select(condition);
+        if (awardMonth == null) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "只能结算上个月的");
+        }
+        awardMonth.setUnsettleCount(
+            awardMonth.getUnsettleCount().subtract(data.getCount()));
+        Account dbAccount = accountBO.getAccountByUser(data.getUserId(),
+            data.getCurrency());
+        awardMonth.setCurrentCount(dbAccount.getAmount());
+        awardMonth.setSettleDatetime(now);
+        if (EBoolean.YES.getCode().equals(handleResult)) {
+            awardMonth.setSettleCount(
+                awardMonth.getSettleCount().add(data.getCount()));
+        } else {
+            awardMonth.setNosettleCount(
+                awardMonth.getNosettleCount().add(data.getCount()));
+        }
+        awardMonth.setRemark("结算奖励");
+        awardMonthDAO.updateSettle(awardMonth);
     }
 
     @Override
@@ -116,6 +147,7 @@ public class AwardMonthBOImpl extends PaginableBOImpl<AwardMonth>
         calendar.setTime(now); // 设置为当前时间
         calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH) - 1); // 设置为上一个月
         Date date = calendar.getTime();
+        // 查询上个月是否有记录
         AwardMonth condition = new AwardMonth();
         condition.setUserId(userId);
         condition.setNow(date);
@@ -129,6 +161,11 @@ public class AwardMonthBOImpl extends PaginableBOImpl<AwardMonth>
         data.setStartDate(DateUtil.getCurrentMonthFirstDay());
         data.setEndDate(DateUtil.getCurrentMonthLastDay());
         awardMonthDAO.insert(data);
+    }
+
+    @Override
+    public List<AwardMonth> queryAwardMonthList(AwardMonth condition) {
+        return awardMonthDAO.selectList(condition);
     }
 
 }

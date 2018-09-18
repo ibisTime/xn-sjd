@@ -39,7 +39,7 @@ public class SysConstants {
     public static String QINIU_DOMAIN = "qiniu_domain";
 
     // 用户广告费率配置
-    public static String DEFAULT_ADS_USER_RATE = "default_ads_user_rate";
+    public static String DEFAULT_USER_TRADE_RATE = "default_user_trade_rate";
 
     // 腾讯云配置
     public static String TX_APP_CODE = "tx_app_code";// 应用编号

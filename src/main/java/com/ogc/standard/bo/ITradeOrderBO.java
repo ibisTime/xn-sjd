@@ -78,4 +78,6 @@ public interface ITradeOrderBO extends IPaginableBO<TradeOrder> {
 
     // 删除和该广告有关的代下单订单
     public void removeDaiXiaDanOrders(String adsCode);
+
+    public BigDecimal count(TradeOrder condition);
 }

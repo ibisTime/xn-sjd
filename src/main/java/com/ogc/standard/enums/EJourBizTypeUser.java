@@ -12,7 +12,6 @@ import com.ogc.standard.exception.BizException;
  * @history:
  */
 public enum EJourBizTypeUser {
-    AJ_REG("reg","注册分佣"),
 
     AJ_CHARGE("charge", "充币"), 
     AJ_WITHDRAW("withdraw", "提币"), 

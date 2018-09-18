@@ -2,20 +2,28 @@ package com.ogc.standard.ao.impl;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.ISimuMatchResultAO;
 import com.ogc.standard.bo.IAccountBO;
+import com.ogc.standard.bo.IAwardBO;
 import com.ogc.standard.bo.ISimuMatchResultBO;
 import com.ogc.standard.bo.ISimuMatchResultHistoryBO;
+import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.domain.Account;
+import com.ogc.standard.domain.Award;
 import com.ogc.standard.domain.SimuMatchResult;
 import com.ogc.standard.domain.SimuMatchResultHistory;
+import com.ogc.standard.domain.User;
+import com.ogc.standard.enums.ECoin;
 import com.ogc.standard.enums.EJourBizTypePlat;
 import com.ogc.standard.enums.EJourBizTypeUser;
+import com.ogc.standard.enums.ERefType;
 import com.ogc.standard.enums.ESysUser;
+import com.ogc.standard.enums.EUserKind;
 
 @Service
 public class SimuMatchResultAOImpl implements ISimuMatchResultAO {
@@ -28,6 +36,12 @@ public class SimuMatchResultAOImpl implements ISimuMatchResultAO {
 
     @Autowired
     private IAccountBO accountBO;
+
+    @Autowired
+    private IUserBO userBO;
+
+    @Autowired
+    private IAwardBO awardBO;
 
     @Transactional
     public void doCheckMatchResult() {
@@ -61,6 +75,9 @@ public class SimuMatchResultAOImpl implements ISimuMatchResultAO {
 
             // 删除存活撮合结果
             simuMatchResultBO.removeSimuMatchResult(matchResult.getId());
+
+            // 用户分成
+            award(data);
 
             // 解冻买家账户交易金额
             Account buyAccount = accountBO.getAccountByUser(data.getBuyUserId(),
@@ -117,6 +134,44 @@ public class SimuMatchResultAOImpl implements ISimuMatchResultAO {
                 data.getId().toString());
         }
 
+    }
+
+    private void award(SimuMatchResultHistory data) {
+
+        User user = this.userBO.getUser(data.getBuyUserId());
+
+        // 无推荐人 直接 return 掉
+        String rederUserId = user.getUserReferee();
+        if (!StringUtils.isNotBlank(rederUserId)) {
+            return;
+        }
+
+        // 推荐人为空 return
+        User refereeUser = this.userBO.getUserByMobile(rederUserId);
+        if (refereeUser == null) {
+            return;
+        }
+        // 只有X币有分成
+        if (!ECoin.X.getCode().equals(data.getSymbol())) {
+            return;
+        }
+
+        // 普通用户推荐的只有第一次有分成
+        if (refereeUser.getKind().equals(EUserKind.Customer.getCode())) {
+            Award condition = new Award();
+            condition.setUserId(user.getUserId());
+            condition.setRefType(ERefType.BBTRADE.getCode());
+            if (awardBO.getTotalCount(condition) > 0) {
+                return;
+            }
+            condition.setRefType(ERefType.CCTRADE.getCode());
+            if (awardBO.getTotalCount(condition) > 0) {
+                return;
+            }
+        }
+        // 分成
+        awardBO.saveTradeAward(refereeUser.getUserId(), refereeUser.getKind(),
+            data.getId().toString(), "币币交易推荐人分成", data.getBuyAmount());
     }
 
 }

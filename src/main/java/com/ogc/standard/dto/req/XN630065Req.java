@@ -10,11 +10,11 @@ public class XN630065Req extends APageReq {
     // （选填）角色
     private String roleCode;
 
-    // （选填）开始日期
-    private String dateStart;
-
-    // （选填）截止日期
-    private String dateEnd;
+//    // （选填）开始日期
+//    private String dateStart;
+//
+//    // （选填）截止日期
+//    private String dateEnd;
 
     // （选填）部门编号
     private String departmentCode;
@@ -44,21 +44,21 @@ public class XN630065Req extends APageReq {
         this.roleCode = roleCode;
     }
 
-    public String getDateStart() {
-        return dateStart;
-    }
-
-    public void setDateStart(String dateStart) {
-        this.dateStart = dateStart;
-    }
-
-    public String getDateEnd() {
-        return dateEnd;
-    }
-
-    public void setDateEnd(String dateEnd) {
-        this.dateEnd = dateEnd;
-    }
+//    public String getDateStart() {
+//        return dateStart;
+//    }
+//
+//    public void setDateStart(String dateStart) {
+//        this.dateStart = dateStart;
+//    }
+//
+//    public String getDateEnd() {
+//        return dateEnd;
+//    }
+//
+//    public void setDateEnd(String dateEnd) {
+//        this.dateEnd = dateEnd;
+//    }
 
     public String getDepartmentCode() {
         return departmentCode;

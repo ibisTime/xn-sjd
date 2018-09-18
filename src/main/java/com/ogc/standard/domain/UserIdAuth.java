@@ -66,7 +66,17 @@ public class UserIdAuth extends ABaseDO {
 
     // 备注
     private String remark;
+
     // ***********db properties***********
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public Long getId() {
         return id;

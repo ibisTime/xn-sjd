@@ -13,6 +13,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.IAwardAO;
 import com.ogc.standard.bo.IAccountBO;
@@ -20,11 +21,15 @@ import com.ogc.standard.bo.IAwardBO;
 import com.ogc.standard.bo.IAwardMonthBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
+import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.Award;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.enums.EAwardStatus;
 import com.ogc.standard.enums.EBoolean;
+import com.ogc.standard.enums.EJourBizTypePlat;
+import com.ogc.standard.enums.EJourBizTypeUser;
 import com.ogc.standard.enums.ERefType;
+import com.ogc.standard.enums.ESysUser;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
 
@@ -49,31 +54,53 @@ public class AwardAOImpl implements IAwardAO {
     private IAccountBO accountBO;
 
     @Override
+    @Transactional
     public void settle(Long id, String isSettle, String remark) {
         // 检验是否存在
         Award data = awardBO.getAward(id);
-        // 更新状态
-        awardBO.refreshStatus(data, isSettle, remark);
+
         if (!EAwardStatus.TOHAND.getCode().equals(data.getStatus())) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(), "该奖励已处理");
         }
         if (EBoolean.YES.getCode().equals(isSettle)) {
-            // 奖励落地
+            // 奖励结算
+            Account userAccount = accountBO.getAccountByUser(data.getUserId(),
+                data.getCurrency());
+            Account platAccount = accountBO.getAccountByUser(
+                ESysUser.SYS_USER.getCode(), data.getCurrency());
             if (ERefType.REGIST.getCode().equals(data.getRefType())) {
-//                accountBO.transAmount(ESysUser.SYS_USER.getCode(),
-//                    ECoin.X.getCode(), data.getUserId(), ECoin.X.getCode(),
-//                    data.getCount(), EJourBizTypePlat.AJ_REG.getCode(),
-//                    EJourBizTypeUser.AJ_REG.getCode(), "渠道商分成支出", "推荐注册分佣",
-//                    data.getRefCode());
-            } else if (ERefType.TRADE.getCode().equals(data.getRefType())) {
-
+                accountBO.transAmount(platAccount, userAccount, data.getCount(),
+                    EJourBizTypePlat.AJ_AWARD_REG.getCode(),
+                    EJourBizTypeUser.AJ_AWARD_REG.getCode(),
+                    EJourBizTypePlat.AJ_AWARD_REG.getValue(),
+                    EJourBizTypeUser.AJ_AWARD_REG.getValue(), "注册分佣");
+            } else if (ERefType.CCTRADE.getCode().equals(data.getRefType())) {
+                accountBO.transAmount(platAccount, userAccount, data.getCount(),
+                    EJourBizTypePlat.AJ_AWARD_CCORDER.getCode(),
+                    EJourBizTypeUser.AJ_AWARD_CCORDER.getCode(),
+                    EJourBizTypePlat.AJ_AWARD_CCORDER.getValue(),
+                    EJourBizTypeUser.AJ_AWARD_CCORDER.getValue(), "场外交易分佣");
+            } else if (ERefType.BBTRADE.getCode().equals(data.getRefType())) {
+                accountBO.transAmount(platAccount, userAccount, data.getCount(),
+                    EJourBizTypePlat.AJ_AWARD_BBORDER.getCode(),
+                    EJourBizTypeUser.AJ_AWARD_BBORDER.getCode(),
+                    EJourBizTypePlat.AJ_AWARD_BBORDER.getValue(),
+                    EJourBizTypeUser.AJ_AWARD_BBORDER.getValue(), "币币交易分佣");
             } else if (ERefType.SPECIAL.getCode().equals(data.getRefType())) {
-
+                accountBO.transAmount(platAccount, userAccount, data.getCount(),
+                    EJourBizTypePlat.AJ_AWARD_SPECIAL.getCode(),
+                    EJourBizTypeUser.AJ_AWARD_SPECIAL.getCode(),
+                    EJourBizTypePlat.AJ_AWARD_SPECIAL.getValue(),
+                    EJourBizTypeUser.AJ_AWARD_SPECIAL.getValue(), "特殊奖励");
             }
         }
-        awardMonthBO.refreshAwardMonthSettle(data.getUserId(), data.getCount(),
-            isSettle);
-
+        // 更新状态
+        awardBO.refreshStatus(data, isSettle, remark);
+        // 记录
+        if (!awardMonthBO.isAwardMonthExist(data.getUserId())) {
+            awardMonthBO.addNewAwardMonth(data.getUserId());
+        }
+        awardMonthBO.refreshAwardMonthSettle(data, isSettle);
     }
 
     @Override
