@@ -123,8 +123,16 @@
 			<if test="createDatetimeEnd != null and createDatetimeEnd != '' ">
 				<![CDATA[AND t.create_datetime <= #{createDatetimeEnd}]]>
 			</if>
+			<if test="userRefereeList != null and userRefereeList.size() != 0 ">
+				AND t.userReferee in 
+                <foreach item="item" index="index" collection="userRefereeList" open="(" separator="," close=")">
+	            	#{item}
+                </foreach> 
+			</if>
 		</trim>
 	</sql>
+	
+	
 	<select id="select_user" parameterType="user" resultMap="user_DB_Result">
 		SELECT 
 		t.user_id

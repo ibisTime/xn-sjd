@@ -8,6 +8,7 @@
  */
 package com.ogc.standard.ao.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -29,6 +30,7 @@ import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.ISignLogBO;
 import com.ogc.standard.bo.ISmsOutBO;
 import com.ogc.standard.bo.ITencentBO;
+import com.ogc.standard.bo.ITradeOrderBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.IUserExtBO;
 import com.ogc.standard.bo.base.Paginable;
@@ -37,16 +39,23 @@ import com.ogc.standard.common.MD5Util;
 import com.ogc.standard.common.PhoneUtil;
 import com.ogc.standard.common.PwdUtil;
 import com.ogc.standard.common.SysConstants;
+import com.ogc.standard.domain.Award;
 import com.ogc.standard.domain.SignLog;
+import com.ogc.standard.domain.TradeOrder;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.domain.UserExt;
+import com.ogc.standard.dto.req.XN802399Req;
+import com.ogc.standard.dto.req.XN802400Req;
 import com.ogc.standard.dto.req.XN805041Req;
 import com.ogc.standard.dto.req.XN805042Req;
+import com.ogc.standard.dto.req.XN805043Req;
 import com.ogc.standard.dto.req.XN805081Req;
 import com.ogc.standard.dto.res.XN625000Res;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECaptchaType;
+import com.ogc.standard.enums.ECoin;
 import com.ogc.standard.enums.EIDKind;
+import com.ogc.standard.enums.ERefType;
 import com.ogc.standard.enums.ESignLogType;
 import com.ogc.standard.enums.ESystemCode;
 import com.ogc.standard.enums.EUser;
@@ -66,6 +75,9 @@ import com.ogc.standard.exception.EBizErrorCode;
 public class UserAOImpl implements IUserAO {
     @Autowired
     private ISmsOutBO smsOutBO;
+
+    @Autowired
+    private ITradeOrderBO tradeOrderBO;
 
     @Autowired
     private IAwardBO awardBO;
@@ -110,7 +122,7 @@ public class UserAOImpl implements IUserAO {
 
     @Override
     @Transactional
-    public String doRegister(XN805041Req req) {
+    public String doRegisterByMobile(XN805041Req req) {
         // 验证手机号是否存在
         userBO.isMobileExist(req.getMobile());
 
@@ -123,6 +135,32 @@ public class UserAOImpl implements IUserAO {
         String userId = userBO.doRegister(req.getMobile(), req.getNickname(),
             req.getLoginPwd(), refereeUser, req.getProvince(), req.getCity(),
             req.getArea());
+        if (refereeUser != null) {
+            // 推荐人分佣
+            awardBO.saveRegistAward(refereeUser.getUserId(),
+                refereeUser.getKind(), userId, "用户注册推荐人分佣");
+        }
+
+        // ext中添加数据
+        userExtBO.addUserExt(userId);
+
+        // 分配账户
+        accountAO.distributeAccount(userId);
+        return userId;
+    }
+
+    @Override
+    @Transactional
+    public String doRegisterByEmail(XN805043Req req) {
+        // 验证邮箱是否存在
+        userBO.isEmailExist(req.getEmail());
+
+//        // 验证邮箱验证码
+//        smsOutBO.checkCaptcha(req.getEmail(), req.getCaptcha(), "805043");
+
+        User refereeUser = userBO.getUserByMobile(req.getUserReferee());
+        // 注册用户
+        String userId = userBO.doRegistByEmail(req);
         if (refereeUser != null) {
             // 推荐人分佣
             awardBO.saveRegistAward(refereeUser.getUserId(),
@@ -167,7 +205,7 @@ public class UserAOImpl implements IUserAO {
         user.setUpdater(req.getUpdater());
         user.setRemark(req.getRemark());
         double tradeRate = sysConfigBO
-            .getDoubleValue(SysConstants.DEFAULT_ADS_USER_RATE);
+            .getDoubleValue(SysConstants.DEFAULT_USER_TRADE_RATE);
         user.setTradeRate(tradeRate);
         userId = userBO.doAddUser(user);
 
@@ -496,7 +534,7 @@ public class UserAOImpl implements IUserAO {
         List<User> list = page.getList();
         for (User user : list) {
             // 推荐人转义
-            User userReferee = userBO.getUserUnCheck(user.getUserReferee());
+            User userReferee = userBO.getUserByMobile(user.getUserReferee());
             if (userReferee != null) {
                 user.setRefereeUser(userReferee);
             }
@@ -659,6 +697,60 @@ public class UserAOImpl implements IUserAO {
         }
         // 修改
         userBO.refreshRespArea(userId, respArea, updater);
+    }
+
+    @Override
+    public Paginable<User> queryStraightRefPage(XN802399Req req, int start,
+            int limit) {
+        User user = userBO.getUser(req.getUserId());
+        User condition = new User();
+        condition.setUserReferee(user.getMobile());
+        Paginable<User> page = userBO.getPaginable(start, limit, condition);
+        // 落地数据
+        for (User refUser : page.getList()) {
+            Award regCondition = new Award();
+            regCondition.setUserId(user.getUserId());
+            regCondition.setRefType(ERefType.REGIST.getCode());
+            regCondition.setRefCode(refUser.getUserId());
+            refUser.setRegAwardCount(awardBO.count(regCondition));
+            TradeOrder tradeCondition = new TradeOrder();
+            tradeCondition.setBuyUser(refUser.getUserId());
+            tradeCondition.setTradeCoin(ECoin.X.getCode());
+            refUser.setTradeCount(tradeOrderBO.count(tradeCondition));
+            refUser.setTradeAwardCount(awardBO.tradeCount(tradeCondition));
+        }
+        return page;
+    }
+
+    @Override
+    public Paginable<User> queryRefRefPage(XN802400Req req, int start,
+            int limit) {
+        User user = userBO.getUser(req.getUserId());
+        User condition = new User();
+        condition.setUserReferee(user.getMobile());
+        List<User> userList = userBO.queryUserList(condition);
+        // 获得userRefereeList
+        List<String> userRefereeList = new ArrayList<String>();
+        for (User refUser : userList) {
+            userRefereeList.add(refUser.getMobile());
+        }
+        User refCondition = new User();
+        refCondition.setUserRefereeList(userRefereeList);
+        Paginable<User> page = userBO.getPaginable(start, limit, refCondition);
+        // 落地数据
+        for (User refUser : page.getList()) {
+            Award regCondition = new Award();
+            regCondition.setUserId(user.getUserId());
+            regCondition.setRefType(ERefType.REGIST.getCode());
+            regCondition.setRefCode(refUser.getUserId());
+            refUser.setRegAwardCount(awardBO.count(regCondition));
+            TradeOrder tradeCondition = new TradeOrder();
+            tradeCondition.setBuyUser(refUser.getUserId());
+            tradeCondition.setTradeCoin(ECoin.X.getCode());
+            refUser.setTradeCount(tradeOrderBO.count(tradeCondition));
+            refUser.setTradeAwardCount(awardBO.tradeCount(tradeCondition));
+        }
+        return page;
     }
 
 }

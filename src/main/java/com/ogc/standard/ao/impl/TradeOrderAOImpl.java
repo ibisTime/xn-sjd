@@ -31,6 +31,7 @@ import com.ogc.standard.common.SysConstants;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.Ads;
 import com.ogc.standard.domain.Arbitrate;
+import com.ogc.standard.domain.Award;
 import com.ogc.standard.domain.Jour;
 import com.ogc.standard.domain.SYSDict;
 import com.ogc.standard.domain.TradeOrder;
@@ -39,15 +40,18 @@ import com.ogc.standard.domain.UserStatistics;
 import com.ogc.standard.dto.res.XN625252Res;
 import com.ogc.standard.enums.EAdsStatus;
 import com.ogc.standard.enums.EBoolean;
+import com.ogc.standard.enums.ECoin;
 import com.ogc.standard.enums.ECommentLevel;
 import com.ogc.standard.enums.EJourBizTypePlat;
 import com.ogc.standard.enums.EJourBizTypeUser;
+import com.ogc.standard.enums.ERefType;
 import com.ogc.standard.enums.EReleaserKind;
 import com.ogc.standard.enums.ESysUser;
 import com.ogc.standard.enums.ESystemCode;
 import com.ogc.standard.enums.ETradeOrderStatus;
 import com.ogc.standard.enums.ETradeOrderType;
 import com.ogc.standard.enums.ETradeType;
+import com.ogc.standard.enums.EUserKind;
 import com.ogc.standard.enums.EUserReleationType;
 import com.ogc.standard.enums.EUserSettingsType;
 import com.ogc.standard.exception.BizException;
@@ -852,7 +856,7 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
     // 卖出广告 和 买入广告，共用此方法
     private void handleReferenceFenCheng(TradeOrder tradeOrder) {
 
-        String userId = tradeOrder.getSellUser();
+        String userId = tradeOrder.getBuyUser();
         User user = this.userBO.getUser(userId);
 
         // 无推荐人 直接 return 掉
@@ -866,32 +870,26 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
         if (refereeUser == null) {
             return;
         }
-
+        // 只有X币有分成
+        if (!ECoin.X.getCode().equals(tradeOrder.getTradeCoin())) {
+            return;
+        }
+        // 普通用户推荐的只有第一次有分成
+        if (refereeUser.getKind().equals(EUserKind.Customer.getCode())) {
+            Award condition = new Award();
+            condition.setUserId(user.getUserId());
+            condition.setRefType(ERefType.BBTRADE.getCode());
+            if (awardBO.getTotalCount(condition) > 0) {
+                return;
+            }
+            condition.setRefType(ERefType.CCTRADE.getCode());
+            if (awardBO.getTotalCount(condition) > 0) {
+                return;
+            }
+        }
         // 分成
         awardBO.saveOTCAward(refereeUser.getUserId(), refereeUser.getKind(),
-            tradeOrder.getCode(), "OTC交易推荐人分成", tradeOrder.getTradeCoin(),
-            tradeOrder.getCount());
-//        Double fenChengFee = null;
-//        if (user.getUserRefereeLevel().equals(EUserLevel.ONE.getCode())) {
-//            // 推荐人为普通
-//            fenChengFee = refereeUser.getDivRate1();
-//        } else {
-//            // 推荐人代理人
-//            fenChengFee = refereeUser.getDivRate2();
-//        }
-//
-//        BigDecimal shouldPayFenCheng = tradeOrder.getFee()
-//            .multiply(BigDecimal.valueOf(fenChengFee));
-//
-//        // 4.1平台盈亏账户，减少
-//        accountBO.transAmount(ESysUser.SYS_USER.getCode(),
-//            tradeOrder.getTradeCoin(), refereeUser.getUserId(),
-//            tradeOrder.getTradeCoin(), shouldPayFenCheng,
-//            EJourBizTypePlat.AJ_INVITE.getCode(),
-//            EJourBizTypeUser.AJ_INVITE.getCode(),
-//            EJourBizTypePlat.AJ_INVITE.getValue(),
-//            EJourBizTypeUser.AJ_INVITE.getValue() + "-推荐的用户完成交易获得分成",
-//            tradeOrder.getCode());
+            tradeOrder.getCode(), "OTC交易推荐人分成", tradeOrder.getCount());
     }
 
     // 出售广告处理，购买 释放处理

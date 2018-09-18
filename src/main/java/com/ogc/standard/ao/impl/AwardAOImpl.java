@@ -13,6 +13,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.IAwardAO;
 import com.ogc.standard.bo.IAccountBO;
@@ -53,11 +54,11 @@ public class AwardAOImpl implements IAwardAO {
     private IAccountBO accountBO;
 
     @Override
+    @Transactional
     public void settle(Long id, String isSettle, String remark) {
         // 检验是否存在
         Award data = awardBO.getAward(id);
-        // 更新状态
-        awardBO.refreshStatus(data, isSettle, remark);
+
         if (!EAwardStatus.TOHAND.getCode().equals(data.getStatus())) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(), "该奖励已处理");
         }
@@ -79,7 +80,7 @@ public class AwardAOImpl implements IAwardAO {
                     EJourBizTypeUser.AJ_AWARD_CCORDER.getCode(),
                     EJourBizTypePlat.AJ_AWARD_CCORDER.getValue(),
                     EJourBizTypeUser.AJ_AWARD_CCORDER.getValue(), "场外交易分佣");
-            } else if (ERefType.BBRRADE.getCode().equals(data.getRefType())) {
+            } else if (ERefType.BBTRADE.getCode().equals(data.getRefType())) {
                 accountBO.transAmount(platAccount, userAccount, data.getCount(),
                     EJourBizTypePlat.AJ_AWARD_BBORDER.getCode(),
                     EJourBizTypeUser.AJ_AWARD_BBORDER.getCode(),
@@ -93,13 +94,13 @@ public class AwardAOImpl implements IAwardAO {
                     EJourBizTypeUser.AJ_AWARD_SPECIAL.getValue(), "特殊奖励");
             }
         }
+        // 更新状态
+        awardBO.refreshStatus(data, isSettle, remark);
         // 记录
-        if (!awardMonthBO.isAwardMonthExist(data.getUserId(),
-            data.getCurrency())) {
+        if (!awardMonthBO.isAwardMonthExist(data.getUserId())) {
             awardMonthBO.addNewAwardMonth(data.getUserId());
         }
-        awardMonthBO.refreshAwardMonthSettle(data.getUserId(), data.getCount(),
-            data.getCurrency(), isSettle);
+        awardMonthBO.refreshAwardMonthSettle(data, isSettle);
     }
 
     @Override

@@ -7,8 +7,8 @@
 		<result column="user_id" property="userId" />
 		<result column="user_kind" property="userKind" />
 		<result column="currency" property="currency" />
-		<result column="amount" property="amount" />
-		<result column="order_amount" property="orderAmount" />
+		<result column="count" property="count" />
+		<result column="order_count" property="orderCount" />
 		<result column="rate" property="rate" />
 		<result column="ref_type" property="refType" />
 		<result column="ref_code" property="refCode" />
@@ -50,8 +50,8 @@
 		user_id
 		,user_kind
 		,currency
-		,amount
-		,order_amount
+		,count
+		,order_count
 		,rate
 		,ref_type
 		,ref_code
@@ -65,8 +65,8 @@
 		#{userId}
 		,#{userKind}
 		,#{currency}
-		,#{amount}
-		,#{orderAmount}
+		,#{count}
+		,#{orderCount}
 		,#{rate}
 		,#{refType}
 		,#{refCode}
@@ -83,8 +83,8 @@
 		,t.user_id
 		,t.user_kind
 		,t.currency
-		,t.amount
-		,t.order_amount
+		,t.count
+		,t.order_count
 		,t.rate
 		,t.ref_type
 		,t.ref_code
@@ -106,6 +106,12 @@
 	<select id="select_award_count" parameterType="award"
 		resultType="java.lang.Long">
 		SELECT count(1) FROM tstd_award t
+		<include refid="where_condition" />
+	</select>
+	
+	<select id="select_count_sum" parameterType="award"
+		resultType="java.math.BigDecimal">
+		SELECT SUM(count) FROM tstd_award t
 		<include refid="where_condition" />
 	</select>
 	

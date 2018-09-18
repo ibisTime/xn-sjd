@@ -24,7 +24,7 @@ public class SimuMatchResultAOImpl implements ISimuMatchResultAO {
     private ISimuMatchResultHistoryBO simuMatchResultHistoryBO;
 
     @Autowired
-    private IAccountBO accountBo;
+    private IAccountBO accountBO;
 
     @Transactional
     public void doCheckMatchResult() {
@@ -59,7 +59,7 @@ public class SimuMatchResultAOImpl implements ISimuMatchResultAO {
             simuMatchResultBO.removeSimuMatchResult(matchResult.getId());
 
             // 买家
-            Account account = accountBo.getAccountByUser(
+            Account account = accountBO.getAccountByUser(
                 matchResult.getBuyUserId(), matchResult.getToSymbol());
 
             // // 解冻金额

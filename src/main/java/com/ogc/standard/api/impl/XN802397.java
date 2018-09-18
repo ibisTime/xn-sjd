@@ -18,7 +18,7 @@ import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
 
 /** 
- * 用户佣金明细分页查询
+ * 单个渠道商/用户佣金分布统计
  * @author: taojian 
  * @since: 2018年9月14日 下午8:48:11 
  * @history:

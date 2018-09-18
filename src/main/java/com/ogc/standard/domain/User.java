@@ -1,6 +1,8 @@
 package com.ogc.standard.domain;
 
+import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 import com.ogc.standard.dao.base.ABaseDO;
 
@@ -147,6 +149,50 @@ public class User extends ABaseDO {
 
     // 注册时间止
     private Date createDatetimeEnd;
+
+    // 用户编号列表
+    private List<String> userRefereeList;
+
+    // 注册分成奖励
+    private BigDecimal regAwardCount;
+
+    // 交易分成奖励
+    private BigDecimal tradeAwardCount;
+
+    // 交易金额
+    private BigDecimal tradeCount;
+
+    public List<String> getUserRefereeList() {
+        return userRefereeList;
+    }
+
+    public void setUserRefereeList(List<String> userRefereeList) {
+        this.userRefereeList = userRefereeList;
+    }
+
+    public BigDecimal getRegAwardCount() {
+        return regAwardCount;
+    }
+
+    public void setRegAwardCount(BigDecimal regAwardCount) {
+        this.regAwardCount = regAwardCount;
+    }
+
+    public BigDecimal getTradeAwardCount() {
+        return tradeAwardCount;
+    }
+
+    public void setTradeAwardCount(BigDecimal tradeAwardCount) {
+        this.tradeAwardCount = tradeAwardCount;
+    }
+
+    public BigDecimal getTradeCount() {
+        return tradeCount;
+    }
+
+    public void setTradeCount(BigDecimal tradeCount) {
+        this.tradeCount = tradeCount;
+    }
 
     /***** 辅助字段 ******/
 

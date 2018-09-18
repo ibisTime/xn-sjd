@@ -9,6 +9,7 @@
 package com.ogc.standard.bo;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import com.ogc.standard.bo.base.IPaginableBO;
 import com.ogc.standard.domain.Award;
@@ -20,7 +21,7 @@ import com.ogc.standard.domain.AwardMonth;
  * @history:
  */
 public interface IAwardMonthBO extends IPaginableBO<AwardMonth> {
-    public boolean isAwardMonthExist(String userId, String tradeCoin);
+    public boolean isAwardMonthExist(String userId);
 
     public AwardMonth getAwardMonth(Long id);
 
@@ -28,11 +29,12 @@ public interface IAwardMonthBO extends IPaginableBO<AwardMonth> {
 
     public int addAwardMonth(Award award, String remark);
 
-    public void refreshAwardMonthSettle(String userId, BigDecimal count,
-            String symbol, String handleResult);
+    public void refreshAwardMonthSettle(Award data, String handleResult);
 
     public void addNewAwardMonth(String userId);
 
     public void refreshAwardMonthUnsettle(String userId, BigDecimal count);
+
+    public List<AwardMonth> queryAwardMonthList(AwardMonth condition);
 
 }
