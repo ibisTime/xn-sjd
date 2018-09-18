@@ -41,7 +41,7 @@
 	
 	<insert id="insert_award_month" parameterType="awardMonth">
 		INSERT INTO
-		tstd_award(
+		tstd_award_month(
 		user_id
 		,unsettle_count
 		,settle_count
@@ -75,7 +75,7 @@
 		,t.unsettle_count
 		,t.settle_count
 		,t.nosettle_count
-		,t.next_settle_count
+		,t.next_unsettle_count
 		,t.current_count
 		,t.start_date
 		,t.end_date
@@ -83,7 +83,7 @@
 		,t.settle_datetime
 		,t.remark
 		FROM
-		tstd_award t
+		tstd_award_month t
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -110,7 +110,7 @@
 		UPDATE tstd_award_month
 		SET
 		unsettle_count=#{unsettleCount}
-		,settle_count=#{settle_count}
+		,settle_count=#{settleCount}
 		,nosettle_count=#{nosettleCount}
 		,current_count=#{currentCount}
 		,settle_datetime=#{settleDatetime}

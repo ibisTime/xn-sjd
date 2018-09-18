@@ -13,8 +13,9 @@
 		<result column="sell_user_id" property="sellUserId" />
 		<result column="buy_amount" property="buyAmount" />
 		<result column="sell_amount" property="sellAmount" />
-		<result column="fee" property="fee" />
+		<result column="buy_fee" property="buyFee" />
 		
+		<result column="sell_fee" property="sellFee" />
 		<result column="create_datetime" property="createDatetime" />
 	</resultMap>
 	<sql id="where_condition">
@@ -22,7 +23,7 @@
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
 			</if>
-		</trim>
+		</trim> 
 	</sql>
 	<select id="select_simuMatchResultHistory" parameterType="simuMatchResultHistory" resultMap="simuMatchResultHistory_DB_Result">
 		SELECT
@@ -36,8 +37,9 @@
 		,t.sell_user_id
 		,t.buy_amount
 		,t.sell_amount
-		,t.fee
+		,t.buy_fee
 		
+		,t.sell_fee
 		,t.create_datetime
 		FROM
 		tsimu_match_result_history t
@@ -68,8 +70,9 @@
 		,sell_user_id
 		,buy_amount
 		,sell_amount
-		,fee
+		,t.buy_fee
 		
+		,t.sell_fee
 		,create_datetime
 		)
 		VALUES(
@@ -78,11 +81,14 @@
 		,#{sellOrderCode}
 		,#{symbol}
 		,#{toSymbol}
+		
 		,#{buyUserId}
 		,#{sellUserId}
 		,#{buyAmount}
 		,#{sellAmount}
-		,#{fee}
+		,#{buyFee}
+		
+		,#{sellFee}
 		,#{createDatetime}
 		)
 	</insert>

@@ -530,4 +530,14 @@ public class TradeOrderBOImpl extends PaginableBOImpl<TradeOrder>
         condition.setAdsCode(adsCode);
         this.tradeOrderDAO.deleteByAdsCodeAndStatus(condition);
     }
+
+    @Override
+    public BigDecimal count(TradeOrder condition) {
+        List<TradeOrder> orderList = this.queryTradeOrderList(condition);
+        BigDecimal count = BigDecimal.ZERO;
+        for (TradeOrder tradeOrder : orderList) {
+            count = count.add(tradeOrder.getCount());
+        }
+        return count;
+    }
 }

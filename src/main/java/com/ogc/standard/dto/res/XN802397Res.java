@@ -14,7 +14,17 @@ public class XN802397Res {
 
     private BigDecimal settleCount;
 
+    private BigDecimal nosettleCount;
+
     private BigDecimal unsettleCount;
+
+    public BigDecimal getNosettleCount() {
+        return nosettleCount;
+    }
+
+    public void setNosettleCount(BigDecimal nosettleCount) {
+        this.nosettleCount = nosettleCount;
+    }
 
     public BigDecimal getPlatCount() {
         return platCount;

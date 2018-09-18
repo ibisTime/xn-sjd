@@ -1,23 +1,27 @@
 /**
- * @Title XN802399req.java 
+ * @Title XN802397.java 
  * @Package com.ogc.standard.dto.req 
  * @Description 
  * @author taojian  
- * @date 2018年9月17日 下午11:11:25 
+ * @date 2018年9月14日 下午8:40:29 
  * @version V1.0   
  */
 package com.ogc.standard.dto.req;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 /** 
- * 间推用户分页查询
+ * 直推用户分页查询
  * @author: taojian 
- * @since: 2018年9月17日 下午11:11:25 
+ * @since: 2018年9月14日 下午8:40:29 
  * @history:
  */
-public class XN802400req extends APageReq {
+public class XN802399Req extends APageReq {
 
-    private static final long serialVersionUID = -3153123375831784323L;
+    private static final long serialVersionUID = -3866743829780973071L;
 
+    // 用户编号
+    @NotBlank
     private String userId;
 
     public String getUserId() {

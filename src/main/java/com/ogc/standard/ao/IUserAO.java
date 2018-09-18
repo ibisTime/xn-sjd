@@ -2,8 +2,11 @@ package com.ogc.standard.ao;
 
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.User;
+import com.ogc.standard.dto.req.XN802399Req;
+import com.ogc.standard.dto.req.XN802400Req;
 import com.ogc.standard.dto.req.XN805041Req;
 import com.ogc.standard.dto.req.XN805042Req;
+import com.ogc.standard.dto.req.XN805043Req;
 import com.ogc.standard.dto.req.XN805081Req;
 import com.ogc.standard.dto.res.XN625000Res;
 
@@ -19,7 +22,10 @@ public interface IUserAO {
     public void doCheckMobile(String mobile);
 
     // 注册前端用户
-    public String doRegister(XN805041Req req);
+    public String doRegisterByMobile(XN805041Req req);
+
+    // 邮箱注册
+    public String doRegisterByEmail(XN805043Req req);
 
     // 代注册
     public String doAddUser(XN805042Req req);
@@ -207,6 +213,13 @@ public interface IUserAO {
     // 修改负责区域
     public void editRespArea(String userId, String respArea, String updater);
 
+    // 直退用户查询
+    public Paginable<User> queryStraightRefPage(XN802399Req req, int start,
+            int limit);
+
+    //
+    public Paginable<User> queryRefRefPage(XN802400Req req, int start,
+            int limit);
     // // 关闭认证
     // public void closeGoogleAuth(String userId, String smsCaptcha,
     // String googleCaptcha);

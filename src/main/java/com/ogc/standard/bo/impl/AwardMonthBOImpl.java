@@ -11,6 +11,7 @@ package com.ogc.standard.bo.impl;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -24,6 +25,8 @@ import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.Award;
 import com.ogc.standard.domain.AwardMonth;
 import com.ogc.standard.enums.EBoolean;
+import com.ogc.standard.exception.BizException;
+import com.ogc.standard.exception.EBizErrorCode;
 
 /** 
  * @author: taojian 
@@ -40,7 +43,7 @@ public class AwardMonthBOImpl extends PaginableBOImpl<AwardMonth>
     private IAccountBO accountBO;
 
     @Override
-    public boolean isAwardMonthExist(String userId, String tradeCoin) {
+    public boolean isAwardMonthExist(String userId) {
         AwardMonth condition = new AwardMonth();
         condition.setUserId(userId);
         condition.setNow(new Date());
@@ -84,6 +87,8 @@ public class AwardMonthBOImpl extends PaginableBOImpl<AwardMonth>
             } else {
                 data.setUnsettleCount(BigDecimal.ZERO);
             }
+            data.setSettleCount(BigDecimal.ZERO);
+            data.setNosettleCount(BigDecimal.ZERO);
             data.setNextUnsettleCount(award.getCount());
             data.setStartDate(DateUtil.getCurrentMonthFirstDay());
             data.setEndDate(DateUtil.getCurrentMonthLastDay());
@@ -95,27 +100,32 @@ public class AwardMonthBOImpl extends PaginableBOImpl<AwardMonth>
     }
 
     @Override
-    public void refreshAwardMonthSettle(String userId, BigDecimal count,
-            String symbol, String handleResult) {
-        Date now = new Date();
+    public void refreshAwardMonthSettle(Award data, String handleResult) {
+        Date createDate = data.getCreateDatetime();
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(now); // 设置为当前时间
-        calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH) - 1); // 设置为上一个月
+        calendar.setTime(createDate); // 设置为创建奖励时间
+        calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH) + 1); // 设置为下一个月
         Date date = calendar.getTime();
         AwardMonth condition = new AwardMonth();
-        condition.setUserId(userId);
+        condition.setUserId(data.getUserId());
         condition.setNow(date);
         AwardMonth awardMonth = awardMonthDAO.select(condition);
-        awardMonth
-            .setUnsettleCount(awardMonth.getUnsettleCount().subtract(count));
-        Account dbAccount = accountBO.getAccountByUser(userId, symbol);
+        if (awardMonth == null) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "不能结算本月的奖励");
+        }
+        awardMonth.setUnsettleCount(
+            awardMonth.getUnsettleCount().subtract(data.getCount()));
+        Account dbAccount = accountBO.getAccountByUser(data.getUserId(),
+            data.getCurrency());
         awardMonth.setCurrentCount(dbAccount.getAmount());
-        awardMonth.setSettleDatetime(now);
+        awardMonth.setSettleDatetime(new Date());
         if (EBoolean.YES.getCode().equals(handleResult)) {
-            awardMonth.setSettleCount(awardMonth.getSettleCount().add(count));
+            awardMonth.setSettleCount(
+                awardMonth.getSettleCount().add(data.getCount()));
         } else {
-            awardMonth
-                .setNosettleCount(awardMonth.getNosettleCount().add(count));
+            awardMonth.setNosettleCount(
+                awardMonth.getNosettleCount().add(data.getCount()));
         }
         awardMonth.setRemark("结算奖励");
         awardMonthDAO.updateSettle(awardMonth);
@@ -140,6 +150,7 @@ public class AwardMonthBOImpl extends PaginableBOImpl<AwardMonth>
         calendar.setTime(now); // 设置为当前时间
         calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH) - 1); // 设置为上一个月
         Date date = calendar.getTime();
+        // 查询上个月是否有记录
         AwardMonth condition = new AwardMonth();
         condition.setUserId(userId);
         condition.setNow(date);
@@ -153,6 +164,11 @@ public class AwardMonthBOImpl extends PaginableBOImpl<AwardMonth>
         data.setStartDate(DateUtil.getCurrentMonthFirstDay());
         data.setEndDate(DateUtil.getCurrentMonthLastDay());
         awardMonthDAO.insert(data);
+    }
+
+    @Override
+    public List<AwardMonth> queryAwardMonthList(AwardMonth condition) {
+        return awardMonthDAO.selectList(condition);
     }
 
 }

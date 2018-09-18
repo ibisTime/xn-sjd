@@ -579,10 +579,14 @@ INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`r
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('qiniu','qiniu_secret_key','3NP-tpZP9-5fH-R-FhvKTfYpPPVFNvjFF3JXmrcq','admin',now(),'七牛云key1');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('qiniu','qiniu_bucket','test','admin',now(),'存储空间');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('qiniu','qiniu_domain','ounm8iw2d.bkt.clouddn.com','admin',now(),'访问域名');
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('user_rate','default_user_trade_rate','0','admin',now(),'初始用户广告费率');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('coin_price_x','eth_coin_price_x','10','admin',now(),'eth价格计算x');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('coin_price_x','btc_coin_price_x','5000','admin',now(),'bec价格计算x');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('coin_price_x','hpm_coin_price_x','0','admin',now(),'hpm价格计算x');
+
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('sys_txt','trade_remind','1.交易前请详细了解卖家的交易信息 \n2.请通过平台进行沟通约定，并保存好相关聊天记录 \n3.如遇到交易纠纷，请通过平台“帮助”解决问题','admin',now(),'交易提醒');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('sys_txt','activity_rule','1.分享好友，并通过链接注册成功；\n2.注册之后每一笔成功交易，您都将获得一笔提成，金额为交易手续费的0.1% \n3.HappyMoney保留对活动的解释权。','admin',now(),'活动规则');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('sys_txt','tips','1.温馨提示；\n2.温馨提示 \n3.温馨提示。','admin',now(),'温馨提示');
+
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('coin_type','0','BTC','admin',now(),'比特币');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('coin_type','1','ETH','admin',now(),'以太坊');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('coin_type','0T','HPM','admin',now(),'x币');
@@ -605,8 +609,10 @@ INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`r
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('accept_rule','accept_order_min_usd_amount','20','admin',now(),'单笔交易最小额度(美元)');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('accept_rule','accept_order_max_usd_amount','5000','admin',now(),'单笔交易最大额度(美元)');
 
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('simu_order_rule','simu_order_rule_cuser_fee','0.01','admin',now(),'普通用户币币交易手续费率');
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('simu_order_rule','simu_order_rule_quser_fee','0.008','admin',now(),'渠道商币币交易手续费率');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('simu_order_rule','simu_order_fee_rate','0.001','admin',now(),'币币交易手续费率');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('ads_rule','trade_fee_rate','0.001','admin',now(),'场外交易广告费率');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('withdraw_rule','withdraw_fee','0.005','admin',now(),'用户提币手续费');
+
 /*
 -- Query: SELECT `type`,`parent_key`,`dkey`,`dvalue`,`updater`,now() as `update_datetime`,`remark`FROM tsys_dict
 LIMIT 0, 1000
@@ -631,22 +637,25 @@ INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_d
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','trade_order_status','3','已完成','admin',now(),NULL);
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','trade_order_status','4','已取消','admin',now(),NULL);
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','trade_order_status','5','仲裁中','admin',now(),NULL);
-INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('0',NULL,'jour_biz_type','流水业务类型','admin',now(),NULL);
-INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','jour_biz_type','charge','充值','admin',now(),NULL);
-INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','jour_biz_type','withdraw','取现','admin',now(),NULL);
-INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','jour_biz_type','buy','交易买入','admin',now(),NULL);
-INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','jour_biz_type','sell','交易卖出','admin',now(),NULL);
-INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','jour_niz_type','tradefee','交易手续费','admin',now(),NULL);
-INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','jour_biz_type','withdrawfee','取现手续费','admin',now(),NULL);
-INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','jour_biz_type','invite','邀请好友分成','admin',now(),NULL);
-INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','jour_biz_type','tradefrozen','交易冻结','admin',now(),NULL);
-INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','jour_biz_type','tradeunfrozen','交易解冻','admin',now(),NULL);
-INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','jour_biz_type','withdrawfrozen','取现冻结','admin',now(),NULL);
-INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','jour_biz_type','withdrawunfrozen','取现解冻','admin',now(),NULL);
-INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','jour_biz_type','transfer_in','转账收入','admin',now(),NULL);
-INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','jour_biz_type','transfer_out','转账支出','admin',now(),NULL);
-INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','jour_biz_type','hc','红冲','admin',now(),NULL);
-INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','jour_biz_type','lb','蓝补','admin',now(),NULL);
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('0',NULL,'jour_biz_type_user','用户流水业务类型','admin',now(),NULL);
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','jour_biz_type_user','charge','充币','admin',now(),NULL);
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','jour_biz_type_user','withdraw','提币','admin',now(),NULL);
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','jour_biz_type_user','withdraw_fee','提币手续费','admin',now(),NULL);
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','jour_biz_type_user','withdraw_frozen','提币冻结','admin',now(),NULL);
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','jour_biz_type_user','withdraw_unfrozen','提币解冻','admin',now(),NULL);
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','jour_biz_type_user','buy','交易买入','admin',now(),NULL);
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','jour_biz_type_user','sell','交易卖出','admin',now(),NULL);
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','jour_biz_type_user','tradefee','交易手续费','admin',now(),NULL);
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','jour_biz_type_user','withdrawfee','取现手续费','admin',now(),NULL);
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','jour_biz_type_user','invite','邀请好友分成','admin',now(),NULL);
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','jour_biz_type_user','tradefrozen','交易冻结','admin',now(),NULL);
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','jour_biz_type_user','tradeunfrozen','交易解冻','admin',now(),NULL);
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','jour_biz_type_user','withdrawfrozen','取现冻结','admin',now(),NULL);
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','jour_biz_type_user','withdrawunfrozen','取现解冻','admin',now(),NULL);
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','jour_biz_type_user','transfer_in','转账收入','admin',now(),NULL);
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','jour_biz_type_user','transfer_out','转账支出','admin',now(),NULL);
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','jour_biz_type_user','hc','红冲','admin',now(),NULL);
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','jour_biz_type_user','lb','蓝补','admin',now(),NULL);
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('0',NULL,'coin_type','币种类型','admin',now(),NULL);
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','coin_type','0','以太坊','admin',now(),NULL);
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','coin_type','1','比特币','admin',now(),NULL);

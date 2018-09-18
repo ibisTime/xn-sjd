@@ -26,7 +26,7 @@ public class SysConstants {
 
     public static final String REFEREE_CUSER_FEE_RATE = "referee_cuser_fee_rate"; // 普通用户推荐用户交易分成
 
-    public static final String REFEREE_DUSER_FEE_RATE = "referee_duser_fee_rate"; // 普通用户推荐用户交易分成
+    public static final String REFEREE_DUSER_FEE_RATE = "referee_duser_fee_rate"; // 渠道商推荐用户交易分成
 
     // 七牛云图片配置
 
@@ -37,9 +37,6 @@ public class SysConstants {
     public static String QINIU_BUCKET = "qiniu_bucket";
 
     public static String QINIU_DOMAIN = "qiniu_domain";
-
-    // 用户广告费率配置
-    public static String DEFAULT_ADS_USER_RATE = "default_ads_user_rate";
 
     // 腾讯云配置
     public static String TX_APP_CODE = "tx_app_code";// 应用编号
@@ -126,13 +123,17 @@ public class SysConstants {
 
     // ****** 币币交易 ******
 
-    public static final String SIMU_ORDER_RULE_CUSER_FEE = "simu_order_rule_cuser_fee"; // 普通用户币币交易手续费率
-
-    public static final String SIMU_ORDER_RULE_QUSER_FEE = "simu_order_rule_quser_fee"; // 渠道商币币交易手续费率
+    public static final String SIMU_ORDER_FEE_RATE = "simu_order_fee_rate"; // 用户币币交易手续费率
 
     public static Integer handicapLimit = 5; // 盘口数量限制
 
     public static BigDecimal minCountLimit = new BigDecimal("0.00001"); // 最小委托数量
 
     public static BigDecimal maxCountLimit = new BigDecimal("1000000"); // 最大委托数量
+
+    // 用户广告费率
+    public static String TRADE_FEE_RATE = "trade_fee_rate"; // 用户交易广告费率
+
+    // 提币手续费率
+    public static String WITHDRAW_FEE = "withdraw_fee"; // 用户提币手续费率
 }

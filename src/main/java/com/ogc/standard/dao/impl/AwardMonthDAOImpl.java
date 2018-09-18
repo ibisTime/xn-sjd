@@ -49,7 +49,8 @@ public class AwardMonthDAOImpl extends AMybatisTemplate
 
     @Override
     public List<AwardMonth> selectList(AwardMonth condition) {
-        return null;
+        return super.selectList(NAMESPACE.concat("select_award_month"),
+            condition, AwardMonth.class);
     }
 
     @Override
@@ -61,12 +62,12 @@ public class AwardMonthDAOImpl extends AMybatisTemplate
 
     @Override
     public int updateUnsettle(AwardMonth data) {
-        return super.update(NAMESPACE.concat("update_unsettle"), data);
+        return super.update(NAMESPACE.concat("update_award_unsettle"), data);
     }
 
     @Override
     public int updateSettle(AwardMonth data) {
-        return super.update(NAMESPACE.concat("update_settle"), data);
+        return super.update(NAMESPACE.concat("update_award_settle"), data);
     }
 
 }

@@ -27,7 +27,6 @@ import com.ogc.standard.enums.EHandicapQuantity;
 import com.ogc.standard.enums.ESimuOrderDirection;
 import com.ogc.standard.enums.ESimuOrderStatus;
 import com.ogc.standard.enums.ESimuOrderType;
-import com.ogc.standard.enums.EUserKind;
 
 /**
  * 币币交易撮合类
@@ -454,7 +453,8 @@ public class SimuOrderMatch {
             BigDecimal tradedAmount, String status) {
 
         // 新增成交单并更新委托单
-        BigDecimal tradedFee = getFee(simuOrder.getUserId(), tradedAmount);
+        BigDecimal tradedFee = getFee(simuOrder.getUserId(),
+            simuOrder.getDirection(), tradedAmount, tradedCount);
         SimuOrderDetail orderDetail = simuOrderDetailBO.saveSimuOrderDetail(
             simuOrder, tradedPrice, tradedCount, tradedAmount, tradedFee);
 
@@ -471,44 +471,6 @@ public class SimuOrderMatch {
 
         return orderDetail;
     }
-
-    /**
-     * 处理限价委托单撮合结果
-     * @param simuOrder
-     * @param tradedCount
-     * @param tradedAmount
-     * @param status 
-     * @create: 2018年8月31日 下午5:09:09 lei
-     * @history:
-     */
-    // private SimuOrderDetail doLimitSimuOrderMatch(SimuOrder simuOrder,
-    // BigDecimal tradedCount, BigDecimal tradedAmount, String status) {
-    //
-    // // 新增成交单并更新委托单
-    // SimuOrderDetail handicapDetail = new SimuOrderDetail();
-    // handicapDetail.setOrderCode(simuOrder.getCode());
-    // handicapDetail.setUserId(simuOrder.getUserId());
-    // handicapDetail.setSymbol(simuOrder.getSymbol());
-    // handicapDetail.setToSymbol(simuOrder.getToSymbol());
-    // handicapDetail.setTradedPrice(simuOrder.getPrice());
-    //
-    // handicapDetail.setTradedCount(tradedCount);
-    // handicapDetail.setTradedAmount(tradedAmount);
-    // // 交易手续费
-    // handicapDetail.setTradedFee(getFee(tradedAmount));
-    // handicapDetail.setCreateDatetime(new Date());
-    // simuOrderDetailBO.saveSimuOrderDetail(handicapDetail);
-    //
-    // // 更新委托单交易信息
-    // updateSimuOrderTradeInfo(simuOrder, tradedCount, tradedAmount, status);
-    //
-    // // 更新盘口交易信息
-    // updateHandicapTradeInfo(simuOrder.getCode(),
-    // simuOrder.getTotalCount().subtract(simuOrder.getTradedCount()),
-    // status);
-    //
-    // return handicapDetail;
-    // }
 
     /**
      * 更新委托单交易信息
@@ -533,8 +495,9 @@ public class SimuOrderMatch {
             simuOrder
                 .setTradedAmount(simuOrder.getTradedAmount().add(tradedAmount));
             // 交易手续费
-            simuOrder.setTradedFee(simuOrder.getTradedFee()
-                .add(getFee(simuOrder.getUserId(), tradedAmount)));
+            simuOrder.setTradedFee(
+                simuOrder.getTradedFee().add(getFee(simuOrder.getUserId(),
+                    simuOrder.getDirection(), tradedAmount, tradedCount)));
 
             simuOrderBO.refreshLimitSimuOrder(simuOrder);
 
@@ -543,7 +506,8 @@ public class SimuOrderMatch {
             simuOrder.setTradedCount(tradedCount);
             simuOrder.setTradedAmount(tradedAmount);
             // 交易手续费
-            simuOrder.setTradedFee(getFee(simuOrder.getUserId(), tradedAmount));
+            simuOrder.setTradedFee(getFee(simuOrder.getUserId(),
+                simuOrder.getDirection(), tradedAmount, tradedCount));
 
             // 放入历史委托单
             moveToHistory(simuOrder);
@@ -600,22 +564,21 @@ public class SimuOrderMatch {
      * @create: 2018年9月4日 下午8:16:58 lei
      * @history:
      */
-    private BigDecimal getFee(String userId, BigDecimal tradeAmount) {
+    private BigDecimal getFee(String userId, String direction,
+            BigDecimal symbolAmount, BigDecimal toSymbolAmount) {
 
         User user = userBO.getUser(userId);
 
-        BigDecimal rate = BigDecimal.ZERO;
-
-        if (EUserKind.Customer.getCode().equals(user.getKind())) {
-            rate = sysConfigBO
-                .getBigDecimalValue(SysConstants.SIMU_ORDER_RULE_CUSER_FEE);
-        } else {
-            rate = sysConfigBO
-                .getBigDecimalValue(SysConstants.SIMU_ORDER_RULE_QUSER_FEE);
-        }
+        BigDecimal rate = sysConfigBO
+            .getBigDecimalValue(SysConstants.SIMU_ORDER_FEE_RATE);
 
         BigDecimal fee = BigDecimal.ZERO;
-        fee = tradeAmount.multiply(rate);
+        // 手续费收取：买单收取symbol，卖单收取toSymbol(得到什么币收取什么币)
+        if (ESimuOrderDirection.BUY.getCode().equals(direction)) {
+            fee = symbolAmount.multiply(rate);
+        } else {
+            fee = toSymbolAmount.multiply(rate);
+        }
 
         return fee;
     }
