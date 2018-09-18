@@ -157,8 +157,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         Date date = new Date();
         user.setCreateDatetime(date);
         user.setTradeRate(
-            sysConfigBO.getDoubleValue(SysConstants.DEFAULT_USER_TRADE_RATE));
-
+            sysConfigBO.getDoubleValue(SysConstants.TRADE_RATE_CUSER));
         userDAO.insert(user);
         return userId;
     }
@@ -188,7 +187,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         Date date = new Date();
         data.setCreateDatetime(date);
         data.setTradeRate(
-            sysConfigBO.getDoubleValue(SysConstants.DEFAULT_USER_TRADE_RATE));
+            sysConfigBO.getDoubleValue(SysConstants.TRADE_RATE_CUSER));
 
         userDAO.insert(data);
         return userId;
@@ -570,7 +569,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         user.setIdNo(idNo);
         user.setRealName(realName);
         double tradeRate = sysConfigBO
-            .getDoubleValue(SysConstants.DEFAULT_USER_TRADE_RATE);
+            .getDoubleValue(SysConstants.TRADE_RATE_QUSER);
         user.setTradeRate(tradeRate);
         user.setCreateDatetime(new Date());
         user.setRespArea(respArea);

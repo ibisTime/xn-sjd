@@ -181,6 +181,7 @@ public class UserAOImpl implements IUserAO {
         String userId = null;
         User user = new User();
         user.setUserId(userId);
+        user.setKind(EUserKind.Customer.getCode());
         user.setLoginName(req.getLoginName());
         user.setMobile(req.getMobile());
         if (StringUtils.isBlank(req.getLoginPwd())) {
@@ -205,7 +206,7 @@ public class UserAOImpl implements IUserAO {
         user.setUpdater(req.getUpdater());
         user.setRemark(req.getRemark());
         double tradeRate = sysConfigBO
-            .getDoubleValue(SysConstants.DEFAULT_USER_TRADE_RATE);
+            .getDoubleValue(SysConstants.TRADE_RATE_CUSER);
         user.setTradeRate(tradeRate);
         userId = userBO.doAddUser(user);
 
