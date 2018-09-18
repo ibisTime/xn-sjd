@@ -87,6 +87,8 @@ public class AwardMonthBOImpl extends PaginableBOImpl<AwardMonth>
             } else {
                 data.setUnsettleCount(BigDecimal.ZERO);
             }
+            data.setSettleCount(BigDecimal.ZERO);
+            data.setNosettleCount(BigDecimal.ZERO);
             data.setNextUnsettleCount(award.getCount());
             data.setStartDate(DateUtil.getCurrentMonthFirstDay());
             data.setEndDate(DateUtil.getCurrentMonthLastDay());
@@ -99,24 +101,25 @@ public class AwardMonthBOImpl extends PaginableBOImpl<AwardMonth>
 
     @Override
     public void refreshAwardMonthSettle(Award data, String handleResult) {
-        Date now = new Date();
+        Date createDate = data.getCreateDatetime();
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(now); // 设置为当前时间
-        calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH) - 1); // 设置为上一个月
+        calendar.setTime(createDate); // 设置为创建奖励时间
+        calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH) + 1); // 设置为下一个月
         Date date = calendar.getTime();
         AwardMonth condition = new AwardMonth();
         condition.setUserId(data.getUserId());
         condition.setNow(date);
         AwardMonth awardMonth = awardMonthDAO.select(condition);
         if (awardMonth == null) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "只能结算上个月的");
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "不能结算本月的奖励");
         }
         awardMonth.setUnsettleCount(
             awardMonth.getUnsettleCount().subtract(data.getCount()));
         Account dbAccount = accountBO.getAccountByUser(data.getUserId(),
             data.getCurrency());
         awardMonth.setCurrentCount(dbAccount.getAmount());
-        awardMonth.setSettleDatetime(now);
+        awardMonth.setSettleDatetime(new Date());
         if (EBoolean.YES.getCode().equals(handleResult)) {
             awardMonth.setSettleCount(
                 awardMonth.getSettleCount().add(data.getCount()));

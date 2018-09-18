@@ -147,7 +147,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         }
         user.setNickname(nickname);
         if (refereeUser != null) {
-            user.setUserReferee(refereeUser.getUserId());
+            user.setUserReferee(refereeUser.getMobile());
         }
         user.setLevel(EUserLevel.ONE.getCode());
         user.setStatus(EUserStatus.NORMAL.getCode());
@@ -179,6 +179,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             data.setLoginPwdStrength(
                 PwdUtil.calculateSecurityLevel(req.getLoginPwd()));
         }
+        data.setUserReferee(req.getUserReferee());
         data.setLevel(EUserLevel.ONE.getCode());
         data.setStatus(EUserStatus.NORMAL.getCode());
         data.setProvince(req.getProvince());

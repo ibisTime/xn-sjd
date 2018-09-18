@@ -76,7 +76,7 @@ public class AwardBOImpl extends PaginableBOImpl<Award> implements IAwardBO {
         data.setRefCode(refCode);
         data.setRefNote(refNote);
         data.setCurrency(ECoin.X.getCode());
-        data.setRefType(ERefType.CCTRADE.getCode());
+        data.setRefType(ERefType.BBTRADE.getCode());
         data.setCreateDatetime(new Date());
         data.setStatus(EAwardStatus.TOHAND.getCode());
         if (userKind.equals(EUserKind.QDS.getCode())) {

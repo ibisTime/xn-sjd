@@ -96,10 +96,7 @@ public class AwardAOImpl implements IAwardAO {
         }
         // 更新状态
         awardBO.refreshStatus(data, isSettle, remark);
-        // 记录
-        if (!awardMonthBO.isAwardMonthExist(data.getUserId())) {
-            awardMonthBO.addNewAwardMonth(data.getUserId());
-        }
+        // 更新记录
         awardMonthBO.refreshAwardMonthSettle(data, isSettle);
     }
 
@@ -109,7 +106,7 @@ public class AwardAOImpl implements IAwardAO {
         Paginable<Award> page = awardBO.getPaginable(start, limit, condition);
         for (Award award : page.getList()) {
             award.setUser(userBO.getUser(award.getUserId()));
-            award.setRelUser(userBO.getUser(award.getRefCode()));
+//            award.setRelUser(userBO.getUser(award.getRefCode()));
         }
         return page;
     }
