@@ -11,6 +11,7 @@ import com.ogc.standard.ao.IDivideAO;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IDivideBO;
 import com.ogc.standard.bo.IDivideDetailBO;
+import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.core.StringValidater;
@@ -35,6 +36,9 @@ public class DivideAOImpl implements IDivideAO {
     private IUserBO userBO;
 
     @Autowired
+    private ISYSUserBO sysUserBO;
+
+    @Autowired
     private IAccountBO accountBO;
 
     @Override
@@ -43,7 +47,7 @@ public class DivideAOImpl implements IDivideAO {
 
         Paginable<Divide> page = divideBO.getPaginable(start, limit, condition);
         for (Divide divide : page.getList()) {
-            divide.setUserInfo(userBO.getUser(divide.getDivideUser()));
+            divide.setUserInfo(sysUserBO.getSYSUser(divide.getDivideUser()));
         }
 
         return page;
@@ -52,6 +56,8 @@ public class DivideAOImpl implements IDivideAO {
     @Override
     public void doDivide(String divideId, String divideProfit,
             String divideUser, String remark) {
+
+        sysUserBO.getSYSUser(divideId);
 
         DivideDetail condition = new DivideDetail();
         condition.setDivideId(divideId);
