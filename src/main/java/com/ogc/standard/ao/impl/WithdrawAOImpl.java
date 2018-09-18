@@ -26,6 +26,7 @@ import com.ogc.standard.bo.ITokenEventBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.IWithdrawBO;
 import com.ogc.standard.bo.base.Paginable;
+import com.ogc.standard.common.SysConstants;
 import com.ogc.standard.core.EthClient;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.Coin;
@@ -61,6 +62,9 @@ public class WithdrawAOImpl implements IWithdrawAO {
     private IAccountBO accountBO;
 
     @Autowired
+    private ISYSConfigBO sysConfigBO;
+
+    @Autowired
     private IUserBO userBO;
 
     @Autowired
@@ -77,9 +81,6 @@ public class WithdrawAOImpl implements IWithdrawAO {
 
     @Autowired
     private ICoinBO coinBO;
-
-    @Autowired
-    private ISYSConfigBO sysConfigBO;
 
     @Autowired
     private ITokenEventBO tokenEventBO;
@@ -213,8 +214,8 @@ public class WithdrawAOImpl implements IWithdrawAO {
             .getEthMAddressSecret(mEthAddress.getId());
 
         // 实际到账金额=取现金额-取现手续费
-        BigDecimal realAmount = withdraw.getAmount()
-            .subtract(withdraw.getFee());
+        BigDecimal realAmount = withdraw.getAmount().subtract(
+            sysConfigBO.getBigDecimalValue(SysConstants.WITHDRAW_FEE));
 
         // 查询散取地址token余额
         BigDecimal tokenBalance = TokenClient.getBalance(address,
@@ -282,8 +283,8 @@ public class WithdrawAOImpl implements IWithdrawAO {
             .getEthMAddressSecret(mEthAddress.getId());
 
         // 实际到账金额=取现金额-取现手续费
-        BigDecimal realAmount = withdraw.getAmount()
-            .subtract(withdraw.getFee());
+        BigDecimal realAmount = withdraw.getAmount().subtract(
+            sysConfigBO.getBigDecimalValue(SysConstants.WITHDRAW_FEE));
 
         // 预估矿工费用
         BigDecimal gasPrice = ethTransactionBO.getGasPrice();
@@ -592,7 +593,10 @@ public class WithdrawAOImpl implements IWithdrawAO {
             withdraw.getCode());
         // 取现金额扣减
         userAccount = accountBO.changeAmount(userAccount,
-            withdraw.getAmount().subtract(withdraw.getFee()).negate(),
+            withdraw.getAmount()
+                .subtract(
+                    sysConfigBO.getBigDecimalValue(SysConstants.WITHDRAW_FEE))
+                .negate(),
             EChannelType.Online, ctqEthTransaction.getHash(),
             withdraw.getCode(), EJourBizTypeUser.AJ_WITHDRAW.getCode(),
             EJourBizTypeUser.AJ_WITHDRAW.getValue() + "-外部地址："
@@ -673,7 +677,10 @@ public class WithdrawAOImpl implements IWithdrawAO {
             withdraw.getCode());
         // 取现金额扣减
         userAccount = accountBO.changeAmount(userAccount,
-            withdraw.getAmount().subtract(withdraw.getFee()).negate(),
+            withdraw.getAmount()
+                .subtract(
+                    sysConfigBO.getBigDecimalValue(SysConstants.WITHDRAW_FEE))
+                .negate(),
             EChannelType.Online, ctqEthTransaction.getHash(),
             withdraw.getCode(), EJourBizTypeUser.AJ_WITHDRAW.getCode(),
             EJourBizTypeUser.AJ_WITHDRAW.getValue() + "-外部地址："
