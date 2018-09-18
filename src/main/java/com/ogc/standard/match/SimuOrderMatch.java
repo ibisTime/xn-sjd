@@ -27,7 +27,6 @@ import com.ogc.standard.enums.EHandicapQuantity;
 import com.ogc.standard.enums.ESimuOrderDirection;
 import com.ogc.standard.enums.ESimuOrderStatus;
 import com.ogc.standard.enums.ESimuOrderType;
-import com.ogc.standard.enums.EUserKind;
 
 /**
  * 币币交易撮合类
@@ -570,15 +569,8 @@ public class SimuOrderMatch {
 
         User user = userBO.getUser(userId);
 
-        BigDecimal rate = BigDecimal.ZERO;
-
-        if (EUserKind.Customer.getCode().equals(user.getKind())) {
-            rate = sysConfigBO
-                .getBigDecimalValue(SysConstants.SIMU_ORDER_RULE_CUSER_FEE);
-        } else {
-            rate = sysConfigBO
-                .getBigDecimalValue(SysConstants.SIMU_ORDER_RULE_QUSER_FEE);
-        }
+        BigDecimal rate = sysConfigBO
+            .getBigDecimalValue(SysConstants.SIMU_ORDER_FEE_RATE);
 
         BigDecimal fee = BigDecimal.ZERO;
         // 手续费收取：买单收取symbol，卖单收取toSymbol(得到什么币收取什么币)
