@@ -41,6 +41,9 @@ public class Divide extends ABaseDO {
 
     // ******************db properties**************
 
+    // 用户详情
+    private User userInfo;
+
     // 创建时间起
     private Date createDatetimeStart;
 
@@ -113,6 +116,14 @@ public class Divide extends ABaseDO {
 
     public Date getCreateDatetimeStart() {
         return createDatetimeStart;
+    }
+
+    public User getUserInfo() {
+        return userInfo;
+    }
+
+    public void setUserInfo(User userInfo) {
+        this.userInfo = userInfo;
     }
 
     public void setCreateDatetimeStart(Date createDatetimeStart) {

@@ -40,7 +40,13 @@ public class DivideAOImpl implements IDivideAO {
     @Override
     public Paginable<Divide> queryDividePage(int start, int limit,
             Divide condition) {
-        return divideBO.getPaginable(start, limit, condition);
+
+        Paginable<Divide> page = divideBO.getPaginable(start, limit, condition);
+        for (Divide divide : page.getList()) {
+            divide.setUserInfo(userBO.getUser(divide.getDivideUser()));
+        }
+
+        return page;
     }
 
     @Override
