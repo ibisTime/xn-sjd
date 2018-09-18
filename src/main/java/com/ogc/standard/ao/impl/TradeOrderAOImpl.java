@@ -537,14 +537,14 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
                     "当前状态下不能释放");
             }
         }
-//        if (user != null
-//                && EUserKind.Customer.getCode().equals(user.getKind())) {
-//            if (!updater.equals(tradeOrder.getSellUser())) {
-//
-//                throw new BizException("xn000", "您不能释放该订单");
-//
-//            }
-//        }
+        // if (user != null
+        // && EUserKind.Customer.getCode().equals(user.getKind())) {
+        // if (!updater.equals(tradeOrder.getSellUser())) {
+        //
+        // throw new BizException("xn000", "您不能释放该订单");
+        //
+        // }
+        // }
 
         if (ETradeOrderType.BUY.getCode().equals(tradeOrder.getType())) {
 
@@ -856,8 +856,7 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
     // 卖出广告 和 买入广告，共用此方法
     private void handleReferenceFenCheng(TradeOrder tradeOrder) {
 
-        String userId = tradeOrder.getBuyUser();
-        User user = this.userBO.getUser(userId);
+        User user = this.userBO.getUser(tradeOrder.getBuyUser());
 
         // 无推荐人 直接 return 掉
         String rederUserId = user.getUserReferee();
@@ -932,19 +931,19 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
     private void doAmountCheck(Ads adsSell, BigDecimal tradePrice,
             BigDecimal count, BigDecimal tradeAmount,
             String outOfLeftCountString) {
-//        if (ECoin.ETH.getCode().equals(adsSell.getTradeCoin())) {
-//            if (tradePrice.multiply(Convert.fromWei(count, Unit.ETHER))
-//                .subtract(tradeAmount).abs().compareTo(BigDecimal.ONE) > 0) {
-//                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-//                    "交易总额计算有误");
-//            }
-//        } else if (ECoin.BTC.getCode().equals(adsSell.getTradeCoin())) {
-//            if (tradePrice.multiply(BTCUtil.fromBtc(count))
-//                .subtract(tradeAmount).abs().compareTo(BigDecimal.ONE) > 0) {
-//                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-//                    "交易总额计算有误");
-//            }
-//        }
+        // if (ECoin.ETH.getCode().equals(adsSell.getTradeCoin())) {
+        // if (tradePrice.multiply(Convert.fromWei(count, Unit.ETHER))
+        // .subtract(tradeAmount).abs().compareTo(BigDecimal.ONE) > 0) {
+        // throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+        // "交易总额计算有误");
+        // }
+        // } else if (ECoin.BTC.getCode().equals(adsSell.getTradeCoin())) {
+        // if (tradePrice.multiply(BTCUtil.fromBtc(count))
+        // .subtract(tradeAmount).abs().compareTo(BigDecimal.ONE) > 0) {
+        // throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+        // "交易总额计算有误");
+        // }
+        // }
 
         if (adsSell.getMinTrade().compareTo(tradeAmount) > 0) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),

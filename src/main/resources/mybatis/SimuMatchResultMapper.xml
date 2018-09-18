@@ -13,8 +13,9 @@
 		<result column="sell_user_id" property="sellUserId" />
 		<result column="buy_amount" property="buyAmount" />
 		<result column="sell_amount" property="sellAmount" />
-		<result column="fee" property="fee" />
+		<result column="buy_fee" property="buyFee" />
 		
+		<result column="sell_fee" property="sellFee" />
 		<result column="create_datetime" property="createDatetime" />
 	</resultMap>
 	
@@ -38,8 +39,9 @@
 		,t.sell_user_id
 		,t.buy_amount
 		,t.sell_amount
-		,t.fee
+		,t.buy_fee
 		
+		,t.sell_fee
 		,t.create_datetime
 		FROM
 		tsimu_match_result t
@@ -70,8 +72,9 @@
 		,sell_user_id
 		,buy_amount
 		,sell_amount
-		,fee
+		,buy_fee
 		
+		,sell_fee
 		,create_datetime
 		)
 		VALUES(
@@ -85,8 +88,9 @@
 		,#{sellUserId}
 		,#{buyAmount}
 		,#{sellAmount}
-		,#{fee}
+		,#{buyFee}
 		
+		,#{sellFee}
 		,#{createDatetime}
 		)
 	</insert>
@@ -96,7 +100,8 @@
 		SET
 		buy_amount = #{buyAmount}
 		,sell_amount = #{sellAmount}
-		,fee = #{fee}
+		,buy_fee = #{buyFee}
+		,sell_fee = #{sellFee}
 		
 		WHERE id = #{id}
 	</update>

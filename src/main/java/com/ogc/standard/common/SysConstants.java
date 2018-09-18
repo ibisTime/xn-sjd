@@ -26,7 +26,7 @@ public class SysConstants {
 
     public static final String REFEREE_CUSER_FEE_RATE = "referee_cuser_fee_rate"; // 普通用户推荐用户交易分成
 
-    public static final String REFEREE_DUSER_FEE_RATE = "referee_duser_fee_rate"; // 普通用户推荐用户交易分成
+    public static final String REFEREE_DUSER_FEE_RATE = "referee_duser_fee_rate"; // 渠道商推荐用户交易分成
 
     // 七牛云图片配置
 

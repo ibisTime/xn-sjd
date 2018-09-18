@@ -12,6 +12,7 @@ import com.ogc.standard.exception.BizException;
  */
 public enum EJourBizTypePlat {
 
+
     AJ_DEPOSIT("deposit", "定存"), 
     AJ_COLLECT("collect", "归集"), 
     AJ_WITHDRAW("withdraw", "提币"),
@@ -33,7 +34,7 @@ public enum EJourBizTypePlat {
     AJ_COLLECT_MINING_FEE_ERC20("collect_first_mining_fee_erc20", "ERC20币一级归集矿工费"), 
     AJ_DEPOSIT_MINING_FEE_ERC20("deposit_mining_fee_erc20", "ERC20币定存矿工费"),
     
-
+    AJ_DIVIDE("divide", "分红"),
     AJ_AWARD_REG("award_reg", "拉新奖励"),
     AJ_AWARD_SPECIAL("award_special", "特殊奖励"),
     AJ_AWARD_CCORDER("award_ccorder", "场外交易奖励"),

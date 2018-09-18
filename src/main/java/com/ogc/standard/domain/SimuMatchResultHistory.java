@@ -48,8 +48,11 @@ public class SimuMatchResultHistory extends ABaseDO {
     // 计价数量
     private BigDecimal sellAmount;
 
-    // 手续费
-    private BigDecimal fee;
+    // 买方手续费
+    private BigDecimal buyFee;
+
+    // 卖方手续费
+    private BigDecimal sellFee;
 
     // 撮合时间
     private Date createDatetime;
@@ -142,12 +145,20 @@ public class SimuMatchResultHistory extends ABaseDO {
         this.sellAmount = sellAmount;
     }
 
-    public BigDecimal getFee() {
-        return fee;
+    public BigDecimal getBuyFee() {
+        return buyFee;
     }
 
-    public void setFee(BigDecimal fee) {
-        this.fee = fee;
+    public void setBuyFee(BigDecimal buyFee) {
+        this.buyFee = buyFee;
+    }
+
+    public BigDecimal getSellFee() {
+        return sellFee;
+    }
+
+    public void setSellFee(BigDecimal sellFee) {
+        this.sellFee = sellFee;
     }
 
     public Date getCreateDatetime() {

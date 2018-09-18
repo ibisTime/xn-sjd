@@ -90,7 +90,7 @@ public class AwardBOImpl extends PaginableBOImpl<Award> implements IAwardBO {
             data.setRate(rate);
             data.setCount(rate.multiply(tradeCount));
         }
-        data.setRemark("推荐用户交易分成");
+        data.setRemark("推荐用户币币交易分成");
         awardDAO.insert(data);
         // 记录
         if (awardMonthBO.isAwardMonthExist(refereeUserId)) {
@@ -124,7 +124,7 @@ public class AwardBOImpl extends PaginableBOImpl<Award> implements IAwardBO {
             data.setRate(rate);
             data.setCount(rate.multiply(tradeCount));
         }
-        data.setRemark("推荐用户交易分成");
+        data.setRemark("推荐用户场外交易分成");
         awardDAO.insert(data);
         // 记录
         if (awardMonthBO.isAwardMonthExist(refereeUserId)) {
@@ -194,8 +194,8 @@ public class AwardBOImpl extends PaginableBOImpl<Award> implements IAwardBO {
         Award data = new Award();
         data.setUserId(user.getUserId());
         data.setUserKind(user.getKind());
-//        data.setRefCode(refCode);
-//        data.setRefNote(refNote);
+        // data.setRefCode(refCode);
+        // data.setRefNote(refNote);
         data.setCurrency(ECoin.X.getCode());
         data.setRefType(ERefType.SPECIAL.getCode());
         data.setCreateDatetime(new Date());

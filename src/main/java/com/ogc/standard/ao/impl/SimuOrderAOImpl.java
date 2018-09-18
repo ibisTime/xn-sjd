@@ -170,7 +170,7 @@ public class SimuOrderAOImpl implements ISimuOrderAO {
         if (account.getAmount().subtract(account.getFrozenAmount())
             .compareTo(totalAmount) < 0) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "当前组合" + account.getCurrency() + "资产可用余额不足");
+                "当前账户" + account.getCurrency() + "资产可用余额不足");
         }
 
         // 落地委托单
@@ -215,7 +215,7 @@ public class SimuOrderAOImpl implements ISimuOrderAO {
         if (account.getAmount().subtract(account.getFrozenAmount())
             .compareTo(totalCount) < 0) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "当前组合" + req.getSymbol() + "资产可用余额不足");
+                "当前账户" + req.getSymbol() + "资产可用余额不足");
         }
 
         // 落地委托单

@@ -39,6 +39,11 @@ public class DivideDetail extends ABaseDO {
     // 分红ID
     private String divideId;
 
+    // ******************db properties**************
+
+    // 用户详情
+    private User userInfo;
+
     public String getId() {
         return id;
     }
@@ -101,6 +106,14 @@ public class DivideDetail extends ABaseDO {
 
     public void setDivideId(String divideId) {
         this.divideId = divideId;
+    }
+
+    public User getUserInfo() {
+        return userInfo;
+    }
+
+    public void setUserInfo(User userInfo) {
+        this.userInfo = userInfo;
     }
 
 }
