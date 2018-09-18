@@ -89,6 +89,11 @@ public class SimuKLineBOImpl extends PaginableBOImpl<SimuKLine>
     @Override
     public void saveKLineByPeriod(ExchangePair pair, String period) {
 
+        // 验证历史上是否有交易产生,没有则不添加K线
+        if (SimuOrderDetailValidater(pair)) {
+            return;
+        }
+
         ESimuKLinePeriod linePeriod = ESimuKLinePeriod
             .getESimuKLinePeriod(period);
 
@@ -162,6 +167,19 @@ public class SimuKLineBOImpl extends PaginableBOImpl<SimuKLine>
 
         marketAOImpl.saveMarket(pair.getSymbol(), "HappyMoney",
             pair.getToSymbol(), "", close);
+    }
+
+    private boolean SimuOrderDetailValidater(ExchangePair pair) {
+
+        SimuOrderDetail condition = new SimuOrderDetail();
+        condition.setSymbol(pair.getSymbol());
+        condition.setToSymbol(pair.getToSymbol());
+
+        List<SimuOrderDetail> simuOrderDetails = simuOrderDetailBO
+            .querySimuOrderDetailList(condition);
+
+        return CollectionUtils.isEmpty(simuOrderDetails);
+
     }
 
     /**
