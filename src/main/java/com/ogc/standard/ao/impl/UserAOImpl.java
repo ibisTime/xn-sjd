@@ -155,8 +155,8 @@ public class UserAOImpl implements IUserAO {
         // 验证邮箱是否存在
         userBO.isEmailExist(req.getEmail());
 
-//        // 验证邮箱验证码
-//        smsOutBO.checkCaptcha(req.getEmail(), req.getCaptcha(), "805043");
+        // 验证邮箱验证码
+        smsOutBO.checkCaptcha(req.getEmail(), req.getCaptcha(), "805043");
 
         User refereeUser = userBO.getUserByMobile(req.getUserReferee());
         // 注册用户
@@ -206,7 +206,7 @@ public class UserAOImpl implements IUserAO {
         user.setUpdater(req.getUpdater());
         user.setRemark(req.getRemark());
         double tradeRate = sysConfigBO
-            .getDoubleValue(SysConstants.TRADE_RATE_CUSER);
+            .getDoubleValue(SysConstants.TRADE_FEE_RATE);
         user.setTradeRate(tradeRate);
         userId = userBO.doAddUser(user);
 
