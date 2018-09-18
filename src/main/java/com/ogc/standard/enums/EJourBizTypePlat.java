@@ -11,7 +11,6 @@ import com.ogc.standard.exception.BizException;
  * @history:
  */
 public enum EJourBizTypePlat {
-    AJ_REG("reg","注册分佣"),
 
     AJ_DEPOSIT("deposit", "定存"), 
     AJ_COLLECT("collect", "归集"), 

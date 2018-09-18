@@ -868,8 +868,9 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
         }
 
         // 分成
-        awardBO.saveTradeAward(refereeUser.getUserId(), refereeUser.getKind(),
-            tradeOrder.getCode(), "OTC交易推荐人分成", tradeOrder.getCount());
+        awardBO.saveOTCAward(refereeUser.getUserId(), refereeUser.getKind(),
+            tradeOrder.getCode(), "OTC交易推荐人分成", tradeOrder.getTradeCoin(),
+            tradeOrder.getCount());
 //        Double fenChengFee = null;
 //        if (user.getUserRefereeLevel().equals(EUserLevel.ONE.getCode())) {
 //            // 推荐人为普通

@@ -88,7 +88,12 @@ public class UserIdAuthAOImpl implements IUserIdAuthAO {
     @Override
     public Paginable<UserIdAuth> queryUserIdAuthPage(int start, int limit,
             UserIdAuth condition) {
-        return userIdAuthBO.getPaginable(start, limit, condition);
+        Paginable<UserIdAuth> page = userIdAuthBO.getPaginable(start, limit,
+            condition);
+        for (UserIdAuth data : page.getList()) {
+            data.setUser(userBO.getUser(data.getApplyUser()));
+        }
+        return page;
     }
 
 }
