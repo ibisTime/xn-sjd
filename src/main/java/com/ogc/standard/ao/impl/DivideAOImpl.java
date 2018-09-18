@@ -18,6 +18,9 @@ import com.ogc.standard.domain.Divide;
 import com.ogc.standard.domain.DivideDetail;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.enums.ECoin;
+import com.ogc.standard.enums.EJourBizTypePlat;
+import com.ogc.standard.enums.EJourBizTypeUser;
+import com.ogc.standard.enums.ESysUser;
 
 @Service
 public class DivideAOImpl implements IDivideAO {
@@ -73,11 +76,14 @@ public class DivideAOImpl implements IDivideAO {
             divideDetail.setDivideDatetime(new Date());
             divideDetailBO.refreshDivideDetail(divideDetail);
 
-            // Account account = accountBO
-            // .getAccountByUser(divideDetail.getUserId(), ECoin.X.getCode());
-            // accountBO.changeAmount(account, divideAmount,
-            // EChannelType.Divide.getCode(), EChannelType.Divide.getValue(),
-            // divideDetail.getId(), EJourBizType., bizNote)
+            // 从平台账户划转 分红 到用户账户
+            accountBO.transAmount(ESysUser.SYS_USER.getCode(),
+                ECoin.X.getCode(), divideDetail.getUserId(), ECoin.X.getCode(),
+                divideAmount, EJourBizTypeUser.AJ_DIVIDE.getCode(),
+                EJourBizTypePlat.AJ_DIVIDE.getCode(),
+                EJourBizTypeUser.AJ_DIVIDE.getValue(),
+                EJourBizTypePlat.AJ_DIVIDE.getValue(),
+                divideDetail.getId().toString());
         }
 
         divideBO.refreshDivide(divideId,

@@ -96,7 +96,7 @@ public class SimuOrderMatch2 {
 
         // 当卖方盘口不存在，当前限价买单无法撮合成交，则 进入买方盘口
         if (CollectionUtils.isEmpty(handicapGrades)) {
-            intoHandicap(simuOrder);
+            handicapBO.saveHandicap(simuOrder);
         }
 
         // 获取卖方盘口最低档位价格
@@ -104,7 +104,7 @@ public class SimuOrderMatch2 {
 
         // 当前限价买单价格 低于 卖盘最低档位价格，不可成交则进入盘口，反之则可以直接成交
         if (simuOrder.getPrice().compareTo(asdsLowest) < 0) {
-            intoHandicap(simuOrder);
+            handicapBO.saveHandicap(simuOrder);
         }
 
         // 根据当前委托单价格筛选 在可成交范围内的 档位价格
@@ -154,10 +154,6 @@ public class SimuOrderMatch2 {
 
         // 直接与可成交买盘口档位匹配，成交
         doMatchOrder(simuOrder, usableGrades);
-    }
-
-    private void intoHandicap(SimuOrder simuOrder) {
-
     }
 
     private void doMatchOrder(SimuOrder simuOrder,
