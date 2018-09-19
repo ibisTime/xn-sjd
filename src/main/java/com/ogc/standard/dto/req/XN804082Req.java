@@ -13,6 +13,17 @@ public class XN804082Req {
     // 业务类型(必填)
     private String bizType;
 
+    // 公司编号
+    private String companyCode;
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
+    }
+
     public String getSystemCode() {
         return systemCode;
     }

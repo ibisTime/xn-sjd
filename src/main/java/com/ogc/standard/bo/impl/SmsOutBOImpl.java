@@ -44,6 +44,7 @@ public class SmsOutBOImpl implements ISmsOutBO {
         req.setCaptcha(captcha);
         req.setBizType(bizType);
         req.setSystemCode(ESystemCode.BZ.getCode());
+        req.setCompanyCode(ESystemCode.BZ.getCode());
         BizConnecter.getBizData("804082", JsonUtils.object2Json(req),
             BooleanRes.class);
     }
