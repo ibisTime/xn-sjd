@@ -30,6 +30,7 @@ public class SmsOutBOImpl implements ISmsOutBO {
             req.setMobile(mobile);
             req.setBizType(bizType);
             req.setSystemCode(ESystemCode.BZ.getCode());
+            req.setCompanyCode(ESystemCode.BZ.getCode());
             BizConnecter.getBizData("804081", JsonUtils.object2Json(req),
                 PKCodeRes.class);
         } catch (Exception e) {

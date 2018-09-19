@@ -70,9 +70,9 @@
 		,sell_user_id
 		,buy_amount
 		,sell_amount
-		,t.buy_fee
+		,buy_fee
 		
-		,t.sell_fee
+		,sell_fee
 		,create_datetime
 		)
 		VALUES(

@@ -135,7 +135,11 @@ public class SimuOrderMatch {
 
                     // 根据盘口获取委托单
                     SimuOrder limitOrder = simuOrderBO
-                        .getSimuOrderCheck(handicap.getOrderCode());
+                        .getSimuOrder(handicap.getOrderCode());
+
+                    if (null == limitOrder) {
+                        break;
+                    }
 
                     // 双委托单所有者为同一人
                     if (marketOrder.getUserId()
@@ -194,37 +198,38 @@ public class SimuOrderMatch {
         List<HandicapGrade> asksGrades = queryHandicapGrades(symbol, toSymbol,
             ESimuOrderDirection.BUY.getCode());
 
+        // 用买盘 去扫 卖盘
         for (HandicapGrade bidsGrade : bidsGrades) {
 
-            // 用买盘 去扫 卖盘
             for (Handicap bidsHandicap : bidsGrade.getHandicapList()) {
-
-                // 根据盘口获取委托单
-                SimuOrder bidsOrder = simuOrderBO
-                    .getSimuOrderCheck(bidsHandicap.getOrderCode());
-
-                // 委托总量减去已成交量：剩余可交易量
-                BigDecimal avilBidsAmount = bidsOrder.getTotalAmount()
-                    .subtract(bidsOrder.getTradedAmount());
-
-                if (avilBidsAmount.compareTo(BigDecimal.ZERO) == 0) {
-                    break;
-                }
-
-                // 每次循环都重新获取卖盘盘口档位
-                // asksGrades = handicapBO.queryHandicapList(symbol, toSymbol,
-                // ESimuOrderDirection.SELL.getCode(), 5);
-                //
-                asksGrades = queryHandicapGrades(symbol, toSymbol,
-                    ESimuOrderDirection.BUY.getCode());
 
                 for (HandicapGrade asksGrade : asksGrades) {
 
                     for (Handicap asksHandicap : asksGrade.getHandicapList()) {
 
                         // 根据盘口获取委托单
+                        SimuOrder bidsOrder = simuOrderBO
+                            .getSimuOrder(bidsHandicap.getOrderCode());
+
+                        if (null == bidsOrder) {
+                            break;
+                        }
+
+                        // 委托总量减去已成交量：剩余可交易量
+                        BigDecimal avilBidsAmount = bidsOrder.getTotalAmount()
+                            .subtract(bidsOrder.getTradedAmount());
+
+                        if (avilBidsAmount.compareTo(BigDecimal.ZERO) == 0) {
+                            break;
+                        }
+
+                        // 根据盘口获取委托单
                         SimuOrder asksOrder = simuOrderBO
-                            .getSimuOrderCheck(asksHandicap.getOrderCode());
+                            .getSimuOrder(asksHandicap.getOrderCode());
+
+                        if (null == asksOrder) {
+                            break;
+                        }
 
                         // 双委托单所有者为同一人
                         if (bidsOrder.getUserId()
@@ -240,9 +245,7 @@ public class SimuOrderMatch {
                         if (asksOrder.getPrice()
                             .compareTo(bidsOrder.getPrice()) <= 0) {
 
-                            doMatchLimit(bidsHandicap, bidsOrder,
-                                avilBidsAmount, asksHandicap, asksOrder,
-                                avilAsksAmount);
+                            doMatchLimit(bidsOrder, asksOrder);
 
                         }
 
@@ -312,36 +315,43 @@ public class SimuOrderMatch {
 
     }
 
-    private void doMatchLimit(Handicap bidsHandicap, SimuOrder bidsOrder,
-            BigDecimal avilBidsAmount, Handicap asksHandicap,
-            SimuOrder asksOrder, BigDecimal avilAsksAmount) {
+    private void doMatchLimit(SimuOrder bidsOrder, SimuOrder asksOrder) {
+
+        // 买单交易信息
+        BigDecimal bidsPrice = bidsOrder.getPrice();
+        BigDecimal bidsCount = bidsOrder.getTotalCount()
+            .subtract(bidsOrder.getTradedCount());
+        BigDecimal bidsAmount = bidsPrice.multiply(bidsCount);
+
+        // 卖单交易信息
+        BigDecimal asksPrice = asksOrder.getPrice();
+        BigDecimal asksCount = asksOrder.getTotalCount()
+            .subtract(asksOrder.getTradedCount());
+        BigDecimal asksAmount = asksPrice.multiply(asksCount);
+
         // 买盘交易量能否被满足
-        if (avilAsksAmount.compareTo(avilBidsAmount) > 0) {
+        if (asksAmount.compareTo(bidsAmount) > 0) {
 
             // 买盘单完全成交
-            SimuOrderDetail bidsDetail = doOrderMatch(bidsOrder,
-                asksHandicap.getPrice(), bidsHandicap.getCount(),
-                avilBidsAmount, ESimuOrderStatus.ENTIRE_DEAL.getCode());
+            SimuOrderDetail bidsDetail = doOrderMatch(bidsOrder, bidsPrice,
+                bidsCount, bidsAmount, ESimuOrderStatus.ENTIRE_DEAL.getCode());
 
             // 卖盘单部分成交
-            SimuOrderDetail asksDetail = doOrderMatch(asksOrder,
-                asksHandicap.getPrice(), bidsHandicap.getCount(),
-                avilBidsAmount, ESimuOrderStatus.PART_DEAL.getCode());
+            SimuOrderDetail asksDetail = doOrderMatch(asksOrder, bidsPrice,
+                bidsCount, bidsAmount, ESimuOrderStatus.PART_DEAL.getCode());
 
             // 落地撮合结果
             simuMatchResultBO.doSimuMatchResult(bidsDetail, asksDetail);
 
-        } else if (avilAsksAmount.compareTo(avilBidsAmount) == 0) {
+        } else if (asksAmount.compareTo(bidsAmount) == 0) {
 
             // 买盘单完全成交
-            SimuOrderDetail bidsDetail = doOrderMatch(bidsOrder,
-                asksHandicap.getPrice(), bidsHandicap.getCount(),
-                avilBidsAmount, ESimuOrderStatus.ENTIRE_DEAL.getCode());
+            SimuOrderDetail bidsDetail = doOrderMatch(bidsOrder, bidsPrice,
+                bidsCount, bidsAmount, ESimuOrderStatus.ENTIRE_DEAL.getCode());
 
             // 卖盘单完全成交
-            SimuOrderDetail asksDetail = doOrderMatch(asksOrder,
-                asksHandicap.getPrice(), asksHandicap.getCount(),
-                avilAsksAmount, ESimuOrderStatus.ENTIRE_DEAL.getCode());
+            SimuOrderDetail asksDetail = doOrderMatch(asksOrder, asksPrice,
+                asksCount, asksAmount, ESimuOrderStatus.ENTIRE_DEAL.getCode());
 
             // 落地撮合结果
             simuMatchResultBO.doSimuMatchResult(bidsDetail, asksDetail);
@@ -349,14 +359,12 @@ public class SimuOrderMatch {
         } else {
 
             // 买盘单部分成交
-            SimuOrderDetail bidsDetail = doOrderMatch(bidsOrder,
-                asksHandicap.getPrice(), asksHandicap.getCount(),
-                avilAsksAmount, ESimuOrderStatus.PART_DEAL.getCode());
+            SimuOrderDetail bidsDetail = doOrderMatch(bidsOrder, asksPrice,
+                asksCount, asksAmount, ESimuOrderStatus.PART_DEAL.getCode());
 
             // 卖盘单完全成交
-            SimuOrderDetail asksDetail = doOrderMatch(asksOrder,
-                asksHandicap.getPrice(), asksHandicap.getCount(),
-                avilAsksAmount, ESimuOrderStatus.ENTIRE_DEAL.getCode());
+            SimuOrderDetail asksDetail = doOrderMatch(asksOrder, asksPrice,
+                asksCount, asksAmount, ESimuOrderStatus.ENTIRE_DEAL.getCode());
 
             // 落地撮合结果
             simuMatchResultBO.doSimuMatchResult(bidsDetail, asksDetail);
@@ -454,7 +462,7 @@ public class SimuOrderMatch {
 
         // 新增成交单并更新委托单
         BigDecimal tradedFee = getFee(simuOrder.getUserId(),
-            simuOrder.getDirection(), tradedAmount, tradedCount);
+            simuOrder.getDirection(), tradedCount, tradedAmount);
         SimuOrderDetail orderDetail = simuOrderDetailBO.saveSimuOrderDetail(
             simuOrder, tradedPrice, tradedCount, tradedAmount, tradedFee);
 
@@ -497,7 +505,7 @@ public class SimuOrderMatch {
             // 交易手续费
             simuOrder.setTradedFee(
                 simuOrder.getTradedFee().add(getFee(simuOrder.getUserId(),
-                    simuOrder.getDirection(), tradedAmount, tradedCount)));
+                    simuOrder.getDirection(), tradedCount, tradedAmount)));
 
             simuOrderBO.refreshLimitSimuOrder(simuOrder);
 
@@ -507,7 +515,7 @@ public class SimuOrderMatch {
             simuOrder.setTradedAmount(tradedAmount);
             // 交易手续费
             simuOrder.setTradedFee(getFee(simuOrder.getUserId(),
-                simuOrder.getDirection(), tradedAmount, tradedCount));
+                simuOrder.getDirection(), tradedCount, tradedAmount));
 
             // 放入历史委托单
             moveToHistory(simuOrder);

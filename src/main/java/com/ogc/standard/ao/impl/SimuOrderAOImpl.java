@@ -98,16 +98,6 @@ public class SimuOrderAOImpl implements ISimuOrderAO {
                 "当前状态下不支持撤单");
         }
 
-        // 买入订单解冻计价币种数量
-        if (ESimuOrderDirection.BUY.getCode().equals(data.getDirection())) {
-
-            Account account = accountBO.getAccountByUser(data.getUserId(),
-                data.getToSymbol());
-            accountBO.unfrozenAmount(account, data.getTotalCount(),
-                EJourBizTypeUser.AJ_BBORDER_UNFROZEN_REVOKE.getCode(),
-                EJourBizTypeUser.AJ_BBORDER_UNFROZEN_REVOKE.getValue(), code);
-        }
-
         // 更新委托单信息
         if (ESimuOrderStatus.SUBMIT.getCode().equals(data.getStatus())) {
             data.setAvgPrice(BigDecimal.ZERO);
@@ -128,6 +118,22 @@ public class SimuOrderAOImpl implements ISimuOrderAO {
         // 撤销，并从 存活委托 中删除；
         simuOrderBO.cancel(data);
 
+        // 解冻交易币种数量
+        String accountSymbol;
+        BigDecimal unfrozenAmount;
+        if (ESimuOrderDirection.BUY.getCode().equals(data.getDirection())) {
+            accountSymbol = data.getToSymbol();
+            unfrozenAmount = data.getTotalAmount();
+        } else {
+            accountSymbol = data.getSymbol();
+            unfrozenAmount = data.getTotalCount();
+        }
+
+        Account account = accountBO.getAccountByUser(data.getUserId(),
+            accountSymbol);
+        accountBO.unfrozenAmount(account, unfrozenAmount,
+            EJourBizTypeUser.AJ_BBORDER_UNFROZEN_REVOKE.getCode(),
+            EJourBizTypeUser.AJ_BBORDER_UNFROZEN_REVOKE.getValue(), code);
     }
 
     @Override
@@ -198,6 +204,9 @@ public class SimuOrderAOImpl implements ISimuOrderAO {
 
     private SimuOrder submitSellOrder(XN650050Req req) {
 
+        // 获取币种单位
+        Coin coin = coinBO.getCoin(req.getSymbol());
+
         // 卖出币总数量
         BigDecimal totalCount = StringValidater
             .toBigDecimal(req.getTotalCount());
@@ -209,7 +218,8 @@ public class SimuOrderAOImpl implements ISimuOrderAO {
         BigDecimal totalAmount;
         if (ESimuOrderType.LIMIT.getCode().equals(req.getType())) {
             price = StringValidater.toBigDecimal(req.getPrice());
-            totalAmount = price.multiply(totalCount);
+            totalAmount = price
+                .multiply(CoinUtil.fromMinUnit(totalCount, coin.getUnit()));
         } else {
             // 市价单卖单没有价格
             price = new BigDecimal(-1);
@@ -233,7 +243,7 @@ public class SimuOrderAOImpl implements ISimuOrderAO {
             totalAmount);
 
         // 冻结出售币种资产
-        accountBO.frozenAmount(account, totalAmount,
+        accountBO.frozenAmount(account, totalCount,
             EJourBizTypeUser.AJ_BBORDER_SELL.getCode(), "提交卖出[" + SymbolUtil
                 .getSymbolPair(req.getSymbol(), req.getToSymbol()) + "]委托单",
             simuOrder.getCode());
@@ -273,8 +283,7 @@ public class SimuOrderAOImpl implements ISimuOrderAO {
         }
 
         // 委托价格是否超过价格范围:不高于前收盘价的900%，不低于前收盘价测50%
-        BigDecimal price = CoinUtil.fromMinUnit(
-            StringValidater.toBigDecimal(req.getTotalCount()), coin.getUnit());
+        BigDecimal price = StringValidater.toBigDecimal(req.getTotalCount());
         // 获取上一时间单位的K线
         SimuKLine simuKLine = simuKLineBO.getLatestSimuKLine(req.getSymbol(),
             req.getToSymbol(), ESimuKLinePeriod.MIN1.getCode());

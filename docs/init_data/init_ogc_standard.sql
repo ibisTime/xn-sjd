@@ -592,11 +592,11 @@ INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`r
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('coin_type','0T','HPM','admin',now(),'x币');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('coin_status','0','已发布','admin',now(),'币种状态');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('coin_status','1','已撤下','admin',now(),'币种状态');
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('tencent_im','tx_app_code','1400139627','admin',now(),'应用编号');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('tencent_im','tx_app_code','1400143607','admin',now(),'应用编号');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('tencent_im','tx_app_admin','admin','admin',now(),'账号管理员');
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('tencent_im','tx_access_key','-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEjpFnJBYdffrPuhNwuMVHgA8ww9tx\n5b3N12QOOneRRrM9FfOv5FE+GmmyFjZPNlxemK35TAru63AUgQpNzs+x1g==\n-----END PUBLIC KEY-----','admin',now(),'公钥');
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('tencent_im','tx_secret_key','-----BEGIN PRIVATE KEY-----\nMIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgX50tBBPq9VZnCYvU\n68DXJlWtimgmGVQbYJ2vbK5AczahRANCAASOkWckFh19+s+6E3C4xUeADzDD23Hl\nvc3XZA46d5FGsz0V86/kUT4aabIWNk82XF6YrflMCu7rcBSBCk3Oz7HW\n-----END PRIVATE KEY-----','admin',now(),'私钥');
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('tencent_im','tx_account_type','38263','admin',now(),'账户类型');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('tencent_im','tx_access_key','-----BEGIN PUBLIC KEY----- MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE5bhxPWPzF55zGEp7IK1d7DIKYZyA EPUL1SxgJCV13PA6c2FibdB5OnioRViSqinnX/x+2wvp8vA/2qVQKTVcWg== -----END PUBLIC KEY-----','admin',now(),'公钥');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('tencent_im','tx_secret_key','-----BEGIN PRIVATE KEY----- MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgXXphC+fkI/m+Q4Fs UFMvEFNpcXMnwz5uMiL46EK9xkihRANCAATluHE9Y/MXnnMYSnsgrV3sMgphnIAQ 9QvVLGAkJXXc8DpzYWJt0Hk6eKhFWJKqKedf/H7bC+ny8D/apVApNVxa -----END PRIVATE KEY-----','admin',now(),'私钥');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('tencent_im','tx_account_type','36862','admin',now(),'账户类型');
 
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('reg_award','cuser_ref','10','admin',now(),'普通用户推荐送X币');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('reg_award','duser_ref','15','admin',now(),'普通用户推荐送X币');
@@ -751,14 +751,14 @@ INSERT INTO `tstd_account` (`account_number`,`user_id`,`currency`,`address`,`typ
 INSERT INTO `tstd_account` (`account_number`,`user_id`,`currency`,`address`,`type`,`status`,`amount`,`frozen_amount`,`md5`,`in_amount`,`out_amount`,`create_datetime`,`last_order`) VALUES ('SYS_ACOUNT_X','SYS_USER','X',NULL,'P','0',0,0,'b99e0407fedc3d160f73fec8d1fa9a0c',0,0,now(),NULL);
 
 /*
--- Query: SELECT `symbol`,`ename`,`cname`,`type`,`unit`,`icon`,`pic1`,`pic2`,`pic3`,`order_no`,`collect_start`,`withdraw_fee`,`contract_address`,`contract_abi`,`status`,`updater`,`update_datetime`,`remark` FROM ogc_standard.tcoin_coin
+-- Query: SELECT `symbol`,`ename`,`cname`,`type`,`unit`,`icon`,`pic1`,`pic2`,`pic3`,`order_no`,`collect_start`,`withdraw_fee`,`contract_address`,`contract_abi`,`status`,`updater`,`update_datetime`,`remark` FROM tcoin_coin
 LIMIT 0, 1000
 
 -- Date: 2018-09-11 15:29
 */
 INSERT INTO `tcoin_coin` (`symbol`,`ename`,`cname`,`type`,`unit`,`icon`,`pic1`,`pic2`,`pic3`,`order_no`,`collect_start`,`withdraw_fee`,`contract_address`,`contract_abi`,`status`,`updater`,`update_datetime`,`remark`) VALUES ('X','Happymoney','X币','0T',18,'http://m.hichengdai.com/icon.png','http://m.hichengdai.com/pic1.png','http://m.hichengdai.com/pic2.png','http://m.hichengdai.com/pic3.png',4,1000000000,100,'0xA1b7f66d2c5Cd89A848c75CCda085117825A0Af9','0xA1b7f66d2c5Cd89A848c75CCda085117825A0Af9','0','admin','2018-09-08 20:41:59',NULL);
-INSERT INTO `tcoin_coin` (`symbol`,`ename`,`cname`,`type`,`unit`,`icon`,`pic1`,`pic2`,`pic3`,`order_no`,`collect_start`,`withdraw_fee`,`contract_address`,`contract_abi`,`status`,`updater`,`update_datetime`,`remark`) VALUES ('BTC','Bitcoin','比特币','1',8,'http://m.hichengdai.com/icon.png','http://m.hichengdai.com/pic1.png','http://m.hichengdai.com/pic2.png','http://m.hichengdai.com/pic3.png',4,1000000000,100000000,'0xA1b7f66d2c5Cd89A848c75CCda085117825A0Ar9','0xA1b7f66d2c5Cd89A848c75CCda085117825A0Ar9','0','admin','2018-09-08 20:23:54','测试');
-INSERT INTO `tcoin_coin` (`symbol`,`ename`,`cname`,`type`,`unit`,`icon`,`pic1`,`pic2`,`pic3`,`order_no`,`collect_start`,`withdraw_fee`,`contract_address`,`contract_abi`,`status`,`updater`,`update_datetime`,`remark`) VALUES ('ETH','Ethereun','以太坊','0',18,'FjdmXxf49V1bQYkeLnmG9kzkS_OY','FuYWZ2i49Gb5-EbDbauKLV_FbwJm','FnTUugffEc4yxWOoZK-Gyk6v41y2','Fo4ACqf0bHRLRJaYwssrwGAIwHBC',1,10000000,10,'kkkk','kkkk','0','tao','2018-09-08 20:07:58','测试');
+INSERT INTO `tcoin_coin` (`symbol`,`ename`,`cname`,`type`,`unit`,`icon`,`pic1`,`pic2`,`pic3`,`order_no`,`collect_start`,`withdraw_fee`,`contract_address`,`contract_abi`,`status`,`updater`,`update_datetime`,`remark`) VALUES ('BTC','Bitcoin','比特币','1',8,'http://m.hichengdai.com/icon.png','http://m.hichengdai.com/pic1.png','http://m.hichengdai.com/pic2.png','http://m.hichengdai.com/pic3.png',4,1000000000,100000000,'0xA1b7f66d2c5Cd89A848c75CCda085117825A0Ar9','0xA1b7f66d2c5Cd89A848c75CCda085117825A0Ar9','0','admin','2018-09-08 20:23:54',NULL);
+INSERT INTO `tcoin_coin` (`symbol`,`ename`,`cname`,`type`,`unit`,`icon`,`pic1`,`pic2`,`pic3`,`order_no`,`collect_start`,`withdraw_fee`,`contract_address`,`contract_abi`,`status`,`updater`,`update_datetime`,`remark`) VALUES ('ETH','Ethereun','以太坊','0',18,'FjdmXxf49V1bQYkeLnmG9kzkS_OY','FuYWZ2i49Gb5-EbDbauKLV_FbwJm','FnTUugffEc4yxWOoZK-Gyk6v41y2','Fo4ACqf0bHRLRJaYwssrwGAIwHBC',1,10000000,10,'kkkk','kkkk','0','tao','2018-09-08 20:07:58',NULL);
 
 /*
 -- Query: SELECT * FROM ogc_standard.tcoin_market
@@ -769,3 +769,12 @@ LIMIT 0, 1000
 INSERT INTO `tcoin_market` (`symbol`,`refer_currency`,`origin`,`last_price`,`bid`,`ask`,`mid`,`low`,`high`,`volume`,`update_datetime`,`coinmarketcap_id`) VALUES ('BTC','CNY','cctrade',45000.0000,NULL,NULL,45000.0000,20000.0000,60000.0000,NULL,'2018-09-08 00:00:00',1);
 INSERT INTO `tcoin_market` (`symbol`,`refer_currency`,`origin`,`last_price`,`bid`,`ask`,`mid`,`low`,`high`,`volume`,`update_datetime`,`coinmarketcap_id`) VALUES ('X','CNY','cctrade',20.0000,NULL,NULL,20.0000,40.0000,10.0000,NULL,'2018-09-08 00:00:00',2);
 INSERT INTO `tcoin_market` (`symbol`,`refer_currency`,`origin`,`last_price`,`bid`,`ask`,`mid`,`low`,`high`,`volume`,`update_datetime`,`coinmarketcap_id`) VALUES ('ETH','CNY','cctrade',2000.0000,NULL,NULL,2000.0000,4000.0000,1000.0000,NULL,'2018-09-08 00:00:00',3);
+
+/*
+-- Query: SELECT `id`,`exchange_ename`,`symbol`,`to_symbol`,`pair`,`price`,`updater`,`update_datetime`,`remark` FROM tmk_exchange_pair
+LIMIT 0, 1000
+
+-- Date: 2018-09-19 23:11
+*/
+INSERT INTO `tmk_exchange_pair` (`exchange_ename`,`symbol`,`to_symbol`,`pair`,`price`,`updater`,`update_datetime`,`remark`) VALUES ('HappyMoney','x','btc','xbtc',0.000000000000000000,'system',now(),NULL);
+INSERT INTO `tmk_exchange_pair` (`exchange_ename`,`symbol`,`to_symbol`,`pair`,`price`,`updater`,`update_datetime`,`remark`) VALUES ('HappyMoney','x','eth','xeth',0.000000000000000000,'system',now(),NULL);

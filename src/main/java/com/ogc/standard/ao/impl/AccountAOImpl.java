@@ -159,6 +159,7 @@ public class AccountAOImpl implements IAccountAO {
             Account account = accountBO.getAccountByUser(userId, currency);
             accounts.add(account);
         }
+
         return accounts;
     }
 

@@ -57,7 +57,7 @@ public class DivideAOImpl implements IDivideAO {
     public void doDivide(String divideId, String divideProfit,
             String divideUser, String remark) {
 
-        sysUserBO.getSYSUser(divideId);
+        sysUserBO.getSYSUser(divideUser);
 
         DivideDetail condition = new DivideDetail();
         condition.setDivideId(divideId);
