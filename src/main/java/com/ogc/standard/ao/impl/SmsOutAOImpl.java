@@ -29,7 +29,7 @@ public class SmsOutAOImpl implements ISmsOutAO {
 
     @Override
     public void sendEmailCaptcha(String email, String bizType) {
-        if ("805081".equals(bizType)) {
+        if ("805043".equals(bizType)) {
             User condition = new User();
             condition.setEmail(email);
             if (userBO.getTotalCount(condition) > 0) {
