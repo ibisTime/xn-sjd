@@ -22,8 +22,8 @@ public enum EJourBizTypeUser {
     AJ_ACCEPT_BUY("accept_buy", "场外承兑商购买"), 
     AJ_ACCEPT_SELL("accept_sell","场外承兑商出售"), 
     AJ_ACCEPT_FEE("accept_fee", "场外承兑商手续费"),
-    AJ_ACCEPT_FROZEN("withdraw_frozen", "场外承兑商冻结"),
-    AJ_ACCEPT_UNFROZEN("withdraw_unfrozen", "场外承兑商解冻"),
+    AJ_ACCEPT_FROZEN("accept_frozen", "场外承兑商冻结"),
+    AJ_ACCEPT_UNFROZEN("accept_unfrozen", "场外承兑商解冻"),
     
     AJ_CCORDER_BUY("ccorder_buy", "场外cc买入"), 
     AJ_CCORDER_SELL("ccorder_sell", "场外cc卖出"), 

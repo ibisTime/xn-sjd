@@ -7,6 +7,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import okhttp3.Call;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +21,6 @@ import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.ogc.standard.ao.IHuobiproAO;
 import com.ogc.standard.ao.IMarketAO;
 import com.ogc.standard.bo.ICoinBO;
 import com.ogc.standard.bo.ICurrencyRateBO;
@@ -33,11 +37,6 @@ import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EMarketOrigin;
 import com.ogc.standard.exception.BizException;
 
-import okhttp3.Call;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-
 /** 
  * 
  * @author: lei 
@@ -51,9 +50,6 @@ public class MarketAOImpl implements IMarketAO {
         .getLogger(MarketAOImpl.class);
 
     private static List<MarketDetail> marketDetailList;
-
-    @Autowired
-    private IHuobiproAO huobiproAO;
 
     @Autowired
     private IMarketBO marketBO;
@@ -111,17 +107,17 @@ public class MarketAOImpl implements IMarketAO {
 
                     BigDecimal priceCNY = new BigDecimal(
                         marketDetail.getPrice_usd()).multiply(currencyRate);
-                    String priceCNYString = priceCNY
-                        .setScale(2, RoundingMode.HALF_EVEN).toString();
+                    String priceCNYString = priceCNY.setScale(2,
+                        RoundingMode.HALF_EVEN).toString();
                     marketDetail.setPrice_cny(priceCNYString);
 
-                    marketDetail.setOne_day_volume_usd(
-                        (String) marketDetailMap.get("24h_volume_usd"));
+                    marketDetail.setOne_day_volume_usd((String) marketDetailMap
+                        .get("24h_volume_usd"));
 
                     // 获取人民币转化
                     BigDecimal one_day_volume_cny = new BigDecimal(
                         marketDetail.getOne_day_volume_usd())
-                            .multiply(currencyRate);
+                        .multiply(currencyRate);
                     String one_day_volume_cny_String = one_day_volume_cny
                         .setScale(2, RoundingMode.HALF_EVEN).toString();
                     marketDetail
@@ -176,8 +172,8 @@ public class MarketAOImpl implements IMarketAO {
 
                 for (Coin coin : openCoinList) {
 
-                    if (String.valueOf(coinInfo.get("symbol"))
-                        .equals(coin.getSymbol())) {
+                    if (String.valueOf(coinInfo.get("symbol")).equals(
+                        coin.getSymbol())) {
                         // 从coinmarketcap获取
 
                         this.obtainCoinMarketCap(
@@ -191,9 +187,11 @@ public class MarketAOImpl implements IMarketAO {
 
         } catch (Exception e) {
 
-            logger.error("行情详情数据拉取异常，原因：" + e.getMessage()
-                    + Thread.currentThread().getStackTrace()[1]
-                        .getMethodName());
+            logger
+                .error("行情详情数据拉取异常，原因："
+                        + e.getMessage()
+                        + Thread.currentThread().getStackTrace()[1]
+                            .getMethodName());
 
         }
 
