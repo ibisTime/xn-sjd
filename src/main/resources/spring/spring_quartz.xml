@@ -20,7 +20,7 @@
 			<list>
 			
 				<!-- 行情 -->
-       		    <!-- <ref bean="marketTrigger"/>-->
+       		   <!--  <ref bean="marketTrigger"/> -->
        		    
        		    <!-- <ref bean="doScanPairTrigger"/>
        		    <ref bean="doSaveKLineTrigger"/>

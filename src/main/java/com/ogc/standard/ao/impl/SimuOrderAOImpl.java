@@ -18,6 +18,7 @@ import com.ogc.standard.bo.ISimuOrderBO;
 import com.ogc.standard.bo.ISimuOrderHistoryBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
+import com.ogc.standard.common.CoinUtil;
 import com.ogc.standard.common.SysConstants;
 import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.domain.Account;
@@ -147,6 +148,9 @@ public class SimuOrderAOImpl implements ISimuOrderAO {
 
     private SimuOrder submitBuyOrder(XN650050Req req) {
 
+        // 获取币种单位
+        Coin coin = coinBO.getCoin(req.getSymbol());
+
         // 买入币总数量
         BigDecimal totalCount = StringValidater
             .toBigDecimal(req.getTotalCount());
@@ -159,7 +163,8 @@ public class SimuOrderAOImpl implements ISimuOrderAO {
 
         if (ESimuOrderType.LIMIT.getCode().equals(req.getType())) {
             price = StringValidater.toBigDecimal(req.getPrice());
-            totalAmount = price.multiply(totalCount);
+            totalAmount = price
+                .multiply(CoinUtil.fromMinUnit(totalCount, coin.getUnit()));
         } else {
             // 市价买单没有价格
             price = new BigDecimal(-1);
@@ -249,27 +254,27 @@ public class SimuOrderAOImpl implements ISimuOrderAO {
 
         // 获取币种单位
         Coin coin = coinBO.getCoin(req.getSymbol());
-        BigDecimal unit = new BigDecimal("10").pow(coin.getUnit());
 
         // 委托数量是否超过限制
-        BigDecimal count = StringValidater.toBigDecimal(req.getTotalCount());
-        if (count.compareTo(SysConstants.minCountLimit.multiply(unit)) < 0
-                || count
-                    .compareTo(SysConstants.maxCountLimit.multiply(unit)) > 0) {
+        BigDecimal count = CoinUtil.fromMinUnit(
+            StringValidater.toBigDecimal(req.getTotalCount()), coin.getUnit());
+        if (count.compareTo(SysConstants.minCountLimit) < 0
+                || count.compareTo(SysConstants.maxCountLimit) > 0) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "委托数量应在" + SysConstants.minCountLimit + "至"
                         + SysConstants.maxCountLimit + "之间");
         }
 
         // 是否是最小委托数量的整数倍
-        if (BigDecimal.ZERO.compareTo(count.divideAndRemainder(
-            SysConstants.minCountLimit.multiply(unit))[1]) != 0) {
+        if (BigDecimal.ZERO.compareTo(
+            count.divideAndRemainder(SysConstants.minCountLimit)[1]) != 0) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "委托数量应当" + SysConstants.minCountLimit + "的整数倍");
         }
 
         // 委托价格是否超过价格范围:不高于前收盘价的900%，不低于前收盘价测50%
-        BigDecimal price = StringValidater.toBigDecimal(req.getTotalCount());
+        BigDecimal price = CoinUtil.fromMinUnit(
+            StringValidater.toBigDecimal(req.getTotalCount()), coin.getUnit());
         // 获取上一时间单位的K线
         SimuKLine simuKLine = simuKLineBO.getLatestSimuKLine(req.getSymbol(),
             req.getToSymbol(), ESimuKLinePeriod.MIN1.getCode());
