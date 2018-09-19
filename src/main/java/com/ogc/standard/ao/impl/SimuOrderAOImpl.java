@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.ISimuOrderAO;
 import com.ogc.standard.bo.IAccountBO;
+import com.ogc.standard.bo.ICoinBO;
 import com.ogc.standard.bo.IHandicapBO;
 import com.ogc.standard.bo.ISimuKLineBO;
 import com.ogc.standard.bo.ISimuOrderBO;
@@ -20,6 +21,7 @@ import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.SysConstants;
 import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.domain.Account;
+import com.ogc.standard.domain.Coin;
 import com.ogc.standard.domain.SimuKLine;
 import com.ogc.standard.domain.SimuOrder;
 import com.ogc.standard.domain.User;
@@ -53,6 +55,9 @@ public class SimuOrderAOImpl implements ISimuOrderAO {
 
     @Autowired
     private IAccountBO accountBO;
+
+    @Autowired
+    private ICoinBO coinBO;
 
     @Override
     @Transactional
@@ -242,18 +247,23 @@ public class SimuOrderAOImpl implements ISimuOrderAO {
             }
         }
 
+        // 获取币种单位
+        Coin coin = coinBO.getCoin(req.getSymbol());
+        BigDecimal unit = new BigDecimal("10").pow(coin.getUnit());
+
         // 委托数量是否超过限制
         BigDecimal count = StringValidater.toBigDecimal(req.getTotalCount());
-        if (count.compareTo(SysConstants.minCountLimit) < 0
-                || count.compareTo(SysConstants.maxCountLimit) > 0) {
+        if (count.compareTo(SysConstants.minCountLimit.multiply(unit)) < 0
+                || count
+                    .compareTo(SysConstants.maxCountLimit.multiply(unit)) > 0) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "委托数量应在" + SysConstants.minCountLimit + "至"
                         + SysConstants.maxCountLimit + "之间");
         }
 
         // 是否是最小委托数量的整数倍
-        if (BigDecimal.ZERO.compareTo(
-            count.divideAndRemainder(SysConstants.minCountLimit)[1]) != 0) {
+        if (BigDecimal.ZERO.compareTo(count.divideAndRemainder(
+            SysConstants.minCountLimit.multiply(unit))[1]) != 0) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "委托数量应当" + SysConstants.minCountLimit + "的整数倍");
         }

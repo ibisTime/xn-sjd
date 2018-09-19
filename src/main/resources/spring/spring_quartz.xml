@@ -22,9 +22,9 @@
 				<!-- 行情 -->
        		    <!-- <ref bean="marketTrigger"/>-->
        		    
-       		    <ref bean="doScanPairTrigger"/>
+       		    <!-- <ref bean="doScanPairTrigger"/>
        		    <ref bean="doSaveKLineTrigger"/>
-       		    <ref bean="doScanMatchResultTrigger"/>
+       		    <ref bean="doScanMatchResultTrigger"/> -->
        		    
 				<!-- <ref bean="doERC20CollectTrigger"/>
 				<ref bean="doERC20CheckGetFeeTxTrigger"/>
