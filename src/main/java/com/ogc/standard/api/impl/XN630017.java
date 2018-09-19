@@ -1,5 +1,7 @@
 package com.ogc.standard.api.impl;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.ogc.standard.ao.ISYSMenuAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
@@ -28,8 +30,12 @@ public class XN630017 extends AProcessor {
         condition.setNameForQuery(req.getName());
         condition.setType(req.getType());
         condition.setParentCode(req.getParentCode());
-        // condition.setUpdater(req.getUpdater());
         condition.setSystemCode(req.getSystemCode());
+        String column = req.getOrderColumn();
+        if (StringUtils.isBlank(column)) {
+            column = ISYSMenuAO.DEFAULT_ORDER_COLUMN;
+        }
+        condition.setOrder(column, req.getOrderDir());
         return sysMenuAO.querySYSMenuList(condition);
     }
 

@@ -13,6 +13,7 @@ import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.ObjValidater;
 import com.ogc.standard.dto.req.XN805043Req;
+import com.ogc.standard.dto.res.PKCodeRes;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
@@ -31,7 +32,7 @@ public class XN805043 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return userAO.doRegisterByEmail(req);
+        return new PKCodeRes(userAO.doRegisterByEmail(req));
     }
 
     @Override

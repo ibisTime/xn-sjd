@@ -2,7 +2,9 @@ package com.ogc.standard.dto.req;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-public class XN630017Req {
+public class XN630017Req extends AListReq {
+    private static final long serialVersionUID = -3229284029431616391L;
+
     // 菜单名称(选填)
     private String name;
 

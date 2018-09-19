@@ -14,6 +14,7 @@ import com.ogc.standard.dao.base.ABaseDO;
 public class AcceptOrder extends ABaseDO {
 
     private static final long serialVersionUID = -543164987108114191L;
+    // ***********db properties***********
 
     // 编号
     private String code;
@@ -83,6 +84,18 @@ public class AcceptOrder extends ABaseDO {
 
     // 备注
     private String remark;
+    // ***********db properties***********
+
+    // userId转义
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public String getCode() {
         return code;

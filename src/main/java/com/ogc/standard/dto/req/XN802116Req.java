@@ -1,6 +1,6 @@
 package com.ogc.standard.dto.req;
 
-public class XN802116Req extends APageReq {
+public class XN802116Req extends AListReq {
 
     private static final long serialVersionUID = 6344984390159547359L;
 

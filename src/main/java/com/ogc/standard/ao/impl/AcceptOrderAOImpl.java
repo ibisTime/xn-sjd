@@ -14,6 +14,7 @@ import com.ogc.standard.bo.IAcceptOrderBO;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IBankcardBO;
 import com.ogc.standard.bo.ISYSConfigBO;
+import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.AmountUtil;
 import com.ogc.standard.common.SysConstants;
@@ -49,6 +50,9 @@ public class AcceptOrderAOImpl implements IAcceptOrderAO {
 
     @Autowired
     private IBankcardBO bankcardBO;
+
+    @Autowired
+    private IUserBO userBO;
 
     @Override
     public String buyOrder(XN625270Req req) {
@@ -297,7 +301,12 @@ public class AcceptOrderAOImpl implements IAcceptOrderAO {
     @Override
     public Paginable<AcceptOrder> queryAcceptOrderPage(int start, int limit,
             AcceptOrder condition) {
-        return acceptOrderBO.getPaginable(start, limit, condition);
+        Paginable<AcceptOrder> orderPage = acceptOrderBO.getPaginable(start,
+            limit, condition);
+        for (AcceptOrder order : orderPage.getList()) {
+            order.setUser(userBO.getUser(order.getUserId()));
+        }
+        return orderPage;
     }
 
     @Override
@@ -307,6 +316,8 @@ public class AcceptOrderAOImpl implements IAcceptOrderAO {
 
     @Override
     public AcceptOrder getAcceptOrder(String code) {
-        return acceptOrderBO.getAcceptOrder(code);
+        AcceptOrder data = acceptOrderBO.getAcceptOrder(code);
+        data.setUser(userBO.getUser(data.getUserId()));
+        return data;
     }
 }

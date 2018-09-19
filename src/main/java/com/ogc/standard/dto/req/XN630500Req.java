@@ -13,7 +13,6 @@ public class XN630500Req {
     private String type;
 
     // 访问Url（必填）
-    @NotBlank
     private String url;
 
     // 图片（选填）
