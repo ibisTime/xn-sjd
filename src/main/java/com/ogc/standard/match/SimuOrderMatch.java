@@ -9,6 +9,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ogc.standard.bo.ICoinBO;
 import com.ogc.standard.bo.IHandicapBO;
 import com.ogc.standard.bo.ISYSConfigBO;
 import com.ogc.standard.bo.ISimuMatchResultBO;
@@ -16,8 +17,10 @@ import com.ogc.standard.bo.ISimuOrderBO;
 import com.ogc.standard.bo.ISimuOrderDetailBO;
 import com.ogc.standard.bo.ISimuOrderHistoryBO;
 import com.ogc.standard.bo.IUserBO;
+import com.ogc.standard.common.CoinUtil;
 import com.ogc.standard.common.SysConstants;
 import com.ogc.standard.core.StringValidater;
+import com.ogc.standard.domain.Coin;
 import com.ogc.standard.domain.Handicap;
 import com.ogc.standard.domain.HandicapGrade;
 import com.ogc.standard.domain.SimuOrder;
@@ -57,6 +60,9 @@ public class SimuOrderMatch {
 
     @Autowired
     private ISYSConfigBO sysConfigBO;
+
+    @Autowired
+    private ICoinBO coinBO;
 
     /**
     * 按交易对查找委托单进行撮合逻辑
@@ -156,12 +162,7 @@ public class SimuOrderMatch {
                         break;
                     }
 
-                    // 对向
-                    BigDecimal avilHandicapAmount = handicap.getCount()
-                        .multiply(handicap.getPrice());
-
-                    doMatchMarket(marketOrder, handicap, limitOrder, avilAmount,
-                        avilHandicapAmount);
+                    doMatchMarket(marketOrder, limitOrder, avilAmount);
 
                 }
 
@@ -237,10 +238,6 @@ public class SimuOrderMatch {
                             continue;
                         }
 
-                        // 盘口剩余可交易量
-                        BigDecimal avilAsksAmount = asksOrder.getTotalAmount()
-                            .subtract(asksOrder.getTradedAmount());
-
                         // 卖盘盘口价格 低于等于 买盘盘口价格 撮合成功
                         if (asksOrder.getPrice()
                             .compareTo(bidsOrder.getPrice()) <= 0) {
@@ -260,38 +257,47 @@ public class SimuOrderMatch {
     }
 
     //
-    private void doMatchMarket(SimuOrder marketOrder, Handicap handicap,
-            SimuOrder limitOrder, BigDecimal avilAmount,
-            BigDecimal avilHandicapAmount) {
+    private void doMatchMarket(SimuOrder marketOrder, SimuOrder limitOrder,
+            BigDecimal avilAmount) {
+
+        // 获取盘口币种单位
+        Coin asksCoin = coinBO.getCoin(limitOrder.getSymbol());
+
+        // 盘口交易信息
+        BigDecimal handicapPrice = limitOrder.getPrice();
+        BigDecimal handicapCount = limitOrder.getTotalCount()
+            .subtract(limitOrder.getTradedCount());
+        BigDecimal handicapAmount = handicapPrice
+            .multiply(CoinUtil.fromMinUnit(handicapCount, asksCoin.getUnit()));
 
         // 当前盘口的交易量是否能满足
-        if (avilHandicapAmount.compareTo(avilAmount) > 0) {
+        if (handicapAmount.compareTo(avilAmount) > 0) {
             // 计算交易数量
-            BigDecimal tradeCount = avilAmount.divide(handicap.getPrice(), 4,
+            BigDecimal tradeCount = avilAmount.divide(handicapPrice, 4,
                 BigDecimal.ROUND_DOWN);
 
             // 当前委托单完全成交，新增当前委托单交易明细单
             SimuOrderDetail marketDetail = doOrderMatch(marketOrder,
-                handicap.getPrice(), tradeCount, avilAmount,
+                handicapPrice, tradeCount, avilAmount,
                 ESimuOrderStatus.ENTIRE_DEAL.getCode());
 
             // 盘口部分成交，新增盘口单交易明细单
             SimuOrderDetail handicapDetail = doOrderMatch(limitOrder,
-                handicap.getPrice(), tradeCount, avilAmount,
+                handicapPrice, tradeCount, avilAmount,
                 ESimuOrderStatus.PART_DEAL.getCode());
 
             // 落地撮合结果
             simuMatchResultBO.doSimuMatchResult(marketDetail, handicapDetail);
 
-        } else if (avilHandicapAmount.compareTo(avilAmount) == 0) {
+        } else if (handicapAmount.compareTo(avilAmount) == 0) {
             // 当前委托单完全成交，新增当前委托单交易明细单
             SimuOrderDetail marketDetail = doOrderMatch(marketOrder,
-                handicap.getPrice(), handicap.getCount(), avilHandicapAmount,
+                handicapPrice, handicapCount, handicapAmount,
                 ESimuOrderStatus.ENTIRE_DEAL.getCode());
 
             // 盘口完全成交，新增盘口单交易明细单
             SimuOrderDetail handicapDetail = doOrderMatch(limitOrder,
-                handicap.getPrice(), handicap.getCount(), avilHandicapAmount,
+                handicapPrice, handicapCount, handicapAmount,
                 ESimuOrderStatus.ENTIRE_DEAL.getCode());
 
             // 落地撮合结果
@@ -300,12 +306,12 @@ public class SimuOrderMatch {
         } else {
             // 当前委托单部分成交，新增当前委托单交易明细单
             SimuOrderDetail marketDetail = doOrderMatch(marketOrder,
-                handicap.getPrice(), handicap.getCount(), avilHandicapAmount,
+                handicapPrice, handicapCount, handicapAmount,
                 ESimuOrderStatus.PART_DEAL.getCode());
 
             // 盘口完全成交，新增盘口单交易明细单
             SimuOrderDetail handicapDetail = doOrderMatch(limitOrder,
-                handicap.getPrice(), handicap.getCount(), avilHandicapAmount,
+                handicapPrice, handicapCount, handicapAmount,
                 ESimuOrderStatus.ENTIRE_DEAL.getCode());
 
             // 落地撮合结果
@@ -317,17 +323,25 @@ public class SimuOrderMatch {
 
     private void doMatchLimit(SimuOrder bidsOrder, SimuOrder asksOrder) {
 
+        // 获取买方币种单位
+        Coin bidsCoin = coinBO.getCoin(bidsOrder.getSymbol());
+
         // 买单交易信息
         BigDecimal bidsPrice = bidsOrder.getPrice();
         BigDecimal bidsCount = bidsOrder.getTotalCount()
             .subtract(bidsOrder.getTradedCount());
-        BigDecimal bidsAmount = bidsPrice.multiply(bidsCount);
+        BigDecimal bidsAmount = bidsPrice
+            .multiply(CoinUtil.fromMinUnit(bidsCount, bidsCoin.getUnit()));
+
+        // 获取卖方币种单位
+        Coin asksCoin = coinBO.getCoin(bidsOrder.getSymbol());
 
         // 卖单交易信息
         BigDecimal asksPrice = asksOrder.getPrice();
         BigDecimal asksCount = asksOrder.getTotalCount()
             .subtract(asksOrder.getTradedCount());
-        BigDecimal asksAmount = asksPrice.multiply(asksCount);
+        BigDecimal asksAmount = asksPrice
+            .multiply(CoinUtil.fromMinUnit(asksCount, asksCoin.getUnit()));
 
         // 买盘交易量能否被满足
         if (asksAmount.compareTo(bidsAmount) > 0) {

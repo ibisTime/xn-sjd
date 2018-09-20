@@ -23,7 +23,7 @@
        		    <!-- <ref bean="marketTrigger"/> -->
        		    
        		    <!-- 币币交易 -->
-       		    <ref bean="doScanPairTrigger"/>
+       		    <!-- <ref bean="doScanPairTrigger"/> -->
        		    <!-- <ref bean="doSaveKLineTrigger"/> -->
        		    <!-- <ref bean="doScanMatchResultTrigger"/> -->
        		    

@@ -532,6 +532,7 @@ CREATE TABLE `tcoin_coin` (
   `pic2` varchar(255) DEFAULT NULL COMMENT '图标2',
   `pic3` varchar(255) DEFAULT NULL COMMENT '图标3',
   `order_no` int(11) NOT NULL COMMENT 'UI序号',
+  `introduction` varchar(255) DEFAULT NULL COMMENT '介绍',
   `total_supply` varchar(255) DEFAULT NULL COMMENT '流通量',
   `total_supply_market` varchar(255) DEFAULT NULL COMMENT '流通市值',
   `max_supply` varchar(255) DEFAULT NULL COMMENT '发行总量',
@@ -541,7 +542,6 @@ CREATE TABLE `tcoin_coin` (
   `web_url` varchar(255) DEFAULT NULL COMMENT '官网',
   `block_url` varchar(255) DEFAULT NULL COMMENT '区块查询',
   `ico_datetime` varchar(255) DEFAULT NULL COMMENT 'ico时间',
-  
   `collect_start` decimal(64,0) NOT NULL COMMENT '归集阀值',
   `withdraw_fee` decimal(64,0) NOT NULL COMMENT '取现手续费',
   `contract_address` varchar(255) DEFAULT NULL COMMENT '合约地址',
@@ -551,7 +551,8 @@ CREATE TABLE `tcoin_coin` (
   `update_datetime` datetime NOT NULL COMMENT '最后操作时间',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='币种';
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='币种';
+
 
 -- ----------------------------
 --  Table structure for `tmk_exchange`
