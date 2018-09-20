@@ -98,8 +98,8 @@ public class EthClient {
             // 临时解决web3jbug
             String findStr = "\"kdf\":\"scrypt\",";
             String keystoreContentCopy = keystoreContent;
-            String newkeystoreContent = keystoreContentCopy.replaceFirst(
-                findStr, "");
+            String newkeystoreContent = keystoreContentCopy
+                .replaceFirst(findStr, "");
             int index = newkeystoreContent.indexOf(findStr);
             if (index != -1) {
                 keystoreContent = newkeystoreContent;
@@ -127,23 +127,26 @@ public class EthClient {
                 "以太坊地址创建发生异常，原因：" + e.getMessage());
         }
         if (ethAddress == null) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "以太坊地址创建失败");
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "以太坊地址创建失败");
         }
+
         return ethAddress;
     }
 
     public static BigDecimal getBalance(String address) {
         try {
             DefaultBlockParameter defaultBlockParameter = DefaultBlockParameterName.LATEST;
-            EthGetBalance ethGetBalance = getClient().ethGetBalance(address,
-                defaultBlockParameter).send();
+            EthGetBalance ethGetBalance = getClient()
+                .ethGetBalance(address, defaultBlockParameter).send();
             if (ethGetBalance != null) {
                 return new BigDecimal(ethGetBalance.getBalance().toString());
             } else {
                 throw new BizException("xn625000", "以太坊余额查询失败");
             }
         } catch (Exception e) {
-            throw new BizException("xn625000", "以太坊余额查询异常，原因：" + e.getMessage());
+            throw new BizException("xn625000",
+                "以太坊余额查询异常，原因：" + e.getMessage());
         }
     }
 
@@ -275,7 +278,8 @@ public class EthClient {
             //
             EthGetTransactionCount ethGetTransactionCount = getClient()
                 .ethGetTransactionCount(fromAddress,
-                    DefaultBlockParameterName.LATEST).sendAsync().get();
+                    DefaultBlockParameterName.LATEST)
+                .sendAsync().get();
             //
             BigInteger nonce = ethGetTransactionCount.getTransactionCount();
 
@@ -290,8 +294,8 @@ public class EthClient {
                 new BigInteger(value.toString()), "");
 
             // 签名
-            byte[] signedMessage = TransactionEncoder.signMessage(
-                rawTransaction, credentials);
+            byte[] signedMessage = TransactionEncoder
+                .signMessage(rawTransaction, credentials);
             txHash = Numeric.toHexString(signedMessage);
             EthSendTransaction ethSendTransaction = getClient()
                 .ethSendRawTransaction(txHash).sendAsync().get();
@@ -329,8 +333,8 @@ public class EthClient {
         }
         Credentials credentials;
         try {
-            credentials = WalletUtils
-                .loadCredentials(keyStorePwd, keystoreFile);
+            credentials = WalletUtils.loadCredentials(keyStorePwd,
+                keystoreFile);
             return credentials;
         } catch (Exception e) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),

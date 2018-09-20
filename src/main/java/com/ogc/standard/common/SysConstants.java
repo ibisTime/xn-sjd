@@ -82,7 +82,7 @@ public class SysConstants {
     public static String WITHDRAW_CN = "您有一个新的取现订单（编号：%s），请及时处理！";
 
     // 代注册
-    public static String DO_ADD_USER_CN = "尊敬的%s用户，您已成功注册THA钱包，您的默认登录密码是%s，请及时登录平台修改。";
+    public static String DO_ADD_USER_CN = "尊敬的%s用户，您已成功注册，您的默认登录密码是%s，请及时登录平台修改。";
 
     // 修改手机号
     public static String DO_CHANGE_MOBILE_CN = "尊敬的%s用户，您于%s提交的更改绑定手机号码服务已完成，现绑定手机号码为%s，请妥善保管您的账户相关信息。";

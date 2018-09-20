@@ -34,7 +34,7 @@ public class XN802399 extends AProcessor {
     public Object doBusiness() throws BizException {
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
-        return userAO.queryStraightRefPage(req, start, limit);
+        return userAO.queryFirstRefPage(req, start, limit);
     }
 
     @Override

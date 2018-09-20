@@ -1,5 +1,7 @@
 package com.ogc.standard.ao.impl;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -58,7 +60,17 @@ public class SYSMenuRoleAOImpl implements ISYSMenuRoleAO {
 
     @Override
     public List<SYSMenu> querySYSMenuList(SYSMenuRole data) {
-        return sysMenuRoleBO.querySYSMenuList(data);
+        List<SYSMenu> list = sysMenuRoleBO.querySYSMenuList(data);
+        ListSort(list);
+        return list;
     }
 
+    public void ListSort(List<SYSMenu> list) {
+        Collections.sort(list, new Comparator<SYSMenu>() {
+            @Override
+            public int compare(SYSMenu o1, SYSMenu o2) {
+                return o1.getOrderNo().compareTo(o2.getOrderNo());
+            }
+        });
+    }
 }

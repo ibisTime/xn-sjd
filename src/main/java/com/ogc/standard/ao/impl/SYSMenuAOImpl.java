@@ -1,5 +1,7 @@
 package com.ogc.standard.ao.impl;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,7 +72,18 @@ public class SYSMenuAOImpl implements ISYSMenuAO {
 
     @Override
     public List<SYSMenu> querySYSMenuList(SYSMenu condition) {
-        return sysMenuBO.querySYSMenuList(condition);
+        List<SYSMenu> menuList = sysMenuBO.querySYSMenuList(condition);
+        ListSort(menuList);
+        return menuList;
+    }
+
+    public void ListSort(List<SYSMenu> list) {
+        Collections.sort(list, new Comparator<SYSMenu>() {
+            @Override
+            public int compare(SYSMenu o1, SYSMenu o2) {
+                return o1.getOrderNo().compareTo(o2.getOrderNo());
+            }
+        });
     }
 
     @Override

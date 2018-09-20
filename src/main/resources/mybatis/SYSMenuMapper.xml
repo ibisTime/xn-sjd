@@ -49,15 +49,15 @@
 	<select id="select_sysMenu" parameterType="sysMenu" resultMap="sysMenu_DB_Result">
 		SELECT 
 		code
-		,name
+	 	,name
 		,type
-		,url
+		,url 
 		,order_no
 		,updater
 		,update_datetime
 		,remark	
 		,parent_code
-		,system_code
+		,system_code  
 		FROM
 		tsys_menu t
 		<include refid="where_condition"/>

@@ -214,11 +214,11 @@ public interface IUserAO {
     public void editRespArea(String userId, String respArea, String updater);
 
     // 直退用户查询
-    public Paginable<User> queryStraightRefPage(XN802399Req req, int start,
+    public Paginable<User> queryFirstRefPage(XN802399Req req, int start,
             int limit);
 
     //
-    public Paginable<User> queryRefRefPage(XN802400Req req, int start,
+    public Paginable<User> querySecondRefPage(XN802400Req req, int start,
             int limit);
     // // 关闭认证
     // public void closeGoogleAuth(String userId, String smsCaptcha,
