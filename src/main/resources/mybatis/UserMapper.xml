@@ -47,6 +47,9 @@
 			<if test="userId != null and userId != '' ">
 				AND t.user_id = #{userId}
 			</if>
+			<if test="kind != null and kind != '' ">
+				AND t.kind = #{kind}
+			</if>
 			<if test="loginName != null and loginName != '' ">
 				AND t.login_name = #{loginName}
 			</if>

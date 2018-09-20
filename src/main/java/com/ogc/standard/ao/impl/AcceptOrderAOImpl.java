@@ -303,6 +303,8 @@ public class AcceptOrderAOImpl implements IAcceptOrderAO {
             limit, condition);
         for (AcceptOrder order : orderPage.getList()) {
             order.setUser(userBO.getUser(order.getUserId()));
+            order.setBankcard(bankcardBO
+                .getBankcardByBankcardNumber(order.getReceiveCardNo()));
         }
         return orderPage;
     }
@@ -316,6 +318,8 @@ public class AcceptOrderAOImpl implements IAcceptOrderAO {
     public AcceptOrder getAcceptOrder(String code) {
         AcceptOrder data = acceptOrderBO.getAcceptOrder(code);
         data.setUser(userBO.getUser(data.getUserId()));
+        data.setBankcard(
+            bankcardBO.getBankcardByBankcardNumber(data.getReceiveCardNo()));
         return data;
     }
 }

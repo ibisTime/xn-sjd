@@ -691,7 +691,7 @@ INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`r
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('qiniu','qiniu_domain','ounm8iw2d.bkt.clouddn.com','admin',now(),'访问域名');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('coin_price_x','eth_coin_price_x','10','admin',now(),'eth价格计算x');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('coin_price_x','btc_coin_price_x','5000','admin',now(),'bec价格计算x');
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('coin_price_x','hpm_coin_price_x','0','admin',now(),'hpm价格计算x');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('coin_price_x','x_coin_price_x','0','admin',now(),'hpm价格计算x');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('sys_txt','trade_remind','1.交易前请详细了解卖家的交易信息 \n2.请通过平台进行沟通约定，并保存好相关聊天记录 \n3.如遇到交易纠纷，请通过平台“帮助”解决问题','admin',now(),'交易提醒');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('sys_txt','activity_rule','1.分享好友，并通过链接注册成功；\n2.注册之后每一笔成功交易，您都将获得一笔提成，金额为交易手续费的0.1% \n3.HappyMoney保留对活动的解释权。','admin',now(),'活动规则');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('sys_txt','tips','1.温馨提示；\n2.温馨提示 \n3.温馨提示。','admin',now(),'温馨提示');
@@ -707,8 +707,8 @@ INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`r
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('tencent_im','tx_account_type','38263','admin',now(),'账户类型');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('reg_award','cuser_ref','10','admin',now(),'普通用户推荐送X币');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('reg_award','duser_ref','15','admin',now(),'普通用户推荐送X币');
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('accept_rule','accept_order_buy_fee','0.001','admin',now(),'买入交易手续费');
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('accept_rule','accept_order_sell_fee','0.002','admin',now(),'卖出交易手续费');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('accept_rule','accept_order_buy_fee_rate','0.001','admin',now(),'买入交易手续费');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('accept_rule','accept_order_sell_fee_rate','0.002','admin',now(),'卖出交易手续费');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('accept_rule','accept_order_cancel_max_time','10','admin',now(),'每天交易取消最大次数');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('accept_rule','accept_order_min_cny_amount','100','admin',now(),'单笔交易最小额度(人民币)');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('accept_rule','accept_order_max_cny_amount','50000','admin',now(),'单笔交易最大额度(人民币)');

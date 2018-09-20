@@ -89,6 +89,17 @@ public class AcceptOrder extends ABaseDO {
     // userId转义
     private User user;
 
+    // 银行卡转义
+    private Bankcard bankcard;
+
+    public Bankcard getBankcard() {
+        return bankcard;
+    }
+
+    public void setBankcard(Bankcard bankcard) {
+        this.bankcard = bankcard;
+    }
+
     public User getUser() {
         return user;
     }
