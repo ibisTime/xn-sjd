@@ -237,4 +237,10 @@ public class JourBOImpl extends PaginableBOImpl<Jour> implements IJourBO {
         BigDecimal a = jourDAO.selectTotalAmount(jour);
         return a;
     }
+
+    @Override
+    public BigDecimal getTotalAmount(Jour condition) {
+
+        return jourDAO.selectTotalAmount(condition);
+    }
 }

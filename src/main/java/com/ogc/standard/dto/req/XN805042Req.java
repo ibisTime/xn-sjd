@@ -4,7 +4,6 @@ import org.hibernate.validator.constraints.NotBlank;
 
 public class XN805042Req {
     // 登录名（必填）
-    @NotBlank
     private String loginName;
 
     // 详细地址

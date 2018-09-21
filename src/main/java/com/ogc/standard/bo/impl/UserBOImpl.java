@@ -28,6 +28,7 @@ import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.IUserDAO;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.dto.req.XN805043Req;
+import com.ogc.standard.enums.ELanguage;
 import com.ogc.standard.enums.EUserKind;
 import com.ogc.standard.enums.EUserLevel;
 import com.ogc.standard.enums.EUserStatus;
@@ -56,7 +57,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             condition.setMobile(mobile);
             long count = getTotalCount(condition);
             if (count > 0) {
-                throw new BizException("li01003", "手机号已经存在");
+                throw new BizException("000001", ELanguage.zh_CN);
             }
         }
     }
@@ -568,6 +569,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         user.setIdKind(idKind);
         user.setIdNo(idNo);
         user.setRealName(realName);
+        user.setStatus(EUserStatus.NORMAL.getCode());
         double tradeRate = sysConfigBO
             .getDoubleValue(SysConstants.TRADE_FEE_RATE);
         user.setTradeRate(tradeRate);

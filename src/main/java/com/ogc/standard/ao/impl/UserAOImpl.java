@@ -182,7 +182,7 @@ public class UserAOImpl implements IUserAO {
         User user = new User();
         user.setUserId(userId);
         user.setKind(EUserKind.Customer.getCode());
-        user.setLoginName(req.getLoginName());
+        user.setLoginName(req.getMobile());
         user.setMobile(req.getMobile());
         if (StringUtils.isBlank(req.getLoginPwd())) {
             req.setLoginPwd(EUserPwd.InitPwd.getCode());
@@ -270,19 +270,33 @@ public class UserAOImpl implements IUserAO {
     public String doLogin(String loginName, String loginPwd, String client,
             String location) {
         User condition = new User();
+        condition.setMobile(loginName);
 
-        condition.setLoginName(loginName);
-
-        List<User> userList1 = userBO.queryUserList(condition);
-        if (CollectionUtils.isEmpty(userList1)) {
+        List<User> userList = userBO.queryUserList(condition);
+        User condition1 = new User();
+        condition1.setEmail(loginName);
+        userList.addAll(userBO.queryUserList(condition1));
+        if (CollectionUtils.isEmpty(userList)) {
             throw new BizException("xn805050", "登录名不存在");
         }
-        condition.setLoginPwd(MD5Util.md5(loginPwd));
-        List<User> userList2 = userBO.queryUserList(condition);
-        if (CollectionUtils.isEmpty(userList2)) {
+        User con = new User();
+        con.setLoginPwd(MD5Util.md5(loginPwd));
+        List<User> listUser = userBO.queryUserList(con);
+        if (CollectionUtils.isEmpty(userList)) {
             throw new BizException("xn805050", "登录密码错误");
         }
-        User user = userList2.get(0);
+        String userId = null;
+        for (User user : listUser) {
+            if (loginName.equals(user.getMobile())
+                    || loginName.equals(user.getEmail())) {
+                userId = user.getUserId();
+                break;
+            }
+        }
+        if (userId == null) {
+            throw new BizException("xn805050", "登录密码错误");
+        }
+        User user = userBO.getUser(userId);
         if (!EUserStatus.NORMAL.getCode().equals(user.getStatus())) {
             throw new BizException("xn805050",
                 "该账号" + EUserStatus.getMap().get(user.getStatus()).getValue()
@@ -296,7 +310,35 @@ public class UserAOImpl implements IUserAO {
         data.setLocation(location);
         signLogBO.saveSignLog(data);
 
-        return user.getUserId();
+        return userId;
+//        User condition = new User();
+//
+//        condition.setLoginName(loginName);
+//
+//        List<User> userList1 = userBO.queryUserList(condition);
+//        if (CollectionUtils.isEmpty(userList1)) {
+//            throw new BizException("xn805050", "登录名不存在");
+//        }
+//        condition.setLoginPwd(MD5Util.md5(loginPwd));
+//        List<User> userList2 = userBO.queryUserList(condition);
+//        if (CollectionUtils.isEmpty(userList2)) {
+//            throw new BizException("xn805050", "登录密码错误");
+//        }
+//        User user = userList2.get(0);
+//        if (!EUserStatus.NORMAL.getCode().equals(user.getStatus())) {
+//            throw new BizException("xn805050",
+//                "该账号" + EUserStatus.getMap().get(user.getStatus()).getValue()
+//                        + "，请联系工作人员");
+//        }
+//        // 增加登陆日志
+//        SignLog data = new SignLog();
+//        data.setUserId(user.getUserId());
+//        data.setType(ESignLogType.LOGIN.getCode());
+//        data.setClient(client);
+//        data.setLocation(location);
+//        signLogBO.saveSignLog(data);
+//
+//        return user.getUserId();
     }
 
     @Override
@@ -701,7 +743,7 @@ public class UserAOImpl implements IUserAO {
     }
 
     @Override
-    public Paginable<User> queryStraightRefPage(XN802399Req req, int start,
+    public Paginable<User> queryFirstRefPage(XN802399Req req, int start,
             int limit) {
         User user = userBO.getUser(req.getUserId());
         User condition = new User();
@@ -724,7 +766,7 @@ public class UserAOImpl implements IUserAO {
     }
 
     @Override
-    public Paginable<User> queryRefRefPage(XN802400Req req, int start,
+    public Paginable<User> querySecondRefPage(XN802400Req req, int start,
             int limit) {
         User user = userBO.getUser(req.getUserId());
         User condition = new User();

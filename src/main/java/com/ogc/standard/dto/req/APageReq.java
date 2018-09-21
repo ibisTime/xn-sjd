@@ -43,6 +43,16 @@ public abstract class APageReq implements Serializable {
 
     private String orderDir;// 分页方向
 
+    private String language;// 语言
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
     public String getDateStart() {
         return dateStart;
     }

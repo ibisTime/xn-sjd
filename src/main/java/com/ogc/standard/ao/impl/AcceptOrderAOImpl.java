@@ -26,9 +26,7 @@ import com.ogc.standard.dto.req.XN625270Req;
 import com.ogc.standard.dto.req.XN625271Req;
 import com.ogc.standard.enums.EAcceptOrderStatus;
 import com.ogc.standard.enums.EBoolean;
-import com.ogc.standard.enums.EChannelType;
 import com.ogc.standard.enums.ECoin;
-import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EJourBizTypePlat;
 import com.ogc.standard.enums.EJourBizTypeUser;
 import com.ogc.standard.enums.ESysUser;
@@ -167,24 +165,24 @@ public class AcceptOrderAOImpl implements IAcceptOrderAO {
     public void release(String code, String result, String updater) {
         AcceptOrder order = acceptOrderBO.getAcceptOrder(code);
         if (EBoolean.YES.getCode().equals(result)) {
-            // 平台法币账户加钱
-            if (ECurrency.CNY.getCode().equals(order.getTradeCurrency())) {
-                Account cnyAccount = accountBO
-                    .getAccount(ESystemAccount.SYS_ACOUNT_CNY_ACCEPT.getCode());
-                accountBO.changeAmount(cnyAccount, order.getTradeAmount(),
-                    EChannelType.NBZ, null, order.getCode(),
-                    EJourBizTypePlat.AJ_ACCEPT_SELL.getCode(), "平台卖币法币账户加钱");
-            } else if (ECurrency.USD.getCode()
-                .equals(order.getTradeCurrency())) {
-                Account usdAccount = accountBO
-                    .getAccount(ESystemAccount.SYS_ACOUNT_USD_ACCEPT.getCode());
-                accountBO.changeAmount(usdAccount, order.getTradeAmount(),
-                    EChannelType.NBZ, null, order.getCode(),
-                    EJourBizTypePlat.AJ_ACCEPT_SELL.getCode(), "平台卖币法币账户加钱");
-            } else {
-                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                    "不支持的法币交易");
-            }
+//            // 平台法币账户加钱
+//            if (ECurrency.CNY.getCode().equals(order.getTradeCurrency())) {
+//                Account cnyAccount = accountBO
+//                    .getAccount(ESystemAccount.SYS_ACOUNT_CNY_ACCEPT.getCode());
+//                accountBO.changeAmount(cnyAccount, order.getTradeAmount(),
+//                    EChannelType.NBZ, null, order.getCode(),
+//                    EJourBizTypePlat.AJ_ACCEPT_SELL.getCode(), "平台卖币法币账户加钱");
+//            } else if (ECurrency.USD.getCode()
+//                .equals(order.getTradeCurrency())) {
+//                Account usdAccount = accountBO
+//                    .getAccount(ESystemAccount.SYS_ACOUNT_USD_ACCEPT.getCode());
+//                accountBO.changeAmount(usdAccount, order.getTradeAmount(),
+//                    EChannelType.NBZ, null, order.getCode(),
+//                    EJourBizTypePlat.AJ_ACCEPT_SELL.getCode(), "平台卖币法币账户加钱");
+//            } else {
+//                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+//                    "不支持的法币交易");
+//            }
             if (!(EAcceptOrderStatus.PAYED.getCode()
                 .equals(order.getStatus()))) {
                 throw new BizException(EBizErrorCode.DEFAULT.getCode(),
@@ -225,25 +223,25 @@ public class AcceptOrderAOImpl implements IAcceptOrderAO {
         AcceptOrder order = acceptOrderBO.getAcceptOrder(code);
         if (EBoolean.YES.getCode().equals(result)) {
             // 平台法币账户减钱
-            if (ECurrency.CNY.getCode().equals(order.getTradeCurrency())) {
-                Account cnyAccount = accountBO
-                    .getAccount(ESystemAccount.SYS_ACOUNT_CNY_ACCEPT.getCode());
-                accountBO.changeAmount(cnyAccount,
-                    order.getTradeAmount().negate(), EChannelType.NBZ, null,
-                    order.getCode(), EJourBizTypePlat.AJ_ACCEPT_BUY.getCode(),
-                    "平台卖币法币账户减钱");
-            } else if (ECurrency.USD.getCode()
-                .equals(order.getTradeCurrency())) {
-                Account usdAccount = accountBO
-                    .getAccount(ESystemAccount.SYS_ACOUNT_USD_ACCEPT.getCode());
-                accountBO.changeAmount(usdAccount,
-                    order.getTradeAmount().negate(), EChannelType.NBZ, null,
-                    order.getCode(), EJourBizTypePlat.AJ_ACCEPT_BUY.getCode(),
-                    "平台卖币法币账户减钱");
-            } else {
-                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                    "不支持的法币交易");
-            }
+//            if (ECurrency.CNY.getCode().equals(order.getTradeCurrency())) {
+//                Account cnyAccount = accountBO
+//                    .getAccount(ESystemAccount.SYS_ACOUNT_CNY_ACCEPT.getCode());
+//                accountBO.changeAmount(cnyAccount,
+//                    order.getTradeAmount().negate(), EChannelType.NBZ, null,
+//                    order.getCode(), EJourBizTypePlat.AJ_ACCEPT_BUY.getCode(),
+//                    "平台卖币法币账户减钱");
+//            } else if (ECurrency.USD.getCode()
+//                .equals(order.getTradeCurrency())) {
+//                Account usdAccount = accountBO
+//                    .getAccount(ESystemAccount.SYS_ACOUNT_USD_ACCEPT.getCode());
+//                accountBO.changeAmount(usdAccount,
+//                    order.getTradeAmount().negate(), EChannelType.NBZ, null,
+//                    order.getCode(), EJourBizTypePlat.AJ_ACCEPT_BUY.getCode(),
+//                    "平台卖币法币账户减钱");
+//            } else {
+//                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+//                    "不支持的法币交易");
+//            }
             if (!EAcceptOrderStatus.TO_PAY.getCode()
                 .equals(order.getStatus())) {
                 throw new BizException(EBizErrorCode.DEFAULT.getCode(),
@@ -305,6 +303,8 @@ public class AcceptOrderAOImpl implements IAcceptOrderAO {
             limit, condition);
         for (AcceptOrder order : orderPage.getList()) {
             order.setUser(userBO.getUser(order.getUserId()));
+            order.setBankcard(bankcardBO
+                .getBankcardByBankcardNumber(order.getReceiveCardNo()));
         }
         return orderPage;
     }
@@ -318,6 +318,8 @@ public class AcceptOrderAOImpl implements IAcceptOrderAO {
     public AcceptOrder getAcceptOrder(String code) {
         AcceptOrder data = acceptOrderBO.getAcceptOrder(code);
         data.setUser(userBO.getUser(data.getUserId()));
+        data.setBankcard(
+            bankcardBO.getBankcardByBankcardNumber(data.getReceiveCardNo()));
         return data;
     }
 }

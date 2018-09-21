@@ -25,6 +25,17 @@ public abstract class AListReq implements Serializable {
     // 排序方向
     private String orderDir;
 
+    // 语言
+    private String language;
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
     public String getDateStart() {
         return dateStart;
     }

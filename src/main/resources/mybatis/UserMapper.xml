@@ -11,7 +11,6 @@
 		<result column="photo" property="photo" />
 		
 		<result column="nickname" property="nickname" />
-		<result column="login_pwd" property="loginPwd" />
 		<result column="login_pwd_strength" property="loginPwdStrength" />		
 		<result column="level" property="level" />		
 		<result column="user_referee" property="userReferee" />
@@ -47,6 +46,9 @@
 		<trim prefix="WHERE" prefixOverrides="AND | OR">			
 			<if test="userId != null and userId != '' ">
 				AND t.user_id = #{userId}
+			</if>
+			<if test="kind != null and kind != '' ">
+				AND t.kind = #{kind}
 			</if>
 			<if test="loginName != null and loginName != '' ">
 				AND t.login_name = #{loginName}
