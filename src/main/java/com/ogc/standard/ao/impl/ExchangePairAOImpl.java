@@ -41,12 +41,12 @@ public class ExchangePairAOImpl implements IExchangePairAO {
 
         for (ExchangePair pair : pairs) {
             //
-            // // new Thread() {
-            // // public void run() {
+            // new Thread() {
+            // public void run() {
             simuOrderMatch.doMatchTrade(pair.getSymbol().toUpperCase(),
                 pair.getToSymbol().toUpperCase());
-            // // }
-            // // }.start();
+            // }
+            // }.start();
             //
         }
 
