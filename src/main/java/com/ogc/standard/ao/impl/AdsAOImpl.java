@@ -341,7 +341,8 @@ public class AdsAOImpl implements IAdsAO {
         ads.setTradeType(data.getTradeType());
         ads.setTruePrice(data.getTruePrice());
         if (ECoinType.BTC.getCode().equals(coin.getType())
-                || ECoinType.ETH.getCode().equals(coin.getType())) {// 获取市场价格
+                || ECoinType.ETH.getCode().equals(coin.getType())
+                || ECoinType.X.getCode().equals(coin.getType())) {// 获取市场价格
             // Market market = this.marketBO
             // .standardMarket(ECoin.getCoin(data.getTradeCoin()));
             // if (market == null) {
@@ -358,23 +359,23 @@ public class AdsAOImpl implements IAdsAO {
             if (data.getTradeType().equals(ETradeType.SELL.getCode())) {
 
                 truePrice = truePrice.compareTo(data.getProtectPrice()) > 0
-                        ? truePrice
-                        : data.getProtectPrice();
+                        ? truePrice : data.getProtectPrice();
 
             } else {
 
                 truePrice = truePrice.compareTo(data.getProtectPrice()) < 0
-                        ? truePrice
-                        : data.getProtectPrice();
+                        ? truePrice : data.getProtectPrice();
 
             }
 
             ads.setTruePrice(truePrice);
 
-        } else if (ECoinType.X.getCode().equals(coin.getType())) {
-            ads.setMarketPrice(data.getTruePrice());
-            ads.setTruePrice(data.getTruePrice());
-        } else {
+        }
+        // else if (ECoinType.X.getCode().equals(coin.getType())) {
+        // ads.setMarketPrice(data.getTruePrice());
+        // ads.setTruePrice(data.getTruePrice());
+        // }
+        else {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "不能识别该币种的类型");
         }
