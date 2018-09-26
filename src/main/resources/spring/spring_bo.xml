@@ -93,15 +93,21 @@
 		<property name="paginableDAO" ref="withdrawDAOImpl"/>
 	</bean>
 	
-		<bean id="companyBO" class="com.ogc.standard.bo.impl.CompanyBOImpl">
+
+	<bean id="companyBO" class="com.ogc.standard.bo.impl.CompanyBOImpl">
 		<property name="paginableDAO" ref="companyDAOImpl"/>
 	</bean>
 	
-		<bean id="applyBindMaintainBO" class="com.ogc.standard.bo.impl.ApplyBindMaintainBOImpl">
+	<bean id="applyBindMaintainBO" class="com.ogc.standard.bo.impl.ApplyBindMaintainBOImpl">
 		<property name="paginableDAO" ref="applyBindMaintainDAOImpl"/>
 	</bean>
 	
-		<bean id="adoptOrderBO" class="com.ogc.standard.bo.impl.AdoptOrderBOImpl">
+	<bean id="adoptOrderBO" class="com.ogc.standard.bo.impl.AdoptOrderBOImpl">
 		<property name="paginableDAO" ref="adoptOrderDAOImpl"/>
+	</bean>
+
+	<bean id="categoryBO" class="com.ogc.standard.bo.impl.CategoryBOImpl">
+		<property name="paginableDAO" ref="categoryDAOImpl"/>
+
 	</bean>
 </beans>
