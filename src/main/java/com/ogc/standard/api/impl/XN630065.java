@@ -29,17 +29,17 @@ public class XN630065 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         SYSUser condition = new SYSUser();
-        condition.setDepartmentCode(req.getDepartmentCode());
+        condition.setCompanyCode(req.getCompanyCode());
         condition.setMobileForQuery(req.getKeyword());
         condition.setRealNameForQuery(req.getKeyword());
         condition.setRoleCode(req.getRoleCode());
         condition.setStatus(req.getStatus());
         condition.setUpdater(req.getUpdater());
         String column = req.getOrderColumn();
-        condition.setCreateDatetimeStart(
-            DateUtil.getFrontDate(req.getDateStart(), false));
-        condition.setCreateDatetimeEnd(
-            DateUtil.getFrontDate(req.getDateEnd(), true));
+        condition.setCreateDatetimeStart(DateUtil.getFrontDate(
+            req.getDateStart(), false));
+        condition.setCreateDatetimeEnd(DateUtil.getFrontDate(req.getDateEnd(),
+            true));
         if (StringUtils.isBlank(column)) {
             column = ISYSUserAO.DEFAULT_ORDER_COLUMN;
         }

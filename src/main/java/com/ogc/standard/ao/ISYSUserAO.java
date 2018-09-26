@@ -6,9 +6,9 @@ import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.SYSUser;
 
 /**
- * 系统用户表
- * @author: clockorange 
- * @since: Jul 31, 2018 4:50:05 PM 
+ * 系统用户
+ * @author: jiafr 
+ * @since: 2018年9月26日 下午5:39:39 
  * @history:
  */
 public interface ISYSUserAO {

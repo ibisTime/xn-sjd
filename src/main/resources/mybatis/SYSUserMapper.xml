@@ -4,8 +4,9 @@
 <mapper namespace="com.ogc.standard.dao.ISYSUserDAO">
 	<resultMap id="sysuser_DB_Result" type="sysuser">
 		<result column="user_id" property="userId" />
+		<result column="kind" property="kind" />
 		<result column="role_code" property="roleCode" />
-		<result column="department_code" property="departmentCode" />
+		<result column="company_code" property="companyCode" />
 		<result column="real_name" property="realName" />	
 		<result column="photo" property="photo" />	
 		<result column="mobile" property="mobile" />	
@@ -16,8 +17,7 @@
 		<result column="status" property="status" />
 		<result column="updater" property="updater" />
 		<result column="update_datetime" property="updateDatetime" />
-		<result column="remark" property="remark" />	
-		<result column="system_code" property="systemCode" />		
+		<result column="remark" property="remark" />		
 	</resultMap>
 	
 	<sql id="where_condition">
@@ -25,8 +25,8 @@
 			<if test="userId != null and userId != '' ">
 				AND t.user_id = #{userId}
 			</if>
-			<if test="departmentCode != null and departmentCode != '' ">
-				AND t.department_code = #{departmentCode}
+			<if test="companyCode != null and companyCode != '' ">
+				AND t.company_code = #{companyCode}
 			</if>
 			<if test="loginName != null and loginName != '' ">
 				AND t.login_name = #{loginName}
@@ -51,9 +51,6 @@
 				AND t.mobile = #{mobile}
 			</if>
 					
-			<if test="systemCode != null and systemCode != '' ">
-				AND t.system_code = #{systemCode}
-			</if>
 			<if test="roleCode != null and roleCode != '' ">
 				AND t.role_code = #{roleCode}
 			</if>
@@ -71,7 +68,9 @@
 	<select id="select_sysuser" parameterType="sysuser" resultMap="sysuser_DB_Result">
 		SELECT
 		t.user_id
+		,t.kind
 		,t.role_code
+		,t.company_code
 		,t.real_name
 		,t.photo
 		,t.mobile
@@ -83,7 +82,6 @@
 		,t.updater
 		,t.update_datetime
 		,t.remark
-		,t.system_code
 		
 		FROM
 		tsys_user t
@@ -105,7 +103,7 @@
 		INSERT INTO
 		tsys_user(
 		user_id
-	
+		
 		,real_name
 		,photo
 		,mobile
@@ -118,7 +116,6 @@
 		,updater
 		,update_datetime
 		,remark
-		,system_code
 		)
 		VALUES(
 		#{userId}
@@ -134,7 +131,6 @@
 	    ,#{updater}
 	    ,#{updateDatetime}
 		,#{remark}
-		,#{systemCode}
 		)
 	</insert>
 
@@ -152,7 +148,6 @@
 		,updater=#{updater}
 		,update_datetime=#{updateDatetime}
 		,remark=#{remark}
-		,system_code=#{systemCode}
 		WHERE user_id = #{userId}
 	</update>
 	

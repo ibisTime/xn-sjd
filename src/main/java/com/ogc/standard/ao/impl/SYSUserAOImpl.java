@@ -19,7 +19,6 @@ import com.ogc.standard.common.PwdUtil;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.domain.SYSRole;
 import com.ogc.standard.domain.SYSUser;
-import com.ogc.standard.enums.ESystemCode;
 import com.ogc.standard.enums.EUser;
 import com.ogc.standard.enums.EUserStatus;
 import com.ogc.standard.exception.BizException;
@@ -53,7 +52,6 @@ public class SYSUserAOImpl implements ISYSUserAO {
         data.setPhoto(photo);
         data.setStatus(EUserStatus.NORMAL.getCode());
         data.setCreateDatetime(new Date());
-        data.setSystemCode(ESystemCode.BZ.getCode());
         sysUserBO.doSaveSYSuser(data);
         return userId;
     }

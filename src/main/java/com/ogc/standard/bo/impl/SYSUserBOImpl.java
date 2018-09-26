@@ -19,8 +19,8 @@ import com.ogc.standard.enums.EUserStatus;
 import com.ogc.standard.exception.BizException;
 
 @Component
-public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
-        implements ISYSUserBO {
+public class SYSUserBOImpl extends PaginableBOImpl<SYSUser> implements
+        ISYSUserBO {
 
     @Autowired
     private ISYSUserDAO sysUserDAO;
@@ -32,14 +32,12 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
 
     // 注册
     @Override
-    public String doRegister(String loginName, String loginPwd,
-            String systemCode) {
+    public String doRegister(String loginName, String loginPwd) {
         String userId = OrderNoGenerater.generate("U");
         SYSUser sysUser = new SYSUser();
         sysUser.setUserId(userId);
 
         sysUser.setLoginName(loginName);
-        sysUser.setSystemCode(systemCode);
 
         sysUserDAO.insert(sysUser);
         return userId;
@@ -123,10 +121,9 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
     }
 
     @Override
-    public boolean isUserExist(String userId, String systemCode) {
+    public boolean isUserExist(String userId) {
         SYSUser condition = new SYSUser();
         condition.setUserId(userId);
-        condition.setSystemCode(systemCode);
         if (sysUserDAO.selectTotalCount(condition) > 0) {
             return true;
         }
@@ -136,8 +133,7 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
     // 密码检查
     @Override
     public void checkLoginPwd(String userId, String loginPwd) {
-        if (StringUtils.isNotBlank(userId)
-                && StringUtils.isNotBlank(loginPwd)) {
+        if (StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(loginPwd)) {
             SYSUser condition = new SYSUser();
             condition.setUserId(userId);
             condition.setLoginPwd(MD5Util.md5(loginPwd));
@@ -176,13 +172,12 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
     }
 
     @Override
-    public void isLoginNameExist(String loginName, String systemCode) {
+    public void isLoginNameExist(String loginName) {
         if (StringUtils.isNotBlank(loginName)) {
             // 判断格式
             SYSUser condition = new SYSUser();
             condition.setLoginName(loginName);
 
-            condition.setSystemCode(systemCode);
             long count = getTotalCount(condition);
             if (count > 0) {
                 throw new BizException("li01003", "登录名已经存在");
@@ -206,8 +201,8 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
     }
 
     @Override
-    public void refreshStatus(String userId, EUserStatus status, String updater,
-            String remark) {
+    public void refreshStatus(String userId, EUserStatus status,
+            String updater, String remark) {
         if (StringUtils.isNotBlank(userId)) {
             SYSUser data = new SYSUser();
             data.setUserId(userId);

@@ -23,5 +23,8 @@
 		<typeAlias alias="withdraw" type="com.ogc.standard.domain.Withdraw" />
 		<typeAlias alias="bankcard" type="com.ogc.standard.domain.Bankcard"/>
 		<typeAlias alias="company" type="com.ogc.standard.domain.Company"/>
+		
+		<typeAlias alias="applyBindMaintain" type="com.ogc.standard.domain.ApplyBindMaintain"/>
+		<typeAlias alias="adoptOrder" type="com.ogc.standard.domain.AdoptOrder"/>
 	</typeAliases>
 </configuration>

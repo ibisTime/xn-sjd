@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ogc.standard.dao.IApplyBindMaintainDAO">
+	<resultMap id="applyBindMaintain_DB_Result" type="applyBindMaintain">
+		<result column="code" property="code" />
+		<result column="owner_id" property="ownerId" />
+		<result column="maintain_id" property="maintainId" />
+		<result column="status" property="status" />
+		<result column="updater" property="updater" />
+		<result column="update_datetime" property="updateDatetime" />
+		<result column="remark" property="remark" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+		</trim>
+	</sql>
+	<select id="select_applyBindMaintain" parameterType="applyBindMaintain" resultMap="applyBindMaintain_DB_Result">
+		SELECT
+		t.code
+		,t.owner_id
+		,t.maintain_id
+		,t.status
+		,t.updater
+		,t.update_datetime
+		,t.remark
+		FROM
+		tsys_apply_bind_maintain t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_applyBindMaintain_count" parameterType="applyBindMaintain"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tsys_apply_bind_maintain t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_applyBindMaintain" parameterType="applyBindMaintain">
+		INSERT INTO
+		tsys_apply_bind_maintain(
+		code
+		,owner_id
+		,maintain_id
+		,status
+		,updater
+		,update_datetime
+		,remark
+		)
+		VALUES(
+		#{code}
+		,#{ownerId}
+		,#{maintainId}
+		,#{status}
+		,#{updater}
+		,#{updateDatetime}
+		,#{remark}
+		)
+	</insert>
+
+	<update id="update_applyBindMaintain" parameterType="applyBindMaintain">
+		UPDATE tsys_apply_bind_maintain
+		SET
+		owner_id = #{ownerId}
+		,maintain_id = #{maintainId}
+		,status = #{status}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+
+
+</mapper>

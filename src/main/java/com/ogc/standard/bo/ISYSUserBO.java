@@ -9,8 +9,7 @@ import com.ogc.standard.enums.EUserStatus;
 public interface ISYSUserBO extends IPaginableBO<SYSUser> {
 
     // 注册
-    public String doRegister(String loginName, String loginPwd,
-            String systemCode);
+    public String doRegister(String loginName, String loginPwd);
 
     // 新增系统用户
     public void doSaveSYSuser(SYSUser data);
@@ -46,7 +45,7 @@ public interface ISYSUserBO extends IPaginableBO<SYSUser> {
     public void checkLoginPwd(String userId, String loginPwd);
 
     // 判断登录名是否存在
-    public void isLoginNameExist(String loginName, String systemCode);
+    public void isLoginNameExist(String loginName);
 
     // 查询详情
     public SYSUser getSYSUser(String userId);
@@ -57,9 +56,9 @@ public interface ISYSUserBO extends IPaginableBO<SYSUser> {
     public void refreshLoginName(String userId, String loginName);
 
     // 判断用户编号是否存在
-    public boolean isUserExist(String userId, String systemCode);
+    public boolean isUserExist(String userId);
 
-    public void refreshStatus(String userId, EUserStatus status, String updater,
-            String remark);
+    public void refreshStatus(String userId, EUserStatus status,
+            String updater, String remark);
 
 }

@@ -1,4 +1,3 @@
-
 package com.ogc.standard.domain;
 
 import java.util.Date;
@@ -7,24 +6,28 @@ import java.util.List;
 import com.ogc.standard.dao.base.ABaseDO;
 
 /**
- * 平台用户
- * @author: dl 
- * @since: 2018年8月18日 下午2:48:10 
+ * 系统用户
+ * @author: jiafr 
+ * @since: 2018年9月26日 下午5:35:21 
  * @history:
  */
 public class SYSUser extends ABaseDO {
 
     private static final long serialVersionUID = -332310384678966884L;
+
     // ***********db properties***********
 
     // 管理人员id
     private String userId;
 
+    // 类型
+    private String kind;
+
     // 角色编号
     private String roleCode;
 
-    // 部门编号
-    private String departmentCode;
+    // 公司编号
+    private String companyCode;
 
     // 真实姓名
     private String realName;
@@ -58,9 +61,6 @@ public class SYSUser extends ABaseDO {
 
     // 备注
     private String remark;
-
-    // 系统编号
-    private String systemCode;
 
     // ***********db properties***********
 
@@ -125,22 +125,6 @@ public class SYSUser extends ABaseDO {
 
     public void setLoginPwd(String loginPwd) {
         this.loginPwd = loginPwd;
-    }
-
-    public String getDepartmentCode() {
-        return departmentCode;
-    }
-
-    public void setDepartmentCode(String departmentCode) {
-        this.departmentCode = departmentCode;
-    }
-
-    public String getSystemCode() {
-        return systemCode;
-    }
-
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
     }
 
     public String getRealName() {
@@ -242,6 +226,18 @@ public class SYSUser extends ABaseDO {
 
     public void setCreateDatetimeEnd(Date createDatetimeEnd) {
         this.createDatetimeEnd = createDatetimeEnd;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
+    }
+
+    public String getKind() {
+        return kind;
     }
 
 }
