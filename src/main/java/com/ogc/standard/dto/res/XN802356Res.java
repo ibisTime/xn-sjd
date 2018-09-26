@@ -10,7 +10,6 @@ package com.ogc.standard.dto.res;
 
 import java.util.List;
 
-import com.ogc.standard.domain.EthTransaction;
 import com.ogc.standard.domain.Jour;
 import com.ogc.standard.domain.Withdraw;
 
@@ -27,9 +26,6 @@ public class XN802356Res {
     // 取现订单相关流水
     private List<Jour> jourList;
 
-    // ETH相关广播记录
-    private List<EthTransaction> ethTransList;
-
     public Withdraw getWithdraw() {
         return withdraw;
     }
@@ -44,14 +40,6 @@ public class XN802356Res {
 
     public void setJourList(List<Jour> jourList) {
         this.jourList = jourList;
-    }
-
-    public List<EthTransaction> getEthTransList() {
-        return ethTransList;
-    }
-
-    public void setEthTransList(List<EthTransaction> ethTransList) {
-        this.ethTransList = ethTransList;
     }
 
 }
