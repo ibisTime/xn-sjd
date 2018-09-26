@@ -92,4 +92,8 @@
 	<bean id="withdrawBO" class="com.ogc.standard.bo.impl.WithdrawBOImpl">
 		<property name="paginableDAO" ref="withdrawDAOImpl"/>
 	</bean>
+	
+	<bean id="categoryBO" class="com.ogc.standard.bo.impl.CategoryBOImpl">
+		<property name="paginableDAO" ref="categoryDAOImpl"/>
+	</bean>
 </beans>

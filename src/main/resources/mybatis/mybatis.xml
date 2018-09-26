@@ -7,21 +7,26 @@
 		<typeAlias alias="sysMenuRole" type="com.ogc.standard.domain.SYSMenuRole" />
 		<typeAlias alias="cNavigate" type="com.ogc.standard.domain.CNavigate" />
 		<typeAlias alias="sysDict" type="com.ogc.standard.domain.SYSDict" />
+		
 		<typeAlias alias="sysConfig" type="com.ogc.standard.domain.SYSConfig" />
 		<typeAlias alias="sysUser" type="com.ogc.standard.domain.SYSUser" />
 		<typeAlias alias="channelBank" type="com.ogc.standard.domain.ChannelBank" />
 		<typeAlias alias="user" type="com.ogc.standard.domain.User" />
 		<typeAlias alias="userExt" type="com.ogc.standard.domain.UserExt" />
+		
 		<typeAlias alias="signLog" type="com.ogc.standard.domain.SignLog" />
 		<typeAlias alias="sms" type="com.ogc.standard.domain.Sms" />
 		<typeAlias alias="read" type="com.ogc.standard.domain.Read" />
 		<typeAlias alias="interact" type="com.ogc.standard.domain.Interact" />
 		<typeAlias alias="userRelation" type="com.ogc.standard.domain.UserRelation" />
+		
 		<typeAlias alias="account" type="com.ogc.standard.domain.Account" />
 		<typeAlias alias="jour" type="com.ogc.standard.domain.Jour" />
 		<typeAlias alias="charge" type="com.ogc.standard.domain.Charge" />
 		<typeAlias alias="withdraw" type="com.ogc.standard.domain.Withdraw" />
 		<typeAlias alias="bankcard" type="com.ogc.standard.domain.Bankcard"/>
+		
 		<typeAlias alias="company" type="com.ogc.standard.domain.Company"/>
+		<typeAlias alias="category" type="com.ogc.standard.domain.Category"/>
 	</typeAliases>
 </configuration>
