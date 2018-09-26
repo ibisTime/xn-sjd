@@ -5,8 +5,6 @@ import java.util.List;
 
 import com.ogc.standard.bo.base.IPaginableBO;
 import com.ogc.standard.domain.Account;
-import com.ogc.standard.domain.Coin;
-import com.ogc.standard.domain.HLOrder;
 import com.ogc.standard.enums.EAccountStatus;
 import com.ogc.standard.enums.EAccountType;
 import com.ogc.standard.enums.EChannelType;
@@ -22,7 +20,7 @@ public interface IAccountBO extends IPaginableBO<Account> {
 
     // 分配账户
     public String distributeAccount(String userId, EAccountType accountType,
-            Coin coin, String address);
+            String address);
 
     // 变更账户余额：流水落地
     public Account changeAmount(Account dbAccount, BigDecimal transAmount,
@@ -32,9 +30,6 @@ public interface IAccountBO extends IPaginableBO<Account> {
     // 仅变更账户余额：流水不落地
     public void changeAmountNotJour(String accountNumber,
             BigDecimal transAmount, String lastOrder);
-
-    // 红冲蓝补导致的资金变动（落地流水不需要对账）
-    public void changeAmountForHL(HLOrder order);
 
     // 冻结金额（余额变动）
     public Account frozenAmount(Account dbAccount, BigDecimal freezeAmount,

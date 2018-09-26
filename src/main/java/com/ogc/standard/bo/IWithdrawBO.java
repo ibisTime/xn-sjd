@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.ogc.standard.bo.base.IPaginableBO;
 import com.ogc.standard.domain.Account;
-import com.ogc.standard.domain.EthMAddress;
 import com.ogc.standard.domain.Withdraw;
 import com.ogc.standard.enums.EWithdrawStatus;
 
@@ -17,8 +16,8 @@ public interface IWithdrawBO extends IPaginableBO<Withdraw> {
             String payCardInfo, String payCardNo, String applyUser,
             String applyNote);
 
-    void approveOrder(Withdraw data, EWithdrawStatus status, String approveUser,
-            String approveNote);
+    void approveOrder(Withdraw data, EWithdrawStatus status,
+            String approveUser, String approveNote);
 
     void payOrder(Withdraw data, EWithdrawStatus status, String payUser,
             String payNote, String channelOrder, BigDecimal payFee);
@@ -30,8 +29,6 @@ public interface IWithdrawBO extends IPaginableBO<Withdraw> {
     Withdraw getWithdraw(String code);
 
     public Withdraw getWithdrawByChannelOrder(String hash);
-
-    public EthMAddress getAddressUseInfo(String fromAddress, String currency);
 
     public BigDecimal getTotalWithdraw(String currency);
 

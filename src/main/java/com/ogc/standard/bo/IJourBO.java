@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.ogc.standard.bo.base.IPaginableBO;
 import com.ogc.standard.domain.Account;
-import com.ogc.standard.domain.HLOrder;
 import com.ogc.standard.domain.Jour;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.EChannelType;
@@ -18,8 +17,7 @@ import com.ogc.standard.enums.EChannelType;
 public interface IJourBO extends IPaginableBO<Jour> {
 
     // 不需要对账的新增
-    public String addJourForHL(Account dbAccount, HLOrder order,
-            String bizType);
+    public String addJourForHL(Account dbAccount, String bizType);
 
     // 余额流水新增
     public String addJour(Account dbAccount, EChannelType channelType,

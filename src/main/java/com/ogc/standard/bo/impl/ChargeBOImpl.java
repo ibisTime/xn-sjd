@@ -14,7 +14,6 @@ import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.IChargeDAO;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.Charge;
-import com.ogc.standard.domain.EthWAddress;
 import com.ogc.standard.enums.EChannelType;
 import com.ogc.standard.enums.EChargeStatus;
 import com.ogc.standard.exception.BizException;
@@ -162,16 +161,6 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
             }
         }
         return order;
-    }
-
-    @Override
-    public EthWAddress getAddressUseInfo(String fromAddress, String currency) {
-        Charge condition = new Charge();
-        condition.setPayCardNo(fromAddress);
-        condition.setCurrency(currency);
-        condition.setChannelType(EChannelType.Online.getCode());
-        condition.setStatus(EChargeStatus.Pay_YES.getCode());
-        return chargeDAO.selectAddressUseInfo(condition);
     }
 
     @Override

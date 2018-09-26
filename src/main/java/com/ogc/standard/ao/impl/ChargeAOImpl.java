@@ -1,7 +1,6 @@
 package com.ogc.standard.ao.impl;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,26 +10,17 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ogc.standard.ao.IChargeAO;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IChargeBO;
-import com.ogc.standard.bo.ICoinBO;
-import com.ogc.standard.bo.ICollectBO;
-import com.ogc.standard.bo.IEthTransactionBO;
 import com.ogc.standard.bo.IJourBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.Charge;
-import com.ogc.standard.domain.Coin;
-import com.ogc.standard.domain.Collect;
-import com.ogc.standard.domain.EthTransaction;
-import com.ogc.standard.domain.Jour;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.dto.res.XN802347Res;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.EChargeStatus;
-import com.ogc.standard.enums.ECoinType;
 import com.ogc.standard.enums.EJourBizTypePlat;
 import com.ogc.standard.enums.EJourBizTypeUser;
-import com.ogc.standard.enums.EJourType;
 import com.ogc.standard.enums.ESystemAccount;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
@@ -48,15 +38,6 @@ public class ChargeAOImpl implements IChargeAO {
 
     @Autowired
     private IJourBO jourBO;
-
-    @Autowired
-    private IEthTransactionBO ethTransactionBO;
-
-    @Autowired
-    private ICollectBO collectBO;
-
-    @Autowired
-    private ICoinBO coinBO;
 
     @Override
     public String applyOrder(String accountNumber, BigDecimal amount,
@@ -99,11 +80,8 @@ public class ChargeAOImpl implements IChargeAO {
         Account userAccount = accountBO.getAccount(data.getAccountNumber());
         User user = userBO.getUser(userAccount.getUserId());
 
-        Coin coin = coinBO.getCoin(data.getCurrency());
-        String symbol = coin.getSymbol();
-
-        Account platAccount = accountBO
-            .getAccount(ESystemAccount.getPlatAccount(symbol));
+        Account platAccount = accountBO.getAccount(ESystemAccount
+            .getPlatAccount("CNY_ACCEPT"));
         accountBO.transAmount(platAccount, userAccount, data.getAmount(),
             EJourBizTypePlat.AJ_SUBSIDY.getCode(),
             EJourBizTypeUser.AJ_CHARGE.getCode(),
@@ -117,10 +95,6 @@ public class ChargeAOImpl implements IChargeAO {
             Charge condition) {
         Paginable<Charge> page = chargeBO.getPaginable(start, limit, condition);
         List<Charge> chargeList = page.getList();
-        // for (Charge charge : chargeList) {
-        // User user = userBO.getUser(charge.getApplyUser());
-        // charge.setPayer(user);
-        // }
         return page;
     }
 
@@ -138,44 +112,6 @@ public class ChargeAOImpl implements IChargeAO {
     @Override
     public XN802347Res getChargeCheckInfo(String code) {
         XN802347Res res = new XN802347Res();
-
-        // 充值订单详情
-        Charge charge = chargeBO.getCharge(code);
-
-        // 充值对应流水记录
-        Jour jour = new Jour();
-        jour.setRefNo(charge.getCode());
-        jour.setType(EJourType.BALANCE.getCode());
-        List<Jour> jourList1 = jourBO.queryJourList(jour);
-
-        if (ECoinType.ETH.getCode().equals(charge.getCurrency())) {
-
-            List<EthTransaction> resultList1 = new ArrayList<>();
-            // 充值对应广播记录
-            EthTransaction chargeTx = ethTransactionBO
-                .getEthTransaction(charge.getChannelOrder());
-
-            resultList1.add(chargeTx);
-
-            Collect collect = collectBO.getCollectByRefNo(charge.getCode());
-            // 如果有归集
-            if (collect != null) {
-                // 归集对应流水
-                jour.setRefNo(collect.getCode());
-                List<Jour> jourList2 = jourBO.queryJourList(jour);
-                jourList1.addAll(jourList2);
-                // 归集对应广播记录
-                EthTransaction collectTx = ethTransactionBO
-                    .getEthTransaction(collect.getTxHash());
-                resultList1.add(collectTx);
-                res.setCollect(collect);
-                res.setEthTransList(resultList1);
-            }
-            res.setEthTransList(resultList1);
-        }
-
-        res.setCharge(charge);
-        res.setJourList(jourList1);
 
         return res;
     }

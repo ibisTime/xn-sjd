@@ -8,7 +8,6 @@ import com.ogc.standard.dto.req.XN805041Req;
 import com.ogc.standard.dto.req.XN805042Req;
 import com.ogc.standard.dto.req.XN805043Req;
 import com.ogc.standard.dto.req.XN805081Req;
-import com.ogc.standard.dto.res.XN625000Res;
 
 /**
  * @author: xieyj 
@@ -32,8 +31,8 @@ public interface IUserAO {
 
     public void editTradeRate(String userId, Double tradeRate);
 
-    public void doBindMobile(String isSendSms, String mobile, String smsCaptcha,
-            String userId);
+    public void doBindMobile(String isSendSms, String mobile,
+            String smsCaptcha, String userId);
 
     // 平台代注册渠道商用户
     public String doAddQDS(String mobile, String idKind, String idNo,
@@ -84,12 +83,10 @@ public interface IUserAO {
             String adminUserId, String adminPwd);
 
     // 管理员重置推荐人
-    public void doResetReferee(String userId, String userReferee,
-            String updater);
+    public void doResetReferee(String userId, String userReferee, String updater);
 
     // 设置支付密码
-    public void doSetTradePwd(String userId, String tradePwd,
-            String smsCaptcha);
+    public void doSetTradePwd(String userId, String tradePwd, String smsCaptcha);
 
     // 重置支付密码
     public void doResetTradePwd(String userId, String newTradePwd,
@@ -102,9 +99,6 @@ public interface IUserAO {
     // 修改支付密码
     public void doModifyTradePwd(String userId, String oldTradePwd,
             String newTradePwd);
-
-    // 获取腾讯云签名
-    public XN625000Res getTencentSign(String userId);
 
     // 本系统实名认证
     public void doIdentify(String userId, String idKind, String idNo,
@@ -198,14 +192,6 @@ public interface IUserAO {
 
     // 更新最后一次登录时间
     public void lastLogin(String userId);
-
-    // 开启/修改谷歌认证
-    public void openGoogleAuth(String userId, String secret, String smsCaptcha,
-            String googleCaptcha);
-
-    // 开启/修改谷歌认证
-    public void closeGoogleAuth(String userId, String smsCaptcha,
-            String googleCaptcha);
 
     // 绑定邮箱
     public void bindEmail(String captcha, String email, String userId);

@@ -6,7 +6,6 @@ import java.util.List;
 import com.ogc.standard.bo.base.IPaginableBO;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.Charge;
-import com.ogc.standard.domain.EthWAddress;
 import com.ogc.standard.enums.EChannelType;
 
 public interface IChargeBO extends IPaginableBO<Charge> {
@@ -34,8 +33,6 @@ public interface IChargeBO extends IPaginableBO<Charge> {
     List<Charge> queryChargeList(Charge condition);
 
     Charge getCharge(String code);
-
-    public EthWAddress getAddressUseInfo(String fromAddress, String currency);
 
     public boolean isExistOfChannelOrder(String orderNo);
 

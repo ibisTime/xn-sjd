@@ -15,15 +15,14 @@ import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.IWithdrawDAO;
 import com.ogc.standard.domain.Account;
-import com.ogc.standard.domain.EthMAddress;
 import com.ogc.standard.domain.Withdraw;
 import com.ogc.standard.enums.EChannelType;
 import com.ogc.standard.enums.EWithdrawStatus;
 import com.ogc.standard.exception.BizException;
 
 @Component
-public class WithdrawBOImpl extends PaginableBOImpl<Withdraw>
-        implements IWithdrawBO {
+public class WithdrawBOImpl extends PaginableBOImpl<Withdraw> implements
+        IWithdrawBO {
 
     @Autowired
     private IWithdrawDAO withdrawDAO;
@@ -32,9 +31,9 @@ public class WithdrawBOImpl extends PaginableBOImpl<Withdraw>
     ISYSConfigBO sysConfigBO;
 
     @Override
-    public String applyOrder(Account account, BigDecimal amount, BigDecimal fee,
-            String payCardInfo, String payCardNo, String applyUser,
-            String applyNote) {
+    public String applyOrder(Account account, BigDecimal amount,
+            BigDecimal fee, String payCardInfo, String payCardNo,
+            String applyUser, String applyNote) {
         if (amount.compareTo(BigDecimal.ZERO) == 0) {
             throw new BizException("xn000000", "取现金额不能为0");
         }
@@ -147,15 +146,6 @@ public class WithdrawBOImpl extends PaginableBOImpl<Withdraw>
             withdraw = results.get(0);
         }
         return withdraw;
-    }
-
-    @Override
-    public EthMAddress getAddressUseInfo(String fromAddress, String currency) {
-        Withdraw data = new Withdraw();
-        data.setPayUser(fromAddress);
-        data.setCurrency(currency);
-        data.setStatus(EWithdrawStatus.Pay_YES.getCode());
-        return withdrawDAO.selectAddressUseInfo(data);
     }
 
     @Override

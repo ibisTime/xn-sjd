@@ -22,7 +22,6 @@ import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.IJourDAO;
 import com.ogc.standard.domain.Account;
-import com.ogc.standard.domain.HLOrder;
 import com.ogc.standard.domain.Jour;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.EChannelType;
@@ -77,8 +76,8 @@ public class JourBOImpl extends PaginableBOImpl<Jour> implements IJourBO {
 
         data.setRemark("记得对账哦");
         data.setCreateDatetime(new Date());
-        data.setWorkDate(
-            DateUtil.dateToStr(new Date(), DateUtil.DB_DATE_FORMAT_STRING));
+        data.setWorkDate(DateUtil.dateToStr(new Date(),
+            DateUtil.DB_DATE_FORMAT_STRING));
 
         jourDAO.insert(data);
         return code;
@@ -120,16 +119,15 @@ public class JourBOImpl extends PaginableBOImpl<Jour> implements IJourBO {
 
         data.setRemark("记得对账哦");
         data.setCreateDatetime(new Date());
-        data.setWorkDate(
-            DateUtil.dateToStr(new Date(), DateUtil.DB_DATE_FORMAT_STRING));
+        data.setWorkDate(DateUtil.dateToStr(new Date(),
+            DateUtil.DB_DATE_FORMAT_STRING));
 
         jourDAO.insert(data);
         return code;
     }
 
     @Override
-    public String addJourForHL(Account dbAccount, HLOrder order,
-            String bizType) {
+    public String addJourForHL(Account dbAccount, String bizType) {
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.AJour.getCode());
 
@@ -141,13 +139,13 @@ public class JourBOImpl extends PaginableBOImpl<Jour> implements IJourBO {
         data.setCurrency(dbAccount.getCurrency());
         data.setChannelType(EChannelType.NBZ.getCode());
 
-        data.setRefNo(order.getCode());
+        data.setRefNo(null);
         data.setBizType(bizType);
-        data.setBizNote("根据红蓝订单《" + order.getCode() + "》变动资金");
-        data.setTransAmount(order.getAmount());
+        data.setBizNote("根据红蓝订单《" + "" + "》变动资金");
+        data.setTransAmount(null);
         data.setPreAmount(dbAccount.getAmount());
 
-        data.setPostAmount(dbAccount.getAmount().add(order.getAmount()));
+        data.setPostAmount(dbAccount.getAmount().add(null));
         data.setStatus(EJourStatus.noAdjust.getCode());
         data.setCreateDatetime(new Date());
         data.setWorkDate(null);

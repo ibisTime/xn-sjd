@@ -9,16 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.ogc.standard.bo.IAccountBO;
-import com.ogc.standard.bo.IBtcXAddressBO;
-import com.ogc.standard.bo.IEthXAddressBO;
 import com.ogc.standard.bo.IJourBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.core.AccountUtil;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.IAccountDAO;
 import com.ogc.standard.domain.Account;
-import com.ogc.standard.domain.Coin;
-import com.ogc.standard.domain.HLOrder;
 import com.ogc.standard.enums.EAccountStatus;
 import com.ogc.standard.enums.EAccountType;
 import com.ogc.standard.enums.EChannelType;
@@ -35,34 +31,27 @@ import com.ogc.standard.exception.EBizErrorCode;
  * @history:
  */
 @Component
-public class AccountBOImpl extends PaginableBOImpl<Account>
-        implements IAccountBO {
+public class AccountBOImpl extends PaginableBOImpl<Account> implements
+        IAccountBO {
     @Autowired
     private IAccountDAO accountDAO;
 
     @Autowired
     private IJourBO jourBO;
 
-    @Autowired
-    private IEthXAddressBO ethXAddressBO;
-
-    @Autowired
-    private IBtcXAddressBO btcXAddressBO;
-
     @Override
     public String distributeAccount(String userId, EAccountType accountType,
-            Coin coin, String address) {
+            String address) {
         String accountNumber = null;
         if (StringUtils.isNotBlank(userId)) {
 
-            accountNumber = OrderNoGenerater
-                .generate(EGeneratePrefix.Account.getCode());
+            accountNumber = OrderNoGenerater.generate(EGeneratePrefix.Account
+                .getCode());
             Account data = new Account();
             data.setAccountNumber(accountNumber);
             data.setUserId(userId);
             data.setAddress(address);
             data.setType(accountType.getCode());
-            data.setCurrency(coin.getSymbol());
             data.setStatus(EAccountStatus.NORMAL.getCode());
             data.setAmount(BigDecimal.ZERO);
             data.setFrozenAmount(BigDecimal.ZERO);
@@ -137,23 +126,6 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
     }
 
     @Override
-    public void changeAmountForHL(HLOrder order) {
-        Account dbAccount = this.getAccount(order.getAccountNumber());
-        BigDecimal nowAmount = dbAccount.getAmount().add(order.getAmount());
-        // 记录流水
-        String lastOrder = jourBO.addJourForHL(dbAccount, order, "");
-        // 更改余额
-        Account data = new Account();
-        data.setAccountNumber(dbAccount.getAccountNumber());
-        data.setAmount(nowAmount);
-        data.setMd5(AccountUtil.md5(dbAccount.getMd5(), dbAccount.getAmount(),
-            nowAmount));
-        data.setInAmount(dbAccount.getInAmount());
-        data.setLastOrder(lastOrder);
-        accountDAO.updateAmount(data);
-    }
-
-    @Override
     public Account frozenAmount(Account dbAccount, BigDecimal freezeAmount,
             String bizType, String bizNote, String refNo) {
         if (freezeAmount.compareTo(BigDecimal.ZERO) <= 0) {
@@ -167,8 +139,8 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
         // 记录冻结流水
         String lastOrder = jourBO.addFrozenJour(dbAccount, EChannelType.NBZ,
             null, refNo, bizType, bizNote, freezeAmount);
-        BigDecimal nowFrozenAmount = dbAccount.getFrozenAmount()
-            .add(freezeAmount);
+        BigDecimal nowFrozenAmount = dbAccount.getFrozenAmount().add(
+            freezeAmount);
         dbAccount.setAccountNumber(dbAccount.getAccountNumber());
         dbAccount.setFrozenAmount(nowFrozenAmount);
         dbAccount.setLastOrder(lastOrder);
@@ -182,8 +154,8 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
         if (unfreezeAmount.compareTo(BigDecimal.ZERO) <= 0) {
             return dbAccount;
         }
-        BigDecimal nowFrozenAmount = dbAccount.getFrozenAmount()
-            .subtract(unfreezeAmount);
+        BigDecimal nowFrozenAmount = dbAccount.getFrozenAmount().subtract(
+            unfreezeAmount);
         if (nowFrozenAmount.compareTo(BigDecimal.ZERO) == -1) {
             throw new BizException("xn000000", "本次解冻会使账户冻结金额小于0");
         }
@@ -240,15 +212,14 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
     @Override
     public Account getAccountByUser(String userId, String currency) {
         Account data = null;
-        if (StringUtils.isNotBlank(userId)
-                && StringUtils.isNotBlank(currency)) {
+        if (StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(currency)) {
             Account condition = new Account();
             condition.setUserId(userId);
             condition.setCurrency(currency);
             data = accountDAO.select(condition);
             if (data == null) {
-                throw new BizException("xn802000",
-                    "用户[" + userId + ";" + currency + "]无此类型账户");
+                throw new BizException("xn802000", "用户[" + userId + ";"
+                        + currency + "]无此类型账户");
             }
         }
         return data;
@@ -275,8 +246,8 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
             String toBizNote, String refNo) {
         Account fromAccount = this.getAccountByUser(fromUserId, fromCurrency);
         Account toAccount = this.getAccountByUser(toUserId, toCurrency);
-        transAmount(fromAccount, toAccount, transAmount, fromBizType, toBizType,
-            fromBizNote, toBizNote, refNo);
+        transAmount(fromAccount, toAccount, transAmount, fromBizType,
+            toBizType, fromBizNote, toBizNote, refNo);
     }
 
     @Override
@@ -291,8 +262,8 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
         }
         this.changeAmount(fromAccount, transAmount.negate(), EChannelType.NBZ,
             null, refNo, fromBizType, fromBizNote);
-        this.changeAmount(toAccount, transAmount, EChannelType.NBZ, null, refNo,
-            toBizType, toBizNote);
+        this.changeAmount(toAccount, transAmount, EChannelType.NBZ, null,
+            refNo, toBizType, toBizNote);
     }
 
     @Override
@@ -311,11 +282,11 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
     public void distributePlatAccount(String symbol) {
         if (StringUtils.isNotBlank(symbol)) {
 
-            savePlatAccount("SYS_ACOUNT_" + symbol, ESysUser.SYS_USER,
-                "平台" + symbol + "盈亏账户", symbol);
+            savePlatAccount("SYS_ACOUNT_" + symbol, ESysUser.SYS_USER, "平台"
+                    + symbol + "盈亏账户", symbol);
 
-            savePlatAccount("SYS_ACOUNT_COLD_" + symbol + "", ESysUser.SYS_USER,
-                "平台" + symbol + "冷钱包", symbol);
+            savePlatAccount("SYS_ACOUNT_COLD_" + symbol + "",
+                ESysUser.SYS_USER, "平台" + symbol + "冷钱包", symbol);
 
         }
     }
