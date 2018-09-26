@@ -28,10 +28,7 @@
 		<result column="channel_order" property="channelOrder" />
 		
 	</resultMap>
-	<resultMap id="addressUseInfo_DB_Result" type="ethXAddress">
-		<result column="use_count" property="useCount" />
-		<result column="use_amount" property="useAmount" />
-	</resultMap>
+
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != '' ">
@@ -197,14 +194,6 @@
 		,pay_datetime=#{payDatetime}
 		WHERE code = #{code}
 	</update>
-	
-	<select id="select_addressUseInfo" parameterType="charge"
-		resultMap="addressUseInfo_DB_Result">
-		SELECT 
-		COUNT(*) as use_count, 
-		COALESCE(SUM(amount),0) as use_amount
-		FROM tstd_charge t
-		<include refid="where_condition" />
-	</select>
+
 	
 </mapper>

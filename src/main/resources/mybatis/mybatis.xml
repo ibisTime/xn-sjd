@@ -22,5 +22,6 @@
 		<typeAlias alias="charge" type="com.ogc.standard.domain.Charge" />
 		<typeAlias alias="withdraw" type="com.ogc.standard.domain.Withdraw" />
 		<typeAlias alias="bankcard" type="com.ogc.standard.domain.Bankcard"/>
+		<typeAlias alias="company" type="com.ogc.standard.domain.Company"/>
 	</typeAliases>
 </configuration>
