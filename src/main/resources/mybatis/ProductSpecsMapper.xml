@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ogc.standard.dao.IProductSpecsDAO">
+	<resultMap id="productSpecs_DB_Result" type="productSpecs">
+		<result column="code" property="code" />
+		<result column="name" property="name" />
+		<result column="product_code" property="productCode" />
+		<result column="price" property="price" />
+		<result column="year" property="year" />
+		
+		<result column="start_datetime" property="startDatetime" />
+		<result column="end_datetime" property="endDatetime" />
+	</resultMap>
+	
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="productCode != null and productCode != '' ">
+				AND t.product_code = #{productCode}
+			</if>
+		</trim>
+	</sql>
+	
+	<select id="select_productSpecs" parameterType="productSpecs" resultMap="productSpecs_DB_Result">
+		SELECT
+		t.code
+		,t.name
+		,t.product_code
+		,t.price
+		,t.year
+		
+		,t.start_datetime
+		,t.end_datetime
+		FROM
+		tzb_product_specs t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_productSpecs_count" parameterType="productSpecs"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tzb_product_specs t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_productSpecs" parameterType="productSpecs">
+		INSERT INTO
+		tzb_product_specs(
+		code
+		,name
+		,product_code
+		,price
+		,year
+		,start_datetime
+		,end_datetime
+		)
+		VALUES(
+		#{code}
+		,#{name}
+		,#{productCode}
+		,#{price}
+		,#{year}
+		,#{startDatetime}
+		,#{endDatetime}
+		)
+	</insert>
+
+	<delete id="delete_productSpecsByProduct">
+		DELETE FROM tzb_product_specs where product_code = #{productCode}
+	</delete>
+	
+</mapper>

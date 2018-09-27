@@ -5,10 +5,13 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.IProductAO;
 import com.ogc.standard.bo.ICategoryBO;
 import com.ogc.standard.bo.IProductBO;
+import com.ogc.standard.bo.IProductSpecsBO;
+import com.ogc.standard.bo.ITreeBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.core.OrderNoGenerater;
@@ -16,7 +19,10 @@ import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.domain.Category;
 import com.ogc.standard.domain.Product;
 import com.ogc.standard.dto.req.XN629010Req;
+import com.ogc.standard.dto.req.XN629010ReqSpecs;
+import com.ogc.standard.dto.req.XN629010ReqTree;
 import com.ogc.standard.dto.req.XN629011Req;
+import com.ogc.standard.dto.req.XN629011ReqSpecs;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECategoryStatus;
 import com.ogc.standard.enums.EGeneratePrefix;
@@ -33,7 +39,14 @@ public class ProductAOImpl implements IProductAO {
     @Autowired
     private ICategoryBO categoryBO;
 
+    @Autowired
+    private IProductSpecsBO productSpecsBO;
+
+    @Autowired
+    private ITreeBO treeBO;
+
     @Override
+    @Transactional
     public String addProduct(XN629010Req req) {
         Category category = categoryBO.getCategory(req.getCategoryCode());
         if (ECategoryStatus.PUT_OFF.getCode().equals(category.getStatus())) {
@@ -51,20 +64,42 @@ public class ProductAOImpl implements IProductAO {
 
         data.setListPic(req.getListPic());
         data.setBannerPic(req.getBannerPic());
+        data.setOriginPlace(req.getOriginPlace());
+        data.setScientificName(req.getScientificName());
+        data.setVariety(req.getVariety());
+
+        data.setRank(req.getRank());
+        data.setProvince(req.getProvince());
+        data.setCity(req.getCity());
+        data.setArea(req.getArea());
+        data.setTown(req.getTown());
+
         data.setRaiseStartDatetime(DateUtil.strToDate(
             req.getRaiseStartDatetime(), DateUtil.FRONT_DATE_FORMAT_STRING));
         data.setRaiseEndDatetime(DateUtil.strToDate(req.getRaiseEndDatetime(),
             DateUtil.FRONT_DATE_FORMAT_STRING));
         data.setRaiseCount(StringValidater.toInteger(req.getRaiseCount()));
-
         data.setStatus(EProductStatus.DRAFT.getCode());
         data.setUpdater(req.getUpdater());
         data.setUpdateDatetime(new Date());
+
         productBO.saveProduct(data);
+
+        // 添加产品规格
+        for (XN629010ReqSpecs productSpecs : req.getProductSpecsList()) {
+            productSpecsBO.saveProductSpecs(code, productSpecs);
+        }
+
+        // 添加古树
+        for (XN629010ReqTree tree : req.getTreeList()) {
+            treeBO.saveTree(data, tree);
+        }
+
         return code;
     }
 
     @Override
+    @Transactional
     public void editProduct(XN629011Req req) {
         Category category = categoryBO.getCategory(req.getCategoryCode());
         if (ECategoryStatus.PUT_OFF.getCode().equals(category.getStatus())) {
@@ -88,6 +123,16 @@ public class ProductAOImpl implements IProductAO {
 
         data.setListPic(req.getListPic());
         data.setBannerPic(req.getBannerPic());
+        data.setOriginPlace(req.getOriginPlace());
+        data.setScientificName(req.getScientificName());
+        data.setVariety(req.getVariety());
+
+        data.setRank(req.getRank());
+        data.setProvince(req.getProvince());
+        data.setCity(req.getCity());
+        data.setArea(req.getArea());
+        data.setTown(req.getTown());
+
         data.setRaiseStartDatetime(DateUtil.strToDate(
             req.getRaiseStartDatetime(), DateUtil.FRONT_DATE_FORMAT_STRING));
         data.setRaiseEndDatetime(DateUtil.strToDate(req.getRaiseEndDatetime(),
@@ -97,6 +142,18 @@ public class ProductAOImpl implements IProductAO {
         data.setUpdater(req.getUpdater());
         data.setUpdateDatetime(new Date());
         productBO.refreshProduct(data);
+
+        // 删除旧产品规格
+        productSpecsBO.removeProductSpecsByProduct(req.getCode());
+
+        // 添加新产品规格
+        for (XN629011ReqSpecs productSpecs : req.getProductSpecsList()) {
+        }
+
+        // 删除旧古树
+        treeBO.removeTreeByProduct(req.getCode());
+
+        // 添加新古树
     }
 
     @Override

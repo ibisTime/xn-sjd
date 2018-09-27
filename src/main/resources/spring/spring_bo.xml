@@ -93,7 +93,6 @@
 		<property name="paginableDAO" ref="withdrawDAOImpl"/>
 	</bean>
 	
-
 	<bean id="companyBO" class="com.ogc.standard.bo.impl.CompanyBOImpl">
 		<property name="paginableDAO" ref="companyDAOImpl"/>
 	</bean>
@@ -112,5 +111,13 @@
 	
 	<bean id="productBO" class="com.ogc.standard.bo.impl.ProductBOImpl">
 		<property name="paginableDAO" ref="productDAOImpl"/>
+	</bean>
+	
+	<bean id="treeBO" class="com.ogc.standard.bo.impl.TreeBOImpl">
+		<property name="paginableDAO" ref="treeDAOImpl"/>
+	</bean>
+	
+	<bean id="productSpecsBO" class="com.ogc.standard.bo.impl.ProductSpecsBOImpl">
+		<property name="paginableDAO" ref="productSpecsDAOImpl"/>
 	</bean>
 </beans>
