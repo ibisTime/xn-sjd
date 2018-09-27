@@ -4,9 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 承兑交易订单状态
- * @author: lei 
- * @since: 2018年9月10日 下午8:53:33 
+ * 个人捐赠定向认养订单状态
+ * @author: jiafr 
+ * @since: 2018年9月27日 下午8:54:31 
  * @history:
  */
 public enum EAdoptOrderStatus {

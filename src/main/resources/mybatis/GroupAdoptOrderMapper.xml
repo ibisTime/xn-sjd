@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ogc.standard.dao.IGroupAdoptOrderDAO">
+	<resultMap id="groupAdoptOrder_DB_Result" type="groupAdoptOrder">
+		<result column="code" property="code" />
+		<result column="identify_code" property="identifyCode" />
+		<result column="product_code" property="productCode" />
+		<result column="product_specs_name" property="productSpecsName" />
+		<result column="price" property="price" />
+		<result column="year" property="year" />
+		<result column="start_datetime" property="startDatetime" />
+		<result column="end_datetime" property="endDatetime" />
+		<result column="quantity" property="quantity" />
+		<result column="amount" property="amount" />
+		<result column="apply_user" property="applyUser" />
+		<result column="apply_datetime" property="applyDatetime" />
+		<result column="status" property="status" />
+		<result column="pay_type" property="payType" />
+		<result column="pay_group" property="payGroup" />
+		<result column="pay_code" property="payCode" />
+		<result column="pay_amount" property="payAmount" />
+		<result column="jf_deduct_amount" property="jfDeductAmount" />
+		<result column="pay_datetime" property="payDatetime" />
+		<result column="back_jf_amount" property="backJfAmount" />
+		<result column="updater" property="updater" />
+		<result column="update_datetime" property="updateDatetime" />
+		<result column="remark" property="remark" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+		</trim>
+	</sql>
+	<select id="select_groupAdoptOrder" parameterType="groupAdoptOrder" resultMap="groupAdoptOrder_DB_Result">
+		SELECT
+		t.code
+		,t.identify_code
+		,t.product_code
+		,t.product_specs_name
+		,t.price
+		,t.year
+		,t.start_datetime
+		,t.end_datetime
+		,t.quantity
+		,t.amount
+		,t.apply_user
+		,t.apply_datetime
+		,t.status
+		,t.pay_type
+		,t.pay_group
+		,t.pay_code
+		,t.pay_amount
+		,t.jf_deduct_amount
+		,t.pay_datetime
+		,t.back_jf_amount
+		,t.updater
+		,t.update_datetime
+		,t.remark
+		FROM
+		try_group_adopt_order t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_groupAdoptOrder_count" parameterType="groupAdoptOrder"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM try_group_adopt_order t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_groupAdoptOrder" parameterType="groupAdoptOrder">
+		INSERT INTO
+		try_group_adopt_order(
+		code
+		,identify_code
+		,product_code
+		,product_specs_name
+		,price
+		,year
+		,start_datetime
+		,end_datetime
+		,quantity
+		,amount
+		,apply_user
+		,apply_datetime
+		,status
+		,pay_type
+		,pay_group
+		,pay_code
+		,pay_amount
+		,jf_deduct_amount
+		,pay_datetime
+		,back_jf_amount
+		,updater
+		,update_datetime
+		,remark
+		)
+		VALUES(
+		#{code}
+		,#{identifyCode}
+		,#{productCode}
+		,#{productSpecsName}
+		,#{price}
+		,#{year}
+		,#{startDatetime}
+		,#{endDatetime}
+		,#{quantity}
+		,#{amount}
+		,#{applyUser}
+		,#{applyDatetime}
+		,#{status}
+		,#{payType}
+		,#{payGroup}
+		,#{payCode}
+		,#{payAmount}
+		,#{jfDeductAmount}
+		,#{payDatetime}
+		,#{backJfAmount}
+		,#{updater}
+		,#{updateDatetime}
+		,#{remark}
+		)
+	</insert>
+
+	<update id="update_groupAdoptOrder" parameterType="groupAdoptOrder">
+		UPDATE try_group_adopt_order
+		SET
+		identify_code = #{identifyCode}
+		,product_code = #{productCode}
+		,product_specs_name = #{productSpecsName}
+		,price = #{price}
+		,year = #{year}
+		,start_datetime = #{startDatetime}
+		,end_datetime = #{endDatetime}
+		,quantity = #{quantity}
+		,amount = #{amount}
+		,apply_user = #{applyUser}
+		,apply_datetime = #{applyDatetime}
+		,status = #{status}
+		,pay_type = #{payType}
+		,pay_group = #{payGroup}
+		,pay_code = #{payCode}
+		,pay_amount = #{payAmount}
+		,jf_deduct_amount = #{jfDeductAmount}
+		,pay_datetime = #{payDatetime}
+		,back_jf_amount = #{backJfAmount}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+
+
+</mapper>

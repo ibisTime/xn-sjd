@@ -9,28 +9,28 @@ import com.ogc.standard.common.DateUtil;
 
 public class SCDM_IDAO {
     // 实体
-    private static String key = "adoptOrder";
+    private static String key = "groupAdoptOrder";
 
     // 实体名称
-    private static String keyName = "个人/定向/捐赠认养订单";
+    private static String keyName = "集体认养订单";
 
     // 包路径
     private static String packge = "com.ogc.standard.";
 
     // 表名
-    private static String dbname = "try_adopt_order";
+    private static String dbname = "try_group_adopt_order";
 
-    private static String[] DBwords = { "code", "type", "product_code",
-            "product_specs_name", "price", "year", "start_datetime",
-            "end_datetime", "quantity", "amount", "apply_user",
-            "apply_datetime", "status", "pay_type", "pay_group", "pay_code",
-            "pay_amount", "jf_deduct_amount", "pay_datetime", "back_jf_amount",
-            "updater", "update_datetime", "remark" };
+    private static String[] DBwords = { "code", "identify_code",
+            "product_code", "product_specs_name", "price", "year",
+            "start_datetime", "end_datetime", "quantity", "amount",
+            "apply_user", "apply_datetime", "status", "pay_type", "pay_group",
+            "pay_code", "pay_amount", "jf_deduct_amount", "pay_datetime",
+            "back_jf_amount", "updater", "update_datetime", "remark" };
 
-    private static String[] DBwordsName = { "编号", "订单类型（0个人/1定向/2捐赠）",
-            "认养产品编号", "规格名称", "认养价格", "认养年限", "认养开始时间", "认养结束时间", "数量", "金额",
-            "下单人编号", "下单时间", "状态", "支付方式", "支付组号", "支付渠道编号", "支付金额", "积分抵扣金额",
-            "支付时间", "积分返点金额", "更新人", "更新时间", "备注" };
+    private static String[] DBwordsName = { "编号", "识别码", "认养产品编号", "规格名称",
+            "认养价格", "认养年限", "认养开始时间", "认养结束时间", "数量", "金额", "下单人编号", "下单时间",
+            "状态", "支付方式", "支付组号", "支付渠道编号", "支付金额", "积分抵扣金额", "支付时间", "积分返点金额",
+            "更新人", "更新时间", "备注" };
 
     public void testname() throws Exception {
     }

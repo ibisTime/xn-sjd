@@ -17,10 +17,11 @@ public enum EGeneratePrefix {
 
     Interact("I", "点赞"), BANK_CARD("BC", "银行卡"),
 
-    APPLY_BIND_MAINTAIN("ABM", "申请绑定养护方"), ADOPT_ORDER("AO", "个人/定向/捐赠认养订单"),
+    APPLY_BIND_MAINTAIN("ABM", "申请绑定养护方"), ADOPT_ORDER("AO", "个人/定向/捐赠认养订单"), GROUP_ADOPT_ORDER(
+            "GAO", "集体认养订单"),
 
-    Category("C", "产品类型"), Product("P", "认养产品"), ProductSpec("PS",
-            "产品规格"), Tree("T", "古树");
+    Category("C", "产品类型"), Product("P", "认养产品"), ProductSpec("PS", "产品规格"), Tree(
+            "T", "古树");
 
     public static Map<String, EGeneratePrefix> getMap() {
         Map<String, EGeneratePrefix> map = new HashMap<String, EGeneratePrefix>();
