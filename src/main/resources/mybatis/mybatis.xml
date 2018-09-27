@@ -33,6 +33,7 @@
 
 		<typeAlias alias="category" type="com.ogc.standard.domain.Category"/>
 		<typeAlias alias="product" type="com.ogc.standard.domain.Product"/>
-
+		<typeAlias alias="tree" type="com.ogc.standard.domain.Tree"/>
+		<typeAlias alias="productSpecs" type="com.ogc.standard.domain.ProductSpecs"/>
 	</typeAliases>
 </configuration>

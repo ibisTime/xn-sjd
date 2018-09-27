@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ogc.standard.dao.ITreeDAO">
+	<resultMap id="tree_DB_Result" type="tree">
+		<result column="code" property="code" />
+		<result column="product_code" property="productCode" />
+		<result column="owner_id" property="ownerId" />
+		<result column="tree_number" property="treeNumber" />
+		<result column="age" property="age" />
+		
+		<result column="origin_place" property="originPlace" />
+		<result column="scientific_name" property="scientificName" />
+		<result column="variety" property="variety" />
+		<result column="rank" property="rank" />
+		<result column="province" property="province" />
+		
+		<result column="city" property="city" />
+		<result column="area" property="area" />
+		<result column="town" property="town" />
+		<result column="longitude" property="longitude" />
+		<result column="latitude" property="latitude" />
+		
+		<result column="pic" property="pic" />
+		<result column="status" property="status" />
+		<result column="article_count" property="articleCount" />
+		<result column="point_count" property="pointCount" />
+		<result column="collection_count" property="collectionCount" />
+		
+		<result column="adopt_count" property="adoptCount" />
+		<result column="updater" property="updater" />
+		<result column="update_datetime" property="updateDatetime" />
+		<result column="remark" property="remark" />
+	</resultMap>
+	
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="productCode != null and productCode != '' ">
+				AND t.product_code = #{productCode}
+			</if>
+			<if test="ownerId != null and ownerId != '' ">
+				AND t.owner_id = #{ownerId}
+			</if>
+			<if test="treeNumber != null and treeNumber != '' ">
+				AND t.tree_number = #{treeNumber}
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+		</trim>
+	</sql>
+	
+	<select id="select_tree" parameterType="tree" resultMap="tree_DB_Result">
+		SELECT
+		t.code
+		,t.product_code
+		,t.owner_id
+		,t.tree_number
+		,t.age
+		
+		,t.origin_place
+		,t.scientific_name
+		,t.variety
+		,t.rank
+		,t.province
+		
+		,t.city
+		,t.area
+		,t.town
+		,t.longitude
+		,t.latitude
+		
+		,t.pic
+		,t.status
+		,t.article_count
+		,t.point_count
+		,t.collection_count
+		
+		,t.adopt_count
+		,t.updater
+		,t.update_datetime
+		,t.remark
+		FROM
+		tzb_tree t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_tree_count" parameterType="tree"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tzb_tree t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_tree" parameterType="tree">
+		INSERT INTO
+		tzb_tree(
+		code
+		,product_code
+		,owner_id
+		,tree_number
+		,age
+		
+		,origin_place
+		,scientific_name
+		,variety
+		,rank
+		,province
+		
+		,city
+		,area
+		,town
+		,longitude
+		,latitude
+		
+		,pic
+		,status
+		,updater
+		,update_datetime
+		,remark
+		)
+		VALUES(
+		#{code}
+		,#{productCode}
+		,#{ownerId}
+		,#{treeNumber}
+		,#{age}
+		
+		,#{originPlace}
+		,#{scientificName}
+		,#{variety}
+		,#{rank}
+		,#{province}
+		
+		,#{city}
+		,#{area}
+		,#{town}
+		,#{longitude}
+		,#{latitude}
+		
+		,#{pic}
+		,#{status}
+		,#{updater}
+		,#{updateDatetime}
+		,#{remark}
+		)
+	</insert>
+
+	<update id="update_tree" parameterType="tree">
+		UPDATE tzb_tree
+		SET
+		product_code = #{productCode}
+		,tree_number = #{treeNumber}
+		,age = #{age}
+		,origin_place = #{originPlace}
+		,scientific_name = #{scientificName}
+		,variety = #{variety}
+		,rank = #{rank}
+		,province = #{province}
+		,city = #{city}
+		,area = #{area}
+		,town = #{town}
+		,longitude = #{longitude}
+		,latitude = #{latitude}
+		,pic = #{pic}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+
+	<delete id="delete_treeByProduct">
+		DELETE FROM tzb_tree WHERE product_code = #{productCode}
+	</delete>
+	
+</mapper>

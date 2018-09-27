@@ -1,6 +1,9 @@
 package com.ogc.standard.dto.req;
 
+import java.util.List;
+
 import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * 修改产品
@@ -39,6 +42,38 @@ public class XN629011Req extends BaseReq {
     @NotBlank
     private String bannerPic;
 
+    // 产地
+    @NotBlank
+    private String originPlace;
+
+    // 学名
+    @NotBlank
+    private String scientificName;
+
+    // 品种
+    @NotBlank
+    private String variety;
+
+    // 级别
+    @NotBlank
+    private String rank;
+
+    // 省
+    @NotBlank
+    private String province;
+
+    // 市
+    @NotBlank
+    private String city;
+
+    // 区
+    @NotBlank
+    private String area;
+
+    // 镇
+    @NotBlank
+    private String town;
+
     // 募集开始时间
     private String raiseStartDatetime;
 
@@ -47,6 +82,14 @@ public class XN629011Req extends BaseReq {
 
     // 募集总量
     private String raiseCount;
+
+    // 产品规格列表
+    @NotEmpty
+    private List<XN629011ReqSpecs> productSpecsList;
+
+    // 树木列表
+    @NotEmpty
+    private List<XN629010ReqTree> treeList;
 
     // 更新人
     @NotBlank
@@ -149,6 +192,86 @@ public class XN629011Req extends BaseReq {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public List<XN629011ReqSpecs> getProductSpecsList() {
+        return productSpecsList;
+    }
+
+    public void setProductSpecsList(List<XN629011ReqSpecs> productSpecsList) {
+        this.productSpecsList = productSpecsList;
+    }
+
+    public String getOriginPlace() {
+        return originPlace;
+    }
+
+    public void setOriginPlace(String originPlace) {
+        this.originPlace = originPlace;
+    }
+
+    public String getScientificName() {
+        return scientificName;
+    }
+
+    public void setScientificName(String scientificName) {
+        this.scientificName = scientificName;
+    }
+
+    public String getVariety() {
+        return variety;
+    }
+
+    public void setVariety(String variety) {
+        this.variety = variety;
+    }
+
+    public String getRank() {
+        return rank;
+    }
+
+    public void setRank(String rank) {
+        this.rank = rank;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
+
+    public String getTown() {
+        return town;
+    }
+
+    public void setTown(String town) {
+        this.town = town;
+    }
+
+    public List<XN629010ReqTree> getTreeList() {
+        return treeList;
+    }
+
+    public void setTreeList(List<XN629010ReqTree> treeList) {
+        this.treeList = treeList;
     }
 
 }

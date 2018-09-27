@@ -1,6 +1,7 @@
 package com.ogc.standard.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import com.ogc.standard.dao.base.ABaseDO;
 
@@ -101,6 +102,12 @@ public class Product extends ABaseDO {
 
     // 募集结束结束时间
     private Date raiseEndEndDatetime;
+
+    // 产品规格列表
+    private List<ProductSpecs> productSpecsList;
+
+    // 树木列表
+    private List<Tree> treeList;
 
     public void setCode(String code) {
         this.code = code;
@@ -332,6 +339,22 @@ public class Product extends ABaseDO {
 
     public void setRaiseEndEndDatetime(Date raiseEndEndDatetime) {
         this.raiseEndEndDatetime = raiseEndEndDatetime;
+    }
+
+    public List<ProductSpecs> getProductSpecsList() {
+        return productSpecsList;
+    }
+
+    public void setProductSpecsList(List<ProductSpecs> productSpecsList) {
+        this.productSpecsList = productSpecsList;
+    }
+
+    public List<Tree> getTreeList() {
+        return treeList;
+    }
+
+    public void setTreeList(List<Tree> treeList) {
+        this.treeList = treeList;
     }
 
 }
