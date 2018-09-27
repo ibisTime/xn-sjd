@@ -76,9 +76,10 @@ public class AdoptOrderBOImpl extends PaginableBOImpl<AdoptOrder> implements
             condition.setCode(code);
             data = adoptOrderDAO.select(condition);
             if (data == null) {
-                throw new BizException("xn0000", "�� ��Ų�����");
+                throw new BizException("xn0000", "订单编号不存在");
             }
         }
         return data;
     }
+
 }

@@ -16,6 +16,15 @@
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
 			</if>
+			<if test="ownerId != null and ownerId != '' ">
+				AND t.owner_id = #{ownerId}
+			</if>
+			<if test="maintainId != null and maintainId != '' ">
+				AND t.maintain_id = #{maintainId}
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
 		</trim>
 	</sql>
 	<select id="select_applyBindMaintain" parameterType="applyBindMaintain" resultMap="applyBindMaintain_DB_Result">
@@ -76,6 +85,14 @@
 		,remark = #{remark}
 		WHERE code = #{code}
 	</update>
-
-
+	
+	<update id="approve_applyBindMaintain" parameterType="applyBindMaintain">
+		UPDATE tsys_apply_bind_maintain
+		SET
+		status = #{status}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
 </mapper>

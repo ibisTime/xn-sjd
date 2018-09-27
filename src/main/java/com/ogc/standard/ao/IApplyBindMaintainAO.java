@@ -6,6 +6,9 @@ import org.springframework.stereotype.Component;
 
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.ApplyBindMaintain;
+import com.ogc.standard.dto.req.XN629600Req;
+import com.ogc.standard.dto.req.XN629601Req;
+import com.ogc.standard.dto.req.XN629602Req;
 
 /**
  * 申请绑定养护方
@@ -17,11 +20,11 @@ import com.ogc.standard.domain.ApplyBindMaintain;
 public interface IApplyBindMaintainAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
-    public String addApplyBindMaintain(ApplyBindMaintain data);
+    public String addApplyBindMaintain(XN629600Req req);
 
     public int dropApplyBindMaintain(String code);
 
-    public int editApplyBindMaintain(ApplyBindMaintain data);
+    public boolean editApplyBindMaintain(XN629601Req req);
 
     public Paginable<ApplyBindMaintain> queryApplyBindMaintainPage(int start,
             int limit, ApplyBindMaintain condition);
@@ -30,5 +33,8 @@ public interface IApplyBindMaintainAO {
             ApplyBindMaintain condition);
 
     public ApplyBindMaintain getApplyBindMaintain(String code);
+
+    // 审核
+    public void approveApplyBindMaintain(XN629602Req req);
 
 }

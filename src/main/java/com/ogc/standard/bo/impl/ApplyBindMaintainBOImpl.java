@@ -77,9 +77,16 @@ public class ApplyBindMaintainBOImpl extends PaginableBOImpl<ApplyBindMaintain>
             condition.setCode(code);
             data = applyBindMaintainDAO.select(condition);
             if (data == null) {
-                throw new BizException("xn0000", "�� ��Ų�����");
+                throw new BizException("xn0000", "记录编号不存在");
             }
         }
         return data;
+    }
+
+    @Override
+    public void approveApplyBindMaintain(ApplyBindMaintain data) {
+        if (StringUtils.isNotBlank(data.getCode())) {
+            applyBindMaintainDAO.approveApplyBindMaintain(data);
+        }
     }
 }
