@@ -8,40 +8,33 @@
 		<result column="mobile" property="mobile" />
 		<result column="email" property="email" />
 		<result column="kind" property="kind" />
-		<result column="photo" property="photo" />
 		
+		<result column="photo" property="photo" />
 		<result column="nickname" property="nickname" />
 		<result column="login_pwd_strength" property="loginPwdStrength" />		
 		<result column="level" property="level" />		
 		<result column="user_referee" property="userReferee" />
 		
+		<result column="agent" property="agent" />
+		<result column="salesman" property="salesman" />
 		<result column="id_kind" property="idKind" />
 		<result column="id_no" property="idNo" />
 		<result column="real_name" property="realName" />
-		<result column="id_face" property="idFace" />
-		<result column="id_oppo" property="idOppo" />
 		
-		<result column="id_hold" property="idHold" />
-		<result column="trade_pwd" property="tradePwd" />
 		<result column="trade_pwd_strength" property="tradePwdStrength" />
-		<result column="google_secret" property="googleSecret" />
 		<result column="status" property="status" />
 		<result column="province" property="province" />
-		
 		<result column="city" property="city" />
 		<result column="area" property="area" />
+		
 		<result column="address" property="address" />
 		<result column="longitude" property="longitude" />
 		<result column="latitude" property="latitude" />
-		
-		<result column="resp_area" property="respArea" />
-		<result column="trade_rate" property="tradeRate" />
 		<result column="create_datetime" property="createDatetime" />
 		<result column="updater" property="updater" />
-		<result column="update_datetime" property="updateDatetime" />
 		
+		<result column="update_datetime" property="updateDatetime" />
 		<result column="remark" property="remark" />
-		<result column="last_login" property="lastLogin" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">			
@@ -143,22 +136,20 @@
 		,t.mobile
 		,t.email
 		,t.kind
-		,t.photo
 		
+		,t.photo
 		,t.nickname
 		,t.login_pwd_strength
 		,t.level
 		,t.user_referee
-		,t.id_kind
 		
+		,t.agent
+		,t.salesman
+		,t.id_kind
 		,t.id_no
 		,t.real_name
-		,t.id_face
-		,t.id_oppo
-		,t.id_hold
 		
 		,t.trade_pwd_strength
-		,t.google_secret
 		,t.status
 		,t.province
 		,t.city
@@ -167,11 +158,9 @@
 		,t.address
 		,t.longitude
 		,t.latitude
-		,t.resp_area
 		,t.create_datetime
-		
-		,t.trade_rate
 		,t.updater
+		
 		,t.update_datetime
 		,t.remark
 		FROM
@@ -197,24 +186,22 @@
 		,mobile
 		,email
 		,kind
-		,photo
 		
+		,photo
 		,nickname
 		,login_pwd
 		,login_pwd_strength
 		,level
-		,user_referee
 		
+		,user_referee
+		,agent
+		,salesman
 		,id_kind
 		,id_no
-		,real_name
-		,id_face
-		,id_oppo
 		
-		,id_hold
+		,real_name
 		,trade_pwd
 		,trade_pwd_strength
-		,google_secret
 		,status
 		,province
 		
@@ -224,12 +211,9 @@
 		,longitude
 		,latitude
 		
-		,resp_area
 		,create_datetime
-		,trade_rate
 		,updater
 		,update_datetime
-		
 		,remark
 		)
 		VALUES(
@@ -238,24 +222,22 @@
 		,#{mobile}
 		,#{email}
 		,#{kind}
-		,#{photo}
 		
+		,#{photo}
 		,#{nickname}
 		,#{loginPwd}
 		,#{loginPwdStrength}
 		,#{level}
-		,#{userReferee}
 		
+		,#{userReferee}
+		,#{agent}
+		,#{salesman}
 		,#{idKind}
 		,#{idNo}
-		,#{realName}
-		,#{idFace}
-		,#{idOppo}
 		
-		,#{idHold}
+		,#{realName}
 		,#{tradePwd}
 		,#{tradePwdStrength}
-		,#{googleSecret}
 		,#{status}
 		,#{province}
 		
@@ -265,12 +247,9 @@
 		,#{longitude}
 		,#{latitude}
 		
-		,#{respArea}
 		,#{createDatetime}
-		,#{tradeRate}
 		,#{updater}
 		,#{updateDatetime}
-		
 		,#{remark}
 		)
 	</insert>
@@ -281,9 +260,6 @@
 		 real_name= #{realName}
 		,id_kind = #{idKind}
 		,id_no = #{idNo}
-		,id_face=#{idFace}
-		,id_oppo=#{idOppo}
-		,id_hold=#{idHold}
 		WHERE
 		user_id = #{userId}	
 	</update>
@@ -323,19 +299,10 @@
 		user_id = #{userId}	
 	</update>
 	
-	<update id="update_trade_rate" parameterType="user">
-		UPDATE tstd_user
-		SET
-		 trade_rate = #{tradeRate}
-		WHERE
-		user_id = #{userId}	
-	</update>
-	
 	<update id="update_resp_area" parameterType="user">
 		UPDATE tstd_user
 		SET
-		 resp_area = #{respArea}
-		 ,updater=#{updater}
+		 updater=#{updater}
 		 ,update_datetime=#{updateDatetime}
 		WHERE
 		user_id = #{userId}	
@@ -378,12 +345,10 @@
 		user_id = #{userId}	
 	</update>
 	
-	
-	
 	<update id="update_user_loginName" parameterType="user">
 		UPDATE tstd_user
 		SET
-		 login_name = #{loginName}
+		login_name = #{loginName}
 		WHERE
 		user_id = #{userId}	
 	</update>
@@ -420,8 +385,6 @@
 		user_id = #{userId}	
 	</update>
 	
-	
-	
 	<update id="update_level" parameterType="user">
 		UPDATE tstd_user
 		SET
@@ -446,14 +409,6 @@
 		user_id = #{userId}		
 	</update>
 	
-	<update id="update_googleSecret" parameterType="user">
-		UPDATE tstd_user
-		SET
-		google_secret = #{googleSecret}
-		WHERE
-		user_id = #{userId}		
-	</update>
-	
 	<update id="update_userReferee" parameterType="user">
 		UPDATE tstd_user
 		SET
@@ -473,11 +428,4 @@
 		user_id = #{userId}		
 	</update>
 	
-	<update id="update_lastLogin" parameterType="user">
-		UPDATE tstd_user
-		SET
-		last_login = #{lastLogin}
-		WHERE
-		user_id = #{userId}		
-	</update>
 </mapper>

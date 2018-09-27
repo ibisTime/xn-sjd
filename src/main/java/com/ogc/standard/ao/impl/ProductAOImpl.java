@@ -3,6 +3,7 @@ package com.ogc.standard.ao.impl;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,11 +19,12 @@ import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.domain.Category;
 import com.ogc.standard.domain.Product;
+import com.ogc.standard.domain.ProductSpecs;
+import com.ogc.standard.domain.Tree;
 import com.ogc.standard.dto.req.XN629010Req;
 import com.ogc.standard.dto.req.XN629010ReqSpecs;
 import com.ogc.standard.dto.req.XN629010ReqTree;
 import com.ogc.standard.dto.req.XN629011Req;
-import com.ogc.standard.dto.req.XN629011ReqSpecs;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECategoryStatus;
 import com.ogc.standard.enums.EGeneratePrefix;
@@ -92,6 +94,11 @@ public class ProductAOImpl implements IProductAO {
 
         // 添加古树
         for (XN629010ReqTree tree : req.getTreeList()) {
+            // 判断重复的树
+            if (treeBO.isTreeNumberExist(tree.getTreeNumber())) {
+                throw new BizException("xn0000", "树木编号已存在，请重新输入！");
+            }
+
             treeBO.saveTree(data, tree);
         }
 
@@ -147,13 +154,22 @@ public class ProductAOImpl implements IProductAO {
         productSpecsBO.removeProductSpecsByProduct(req.getCode());
 
         // 添加新产品规格
-        for (XN629011ReqSpecs productSpecs : req.getProductSpecsList()) {
+        for (XN629010ReqSpecs productSpecs : req.getProductSpecsList()) {
+            productSpecsBO.saveProductSpecs(req.getCode(), productSpecs);
         }
 
         // 删除旧古树
         treeBO.removeTreeByProduct(req.getCode());
 
         // 添加新古树
+        for (XN629010ReqTree tree : req.getTreeList()) {
+            // 判断重复的树
+            if (treeBO.isTreeNumberExist(tree.getTreeNumber())) {
+                throw new BizException("xn0000", "树木编号已存在，请重新输入！");
+            }
+
+            treeBO.saveTree(data, tree);
+        }
     }
 
     @Override
@@ -222,17 +238,49 @@ public class ProductAOImpl implements IProductAO {
     @Override
     public Paginable<Product> queryProductPage(int start, int limit,
             Product condition) {
-        return productBO.getPaginable(start, limit, condition);
+        Paginable<Product> page = productBO.getPaginable(start, limit,
+            condition);
+        List<Product> list = page.getList();
+
+        if (CollectionUtils.isNotEmpty(list)) {
+            for (Product product : list) {
+                initProduct(product);
+            }
+        }
+
+        return page;
     }
 
     @Override
     public List<Product> queryProductList(Product condition) {
-        return productBO.queryProductList(condition);
+        List<Product> list = productBO.queryProductList(condition);
+
+        if (CollectionUtils.isNotEmpty(list)) {
+            for (Product product : list) {
+                initProduct(product);
+            }
+        }
+        return list;
     }
 
     @Override
     public Product getProduct(String code) {
-        return productBO.getProduct(code);
+        Product product = productBO.getProduct(code);
+        initProduct(product);
+        return product;
     }
 
+    private void initProduct(Product product) {
+        // 产品规格列表
+        List<ProductSpecs> specsList = productSpecsBO
+            .queryProductSpecsListByProduct(product.getCode());
+        product.setProductSpecsList(specsList);
+
+        // 古树列表
+        List<Tree> treeList = treeBO.queryTreeListByProduct(product.getCode());
+        product.setTreeList(treeList);
+
+        // 树木数量
+        product.setTreeCount(treeList.size());
+    }
 }

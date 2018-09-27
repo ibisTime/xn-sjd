@@ -6,6 +6,8 @@ import org.springframework.stereotype.Component;
 
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Tree;
+import com.ogc.standard.dto.req.XN629030Req;
+import com.ogc.standard.dto.req.XN629031Req;
 
 /**
  * 古树
@@ -18,10 +20,10 @@ public interface ITreeAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
     // 添加古树
-    public String addTree(Tree data);
+    public String addTree(XN629030Req req);
 
     // 修改古树
-    public void editTree(Tree data);
+    public void editTree(XN629031Req req);
 
     public Paginable<Tree> queryTreePage(int start, int limit, Tree condition);
 

@@ -26,9 +26,6 @@ public interface IUserDAO extends IBaseDAO<User> {
     // 实名认证
     public int updateIdentity(User data);
 
-    // 修改手续费率
-    public int updateTradeRate(User data);
-
     // 设置支付密码
     public int updateTradePwd(User data);
 
@@ -64,11 +61,5 @@ public interface IUserDAO extends IBaseDAO<User> {
 
     // 更新用户手机号和真实信息
     public int updateSupple(User data);
-
-    // 更新谷歌密码
-    public int updateGoogleSecret(User data);
-
-    // 最后一次登陆时间
-    public int updateLastLogin(User data);
 
 }

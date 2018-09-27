@@ -1,89 +1,79 @@
-package com.ogc.standard.domain;
+package com.ogc.standard.dto.req;
 
-import java.util.Date;
-
-import com.ogc.standard.dao.base.ABaseDO;
+import org.hibernate.validator.constraints.NotBlank;
 
 /**
-* 古树
-* @author: silver 
-* @since: 2018-09-26 16:40:01
-* @history:
-*/
-public class Tree extends ABaseDO {
+ * 修改古树
+ * @author: silver 
+ * @since: 2018年9月27日 下午8:33:25 
+ * @history:
+ */
+public class XN629031Req extends BaseReq {
 
-    private static final long serialVersionUID = 5051411391450658545L;
+    private static final long serialVersionUID = -6308551102694787370L;
 
     // 编号
+    @NotBlank
     private String code;
 
-    // 产品编号
-    private String productCode;
-
-    // 产权方编号
-    private String ownerId;
-
     // 树木编号
+    @NotBlank
     private String treeNumber;
 
     // 树龄
-    private Integer age;
+    @NotBlank
+    private String age;
 
     // 产地
+    @NotBlank
     private String originPlace;
 
     // 学名
+    @NotBlank
     private String scientificName;
 
     // 品种
+    @NotBlank
     private String variety;
 
     // 级别
+    @NotBlank
     private String rank;
 
     // 省
+    @NotBlank
     private String province;
 
     // 市
+    @NotBlank
     private String city;
 
     // 区
+    @NotBlank
     private String area;
 
     // 镇
+    @NotBlank
     private String town;
 
     // 经度
+    @NotBlank
     private String longitude;
 
     // 维度
+    @NotBlank
     private String latitude;
 
     // 实景图
+    @NotBlank
     private String pic;
 
-    // 状态（0待认养/1已认养）
-    private String status;
-
-    // 文章数
-    private Integer articleCount;
-
-    // 点赞数
-    private Integer pointCount;
-
-    // 收藏数
-    private Integer collectionCount;
-
-    // 认养次数
-    private Integer adoptCount;
-
     // 更新人
+    @NotBlank
     private String updater;
 
-    // 更新时间
-    private Date updateDatetime;
-
     // 备注
+    @NotBlank
     private String remark;
 
     public String getCode() {
@@ -94,22 +84,6 @@ public class Tree extends ABaseDO {
         this.code = code;
     }
 
-    public String getProductCode() {
-        return productCode;
-    }
-
-    public void setProductCode(String productCode) {
-        this.productCode = productCode;
-    }
-
-    public String getOwnerId() {
-        return ownerId;
-    }
-
-    public void setOwnerId(String ownerId) {
-        this.ownerId = ownerId;
-    }
-
     public String getTreeNumber() {
         return treeNumber;
     }
@@ -118,11 +92,11 @@ public class Tree extends ABaseDO {
         this.treeNumber = treeNumber;
     }
 
-    public Integer getAge() {
+    public String getAge() {
         return age;
     }
 
-    public void setAge(Integer age) {
+    public void setAge(String age) {
         this.age = age;
     }
 
@@ -214,60 +188,12 @@ public class Tree extends ABaseDO {
         this.pic = pic;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public Integer getArticleCount() {
-        return articleCount;
-    }
-
-    public void setArticleCount(Integer articleCount) {
-        this.articleCount = articleCount;
-    }
-
-    public Integer getPointCount() {
-        return pointCount;
-    }
-
-    public void setPointCount(Integer pointCount) {
-        this.pointCount = pointCount;
-    }
-
-    public Integer getCollectionCount() {
-        return collectionCount;
-    }
-
-    public void setCollectionCount(Integer collectionCount) {
-        this.collectionCount = collectionCount;
-    }
-
-    public Integer getAdoptCount() {
-        return adoptCount;
-    }
-
-    public void setAdoptCount(Integer adoptCount) {
-        this.adoptCount = adoptCount;
-    }
-
     public String getUpdater() {
         return updater;
     }
 
     public void setUpdater(String updater) {
         this.updater = updater;
-    }
-
-    public Date getUpdateDatetime() {
-        return updateDatetime;
-    }
-
-    public void setUpdateDatetime(Date updateDatetime) {
-        this.updateDatetime = updateDatetime;
     }
 
     public String getRemark() {
