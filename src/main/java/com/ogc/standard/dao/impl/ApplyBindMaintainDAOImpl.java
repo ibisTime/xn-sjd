@@ -49,8 +49,12 @@ public class ApplyBindMaintainDAOImpl extends AMybatisTemplate implements
 
     @Override
     public int update(ApplyBindMaintain data) {
-        // TODO Auto-generated method stub
-        return 0;
+        return super.update(NAMESPACE.concat("update_applyBindMaintain"), data);
+    }
+
+    @Override
+    public void approveApplyBindMaintain(ApplyBindMaintain data) {
+        super.update(NAMESPACE.concat("approve_applyBindMaintain"), data);
     }
 
 }

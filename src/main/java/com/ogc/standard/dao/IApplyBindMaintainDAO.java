@@ -8,4 +8,6 @@ public interface IApplyBindMaintainDAO extends IBaseDAO<ApplyBindMaintain> {
     String NAMESPACE = IApplyBindMaintainDAO.class.getName().concat(".");
 
     int update(ApplyBindMaintain data);
+
+    void approveApplyBindMaintain(ApplyBindMaintain data);
 }

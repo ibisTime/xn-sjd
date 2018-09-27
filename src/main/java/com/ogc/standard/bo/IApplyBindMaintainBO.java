@@ -20,4 +20,6 @@ public interface IApplyBindMaintainBO extends IPaginableBO<ApplyBindMaintain> {
 
     public ApplyBindMaintain getApplyBindMaintain(String code);
 
+    public void approveApplyBindMaintain(ApplyBindMaintain data);
+
 }
