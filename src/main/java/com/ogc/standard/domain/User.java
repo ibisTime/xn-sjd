@@ -1,6 +1,5 @@
 package com.ogc.standard.domain;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -15,8 +14,6 @@ import com.ogc.standard.dao.base.ABaseDO;
 public class User extends ABaseDO {
 
     private static final long serialVersionUID = 1975331351390818527L;
-
-    // ***********db properties***********
 
     // 用户编号
     private String userId;
@@ -51,11 +48,11 @@ public class User extends ABaseDO {
     // 推荐人
     private String userReferee;
 
-    // 分成比例1
-    private Double divRate1;
+    // 所属代理商
+    private String agent;
 
-    // 分成比例2
-    private Double divRate2;
+    // 所属业务员
+    private String salesman;
 
     // 证件类型
     private String idKind;
@@ -66,23 +63,11 @@ public class User extends ABaseDO {
     // 真实姓名
     private String realName;
 
-    // 证件照正面
-    private String idFace;
-
-    // 证件照反面
-    private String idOppo;
-
-    // 证件照手持面
-    private String idHold;
-
     // 安全密码
     private String tradePwd;
 
     // 安全密码强度
     private String tradePwdStrength;
-
-    // 谷歌验证码
-    private String googleSecret;
 
     // 状态
     private String status;
@@ -105,12 +90,6 @@ public class User extends ABaseDO {
     // 维度
     private String latitude;
 
-    // 负责区域
-    private String respArea;
-
-    // 交易广告费率
-    private Double tradeRate;
-
     // 注册时间
     private Date createDatetime;
 
@@ -122,9 +101,6 @@ public class User extends ABaseDO {
 
     // 备注
     private String remark;
-
-    // 最后一次登录时间
-    private Date lastLogin;
 
     // ***********db properties***********
 
@@ -158,67 +134,6 @@ public class User extends ABaseDO {
     // 用户编号列表
     private List<String> userRefereeList;
 
-    // 注册分成奖励
-    private BigDecimal regAwardCount;
-
-    // 交易分成奖励
-    private BigDecimal tradeAwardCount;
-
-    // 交易金额
-    private BigDecimal tradeCount;
-
-    public List<String> getUserRefereeList() {
-        return userRefereeList;
-    }
-
-    public void setUserRefereeList(List<String> userRefereeList) {
-        this.userRefereeList = userRefereeList;
-    }
-
-    public BigDecimal getRegAwardCount() {
-        return regAwardCount;
-    }
-
-    public void setRegAwardCount(BigDecimal regAwardCount) {
-        this.regAwardCount = regAwardCount;
-    }
-
-    public BigDecimal getTradeAwardCount() {
-        return tradeAwardCount;
-    }
-
-    public void setTradeAwardCount(BigDecimal tradeAwardCount) {
-        this.tradeAwardCount = tradeAwardCount;
-    }
-
-    public BigDecimal getTradeCount() {
-        return tradeCount;
-    }
-
-    public void setTradeCount(BigDecimal tradeCount) {
-        this.tradeCount = tradeCount;
-    }
-
-    /***** 辅助字段 ******/
-
-    private String userRefereeLevel;
-
-    public String getUserRefereeLevel() {
-        return userRefereeLevel;
-    }
-
-    public void setUserRefereeLevel(String userRefereeLevel) {
-        this.userRefereeLevel = userRefereeLevel;
-    }
-
-    public Double getTradeRate() {
-        return tradeRate;
-    }
-
-    public void setTradeRate(Double tradeRate) {
-        this.tradeRate = tradeRate;
-    }
-
     // 是否绑定银行卡
     private String bankcardFlag;
 
@@ -227,9 +142,6 @@ public class User extends ABaseDO {
 
     // 是否设置交易密码
     private boolean tradepwdFlag;
-
-    // 是否设置谷歌验证密码
-    private boolean googleAuthFlag;
 
     // 是否绑定邮箱
     private boolean emailBindFlag;
@@ -260,6 +172,24 @@ public class User extends ABaseDO {
 
     // 自我介绍
     private String introduce;
+
+    public List<String> getUserRefereeList() {
+        return userRefereeList;
+    }
+
+    public void setUserRefereeList(List<String> userRefereeList) {
+        this.userRefereeList = userRefereeList;
+    }
+
+    private String userRefereeLevel;
+
+    public String getUserRefereeLevel() {
+        return userRefereeLevel;
+    }
+
+    public void setUserRefereeLevel(String userRefereeLevel) {
+        this.userRefereeLevel = userRefereeLevel;
+    }
 
     public String getUserId() {
         return userId;
@@ -349,22 +279,6 @@ public class User extends ABaseDO {
         this.userReferee = userReferee;
     }
 
-    public Double getDivRate1() {
-        return divRate1;
-    }
-
-    public void setDivRate1(Double divRate1) {
-        this.divRate1 = divRate1;
-    }
-
-    public Double getDivRate2() {
-        return divRate2;
-    }
-
-    public void setDivRate2(Double divRate2) {
-        this.divRate2 = divRate2;
-    }
-
     public String getIdKind() {
         return idKind;
     }
@@ -389,30 +303,6 @@ public class User extends ABaseDO {
         this.realName = realName;
     }
 
-    public String getIdFace() {
-        return idFace;
-    }
-
-    public void setIdFace(String idFace) {
-        this.idFace = idFace;
-    }
-
-    public String getIdOppo() {
-        return idOppo;
-    }
-
-    public void setIdOppo(String idOppo) {
-        this.idOppo = idOppo;
-    }
-
-    public String getIdHold() {
-        return idHold;
-    }
-
-    public void setIdHold(String idHold) {
-        this.idHold = idHold;
-    }
-
     public String getTradePwd() {
         return tradePwd;
     }
@@ -427,14 +317,6 @@ public class User extends ABaseDO {
 
     public void setTradePwdStrength(String tradePwdStrength) {
         this.tradePwdStrength = tradePwdStrength;
-    }
-
-    public String getGoogleSecret() {
-        return googleSecret;
-    }
-
-    public void setGoogleSecret(String googleSecret) {
-        this.googleSecret = googleSecret;
     }
 
     public String getStatus() {
@@ -493,14 +375,6 @@ public class User extends ABaseDO {
         this.latitude = latitude;
     }
 
-    public String getRespArea() {
-        return respArea;
-    }
-
-    public void setRespArea(String respArea) {
-        this.respArea = respArea;
-    }
-
     public Date getCreateDatetime() {
         return createDatetime;
     }
@@ -531,14 +405,6 @@ public class User extends ABaseDO {
 
     public void setRemark(String remark) {
         this.remark = remark;
-    }
-
-    public Date getLastLogin() {
-        return lastLogin;
-    }
-
-    public void setLastLogin(Date lastLogin) {
-        this.lastLogin = lastLogin;
     }
 
     public String getLoginNameForQuery() {
@@ -635,14 +501,6 @@ public class User extends ABaseDO {
 
     public void setTradepwdFlag(boolean tradepwdFlag) {
         this.tradepwdFlag = tradepwdFlag;
-    }
-
-    public boolean isGoogleAuthFlag() {
-        return googleAuthFlag;
-    }
-
-    public void setGoogleAuthFlag(boolean googleAuthFlag) {
-        this.googleAuthFlag = googleAuthFlag;
     }
 
     public boolean isEmailBindFlag() {

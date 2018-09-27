@@ -23,7 +23,6 @@ import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.common.MD5Util;
 import com.ogc.standard.common.PhoneUtil;
 import com.ogc.standard.common.PwdUtil;
-import com.ogc.standard.common.SysConstants;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.IUserDAO;
 import com.ogc.standard.domain.User;
@@ -157,8 +156,6 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         user.setArea(area);
         Date date = new Date();
         user.setCreateDatetime(date);
-        user.setTradeRate(
-            sysConfigBO.getDoubleValue(SysConstants.TRADE_FEE_RATE));
         userDAO.insert(user);
         return userId;
     }
@@ -187,8 +184,6 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         data.setArea(req.getArea());
         Date date = new Date();
         data.setCreateDatetime(date);
-        data.setTradeRate(
-            sysConfigBO.getDoubleValue(SysConstants.TRADE_FEE_RATE));
 
         userDAO.insert(data);
         return userId;
@@ -232,9 +227,6 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         data.setRealName(realName);
         data.setIdKind(idKind);
         data.setIdNo(idNo);
-        data.setIdFace(idFace);
-        data.setIdOppo(idOppo);
-        data.setIdHold(idHold);
         int count = 0;
         if (data != null && StringUtils.isNotBlank(data.getUserId())) {
             count = userDAO.updateIdentity(data);
@@ -529,32 +521,6 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     }
 
     @Override
-    public void refreshLastLogin(String userId) {
-        if (StringUtils.isNotBlank(userId)) {
-            User data = new User();
-            data.setUserId(userId);
-            data.setLastLogin(new Date());
-            userDAO.updateLastLogin(data);
-        }
-    }
-
-    @Override
-    public void refreshGoogleSecret(String userId, String secret) {
-        User data = new User();
-        data.setUserId(userId);
-        data.setGoogleSecret(secret);
-        userDAO.updateGoogleSecret(data);
-    }
-
-    @Override
-    public void refreshTradeRate(String userId, Double tradeRate) {
-        User data = new User();
-        data.setUserId(userId);
-        data.setTradeRate(tradeRate);
-        userDAO.updateTradeRate(data);
-    }
-
-    @Override
     public int refreshEmail(String userId, String email) {
         int count = 0;
         if (StringUtils.isNotBlank(email) && StringUtils.isNotBlank(userId)) {
@@ -580,11 +546,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         user.setIdNo(idNo);
         user.setRealName(realName);
         user.setStatus(EUserStatus.NORMAL.getCode());
-        double tradeRate = sysConfigBO
-            .getDoubleValue(SysConstants.TRADE_FEE_RATE);
-        user.setTradeRate(tradeRate);
         user.setCreateDatetime(new Date());
-        user.setRespArea(respArea);
         user.setLoginPwd(MD5Util.md5(loginPwd));
         user.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(loginPwd));
         user.setNickname(
@@ -598,7 +560,6 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             String updater) {
         User data = new User();
         data.setUserId(userId);
-        data.setRespArea(respArea);
         data.setUpdater(updater);
         data.setUpdateDatetime(new Date());
         userDAO.updateRespArea(data);

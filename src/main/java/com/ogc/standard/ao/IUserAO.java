@@ -29,10 +29,8 @@ public interface IUserAO {
     // 代注册
     public String doAddUser(XN805042Req req);
 
-    public void editTradeRate(String userId, Double tradeRate);
-
-    public void doBindMobile(String isSendSms, String mobile,
-            String smsCaptcha, String userId);
+    public void doBindMobile(String isSendSms, String mobile, String smsCaptcha,
+            String userId);
 
     // 平台代注册渠道商用户
     public String doAddQDS(String mobile, String idKind, String idNo,
@@ -83,10 +81,12 @@ public interface IUserAO {
             String adminUserId, String adminPwd);
 
     // 管理员重置推荐人
-    public void doResetReferee(String userId, String userReferee, String updater);
+    public void doResetReferee(String userId, String userReferee,
+            String updater);
 
     // 设置支付密码
-    public void doSetTradePwd(String userId, String tradePwd, String smsCaptcha);
+    public void doSetTradePwd(String userId, String tradePwd,
+            String smsCaptcha);
 
     // 重置支付密码
     public void doResetTradePwd(String userId, String newTradePwd,
@@ -189,9 +189,6 @@ public interface IUserAO {
 
     // 查询推荐信息
     // public Object getInviteInfoList(String userId);
-
-    // 更新最后一次登录时间
-    public void lastLogin(String userId);
 
     // 绑定邮箱
     public void bindEmail(String captcha, String email, String userId);

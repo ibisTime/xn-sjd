@@ -110,17 +110,10 @@ public interface IUserBO extends IPaginableBO<User> {
     public List<User> queryUserList(String mobile, String kind,
             String systemCode);
 
-    public void refreshLastLogin(String userId);
-
     public Long totalUser(User condition);
 
     // 修改定位信息
     public void refreshLocation(User data);
-
-    // 修改手续费率
-    public void refreshTradeRate(String userId, Double tradeRate);
-
-    public void refreshGoogleSecret(String userId, String secret);
 
     // 修改渠道商负责区域
     public void refreshRespArea(String userId, String respArea, String updater);
