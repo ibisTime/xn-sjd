@@ -10,7 +10,7 @@ import com.ogc.standard.ao.IAdoptOrderAO;
 import com.ogc.standard.bo.IAdoptOrderBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.AdoptOrder;
-import com.ogc.standard.dto.req.XN629030Req;
+import com.ogc.standard.dto.req.XN629040Req;
 import com.ogc.standard.enums.EAdoptOrderStatus;
 import com.ogc.standard.exception.BizException;
 
@@ -21,7 +21,7 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
     private IAdoptOrderBO adoptOrderBO;
 
     @Override
-    public String addAdoptOrder(XN629030Req req) {
+    public String addAdoptOrder(XN629040Req req) {
         AdoptOrder data = new AdoptOrder();
         data.setType(req.getType());
         // TODO 产品规格待落地

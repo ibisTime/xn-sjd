@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.AdoptOrder;
-import com.ogc.standard.dto.req.XN629030Req;
+import com.ogc.standard.dto.req.XN629040Req;
 
 /**
  * 个人/定向/捐赠认养订单
@@ -18,7 +18,7 @@ import com.ogc.standard.dto.req.XN629030Req;
 public interface IAdoptOrderAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
-    public String addAdoptOrder(XN629030Req req);
+    public String addAdoptOrder(XN629040Req req);
 
     public int dropAdoptOrder(String code);
 

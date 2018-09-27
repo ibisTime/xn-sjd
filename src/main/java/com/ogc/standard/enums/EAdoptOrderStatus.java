@@ -11,8 +11,8 @@ import java.util.Map;
  */
 public enum EAdoptOrderStatus {
 
-    TO_PAY("0", "待支付"), PAYED("1", "已支付"), CANCELED("2", "已取消"), TO_ADOPT("3",
-            "待认养"), ADOPT("4", "认养中"), END("5", "已到期");
+    TO_PAY("0", "待支付"), CANCELED("1", "已取消"), TO_ADOPT("2", "待认养"), ADOPT("3",
+            "认养中"), END("4", "已到期");
 
     EAdoptOrderStatus(String code, String value) {
         this.code = code;

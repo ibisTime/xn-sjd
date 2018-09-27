@@ -8,7 +8,7 @@ import org.hibernate.validator.constraints.NotBlank;
  * @since: 2018年9月27日 上午11:38:41 
  * @history:
  */
-public class XN629030Req {
+public class XN629040Req {
 
     // 订单类型（1个人/2定向/3捐赠）
     @NotBlank

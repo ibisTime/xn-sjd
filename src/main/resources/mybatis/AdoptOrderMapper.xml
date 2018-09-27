@@ -32,6 +32,18 @@
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
 			</if>
+			<if test="type != null and type != '' ">
+				AND t.type = #{type}
+			</if>
+			<if test="productSpecsName != null and productSpecsName != '' ">
+				AND t.product_code = #{productSpecsName}
+			</if>
+			<if test="code != null and code != '' ">
+				AND t.product_specs_name = #{code}
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
 		</trim>
 	</sql>
 	<select id="select_adoptOrder" parameterType="adoptOrder" resultMap="adoptOrder_DB_Result">

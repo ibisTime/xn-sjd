@@ -50,7 +50,7 @@ public class AdoptOrder extends ABaseDO {
     // 下单时间
     private Date applyDatetime;
 
-    // 状态
+    // 状态(0待支付1已取消2待认养3认养中4已到期)
     private String status;
 
     // 支付方式
