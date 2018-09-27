@@ -85,7 +85,7 @@ public class XN629011Req extends BaseReq {
 
     // 产品规格列表
     @NotEmpty
-    private List<XN629011ReqSpecs> productSpecsList;
+    private List<XN629010ReqSpecs> productSpecsList;
 
     // 树木列表
     @NotEmpty
@@ -194,11 +194,11 @@ public class XN629011Req extends BaseReq {
         this.code = code;
     }
 
-    public List<XN629011ReqSpecs> getProductSpecsList() {
+    public List<XN629010ReqSpecs> getProductSpecsList() {
         return productSpecsList;
     }
 
-    public void setProductSpecsList(List<XN629011ReqSpecs> productSpecsList) {
+    public void setProductSpecsList(List<XN629010ReqSpecs> productSpecsList) {
         this.productSpecsList = productSpecsList;
     }
 

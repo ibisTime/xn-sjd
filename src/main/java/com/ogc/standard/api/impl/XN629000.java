@@ -6,6 +6,7 @@ import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.ObjValidater;
 import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.dto.req.XN629000Req;
+import com.ogc.standard.dto.res.PKCodeRes;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
@@ -24,9 +25,10 @@ public class XN629000 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return categoryAO.addCategory(req.getName(), req.getParentCode(),
-            req.getPic(), StringValidater.toInteger(req.getOrderNo()),
-            req.getUpdater(), req.getRemark());
+        return new PKCodeRes(
+            categoryAO.addCategory(req.getName(), req.getParentCode(),
+                req.getPic(), StringValidater.toInteger(req.getOrderNo()),
+                req.getUpdater(), req.getRemark()));
     }
 
     @Override

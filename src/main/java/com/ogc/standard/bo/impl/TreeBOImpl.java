@@ -35,8 +35,18 @@ public class TreeBOImpl extends PaginableBOImpl<Tree> implements ITreeBO {
     }
 
     @Override
-    public String saveTree(Tree tree) {
-        return null;
+    public boolean isTreeNumberExist(String treeNumber) {
+        Tree condition = new Tree();
+        condition.setTreeNumber(treeNumber);
+        if (treeDAO.selectTotalCount(condition) > 0) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void saveTree(Tree tree) {
+        treeDAO.insert(tree);
     }
 
     @Override
@@ -72,6 +82,11 @@ public class TreeBOImpl extends PaginableBOImpl<Tree> implements ITreeBO {
     }
 
     @Override
+    public void refreshTree(Tree data) {
+        treeDAO.updateTree(data);
+    }
+
+    @Override
     public void removeTreeByProduct(String productCode) {
         Tree tree = new Tree();
         tree.setProductCode(productCode);
@@ -79,8 +94,50 @@ public class TreeBOImpl extends PaginableBOImpl<Tree> implements ITreeBO {
     }
 
     @Override
-    public void refreshTree(Tree data) {
-        treeDAO.updateTree(data);
+    public void refreshAdoptTree(String code) {
+        Tree tree = new Tree();
+        tree.setCode(code);
+        tree.setStatus(ETreeStatus.ADOPTED.getCode());
+        treeDAO.updateAdoptTree(tree);
+    }
+
+    @Override
+    public void refreshArticleCount(String code, Integer articleCount) {
+        Tree tree = new Tree();
+        tree.setCode(code);
+        tree.setArticleCount(articleCount);
+        treeDAO.updateArticleCount(tree);
+    }
+
+    @Override
+    public void refreshPointCount(String code, Integer pointCount) {
+        Tree tree = new Tree();
+        tree.setCode(code);
+        tree.setPointCount(pointCount);
+        treeDAO.updatePointCount(tree);
+    }
+
+    @Override
+    public void refreshCollectionCount(String code, Integer collectionCount) {
+        Tree tree = new Tree();
+        tree.setCode(code);
+        tree.setCollectionCount(collectionCount);
+        treeDAO.updateCollectionCount(tree);
+    }
+
+    @Override
+    public void refreshAdoptCount(String code, Integer adoptCount) {
+        Tree tree = new Tree();
+        tree.setCode(code);
+        tree.setAdoptCount(adoptCount);
+        treeDAO.updateAdoptCount(tree);
+    }
+
+    @Override
+    public List<Tree> queryTreeListByProduct(String productCode) {
+        Tree condition = new Tree();
+        condition.setProductCode(productCode);
+        return treeDAO.selectList(condition);
     }
 
     @Override

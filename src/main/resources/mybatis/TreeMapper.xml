@@ -47,6 +47,9 @@
 			<if test="treeNumber != null and treeNumber != '' ">
 				AND t.tree_number = #{treeNumber}
 			</if>
+			<if test="scientificName != null and scientificName != '' ">
+				AND t.scientific_name = #{scientificName}
+			</if>
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
 			</if>
@@ -156,8 +159,7 @@
 	<update id="update_tree" parameterType="tree">
 		UPDATE tzb_tree
 		SET
-		product_code = #{productCode}
-		,tree_number = #{treeNumber}
+		tree_number = #{treeNumber}
 		,age = #{age}
 		,origin_place = #{originPlace}
 		,scientific_name = #{scientificName}
@@ -176,6 +178,41 @@
 		WHERE code = #{code}
 	</update>
 
+	<update id="update_adoptTree">
+		UPDATE tzb_tree
+		SET
+		status = #{status}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_articleCount">
+		UPDATE tzb_tree
+		SET
+		article_count = #{articleCount}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_pointCount">
+		UPDATE tzb_tree
+		SET
+		point_count = #{pointCount}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_collectionCount">
+		UPDATE tzb_tree
+		SET
+		collection_count = #{collectionCount}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_adoptCount">
+		UPDATE tzb_tree
+		SET
+		adopt_count = #{adoptCount}
+		WHERE code = #{code}
+	</update>
+	
 	<delete id="delete_treeByProduct">
 		DELETE FROM tzb_tree WHERE product_code = #{productCode}
 	</delete>

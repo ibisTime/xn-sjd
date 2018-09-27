@@ -20,6 +20,10 @@ public interface IProductSpecsBO extends IPaginableBO<ProductSpecs> {
     // 删除产品规格
     public void removeProductSpecsByProduct(String productCode);
 
+    // 获取产品下的规格列表
+    public List<ProductSpecs> queryProductSpecsListByProduct(
+            String productCode);
+
     public List<ProductSpecs> queryProductSpecsList(ProductSpecs condition);
 
     public ProductSpecs getProductSpecs(String code);
