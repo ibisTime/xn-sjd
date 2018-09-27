@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ogc.standard.dao.IProductDAO">
+	<resultMap id="product_DB_Result" type="product">
+		<result column="code" property="code" />
+		<result column="name" property="name" />
+		<result column="sell_type" property="sellType" />
+		<result column="owner_id" property="ownerId" />
+		<result column="category_code" property="categoryCode" />
+		
+		<result column="list_pic" property="listPic" />
+		<result column="banner_pic" property="bannerPic" />
+		<result column="origin_place" property="originPlace" />
+		<result column="scientific_name" property="scientificName" />
+		<result column="variety" property="variety" />
+		
+		<result column="rank" property="rank" />
+		<result column="province" property="province" />
+		<result column="city" property="city" />
+		<result column="area" property="area" />
+		<result column="town" property="town" />
+		
+		<result column="raise_start_datetime" property="raiseStartDatetime" />
+		<result column="raise_end_datetime" property="raiseEndDatetime" />
+		<result column="raise_count" property="raiseCount" />
+		<result column="now_count" property="nowCount" />
+		<result column="location" property="location" />
+		
+		<result column="order_no" property="orderNo" />
+		<result column="status" property="status" />
+		<result column="updater" property="updater" />
+		<result column="update_datetime" property="updateDatetime" />
+		<result column="remark" property="remark" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="name != null and name != '' ">
+				AND t.name = #{name}
+			</if>
+			<if test="sellType != null and sellType != '' ">
+				AND t.sell_type = #{sellType}
+			</if>
+			<if test="ownerId != null and ownerId != '' ">
+				AND t.owner_id = #{ownerId}
+			</if>
+			<if test="categoryCode != null and categoryCode != '' ">
+				AND t.category_code = #{categoryCode}
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+			
+			<if test="raiseStartStartDatetime != null and raiseStartStartDatetime != '' ">
+				<![CDATA[AND t.raise_start_datetime >= #{raiseStartStartDatetime}]]>
+			</if>
+			<if test="raiseStartEndDatetime != null and raiseStartEndDatetime != '' ">
+				<![CDATA[AND t.raise_start_datetime <= #{raiseStartEndDatetime}]]>
+			</if>
+			<if test="raiseEndStartDatetime != null and raiseEndStartDatetime != '' ">
+				<![CDATA[AND t.raise_end_datetime >= #{raiseEndStartDatetime}]]>
+			</if>
+			<if test="raiseEndEndDatetime != null and raiseEndEndDatetime != '' ">
+				<![CDATA[AND t.raise_end_datetime <= #{raiseEndEndDatetime}]]>
+			</if>
+			
+		</trim>
+	</sql>
+	<select id="select_product" parameterType="product" resultMap="product_DB_Result">
+		SELECT
+		t.code
+		,t.name
+		,t.sell_type
+		,t.owner_id
+		,t.category_code
+		
+		,t.list_pic
+		,t.banner_pic
+		,t.origin_place
+		,t.scientific_name
+		,t.variety
+		
+		,t.rank
+		,t.province
+		,t.city
+		,t.area
+		,t.town
+		
+		,t.raise_start_datetime
+		,t.raise_end_datetime
+		,t.raise_count
+		,t.now_count
+		,t.location
+		
+		,t.order_no
+		,t.status
+		,t.updater
+		,t.update_datetime
+		,t.remark
+		FROM
+		tzb_product t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_product_count" parameterType="product"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tzb_product t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_product" parameterType="product">
+		INSERT INTO
+		tzb_product(
+		code
+		,name
+		,sell_type
+		,owner_id
+		,category_code
+		
+		,list_pic
+		,banner_pic
+		,origin_place
+		,scientific_name
+		,variety
+		
+		,rank
+		,province
+		,city
+		,area
+		,town
+		
+		,raise_start_datetime
+		,raise_end_datetime
+		,raise_count
+		,location
+		,order_no
+		
+		,status
+		,updater
+		,update_datetime
+		,remark
+		)
+		VALUES(
+		#{code}
+		,#{name}
+		,#{sellType}
+		,#{ownerId}
+		,#{categoryCode}
+		
+		,#{listPic}
+		,#{bannerPic}
+		,#{originPlace}
+		,#{scientificName}
+		,#{variety}
+		
+		,#{rank}
+		,#{province}
+		,#{city}
+		,#{area}
+		,#{town}
+		
+		,#{raiseStartDatetime}
+		,#{raiseEndDatetime}
+		,#{raiseCount}
+		,#{location}
+		,#{orderNo}
+		
+		,#{status}
+		,#{updater}
+		,#{updateDatetime}
+		,#{remark}
+		)
+	</insert>
+
+	<update id="update_editProduct" parameterType="product">
+		UPDATE tzb_product
+		SET
+		name = #{name}
+		,sell_type = #{sellType}
+		,category_code = #{categoryCode}
+		,list_pic = #{listPic}
+		,banner_pic = #{bannerPic}
+		,origin_place = #{originPlace}
+		,scientific_name = #{scientificName}
+		,variety = #{variety}
+		,rank = #{rank}
+		,province = #{province}
+		,city = #{city}
+		,area = #{area}
+		,town = #{town}
+		,raise_start_datetime = #{raiseStartDatetime}
+		,raise_end_datetime = #{raiseEndDatetime}
+		,raise_count = #{raiseCount}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+
+	<update id="update_submitProduct" parameterType="product">
+		UPDATE tzb_product
+		SET
+		status = #{status}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_approveProduct" parameterType="product">
+		UPDATE tzb_product
+		SET
+		status = #{status}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_putOnProduct" parameterType="product">
+		UPDATE tzb_product
+		SET
+		status = #{status}
+		,location = #{location}
+		,order_no = #{orderNo}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_LockProduct" parameterType="product">
+		UPDATE tzb_product
+		SET
+		status = #{status}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_nowCount" parameterType="product">
+		UPDATE tzb_product
+		SET
+		now_count = #{nowCount}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_adoptProduct" parameterType="product">
+		UPDATE tzb_product
+		SET
+		status = #{status}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_putOffProduct" parameterType="product">
+		UPDATE tzb_product
+		SET
+		status = #{status}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+	
+</mapper>

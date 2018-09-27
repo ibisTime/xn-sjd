@@ -2,6 +2,7 @@ package com.ogc.standard.ao.impl;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +32,15 @@ public class CategoryAOImpl implements ICategoryAO {
             throw new BizException("xn0000", "产品分类名称已存在，请重新输入！");
         }
 
+        if (StringUtils.isNotBlank(parentCode)) {
+            Category parentCategory = categoryBO.getCategory(parentCode);
+
+            if (ECategoryStatus.PUT_OFF.getCode()
+                .equals(parentCategory.getStatus())) {
+                throw new BizException("xn0000", "父类产品分类已下架，请重新选择！");
+            }
+        }
+
         return categoryBO.saveCategory(name, parentCode, pic, orderNo, updater,
             remark);
     }
@@ -41,6 +51,15 @@ public class CategoryAOImpl implements ICategoryAO {
         Category category = categoryBO.getCategory(code);
         if (ECategoryStatus.PUT_ON.getCode().equals(category.getStatus())) {
             throw new BizException("xn0000", "产品分类已上架，无法修改！");
+        }
+
+        if (StringUtils.isNotBlank(parentCode)) {
+            Category parentCategory = categoryBO.getCategory(parentCode);
+
+            if (ECategoryStatus.PUT_OFF.getCode()
+                .equals(parentCategory.getStatus())) {
+                throw new BizException("xn0000", "父类产品分类已下架，请重新选择！");
+            }
         }
 
         categoryBO.refreshCategory(code, name, parentCode, pic, orderNo,
