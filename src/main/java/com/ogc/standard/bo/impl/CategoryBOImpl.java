@@ -86,6 +86,8 @@ public class CategoryBOImpl extends PaginableBOImpl<Category>
         Category data = new Category();
 
         data.setCode(code);
+        data.setUpdater(updater);
+        data.setUpdateDatetime(new Date());
         data.setStatus(ECategoryStatus.PUT_ON.getCode());
         categoryDAO.updatePutOn(data);
     }
@@ -95,6 +97,8 @@ public class CategoryBOImpl extends PaginableBOImpl<Category>
         Category data = new Category();
 
         data.setCode(code);
+        data.setUpdater(updater);
+        data.setUpdateDatetime(new Date());
         data.setStatus(ECategoryStatus.PUT_OFF.getCode());
         categoryDAO.updatePutOff(data);
     }

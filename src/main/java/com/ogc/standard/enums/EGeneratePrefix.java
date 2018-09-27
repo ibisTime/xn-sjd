@@ -19,7 +19,7 @@ public enum EGeneratePrefix {
 
     APPLY_BIND_MAINTAIN("ABM", "申请绑定养护方"), ADOPT_ORDER("AO", "个人/定向/捐赠认养订单"),
 
-    Category("C", "产品类型");
+    Category("C", "产品类型"), Product("P", "认养产品");
     public static Map<String, EGeneratePrefix> getMap() {
         Map<String, EGeneratePrefix> map = new HashMap<String, EGeneratePrefix>();
         for (EGeneratePrefix orderType : EGeneratePrefix.values()) {

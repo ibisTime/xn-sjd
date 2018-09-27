@@ -32,6 +32,7 @@
 		<typeAlias alias="adoptOrder" type="com.ogc.standard.domain.AdoptOrder"/>
 
 		<typeAlias alias="category" type="com.ogc.standard.domain.Category"/>
+		<typeAlias alias="product" type="com.ogc.standard.domain.Product"/>
 
 	</typeAliases>
 </configuration>

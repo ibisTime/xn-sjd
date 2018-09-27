@@ -108,6 +108,9 @@
 
 	<bean id="categoryBO" class="com.ogc.standard.bo.impl.CategoryBOImpl">
 		<property name="paginableDAO" ref="categoryDAOImpl"/>
-
+	</bean>
+	
+	<bean id="productBO" class="com.ogc.standard.bo.impl.ProductBOImpl">
+		<property name="paginableDAO" ref="productDAOImpl"/>
 	</bean>
 </beans>
