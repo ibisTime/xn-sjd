@@ -141,8 +141,7 @@ public class TreeBOImpl extends PaginableBOImpl<Tree> implements ITreeBO {
     }
 
     @Override
-    public List<Tree> queryTreeListByProduct(String productCode,
-            String status) {
+    public List<Tree> queryTreeListByProduct(String productCode, String status) {
         Tree condition = new Tree();
         condition.setProductCode(productCode);
         condition.setStatus(status);
@@ -166,6 +165,14 @@ public class TreeBOImpl extends PaginableBOImpl<Tree> implements ITreeBO {
             }
         }
         return data;
+    }
+
+    @Override
+    public long getTotalCountByOwnerId(String ownerId) {
+        Tree condition = new Tree();
+        condition.setOwnerId(ownerId);
+        long count = treeDAO.selectTotalCount(condition);
+        return count;
     }
 
 }

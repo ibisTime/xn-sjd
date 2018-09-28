@@ -229,4 +229,11 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser> implements
         }
     }
 
+    @Override
+    public void approveSYSUser(SYSUser data) {
+        if (StringUtils.isNotBlank(data.getUserId())) {
+            sysUserDAO.updateApproveSYSUser(data);
+        }
+    }
+
 }

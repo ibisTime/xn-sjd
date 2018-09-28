@@ -31,4 +31,7 @@ public interface ISYSUserDAO extends IBaseDAO<SYSUser> {
     // 更新头像
     public int updatePhoto(SYSUser data);
 
+    // 审核注册用户
+    public void updateApproveSYSUser(SYSUser data);
+
 }

@@ -265,4 +265,36 @@ public class SYSUser extends ABaseDO {
         this.realNameForQuery = realNameForQuery;
     }
 
+    public String getTreeQuantity() {
+        return treeQuantity;
+    }
+
+    public void setTreeQuantity(String treeQuantity) {
+        this.treeQuantity = treeQuantity;
+    }
+
+    public String getTreeValue() {
+        return treeValue;
+    }
+
+    public void setTreeValue(String treeValue) {
+        this.treeValue = treeValue;
+    }
+
+    public String getTotalIncome() {
+        return totalIncome;
+    }
+
+    public void setTotalIncome(String totalIncome) {
+        this.totalIncome = totalIncome;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+
 }

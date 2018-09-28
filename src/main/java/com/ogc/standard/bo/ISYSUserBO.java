@@ -61,4 +61,7 @@ public interface ISYSUserBO extends IPaginableBO<SYSUser> {
     public void refreshStatus(String userId, EUserStatus status,
             String updater, String remark);
 
+    // 审核注册用户
+    public void approveSYSUser(SYSUser data);
+
 }

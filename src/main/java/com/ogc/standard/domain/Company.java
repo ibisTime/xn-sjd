@@ -1,5 +1,7 @@
 package com.ogc.standard.domain;
 
+import java.util.Date;
+
 import com.ogc.standard.dao.base.ABaseDO;
 
 /**
@@ -10,171 +12,171 @@ import com.ogc.standard.dao.base.ABaseDO;
 */
 public class Company extends ABaseDO {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	// 编号
-	private String code;
+    // 编号
+    private String code;
 
-	// 用户编号
-	private String userId;
+    // 用户编号
+    private String userId;
 
-	// 公司名称
-	private String name;
+    // 公司名称
+    private String name;
 
-	// 负责人
-	private String charger;
+    // 负责人
+    private String charger;
 
-	// 联系方式
-	private String chargeMobile;
+    // 联系方式
+    private String chargeMobile;
 
-	// 地址
-	private String address;
+    // 地址
+    private String address;
 
-	// 简介
-	private String description;
+    // 简介
+    private String description;
 
-	// 营业执照
-	private String bussinessLicense;
+    // 营业执照
+    private String bussinessLicense;
 
-	// 组织机构代码
-	private String organizationCode;
+    // 组织机构代码
+    private String organizationCode;
 
-	// 证书模板
-	private String certificateTemplate;
+    // 证书模板
+    private String certificateTemplate;
 
-	// 合同模板
-	private String contractTemplate;
+    // 合同模板
+    private String contractTemplate;
 
-	// 创建时间
-	private String createDatetime;
+    // 创建时间
+    private Date createDatetime;
 
-	// 更新人
-	private String updater;
+    // 更新人
+    private String updater;
 
-	// 更新时间
-	private String updateDatetime;
+    // 更新时间
+    private String updateDatetime;
 
-	// 备注
-	private String remark;
+    // 备注
+    private String remark;
 
-	public void setCode(String code) {
-		this.code = code;
-	}
+    public void setCode(String code) {
+        this.code = code;
+    }
 
-	public String getCode() {
-		return code;
-	}
+    public String getCode() {
+        return code;
+    }
 
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
-	public String getUserId() {
-		return userId;
-	}
+    public String getUserId() {
+        return userId;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setCharger(String charger) {
-		this.charger = charger;
-	}
+    public void setCharger(String charger) {
+        this.charger = charger;
+    }
 
-	public String getCharger() {
-		return charger;
-	}
+    public String getCharger() {
+        return charger;
+    }
 
-	public void setChargeMobile(String chargeMobile) {
-		this.chargeMobile = chargeMobile;
-	}
+    public void setChargeMobile(String chargeMobile) {
+        this.chargeMobile = chargeMobile;
+    }
 
-	public String getChargeMobile() {
-		return chargeMobile;
-	}
+    public String getChargeMobile() {
+        return chargeMobile;
+    }
 
-	public void setAddress(String address) {
-		this.address = address;
-	}
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
-	public String getAddress() {
-		return address;
-	}
+    public String getAddress() {
+        return address;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public void setBussinessLicense(String bussinessLicense) {
-		this.bussinessLicense = bussinessLicense;
-	}
+    public void setBussinessLicense(String bussinessLicense) {
+        this.bussinessLicense = bussinessLicense;
+    }
 
-	public String getBussinessLicense() {
-		return bussinessLicense;
-	}
+    public String getBussinessLicense() {
+        return bussinessLicense;
+    }
 
-	public void setOrganizationCode(String organizationCode) {
-		this.organizationCode = organizationCode;
-	}
+    public void setOrganizationCode(String organizationCode) {
+        this.organizationCode = organizationCode;
+    }
 
-	public String getOrganizationCode() {
-		return organizationCode;
-	}
+    public String getOrganizationCode() {
+        return organizationCode;
+    }
 
-	public void setCertificateTemplate(String certificateTemplate) {
-		this.certificateTemplate = certificateTemplate;
-	}
+    public void setCertificateTemplate(String certificateTemplate) {
+        this.certificateTemplate = certificateTemplate;
+    }
 
-	public String getCertificateTemplate() {
-		return certificateTemplate;
-	}
+    public String getCertificateTemplate() {
+        return certificateTemplate;
+    }
 
-	public void setContractTemplate(String contractTemplate) {
-		this.contractTemplate = contractTemplate;
-	}
+    public void setContractTemplate(String contractTemplate) {
+        this.contractTemplate = contractTemplate;
+    }
 
-	public String getContractTemplate() {
-		return contractTemplate;
-	}
+    public String getContractTemplate() {
+        return contractTemplate;
+    }
 
-	public void setCreateDatetime(String createDatetime) {
-		this.createDatetime = createDatetime;
-	}
+    public Date getCreateDatetime() {
+        return createDatetime;
+    }
 
-	public String getCreateDatetime() {
-		return createDatetime;
-	}
+    public void setCreateDatetime(Date createDatetime) {
+        this.createDatetime = createDatetime;
+    }
 
-	public void setUpdater(String updater) {
-		this.updater = updater;
-	}
+    public void setUpdater(String updater) {
+        this.updater = updater;
+    }
 
-	public String getUpdater() {
-		return updater;
-	}
+    public String getUpdater() {
+        return updater;
+    }
 
-	public void setUpdateDatetime(String updateDatetime) {
-		this.updateDatetime = updateDatetime;
-	}
+    public void setUpdateDatetime(String updateDatetime) {
+        this.updateDatetime = updateDatetime;
+    }
 
-	public String getUpdateDatetime() {
-		return updateDatetime;
-	}
+    public String getUpdateDatetime() {
+        return updateDatetime;
+    }
 
-	public void setRemark(String remark) {
-		this.remark = remark;
-	}
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 
-	public String getRemark() {
-		return remark;
-	}
+    public String getRemark() {
+        return remark;
+    }
 
 }

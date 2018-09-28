@@ -4,11 +4,12 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ogc.standard.ao.ISYSUserAO;
+import com.ogc.standard.bo.IApplyBindMaintainBO;
+import com.ogc.standard.bo.ICompanyBO;
 import com.ogc.standard.bo.ISYSRoleBO;
 import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.ISmsOutBO;
@@ -19,9 +20,13 @@ import com.ogc.standard.common.MD5Util;
 import com.ogc.standard.common.PhoneUtil;
 import com.ogc.standard.common.PwdUtil;
 import com.ogc.standard.core.OrderNoGenerater;
+import com.ogc.standard.domain.ApplyBindMaintain;
+import com.ogc.standard.domain.Company;
 import com.ogc.standard.domain.SYSRole;
 import com.ogc.standard.domain.SYSUser;
-import com.ogc.standard.domain.Tree;
+import com.ogc.standard.dto.req.XN630060Req;
+import com.ogc.standard.enums.EApplyBindMaintainStatus;
+import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ESYSUserKind;
 import com.ogc.standard.enums.ESYSUserStatus;
 import com.ogc.standard.enums.EUser;
@@ -43,7 +48,13 @@ public class SYSUserAOImpl implements ISYSUserAO {
     @Autowired
     ITreeBO treeBO;
 
-    // 新增用户
+    @Autowired
+    IApplyBindMaintainBO applyBindMaintainBO;
+
+    @Autowired
+    ICompanyBO companyBO;
+
+    // 新增用户（平台）
     @Override
     public String addSYSUser(String roleCode, String realName, String mobile,
             String loginName, String loginPwd, String photo, String remark) {
@@ -64,6 +75,90 @@ public class SYSUserAOImpl implements ISYSUserAO {
         data.setRemark(remark);
         sysUserBO.doSaveSYSuser(data);
         return userId;
+    }
+
+    // 注册用户(产权/养护)
+    @Override
+    public String registerSYSUserOwner(XN630060Req req) {
+        sysUserBO.isMobileExist(req.getMobile());
+        SYSUser data = new SYSUser();
+        String userId = OrderNoGenerater.generate("U");
+        data.setUserId(userId);
+        data.setKind(req.getKind());
+        data.setRealName(req.getCompanyCharger());
+        data.setMobile(req.getMobile());
+        data.setLoginName(req.getMobile());
+        if (ESYSUserKind.OWNER.getCode().equals(req.getKind())) {
+            data.setRoleCode("");// TODO
+        }
+        if (ESYSUserKind.MAINTAIN.getCode().equals(req.getKind())) {
+            data.setRoleCode("");// TODO
+        }
+        data.setLoginPwd(MD5Util.md5(req.getLoginPwd()));
+        data.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(req
+            .getLoginPwd()));
+        data.setCreateDatetime(new Date());
+        data.setStatus(ESYSUserStatus.TO_APPROVE.getCode());// 待审核
+        sysUserBO.doSaveSYSuser(data);
+        // 公司
+        Company company = new Company();
+        company.setUserId(userId);
+        company.setName(req.getCompanyName());
+        company.setCharger(req.getCompanyCharger());
+        company.setChargeMobile(req.getChargerMobile());
+        company.setAddress(req.getCompanyAddress());
+        company.setDescription(req.getDescription());
+        company.setBussinessLicense(req.getBussinessLicense());
+        company.setOrganizationCode(req.getOrganizationCode());
+        company.setCreateDatetime(new Date());
+        companyBO.saveCompany(company);
+        // 证书模板合同模板 TODO
+        return userId;
+    }
+
+    // 代申请
+    @Override
+    public String proxyApplySYSUser(String kind, String loginName,
+            String mobile, String realName, String remark) {
+        sysUserBO.isMobileExist(mobile);
+        SYSUser data = new SYSUser();
+        String userId = OrderNoGenerater.generate("U");
+        data.setUserId(userId);
+        data.setKind(kind);
+        data.setRealName(realName);
+        data.setMobile(mobile);
+        data.setLoginName(loginName);
+        if (ESYSUserKind.OWNER.getCode().equals(kind)) {
+            data.setRoleCode("");// TODO
+        }
+        if (ESYSUserKind.MAINTAIN.getCode().equals(kind)) {
+            data.setRoleCode("");// TODO
+        }
+        data.setLoginPwd(MD5Util.md5("888888"));
+        data.setLoginPwdStrength(PwdUtil.calculateSecurityLevel("888888"));
+        data.setCreateDatetime(new Date());
+        data.setStatus(ESYSUserStatus.TO_APPROVE.getCode());// 代注册的也是待审核？
+        data.setRemark(remark);
+        sysUserBO.doSaveSYSuser(data);
+        return userId;
+    }
+
+    @Override
+    public void approveSYSUser(String userId, String approveResult,
+            String updater, String remark) {
+        if (!sysUserBO.isUserExist(userId)) {
+            throw new BizException("xn805050", "用户不存在");
+        }
+        SYSUser data = sysUserBO.getSYSUser(userId);
+        if (EBoolean.YES.getCode().equals(approveResult)) {
+            data.setStatus(ESYSUserStatus.PARTNER.getCode());
+        } else {
+            data.setStatus(ESYSUserStatus.APPROVE_NO.getCode());
+        }
+        data.setUpdater(updater);
+        data.setUpdateDatetime(new Date());
+        data.setRemark(remark);
+        sysUserBO.approveSYSUser(data);
     }
 
     // 用户登录
@@ -220,14 +315,9 @@ public class SYSUserAOImpl implements ISYSUserAO {
         }
         Paginable<SYSUser> page = sysUserBO.getPaginable(start, limit,
             condition);
-        if (StringUtils.isNotBlank(condition.getKind())
-                && ESYSUserKind.OWNER.getCode().equals(condition.getKind())) {// 产权方
-            Tree treeCondition = new Tree();
-            List<Tree> treeList = treeBO.queryTreeList(treeCondition);
-            for (Tree tree : treeList) {
-
-            }
-
+        List<SYSUser> list = page.getList();
+        for (SYSUser sysUser : list) {
+            init(sysUser);
         }
         return page;
     }
@@ -235,13 +325,37 @@ public class SYSUserAOImpl implements ISYSUserAO {
     // 列表查询
     public List<SYSUser> querySYSUserList(SYSUser condition) {
         List<SYSUser> list = sysUserBO.queryUserList(condition);
+        for (SYSUser sysUser : list) {
+            init(sysUser);
+        }
         return list;
-
     }
 
     // 详细查询
     public SYSUser getSYSUser(String code) {
-        return sysUserBO.getSYSUser(code);
-
+        SYSUser sysUser = sysUserBO.getSYSUser(code);
+        return sysUser;
     }
+
+    public void init(SYSUser data) {
+        if (ESYSUserKind.OWNER.getCode().equals(data.getKind())) { // 产权方
+            long count = treeBO.getTotalCountByOwnerId(data.getUserId());
+            data.setTreeQuantity(String.valueOf(count));
+            data.setTreeValue("");// TODO 古树市值
+        }
+        if (ESYSUserKind.MAINTAIN.getCode().equals(data.getKind())) {// 养护方
+            ApplyBindMaintain abmCondition = new ApplyBindMaintain();
+            abmCondition.setStatus(EApplyBindMaintainStatus.BIND.getCode());
+            abmCondition.setMaintainId(data.getUserId());
+            List<ApplyBindMaintain> abmList = applyBindMaintainBO
+                .queryApplyBindMaintainList(abmCondition);
+            if (CollectionUtils.isNotEmpty(abmList)) {
+                SYSUser sysUser2 = sysUserBO.getSYSUser(abmList.get(0)
+                    .getOwnerId());
+                data.setOwner(sysUser2.getRealName());
+            }
+            data.setTotalIncome("");// TODO 总收入
+        }
+    }
+
 }

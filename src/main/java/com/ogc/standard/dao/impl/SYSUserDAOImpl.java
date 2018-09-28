@@ -85,4 +85,9 @@ public class SYSUserDAOImpl extends AMybatisTemplate implements ISYSUserDAO {
         return 0;
     }
 
+    @Override
+    public void updateApproveSYSUser(SYSUser data) {
+        super.update(NAMESPACE.concat("update_approveSYSUser"), data);
+    }
+
 }

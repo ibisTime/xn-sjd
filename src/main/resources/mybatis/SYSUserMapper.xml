@@ -226,4 +226,17 @@
 		user_id = #{userId}	
 	</update>	
 	
+	
+	<update id="update_approveSYSUser" parameterType="sysuser">
+		UPDATE tsys_user
+		SET
+		status=#{status}
+		,updater=#{updater}
+		,update_datetime=#{updateDatetime}
+		<if test="remark != null and remark != '' ">
+			,remark = #{remark}
+		</if>
+		WHERE user_id = #{userId}
+	</update>
+	
 </mapper>

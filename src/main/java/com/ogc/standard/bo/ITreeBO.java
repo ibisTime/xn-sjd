@@ -57,4 +57,7 @@ public interface ITreeBO extends IPaginableBO<Tree> {
 
     public Tree getTree(String code);
 
+    // 查询指定产权方的古树数量
+    public long getTotalCountByOwnerId(String ownerId);
+
 }
