@@ -94,10 +94,14 @@ public class UserAOImpl implements IUserAO {
             ECaptchaType.C_REG.getCode());
 
         User refereeUser = userBO.getUserByMobile(req.getUserReferee());
+        User agentUser = userBO.getUserByMobile(req.getAgent());
+        User salesUser = userBO.getUserByMobile(req.getSalesman());
+
         // 注册用户
         String userId = userBO.doRegister(req.getMobile(), req.getNickname(),
-            req.getLoginPwd(), refereeUser, req.getProvince(), req.getCity(),
-            req.getArea());
+            req.getLoginPwd(), refereeUser, agentUser, salesUser,
+            req.getProvince(), req.getCity(), req.getArea());
+
         if (refereeUser != null) {
             // 推荐人分佣
             // awardBO.saveRegistAward(refereeUser.getUserId(),

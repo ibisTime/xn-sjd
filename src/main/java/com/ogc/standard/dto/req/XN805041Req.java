@@ -19,6 +19,12 @@ public class XN805041Req {
     @NotBlank
     private String smsCaptcha; // 手机验证码
 
+    // 所属代理商
+    private String agent;
+
+    // 所属业务员
+    private String salesman;
+
     private String longitude;// 经度
 
     private String latitude;// 纬度
@@ -107,6 +113,22 @@ public class XN805041Req {
 
     public void setArea(String area) {
         this.area = area;
+    }
+
+    public String getAgent() {
+        return agent;
+    }
+
+    public void setAgent(String agent) {
+        this.agent = agent;
+    }
+
+    public String getSalesman() {
+        return salesman;
+    }
+
+    public void setSalesman(String salesman) {
+        this.salesman = salesman;
     }
 
 }

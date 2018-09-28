@@ -141,6 +141,15 @@ public class TreeBOImpl extends PaginableBOImpl<Tree> implements ITreeBO {
     }
 
     @Override
+    public List<Tree> queryTreeListByProduct(String productCode,
+            String status) {
+        Tree condition = new Tree();
+        condition.setProductCode(productCode);
+        condition.setStatus(status);
+        return treeDAO.selectList(condition);
+    }
+
+    @Override
     public List<Tree> queryTreeList(Tree condition) {
         return treeDAO.selectList(condition);
     }

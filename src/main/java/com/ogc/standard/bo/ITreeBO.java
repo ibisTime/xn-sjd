@@ -50,6 +50,9 @@ public interface ITreeBO extends IPaginableBO<Tree> {
     // 获取产品下的古树
     public List<Tree> queryTreeListByProduct(String productCode);
 
+    // 获取产品下某个状态的古树
+    public List<Tree> queryTreeListByProduct(String productCode, String status);
+
     public List<Tree> queryTreeList(Tree condition);
 
     public Tree getTree(String code);

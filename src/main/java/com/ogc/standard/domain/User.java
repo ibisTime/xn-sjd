@@ -575,6 +575,22 @@ public class User extends ABaseDO {
         this.pdf = pdf;
     }
 
+    public String getAgent() {
+        return agent;
+    }
+
+    public void setAgent(String agent) {
+        this.agent = agent;
+    }
+
+    public String getSalesman() {
+        return salesman;
+    }
+
+    public void setSalesman(String salesman) {
+        this.salesman = salesman;
+    }
+
     public String getIntroduce() {
         return introduce;
     }

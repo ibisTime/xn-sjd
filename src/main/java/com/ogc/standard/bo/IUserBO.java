@@ -41,7 +41,8 @@ public interface IUserBO extends IPaginableBO<User> {
 
     // 前端用户注册
     public String doRegister(String mobile, String nickname, String loginPwd,
-            User refereeUser, String province, String city, String area);
+            User refereeUser, User agentUser, User salesmanUser,
+            String province, String city, String area);
 
     // 邮箱注册
     public String doRegistByEmail(XN805043Req req);
