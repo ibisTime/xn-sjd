@@ -35,6 +35,7 @@ public class XN630065 extends AProcessor {
         condition.setRoleCode(req.getRoleCode());
         condition.setStatus(req.getStatus());
         condition.setUpdater(req.getUpdater());
+        condition.setKind(req.getKind());
         String column = req.getOrderColumn();
         condition.setCreateDatetimeStart(DateUtil.getFrontDate(
             req.getDateStart(), false));

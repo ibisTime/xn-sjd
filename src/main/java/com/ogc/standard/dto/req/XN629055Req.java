@@ -1,7 +1,5 @@
 package com.ogc.standard.dto.req;
 
-import org.hibernate.validator.constraints.NotBlank;
-
 /**
  * 分页查询集体认养订单
  * @author: jiafr 
@@ -13,24 +11,22 @@ public class XN629055Req extends APageReq {
     private static final long serialVersionUID = -585586450144233268L;
 
     // 认养产品编号
-    @NotBlank
     private String productCode;
 
     // 规格名称
-    @NotBlank
     private String productSpecsName;
 
     // 状态
-    @NotBlank
     private String status;
 
     // 认养开始时间
-    @NotBlank
     private String startDatetime;
 
     // 认养结束时间
-    @NotBlank
     private String endDatetime;
+
+    // 下单时间
+    private String applyDatetime;
 
     public String getProductCode() {
         return productCode;
@@ -70,6 +66,14 @@ public class XN629055Req extends APageReq {
 
     public void setEndDatetime(String endDatetime) {
         this.endDatetime = endDatetime;
+    }
+
+    public String getApplyDatetime() {
+        return applyDatetime;
+    }
+
+    public void setApplyDatetime(String applyDatetime) {
+        this.applyDatetime = applyDatetime;
     }
 
 }

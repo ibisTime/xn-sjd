@@ -104,6 +104,14 @@
 	<bean id="adoptOrderBO" class="com.ogc.standard.bo.impl.AdoptOrderBOImpl">
 		<property name="paginableDAO" ref="adoptOrderDAOImpl"/>
 	</bean>
+	
+	<bean id="groupAdoptOrderBO" class="com.ogc.standard.bo.impl.GroupAdoptOrderBOImpl">
+		<property name="paginableDAO" ref="groupAdoptOrderDAOImpl"/>
+	</bean>
+	
+	<bean id="adoptOrderTreeBO" class="com.ogc.standard.bo.impl.AdoptOrderTreeBOImpl">
+		<property name="paginableDAO" ref="adoptOrderTreeDAOImpl"/>
+	</bean>
 
 	<bean id="categoryBO" class="com.ogc.standard.bo.impl.CategoryBOImpl">
 		<property name="paginableDAO" ref="categoryDAOImpl"/>
@@ -119,5 +127,13 @@
 	
 	<bean id="productSpecsBO" class="com.ogc.standard.bo.impl.ProductSpecsBOImpl">
 		<property name="paginableDAO" ref="productSpecsDAOImpl"/>
+	</bean>
+	
+	<bean id="giveTreeRecordBO" class="com.ogc.standard.bo.impl.GiveTreeRecordBOImpl">
+		<property name="paginableDAO" ref="giveTreeRecordDAOImpl"/>
+	</bean>
+	
+	<bean id="bizLogBO" class="com.ogc.standard.bo.impl.BizLogBOImpl">
+		<property name="paginableDAO" ref="bizLogDAOImpl"/>
 	</bean>
 </beans>

@@ -17,10 +17,10 @@ public class SYSUser extends ABaseDO {
 
     // ***********db properties***********
 
-    // 管理人员id
+    // 用户id
     private String userId;
 
-    // 类型
+    // 类型（P平台用户R产权用户M养护用户）
     private String kind;
 
     // 角色编号
@@ -62,8 +62,12 @@ public class SYSUser extends ABaseDO {
     // 备注
     private String remark;
 
+    // 系统编号
+    private String systemCode;
+
     // ***********db properties***********
 
+    /************辅助字段***************/
     // 系统用户列表
     private List<SYSUser> sysUserList;
 
@@ -79,29 +83,19 @@ public class SYSUser extends ABaseDO {
     // 名字模糊查询
     private String realNameForQuery;
 
-    public String getMobileForQuery() {
-        return mobileForQuery;
-    }
+    // 古树数量
+    private String treeQuantity;
 
-    public void setMobileForQuery(String mobileForQuery) {
-        this.mobileForQuery = mobileForQuery;
-    }
+    // 古树市值
+    private String treeValue;
 
-    public String getRealNameForQuery() {
-        return realNameForQuery;
-    }
+    // 总收入
+    private String totalIncome;
 
-    public void setRealNameForQuery(String realNameForQuery) {
-        this.realNameForQuery = realNameForQuery;
-    }
+    // 所属产权方
+    private String owner;
 
-    public List<SYSUser> getSysUserList() {
-        return sysUserList;
-    }
-
-    public void setSysUserList(List<SYSUser> sysUserList) {
-        this.sysUserList = sysUserList;
-    }
+    /************辅助字段***************/
 
     public String getUserId() {
         return userId;
@@ -109,6 +103,54 @@ public class SYSUser extends ABaseDO {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getKind() {
+        return kind;
+    }
+
+    public void setKind(String kind) {
+        this.kind = kind;
+    }
+
+    public String getRoleCode() {
+        return roleCode;
+    }
+
+    public void setRoleCode(String roleCode) {
+        this.roleCode = roleCode;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 
     public String getLoginName() {
@@ -127,43 +169,6 @@ public class SYSUser extends ABaseDO {
         this.loginPwd = loginPwd;
     }
 
-    public String getRealName() {
-        return realName;
-    }
-
-    public void setRealName(String realName) {
-        this.realName = realName;
-    }
-
-    public void setKind(String realName) {
-        this.realName = realName;
-    }
-
-    public String getMobile() {
-        return mobile;
-    }
-
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
-    }
-
-    public String getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(String photo) {
-        this.photo = photo;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    // 登陆密码强度
     public String getLoginPwdStrength() {
         return loginPwdStrength;
     }
@@ -178,6 +183,14 @@ public class SYSUser extends ABaseDO {
 
     public void setCreateDatetime(Date createDatetime) {
         this.createDatetime = createDatetime;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getUpdater() {
@@ -204,12 +217,20 @@ public class SYSUser extends ABaseDO {
         this.remark = remark;
     }
 
-    public String getRoleCode() {
-        return roleCode;
+    public String getSystemCode() {
+        return systemCode;
     }
 
-    public void setRoleCode(String roleCode) {
-        this.roleCode = roleCode;
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
+
+    public List<SYSUser> getSysUserList() {
+        return sysUserList;
+    }
+
+    public void setSysUserList(List<SYSUser> sysUserList) {
+        this.sysUserList = sysUserList;
     }
 
     public Date getCreateDatetimeStart() {
@@ -228,16 +249,20 @@ public class SYSUser extends ABaseDO {
         this.createDatetimeEnd = createDatetimeEnd;
     }
 
-    public String getCompanyCode() {
-        return companyCode;
+    public String getMobileForQuery() {
+        return mobileForQuery;
     }
 
-    public void setCompanyCode(String companyCode) {
-        this.companyCode = companyCode;
+    public void setMobileForQuery(String mobileForQuery) {
+        this.mobileForQuery = mobileForQuery;
     }
 
-    public String getKind() {
-        return kind;
+    public String getRealNameForQuery() {
+        return realNameForQuery;
+    }
+
+    public void setRealNameForQuery(String realNameForQuery) {
+        this.realNameForQuery = realNameForQuery;
     }
 
 }

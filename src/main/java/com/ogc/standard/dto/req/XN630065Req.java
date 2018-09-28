@@ -28,6 +28,9 @@ public class XN630065Req extends APageReq {
     // （选填）操作人
     private String updater;
 
+    // （选填）类型
+    private String kind;
+
     public String getRealName() {
         return realName;
     }
@@ -90,6 +93,14 @@ public class XN630065Req extends APageReq {
 
     public void setUpdater(String updater) {
         this.updater = updater;
+    }
+
+    public String getKind() {
+        return kind;
+    }
+
+    public void setKind(String kind) {
+        this.kind = kind;
     }
 
 }

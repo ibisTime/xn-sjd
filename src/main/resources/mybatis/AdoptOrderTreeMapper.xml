@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ogc.standard.dao.IAdoptOrderTreeDAO">
+	<resultMap id="adoptOrderTree_DB_Result" type="adoptOrderTree">
+		<result column="code" property="code" />
+		<result column="order_code" property="orderCode" />
+		<result column="tree_number" property="treeNumber" />
+		<result column="start_datetime" property="startDatetime" />
+		<result column="end_datetime" property="endDatetime" />
+		<result column="amount" property="amount" />
+		<result column="status" property="status" />
+		<result column="current_holder" property="currentHolder" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="orderCode != null and orderCode != '' ">
+				AND t.order_code = #{orderCode}
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+			<if test="currentHolder != null and currentHolder != '' ">
+				AND t.current_holder = #{currentHolder}
+			</if>
+		</trim>
+	</sql>
+	<select id="select_adoptOrderTree" parameterType="adoptOrderTree" resultMap="adoptOrderTree_DB_Result">
+		SELECT
+		t.code
+		,t.order_code
+		,t.tree_number
+		,t.start_datetime
+		,t.end_datetime
+		,t.amount
+		,t.status
+		,t.current_holder
+		FROM
+		try_adopt_order_tree t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_adoptOrderTree_count" parameterType="adoptOrderTree"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM try_adopt_order_tree t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_adoptOrderTree" parameterType="adoptOrderTree">
+		INSERT INTO
+		try_adopt_order_tree(
+		code
+		,order_code
+		,tree_number
+		,start_datetime
+		,end_datetime
+		,amount
+		,status
+		,current_holder
+		)
+		VALUES(
+		#{code}
+		,#{orderCode}
+		,#{treeNumber}
+		,#{startDatetime}
+		,#{endDatetime}
+		,#{amount}
+		,#{status}
+		,#{currentHolder}
+		)
+	</insert>
+
+	<update id="update_adoptOrderTree" parameterType="adoptOrderTree">
+		UPDATE try_adopt_order_tree
+		SET
+		order_code = #{orderCode}
+		,tree_number = #{treeNumber}
+		,start_datetime = #{startDatetime}
+		,end_datetime = #{endDatetime}
+		,amount = #{amount}
+		,status = #{status}
+		,current_holder = #{currentHolder}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_giveTree" parameterType="adoptOrderTree">
+		UPDATE try_adopt_order_tree
+		SET
+		current_holder = #{currentHolder}
+		WHERE code = #{code}
+	</update>
+
+</mapper>

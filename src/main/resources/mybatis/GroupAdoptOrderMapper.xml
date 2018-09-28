@@ -32,6 +32,24 @@
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
 			</if>
+			<if test="productCode != null and productCode != '' ">
+				AND t.product_code = #{productCode}
+			</if>
+			<if test="productSpecsName != null and productSpecsName != '' ">
+				AND t.product_specs_name = #{productSpecsName}
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+			<if test="startDatetime != null and startDatetime != '' ">
+				AND t.start_datetime = #{startDatetime}
+			</if>
+			<if test="endDatetime != null and endDatetime != '' ">
+				AND t.end_datetime = #{endDatetime}
+			</if>
+			<if test="applyDatetime != null and applyDatetime != '' ">
+				AND t.apply_datetime = #{applyDatetime}
+			</if>
 		</trim>
 	</sql>
 	<select id="select_groupAdoptOrder" parameterType="groupAdoptOrder" resultMap="groupAdoptOrder_DB_Result">

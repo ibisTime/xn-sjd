@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +12,7 @@ import com.ogc.standard.ao.ISYSUserAO;
 import com.ogc.standard.bo.ISYSRoleBO;
 import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.ISmsOutBO;
+import com.ogc.standard.bo.ITreeBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.common.MD5Util;
@@ -19,6 +21,9 @@ import com.ogc.standard.common.PwdUtil;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.domain.SYSRole;
 import com.ogc.standard.domain.SYSUser;
+import com.ogc.standard.domain.Tree;
+import com.ogc.standard.enums.ESYSUserKind;
+import com.ogc.standard.enums.ESYSUserStatus;
 import com.ogc.standard.enums.EUser;
 import com.ogc.standard.enums.EUserStatus;
 import com.ogc.standard.exception.BizException;
@@ -35,23 +40,28 @@ public class SYSUserAOImpl implements ISYSUserAO {
     @Autowired
     ISmsOutBO smsOutBO;
 
+    @Autowired
+    ITreeBO treeBO;
+
     // 新增用户
     @Override
-    public String addSYSUser(String mobile, String loginPwd, String roleCode,
-            String realName, String photo) {
+    public String addSYSUser(String roleCode, String realName, String mobile,
+            String loginName, String loginPwd, String photo, String remark) {
         sysUserBO.isMobileExist(mobile);
         SYSUser data = new SYSUser();
         String userId = OrderNoGenerater.generate("U");
         data.setUserId(userId);
-        data.setMobile(mobile);
-        data.setRoleCode(roleCode);
+        data.setKind(ESYSUserKind.PLATFORM.getCode());
         data.setRealName(realName);
-        data.setLoginName(mobile);
+        data.setPhoto(photo);
+        data.setMobile(mobile);
+        data.setLoginName(loginName);
+        data.setRoleCode(roleCode);
         data.setLoginPwd(MD5Util.md5(loginPwd));
         data.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(loginPwd));
-        data.setPhoto(photo);
-        data.setStatus(EUserStatus.NORMAL.getCode());
         data.setCreateDatetime(new Date());
+        data.setStatus(ESYSUserStatus.NORMAL.getCode());
+        data.setRemark(remark);
         sysUserBO.doSaveSYSuser(data);
         return userId;
     }
@@ -202,17 +212,23 @@ public class SYSUserAOImpl implements ISYSUserAO {
     @Override
     public Paginable<SYSUser> querySYSUserPage(int start, int limit,
             SYSUser condition) {
-
         if (condition.getCreateDatetimeStart() != null
                 && condition.getCreateDatetimeEnd() != null
                 && condition.getCreateDatetimeStart().after(
                     condition.getCreateDatetimeEnd())) {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
-
         Paginable<SYSUser> page = sysUserBO.getPaginable(start, limit,
             condition);
+        if (StringUtils.isNotBlank(condition.getKind())
+                && ESYSUserKind.OWNER.getCode().equals(condition.getKind())) {// 产权方
+            Tree treeCondition = new Tree();
+            List<Tree> treeList = treeBO.queryTreeList(treeCondition);
+            for (Tree tree : treeList) {
 
+            }
+
+        }
         return page;
     }
 

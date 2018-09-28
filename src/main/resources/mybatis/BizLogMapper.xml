@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ogc.standard.dao.IBizLogDAO">
+	<resultMap id="bizLog_DB_Result" type="bizLog">
+		<result column="id" property="id" />
+		<result column="adopt_tree_code" property="adoptTreeCode" />
+		<result column="type" property="type" />
+		<result column="note" property="note" />
+		<result column="user_id" property="userId" />
+		<result column="create_datetime" property="createDatetime" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="adoptTreeCode != null and adoptTreeCode != '' ">
+				AND t.adopt_tree_code = #{adoptTreeCode}
+			</if>
+			<if test="type != null and type != '' ">
+				AND t.type = #{type}
+			</if>
+			<if test="userId != null and userId != '' ">
+				AND t.user_id = #{userId}
+			</if>
+			<if test="createDatetimeStart != null and createDatetimeStart != '' ">
+				<![CDATA[AND t.create_datetime >= #{createDatetimeStart}]]>
+			</if>
+			<if test="createDatetimeEnd != null and createDatetimeEnd != '' ">
+				<![CDATA[AND t.create_datetime >= #{createDatetimeEnd}]]>
+			</if>
+		</trim>
+	</sql>
+	<select id="select_bizLog" parameterType="bizLog" resultMap="bizLog_DB_Result">
+		SELECT
+		t.id
+		,t.adopt_tree_code
+		,t.type
+		,t.note
+		,t.user_id
+		,t.create_datetime
+		FROM
+		tsys_biz_log t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_bizLog_count" parameterType="bizLog"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tsys_biz_log t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_bizLog" parameterType="bizLog">
+		INSERT INTO
+		tsys_biz_log(
+		id
+		,adopt_tree_code
+		,type
+		,note
+		,user_id
+		,create_datetime
+		)
+		VALUES(
+		#{id}
+		,#{adoptTreeCode}
+		,#{type}
+		,#{note}
+		,#{userId}
+		,#{createDatetime}
+		)
+	</insert>
+
+	<update id="update_bizLog" parameterType="bizLog">
+		UPDATE tsys_biz_log
+		SET
+		adopt_tree_code = #{adoptTreeCode}
+		,type = #{type}
+		,note = #{note}
+		,user_id = #{userId}
+		,create_datetime = #{createDatetime}
+		WHERE code = #{code}
+	</update>
+
+
+</mapper>

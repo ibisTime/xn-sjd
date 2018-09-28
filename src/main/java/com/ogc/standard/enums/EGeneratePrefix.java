@@ -18,7 +18,8 @@ public enum EGeneratePrefix {
     Interact("I", "点赞"), BANK_CARD("BC", "银行卡"),
 
     APPLY_BIND_MAINTAIN("ABM", "申请绑定养护方"), ADOPT_ORDER("AO", "个人/定向/捐赠认养订单"), GROUP_ADOPT_ORDER(
-            "GAO", "集体认养订单"),
+            "GAO", "集体认养订单"), ADOPT_ORDER_TREE("AOT", "认养权"), GIVE_TREE_RECORD(
+            "GTR", "赠送树记录"),
 
     Category("C", "产品类型"), Product("P", "认养产品"), ProductSpec("PS", "产品规格"), Tree(
             "T", "古树");

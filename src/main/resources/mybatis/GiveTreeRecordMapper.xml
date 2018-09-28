@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ogc.standard.dao.IGiveTreeRecordDAO">
+	<resultMap id="giveTreeRecord_DB_Result" type="giveTreeRecord">
+		<result column="code" property="code" />
+		<result column="adopt_tree_code" property="adoptTreeCode" />
+		<result column="user_id" property="userId" />
+		<result column="to_user_id" property="toUserId" />
+		<result column="create_datetime" property="createDatetime" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+		</trim>
+	</sql>
+	<select id="select_giveTreeRecord" parameterType="giveTreeRecord" resultMap="giveTreeRecord_DB_Result">
+		SELECT
+		t.code
+		,t.adopt_tree_code
+		,t.user_id
+		,t.to_user_id
+		,t.create_datetime
+		FROM
+		tsj_give_tree_record t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_giveTreeRecord_count" parameterType="giveTreeRecord"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tsj_give_tree_record t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_giveTreeRecord" parameterType="giveTreeRecord">
+		INSERT INTO
+		tsj_give_tree_record(
+		code
+		,adopt_tree_code
+		,user_id
+		,to_user_id
+		,create_datetime
+		)
+		VALUES(
+		#{code}
+		,#{adoptTreeCode}
+		,#{userId}
+		,#{toUserId}
+		,#{createDatetime}
+		)
+	</insert>
+
+	<update id="update_giveTreeRecord" parameterType="giveTreeRecord">
+		UPDATE tsj_give_tree_record
+		SET
+		adopt_tree_code = #{adoptTreeCode}
+		,user_id = #{userId}
+		,to_user_id = #{toUserId}
+		,create_datetime = #{createDatetime}
+		WHERE code = #{code}
+	</update>
+
+
+</mapper>
