@@ -30,10 +30,12 @@
 		
 		<typeAlias alias="applyBindMaintain" type="com.ogc.standard.domain.ApplyBindMaintain"/>
 		<typeAlias alias="adoptOrder" type="com.ogc.standard.domain.AdoptOrder"/>
+		<typeAlias alias="groupAdoptOrder" type="com.ogc.standard.domain.GroupAdoptOrder"/>
 
 		<typeAlias alias="category" type="com.ogc.standard.domain.Category"/>
 		<typeAlias alias="product" type="com.ogc.standard.domain.Product"/>
 		<typeAlias alias="tree" type="com.ogc.standard.domain.Tree"/>
 		<typeAlias alias="productSpecs" type="com.ogc.standard.domain.ProductSpecs"/>
+		<typeAlias alias="agentUser" type="com.ogc.standard.domain.AgentUser"/>
 	</typeAliases>
 </configuration>

@@ -120,4 +120,8 @@
 	<bean id="productSpecsBO" class="com.ogc.standard.bo.impl.ProductSpecsBOImpl">
 		<property name="paginableDAO" ref="productSpecsDAOImpl"/>
 	</bean>
+	
+	<bean id="agentUserBO" class="com.ogc.standard.bo.impl.AgentUserBOImpl">
+		<property name="paginableDAO" ref="agentUsrDAOImpl"/>
+	</bean>
 </beans>

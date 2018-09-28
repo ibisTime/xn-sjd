@@ -62,6 +62,12 @@
 			<if test="userReferee != null and userReferee != '' ">
 				AND t.user_referee = #{userReferee}
 			</if>	
+			<if test="agent != null and agent != '' ">
+				AND t.agent = #{agent}
+			</if>
+			<if test="salesman != null and salesman != '' ">
+				AND t.salesman = #{salesman}
+			</if>
 			<if test="mobile != null and mobile != '' ">
 				AND t.mobile = #{mobile}
 			</if>

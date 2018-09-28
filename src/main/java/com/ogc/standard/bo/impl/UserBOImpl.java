@@ -129,7 +129,8 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
 
     @Override
     public String doRegister(String mobile, String nickname, String loginPwd,
-            User refereeUser, String province, String city, String area) {
+            User refereeUser, User agentUser, User salesmanUser,
+            String province, String city, String area) {
 
         String userId = OrderNoGenerater.generate("U");
         User user = new User();
@@ -148,6 +149,12 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         user.setNickname(nickname);
         if (refereeUser != null) {
             user.setUserReferee(refereeUser.getMobile());
+        }
+        if (agentUser != null) {
+            user.setAgent(agentUser.getMobile());
+        }
+        if (salesmanUser != null) {
+            user.setSalesman(salesmanUser.getMobile());
         }
         user.setLevel(EUserLevel.ONE.getCode());
         user.setStatus(EUserStatus.NORMAL.getCode());
