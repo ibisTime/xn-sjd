@@ -30,6 +30,7 @@ import com.ogc.standard.enums.ECategoryStatus;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.enums.EProductStatus;
 import com.ogc.standard.enums.ESellType;
+import com.ogc.standard.enums.ETreeStatus;
 import com.ogc.standard.exception.BizException;
 
 @Service
@@ -231,6 +232,14 @@ public class ProductAOImpl implements IProductAO {
                 throw new BizException("xn0000", "产品未处于可下架状态！");
             }
         }
+
+        // 存在认养中的古树时不能下架
+        if (CollectionUtils.isNotEmpty(treeBO.queryTreeListByProduct(code,
+            ETreeStatus.ADOPTED.getCode()))) {
+            throw new BizException("xn0000", "产品中存在认养中的古树，无法下架！");
+        }
+
+        // 存在未完成的订单时无法下架
 
         productBO.refreshPutOffProduct(code, updater);
     }
