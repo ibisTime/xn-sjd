@@ -20,6 +20,9 @@ public class Tree extends ABaseDO {
     // 产品编号
     private String productCode;
 
+    // 当前订单编号
+    private String curOrderCode;
+
     // 产权方编号
     private String ownerId;
 
@@ -62,7 +65,7 @@ public class Tree extends ABaseDO {
     // 实景图
     private String pic;
 
-    // 状态（0待认养/1已认养）
+    // 状态（0待认养1已认养2待支付）
     private String status;
 
     // 文章数
@@ -276,6 +279,14 @@ public class Tree extends ABaseDO {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getCurOrderCode() {
+        return curOrderCode;
+    }
+
+    public void setCurOrderCode(String curOrderCode) {
+        this.curOrderCode = curOrderCode;
     }
 
 }

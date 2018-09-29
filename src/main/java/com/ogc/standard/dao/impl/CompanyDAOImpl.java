@@ -47,8 +47,7 @@ public class CompanyDAOImpl extends AMybatisTemplate implements ICompanyDAO {
 
     @Override
     public int update(Company data) {
-        // TODO Auto-generated method stub
-        return 0;
+        return super.update(NAMESPACE.concat("update_company"), data);
     }
 
 }

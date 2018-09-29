@@ -1,16 +1,16 @@
 package com.ogc.standard.enums;
 
 /**
- * 古树状态
- * @author: silver 
- * @since: 2018年9月26日 下午1:53:37 
+ * 订单类型（1个人/2定向/3捐赠）
+ * @author: jiafr 
+ * @since: 2018年9月29日 下午5:24:47 
  * @history:
  */
-public enum ETreeStatus {
+public enum EOrderKind {
 
-    TO_ADOPT("0", "待认养"), TO_PAY("2", "待支付"), ADOPTED("1", "已认养");
+    person("1", "正常"), ORIENT("2", "定向"), DONATE("3", "捐赠");
 
-    ETreeStatus(String code, String value) {
+    EOrderKind(String code, String value) {
         this.code = code;
         this.value = value;
     }
@@ -26,4 +26,5 @@ public enum ETreeStatus {
     public String getValue() {
         return value;
     }
+
 }

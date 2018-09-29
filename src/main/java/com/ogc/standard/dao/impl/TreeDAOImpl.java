@@ -27,6 +27,16 @@ public class TreeDAOImpl extends AMybatisTemplate implements ITreeDAO {
     }
 
     @Override
+    public int updateCancelTree(Tree data) {
+        return super.update(NAMESPACE.concat("update_cancelTree"), data);
+    }
+
+    @Override
+    public int updatePayTree(Tree data) {
+        return super.update(NAMESPACE.concat("update_payTree"), data);
+    }
+
+    @Override
     public int updateArticleCount(Tree data) {
         return super.update(NAMESPACE.concat("update_articleCount"), data);
     }
