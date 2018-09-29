@@ -30,6 +30,7 @@ public class AccountAOImpl implements IAccountAO {
     @Override
     @Transactional
     public void distributeAccount(String userId) {
+
     }
 
     @Override
@@ -106,8 +107,8 @@ public class AccountAOImpl implements IAccountAO {
             BigDecimal freezeAmount, String bizType, String bizNote,
             String refNo) {
         Account dbAccount = accountBO.getAccountByUser(userId, currency);
-        return accountBO.frozenAmount(dbAccount, freezeAmount, bizType,
-            bizNote, refNo);
+        return accountBO.frozenAmount(dbAccount, freezeAmount, bizType, bizNote,
+            refNo);
     }
 
     @Override

@@ -112,6 +112,9 @@ public class Product extends ABaseDO {
     // 树木数量
     private Integer treeCount;
 
+    // 产品类型名称
+    private String categoryName;
+
     public void setCode(String code) {
         this.code = code;
     }
@@ -366,6 +369,14 @@ public class Product extends ABaseDO {
 
     public void setTreeCount(Integer treeCount) {
         this.treeCount = treeCount;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 
 }
