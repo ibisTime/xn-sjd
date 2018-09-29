@@ -22,6 +22,14 @@ public class XN629047Req extends AListReq {
     // 状态(0待支付1已取消2待认养3认养中4已到期)
     private String status;
 
+    private String startDatetimeStart;// 认养开始时间起
+
+    private String startDatetimeEnd;// 认养开始时间止
+
+    private String endDatetimeStart;// 认养结束时间起
+
+    private String endDatetimeEnd;// 认养结束时间止
+
     public String getType() {
         return type;
     }
@@ -52,6 +60,38 @@ public class XN629047Req extends AListReq {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getStartDatetimeStart() {
+        return startDatetimeStart;
+    }
+
+    public void setStartDatetimeStart(String startDatetimeStart) {
+        this.startDatetimeStart = startDatetimeStart;
+    }
+
+    public String getStartDatetimeEnd() {
+        return startDatetimeEnd;
+    }
+
+    public void setStartDatetimeEnd(String startDatetimeEnd) {
+        this.startDatetimeEnd = startDatetimeEnd;
+    }
+
+    public String getEndDatetimeStart() {
+        return endDatetimeStart;
+    }
+
+    public void setEndDatetimeStart(String endDatetimeStart) {
+        this.endDatetimeStart = endDatetimeStart;
+    }
+
+    public String getEndDatetimeEnd() {
+        return endDatetimeEnd;
+    }
+
+    public void setEndDatetimeEnd(String endDatetimeEnd) {
+        this.endDatetimeEnd = endDatetimeEnd;
     }
 
 }

@@ -44,6 +44,44 @@ public class GroupAdoptOrderBOImpl extends PaginableBOImpl<GroupAdoptOrder>
     }
 
     @Override
+    public String saveGroupAdoptOrderFirst(GroupAdoptOrder data) {
+        String code = null;
+        if (data != null) {
+            code = OrderNoGenerater.generate(EGeneratePrefix.GROUP_ADOPT_ORDER
+                .getCode());
+            data.setCode(code);
+            groupAdoptOrderDAO.insertFirst(data);
+        }
+        return code;
+    }
+
+    @Override
+    public String saveGroupAdoptOrderUnFirst(GroupAdoptOrder data) {
+        String code = null;
+        if (data != null) {
+            code = OrderNoGenerater.generate(EGeneratePrefix.GROUP_ADOPT_ORDER
+                .getCode());
+            data.setCode(code);
+            groupAdoptOrderDAO.insertUnFirst(data);
+        }
+        return code;
+    }
+
+    @Override
+    public void refreshCancelGroupAdoptOrder(GroupAdoptOrder data) {
+        if (StringUtils.isNotBlank(data.getCode())) {
+            groupAdoptOrderDAO.updateCancelGroupAdoptOrder(data);
+        }
+    }
+
+    @Override
+    public void payGroupAdoptOrder(GroupAdoptOrder data) {
+        if (StringUtils.isNotBlank(data.getCode())) {
+            groupAdoptOrderDAO.updatePayGroupAdoptOrder(data);
+        }
+    }
+
+    @Override
     public int removeGroupAdoptOrder(String code) {
         int count = 0;
         if (StringUtils.isNotBlank(code)) {
@@ -96,4 +134,5 @@ public class GroupAdoptOrderBOImpl extends PaginableBOImpl<GroupAdoptOrder>
         }
         return data;
     }
+
 }

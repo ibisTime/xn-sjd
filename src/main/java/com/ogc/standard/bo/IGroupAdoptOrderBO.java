@@ -22,4 +22,16 @@ public interface IGroupAdoptOrderBO extends IPaginableBO<GroupAdoptOrder> {
 
     public GroupAdoptOrder getGroupAdoptOrderByIdentifyCode(String identifyCode);
 
+    // 第一人下单
+    public String saveGroupAdoptOrderFirst(GroupAdoptOrder data);
+
+    // 非第一人下单
+    public String saveGroupAdoptOrderUnFirst(GroupAdoptOrder data);
+
+    // 取消订单
+    public void refreshCancelGroupAdoptOrder(GroupAdoptOrder data);
+
+    // 支付订单
+    public void payGroupAdoptOrder(GroupAdoptOrder data);
+
 }

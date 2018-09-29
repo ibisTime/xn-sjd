@@ -82,4 +82,19 @@ public class AdoptOrderBOImpl extends PaginableBOImpl<AdoptOrder> implements
         return data;
     }
 
+    // 取消订单
+    @Override
+    public void cancelAdoptOrder(AdoptOrder data) {
+        if (StringUtils.isNotBlank(data.getCode())) {
+            adoptOrderDAO.updateCancelAdoptOrder(data);
+        }
+    }
+
+    @Override
+    public void payAdoptOrder(AdoptOrder data) {
+        if (StringUtils.isNotBlank(data.getCode())) {
+            adoptOrderDAO.updatepayAdoptOrder(data);
+        }
+    }
+
 }

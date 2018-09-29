@@ -39,7 +39,7 @@ public class GroupAdoptOrder extends ABaseDO {
     private Date endDatetime;
 
     // 数量
-    private String quantity;
+    private Integer quantity;
 
     // 金额
     private Long amount;
@@ -63,16 +63,16 @@ public class GroupAdoptOrder extends ABaseDO {
     private String payCode;
 
     // 支付金额
-    private String payAmount;
+    private Long payAmount;
 
     // 积分抵扣金额
-    private String jfDeductAmount;
+    private Long jfDeductAmount;
 
     // 支付时间
-    private String payDatetime;
+    private Date payDatetime;
 
     // 积分返点金额
-    private String backJfAmount;
+    private Long backJfAmount;
 
     // 更新人
     private String updater;
@@ -82,6 +82,18 @@ public class GroupAdoptOrder extends ABaseDO {
 
     // 备注
     private String remark;
+
+    /**************DB properties*********/
+
+    /**********辅助字段************/
+
+    private Date startDatetimeStart;// 认养开始时间起
+
+    private Date startDatetimeEnd;// 认养开始时间止
+
+    private Date endDatetimeStart;// 认养结束时间起
+
+    private Date endDatetimeEnd;// 认养结束时间止
 
     public void setCode(String code) {
         this.code = code;
@@ -147,12 +159,12 @@ public class GroupAdoptOrder extends ABaseDO {
         this.endDatetime = endDatetime;
     }
 
-    public void setQuantity(String quantity) {
-        this.quantity = quantity;
+    public Integer getQuantity() {
+        return quantity;
     }
 
-    public String getQuantity() {
-        return quantity;
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 
     public Long getAmount() {
@@ -211,36 +223,36 @@ public class GroupAdoptOrder extends ABaseDO {
         return payCode;
     }
 
-    public void setPayAmount(String payAmount) {
-        this.payAmount = payAmount;
-    }
-
-    public String getPayAmount() {
+    public Long getPayAmount() {
         return payAmount;
     }
 
-    public void setJfDeductAmount(String jfDeductAmount) {
-        this.jfDeductAmount = jfDeductAmount;
+    public void setPayAmount(Long payAmount) {
+        this.payAmount = payAmount;
     }
 
-    public String getJfDeductAmount() {
+    public Long getJfDeductAmount() {
         return jfDeductAmount;
     }
 
-    public void setPayDatetime(String payDatetime) {
-        this.payDatetime = payDatetime;
+    public void setJfDeductAmount(Long jfDeductAmount) {
+        this.jfDeductAmount = jfDeductAmount;
     }
 
-    public String getPayDatetime() {
+    public Date getPayDatetime() {
         return payDatetime;
     }
 
-    public void setBackJfAmount(String backJfAmount) {
-        this.backJfAmount = backJfAmount;
+    public void setPayDatetime(Date payDatetime) {
+        this.payDatetime = payDatetime;
     }
 
-    public String getBackJfAmount() {
+    public Long getBackJfAmount() {
         return backJfAmount;
+    }
+
+    public void setBackJfAmount(Long backJfAmount) {
+        this.backJfAmount = backJfAmount;
     }
 
     public void setUpdater(String updater) {
@@ -265,6 +277,38 @@ public class GroupAdoptOrder extends ABaseDO {
 
     public String getRemark() {
         return remark;
+    }
+
+    public Date getStartDatetimeStart() {
+        return startDatetimeStart;
+    }
+
+    public void setStartDatetimeStart(Date startDatetimeStart) {
+        this.startDatetimeStart = startDatetimeStart;
+    }
+
+    public Date getStartDatetimeEnd() {
+        return startDatetimeEnd;
+    }
+
+    public void setStartDatetimeEnd(Date startDatetimeEnd) {
+        this.startDatetimeEnd = startDatetimeEnd;
+    }
+
+    public Date getEndDatetimeStart() {
+        return endDatetimeStart;
+    }
+
+    public void setEndDatetimeStart(Date endDatetimeStart) {
+        this.endDatetimeStart = endDatetimeStart;
+    }
+
+    public Date getEndDatetimeEnd() {
+        return endDatetimeEnd;
+    }
+
+    public void setEndDatetimeEnd(Date endDatetimeEnd) {
+        this.endDatetimeEnd = endDatetimeEnd;
     }
 
 }

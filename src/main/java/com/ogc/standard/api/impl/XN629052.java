@@ -11,7 +11,7 @@ import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
 
 /**
- * 非第一人下单集体认养订单
+ * 第一人下单集体认养订单
  * @author: jiafr 
  * @since: 2018年9月27日 下午8:37:44 
  * @history:

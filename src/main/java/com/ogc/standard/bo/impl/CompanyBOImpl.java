@@ -73,7 +73,7 @@ public class CompanyBOImpl extends PaginableBOImpl<Company> implements
             condition.setCode(code);
             data = companyDAO.select(condition);
             if (data == null) {
-                throw new BizException("xn0000", "�� ��Ų�����");
+                throw new BizException("xn0000", "公司编号不存在");
             }
         }
         return data;

@@ -27,7 +27,7 @@ public class CompanyAOImpl implements ICompanyAO {
 
     @Override
     public int editCompany(XN630302Req req) {
-        if (!companyBO.isCompanyExist(req.getCode())) {
+        if (!companyBO.isCompanyExist(req.getUserId())) {
             throw new BizException("xn0000", "记录编号不存在");
         }
         Company data = new Company();

@@ -16,7 +16,7 @@ public class XN629042Req {
 
     // 支付方式
     @NotBlank
-    private String payMethod;
+    private String payType;
 
     public String getCode() {
         return code;
@@ -26,12 +26,12 @@ public class XN629042Req {
         this.code = code;
     }
 
-    public String getPayMethod() {
-        return payMethod;
+    public String getPayType() {
+        return payType;
     }
 
-    public void setPayMethod(String payMethod) {
-        this.payMethod = payMethod;
+    public void setPayType(String payType) {
+        this.payType = payType;
     }
 
 }

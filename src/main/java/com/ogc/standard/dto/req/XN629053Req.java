@@ -1,0 +1,37 @@
+package com.ogc.standard.dto.req;
+
+import org.hibernate.validator.constraints.NotBlank;
+
+/**
+ * 支付集体认养订单
+ * @author: jiafr 
+ * @since: 2018年9月29日 下午1:48:14 
+ * @history:
+ */
+public class XN629053Req {
+
+    // 编号
+    @NotBlank
+    private String code;
+
+    // 支付方式
+    @NotBlank
+    private String payType;
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getPayType() {
+        return payType;
+    }
+
+    public void setPayType(String payType) {
+        this.payType = payType;
+    }
+
+}
