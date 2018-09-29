@@ -54,7 +54,7 @@ public class Company extends ABaseDO {
     private String updater;
 
     // 更新时间
-    private String updateDatetime;
+    private Date updateDatetime;
 
     // 备注
     private String remark;
@@ -163,12 +163,12 @@ public class Company extends ABaseDO {
         return updater;
     }
 
-    public void setUpdateDatetime(String updateDatetime) {
-        this.updateDatetime = updateDatetime;
+    public Date getUpdateDatetime() {
+        return updateDatetime;
     }
 
-    public String getUpdateDatetime() {
-        return updateDatetime;
+    public void setUpdateDatetime(Date updateDatetime) {
+        this.updateDatetime = updateDatetime;
     }
 
     public void setRemark(String remark) {

@@ -1,5 +1,7 @@
 package com.ogc.standard.domain;
 
+import java.util.Date;
+
 import com.ogc.standard.dao.base.ABaseDO;
 
 /**
@@ -22,13 +24,13 @@ public class AdoptOrderTree extends ABaseDO {
     private String treeNumber;
 
     // 认养开始时间
-    private String startDatetime;
+    private Date startDatetime;
 
     // 认养结束时间
-    private String endDatetime;
+    private Date endDatetime;
 
     // 认养金额
-    private String amount;
+    private Long amount;
 
     // 状态(1待认养2认养中3已到期)
     private String status;
@@ -60,28 +62,28 @@ public class AdoptOrderTree extends ABaseDO {
         return treeNumber;
     }
 
-    public void setStartDatetime(String startDatetime) {
-        this.startDatetime = startDatetime;
-    }
-
-    public String getStartDatetime() {
+    public Date getStartDatetime() {
         return startDatetime;
     }
 
-    public void setEndDatetime(String endDatetime) {
-        this.endDatetime = endDatetime;
+    public void setStartDatetime(Date startDatetime) {
+        this.startDatetime = startDatetime;
     }
 
-    public String getEndDatetime() {
+    public Date getEndDatetime() {
         return endDatetime;
     }
 
-    public void setAmount(String amount) {
-        this.amount = amount;
+    public void setEndDatetime(Date endDatetime) {
+        this.endDatetime = endDatetime;
     }
 
-    public String getAmount() {
+    public Long getAmount() {
         return amount;
+    }
+
+    public void setAmount(Long amount) {
+        this.amount = amount;
     }
 
     public void setStatus(String status) {

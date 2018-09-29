@@ -1,7 +1,9 @@
 package com.ogc.standard.ao.impl;
 
+import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,10 +29,24 @@ public class CompanyAOImpl implements ICompanyAO {
 
     @Override
     public int editCompany(XN630302Req req) {
-        if (!companyBO.isCompanyExist(req.getUserId())) {
-            throw new BizException("xn0000", "记录编号不存在");
+        Company condition = new Company();
+        condition.setUserId(req.getUserId());
+        List<Company> list = companyBO.queryCompanyList(condition);
+        if (CollectionUtils.isEmpty(list)) {
+            throw new BizException("xn0000", "公司不存在");
         }
-        Company data = new Company();
+        Company data = list.get(0);
+        data.setBussinessLicense(req.getBussinessLicense());
+        data.setCertificateTemplate(req.getCertificateTemplate());
+        data.setChargeMobile(req.getChargerMobile());
+        data.setAddress(req.getCompanyAddress());
+        data.setCharger(req.getCompanyCharger());
+        data.setName(req.getCompanyName());
+        data.setContractTemplate(req.getContractTemplate());
+        data.setDescription(req.getDescription());
+        data.setUserId(req.getUserId());
+        data.setUpdateDatetime(new Date());
+        data.setUpdater(req.getUserId());
         return companyBO.refreshCompany(data);
     }
 

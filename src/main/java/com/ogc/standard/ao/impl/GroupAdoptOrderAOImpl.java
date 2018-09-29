@@ -4,25 +4,33 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.IGroupAdoptOrderAO;
+import com.ogc.standard.bo.IAdoptOrderTreeBO;
 import com.ogc.standard.bo.IGroupAdoptOrderBO;
 import com.ogc.standard.bo.IProductBO;
 import com.ogc.standard.bo.IProductSpecsBO;
+import com.ogc.standard.bo.ITreeBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.AmountUtil;
 import com.ogc.standard.core.StringValidater;
+import com.ogc.standard.domain.AdoptOrderTree;
 import com.ogc.standard.domain.GroupAdoptOrder;
 import com.ogc.standard.domain.Product;
 import com.ogc.standard.domain.ProductSpecs;
+import com.ogc.standard.domain.Tree;
 import com.ogc.standard.dto.req.XN629050Req;
 import com.ogc.standard.dto.req.XN629051Req;
 import com.ogc.standard.enums.EAdoptOrderStatus;
+import com.ogc.standard.enums.EAdoptOrderTreeStatus;
 import com.ogc.standard.enums.EGroupAdoptOrderStatus;
 import com.ogc.standard.enums.EProductStatus;
+import com.ogc.standard.enums.ETreeStatus;
 import com.ogc.standard.exception.BizException;
 
 @Service
@@ -37,7 +45,14 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
     @Autowired
     private IProductBO productBO;
 
+    @Autowired
+    private ITreeBO treeBO;
+
+    @Autowired
+    private IAdoptOrderTreeBO adoptOrderTreeBO;
+
     @Override
+    @Transactional
     public String firstAddGroupAdoptOrder(XN629050Req req) {
         Product product = productBO.getProduct(req.getProductCode());
         if (EProductStatus.TO_ADOPT.getCode().equals(product.getStatus())) {
@@ -48,7 +63,7 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
         }
         if (StringValidater.toInteger(req.getQuantity()) > product
             .getRaiseCount()) {
-            throw new BizException("xn0000", "库存数量不足，不能下单");
+            throw new BizException("xn0000", "下单数量大于产品募集总量，不能下单");
         }
         GroupAdoptOrder data = new GroupAdoptOrder();
         data.setProductCode(req.getProductCode());
@@ -69,10 +84,17 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
         // 更新认养产品的已募集数量
         product.setNowCount(product.getNowCount() + data.getQuantity());
         productBO.refreshNowCount(product.getCode(), product.getNowCount());
+        // 更改树状态
+        List<Tree> treeList = treeBO.queryTreeListByProduct(product.getCode(),
+            ETreeStatus.TO_ADOPT.getCode());
+        for (Tree tree : treeList) {
+            treeBO.refreshAdoptTree(tree.getCode(), code);
+        }
         return code;
     }
 
     @Override
+    @Transactional
     public String unFirstAddGroupAdoptOrder(XN629051Req req) {
         GroupAdoptOrder order = groupAdoptOrderBO
             .getGroupAdoptOrderByIdentifyCode(req.getIdentifyCode());
@@ -103,10 +125,17 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
         // 更新认养产品的已募集数量
         product.setNowCount(product.getNowCount() + data.getQuantity());
         productBO.refreshNowCount(product.getCode(), product.getNowCount());
+        // 更改树状态
+        List<Tree> treeList = treeBO.queryTreeListByProduct(product.getCode(),
+            ETreeStatus.TO_ADOPT.getCode());
+        for (Tree tree : treeList) {
+            treeBO.refreshAdoptTree(tree.getCode(), code);
+        }
         return code;
     }
 
     @Override
+    @Transactional
     public void cancelGroupAdoptOrder(String code) {
         GroupAdoptOrder data = groupAdoptOrderBO.getGroupAdoptOrder(code);
         if (EGroupAdoptOrderStatus.TO_PAY.getCode().equals(data.getStatus())) {
@@ -119,11 +148,17 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
         Product product = productBO.getProduct(data.getProductCode());
         product.setNowCount(product.getNowCount() - data.getQuantity());
         productBO.refreshNowCount(product.getCode(), product.getNowCount());
-
+        // 更新树状态
+        List<Tree> treeList = treeBO.queryTreeListByOrderCode(data.getCode(),
+            ETreeStatus.TO_PAY.getCode());
+        for (Tree tree : treeList) {
+            treeBO.refreshCancelTree(tree.getCode());
+        }
         groupAdoptOrderBO.refreshCancelGroupAdoptOrder(data);
     }
 
     @Override
+    @Transactional
     public String payGroupAdoptOrder(String code, String type) {
         GroupAdoptOrder data = groupAdoptOrderBO.getGroupAdoptOrder(code);
         if (EAdoptOrderStatus.TO_PAY.getCode().equals(data.getStatus())) {
@@ -150,6 +185,29 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
             data.setStatus(EAdoptOrderStatus.ADOPT.getCode());
         }
         groupAdoptOrderBO.payGroupAdoptOrder(data);
+        List<Tree> treeList = treeBO.queryTreeListByOrderCode(data.getCode(),
+            ETreeStatus.TO_PAY.getCode());
+        if (CollectionUtils.isNotEmpty(treeList)) {
+            for (Tree tree : treeList) {
+                // 更新树状态
+                treeBO.refreshPayTree(tree.getCode());
+                // 分配认养权
+                AdoptOrderTree aot = new AdoptOrderTree();
+                aot.setOrderCode(data.getCode());
+                aot.setTreeNumber(tree.getTreeNumber());
+                aot.setStartDatetime(data.getStartDatetime());
+                aot.setEndDatetime(data.getEndDatetime());
+                aot.setAmount(data.getPrice());
+                if (new Date().getTime() < data.getStartDatetime().getTime()) {
+                    aot.setStatus(EAdoptOrderTreeStatus.TO_ADOPT.getCode());
+                } else {
+                    aot.setStatus(EAdoptOrderTreeStatus.ADOPT.getCode());
+                }
+                aot.setCurrentHolder(data.getApplyUser());
+                adoptOrderTreeBO.saveAdoptOrderTree(aot);
+            }
+        }
+        // 分配分红 TODO
         return identifyCode;
     }
 

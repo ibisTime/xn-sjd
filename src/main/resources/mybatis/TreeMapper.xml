@@ -5,6 +5,7 @@
 	<resultMap id="tree_DB_Result" type="tree">
 		<result column="code" property="code" />
 		<result column="product_code" property="productCode" />
+		<result column="cur_order_code" property="curOrderCode" />
 		<result column="owner_id" property="ownerId" />
 		<result column="tree_number" property="treeNumber" />
 		<result column="age" property="age" />
@@ -52,6 +53,9 @@
 			</if>
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
+			</if>			
+			<if test="curOrderCode != null and curOrderCode != '' ">
+				AND t.cur_order_code = #{curOrderCode}
 			</if>
 		</trim>
 	</sql>
@@ -60,6 +64,7 @@
 		SELECT
 		t.code
 		,t.product_code
+		,t.cur_order_code
 		,t.owner_id
 		,t.tree_number
 		,t.age
@@ -179,6 +184,22 @@
 	</update>
 
 	<update id="update_adoptTree">
+		UPDATE tzb_tree
+		SET
+		cur_order_code = #{curOrderCode}
+		,status = #{status}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_cancelTree">
+		UPDATE tzb_tree
+		SET
+		cur_order_code = #{curOrderCode}
+		,status = #{status}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_payTree">
 		UPDATE tzb_tree
 		SET
 		status = #{status}

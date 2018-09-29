@@ -94,11 +94,29 @@ public class TreeBOImpl extends PaginableBOImpl<Tree> implements ITreeBO {
     }
 
     @Override
-    public void refreshAdoptTree(String code) {
+    public void refreshAdoptTree(String code, String curOrderCode) {
+        Tree tree = new Tree();
+        tree.setCode(code);
+        tree.setCurOrderCode(curOrderCode);
+        tree.setStatus(ETreeStatus.TO_PAY.getCode());
+        treeDAO.updateAdoptTree(tree);
+    }
+
+    @Override
+    public void refreshCancelTree(String code) {
+        Tree tree = new Tree();
+        tree.setCode(code);
+        tree.setCurOrderCode(null);
+        tree.setStatus(ETreeStatus.TO_ADOPT.getCode());
+        treeDAO.updateCancelTree(tree);
+    }
+
+    @Override
+    public void refreshPayTree(String code) {
         Tree tree = new Tree();
         tree.setCode(code);
         tree.setStatus(ETreeStatus.ADOPTED.getCode());
-        treeDAO.updateAdoptTree(tree);
+        treeDAO.updatePayTree(tree);
     }
 
     @Override
@@ -144,6 +162,14 @@ public class TreeBOImpl extends PaginableBOImpl<Tree> implements ITreeBO {
     public List<Tree> queryTreeListByProduct(String productCode, String status) {
         Tree condition = new Tree();
         condition.setProductCode(productCode);
+        condition.setStatus(status);
+        return treeDAO.selectList(condition);
+    }
+
+    @Override
+    public List<Tree> queryTreeListByOrderCode(String orderCode, String status) {
+        Tree condition = new Tree();
+        condition.setCurOrderCode(orderCode);
         condition.setStatus(status);
         return treeDAO.selectList(condition);
     }
