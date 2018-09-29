@@ -157,4 +157,12 @@
 		<property name="paginableDAO" ref="settleDAOImpl"/>
 	</bean>
 	
+	<bean id="giveCarbonBubbleRecordBO" class="com.ogc.standard.bo.impl.GiveCarbonBubbleRecordBOImpl">
+		<property name="paginableDAO" ref="giveCarbonBubbleRecordDAOImpl"/>
+	</bean>
+	
+	<bean id="shareRecordBO" class="com.ogc.standard.bo.impl.ShareRecordBOImpl">
+		<property name="paginableDAO" ref="shareRecordDAOImpl"/>
+	</bean>
+	
 </beans>

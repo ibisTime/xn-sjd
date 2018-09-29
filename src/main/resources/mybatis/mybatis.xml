@@ -45,6 +45,9 @@
 		<typeAlias alias="maintainProject" type="com.ogc.standard.domain.MaintainProject"/>
 		<typeAlias alias="maintainRecord" type="com.ogc.standard.domain.MaintainRecord"/>
 		<typeAlias alias="settle" type="com.ogc.standard.domain.Settle"/>
+		<typeAlias alias="giveCarbonBubbleRecord" type="com.ogc.standard.domain.GiveCarbonBubbleRecord"/>
+		
+		<typeAlias alias="shareRecord" type="com.ogc.standard.domain.ShareRecord"/>
 		
 	</typeAliases>
 </configuration>
