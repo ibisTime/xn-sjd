@@ -35,6 +35,6 @@ public interface IAdoptOrderAO {
     public void cancelAdoptOrder(String code);
 
     // 支付订单
-    public void payAdoptOrder(String code, String payType);
+    public void payAdoptOrder(String code, String payType, String isJfDeduct);
 
 }

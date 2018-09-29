@@ -1,5 +1,6 @@
 package com.ogc.standard.bo.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -11,6 +12,7 @@ import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.IAdoptOrderTreeDAO;
 import com.ogc.standard.domain.AdoptOrderTree;
+import com.ogc.standard.enums.EAdoptOrderTreeStatus;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.exception.BizException;
 
@@ -32,14 +34,25 @@ public class AdoptOrderTreeBOImpl extends PaginableBOImpl<AdoptOrderTree>
     }
 
     @Override
-    public String saveAdoptOrderTree(AdoptOrderTree data) {
-        String code = null;
-        if (data != null) {
-            code = OrderNoGenerater.generate(EGeneratePrefix.ADOPT_ORDER_TREE
-                .getCode());
-            data.setCode(code);
-            adoptOrderTreeDAO.insert(data);
+    public String saveAdoptOrderTree(String orderCode, String treeNumber,
+            Date startDatetime, Date endDatetime, Long amount,
+            String currentHolder) {
+        AdoptOrderTree data = new AdoptOrderTree();
+        String code = OrderNoGenerater
+            .generate(EGeneratePrefix.ADOPT_ORDER_TREE.getCode());
+        data.setCode(code);
+        data.setOrderCode(orderCode);
+        data.setTreeNumber(treeNumber);
+        data.setStartDatetime(startDatetime);
+        data.setEndDatetime(endDatetime);
+        data.setAmount(amount);
+        if (new Date().getTime() < data.getStartDatetime().getTime()) {
+            data.setStatus(EAdoptOrderTreeStatus.TO_ADOPT.getCode());
+        } else {
+            data.setStatus(EAdoptOrderTreeStatus.ADOPT.getCode());
         }
+        data.setCurrentHolder(currentHolder);
+        adoptOrderTreeDAO.insert(data);
         return code;
     }
 

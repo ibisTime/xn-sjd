@@ -19,7 +19,6 @@ import com.ogc.standard.bo.ITreeBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.AmountUtil;
 import com.ogc.standard.core.StringValidater;
-import com.ogc.standard.domain.AdoptOrderTree;
 import com.ogc.standard.domain.GroupAdoptOrder;
 import com.ogc.standard.domain.Product;
 import com.ogc.standard.domain.ProductSpecs;
@@ -27,7 +26,6 @@ import com.ogc.standard.domain.Tree;
 import com.ogc.standard.dto.req.XN629050Req;
 import com.ogc.standard.dto.req.XN629051Req;
 import com.ogc.standard.enums.EAdoptOrderStatus;
-import com.ogc.standard.enums.EAdoptOrderTreeStatus;
 import com.ogc.standard.enums.EGroupAdoptOrderStatus;
 import com.ogc.standard.enums.EProductStatus;
 import com.ogc.standard.enums.ETreeStatus;
@@ -192,19 +190,10 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
                 // 更新树状态
                 treeBO.refreshPayTree(tree.getCode());
                 // 分配认养权
-                AdoptOrderTree aot = new AdoptOrderTree();
-                aot.setOrderCode(data.getCode());
-                aot.setTreeNumber(tree.getTreeNumber());
-                aot.setStartDatetime(data.getStartDatetime());
-                aot.setEndDatetime(data.getEndDatetime());
-                aot.setAmount(data.getPrice());
-                if (new Date().getTime() < data.getStartDatetime().getTime()) {
-                    aot.setStatus(EAdoptOrderTreeStatus.TO_ADOPT.getCode());
-                } else {
-                    aot.setStatus(EAdoptOrderTreeStatus.ADOPT.getCode());
-                }
-                aot.setCurrentHolder(data.getApplyUser());
-                adoptOrderTreeBO.saveAdoptOrderTree(aot);
+                adoptOrderTreeBO
+                    .saveAdoptOrderTree(data.getCode(), tree.getTreeNumber(),
+                        data.getStartDatetime(), data.getEndDatetime(),
+                        data.getPrice(), data.getApplyUser());
             }
         }
         // 分配分红 TODO

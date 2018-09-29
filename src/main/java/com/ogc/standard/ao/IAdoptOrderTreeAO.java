@@ -11,8 +11,6 @@ import com.ogc.standard.domain.AdoptOrderTree;
 public interface IAdoptOrderTreeAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
-    public String addAdoptOrderTree(AdoptOrderTree data);
-
     public int dropAdoptOrderTree(String code);
 
     public int editAdoptOrderTree(AdoptOrderTree data);

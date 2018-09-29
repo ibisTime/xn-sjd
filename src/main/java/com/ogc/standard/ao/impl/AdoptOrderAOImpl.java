@@ -18,13 +18,13 @@ import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.AmountUtil;
 import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.domain.AdoptOrder;
-import com.ogc.standard.domain.AdoptOrderTree;
 import com.ogc.standard.domain.Product;
 import com.ogc.standard.domain.ProductSpecs;
 import com.ogc.standard.domain.Tree;
 import com.ogc.standard.dto.req.XN629040Req;
 import com.ogc.standard.enums.EAdoptOrderStatus;
-import com.ogc.standard.enums.EAdoptOrderTreeStatus;
+import com.ogc.standard.enums.EBoolean;
+import com.ogc.standard.enums.EPayType;
 import com.ogc.standard.enums.EProductStatus;
 import com.ogc.standard.enums.ETreeStatus;
 import com.ogc.standard.exception.BizException;
@@ -100,18 +100,21 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
 
     @Override
     @Transactional
-    public void payAdoptOrder(String code, String payType) {
+    public void payAdoptOrder(String code, String payType, String isJfDeduct) {
         AdoptOrder data = adoptOrderBO.getAdoptOrder(code);
         if (EAdoptOrderStatus.TO_PAY.getCode().equals(data.getStatus())) {
             throw new BizException("xn0000", "订单不是待支付状态，不能支付");
         }
-        // TODO 调支付接口返回信息填充
+        if (EBoolean.YES.getCode().equals(isJfDeduct)) {// 使用积分抵扣
+            data.setJfDeductAmount(0l);
+        }
+
+        if (EPayType.BALANCE.getCode().equals(payType)) {// 余额支付
+
+        }
+        // TODO 支付宝微信银行卡
         data.setPayType(payType);
-        data.setPayGroup("");
-        data.setPayCode("");
         data.setPayAmount(0l);
-        // TODO 积分账户查询余额 抵扣 默认抵扣？选择抵扣?
-        data.setJfDeductAmount(0l);
         data.setPayDatetime(new Date());
         data.setBackJfAmount(0l);
         data.setUpdater(data.getApplyUser());
@@ -130,19 +133,10 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
                 // 更新树状态
                 treeBO.refreshPayTree(tree.getCode());
                 // 分配认养权
-                AdoptOrderTree aot = new AdoptOrderTree();
-                aot.setOrderCode(data.getCode());
-                aot.setTreeNumber(tree.getTreeNumber());
-                aot.setStartDatetime(data.getStartDatetime());
-                aot.setEndDatetime(data.getEndDatetime());
-                aot.setAmount(data.getPrice());
-                if (new Date().getTime() < data.getStartDatetime().getTime()) {
-                    aot.setStatus(EAdoptOrderTreeStatus.TO_ADOPT.getCode());
-                } else {
-                    aot.setStatus(EAdoptOrderTreeStatus.ADOPT.getCode());
-                }
-                aot.setCurrentHolder(data.getApplyUser());
-                adoptOrderTreeBO.saveAdoptOrderTree(aot);
+                adoptOrderTreeBO
+                    .saveAdoptOrderTree(data.getCode(), tree.getTreeNumber(),
+                        data.getStartDatetime(), data.getEndDatetime(),
+                        data.getPrice(), data.getApplyUser());
             }
         }
         // 分配分红 TODO

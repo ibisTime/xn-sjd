@@ -57,11 +57,6 @@ public class AdoptOrderTreeAOImpl implements IAdoptOrderTreeAO {
     }
 
     @Override
-    public String addAdoptOrderTree(AdoptOrderTree data) {
-        return adoptOrderTreeBO.saveAdoptOrderTree(data);
-    }
-
-    @Override
     public int editAdoptOrderTree(AdoptOrderTree data) {
         if (!adoptOrderTreeBO.isAdoptOrderTreeExist(data.getCode())) {
             throw new BizException("xn0000", "记录编号不存在");
