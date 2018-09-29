@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.IAdoptOrderAO;
+import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IAdoptOrderBO;
 import com.ogc.standard.bo.IAdoptOrderTreeBO;
 import com.ogc.standard.bo.IProductBO;
@@ -17,6 +18,7 @@ import com.ogc.standard.bo.ITreeBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.AmountUtil;
 import com.ogc.standard.core.StringValidater;
+import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.AdoptOrder;
 import com.ogc.standard.domain.Product;
 import com.ogc.standard.domain.ProductSpecs;
@@ -24,6 +26,7 @@ import com.ogc.standard.domain.Tree;
 import com.ogc.standard.dto.req.XN629040Req;
 import com.ogc.standard.enums.EAdoptOrderStatus;
 import com.ogc.standard.enums.EBoolean;
+import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EPayType;
 import com.ogc.standard.enums.EProductStatus;
 import com.ogc.standard.enums.ETreeStatus;
@@ -46,6 +49,9 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
 
     @Autowired
     private IAdoptOrderTreeBO adoptOrderTreeBO;
+
+    @Autowired
+    private IAccountBO accountBO;
 
     @Override
     public String addAdoptOrder(XN629040Req req) {
@@ -106,6 +112,11 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
             throw new BizException("xn0000", "订单不是待支付状态，不能支付");
         }
         if (EBoolean.YES.getCode().equals(isJfDeduct)) {// 使用积分抵扣
+            Account account = accountBO.getAccountByUser(data.getApplyUser(),
+                ECurrency.JF.getCode());
+            // accountBO.changeAmount(account, account.getAmount(),
+            // EPayType.BALANCE.getCode(), null, data.getCode(),
+            // ECustomerJFAccountBizType.COLLECTIVE.getCode(), null);
             data.setJfDeductAmount(0l);
         }
 

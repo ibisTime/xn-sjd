@@ -36,7 +36,7 @@ public class AccountAOImpl implements IAccountAO {
         Map<String, ECurrency> currencyMap = ECurrency.getCurrencyMap();
 
         for (Map.Entry<String, ECurrency> currency : currencyMap.entrySet()) {
-            accountBO.distributeAccount(userId, EAccountType.Customer,
+            accountBO.distributeAccount(userId, EAccountType.CUSTOMER,
                 currency.getKey());
         }
     }
@@ -115,8 +115,8 @@ public class AccountAOImpl implements IAccountAO {
             BigDecimal freezeAmount, String bizType, String bizNote,
             String refNo) {
         Account dbAccount = accountBO.getAccountByUser(userId, currency);
-        return accountBO.frozenAmount(dbAccount, freezeAmount, bizType, bizNote,
-            refNo);
+        return accountBO.frozenAmount(dbAccount, freezeAmount, bizType,
+            bizNote, refNo);
     }
 
     @Override

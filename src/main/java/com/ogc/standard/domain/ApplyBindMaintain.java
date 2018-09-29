@@ -35,6 +35,14 @@ public class ApplyBindMaintain extends ABaseDO {
     // 备注
     private String remark;
 
+    /****************DB properties********/
+
+    /*************辅助字段**********/
+
+    private SYSUser ownerUser; // 产权方用户
+
+    private SYSUser maintainUser;// 养护方用户
+
     public void setCode(String code) {
         this.code = code;
     }
@@ -89,6 +97,22 @@ public class ApplyBindMaintain extends ABaseDO {
 
     public String getRemark() {
         return remark;
+    }
+
+    public SYSUser getOwnerUser() {
+        return ownerUser;
+    }
+
+    public void setOwnerUser(SYSUser ownerUser) {
+        this.ownerUser = ownerUser;
+    }
+
+    public SYSUser getMaintainUser() {
+        return maintainUser;
+    }
+
+    public void setMaintainUser(SYSUser maintainUser) {
+        this.maintainUser = maintainUser;
     }
 
 }

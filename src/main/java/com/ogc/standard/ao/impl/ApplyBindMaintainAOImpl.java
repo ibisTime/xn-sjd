@@ -3,13 +3,18 @@ package com.ogc.standard.ao.impl;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ogc.standard.ao.IApplyBindMaintainAO;
 import com.ogc.standard.bo.IApplyBindMaintainBO;
+import com.ogc.standard.bo.ICompanyBO;
+import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.ApplyBindMaintain;
+import com.ogc.standard.domain.Company;
+import com.ogc.standard.domain.SYSUser;
 import com.ogc.standard.dto.req.XN629600Req;
 import com.ogc.standard.dto.req.XN629601Req;
 import com.ogc.standard.dto.req.XN629602Req;
@@ -22,6 +27,12 @@ public class ApplyBindMaintainAOImpl implements IApplyBindMaintainAO {
 
     @Autowired
     private IApplyBindMaintainBO applyBindMaintainBO;
+
+    @Autowired
+    private ISYSUserBO sysUserBO;
+
+    @Autowired
+    private ICompanyBO companyBO;
 
     @Override
     public String addApplyBindMaintain(XN629600Req req) {
@@ -64,7 +75,13 @@ public class ApplyBindMaintainAOImpl implements IApplyBindMaintainAO {
     @Override
     public Paginable<ApplyBindMaintain> queryApplyBindMaintainPage(int start,
             int limit, ApplyBindMaintain condition) {
-        return applyBindMaintainBO.getPaginable(start, limit, condition);
+        Paginable<ApplyBindMaintain> paginable = applyBindMaintainBO
+            .getPaginable(start, limit, condition);
+        List<ApplyBindMaintain> list = paginable.getList();
+        for (ApplyBindMaintain data : list) {
+            init(data);
+        }
+        return paginable;
     }
 
     @Override
@@ -91,5 +108,24 @@ public class ApplyBindMaintainAOImpl implements IApplyBindMaintainAO {
         data.setUpdateDatetime(new Date());
         data.setRemark(req.getRemark());
         applyBindMaintainBO.approveApplyBindMaintain(data);
+    }
+
+    public void init(ApplyBindMaintain data) {
+        // 产权方用户
+        SYSUser ownerUser = sysUserBO.getSYSUser(data.getOwnerId());
+        data.setOwnerUser(ownerUser);
+        if (StringUtils.isNotBlank(ownerUser.getCompanyCode())) {
+            Company ownerCompany = companyBO.getCompany(ownerUser
+                .getCompanyCode());
+            ownerUser.setCompany(ownerCompany);
+        }
+        // 养护方用户
+        SYSUser maintainUser = sysUserBO.getSYSUser(data.getMaintainId());
+        data.setMaintainUser(maintainUser);
+        if (StringUtils.isNotBlank(maintainUser.getCompanyCode())) {
+            Company maintainCompany = companyBO.getCompany(maintainUser
+                .getCompanyCode());
+            ownerUser.setCompany(maintainCompany);
+        }
     }
 }

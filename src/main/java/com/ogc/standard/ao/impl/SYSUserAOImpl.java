@@ -141,6 +141,10 @@ public class SYSUserAOImpl implements ISYSUserAO {
         data.setStatus(ESYSUserStatus.TO_APPROVE.getCode());// 代注册的也是待审核？
         data.setRemark(remark);
         sysUserBO.doSaveSYSuser(data);
+        // 生成待填写的公司
+        Company company = new Company();
+        company.setUserId(userId);
+        companyBO.saveCompany(company);
         return userId;
     }
 

@@ -12,9 +12,7 @@ import com.ogc.standard.bo.IBizLogBO;
 import com.ogc.standard.bo.IGiveTreeRecordBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.AdoptOrderTree;
-import com.ogc.standard.domain.BizLog;
 import com.ogc.standard.domain.GiveTreeRecord;
-import com.ogc.standard.enums.EBizLogType;
 import com.ogc.standard.exception.BizException;
 
 @Service
@@ -42,18 +40,6 @@ public class AdoptOrderTreeAOImpl implements IAdoptOrderTreeAO {
         record.setToUserId(toUserId);
         record.setCreateDatetime(new Date());
         giveTreeRecordBO.saveGiveTreeRecord(record);
-    }
-
-    @Override
-    public void share(String code, String userId, String channel) {
-        // 日志
-        BizLog data = new BizLog();
-        data.setAdoptTreeCode(code);
-        data.setType(EBizLogType.SHARE.getCode());
-        data.setNote(channel);
-        data.setUserId(userId);
-        data.setCreateDatetime(new Date());
-        bizLogBO.saveBizLog(data);
     }
 
     @Override

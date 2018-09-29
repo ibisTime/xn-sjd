@@ -44,7 +44,6 @@ public class CompanyAOImpl implements ICompanyAO {
         data.setName(req.getCompanyName());
         data.setContractTemplate(req.getContractTemplate());
         data.setDescription(req.getDescription());
-        data.setUserId(req.getUserId());
         data.setUpdateDatetime(new Date());
         data.setUpdater(req.getUserId());
         return companyBO.refreshCompany(data);

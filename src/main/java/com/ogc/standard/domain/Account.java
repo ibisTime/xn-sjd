@@ -22,13 +22,10 @@ public class Account extends ABaseDO {
     // 用户编号
     private String userId;
 
-    // 币种
+    // 币种（CNY人民币TPP碳泡泡JF积分）
     private String currency;
 
-    // 区块链地址
-    private String address;
-
-    // 类别（C端账号/B端账号/P平台账号）
+    // 类别（C端账号O产权方账号M养护方账号A代理商账号P平台账号）
     private String type;
 
     // 状态（0正常/1程序冻结/2人工冻结）
@@ -94,14 +91,6 @@ public class Account extends ABaseDO {
 
     public void setCurrency(String currency) {
         this.currency = currency;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
     }
 
     public String getType() {

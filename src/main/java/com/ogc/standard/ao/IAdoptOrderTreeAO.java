@@ -25,7 +25,4 @@ public interface IAdoptOrderTreeAO {
     // 赠送树
     public void giveTree(String code, String toUserId, String userId);
 
-    // 分享
-    public void share(String code, String userId, String channel);
-
 }
