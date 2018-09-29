@@ -3,6 +3,7 @@ package com.ogc.standard.ao.impl;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,8 @@ import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.User;
+import com.ogc.standard.enums.EAccountType;
+import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.ESysUser;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
@@ -30,7 +33,12 @@ public class AccountAOImpl implements IAccountAO {
     @Override
     @Transactional
     public void distributeAccount(String userId) {
+        Map<String, ECurrency> currencyMap = ECurrency.getCurrencyMap();
 
+        for (Map.Entry<String, ECurrency> currency : currencyMap.entrySet()) {
+            accountBO.distributeAccount(userId, EAccountType.Customer,
+                currency.getKey());
+        }
     }
 
     @Override

@@ -19,7 +19,7 @@ import com.ogc.standard.exception.BizException;
  * @history:
  */
 public enum ECurrency {
-    CNY("CNY", "人民币"), USD("USD", "美元"), HKD("HKD", "港币");
+    CNY("CNY", "人民币"), TPP("TPP", "碳泡泡"), JF("JF", "积分");
 
     public static Map<String, ECurrency> getCurrencyMap() {
         Map<String, ECurrency> map = new HashMap<String, ECurrency>();

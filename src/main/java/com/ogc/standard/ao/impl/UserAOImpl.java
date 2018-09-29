@@ -90,8 +90,8 @@ public class UserAOImpl implements IUserAO {
         userBO.isMobileExist(req.getMobile());
 
         // 验证短信验证码
-        smsOutBO.checkCaptcha(req.getMobile(), req.getSmsCaptcha(),
-            ECaptchaType.C_REG.getCode());
+         smsOutBO.checkCaptcha(req.getMobile(), req.getSmsCaptcha(),
+         ECaptchaType.C_REG.getCode());
 
         User refereeUser = userBO.getUserByMobile(req.getUserReferee());
         User agentUser = userBO.getUserByMobile(req.getAgent());

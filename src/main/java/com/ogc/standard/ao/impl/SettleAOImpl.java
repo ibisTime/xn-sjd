@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.ISettleAO;
+import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.ISettleBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Settle;
@@ -18,6 +19,9 @@ public class SettleAOImpl implements ISettleAO {
 
     @Autowired
     private ISettleBO settleBO;
+
+    @Autowired
+    private IAccountBO accountBO;
 
     @Override
     @Transactional
