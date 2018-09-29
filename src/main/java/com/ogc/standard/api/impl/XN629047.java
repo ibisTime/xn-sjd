@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.ogc.standard.ao.IAdoptOrderAO;
 import com.ogc.standard.api.AProcessor;
+import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.ObjValidater;
 import com.ogc.standard.domain.AdoptOrder;
@@ -31,6 +32,14 @@ public class XN629047 extends AProcessor {
         condition.setProductCode(req.getProductCode());
         condition.setProductSpecsName(req.getProductSpecsName());
         condition.setStatus(req.getStatus());
+        condition.setStartDatetimeStart(DateUtil.strToDate(
+            req.getStartDatetimeStart(), DateUtil.DATA_TIME_PATTERN_1));
+        condition.setStartDatetimeEnd(DateUtil.strToDate(
+            req.getStartDatetimeEnd(), DateUtil.DATA_TIME_PATTERN_1));
+        condition.setEndDatetimeStart(DateUtil.strToDate(
+            req.getEndDatetimeStart(), DateUtil.DATA_TIME_PATTERN_1));
+        condition.setEndDatetimeEnd(DateUtil.strToDate(req.getEndDatetimeEnd(),
+            DateUtil.DATA_TIME_PATTERN_1));
 
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {

@@ -13,7 +13,11 @@ import com.ogc.standard.dto.req.XN629051Req;
 public interface IGroupAdoptOrderAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
-    public String addGroupAdoptOrder(XN629050Req req);
+    // 第一人下单
+    public String firstAddGroupAdoptOrder(XN629050Req req);
+
+    // 非第一人下单
+    public String unFirstAddGroupAdoptOrder(XN629051Req req);
 
     public int dropGroupAdoptOrder(String code);
 
@@ -27,8 +31,10 @@ public interface IGroupAdoptOrderAO {
 
     public GroupAdoptOrder getGroupAdoptOrder(String code);
 
-    public String unFirstAddGroupAdoptOrder(XN629051Req req);
-
+    // 取消订单
     public void cancelGroupAdoptOrder(String code);
+
+    // 支付订单
+    public String payGroupAdoptOrder(String code, String type);
 
 }

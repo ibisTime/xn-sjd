@@ -23,7 +23,7 @@ public class XN629042 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        adoptOrderAO.payAdoptOrder(req.getCode());
+        adoptOrderAO.payAdoptOrder(req.getCode(), req.getPayType());
         return new Boolean(true);
     }
 

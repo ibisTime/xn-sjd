@@ -41,14 +41,17 @@
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
 			</if>
-			<if test="startDatetime != null and startDatetime != '' ">
-				AND t.start_datetime = #{startDatetime}
+			<if test="startDatetimeStart != null and startDatetimeStart != '' ">
+				<![CDATA[AND t.start_datetime >= #{startDatetimeStart}]]>
 			</if>
-			<if test="endDatetime != null and endDatetime != '' ">
-				AND t.end_datetime = #{endDatetime}
+			<if test="startDatetimeEnd != null and startDatetimeEnd != '' ">
+				<![CDATA[AND t.start_datetime <= #{startDatetimeEnd}]]>
 			</if>
-			<if test="applyDatetime != null and applyDatetime != '' ">
-				AND t.apply_datetime = #{applyDatetime}
+			<if test="endDatetimeStart != null and endDatetimeStart != '' ">
+				<![CDATA[AND t.end_datetime >= #{endDatetimeStart}]]>
+			</if>
+			<if test="endDatetimeEnd != null and endDatetimeEnd != '' ">
+				<![CDATA[AND t.end_datetime <= #{endDatetimeEnd}]]>
 			</if>
 		</trim>
 	</sql>
@@ -109,16 +112,6 @@
 		,apply_user
 		,apply_datetime
 		,status
-		,pay_type
-		,pay_group
-		,pay_code
-		,pay_amount
-		,jf_deduct_amount
-		,pay_datetime
-		,back_jf_amount
-		,updater
-		,update_datetime
-		,remark
 		)
 		VALUES(
 		#{code}
@@ -134,16 +127,72 @@
 		,#{applyUser}
 		,#{applyDatetime}
 		,#{status}
-		,#{payType}
-		,#{payGroup}
-		,#{payCode}
-		,#{payAmount}
-		,#{jfDeductAmount}
-		,#{payDatetime}
-		,#{backJfAmount}
-		,#{updater}
-		,#{updateDatetime}
-		,#{remark}
+		)
+	</insert>
+	
+	<insert id="insert_firstGroupAdoptOrder" parameterType="groupAdoptOrder">
+		INSERT INTO
+		try_group_adopt_order(
+		code
+		product_code
+		,product_specs_name
+		,price
+		,year
+		,start_datetime
+		,end_datetime
+		,quantity
+		,amount
+		,apply_user
+		,apply_datetime
+		,status
+		)
+		VALUES(
+		#{code}
+		,#{productCode}
+		,#{productSpecsName}
+		,#{price}
+		,#{year}
+		,#{startDatetime}
+		,#{endDatetime}
+		,#{quantity}
+		,#{amount}
+		,#{applyUser}
+		,#{applyDatetime}
+		,#{status}
+		)
+	</insert>
+	
+	<insert id="insert_unFirstgroupAdoptOrder" parameterType="groupAdoptOrder">
+		INSERT INTO
+		try_group_adopt_order(
+		code
+		,identify_code
+		,product_code
+		,product_specs_name
+		,price
+		,year
+		,start_datetime
+		,end_datetime
+		,quantity
+		,amount
+		,apply_user
+		,apply_datetime
+		,status
+		)
+		VALUES(
+		#{code}
+		,#{identifyCode}
+		,#{productCode}
+		,#{productSpecsName}
+		,#{price}
+		,#{year}
+		,#{startDatetime}
+		,#{endDatetime}
+		,#{quantity}
+		,#{amount}
+		,#{applyUser}
+		,#{applyDatetime}
+		,#{status}
 		)
 	</insert>
 
@@ -162,6 +211,32 @@
 		,apply_user = #{applyUser}
 		,apply_datetime = #{applyDatetime}
 		,status = #{status}
+		,pay_type = #{payType}
+		,pay_group = #{payGroup}
+		,pay_code = #{payCode}
+		,pay_amount = #{payAmount}
+		,jf_deduct_amount = #{jfDeductAmount}
+		,pay_datetime = #{payDatetime}
+		,back_jf_amount = #{backJfAmount}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_cancelGroupAdoptOrder" parameterType="groupAdoptOrder">
+		UPDATE try_group_adopt_order
+		SET
+		status = #{status}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		WHERE code = #{code}
+	</update>
+
+	<update id="update_payGroupAdoptOrder" parameterType="groupAdoptOrder">
+		UPDATE try_group_adopt_order
+		SET
+		status = #{status}
 		,pay_type = #{payType}
 		,pay_group = #{payGroup}
 		,pay_code = #{payCode}

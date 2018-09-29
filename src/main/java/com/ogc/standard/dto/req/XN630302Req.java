@@ -1,68 +1,117 @@
-/**
- * @Title XN630302Req.java 
- * @Package com.ogc.standard.dto.req 
- * @Description 
- * @author dl  
- * @date 2018年8月17日 下午6:58:38 
- * @version V1.0   
- */
 package com.ogc.standard.dto.req;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-/** 
+/**
  * 修改公司
- * @author: tao 
- * @since: 2018年8月17日 下午6:58:38 
+ * @author: jiafr 
+ * @since: 2018年9月29日 上午10:18:03 
  * @history:
  */
 public class XN630302Req {
 
-    // 公司编号
+    // 营业执照
+    private String bussinessLicense;
+
+    // 证书模板
+    private String certificateTemplate;
+
+    // 负责人联系方式
     @NotBlank
-    private String code;
+    private String chargerMobile;
+
+    // 公司地址
+    @NotBlank
+    private String companyAddress;
+
+    // 公司负责人
+    @NotBlank
+    private String companyCharger;
 
     // 公司名称
     @NotBlank
-    private String name;
+    private String companyName;
 
-    // 更新人
+    // 合同模板
+    private String contractTemplate;
+
+    // 描述
     @NotBlank
-    private String updater;
+    private String description;
 
-    // 备注
-    private String remark;
+    // 用户编号
+    @NotBlank
+    private String userId;
 
-    public String getRemark() {
-        return remark;
+    public String getBussinessLicense() {
+        return bussinessLicense;
     }
 
-    public void setRemark(String remark) {
-        this.remark = remark;
+    public void setBussinessLicense(String bussinessLicense) {
+        this.bussinessLicense = bussinessLicense;
     }
 
-    public String getCode() {
-        return code;
+    public String getCertificateTemplate() {
+        return certificateTemplate;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setCertificateTemplate(String certificateTemplate) {
+        this.certificateTemplate = certificateTemplate;
     }
 
-    public String getName() {
-        return name;
+    public String getChargerMobile() {
+        return chargerMobile;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setChargerMobile(String chargerMobile) {
+        this.chargerMobile = chargerMobile;
     }
 
-    public String getUpdater() {
-        return updater;
+    public String getCompanyAddress() {
+        return companyAddress;
     }
 
-    public void setUpdater(String updater) {
-        this.updater = updater;
+    public void setCompanyAddress(String companyAddress) {
+        this.companyAddress = companyAddress;
     }
 
+    public String getCompanyCharger() {
+        return companyCharger;
+    }
+
+    public void setCompanyCharger(String companyCharger) {
+        this.companyCharger = companyCharger;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getContractTemplate() {
+        return contractTemplate;
+    }
+
+    public void setContractTemplate(String contractTemplate) {
+        this.contractTemplate = contractTemplate;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 }

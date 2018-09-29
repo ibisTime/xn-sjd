@@ -31,13 +31,14 @@ public class XN629057 extends AProcessor {
         condition.setProductCode(req.getProductCode());
         condition.setProductSpecsName(req.getProductSpecsName());
         condition.setStatus(req.getStatus());
-        condition.setStartDatetime(DateUtil.strToDate(req.getStartDatetime(),
-            DateUtil.DATA_TIME_PATTERN_1));
-        condition.setEndDatetime(DateUtil.strToDate(req.getEndDatetime(),
-            DateUtil.DATA_TIME_PATTERN_1));
-
-        condition.setApplyDatetime(DateUtil.strToDate(req.getApplyDatetime(),
-            DateUtil.DATA_TIME_PATTERN_1));
+        condition.setStartDatetimeStart(DateUtil.strToDate(
+            req.getStartDatetimeStart(), DateUtil.DATA_TIME_PATTERN_1));
+        condition.setStartDatetimeStart(DateUtil.strToDate(
+            req.getStartDatetimeEnd(), DateUtil.DATA_TIME_PATTERN_1));
+        condition.setEndDatetimeStart(DateUtil.strToDate(
+            req.getEndDatetimeStart(), DateUtil.DATA_TIME_PATTERN_1));
+        condition.setEndDatetimeStart(DateUtil.strToDate(
+            req.getEndDatetimeEnd(), DateUtil.DATA_TIME_PATTERN_1));
 
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {

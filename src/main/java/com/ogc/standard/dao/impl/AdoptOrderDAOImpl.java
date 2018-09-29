@@ -49,8 +49,17 @@ public class AdoptOrderDAOImpl extends AMybatisTemplate implements
 
     @Override
     public int update(AdoptOrder data) {
-        // TODO Auto-generated method stub
-        return 0;
+        return super.update(NAMESPACE.concat("update_adoptOrder"), data);
+    }
+
+    @Override
+    public void updateCancelAdoptOrder(AdoptOrder data) {
+        super.update(NAMESPACE.concat("update_cancelAdoptOrder"), data);
+    }
+
+    @Override
+    public void updatepayAdoptOrder(AdoptOrder data) {
+        super.update(NAMESPACE.concat("update_payAdoptOrder"), data);
     }
 
 }

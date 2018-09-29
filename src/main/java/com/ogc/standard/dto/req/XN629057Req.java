@@ -19,14 +19,17 @@ public class XN629057Req extends AListReq {
     // 状态
     private String status;
 
-    // 认养开始时间
-    private String startDatetime;
+    // 认养开始时间起
+    private String startDatetimeStart;
 
-    // 认养结束时间
-    private String endDatetime;
+    // 认养开始时间止
+    private String startDatetimeEnd;
 
-    // 下单时间
-    private String applyDatetime;
+    // 认养结束时间起
+    private String endDatetimeStart;
+
+    // 认养结束时间止
+    private String endDatetimeEnd;
 
     public String getProductCode() {
         return productCode;
@@ -52,28 +55,36 @@ public class XN629057Req extends AListReq {
         this.status = status;
     }
 
-    public String getStartDatetime() {
-        return startDatetime;
+    public String getStartDatetimeStart() {
+        return startDatetimeStart;
     }
 
-    public void setStartDatetime(String startDatetime) {
-        this.startDatetime = startDatetime;
+    public void setStartDatetimeStart(String startDatetimeStart) {
+        this.startDatetimeStart = startDatetimeStart;
     }
 
-    public String getEndDatetime() {
-        return endDatetime;
+    public String getStartDatetimeEnd() {
+        return startDatetimeEnd;
     }
 
-    public void setEndDatetime(String endDatetime) {
-        this.endDatetime = endDatetime;
+    public void setStartDatetimeEnd(String startDatetimeEnd) {
+        this.startDatetimeEnd = startDatetimeEnd;
     }
 
-    public String getApplyDatetime() {
-        return applyDatetime;
+    public String getEndDatetimeStart() {
+        return endDatetimeStart;
     }
 
-    public void setApplyDatetime(String applyDatetime) {
-        this.applyDatetime = applyDatetime;
+    public void setEndDatetimeStart(String endDatetimeStart) {
+        this.endDatetimeStart = endDatetimeStart;
+    }
+
+    public String getEndDatetimeEnd() {
+        return endDatetimeEnd;
+    }
+
+    public void setEndDatetimeEnd(String endDatetimeEnd) {
+        this.endDatetimeEnd = endDatetimeEnd;
     }
 
 }

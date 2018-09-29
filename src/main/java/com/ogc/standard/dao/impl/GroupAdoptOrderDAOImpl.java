@@ -18,6 +18,18 @@ public class GroupAdoptOrderDAOImpl extends AMybatisTemplate implements
     }
 
     @Override
+    public int insertFirst(GroupAdoptOrder data) {
+        return super.insert(NAMESPACE.concat("insert_firstGroupAdoptOrder"),
+            data);
+    }
+
+    @Override
+    public int insertUnFirst(GroupAdoptOrder data) {
+        return super.insert(NAMESPACE.concat("insert_unFirstgroupAdoptOrder"),
+            data);
+    }
+
+    @Override
     public int delete(GroupAdoptOrder data) {
         return super.delete(NAMESPACE.concat("delete_groupAdoptOrder"), data);
     }
@@ -50,6 +62,16 @@ public class GroupAdoptOrderDAOImpl extends AMybatisTemplate implements
     @Override
     public int update(GroupAdoptOrder data) {
         return super.update(NAMESPACE.concat("update_groupAdoptOrder"), data);
+    }
+
+    @Override
+    public void updateCancelGroupAdoptOrder(GroupAdoptOrder data) {
+        super.update(NAMESPACE.concat("update_cancelGroupAdoptOrder"), data);
+    }
+
+    @Override
+    public void updatePayGroupAdoptOrder(GroupAdoptOrder data) {
+        super.update(NAMESPACE.concat("update_payGroupAdoptOrder"), data);
     }
 
 }

@@ -44,6 +44,18 @@
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
 			</if>
+			<if test="startDatetimeStart != null and startDatetimeStart != '' ">
+				<![CDATA[AND t.start_datetime >= #{startDatetimeStart}]]>
+			</if>
+			<if test="startDatetimeEnd != null and startDatetimeEnd != '' ">
+				<![CDATA[AND t.start_datetime <= #{startDatetimeEnd}]]>
+			</if>
+			<if test="endDatetimeStart != null and endDatetimeStart != '' ">
+				<![CDATA[AND t.end_datetime >= #{endDatetimeStart}]]>
+			</if>
+			<if test="endDatetimeEnd != null and endDatetimeEnd != '' ">
+				<![CDATA[AND t.end_datetime <= #{endDatetimeEnd}]]>
+			</if>
 		</trim>
 	</sql>
 	<select id="select_adoptOrder" parameterType="adoptOrder" resultMap="adoptOrder_DB_Result">
@@ -103,16 +115,6 @@
 		,apply_user
 		,apply_datetime
 		,status
-		,pay_type
-		,pay_group
-		,pay_code
-		,pay_amount
-		,jf_deduct_amount
-		,pay_datetime
-		,back_jf_amount
-		,updater
-		,update_datetime
-		,remark
 		)
 		VALUES(
 		#{code}
@@ -128,16 +130,6 @@
 		,#{applyUser}
 		,#{applyDatetime}
 		,#{status}
-		,#{payType}
-		,#{payGroup}
-		,#{payCode}
-		,#{payAmount}
-		,#{jfDeductAmount}
-		,#{payDatetime}
-		,#{backJfAmount}
-		,#{updater}
-		,#{updateDatetime}
-		,#{remark}
 		)
 	</insert>
 
@@ -168,6 +160,32 @@
 		,remark = #{remark}
 		WHERE code = #{code}
 	</update>
-
-
+	
+		
+	<update id="update_cancelAdoptOrder" parameterType="adoptOrder">
+		UPDATE try_adopt_order
+		SET
+		status = #{status}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_payAdoptOrder" parameterType="adoptOrder">
+		UPDATE try_adopt_order
+		SET
+		status = #{status}
+		,pay_type = #{payType}
+		,pay_group = #{payGroup}
+		,pay_code = #{payCode}
+		,pay_amount = #{payAmount}
+		,jf_deduct_amount = #{jfDeductAmount}
+		,pay_datetime = #{payDatetime}
+		,back_jf_amount = #{backJfAmount}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+	
 </mapper>
