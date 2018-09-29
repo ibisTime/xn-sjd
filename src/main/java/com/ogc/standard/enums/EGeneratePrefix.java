@@ -24,7 +24,7 @@ public enum EGeneratePrefix {
     Category("C", "产品类型"), Product("P", "认养产品"), ProductSpec("PS", "产品规格"), Tree(
             "T", "古树"), Maintainer("M","养护人"), MaintainProject("MP","养护项目"), MaintainRecord("MR","养护记录"),
     
-    Settle("S","结算订单");
+    Settle("S","结算订单"), GiveCarbonBubbleRecord("GCBR","赠送碳泡泡记录"), ShareRecord("SR","分享记录");
 
     public static Map<String, EGeneratePrefix> getMap() {
         Map<String, EGeneratePrefix> map = new HashMap<String, EGeneratePrefix>();
