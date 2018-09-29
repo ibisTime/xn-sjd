@@ -53,6 +53,9 @@
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
 			</if>
+			<if test="location != null and location != '' ">
+				AND t.location = #{location}
+			</if>
 			
 			<if test="raiseStartStartDatetime != null and raiseStartStartDatetime != '' ">
 				<![CDATA[AND t.raise_start_datetime >= #{raiseStartStartDatetime}]]>

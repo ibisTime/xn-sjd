@@ -34,6 +34,7 @@ public class XN629025 extends AProcessor {
         condition.setCategoryCode(req.getCategoryCode());
         condition.setOwnerId(req.getOwnerId());
         condition.setSellType(req.getSellType());
+        condition.setLocation(req.getLocation());
         condition.setStatus(req.getStatus());
 
         condition.setRaiseStartStartDatetime(DateUtil.strToDate(

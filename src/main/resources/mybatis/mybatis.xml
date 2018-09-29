@@ -40,5 +40,10 @@
 		<typeAlias alias="tree" type="com.ogc.standard.domain.Tree"/>
 		<typeAlias alias="productSpecs" type="com.ogc.standard.domain.ProductSpecs"/>
 		<typeAlias alias="agentUser" type="com.ogc.standard.domain.AgentUser"/>
+		
+		<typeAlias alias="maintainer" type="com.ogc.standard.domain.Maintainer"/>
+		<typeAlias alias="maintainProject" type="com.ogc.standard.domain.MaintainProject"/>
+		<typeAlias alias="maintainRecord" type="com.ogc.standard.domain.MaintainRecord"/>
+		
 	</typeAliases>
 </configuration>

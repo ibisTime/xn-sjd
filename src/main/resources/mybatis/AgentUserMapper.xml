@@ -161,6 +161,7 @@
 		UPDATE tsys_agent_user
 		SET
 		mobile = #{mobile}
+		,login_name = #{loginName}
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
 		,remark = #{remark}
