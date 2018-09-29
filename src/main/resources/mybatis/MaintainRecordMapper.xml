@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ogc.standard.dao.IMaintainRecordDAO">
+	<resultMap id="maintainRecord_DB_Result" type="maintainRecord">
+		<result column="code" property="code" />
+		<result column="tree_number" property="treeNumber" />
+		<result column="project_code" property="projectCode" />
+		<result column="project_name" property="projectName" />
+		<result column="maintainer_code" property="maintainerCode" />
+		
+		<result column="maintainer_name" property="maintainerName" />
+		<result column="pic" property="pic" />
+		<result column="description" property="description" />
+		<result column="updater" property="updater" />
+		<result column="update_datetime" property="updateDatetime" />
+		
+		<result column="remark" property="remark" />
+	</resultMap>
+	
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="treeNumber != null and treeNumber != '' ">
+				AND t.tree_number = #{treeNumber}
+			</if>
+			<if test="projectCode != null and projectCode != '' ">
+				AND t.project_code = #{projectCode}
+			</if>
+			<if test="maintainerCode != null and maintainerCode != '' ">
+				AND t.maintainer_code = #{maintainerCode}
+			</if>
+		</trim>
+	</sql>
+	
+	<select id="select_maintainRecord" parameterType="maintainRecord" resultMap="maintainRecord_DB_Result">
+		SELECT
+		t.code
+		,t.tree_number
+		,t.project_code
+		,t.project_name
+		,t.maintainer_code
+		
+		,t.maintainer_name
+		,t.pic
+		,t.description
+		,t.updater
+		,t.update_datetime
+		,t.remark
+		FROM
+		tsys_maintain_record t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_maintainRecord_count" parameterType="maintainRecord"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tsys_maintain_record t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_maintainRecord" parameterType="maintainRecord">
+		INSERT INTO
+		tsys_maintain_record(
+		code
+		,tree_number
+		,project_code
+		,project_name
+		,maintainer_code
+		
+		,maintainer_name
+		,pic
+		,description
+		,updater
+		,update_datetime
+		,remark
+		)
+		VALUES(
+		#{code}
+		,#{treeNumber}
+		,#{projectCode}
+		,#{projectName}
+		,#{maintainerCode}
+		
+		,#{maintainerName}
+		,#{pic}
+		,#{description}
+		,#{updater}
+		,#{updateDatetime}
+		,#{remark}
+		)
+	</insert>
+
+	<update id="update_maintainRecord" parameterType="maintainRecord">
+		UPDATE tsys_maintain_record
+		SET
+		pic = #{pic}
+		,description = #{description}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+
+	<delete id="delete_maintainRecord">
+		DELETE FROM tsys_maintain_record where code = #{code}
+	</delete>
+
+</mapper>

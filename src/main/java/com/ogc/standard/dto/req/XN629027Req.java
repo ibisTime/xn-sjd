@@ -19,6 +19,9 @@ public class XN629027Req extends AListReq {
     // 产权方编号
     private String ownerId;
 
+    // UI位置
+    private String location;
+
     // 产品分类
     private String categoryCode;
 
@@ -63,6 +66,14 @@ public class XN629027Req extends AListReq {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
 }

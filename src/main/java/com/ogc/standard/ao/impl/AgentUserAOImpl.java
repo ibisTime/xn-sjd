@@ -46,7 +46,7 @@ public class AgentUserAOImpl implements IAgentUserAO {
         agentUserBO.isMobileExist(mobile);
 
         // 短信验证码是否正确
-        smsOutBO.checkCaptcha(mobile, smsCaptcha, "730070");
+        // smsOutBO.checkCaptcha(mobile, smsCaptcha, "730070");
 
         // 注册用户
         String userId = agentUserBO.doRegister(mobile, loginPwd);
@@ -164,7 +164,7 @@ public class AgentUserAOImpl implements IAgentUserAO {
         agentUserBO.isMobileExist(newMobile);
 
         // 短信验证码是否正确（往新手机号发送）
-        smsOutBO.checkCaptcha(newMobile, smsCaptcha, "730075");
+        // smsOutBO.checkCaptcha(newMobile, smsCaptcha, "730075");
 
         // 修改手机号
         agentUserBO.refreshMobile(userId, newMobile);
@@ -226,7 +226,7 @@ public class AgentUserAOImpl implements IAgentUserAO {
         }
 
         // 短信验证码是否正确
-        smsOutBO.checkCaptcha(mobile, smsCaptcha, "730079");
+        // smsOutBO.checkCaptcha(mobile, smsCaptcha, "730079");
 
         // 修改密码
         agentUserBO.refreshLoginPwd(agentUser.getUserId(), newLoginPwd);

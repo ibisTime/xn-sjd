@@ -194,6 +194,7 @@ public class AgentUserBOImpl extends PaginableBOImpl<AgentUser>
         AgentUser data = new AgentUser();
         data.setUserId(userId);
         data.setMobile(mobile);
+        data.setLoginName(mobile);
         data.setUpdateDatetime(new Date());
         agentUserDAO.updateMobile(data);
     }

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ogc.standard.dao.IMaintainerDAO">
+	<resultMap id="maintainer_DB_Result" type="maintainer">
+		<result column="code" property="code" />
+		<result column="maintain_id" property="maintainId" />
+		<result column="name" property="name" />
+		<result column="mobile" property="mobile" />
+		<result column="updater" property="updater" />
+		
+		<result column="update_datetime" property="updateDatetime" />
+		<result column="remark" property="remark" />
+	</resultMap>
+	
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="maintainId != null and maintainId != '' ">
+				AND t.maintain_id = #{maintainId}
+			</if>
+		</trim>
+	</sql>
+	
+	<select id="select_maintainer" parameterType="maintainer" resultMap="maintainer_DB_Result">
+		SELECT
+		t.code
+		,t.maintain_id
+		,t.name
+		,t.mobile
+		,t.updater
+		
+		,t.update_datetime
+		,t.remark
+		FROM
+		tsys_maintainer t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_maintainer_count" parameterType="maintainer"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tsys_maintainer t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_maintainer" parameterType="maintainer">
+		INSERT INTO
+		tsys_maintainer(
+		code
+		,maintain_id
+		,name
+		,mobile
+		,updater
+		
+		,update_datetime
+		,remark
+		)
+		VALUES(
+		#{code}
+		,#{maintainId}
+		,#{name}
+		,#{mobile}
+		,#{updater}
+		
+		,#{updateDatetime}
+		,#{remark}
+		)
+	</insert>
+
+	<update id="update_maintainer" parameterType="maintainer">
+		UPDATE tsys_maintainer
+		SET
+		name = #{name}
+		,mobile = #{mobile}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+
+	<delete id="delete_maintainer">
+		DELETE FROM tsys_maintainer where code = #{code}
+	</delete>
+	
+</mapper>

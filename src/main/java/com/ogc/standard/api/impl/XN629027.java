@@ -30,6 +30,7 @@ public class XN629027 extends AProcessor {
         condition.setCategoryCode(req.getCategoryCode());
         condition.setOwnerId(req.getOwnerId());
         condition.setSellType(req.getSellType());
+        condition.setLocation(req.getLocation());
         condition.setStatus(req.getStatus());
 
         return productAO.queryProductList(condition);

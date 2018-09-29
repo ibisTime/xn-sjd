@@ -19,6 +19,9 @@ public class XN629025Req extends APageReq {
     // 产权方编号
     private String ownerId;
 
+    // UI位置
+    private String location;
+
     // 产品分类
     private String categoryCode;
 
@@ -107,6 +110,14 @@ public class XN629025Req extends APageReq {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
 }

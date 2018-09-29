@@ -22,7 +22,7 @@ public enum EGeneratePrefix {
             "GTR", "赠送树记录"),
 
     Category("C", "产品类型"), Product("P", "认养产品"), ProductSpec("PS", "产品规格"), Tree(
-            "T", "古树");
+            "T", "古树"), Maintainer("M","养护人"), MaintainProject("MP","养护项目"), MaintainRecord("MR","养护记录");
 
     public static Map<String, EGeneratePrefix> getMap() {
         Map<String, EGeneratePrefix> map = new HashMap<String, EGeneratePrefix>();
