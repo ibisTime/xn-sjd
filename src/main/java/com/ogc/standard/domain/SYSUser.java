@@ -95,6 +95,9 @@ public class SYSUser extends ABaseDO {
     // 所属产权方
     private String owner;
 
+    // 公司
+    private Company company;
+
     /************辅助字段***************/
 
     public String getUserId() {
@@ -295,6 +298,14 @@ public class SYSUser extends ABaseDO {
 
     public void setOwner(String owner) {
         this.owner = owner;
+    }
+
+    public Company getCompany() {
+        return company;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
     }
 
 }

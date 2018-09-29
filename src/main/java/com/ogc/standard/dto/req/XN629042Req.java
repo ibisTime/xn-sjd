@@ -18,6 +18,10 @@ public class XN629042Req {
     @NotBlank
     private String payType;
 
+    // 支付方式
+    @NotBlank
+    private String isJfDeduct;
+
     public String getCode() {
         return code;
     }
@@ -32,6 +36,14 @@ public class XN629042Req {
 
     public void setPayType(String payType) {
         this.payType = payType;
+    }
+
+    public String getIsJfDeduct() {
+        return isJfDeduct;
+    }
+
+    public void setIsJfDeduct(String isJfDeduct) {
+        this.isJfDeduct = isJfDeduct;
     }
 
 }

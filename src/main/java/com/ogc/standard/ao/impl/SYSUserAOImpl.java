@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -334,6 +335,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
     // 详细查询
     public SYSUser getSYSUser(String code) {
         SYSUser sysUser = sysUserBO.getSYSUser(code);
+        init(sysUser);
         return sysUser;
     }
 
@@ -341,7 +343,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
         if (ESYSUserKind.OWNER.getCode().equals(data.getKind())) { // 产权方
             long count = treeBO.getTotalCountByOwnerId(data.getUserId());
             data.setTreeQuantity(String.valueOf(count));
-            data.setTreeValue("");// TODO 古树市值
+            data.setTreeValue("0");// TODO 古树市值
         }
         if (ESYSUserKind.MAINTAIN.getCode().equals(data.getKind())) {// 养护方
             ApplyBindMaintain abmCondition = new ApplyBindMaintain();
@@ -354,8 +356,11 @@ public class SYSUserAOImpl implements ISYSUserAO {
                     .getOwnerId());
                 data.setOwner(sysUser2.getRealName());
             }
-            data.setTotalIncome("");// TODO 总收入
+            data.setTotalIncome("0");// TODO 总收入
+        }
+        if (StringUtils.isNotBlank(data.getCompanyCode())) {
+            Company company = companyBO.getCompany(data.getCompanyCode());
+            data.setCompany(company);
         }
     }
-
 }
