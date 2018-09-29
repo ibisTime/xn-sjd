@@ -44,6 +44,7 @@
 		<typeAlias alias="maintainer" type="com.ogc.standard.domain.Maintainer"/>
 		<typeAlias alias="maintainProject" type="com.ogc.standard.domain.MaintainProject"/>
 		<typeAlias alias="maintainRecord" type="com.ogc.standard.domain.MaintainRecord"/>
+		<typeAlias alias="settle" type="com.ogc.standard.domain.Settle"/>
 		
 	</typeAliases>
 </configuration>

@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -54,9 +55,12 @@ public class SignLogBOImpl extends PaginableBOImpl<SignLog>
         condition.setUserId(userId);
         List<SignLog> signLogList = querySignLogList(condition);
         ListSort(signLogList);
-        if (signLogList.get(0) == null) {
+
+        if (CollectionUtils.isEmpty(signLogList)
+                || signLogList.get(0) == null) {
             return false;
         }
+
         Date now = new Date();
         long day = signLogList.get(0).getCreateDatetime().getTime() / 86400000;
         long nowDay = now.getTime() / 86400000;

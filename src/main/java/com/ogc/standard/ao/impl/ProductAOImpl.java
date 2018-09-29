@@ -118,6 +118,8 @@ public class ProductAOImpl implements IProductAO {
         // 未提交和已下架后可修改
         if (!EProductStatus.DRAFT.getCode().equals(product.getStatus())
                 && !EProductStatus.PUTOFFED.getCode()
+                    .equals(product.getStatus())
+                && !EProductStatus.APPROVE_NO.getCode()
                     .equals(product.getStatus())) {
             throw new BizException("xn0000", "产品未处于可修改状态！");
         }
@@ -177,7 +179,11 @@ public class ProductAOImpl implements IProductAO {
     public void submitProduct(String code, String updater, String remark) {
         Product product = productBO.getProduct(code);
 
-        if (!EProductStatus.DRAFT.getCode().equals(product.getStatus())) {
+        if (!EProductStatus.DRAFT.getCode().equals(product.getStatus())
+                && !EProductStatus.PUTOFFED.getCode()
+                    .equals(product.getStatus())
+                && !EProductStatus.APPROVE_NO.getCode()
+                    .equals(product.getStatus())) {
             throw new BizException("xn0000", "产品未处于可提交状态！");
         }
 
@@ -262,14 +268,7 @@ public class ProductAOImpl implements IProductAO {
 
     @Override
     public List<Product> queryProductList(Product condition) {
-        List<Product> list = productBO.queryProductList(condition);
-
-        if (CollectionUtils.isNotEmpty(list)) {
-            for (Product product : list) {
-                initProduct(product);
-            }
-        }
-        return list;
+        return productBO.queryProductList(condition);
     }
 
     @Override
@@ -291,5 +290,9 @@ public class ProductAOImpl implements IProductAO {
 
         // 树木数量
         product.setTreeCount(treeList.size());
+
+        // 类型
+        Category category = categoryBO.getCategory(product.getCategoryCode());
+        product.setCategoryName(category.getName());
     }
 }

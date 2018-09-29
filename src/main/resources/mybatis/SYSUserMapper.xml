@@ -31,7 +31,6 @@
 			</if>
 			<if test="loginName != null and loginName != '' ">
 				AND t.login_name = #{loginName}
-
 			</if>					
 			<if test="createDatetimeStart != null and createDatetimeStart != '' ">
 				<![CDATA[AND t.create_datetime >= #{createDatetimeStart}]]>
@@ -50,6 +49,9 @@
 			</if>
 			<if test="mobile != null and mobile != '' ">
 				AND t.mobile = #{mobile}
+			</if>
+			<if test="kind != null and kind != '' ">
+				AND t.kind = #{kind}
 			</if>
 					
 			<if test="roleCode != null and roleCode != '' ">

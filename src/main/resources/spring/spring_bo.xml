@@ -153,4 +153,8 @@
 		<property name="paginableDAO" ref="maintainRecordDAOImpl"/>
 	</bean>
 	
+	<bean id="settleBO" class="com.ogc.standard.bo.impl.SettleBOImpl">
+		<property name="paginableDAO" ref="settleDAOImpl"/>
+	</bean>
+	
 </beans>

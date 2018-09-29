@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ogc.standard.dao.ISettleDAO">
+	<resultMap id="settle_DB_Result" type="settle">
+		<result column="code" property="code" />
+		<result column="user_id" property="userId" />
+		<result column="user_kind" property="userKind" />
+		<result column="amount" property="amount" />
+		<result column="rate" property="rate" />
+		
+		<result column="ref_type" property="refType" />
+		<result column="ref_code" property="refCode" />
+		<result column="ref_note" property="refNote" />
+		<result column="status" property="status" />
+		<result column="create_datetime" property="createDatetime" />
+		
+		<result column="handle_datetime" property="handleDatetime" />
+		<result column="handle_note" property="handleNote" />
+		<result column="remark" property="remark" />
+	</resultMap>
+	
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="userId != null and userId != '' ">
+				AND t.user_id = #{userId}
+			</if>
+			<if test="userKind != null and userKind != '' ">
+				AND t.user_kind = #{userKind}
+			</if>
+			<if test="refType != null and refType != '' ">
+				AND t.ref_type = #{refType}
+			</if>
+			<if test="refCode != null and refCode != '' ">
+				AND t.ref_code = #{refCode}
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+			
+			<if test="createStartDatetime != null and createStartDatetime != '' ">
+				<![CDATA[AND t.create_datetime >= #{createStartDatetime}]]>
+			</if>
+			<if test="createEndDatetime != null and createEndDatetime != '' ">
+				<![CDATA[AND t.create_datetime <= #{createEndDatetime}]]>
+			</if>
+		</trim>
+	</sql>
+	
+	<select id="select_settle" parameterType="settle" resultMap="settle_DB_Result">
+		SELECT
+		t.code
+		,t.user_id
+		,t.user_kind
+		,t.amount
+		,t.rate
+		
+		,t.ref_type
+		,t.ref_code
+		,t.ref_note
+		,t.status
+		,t.create_datetime
+		
+		,t.handle_datetime
+		,t.handle_note
+		,t.remark
+		FROM
+		tsys_settle t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_settle_count" parameterType="settle"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tsys_settle t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_settle" parameterType="settle">
+		INSERT INTO
+		tsys_settle(
+		code
+		,user_id
+		,user_kind
+		,amount
+		,rate
+		
+		,ref_type
+		,ref_code
+		,ref_note
+		,status
+		,create_datetime
+		
+		,handle_datetime
+		,handle_note
+		,remark
+		)
+		VALUES(
+		#{code}
+		,#{userId}
+		,#{userKind}
+		,#{amount}
+		,#{rate}
+		
+		,#{refType}
+		,#{refCode}
+		,#{refNote}
+		,#{status}
+		,#{createDatetime}
+		
+		,#{handleDatetime}
+		,#{handleNote}
+		,#{remark}
+		)
+	</insert>
+
+	<update id="update_settleStatusByRef" parameterType="settle">
+		UPDATE tsys_settle
+		SET
+		status = #{status}
+		,handle_note = #{handleNote}
+		,handle_datetime = #{handleDatetime}
+		WHERE ref_code = #{refCode}
+	</update>
+
+</mapper>
