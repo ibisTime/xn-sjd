@@ -12,15 +12,15 @@ import com.ogc.standard.dao.base.ABaseDO;
 */
 public class Interact extends ABaseDO {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -4594915544956691967L;
 
     // 编号
     private String code;
 
-    // 类型(1=点赞 2=收藏 3=浏览)
+    // 类型(0点赞/1收藏)
     private String type;
 
-    // 对象类型
+    // 对象类型(0文章/1古树)
     private String objectType;
 
     // 对象编号

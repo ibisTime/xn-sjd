@@ -22,11 +22,12 @@ public interface IInteractBO extends IPaginableBO<Interact> {
     // 删除点赞
     public void removeInteract(String code);
 
+    // 查询对象类型
+    public Interact getInteract(String type, String objectType,
+            String objectCode, String userId);
+
     public List<Interact> queryInteractList(Interact condition);
 
     public Interact getInteract(String code);
 
-    // 查询对象类型
-    public Interact getInteract(String type, String objectType,
-            String objectCode, String userId);
 }

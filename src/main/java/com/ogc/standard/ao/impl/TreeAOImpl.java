@@ -5,16 +5,21 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.ITreeAO;
+import com.ogc.standard.bo.IInteractBO;
 import com.ogc.standard.bo.ITreeBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.core.StringValidater;
+import com.ogc.standard.domain.Interact;
 import com.ogc.standard.domain.Tree;
 import com.ogc.standard.dto.req.XN629030Req;
 import com.ogc.standard.dto.req.XN629031Req;
 import com.ogc.standard.enums.EGeneratePrefix;
+import com.ogc.standard.enums.EInteractType;
+import com.ogc.standard.enums.EObjectType;
 import com.ogc.standard.enums.ETreeStatus;
 import com.ogc.standard.exception.BizException;
 
@@ -23,6 +28,9 @@ public class TreeAOImpl implements ITreeAO {
 
     @Autowired
     private ITreeBO treeBO;
+
+    @Autowired
+    private IInteractBO interactBO;
 
     @Override
     public String addTree(XN629030Req req) {
@@ -98,6 +106,29 @@ public class TreeAOImpl implements ITreeAO {
     }
 
     @Override
+    @Transactional
+    public void pointTree(String userId, String treeNumber) {
+        Interact interact = interactBO.getInteract(
+            EInteractType.POINT.getCode(), EObjectType.TREE.getCode(),
+            treeNumber, userId);
+        Tree tree = treeBO.getTreeByTreeNumber(treeNumber);
+        Integer pointCount = tree.getPointCount();
+
+        if (null == interact) {
+            interactBO.saveInteract(EInteractType.POINT.getCode(),
+                EObjectType.TREE.getCode(), treeNumber, userId);
+
+            pointCount = pointCount + 1;
+            treeBO.refreshPointCount(treeNumber, pointCount);
+        } else {
+            interactBO.removeInteract(interact.getCode());
+
+            pointCount = pointCount - 1;
+            treeBO.refreshPointCount(treeNumber, pointCount);
+        }
+    }
+
+    @Override
     public Paginable<Tree> queryTreePage(int start, int limit, Tree condition) {
         return treeBO.getPaginable(start, limit, condition);
     }
@@ -111,4 +142,5 @@ public class TreeAOImpl implements ITreeAO {
     public Tree getTree(String code) {
         return treeBO.getTree(code);
     }
+
 }

@@ -40,7 +40,7 @@
 		,t.user_id
 		,t.create_datetime
 		FROM
-		tforum_interact t
+		tsj_interact t
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -51,13 +51,13 @@
 
 	<select id="select_interact_count" parameterType="interact"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tforum_interact t
+		SELECT count(1) FROM tsj_interact t
 		<include refid="where_condition" />
 	</select>
 
 	<insert id="insert_interact" parameterType="interact">
 		INSERT INTO
-		tforum_interact(
+		tsj_interact(
 		code
 		,type
 		,object_type
@@ -76,7 +76,7 @@
 	</insert>
 
 	<delete id="delete_interact" parameterType="interact">
-		DELETE FROM tforum_interact where code = #{code}
+		DELETE FROM tsj_interact where code = #{code}
 	</delete>
 
 </mapper>

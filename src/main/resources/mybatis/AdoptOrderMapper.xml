@@ -38,9 +38,6 @@
 			<if test="productSpecsName != null and productSpecsName != '' ">
 				AND t.product_code = #{productSpecsName}
 			</if>
-			<if test="code != null and code != '' ">
-				AND t.product_specs_name = #{code}
-			</if>
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
 			</if>

@@ -56,7 +56,7 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
     @Override
     public String addAdoptOrder(XN629040Req req) {
         Product product = productBO.getProduct(req.getProductCode());
-        if (EProductStatus.TO_ADOPT.getCode().equals(product.getStatus())) {
+        if (!EProductStatus.TO_ADOPT.getCode().equals(product.getStatus())) {
             throw new BizException("xn0000", "认养产品不是已上架待认养状态，不能下单");
         }
         List<Tree> treeList = treeBO.queryTreeListByProduct(product.getCode(),
@@ -130,7 +130,8 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
         data.setBackJfAmount(0l);
         data.setUpdater(data.getApplyUser());
         data.setUpdateDatetime(new Date());
-        if (data.getPayDatetime().getTime() < data.getStartDatetime().getTime()) {// 支付时间小于认养开始时间
+        if (data.getPayDatetime().getTime() < data.getStartDatetime()
+            .getTime()) {// 支付时间小于认养开始时间
             data.setStatus(EAdoptOrderStatus.TO_ADOPT.getCode());
         } else {
             data.setStatus(EAdoptOrderStatus.ADOPT.getCode());
@@ -144,10 +145,10 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
                 // 更新树状态
                 treeBO.refreshPayTree(tree.getCode());
                 // 分配认养权
-                adoptOrderTreeBO
-                    .saveAdoptOrderTree(data.getCode(), tree.getTreeNumber(),
-                        data.getStartDatetime(), data.getEndDatetime(),
-                        data.getPrice(), data.getApplyUser());
+                adoptOrderTreeBO.saveAdoptOrderTree(data.getCode(),
+                    tree.getTreeNumber(), data.getStartDatetime(),
+                    data.getEndDatetime(), data.getPrice(),
+                    data.getApplyUser());
             }
         }
         // 分配分红 TODO
