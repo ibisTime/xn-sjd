@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.IAgentUserAO;
+import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IAgentUserBO;
 import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.ISmsOutBO;
@@ -21,10 +22,12 @@ import com.ogc.standard.common.PwdUtil;
 import com.ogc.standard.common.SysConstants;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.domain.AgentUser;
+import com.ogc.standard.enums.EAccountType;
 import com.ogc.standard.enums.EAgentUserKind;
 import com.ogc.standard.enums.EAgentUserStatus;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECaptchaType;
+import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.exception.BizException;
 
 @Service
@@ -39,6 +42,9 @@ public class AgentUserAOImpl implements IAgentUserAO {
     @Autowired
     private ISYSUserBO sysUserBO;
 
+    @Autowired
+    private IAccountBO accountBO;
+
     @Override
     public String doRegister(String mobile, String loginPwd,
             String smsCaptcha) {
@@ -46,10 +52,18 @@ public class AgentUserAOImpl implements IAgentUserAO {
         agentUserBO.isMobileExist(mobile);
 
         // 短信验证码是否正确
-        // smsOutBO.checkCaptcha(mobile, smsCaptcha, "730070");
+        smsOutBO.checkCaptcha(mobile, smsCaptcha, "730070");
 
         // 注册用户
         String userId = agentUserBO.doRegister(mobile, loginPwd);
+
+        // 分配人民币账户
+        accountBO.distributeAccount(userId, EAccountType.AGENT,
+            ECurrency.CNY.getCode());
+
+        // 分配积分账户
+        accountBO.distributeAccount(userId, EAccountType.AGENT,
+            ECurrency.JF.getCode());
 
         return userId;
     }

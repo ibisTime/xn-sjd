@@ -20,7 +20,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.IAccountAO;
 import com.ogc.standard.ao.IUserAO;
+import com.ogc.standard.bo.IAgentUserBO;
 import com.ogc.standard.bo.ISYSUserBO;
+import com.ogc.standard.bo.ISettleBO;
 import com.ogc.standard.bo.ISignLogBO;
 import com.ogc.standard.bo.ISmsOutBO;
 import com.ogc.standard.bo.IUserBO;
@@ -31,6 +33,7 @@ import com.ogc.standard.common.MD5Util;
 import com.ogc.standard.common.PhoneUtil;
 import com.ogc.standard.common.PwdUtil;
 import com.ogc.standard.common.SysConstants;
+import com.ogc.standard.domain.AgentUser;
 import com.ogc.standard.domain.SignLog;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.domain.UserExt;
@@ -78,6 +81,12 @@ public class UserAOImpl implements IUserAO {
     @Autowired
     private IAccountAO accountAO;
 
+    @Autowired
+    private ISettleBO settleBO;
+
+    @Autowired
+    private IAgentUserBO agentUserBO;
+
     @Override
     public void doCheckMobile(String mobile) {
         userBO.isMobileExist(mobile);
@@ -90,22 +99,28 @@ public class UserAOImpl implements IUserAO {
         userBO.isMobileExist(req.getMobile());
 
         // 验证短信验证码
-         smsOutBO.checkCaptcha(req.getMobile(), req.getSmsCaptcha(),
-         ECaptchaType.C_REG.getCode());
+        smsOutBO.checkCaptcha(req.getMobile(), req.getSmsCaptcha(),
+            ECaptchaType.C_REG.getCode());
 
         User refereeUser = userBO.getUserByMobile(req.getUserReferee());
-        User agentUser = userBO.getUserByMobile(req.getAgent());
-        User salesUser = userBO.getUserByMobile(req.getSalesman());
+        AgentUser agentUser = agentUserBO.getUserByMobile(req.getAgent());
+        AgentUser salesUser = agentUserBO.getUserByMobile(req.getSalesman());
 
         // 注册用户
         String userId = userBO.doRegister(req.getMobile(), req.getNickname(),
             req.getLoginPwd(), refereeUser, agentUser, salesUser,
             req.getProvince(), req.getCity(), req.getArea());
 
-        if (refereeUser != null) {
-            // 推荐人分佣
-            // awardBO.saveRegistAward(refereeUser.getUserId(),
-            // refereeUser.getKind(), userId, "用户注册推荐人分佣");
+        if (agentUser != null) {
+            // 代理商分成
+            settleBO.saveSettle(agentUser.getUserId(),
+                EUserKind.Customer.getCode(), "", userId, "用户注册代理商分成");
+        }
+
+        if (salesUser != null) {
+            // 业务员分成
+            settleBO.saveSettle(salesUser.getUserId(),
+                EUserKind.Customer.getCode(), "", userId, "用户注册代理商分成");
         }
 
         // ext中添加数据

@@ -229,6 +229,17 @@ public class AgentUserBOImpl extends PaginableBOImpl<AgentUser>
     }
 
     @Override
+    public AgentUser getUserByMobile(String mobile) {
+        AgentUser data = null;
+        if (StringUtils.isNotBlank(mobile)) {
+            AgentUser condition = new AgentUser();
+            condition.setMobile(mobile);
+            data = agentUserDAO.select(condition);
+        }
+        return data;
+    }
+
+    @Override
     public List<AgentUser> queryAgentUserList(AgentUser condition) {
         return agentUserDAO.selectList(condition);
     }

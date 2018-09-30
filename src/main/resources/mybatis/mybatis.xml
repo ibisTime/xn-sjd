@@ -48,6 +48,8 @@
 		<typeAlias alias="giveCarbonBubbleRecord" type="com.ogc.standard.domain.GiveCarbonBubbleRecord"/>
 		
 		<typeAlias alias="shareRecord" type="com.ogc.standard.domain.ShareRecord"/>
+		<typeAlias alias="giftOrder" type="com.ogc.standard.domain.GiftOrder"/>
+		<typeAlias alias="visitor" type="com.ogc.standard.domain.Visitor"/>
 		
 	</typeAliases>
 </configuration>

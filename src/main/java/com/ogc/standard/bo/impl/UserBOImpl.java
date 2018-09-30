@@ -25,6 +25,7 @@ import com.ogc.standard.common.PhoneUtil;
 import com.ogc.standard.common.PwdUtil;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.IUserDAO;
+import com.ogc.standard.domain.AgentUser;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.dto.req.XN805043Req;
 import com.ogc.standard.enums.ELanguage;
@@ -129,7 +130,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
 
     @Override
     public String doRegister(String mobile, String nickname, String loginPwd,
-            User refereeUser, User agentUser, User salesmanUser,
+            User refereeUser, AgentUser agentUser, AgentUser salesmanUser,
             String province, String city, String area) {
 
         String userId = OrderNoGenerater.generate("U");

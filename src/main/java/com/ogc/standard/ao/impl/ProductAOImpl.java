@@ -97,7 +97,8 @@ public class ProductAOImpl implements IProductAO {
         for (XN629010ReqTree tree : req.getTreeList()) {
             // 判断重复的树
             if (treeBO.isTreeNumberExist(tree.getTreeNumber())) {
-                throw new BizException("xn0000", "树木编号已存在，请重新输入！");
+                throw new BizException("xn0000",
+                    "树木编号" + tree.getTreeNumber() + "已存在，请重新输入！");
             }
 
             treeBO.saveTree(data, tree);
@@ -168,7 +169,8 @@ public class ProductAOImpl implements IProductAO {
         for (XN629010ReqTree tree : req.getTreeList()) {
             // 判断重复的树
             if (treeBO.isTreeNumberExist(tree.getTreeNumber())) {
-                throw new BizException("xn0000", "树木编号已存在，请重新输入！");
+                throw new BizException("xn0000",
+                    "树木编号" + tree.getTreeNumber() + "已存在，请重新输入！");
             }
 
             treeBO.saveTree(data, tree);
@@ -244,8 +246,6 @@ public class ProductAOImpl implements IProductAO {
             ETreeStatus.ADOPTED.getCode()))) {
             throw new BizException("xn0000", "产品中存在认养中的古树，无法下架！");
         }
-
-        // 存在未完成的订单时无法下架
 
         productBO.refreshPutOffProduct(code, updater);
     }
