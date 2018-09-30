@@ -25,6 +25,9 @@ public interface ITreeAO {
     // 修改古树
     public void editTree(XN629031Req req);
 
+    // 点赞/取消点赞
+    public void pointTree(String userId, String treeNumber);
+
     public Paginable<Tree> queryTreePage(int start, int limit, Tree condition);
 
     public List<Tree> queryTreeList(Tree condition);

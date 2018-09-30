@@ -120,35 +120,58 @@ public class TreeBOImpl extends PaginableBOImpl<Tree> implements ITreeBO {
     }
 
     @Override
-    public void refreshArticleCount(String code, Integer articleCount) {
+    public void refreshArticleCount(String treeNumber, Integer articleCount) {
         Tree tree = new Tree();
-        tree.setCode(code);
+        tree.setTreeNumber(treeNumber);
         tree.setArticleCount(articleCount);
         treeDAO.updateArticleCount(tree);
     }
 
     @Override
-    public void refreshPointCount(String code, Integer pointCount) {
+    public void refreshPointCount(String treeNumber, Integer pointCount) {
         Tree tree = new Tree();
-        tree.setCode(code);
+        tree.setTreeNumber(treeNumber);
         tree.setPointCount(pointCount);
         treeDAO.updatePointCount(tree);
     }
 
     @Override
-    public void refreshCollectionCount(String code, Integer collectionCount) {
+    public void refreshCollectionCount(String treeNumber,
+            Integer collectionCount) {
         Tree tree = new Tree();
-        tree.setCode(code);
+        tree.setTreeNumber(treeNumber);
         tree.setCollectionCount(collectionCount);
         treeDAO.updateCollectionCount(tree);
     }
 
     @Override
-    public void refreshAdoptCount(String code, Integer adoptCount) {
+    public void refreshAdoptCount(String treeNumber, Integer adoptCount) {
         Tree tree = new Tree();
-        tree.setCode(code);
+        tree.setTreeNumber(treeNumber);
         tree.setAdoptCount(adoptCount);
         treeDAO.updateAdoptCount(tree);
+    }
+
+    @Override
+    public Tree getTreeByTreeNumber(String treeNumber) {
+        Tree data = null;
+        if (StringUtils.isNotBlank(treeNumber)) {
+            Tree condition = new Tree();
+            condition.setTreeNumber(treeNumber);
+            data = treeDAO.select(condition);
+            if (data == null) {
+                throw new BizException("xn0000", "古树不存在！");
+            }
+        }
+        return data;
+    }
+
+    @Override
+    public long getTotalCountByOwnerId(String ownerId) {
+        Tree condition = new Tree();
+        condition.setOwnerId(ownerId);
+        long count = treeDAO.selectTotalCount(condition);
+        return count;
     }
 
     @Override
@@ -159,7 +182,8 @@ public class TreeBOImpl extends PaginableBOImpl<Tree> implements ITreeBO {
     }
 
     @Override
-    public List<Tree> queryTreeListByProduct(String productCode, String status) {
+    public List<Tree> queryTreeListByProduct(String productCode,
+            String status) {
         Tree condition = new Tree();
         condition.setProductCode(productCode);
         condition.setStatus(status);
@@ -167,7 +191,8 @@ public class TreeBOImpl extends PaginableBOImpl<Tree> implements ITreeBO {
     }
 
     @Override
-    public List<Tree> queryTreeListByOrderCode(String orderCode, String status) {
+    public List<Tree> queryTreeListByOrderCode(String orderCode,
+            String status) {
         Tree condition = new Tree();
         condition.setCurOrderCode(orderCode);
         condition.setStatus(status);
@@ -191,14 +216,6 @@ public class TreeBOImpl extends PaginableBOImpl<Tree> implements ITreeBO {
             }
         }
         return data;
-    }
-
-    @Override
-    public long getTotalCountByOwnerId(String ownerId) {
-        Tree condition = new Tree();
-        condition.setOwnerId(ownerId);
-        long count = treeDAO.selectTotalCount(condition);
-        return count;
     }
 
 }

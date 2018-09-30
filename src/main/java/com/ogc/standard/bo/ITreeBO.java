@@ -42,16 +42,20 @@ public interface ITreeBO extends IPaginableBO<Tree> {
     public void refreshPayTree(String code);
 
     // 更新文章数
-    public void refreshArticleCount(String code, Integer articleCount);
+    public void refreshArticleCount(String treeNumber, Integer articleCount);
 
     // 更新点赞数
-    public void refreshPointCount(String code, Integer pointCount);
+    public void refreshPointCount(String treeNumber, Integer pointCount);
 
     // 更新收藏数
-    public void refreshCollectionCount(String code, Integer collectionCount);
+    public void refreshCollectionCount(String treeNumber,
+            Integer collectionCount);
 
     // 更新认养数
-    public void refreshAdoptCount(String code, Integer adoptCount);
+    public void refreshAdoptCount(String treeNumber, Integer adoptCount);
+
+    // 根据树木编号获取树
+    public Tree getTreeByTreeNumber(String treeNumber);
 
     // 获取产品下的古树
     public List<Tree> queryTreeListByProduct(String productCode);
@@ -59,14 +63,14 @@ public interface ITreeBO extends IPaginableBO<Tree> {
     // 获取产品下某个状态的古树
     public List<Tree> queryTreeListByProduct(String productCode, String status);
 
-    public List<Tree> queryTreeList(Tree condition);
-
-    public Tree getTree(String code);
-
     // 查询指定产权方的古树数量
     public long getTotalCountByOwnerId(String ownerId);
 
     // 获取订单下的古树
     public List<Tree> queryTreeListByOrderCode(String orderCode, String status);
+
+    public List<Tree> queryTreeList(Tree condition);
+
+    public Tree getTree(String code);
 
 }

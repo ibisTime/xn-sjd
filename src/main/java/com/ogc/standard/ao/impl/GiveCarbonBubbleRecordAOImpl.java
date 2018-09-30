@@ -19,6 +19,10 @@ public class GiveCarbonBubbleRecordAOImpl implements IGiveCarbonBubbleRecordAO {
     @Override
     public String addGiveCarbonBubbleRecord(String userId, String toUserId,
             Integer quantity) {
+        // TODO 赠送人扣减碳泡泡余额
+
+        // TODO 被赠送人增加碳泡泡余额
+
         return giveCarbonBubbleRecordBO.saveGiveCarbonBubbleRecord(userId,
             toUserId, quantity);
     }

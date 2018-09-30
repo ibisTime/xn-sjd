@@ -210,28 +210,28 @@
 		UPDATE tzb_tree
 		SET
 		article_count = #{articleCount}
-		WHERE code = #{code}
+		WHERE tree_number = #{treeNumber}
 	</update>
 	
 	<update id="update_pointCount">
 		UPDATE tzb_tree
 		SET
 		point_count = #{pointCount}
-		WHERE code = #{code}
+		WHERE tree_number = #{treeNumber}
 	</update>
 	
 	<update id="update_collectionCount">
 		UPDATE tzb_tree
 		SET
 		collection_count = #{collectionCount}
-		WHERE code = #{code}
+		WHERE tree_number = #{treeNumber}
 	</update>
 	
 	<update id="update_adoptCount">
 		UPDATE tzb_tree
 		SET
 		adopt_count = #{adoptCount}
-		WHERE code = #{code}
+		WHERE tree_number = #{treeNumber}
 	</update>
 	
 	<delete id="delete_treeByProduct">

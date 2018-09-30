@@ -4,23 +4,23 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 点赞收藏类型
+ * 对象类型
  * @author: silver 
- * @since: 2018年8月23日 上午10:17:53 
+ * @since: 2018年8月23日 上午10:09:30 
  * @history:
  */
-public enum EInteractType {
+public enum EObjectType {
 
-    POINT("1", "点赞"), COLLECT("2", "收藏");
+    TREE("1", "树木"), ARTICLE("2", "文章");
 
-    EInteractType(String code, String value) {
+    EObjectType(String code, String value) {
         this.code = code;
         this.value = value;
     }
 
-    public static Map<String, EInteractType> getMap() {
-        Map<String, EInteractType> map = new HashMap<String, EInteractType>();
-        for (EInteractType userStatus : EInteractType.values()) {
+    public static Map<String, EObjectType> getMap() {
+        Map<String, EObjectType> map = new HashMap<String, EObjectType>();
+        for (EObjectType userStatus : EObjectType.values()) {
             map.put(userStatus.getCode(), userStatus);
         }
         return map;
