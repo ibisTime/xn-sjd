@@ -15,7 +15,7 @@ import com.ogc.standard.common.PhoneUtil;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.ISYSUserDAO;
 import com.ogc.standard.domain.SYSUser;
-import com.ogc.standard.enums.EUserStatus;
+import com.ogc.standard.enums.ESYSUserStatus;
 import com.ogc.standard.exception.BizException;
 
 @Component
@@ -201,21 +201,6 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser> implements
     }
 
     @Override
-    public void refreshStatus(String userId, EUserStatus status,
-            String updater, String remark) {
-        if (StringUtils.isNotBlank(userId)) {
-            SYSUser data = new SYSUser();
-            data.setUserId(userId);
-            data.setStatus(status.getCode());
-            data.setUpdater(updater);
-            data.setUpdateDatetime(new Date());
-            data.setRemark(remark);
-            sysUserDAO.updateStatus(data); // change to updateStatus
-        }
-
-    }
-
-    @Override
     public void refreshRole(String userId, String roleCode, String updater,
             String remark) {
         if (StringUtils.isNotBlank(userId)) {
@@ -234,6 +219,21 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser> implements
         if (StringUtils.isNotBlank(data.getUserId())) {
             sysUserDAO.updateApproveSYSUser(data);
         }
+    }
+
+    @Override
+    public void refreshStatus(String userId, ESYSUserStatus status,
+            String updater, String remark) {
+        if (StringUtils.isNotBlank(userId)) {
+            SYSUser data = new SYSUser();
+            data.setUserId(userId);
+            data.setStatus(status.getCode());
+            data.setUpdater(updater);
+            data.setUpdateDatetime(new Date());
+            data.setRemark(remark);
+            sysUserDAO.updateStatus(data); // change to updateStatus
+        }
+
     }
 
 }
