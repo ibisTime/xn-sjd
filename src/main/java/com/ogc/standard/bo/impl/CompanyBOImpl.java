@@ -2,6 +2,7 @@ package com.ogc.standard.bo.impl;
 
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -80,4 +81,16 @@ public class CompanyBOImpl extends PaginableBOImpl<Company> implements
         }
         return data;
     }
+
+    @Override
+    public Company getCompanyByUserId(String userId) {
+        Company condition = new Company();
+        condition.setUserId(userId);
+        List<Company> list = queryCompanyList(condition);
+        if (CollectionUtils.isEmpty(list)) {
+            throw new BizException("xn0000", "公司不存在");
+        }
+        return list.get(0);
+    }
+
 }

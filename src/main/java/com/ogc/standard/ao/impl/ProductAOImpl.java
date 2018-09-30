@@ -32,6 +32,7 @@ import com.ogc.standard.enums.EProductStatus;
 import com.ogc.standard.enums.ESellType;
 import com.ogc.standard.enums.ETreeStatus;
 import com.ogc.standard.exception.BizException;
+import com.ogc.standard.exception.EBizErrorCode;
 
 @Service
 public class ProductAOImpl implements IProductAO {
@@ -57,8 +58,8 @@ public class ProductAOImpl implements IProductAO {
         }
 
         Product data = new Product();
-        String code = OrderNoGenerater
-            .generate(EGeneratePrefix.Product.getCode());
+        String code = OrderNoGenerater.generate(EGeneratePrefix.Product
+            .getCode());
         data.setCode(code);
         data.setName(req.getName());
         data.setSellType(req.getSellType());
@@ -77,6 +78,7 @@ public class ProductAOImpl implements IProductAO {
         data.setArea(req.getArea());
         data.setTown(req.getTown());
 
+        // 集体和团购募集开始时间必填todo
         data.setRaiseStartDatetime(DateUtil.strToDate(
             req.getRaiseStartDatetime(), DateUtil.FRONT_DATE_FORMAT_STRING));
         data.setRaiseEndDatetime(DateUtil.strToDate(req.getRaiseEndDatetime(),
@@ -97,8 +99,8 @@ public class ProductAOImpl implements IProductAO {
         for (XN629010ReqTree tree : req.getTreeList()) {
             // 判断重复的树
             if (treeBO.isTreeNumberExist(tree.getTreeNumber())) {
-                throw new BizException("xn0000",
-                    "树木编号" + tree.getTreeNumber() + "已存在，请重新输入！");
+                throw new BizException("xn0000", "树木编号" + tree.getTreeNumber()
+                        + "已存在，请重新输入！");
             }
 
             treeBO.saveTree(data, tree);
@@ -115,18 +117,16 @@ public class ProductAOImpl implements IProductAO {
             throw new BizException("xn0000", "产品分类已下架，请重新选择！");
         }
 
-        Product product = productBO.getProduct(req.getCode());
+        Product data = productBO.getProduct(req.getCode());
         // 未提交和已下架后可修改
-        if (!EProductStatus.DRAFT.getCode().equals(product.getStatus())
-                && !EProductStatus.PUTOFFED.getCode()
-                    .equals(product.getStatus())
+        if (!EProductStatus.DRAFT.getCode().equals(data.getStatus())
+                && !EProductStatus.PUTOFFED.getCode().equals(data.getStatus())
                 && !EProductStatus.APPROVE_NO.getCode()
-                    .equals(product.getStatus())) {
-            throw new BizException("xn0000", "产品未处于可修改状态！");
+                    .equals(data.getStatus())) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "产品未处于可修改状态！");
         }
 
-        Product data = new Product();
-        data.setCode(req.getCode());
         data.setName(req.getName());
         data.setSellType(req.getSellType());
         data.setCategoryCode(req.getCategoryCode());
@@ -169,8 +169,8 @@ public class ProductAOImpl implements IProductAO {
         for (XN629010ReqTree tree : req.getTreeList()) {
             // 判断重复的树
             if (treeBO.isTreeNumberExist(tree.getTreeNumber())) {
-                throw new BizException("xn0000",
-                    "树木编号" + tree.getTreeNumber() + "已存在，请重新输入！");
+                throw new BizException("xn0000", "树木编号" + tree.getTreeNumber()
+                        + "已存在，请重新输入！");
             }
 
             treeBO.saveTree(data, tree);
@@ -182,10 +182,10 @@ public class ProductAOImpl implements IProductAO {
         Product product = productBO.getProduct(code);
 
         if (!EProductStatus.DRAFT.getCode().equals(product.getStatus())
-                && !EProductStatus.PUTOFFED.getCode()
-                    .equals(product.getStatus())
-                && !EProductStatus.APPROVE_NO.getCode()
-                    .equals(product.getStatus())) {
+                && !EProductStatus.PUTOFFED.getCode().equals(
+                    product.getStatus())
+                && !EProductStatus.APPROVE_NO.getCode().equals(
+                    product.getStatus())) {
             throw new BizException("xn0000", "产品未处于可提交状态！");
         }
 
@@ -227,18 +227,16 @@ public class ProductAOImpl implements IProductAO {
     public void putOffProduct(String code, String updater) {
         Product product = productBO.getProduct(code);
 
-        if (ESellType.COLLECTIVE.getCode().equals(product.getSellType())) {
-            // 集体产品
-            if (!EProductStatus.TO_PUTOFF.getCode()
-                .equals(product.getStatus())) {
-                throw new BizException("xn0000", "产品未处于可下架状态！");
-            }
-        } else {
-            // 个人、定向、捐赠产品
-            if (!EProductStatus.TO_ADOPT.getCode()
-                .equals(product.getStatus())) {
-                throw new BizException("xn0000", "产品未处于可下架状态！");
-            }
+        // 个人、定向、捐赠，集体产品
+        if (!EProductStatus.TO_ADOPT.getCode().equals(product.getStatus())) {
+            throw new BizException("xn0000", "产品未处于可下架状态！");
+        }
+
+        // 集体产品
+        if (ESellType.COLLECTIVE.getCode().equals(product.getSellType())
+                && !EProductStatus.TO_PUTOFF.getCode().equals(
+                    product.getStatus())) {
+            throw new BizException("xn0000", "产品未处于可下架状态！");
         }
 
         // 存在认养中的古树时不能下架

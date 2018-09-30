@@ -15,8 +15,8 @@ import com.ogc.standard.enums.EProductStatus;
 import com.ogc.standard.exception.BizException;
 
 @Component
-public class ProductBOImpl extends PaginableBOImpl<Product>
-        implements IProductBO {
+public class ProductBOImpl extends PaginableBOImpl<Product> implements
+        IProductBO {
 
     @Autowired
     private IProductDAO productDAO;
@@ -42,15 +42,14 @@ public class ProductBOImpl extends PaginableBOImpl<Product>
     }
 
     @Override
-    public void refreshSubmitProduct(String code, String updater,
-            String remark) {
+    public void refreshSubmitProduct(String code, String updater, String remark) {
         Product product = new Product();
 
         product.setCode(code);
         product.setStatus(EProductStatus.TO_APPROVE.getCode());
         product.setUpdater(updater);
-        product.setRemark(remark);
         product.setUpdateDatetime(new Date());
+        product.setRemark(remark);
 
         productDAO.updateSubmitProduct(product);
     }

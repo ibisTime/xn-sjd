@@ -33,14 +33,15 @@ public class SettleBOImpl extends PaginableBOImpl<Settle> implements ISettleBO {
     @Autowired
     private IGroupAdoptOrderBO groupAdoptOrderBO;
 
+    // todo
     @Override
     public String saveSettle(String userId, String userKind, String refType,
             String refCode, String refNote) {
 
         Settle settle = new Settle();
 
-        String code = OrderNoGenerater
-            .generate(EGeneratePrefix.Settle.getCode());
+        String code = OrderNoGenerater.generate(EGeneratePrefix.Settle
+            .getCode());
         settle.setCode(code);
         settle.setUserId(userId);
         settle.setUserKind(userKind);
