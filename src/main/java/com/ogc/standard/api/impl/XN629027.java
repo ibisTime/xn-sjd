@@ -1,5 +1,7 @@
 package com.ogc.standard.api.impl;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.ogc.standard.ao.IProductAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
@@ -32,6 +34,12 @@ public class XN629027 extends AProcessor {
         condition.setSellType(req.getSellType());
         condition.setLocation(req.getLocation());
         condition.setStatus(req.getStatus());
+        String column = req.getOrderColumn();
+
+        if (StringUtils.isBlank(column)) {
+            column = IProductAO.DEFAULT_ORDER_COLUMN;
+        }
+        condition.setOrder(column, req.getOrderDir());
 
         return productAO.queryProductList(condition);
     }

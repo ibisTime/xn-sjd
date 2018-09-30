@@ -5,8 +5,9 @@ import java.util.Map;
 
 public enum ESYSUserStatus {
 
-    TO_APPROVE("0", "待审核"), APPROVE_NO("1", "审核不通过"), PARTNER("2", "合伙中"), RELIEVE(
-            "3", "已解除合伙"), LOGOUT("4", "已注销"), NORMAL("5", "正常");
+    TO_FILL_IN("6", "待填写公司资料"), TO_APPROVE("0", "待审核"), APPROVE_NO("1", "审核不通过"), PARTNER(
+            "2", "合伙中"), RELIEVE("3", "已解除合伙"), LOGOUT("4", "已注销"), NORMAL("5",
+            "正常"), Li_Locked("7", "程序锁定"), Ren_Locked("8", "人工锁定");
 
     ESYSUserStatus(String code, String value) {
         this.code = code;

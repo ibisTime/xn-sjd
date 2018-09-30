@@ -28,10 +28,10 @@ import com.ogc.standard.domain.SYSUser;
 import com.ogc.standard.dto.req.XN630060Req;
 import com.ogc.standard.enums.EApplyBindMaintainStatus;
 import com.ogc.standard.enums.EBoolean;
+import com.ogc.standard.enums.ERoleCode;
 import com.ogc.standard.enums.ESYSUserKind;
 import com.ogc.standard.enums.ESYSUserStatus;
 import com.ogc.standard.enums.EUser;
-import com.ogc.standard.enums.EUserStatus;
 import com.ogc.standard.exception.BizException;
 
 @Service
@@ -90,30 +90,17 @@ public class SYSUserAOImpl implements ISYSUserAO {
         data.setMobile(req.getMobile());
         data.setLoginName(req.getMobile());
         if (ESYSUserKind.OWNER.getCode().equals(req.getKind())) {
-            data.setRoleCode("");// TODO
+            data.setRoleCode(ERoleCode.OWNER.getCode());
         }
         if (ESYSUserKind.MAINTAIN.getCode().equals(req.getKind())) {
-            data.setRoleCode("");// TODO
+            data.setRoleCode(ERoleCode.MAINTAIN.getCode());
         }
         data.setLoginPwd(MD5Util.md5(req.getLoginPwd()));
         data.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(req
             .getLoginPwd()));
         data.setCreateDatetime(new Date());
-        data.setStatus(ESYSUserStatus.TO_APPROVE.getCode());// 待审核
+        data.setStatus(ESYSUserStatus.TO_FILL_IN.getCode());// 待填公司资料
         sysUserBO.doSaveSYSuser(data);
-        // 公司
-        Company company = new Company();
-        company.setUserId(userId);
-        company.setName(req.getCompanyName());
-        company.setCharger(req.getCompanyCharger());
-        company.setChargeMobile(req.getChargerMobile());
-        company.setAddress(req.getCompanyAddress());
-        company.setDescription(req.getDescription());
-        company.setBussinessLicense(req.getBussinessLicense());
-        company.setOrganizationCode(req.getOrganizationCode());
-        company.setCreateDatetime(new Date());
-        companyBO.saveCompany(company);
-        // 证书模板合同模板 TODO
         return userId;
     }
 
@@ -155,6 +142,9 @@ public class SYSUserAOImpl implements ISYSUserAO {
             throw new BizException("xn805050", "用户不存在");
         }
         SYSUser data = sysUserBO.getSYSUser(userId);
+        if (!ESYSUserStatus.TO_APPROVE.getCode().equals(data.getStatus())) {
+            throw new BizException("xn805050", "用户不是待审核状态");
+        }
         if (EBoolean.YES.getCode().equals(approveResult)) {
             data.setStatus(ESYSUserStatus.PARTNER.getCode());
         } else {
@@ -197,13 +187,13 @@ public class SYSUserAOImpl implements ISYSUserAO {
         }
         String mobile = user.getMobile();
         String smsContent = "";
-        EUserStatus userStatus = null;
-        if (EUserStatus.NORMAL.getCode().equalsIgnoreCase(user.getStatus())) {
+        ESYSUserStatus userStatus = null;
+        if (ESYSUserStatus.NORMAL.getCode().equalsIgnoreCase(user.getStatus())) {
             smsContent = "您的账号已被管理员封禁";
-            userStatus = EUserStatus.Ren_Locked;
+            userStatus = ESYSUserStatus.Ren_Locked;
         } else {
             smsContent = "您的账号已被管理员解封,请遵守平台相关规则";
-            userStatus = EUserStatus.NORMAL;
+            userStatus = ESYSUserStatus.NORMAL;
         }
         sysUserBO.refreshStatus(userId, userStatus, updater, remark);
         if (PhoneUtil.isMobile(mobile)) {

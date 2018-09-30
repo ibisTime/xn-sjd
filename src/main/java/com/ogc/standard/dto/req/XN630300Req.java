@@ -1,55 +1,128 @@
-/**
- * @Title XN630300Req.java 
- * @Package com.ogc.standard.dto.req 
- * @Description 
- * @author dl  
- * @date 2018年8月17日 下午6:53:55 
- * @version V1.0   
- */
 package com.ogc.standard.dto.req;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-/** 
- * 新增公司
- * @author: tao
- * @since: 2018年8月17日 下午6:53:55 
+/**
+ * 填写公司资料
+ * @author: jiafr 
+ * @since: 2018年9月30日 下午1:26:19 
  * @history:
  */
 public class XN630300Req {
 
+    // 营业执照
+    private String bussinessLicense;
+
+    // 证书模板
+    private String certificateTemplate;
+
+    // 负责人联系方式
+    @NotBlank
+    private String chargerMobile;
+
+    // 公司地址
+    @NotBlank
+    private String companyAddress;
+
+    // 公司负责人
+    @NotBlank
+    private String companyCharger;
+
     // 公司名称
     @NotBlank
-    private String name;
+    private String companyName;
 
-    // 更新人
+    // 合同模板
+    private String contractTemplate;
+
+    // 简介
+    private String description;
+
+    // 用户id
     @NotBlank
-    private String updater;
+    private String userId;
 
-    // 备注
-    private String remark;
+    // 组织机构代码
+    private String organizationCode;
 
-    public String getRemark() {
-        return remark;
+    public String getBussinessLicense() {
+        return bussinessLicense;
     }
 
-    public void setRemark(String remark) {
-        this.remark = remark;
+    public void setBussinessLicense(String bussinessLicense) {
+        this.bussinessLicense = bussinessLicense;
     }
 
-    public String getName() {
-        return name;
+    public String getCertificateTemplate() {
+        return certificateTemplate;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setCertificateTemplate(String certificateTemplate) {
+        this.certificateTemplate = certificateTemplate;
     }
 
-    public String getUpdater() {
-        return updater;
+    public String getChargerMobile() {
+        return chargerMobile;
     }
 
-    public void setUpdater(String updater) {
-        this.updater = updater;
+    public void setChargerMobile(String chargerMobile) {
+        this.chargerMobile = chargerMobile;
     }
+
+    public String getCompanyAddress() {
+        return companyAddress;
+    }
+
+    public void setCompanyAddress(String companyAddress) {
+        this.companyAddress = companyAddress;
+    }
+
+    public String getCompanyCharger() {
+        return companyCharger;
+    }
+
+    public void setCompanyCharger(String companyCharger) {
+        this.companyCharger = companyCharger;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getContractTemplate() {
+        return contractTemplate;
+    }
+
+    public void setContractTemplate(String contractTemplate) {
+        this.contractTemplate = contractTemplate;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getOrganizationCode() {
+        return organizationCode;
+    }
+
+    public void setOrganizationCode(String organizationCode) {
+        this.organizationCode = organizationCode;
+    }
+
 }

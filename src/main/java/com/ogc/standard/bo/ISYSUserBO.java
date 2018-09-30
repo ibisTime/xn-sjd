@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.ogc.standard.bo.base.IPaginableBO;
 import com.ogc.standard.domain.SYSUser;
-import com.ogc.standard.enums.EUserStatus;
+import com.ogc.standard.enums.ESYSUserStatus;
 
 public interface ISYSUserBO extends IPaginableBO<SYSUser> {
 
@@ -58,7 +58,7 @@ public interface ISYSUserBO extends IPaginableBO<SYSUser> {
     // 判断用户编号是否存在
     public boolean isUserExist(String userId);
 
-    public void refreshStatus(String userId, EUserStatus status,
+    public void refreshStatus(String userId, ESYSUserStatus status,
             String updater, String remark);
 
     // 审核注册用户

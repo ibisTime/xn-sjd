@@ -3,7 +3,7 @@ package com.ogc.standard.dto.req;
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
- * 注册用户（产权方）
+ * 注册用户
  * @author: jiafr 
  * @since: 2018年9月28日 下午7:54:40 
  * @history:

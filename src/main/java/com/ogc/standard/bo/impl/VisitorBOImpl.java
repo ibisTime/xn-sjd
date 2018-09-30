@@ -6,76 +6,76 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.ogc.standard.bo.ICompanyBO;
+import com.ogc.standard.bo.IVisitorBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.core.OrderNoGenerater;
-import com.ogc.standard.dao.ICompanyDAO;
-import com.ogc.standard.domain.Company;
+import com.ogc.standard.dao.IVisitorDAO;
+import com.ogc.standard.domain.Visitor;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.exception.BizException;
 
 @Component
-public class CompanyBOImpl extends PaginableBOImpl<Company> implements
-        ICompanyBO {
+public class VisitorBOImpl extends PaginableBOImpl<Visitor> implements
+        IVisitorBO {
 
     @Autowired
-    private ICompanyDAO companyDAO;
+    private IVisitorDAO visitorDAO;
 
     @Override
-    public boolean isCompanyExist(String code) {
-        Company condition = new Company();
+    public boolean isVisitorExist(String code) {
+        Visitor condition = new Visitor();
         condition.setCode(code);
-        if (companyDAO.selectTotalCount(condition) > 0) {
+        if (visitorDAO.selectTotalCount(condition) > 0) {
             return true;
         }
         return false;
     }
 
     @Override
-    public String saveCompany(Company data) {
+    public String saveVisitor(Visitor data) {
         String code = null;
         if (data != null) {
-            code = OrderNoGenerater.generate(EGeneratePrefix.GS.getCode());
+            code = OrderNoGenerater.generate(EGeneratePrefix.VISITOR.getCode());
             data.setCode(code);
-            companyDAO.insert(data);
+            visitorDAO.insert(data);
         }
         return code;
     }
 
     @Override
-    public int removeCompany(String code) {
+    public int removeVisitor(String code) {
         int count = 0;
         if (StringUtils.isNotBlank(code)) {
-            Company data = new Company();
+            Visitor data = new Visitor();
             data.setCode(code);
-            count = companyDAO.delete(data);
+            count = visitorDAO.delete(data);
         }
         return count;
     }
 
     @Override
-    public int refreshCompany(Company data) {
+    public int refreshVisitor(Visitor data) {
         int count = 0;
         if (StringUtils.isNotBlank(data.getCode())) {
-            count = companyDAO.update(data);
+            count = visitorDAO.update(data);
         }
         return count;
     }
 
     @Override
-    public List<Company> queryCompanyList(Company condition) {
-        return companyDAO.selectList(condition);
+    public List<Visitor> queryVisitorList(Visitor condition) {
+        return visitorDAO.selectList(condition);
     }
 
     @Override
-    public Company getCompany(String code) {
-        Company data = null;
+    public Visitor getVisitor(String code) {
+        Visitor data = null;
         if (StringUtils.isNotBlank(code)) {
-            Company condition = new Company();
+            Visitor condition = new Visitor();
             condition.setCode(code);
-            data = companyDAO.select(condition);
+            data = visitorDAO.select(condition);
             if (data == null) {
-                throw new BizException("xn0000", "公司编号不存在");
+                throw new BizException("xn0000", "来访记录不存在");
             }
         }
         return data;

@@ -9,22 +9,25 @@ import com.ogc.standard.common.DateUtil;
 
 public class SCDM_IDAO {
     // 实体
-    private static String key = "bizLog";
+    private static String key = "giftOrder";
 
     // 实体名称
-    private static String keyName = "日志";
+    private static String keyName = "礼物订单";
 
     // 包路径
     private static String packge = "com.ogc.standard.";
 
     // 表名
-    private static String dbname = "tsys_biz_log";
+    private static String dbname = "tsj_gift_order";
 
-    private static String[] DBwords = { "id", "adopt_tree_code", "type",
-            "note", "user_id", "create_datetime" };
+    private static String[] DBwords = { "code", "adopt_tree_code", "name",
+            "price", "description", "receiver", "re_address", "re_mobile",
+            "status", "create_datetime", "claimer", "claim_datetime",
+            "invalid_datetime" };
 
-    private static String[] DBwordsName = { "ID", "认养权编号",
-            "类型（0赠送/1留言/2分享/3收取碳泡泡）", "说明", "操作人", "产生时间" };
+    private static String[] DBwordsName = { "编号", "认养权编号", "礼物名称", "礼物价格",
+            "礼物描述", "收货人", "收货地址", "收货人手机号", "状态（0待认领/1已认领）", "产生时间", "认领人",
+            "认领时间", "失效时间" };
 
     public void testname() throws Exception {
     }
