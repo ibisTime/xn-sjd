@@ -50,6 +50,6 @@
 		<typeAlias alias="shareRecord" type="com.ogc.standard.domain.ShareRecord"/>
 		<typeAlias alias="giftOrder" type="com.ogc.standard.domain.GiftOrder"/>
 		<typeAlias alias="visitor" type="com.ogc.standard.domain.Visitor"/>
-		
+		<typeAlias alias="article" type="com.ogc.standard.domain.Article"/>
 	</typeAliases>
 </configuration>

@@ -165,4 +165,8 @@
 		<property name="paginableDAO" ref="shareRecordDAOImpl"/>
 	</bean>
 	
+	<bean id="articleBO" class="com.ogc.standard.bo.impl.ArticleBOImpl">
+		<property name="paginableDAO" ref="articleDAOImpl"/>
+	</bean>
+	
 </beans>

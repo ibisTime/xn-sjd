@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ogc.standard.dao.IArticleDAO">
+	<resultMap id="article_DB_Result" type="article">
+		<result column="code" property="code" />
+		<result column="adopt_tree_code" property="adoptTreeCode" />
+		<result column="tree_no" property="treeNo" />
+		<result column="type" property="type" />
+		<result column="right" property="right" />
+		<result column="title" property="title" />
+		<result column="content" property="content" />
+		<result column="photo" property="photo" />
+		<result column="collect_count" property="collectCount" />
+		<result column="point_count" property="pointCount" />
+		<result column="read_count" property="readCount" />
+		<result column="status" property="status" />
+		<result column="location" property="location" />
+		<result column="order_no" property="orderNo" />
+		<result column="publish_datetime" property="publishDatetime" />
+		<result column="updater" property="updater" />
+		<result column="update_datatime" property="updateDatatime" />
+		<result column="remark" property="remark" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="adoptTreeCode != null and adoptTreeCode != '' ">
+				AND t.adopt_tree_code = #{adoptTreeCode}
+			</if>
+			<if test="treeNo != null and treeNo != '' ">
+				AND t.tree_no = #{treeNo}
+			</if>
+			<if test="type != null and type != '' ">
+				AND t.type = #{type}
+			</if>
+			<if test="right != null and right != '' ">
+				AND t.right = #{right}
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+			<if test="publishDatetimeStart != null and publishDatetimeStart != '' ">
+				<![CDATA[AND t.publish_datetime >= #{publishDatetimeStart}]]>
+			</if>
+			<if test="publishDatetimeEnd != null and publishDatetimeEnd != '' ">
+				<![CDATA[AND t.publish_datetime >= #{publishDatetimeEnd}]]>
+			</if>
+		</trim>
+	</sql>
+	<select id="select_article" parameterType="article" resultMap="article_DB_Result">
+		SELECT
+		t.code
+		,t.adopt_tree_code
+		,t.tree_no
+		,t.type
+		,t.right
+		,t.title
+		,t.content
+		,t.photo
+		,t.collect_count
+		,t.point_count
+		,t.read_count
+		,t.status
+		,t.location
+		,t.order_no
+		,t.publish_datetime
+		,t.updater
+		,t.update_datatime
+		,t.remark
+		FROM
+		tsj_article t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_article_count" parameterType="article"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tsj_article t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_article" parameterType="article">
+		INSERT INTO
+		tsj_article(
+		code
+		,adopt_tree_code
+		,tree_no
+		,type
+		,right
+		,title
+		,content
+		,photo
+		,collect_count
+		,point_count
+		,read_count
+		,status
+		,location
+		,order_no
+		,publish_datetime
+		,updater
+		,update_datatime
+		,remark
+		)
+		VALUES(
+		#{code}
+		,#{adoptTreeCode}
+		,#{treeNo}
+		,#{type}
+		,#{right}
+		,#{title}
+		,#{content}
+		,#{photo}
+		,#{collectCount}
+		,#{pointCount}
+		,#{readCount}
+		,#{status}
+		,#{location}
+		,#{orderNo}
+		,#{publishDatetime}
+		,#{updater}
+		,#{updateDatatime}
+		,#{remark}
+		)
+	</insert>
+
+	<update id="update_article" parameterType="article">
+		UPDATE tsj_article
+		SET
+		adopt_tree_code = #{adoptTreeCode}
+		,tree_no = #{treeNo}
+		,type = #{type}
+		,right = #{right}
+		,title = #{title}
+		,content = #{content}
+		,photo = #{photo}
+		,collect_count = #{collectCount}
+		,point_count = #{pointCount}
+		,read_count = #{readCount}
+		,status = #{status}
+		,location = #{location}
+		,order_no = #{orderNo}
+		,publish_datetime = #{publishDatetime}
+		,updater = #{updater}
+		,update_datatime = #{updateDatatime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+
+	<update id="update_status" parameterType="article">
+		UPDATE tsj_article
+		SET
+		status = #{status}
+		,updater = #{updater}
+		,update_datatime = #{updateDatatime}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_putOn" parameterType="article">
+		UPDATE tsj_article
+		SET
+		status = #{status}
+		,location = #{location}
+		,order_no = #{orderNo}
+		,updater = #{updater}
+		,update_datatime = #{updateDatatime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+</mapper>

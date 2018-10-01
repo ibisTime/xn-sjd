@@ -76,7 +76,7 @@ public class GiftOrderBOImpl extends PaginableBOImpl<GiftOrder> implements
             condition.setCode(code);
             data = giftOrderDAO.select(condition);
             if (data == null) {
-                throw new BizException("xn0000", "�� ��Ų�����");
+                throw new BizException("xn0000", "礼物不存在");
             }
         }
         return data;

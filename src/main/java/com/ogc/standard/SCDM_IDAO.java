@@ -9,25 +9,26 @@ import com.ogc.standard.common.DateUtil;
 
 public class SCDM_IDAO {
     // 实体
-    private static String key = "giftOrder";
+    private static String key = "article";
 
     // 实体名称
-    private static String keyName = "礼物订单";
+    private static String keyName = "文章";
 
     // 包路径
     private static String packge = "com.ogc.standard.";
 
     // 表名
-    private static String dbname = "tsj_gift_order";
+    private static String dbname = "tsj_article";
 
-    private static String[] DBwords = { "code", "adopt_tree_code", "name",
-            "price", "description", "receiver", "re_address", "re_mobile",
-            "status", "create_datetime", "claimer", "claim_datetime",
-            "invalid_datetime" };
+    private static String[] DBwords = { "code", "adopt_tree_code", "tree_no",
+            "type", "right", "title", "content", "photo", "collect_count",
+            "point_count", "read_count", "status", "location", "order_no",
+            "publish_datetime", "updater", "update_datatime", "remark" };
 
-    private static String[] DBwordsName = { "编号", "认养权编号", "礼物名称", "礼物价格",
-            "礼物描述", "收货人", "收货地址", "收货人手机号", "状态（0待认领/1已认领）", "产生时间", "认领人",
-            "认领时间", "失效时间" };
+    private static String[] DBwordsName = { "编号", "认养权编号", "树的编号",
+            "类型（1平台2用户）", "权限（1公开、2私密、3仅好友可见）", "标题", "内容", "照片", "收藏总数",
+            "点赞总数", "阅读总数", "状态（1保存、2待审核、3发布、4下架）", "UI位置", "UI次序", "发布时间",
+            "更新人", "更新时间", "备注" };
 
     public void testname() throws Exception {
     }
