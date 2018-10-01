@@ -3,7 +3,6 @@ package com.ogc.standard.ao.impl;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -54,13 +53,8 @@ public class CompanyAOImpl implements ICompanyAO {
 
     @Override
     public int editCompany(XN630302Req req) {
-        Company condition = new Company();
-        condition.setUserId(req.getUserId());
-        List<Company> list = companyBO.queryCompanyList(condition);
-        if (CollectionUtils.isEmpty(list)) {
-            throw new BizException("xn0000", "公司不存在");
-        }
-        Company data = list.get(0);
+        Company data = companyBO.getCompanyByUserId(req.getUserId());
+
         data.setBussinessLicense(req.getBussinessLicense());
         data.setCertificateTemplate(req.getCertificateTemplate());
         data.setChargeMobile(req.getChargerMobile());

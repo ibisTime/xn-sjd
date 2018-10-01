@@ -19,14 +19,14 @@ public interface IGiftOrderAO {
 
     public int editGiftOrder(GiftOrder data);
 
+    // 认领礼物
+    public void claimGift(XN629323Req req);
+
     public Paginable<GiftOrder> queryGiftOrderPage(int start, int limit,
             GiftOrder condition);
 
     public List<GiftOrder> queryGiftOrderList(GiftOrder condition);
 
     public GiftOrder getGiftOrder(String code);
-
-    // 认领礼物
-    public void claimGift(XN629323Req req);
 
 }

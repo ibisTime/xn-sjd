@@ -11,6 +11,7 @@ package com.ogc.standard.bo;
 import java.util.List;
 
 import com.ogc.standard.bo.base.IPaginableBO;
+import com.ogc.standard.domain.AgentUser;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.dto.req.XN805043Req;
 import com.ogc.standard.enums.EUserStatus;
@@ -41,7 +42,7 @@ public interface IUserBO extends IPaginableBO<User> {
 
     // 前端用户注册
     public String doRegister(String mobile, String nickname, String loginPwd,
-            User refereeUser, User agentUser, User salesmanUser,
+            User refereeUser, AgentUser agentUser, AgentUser salesmanUser,
             String province, String city, String area);
 
     // 邮箱注册

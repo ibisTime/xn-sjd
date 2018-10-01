@@ -25,9 +25,9 @@ public class XN629014 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        productAO.putOnProduct(req.getCode(), req.getLocation(),
-            StringValidater.toInteger(req.getOrderNo()), req.getUpdater(),
-            req.getRemark());
+        int orderNo = StringValidater.toInteger(req.getOrderNo());
+        productAO.putOnProduct(req.getCode(), req.getLocation(), orderNo,
+            req.getUpdater(), req.getRemark());
         return new BooleanRes(true);
     }
 

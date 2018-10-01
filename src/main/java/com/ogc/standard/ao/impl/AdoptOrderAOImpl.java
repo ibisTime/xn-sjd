@@ -108,7 +108,7 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
     @Transactional
     public void payAdoptOrder(String code, String payType, String isJfDeduct) {
         AdoptOrder data = adoptOrderBO.getAdoptOrder(code);
-        if (EAdoptOrderStatus.TO_PAY.getCode().equals(data.getStatus())) {
+        if (!EAdoptOrderStatus.TO_PAY.getCode().equals(data.getStatus())) {
             throw new BizException("xn0000", "订单不是待支付状态，不能支付");
         }
         if (EBoolean.YES.getCode().equals(isJfDeduct)) {// 使用积分抵扣

@@ -62,6 +62,9 @@ public interface IAgentUserBO extends IPaginableBO<AgentUser> {
     // 修改等级
     public void refreshLevel(String userId, String level);
 
+    // 根据手机号获取用户
+    public AgentUser getUserByMobile(String mobile);
+
     public List<AgentUser> queryAgentUserList(AgentUser condition);
 
     public AgentUser getAgentUser(String userId);

@@ -8,7 +8,7 @@ package com.ogc.standard.enums;
  */
 public enum ETreeStatus {
 
-    TO_ADOPT("0", "待认养"), TO_PAY("2", "待支付"), ADOPTED("1", "已认养");
+    TO_ADOPT("0", "待认养"), TO_PAY("1", "待支付"), ADOPTED("2", "已认养");
 
     ETreeStatus(String code, String value) {
         this.code = code;
