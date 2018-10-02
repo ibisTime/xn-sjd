@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
+<settings>
+        <setting name="logImpl" value="STDOUT_LOGGING" />
+ </settings> 
 	<typeAliases>
 		<typeAlias alias="sysMenu" type="com.ogc.standard.domain.SYSMenu" />
 		<typeAlias alias="sysRole" type="com.ogc.standard.domain.SYSRole" />
@@ -51,5 +54,6 @@
 		<typeAlias alias="giftOrder" type="com.ogc.standard.domain.GiftOrder"/>
 		<typeAlias alias="visitor" type="com.ogc.standard.domain.Visitor"/>
 		<typeAlias alias="article" type="com.ogc.standard.domain.Article"/>
+		<typeAlias alias="carbonBubbleOrder" type="com.ogc.standard.domain.CarbonBubbleOrder"/>
 	</typeAliases>
 </configuration>

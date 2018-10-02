@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ogc.standard.dao.ICarbonBubbleOrderDAO">
+	<resultMap id="carbonBubbleOrder_DB_Result" type="carbonBubbleOrder">
+		<result column="code" property="code" />
+		<result column="adopt_tree_code" property="adoptTreeCode" />
+		<result column="create_datetime" property="createDatetime" />
+		<result column="invalid_datetime" property="invalidDatetime" />
+		<result column="quantity" property="quantity" />
+		<result column="status" property="status" />
+		<result column="taker" property="taker" />
+		<result column="take_datetime" property="takeDatetime" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="adoptTreeCode != null and adoptTreeCode != '' ">
+				AND t.adopt_tree_code = #{adoptTreeCode}
+			</if>
+			<if test="createDatetimeStart != null and createDatetimeStart != '' ">
+				<![CDATA[AND t.create_datetime >= #{startDatetimeStart}]]>
+			</if>
+			<if test="createDatetimeEnd != null and createDatetimeEnd != '' ">
+				<![CDATA[AND t.create_datetime <= #{createDatetimeEnd}]]>
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+			<if test="taker != null and taker != '' ">
+				AND t.taker = #{taker}
+			</if>
+			<if test="takeDatetimeStart != null and takeDatetimeStart != '' ">
+				<![CDATA[AND t.take_datetime >= #{startDatetimeStart}]]>
+			</if>
+			<if test="takeDatetimeEnd != null and takeDatetimeEnd != '' ">
+				<![CDATA[AND t.take_datetime <= #{takeDatetimeEnd}]]>
+			</if>
+		</trim>
+	</sql>
+	<select id="select_carbonBubbleOrder" parameterType="carbonBubbleOrder" resultMap="carbonBubbleOrder_DB_Result">
+		SELECT
+		t.code
+		,t.adopt_tree_code
+		,t.create_datetime
+		,t.invalid_datetime
+		,t.quantity
+		,t.status
+		,t.taker
+		,t.take_datetime
+		FROM
+		tsj_carbon_bubble_order t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_carbonBubbleOrder_count" parameterType="carbonBubbleOrder"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tsj_carbon_bubble_order t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_carbonBubbleOrder" parameterType="carbonBubbleOrder">
+		INSERT INTO
+		tsj_carbon_bubble_order(
+		code
+		,adopt_tree_code
+		,create_datetime
+		,invalid_datetime
+		,quantity
+		,status
+		,taker
+		,take_datetime
+		)
+		VALUES(
+		#{code}
+		,#{adoptTreeCode}
+		,#{createDatetime}
+		,#{invalidDatetime}
+		,#{quantity}
+		,#{status}
+		,#{taker}
+		,#{takeDatetime}
+		)
+	</insert>
+
+	<update id="update_carbonBubbleOrder" parameterType="carbonBubbleOrder">
+		UPDATE tsj_carbon_bubble_order
+		SET
+		adopt_tree_code = #{adoptTreeCode}
+		,create_datetime = #{createDatetime}
+		,invalid_datetime = #{invalidDatetime}
+		,quantity = #{quantity}
+		,status = #{status}
+		,taker = #{taker}
+		,take_datetime = #{takeDatetime}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_takeCarbonBubble" parameterType="carbonBubbleOrder">
+		UPDATE tsj_carbon_bubble_order
+		SET
+		status = #{status}
+		,taker = #{taker}
+		,take_datetime = #{takeDatetime}
+		WHERE code = #{code}
+	</update>
+
+</mapper>

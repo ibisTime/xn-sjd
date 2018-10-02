@@ -7,7 +7,7 @@
 		<result column="adopt_tree_code" property="adoptTreeCode" />
 		<result column="tree_no" property="treeNo" />
 		<result column="type" property="type" />
-		<result column="right" property="right" />
+		<result column="open_level" property="openLevel" />
 		<result column="title" property="title" />
 		<result column="content" property="content" />
 		<result column="photo" property="photo" />
@@ -36,8 +36,8 @@
 			<if test="type != null and type != '' ">
 				AND t.type = #{type}
 			</if>
-			<if test="right != null and right != '' ">
-				AND t.right = #{right}
+			<if test="openLevel != null and openLevel != '' ">
+				AND t.open_level = #{openLevel}
 			</if>
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
@@ -56,7 +56,7 @@
 		,t.adopt_tree_code
 		,t.tree_no
 		,t.type
-		,t.right
+		,t.open_level
 		,t.title
 		,t.content
 		,t.photo
@@ -93,7 +93,7 @@
 		,adopt_tree_code
 		,tree_no
 		,type
-		,right
+		,open_level
 		,title
 		,content
 		,photo
@@ -113,7 +113,7 @@
 		,#{adoptTreeCode}
 		,#{treeNo}
 		,#{type}
-		,#{right}
+		,#{openLevel}
 		,#{title}
 		,#{content}
 		,#{photo}
@@ -136,7 +136,7 @@
 		adopt_tree_code = #{adoptTreeCode}
 		,tree_no = #{treeNo}
 		,type = #{type}
-		,right = #{right}
+		,open_level = #{openLevel}
 		,title = #{title}
 		,content = #{content}
 		,photo = #{photo}

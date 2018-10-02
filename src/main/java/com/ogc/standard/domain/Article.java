@@ -27,7 +27,7 @@ public class Article extends ABaseDO {
     private String type;
 
     // 权限（1公开、2私密、3仅好友可见）
-    private String right;
+    private String openLevel;
 
     // 标题
     private String title;
@@ -39,13 +39,13 @@ public class Article extends ABaseDO {
     private String photo;
 
     // 收藏总数
-    private String collectCount;
+    private Integer collectCount;
 
     // 点赞总数
-    private String pointCount;
+    private Integer pointCount;
 
     // 阅读总数
-    private String readCount;
+    private Integer readCount;
 
     // 状态（1保存、2待审核、3发布、4下架）
     private String status;
@@ -110,12 +110,12 @@ public class Article extends ABaseDO {
         return type;
     }
 
-    public void setRight(String right) {
-        this.right = right;
+    public String getOpenLevel() {
+        return openLevel;
     }
 
-    public String getRight() {
-        return right;
+    public void setOpenLevel(String openLevel) {
+        this.openLevel = openLevel;
     }
 
     public void setTitle(String title) {
@@ -142,28 +142,28 @@ public class Article extends ABaseDO {
         return photo;
     }
 
-    public void setCollectCount(String collectCount) {
-        this.collectCount = collectCount;
-    }
-
-    public String getCollectCount() {
+    public Integer getCollectCount() {
         return collectCount;
     }
 
-    public void setPointCount(String pointCount) {
-        this.pointCount = pointCount;
+    public void setCollectCount(Integer collectCount) {
+        this.collectCount = collectCount;
     }
 
-    public String getPointCount() {
+    public Integer getPointCount() {
         return pointCount;
     }
 
-    public void setReadCount(String readCount) {
-        this.readCount = readCount;
+    public void setPointCount(Integer pointCount) {
+        this.pointCount = pointCount;
     }
 
-    public String getReadCount() {
+    public Integer getReadCount() {
         return readCount;
+    }
+
+    public void setReadCount(Integer readCount) {
+        this.readCount = readCount;
     }
 
     public void setStatus(String status) {

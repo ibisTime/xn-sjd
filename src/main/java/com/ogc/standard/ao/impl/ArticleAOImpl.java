@@ -17,7 +17,7 @@ import com.ogc.standard.dto.req.XN629341Req;
 import com.ogc.standard.dto.req.XN629342Req;
 import com.ogc.standard.dto.req.XN629343Req;
 import com.ogc.standard.dto.req.XN629344Req;
-import com.ogc.standard.enums.EArticleRight;
+import com.ogc.standard.enums.EArticleOpenLevel;
 import com.ogc.standard.enums.EArticleStatus;
 import com.ogc.standard.enums.EArticleType;
 import com.ogc.standard.enums.EBoolean;
@@ -36,24 +36,24 @@ public class ArticleAOImpl implements IArticleAO {
     public String addArticle(XN629340Req req) {
         EArticleStatus status = null;
         String treeNo = null;
-        String right = null;
+        String openLevel = null;
         if (EBoolean.NO.getCode().equals(req.getDealType())) {// 保存
             status = EArticleStatus.DRAFT;
         } else {// 提交
             if (EArticleType.PLAT.getCode().equals(req.getType())) {// 平台
                 status = EArticleStatus.TO_PUT_ON;
                 treeNo = req.getTreeNo();
-                right = EArticleRight.OPEN.getCode();
+                openLevel = EArticleOpenLevel.OPEN.getCode();
             } else {// 用户
                 status = EArticleStatus.TO_APPROVE;
                 AdoptOrderTree aot = adoptOrderTreeBO.getAdoptOrderTree(req
                     .getAdoptTreeCode());
                 treeNo = aot.getTreeNumber();
-                right = req.getRight();
+                openLevel = req.getOpenLevel();
             }
         }
         return articleBO.saveArticle(req.getAdoptTreeCode(), treeNo,
-            req.getType(), right, req.getTitle(), req.getContent(),
+            req.getType(), openLevel, req.getTitle(), req.getContent(),
             req.getPhoto(), status, req.getUpdater());
     }
 
@@ -67,25 +67,25 @@ public class ArticleAOImpl implements IArticleAO {
         }
         EArticleStatus status = null;
         String treeNo = null;
-        String right = null;
+        String openLevel = null;
         if (EBoolean.NO.getCode().equals(req.getDealType())) {// 保存
             status = EArticleStatus.DRAFT;
         } else {// 提交
             if (EArticleType.PLAT.getCode().equals(data.getType())) {// 平台
                 status = EArticleStatus.TO_PUT_ON;
                 treeNo = req.getTreeNo();
-                right = EArticleRight.OPEN.getCode();
+                openLevel = EArticleOpenLevel.OPEN.getCode();
             } else {// 用户
                 status = EArticleStatus.TO_APPROVE;
                 AdoptOrderTree aot = adoptOrderTreeBO.getAdoptOrderTree(req
                     .getAdoptTreeCode());
                 treeNo = aot.getTreeNumber();
-                right = req.getRight();
+                openLevel = req.getOpenLevel();
             }
         }
         data.setAdoptTreeCode(req.getAdoptTreeCode());
         data.setTreeNo(treeNo);
-        data.setRight(right);
+        data.setOpenLevel(openLevel);
         data.setTitle(req.getTitle());
         data.setContent(req.getContent());
         data.setPhoto(req.getPhoto());

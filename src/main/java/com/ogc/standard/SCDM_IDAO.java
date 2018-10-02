@@ -9,26 +9,23 @@ import com.ogc.standard.common.DateUtil;
 
 public class SCDM_IDAO {
     // 实体
-    private static String key = "article";
+    private static String key = "carbonBubbleOrder";
 
     // 实体名称
-    private static String keyName = "文章";
+    private static String keyName = "碳泡泡产生订单";
 
     // 包路径
     private static String packge = "com.ogc.standard.";
 
     // 表名
-    private static String dbname = "tsj_article";
+    private static String dbname = "tsj_carbon_bubble_order";
 
-    private static String[] DBwords = { "code", "adopt_tree_code", "tree_no",
-            "type", "right", "title", "content", "photo", "collect_count",
-            "point_count", "read_count", "status", "location", "order_no",
-            "publish_datetime", "updater", "update_datatime", "remark" };
+    private static String[] DBwords = { "code", "adopt_tree_code",
+            "create_datetime", "invalid_datetime", "quantity", "status",
+            "taker", "take_datetime" };
 
-    private static String[] DBwordsName = { "编号", "认养权编号", "树的编号",
-            "类型（1平台2用户）", "权限（1公开、2私密、3仅好友可见）", "标题", "内容", "照片", "收藏总数",
-            "点赞总数", "阅读总数", "状态（1保存、2待审核、3发布、4下架）", "UI位置", "UI次序", "发布时间",
-            "更新人", "更新时间", "备注" };
+    private static String[] DBwordsName = { "编号", "认养权编号", "生成时间", "过期时间",
+            "碳泡泡数量", "状态（待收取、已收完、已过期）", "收取人", "收取时间" };
 
     public void testname() throws Exception {
     }

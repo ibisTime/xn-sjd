@@ -33,7 +33,7 @@ public class XN629345 extends AProcessor {
         condition.setAdoptTreeCode(req.getAdoptTreeCode());
         condition.setTreeNo(req.getTreeNo());
         condition.setType(req.getType());
-        condition.setRight(req.getRight());
+        condition.setOpenLevel(req.getOpenLevel());
         condition.setStatus(req.getStatus());
         condition.setPublishDatetimeStart(DateUtil.strToDate(
             req.getPublishDatetimeStart(), DateUtil.DATA_TIME_PATTERN_1));
