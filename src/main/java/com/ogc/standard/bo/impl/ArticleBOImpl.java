@@ -44,7 +44,7 @@ public class ArticleBOImpl extends PaginableBOImpl<Article> implements
         data.setAdoptTreeCode(adoptTreeCode);
         data.setTreeNo(treeNo);
         data.setType(type);
-        data.setRight(right);
+        data.setOpenLevel(right);
         data.setTitle(title);
         data.setContent(content);
         data.setPhoto(photo);

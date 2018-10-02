@@ -25,7 +25,7 @@ public class XN629341Req {
     private String treeNo;
 
     // 权限（1公开、2私密、3仅好友可见）
-    private String right;
+    private String openLevel;
 
     // 标题
     private String title;
@@ -64,12 +64,12 @@ public class XN629341Req {
         this.treeNo = treeNo;
     }
 
-    public String getRight() {
-        return right;
+    public String getOpenLevel() {
+        return openLevel;
     }
 
-    public void setRight(String right) {
-        this.right = right;
+    public void setOpenLevel(String openLevel) {
+        this.openLevel = openLevel;
     }
 
     public String getTitle() {

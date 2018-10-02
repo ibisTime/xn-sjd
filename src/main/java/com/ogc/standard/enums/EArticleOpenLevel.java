@@ -6,11 +6,11 @@ package com.ogc.standard.enums;
  * @since: 2018年10月2日 上午1:19:59 
  * @history:
  */
-public enum EArticleRight {
+public enum EArticleOpenLevel {
 
     OPEN("1", "公开"), PRIVACY("2", "私密"), ONLY_FRIEND("3", "仅好友可见");
 
-    EArticleRight(String code, String value) {
+    EArticleOpenLevel(String code, String value) {
         this.code = code;
         this.value = value;
     }
