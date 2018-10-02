@@ -1,5 +1,6 @@
 package com.ogc.standard.bo.impl;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -46,7 +47,7 @@ public class SettleBOImpl extends PaginableBOImpl<Settle> implements ISettleBO {
         settle.setUserId(userId);
         settle.setUserKind(userKind);
 
-        Long orderAmount = 0L;// 订单金额
+        BigDecimal orderAmount = BigDecimal.ZERO;// 订单金额
 
         if (ESellType.COLLECTIVE.getCode().equals(refType)) {
             // 集体订单
@@ -56,15 +57,15 @@ public class SettleBOImpl extends PaginableBOImpl<Settle> implements ISettleBO {
         } else {
             // 个人/定向/捐赠订单
             AdoptOrder adoptOrder = adoptOrderBO.getAdoptOrder(refCode);
-            orderAmount = adoptOrder.getAmount();
+            // orderAmount = adoptOrder.getAmount();
         }
 
-        Long rate = 0L; // 结算比例
+        // Long rate = 0L; // 结算比例
 
-        Long amount = rate * orderAmount;// 结算金额
+        // Long amount = rate * orderAmount;// 结算金额
 
-        settle.setRate(rate);
-        settle.setAmount(amount);
+        // settle.setRate(rate);
+        // settle.setAmount(amount);
         settle.setStatus(ESettleStatus.TO_SETTLE.getCode());
         settle.setRefType(refType);
         settle.setRefCode(refCode);

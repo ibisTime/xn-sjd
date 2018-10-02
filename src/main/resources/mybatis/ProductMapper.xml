@@ -16,11 +16,12 @@
 		<result column="variety" property="variety" />
 		
 		<result column="rank" property="rank" />
+		<result column="description" property="description" />
 		<result column="province" property="province" />
 		<result column="city" property="city" />
 		<result column="area" property="area" />
-		<result column="town" property="town" />
 		
+		<result column="town" property="town" />
 		<result column="raise_start_datetime" property="raiseStartDatetime" />
 		<result column="raise_end_datetime" property="raiseEndDatetime" />
 		<result column="raise_count" property="raiseCount" />
@@ -87,6 +88,7 @@
 		,t.variety
 		
 		,t.rank
+		,t.description
 		,t.province
 		,t.city
 		,t.area
@@ -135,6 +137,7 @@
 		,variety
 		
 		,rank
+		,description
 		,province
 		,city
 		,area
@@ -143,6 +146,7 @@
 		,raise_start_datetime
 		,raise_end_datetime
 		,raise_count
+		,now_count
 		,location
 		,order_no
 		
@@ -165,6 +169,7 @@
 		,#{variety}
 		
 		,#{rank}
+		,#{description}
 		,#{province}
 		,#{city}
 		,#{area}
@@ -173,6 +178,7 @@
 		,#{raiseStartDatetime}
 		,#{raiseEndDatetime}
 		,#{raiseCount}
+		,#{nowCount}
 		,#{location}
 		,#{orderNo}
 		
@@ -195,6 +201,7 @@
 		,scientific_name = #{scientificName}
 		,variety = #{variety}
 		,rank = #{rank}
+		,description = #{description}
 		,province = #{province}
 		,city = #{city}
 		,area = #{area}
@@ -240,7 +247,7 @@
 		WHERE code = #{code}
 	</update>
 	
-	<update id="update_LockProduct" parameterType="product">
+	<update id="update_lockProduct" parameterType="product">
 		UPDATE tzb_product
 		SET
 		status = #{status}

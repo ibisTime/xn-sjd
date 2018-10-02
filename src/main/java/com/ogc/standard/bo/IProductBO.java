@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.ogc.standard.bo.base.IPaginableBO;
 import com.ogc.standard.domain.Product;
+import com.ogc.standard.dto.req.XN629010Req;
+import com.ogc.standard.dto.req.XN629011Req;
 
 /**
  * 产品
@@ -13,17 +15,14 @@ import com.ogc.standard.domain.Product;
  */
 public interface IProductBO extends IPaginableBO<Product> {
 
-    public boolean isProductExist(String code);
-
     // 添加产品
-    public void saveProduct(Product data);
+    public Product saveProduct(XN629010Req req);
 
     // 修改产品
-    public void refreshProduct(Product data);
+    public void refreshProduct(Product data, XN629011Req req);
 
     // 提交产品
-    public void refreshSubmitProduct(String code, String updater,
-            String remark);
+    public void refreshSubmitProduct(String code, String updater, String remark);
 
     // 审核产品
     public void refreshApproveProduct(String code, String status,

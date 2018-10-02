@@ -58,6 +58,10 @@ public class XN629011Req extends BaseReq {
     @NotBlank
     private String rank;
 
+    // 描述
+    @NotBlank
+    private String description;
+
     // 省
     @NotBlank
     private String province;
@@ -272,6 +276,14 @@ public class XN629011Req extends BaseReq {
 
     public void setTreeList(List<XN629010ReqTree> treeList) {
         this.treeList = treeList;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
 }

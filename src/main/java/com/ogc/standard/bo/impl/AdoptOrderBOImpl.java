@@ -1,17 +1,34 @@
 package com.ogc.standard.bo.impl;
 
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IAdoptOrderBO;
+import com.ogc.standard.bo.ISYSConfigBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
+import com.ogc.standard.common.AmountUtil;
+import com.ogc.standard.common.SysConstants;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.IAdoptOrderDAO;
+import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.AdoptOrder;
+import com.ogc.standard.domain.Product;
+import com.ogc.standard.domain.ProductSpecs;
+import com.ogc.standard.domain.User;
+import com.ogc.standard.dto.res.XN629048Res;
+import com.ogc.standard.enums.EAdoptOrderStatus;
+import com.ogc.standard.enums.EBoolean;
+import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EGeneratePrefix;
+import com.ogc.standard.enums.EPayType;
+import com.ogc.standard.enums.ESysConfigType;
 import com.ogc.standard.exception.BizException;
 
 @Component
@@ -21,46 +38,86 @@ public class AdoptOrderBOImpl extends PaginableBOImpl<AdoptOrder> implements
     @Autowired
     private IAdoptOrderDAO adoptOrderDAO;
 
-    @Override
-    public boolean isAdoptOrderExist(String code) {
-        AdoptOrder condition = new AdoptOrder();
-        condition.setCode(code);
-        if (adoptOrderDAO.selectTotalCount(condition) > 0) {
-            return true;
-        }
-        return false;
-    }
+    @Autowired
+    private ISYSConfigBO sysConfigBO;
+
+    @Autowired
+    private IAccountBO accountBO;
 
     @Override
-    public String saveAdoptOrder(AdoptOrder data) {
+    public String saveAdoptOrder(User user, Product product,
+            ProductSpecs productSpecs, int quantity) {
         String code = null;
-        if (data != null) {
+        if (user != null) {
+            AdoptOrder data = new AdoptOrder();
             code = OrderNoGenerater.generate(EGeneratePrefix.ADOPT_ORDER
                 .getCode());
             data.setCode(code);
+            data.setType(product.getSellType());
+            data.setProductCode(product.getCode());
+
+            data.setProductSpecsName(productSpecs.getName());
+            data.setPrice(productSpecs.getPrice());
+            data.setStartDatetime(productSpecs.getStartDatetime());
+            data.setEndDatetime(productSpecs.getEndDatetime());
+            data.setQuantity(quantity);
+
+            data.setAmount(AmountUtil.mul(data.getPrice(), quantity));
+            data.setApplyUser(user.getUserId());
+            data.setApplyDatetime(new Date());
+            data.setStatus(EAdoptOrderStatus.TO_PAY.getCode());
             adoptOrderDAO.insert(data);
         }
         return code;
     }
 
     @Override
-    public int removeAdoptOrder(String code) {
-        int count = 0;
-        if (StringUtils.isNotBlank(code)) {
-            AdoptOrder data = new AdoptOrder();
-            data.setCode(code);
-            count = adoptOrderDAO.delete(data);
+    public void payYueSuccess(AdoptOrder data, XN629048Res resultRes,
+            BigDecimal backjfAmount) {
+        Date nowDate = new Date();
+        if (nowDate.before(data.getStartDatetime())) {// 支付时间小于认养开始时间
+            data.setStatus(EAdoptOrderStatus.TO_ADOPT.getCode());
+        } else {
+            data.setStatus(EAdoptOrderStatus.ADOPT.getCode());
         }
-        return count;
+
+        data.setPayType(EPayType.YE.getCode());
+        data.setCnyDeductAmount(resultRes.getCnyAmount());
+        data.setJfDeductAmount(resultRes.getJfAmount());
+        data.setPayAmount(data.getAmount());
+        data.setPayDatetime(nowDate);
+        data.setBackJfAmount(backjfAmount);
+        data.setRemark("余额支付成功");
+        adoptOrderDAO.updatePayYueSuccess(data);
     }
 
     @Override
-    public int refreshAdoptOrder(AdoptOrder data) {
-        int count = 0;
-        if (StringUtils.isNotBlank(data.getCode())) {
-            count = adoptOrderDAO.update(data);
+    public void refreshPayGroup(AdoptOrder data, String payType,
+            XN629048Res resultRes) {
+        data.setPayType(payType);
+        data.setPayGroup(data.getCode());
+        data.setCnyDeductAmount(resultRes.getCnyAmount());
+        data.setJfDeductAmount(resultRes.getJfAmount());
+        data.setRemark("预支付发起中");
+        adoptOrderDAO.updatePayGroup(data);
+    }
+
+    @Override
+    public void paySuccess(AdoptOrder data, BigDecimal payAmount,
+            BigDecimal backJfAmount) {
+        Date nowDate = new Date();
+        if (nowDate.before(data.getStartDatetime())) {// 支付时间小于认养开始时间
+            data.setStatus(EAdoptOrderStatus.TO_ADOPT.getCode());
+        } else {
+            data.setStatus(EAdoptOrderStatus.ADOPT.getCode());
         }
-        return count;
+
+        data.setPayAmount(payAmount);
+        data.setPayDatetime(nowDate);
+        data.setBackJfAmount(backJfAmount);
+        data.setRemark("第三方支付成功");
+        adoptOrderDAO.updatePaySuccess(data);
+
     }
 
     @Override
@@ -84,17 +141,39 @@ public class AdoptOrderBOImpl extends PaginableBOImpl<AdoptOrder> implements
 
     // 取消订单
     @Override
-    public void cancelAdoptOrder(AdoptOrder data) {
+    public void cancelAdoptOrder(AdoptOrder data, String remark) {
         if (StringUtils.isNotBlank(data.getCode())) {
+            data.setStatus(EAdoptOrderStatus.CANCELED.getCode());
+            data.setUpdater(data.getApplyUser());
+            data.setUpdateDatetime(new Date());
+            data.setRemark(remark);
             adoptOrderDAO.updateCancelAdoptOrder(data);
         }
     }
 
     @Override
-    public void payAdoptOrder(AdoptOrder data) {
-        if (StringUtils.isNotBlank(data.getCode())) {
-            adoptOrderDAO.updatepayAdoptOrder(data);
-        }
-    }
+    public XN629048Res getOrderDkAmount(AdoptOrder data, String isDk) {
+        BigDecimal cnyAmount = BigDecimal.ZERO;// 抵扣多少人民币
+        BigDecimal jfAmount = BigDecimal.ZERO;// 抵扣积分
+        if (data.getAmount().longValue() > 0
+                && EBoolean.YES.getCode().equals(isDk)) {
+            Map<String, String> configMap = sysConfigBO
+                .getConfigsMap(ESysConfigType.PAY_RULE.getCode());
+            Double rate = Double.valueOf(configMap
+                .get(SysConstants.JF_DK_MAX_RATE));
+            Double cny2jfRate = Double.valueOf(configMap
+                .get(SysConstants.CNY2JF_RATE));
+            cnyAmount = AmountUtil.mul(data.getAmount(), rate);
+            jfAmount = AmountUtil.mul(cnyAmount, cny2jfRate);
 
+            Account jfAccount = accountBO.getAccountByUser(data.getApplyUser(),
+                ECurrency.JF.getCode());
+            if (jfAmount.compareTo(jfAccount.getAmount()) == 1) {
+                jfAmount = jfAccount.getAmount();
+                cnyAmount = AmountUtil.mul(jfAccount.getAmount(),
+                    1.0 / cny2jfRate);
+            }
+        }
+        return new XN629048Res(cnyAmount, jfAmount);
+    }
 }

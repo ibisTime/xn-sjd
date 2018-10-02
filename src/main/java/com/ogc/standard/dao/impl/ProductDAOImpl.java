@@ -18,7 +18,7 @@ public class ProductDAOImpl extends AMybatisTemplate implements IProductDAO {
 
     @Override
     public int delete(Product data) {
-        return super.delete(NAMESPACE.concat("delete_product"), data);
+        return 0;
     }
 
     @Override
@@ -43,7 +43,7 @@ public class ProductDAOImpl extends AMybatisTemplate implements IProductDAO {
 
     @Override
     public int updateLockProduct(Product data) {
-        return super.update(NAMESPACE.concat("update_LockProduct"), data);
+        return super.update(NAMESPACE.concat("update_lockProduct"), data);
     }
 
     @Override

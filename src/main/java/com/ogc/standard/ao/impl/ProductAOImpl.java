@@ -1,6 +1,6 @@
 package com.ogc.standard.ao.impl;
 
-import java.util.Date;
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -14,9 +14,6 @@ import com.ogc.standard.bo.IProductBO;
 import com.ogc.standard.bo.IProductSpecsBO;
 import com.ogc.standard.bo.ITreeBO;
 import com.ogc.standard.bo.base.Paginable;
-import com.ogc.standard.common.DateUtil;
-import com.ogc.standard.core.OrderNoGenerater;
-import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.domain.Category;
 import com.ogc.standard.domain.Product;
 import com.ogc.standard.domain.ProductSpecs;
@@ -27,7 +24,6 @@ import com.ogc.standard.dto.req.XN629010ReqTree;
 import com.ogc.standard.dto.req.XN629011Req;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECategoryStatus;
-import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.enums.EProductStatus;
 import com.ogc.standard.enums.ESellType;
 import com.ogc.standard.enums.ETreeStatus;
@@ -56,43 +52,11 @@ public class ProductAOImpl implements IProductAO {
         if (ECategoryStatus.PUT_OFF.getCode().equals(category.getStatus())) {
             throw new BizException("xn0000", "产品分类已下架，请重新选择！");
         }
-
-        Product data = new Product();
-        String code = OrderNoGenerater.generate(EGeneratePrefix.Product
-            .getCode());
-        data.setCode(code);
-        data.setName(req.getName());
-        data.setSellType(req.getSellType());
-        data.setCategoryCode(req.getCategoryCode());
-        data.setOwnerId(req.getOwnerId());
-
-        data.setListPic(req.getListPic());
-        data.setBannerPic(req.getBannerPic());
-        data.setOriginPlace(req.getOriginPlace());
-        data.setScientificName(req.getScientificName());
-        data.setVariety(req.getVariety());
-
-        data.setRank(req.getRank());
-        data.setProvince(req.getProvince());
-        data.setCity(req.getCity());
-        data.setArea(req.getArea());
-        data.setTown(req.getTown());
-
-        // 集体和团购募集开始时间必填todo
-        data.setRaiseStartDatetime(DateUtil.strToDate(
-            req.getRaiseStartDatetime(), DateUtil.FRONT_DATE_FORMAT_STRING));
-        data.setRaiseEndDatetime(DateUtil.strToDate(req.getRaiseEndDatetime(),
-            DateUtil.FRONT_DATE_FORMAT_STRING));
-        data.setRaiseCount(StringValidater.toInteger(req.getRaiseCount()));
-        data.setStatus(EProductStatus.DRAFT.getCode());
-        data.setUpdater(req.getUpdater());
-        data.setUpdateDatetime(new Date());
-
-        productBO.saveProduct(data);
+        Product product = productBO.saveProduct(req);
 
         // 添加产品规格
         for (XN629010ReqSpecs productSpecs : req.getProductSpecsList()) {
-            productSpecsBO.saveProductSpecs(code, productSpecs);
+            productSpecsBO.saveProductSpecs(product.getCode(), productSpecs);
         }
 
         // 添加古树
@@ -103,10 +67,10 @@ public class ProductAOImpl implements IProductAO {
                         + "已存在，请重新输入！");
             }
 
-            treeBO.saveTree(data, tree);
+            treeBO.saveTree(product, tree);
         }
 
-        return code;
+        return product.getCode();
     }
 
     @Override
@@ -124,35 +88,9 @@ public class ProductAOImpl implements IProductAO {
                 && !EProductStatus.APPROVE_NO.getCode()
                     .equals(data.getStatus())) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "产品未处于可修改状态！");
+                "产品不处于可修改状态！");
         }
-
-        data.setName(req.getName());
-        data.setSellType(req.getSellType());
-        data.setCategoryCode(req.getCategoryCode());
-        data.setOwnerId(req.getOwnerId());
-
-        data.setListPic(req.getListPic());
-        data.setBannerPic(req.getBannerPic());
-        data.setOriginPlace(req.getOriginPlace());
-        data.setScientificName(req.getScientificName());
-        data.setVariety(req.getVariety());
-
-        data.setRank(req.getRank());
-        data.setProvince(req.getProvince());
-        data.setCity(req.getCity());
-        data.setArea(req.getArea());
-        data.setTown(req.getTown());
-
-        data.setRaiseStartDatetime(DateUtil.strToDate(
-            req.getRaiseStartDatetime(), DateUtil.FRONT_DATE_FORMAT_STRING));
-        data.setRaiseEndDatetime(DateUtil.strToDate(req.getRaiseEndDatetime(),
-            DateUtil.FRONT_DATE_FORMAT_STRING));
-        data.setRaiseCount(StringValidater.toInteger(req.getRaiseCount()));
-
-        data.setUpdater(req.getUpdater());
-        data.setUpdateDatetime(new Date());
-        productBO.refreshProduct(data);
+        productBO.refreshProduct(data, req);
 
         // 删除旧产品规格
         productSpecsBO.removeProductSpecsByProduct(req.getCode());
@@ -234,8 +172,7 @@ public class ProductAOImpl implements IProductAO {
 
         // 集体产品
         if (ESellType.COLLECTIVE.getCode().equals(product.getSellType())
-                && !EProductStatus.TO_PUTOFF.getCode().equals(
-                    product.getStatus())) {
+                && !EProductStatus.ADOPT.getCode().equals(product.getStatus())) {
             throw new BizException("xn0000", "产品未处于可下架状态！");
         }
 
@@ -254,7 +191,6 @@ public class ProductAOImpl implements IProductAO {
         Paginable<Product> page = productBO.getPaginable(start, limit,
             condition);
         List<Product> list = page.getList();
-
         if (CollectionUtils.isNotEmpty(list)) {
             for (Product product : list) {
                 initProduct(product);
@@ -282,15 +218,38 @@ public class ProductAOImpl implements IProductAO {
             .queryProductSpecsListByProduct(product.getCode());
         product.setProductSpecsList(specsList);
 
-        // 古树列表
-        List<Tree> treeList = treeBO.queryTreeListByProduct(product.getCode());
-        product.setTreeList(treeList);
+        // 初始化最小价格和最大价格
+        BigDecimal minPrice = BigDecimal.ZERO;
+        BigDecimal maxPrice = minPrice;
+        for (ProductSpecs productSpecs : specsList) {
+            if (minPrice.compareTo(BigDecimal.ZERO) == 0) {
+                minPrice = productSpecs.getPrice();
+            }
+            if (productSpecs.getPrice().compareTo(minPrice) < 0) {
+                minPrice = productSpecs.getPrice();
+            }
+            if (productSpecs.getPrice().compareTo(maxPrice) > 0) {
+                maxPrice = productSpecs.getPrice();
+            }
+        }
+        product.setMinPrice(minPrice);
+        product.setMaxPrice(maxPrice);
 
-        // 树木数量
-        product.setTreeCount(treeList.size());
+        // 古树列表
+        List<Tree> treeRemainList = treeBO.queryTreeListByProduct(
+            product.getCode(), ETreeStatus.TO_ADOPT.getCode());
+        product.setTreeRemainList(treeRemainList);
+
+        // 树木剩余量数量
+        product.setTreeRemainCount(treeRemainList.size());
+
+        // 树木总量获取
+        int treeTotalCount = treeBO.getTreeCount(product.getCode());
+        product.setTreeTotalCount(treeTotalCount);
 
         // 类型
         Category category = categoryBO.getCategory(product.getCategoryCode());
         product.setCategoryName(category.getName());
     }
+
 }

@@ -1,5 +1,6 @@
 package com.ogc.standard.domain;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import com.ogc.standard.dao.base.ABaseDO;
@@ -30,7 +31,7 @@ public class AdoptOrderTree extends ABaseDO {
     private Date endDatetime;
 
     // 认养金额
-    private Long amount;
+    private BigDecimal amount;
 
     // 状态(1待认养2认养中3已到期)
     private String status;
@@ -78,11 +79,11 @@ public class AdoptOrderTree extends ABaseDO {
         this.endDatetime = endDatetime;
     }
 
-    public Long getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(Long amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 

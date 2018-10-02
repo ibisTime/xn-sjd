@@ -8,19 +8,22 @@
 		<result column="product_code" property="productCode" />
 		<result column="product_specs_name" property="productSpecsName" />
 		<result column="price" property="price" />
-		<result column="year" property="year" />
+		
 		<result column="start_datetime" property="startDatetime" />
 		<result column="end_datetime" property="endDatetime" />
 		<result column="quantity" property="quantity" />
 		<result column="amount" property="amount" />
 		<result column="apply_user" property="applyUser" />
+		
 		<result column="apply_datetime" property="applyDatetime" />
 		<result column="status" property="status" />
 		<result column="pay_type" property="payType" />
 		<result column="pay_group" property="payGroup" />
 		<result column="pay_code" property="payCode" />
-		<result column="pay_amount" property="payAmount" />
+		
+		<result column="cny_deduct_amount" property="cnyDeductAmount" />
 		<result column="jf_deduct_amount" property="jfDeductAmount" />
+		<result column="pay_amount" property="payAmount" />
 		<result column="pay_datetime" property="payDatetime" />
 		<result column="back_jf_amount" property="backJfAmount" />
 		<result column="updater" property="updater" />
@@ -35,8 +38,11 @@
 			<if test="type != null and type != '' ">
 				AND t.type = #{type}
 			</if>
+			<if test="productCode != null and productCode != '' ">
+				AND t.product_code = #{productCode}
+			</if>
 			<if test="productSpecsName != null and productSpecsName != '' ">
-				AND t.product_code = #{productSpecsName}
+				AND t.product_specs_name = #{productSpecsName}
 			</if>
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
@@ -62,7 +68,6 @@
 		,t.product_code
 		,t.product_specs_name
 		,t.price
-		,t.year
 		,t.start_datetime
 		,t.end_datetime
 		,t.quantity
@@ -74,6 +79,7 @@
 		,t.pay_group
 		,t.pay_code
 		,t.pay_amount
+		,t.cny_deduct_amount
 		,t.jf_deduct_amount
 		,t.pay_datetime
 		,t.back_jf_amount
@@ -104,7 +110,6 @@
 		,product_code
 		,product_specs_name
 		,price
-		,year
 		,start_datetime
 		,end_datetime
 		,quantity
@@ -119,7 +124,6 @@
 		,#{productCode}
 		,#{productSpecsName}
 		,#{price}
-		,#{year}
 		,#{startDatetime}
 		,#{endDatetime}
 		,#{quantity}
@@ -130,59 +134,49 @@
 		)
 	</insert>
 
-	<update id="update_adoptOrder" parameterType="adoptOrder">
-		UPDATE try_adopt_order
-		SET
-		type = #{type}
-		,product_code = #{productCode}
-		,product_specs_name = #{productSpecsName}
-		,price = #{price}
-		,year = #{year}
-		,start_datetime = #{startDatetime}
-		,end_datetime = #{endDatetime}
-		,quantity = #{quantity}
-		,amount = #{amount}
-		,apply_user = #{applyUser}
-		,apply_datetime = #{applyDatetime}
-		,status = #{status}
-		,pay_type = #{payType}
-		,pay_group = #{payGroup}
-		,pay_code = #{payCode}
-		,pay_amount = #{payAmount}
-		,jf_deduct_amount = #{jfDeductAmount}
-		,pay_datetime = #{payDatetime}
-		,back_jf_amount = #{backJfAmount}
-		,updater = #{updater}
-		,update_datetime = #{updateDatetime}
-		,remark = #{remark}
-		WHERE code = #{code}
-	</update>
-	
-		
 	<update id="update_cancelAdoptOrder" parameterType="adoptOrder">
 		UPDATE try_adopt_order
 		SET
 		status = #{status}
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
-		WHERE code = #{code}
-	</update>
-	
-	<update id="update_payAdoptOrder" parameterType="adoptOrder">
-		UPDATE try_adopt_order
-		SET
-		status = #{status}
-		,pay_type = #{payType}
-		,pay_group = #{payGroup}
-		,pay_code = #{payCode}
-		,pay_amount = #{payAmount}
-		,jf_deduct_amount = #{jfDeductAmount}
-		,pay_datetime = #{payDatetime}
-		,back_jf_amount = #{backJfAmount}
-		,updater = #{updater}
-		,update_datetime = #{updateDatetime}
 		,remark = #{remark}
 		WHERE code = #{code}
 	</update>
 	
+	<update id="update_payYueSuccess" parameterType="adoptOrder">
+		UPDATE try_adopt_order
+		SET
+		status = #{status}
+		,pay_type = #{payType}
+		,cny_deduct_amount = #{cnyDeductAmount}
+		,jf_deduct_amount = #{jfDeductAmount}
+		,pay_amount = #{payAmount}
+		,pay_datetime = #{payDatetime}
+		,back_jf_amount = #{backJfAmount}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_payGroup" parameterType="adoptOrder">
+		UPDATE try_adopt_order
+		SET
+		pay_type = #{payType}
+		,pay_group = #{payGroup}
+		,cny_deduct_amount = #{cnyDeductAmount}
+		,jf_deduct_amount = #{jfDeductAmount}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_paySuccess" parameterType="adoptOrder">
+		UPDATE try_adopt_order
+		SET
+		status = #{status}
+		,pay_amount = #{payAmount}
+		,pay_datetime = #{payDatetime}
+		,back_jf_amount = #{backJfAmount}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
 </mapper>

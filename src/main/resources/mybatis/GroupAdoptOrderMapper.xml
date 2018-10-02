@@ -8,7 +8,6 @@
 		<result column="product_code" property="productCode" />
 		<result column="product_specs_name" property="productSpecsName" />
 		<result column="price" property="price" />
-		<result column="year" property="year" />
 		<result column="start_datetime" property="startDatetime" />
 		<result column="end_datetime" property="endDatetime" />
 		<result column="quantity" property="quantity" />
@@ -62,7 +61,6 @@
 		,t.product_code
 		,t.product_specs_name
 		,t.price
-		,t.year
 		,t.start_datetime
 		,t.end_datetime
 		,t.quantity
@@ -104,7 +102,6 @@
 		,product_code
 		,product_specs_name
 		,price
-		,year
 		,start_datetime
 		,end_datetime
 		,quantity
@@ -119,7 +116,6 @@
 		,#{productCode}
 		,#{productSpecsName}
 		,#{price}
-		,#{year}
 		,#{startDatetime}
 		,#{endDatetime}
 		,#{quantity}
@@ -137,7 +133,6 @@
 		product_code
 		,product_specs_name
 		,price
-		,year
 		,start_datetime
 		,end_datetime
 		,quantity
@@ -151,7 +146,6 @@
 		,#{productCode}
 		,#{productSpecsName}
 		,#{price}
-		,#{year}
 		,#{startDatetime}
 		,#{endDatetime}
 		,#{quantity}
@@ -170,7 +164,6 @@
 		,product_code
 		,product_specs_name
 		,price
-		,year
 		,start_datetime
 		,end_datetime
 		,quantity
@@ -185,7 +178,6 @@
 		,#{productCode}
 		,#{productSpecsName}
 		,#{price}
-		,#{year}
 		,#{startDatetime}
 		,#{endDatetime}
 		,#{quantity}
@@ -203,7 +195,6 @@
 		,product_code = #{productCode}
 		,product_specs_name = #{productSpecsName}
 		,price = #{price}
-		,year = #{year}
 		,start_datetime = #{startDatetime}
 		,end_datetime = #{endDatetime}
 		,quantity = #{quantity}
@@ -249,6 +240,5 @@
 		,remark = #{remark}
 		WHERE code = #{code}
 	</update>
-
 
 </mapper>

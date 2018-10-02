@@ -1,6 +1,6 @@
 package com.ogc.standard.ao.impl;
 
-import java.util.Date;
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -15,34 +15,37 @@ import com.ogc.standard.bo.IAdoptOrderTreeBO;
 import com.ogc.standard.bo.IProductBO;
 import com.ogc.standard.bo.IProductSpecsBO;
 import com.ogc.standard.bo.ITreeBO;
+import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
-import com.ogc.standard.common.AmountUtil;
-import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.AdoptOrder;
 import com.ogc.standard.domain.Product;
 import com.ogc.standard.domain.ProductSpecs;
 import com.ogc.standard.domain.Tree;
-import com.ogc.standard.dto.req.XN629040Req;
+import com.ogc.standard.domain.User;
+import com.ogc.standard.dto.res.BooleanRes;
+import com.ogc.standard.dto.res.XN629048Res;
 import com.ogc.standard.enums.EAdoptOrderStatus;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EPayType;
 import com.ogc.standard.enums.EProductStatus;
+import com.ogc.standard.enums.ESystemAccount;
 import com.ogc.standard.enums.ETreeStatus;
 import com.ogc.standard.exception.BizException;
+import com.ogc.standard.exception.EBizErrorCode;
 
 @Service
 public class AdoptOrderAOImpl implements IAdoptOrderAO {
 
     @Autowired
-    private IAdoptOrderBO adoptOrderBO;
+    private IProductBO productBO;
 
     @Autowired
     private IProductSpecsBO productSpecsBO;
 
     @Autowired
-    private IProductBO productBO;
+    private IAdoptOrderBO adoptOrderBO;
 
     @Autowired
     private ITreeBO treeBO;
@@ -51,51 +54,58 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
     private IAdoptOrderTreeBO adoptOrderTreeBO;
 
     @Autowired
+    private IUserBO userBO;
+
+    @Autowired
     private IAccountBO accountBO;
 
     @Override
-    public String commitAdoptOrder(XN629040Req req) {
-        Product product = productBO.getProduct(req.getProductCode());
+    @Transactional
+    public String commitAdoptOrder(String userId, String specsCode,
+            Integer quantity) {
+        // 参数检查
+        User user = userBO.getUser(userId);
+
+        ProductSpecs productSpecs = productSpecsBO.getProductSpecs(specsCode);
+        Product product = productBO.getProduct(productSpecs.getProductCode());
         if (!EProductStatus.TO_ADOPT.getCode().equals(product.getStatus())) {
             throw new BizException("xn0000", "认养产品不是已上架待认养状态，不能下单");
         }
-        List<Tree> treeList = treeBO.queryTreeListByProduct(product.getCode(),
+
+        int treeRemainCount = treeBO.getTreeCount(product.getCode(),
             ETreeStatus.TO_ADOPT.getCode());
-        if (StringValidater.toInteger(req.getQuantity()) > treeList.size()) {
+        List<Tree> treeRemainList = treeBO.queryTreeListByOrderCode(
+            product.getCode(), ETreeStatus.TO_ADOPT.getCode());
+        if (quantity > treeRemainCount) {
             throw new BizException("xn0000", "库存数量不足，不能下单");
         }
-        AdoptOrder data = new AdoptOrder();
-        data.setType(req.getType());
-        data.setProductCode(req.getProductCode());
-        ProductSpecs specs = productSpecsBO.getProductSpecs(req.getSpecsCode());
-        data.setProductSpecsName(specs.getName());
-        data.setPrice(specs.getPrice());
-        data.setYear(specs.getYear());
-        data.setStartDatetime(specs.getStartDatetime());
-        data.setEndDatetime(specs.getEndDatetime());
-        data.setQuantity(StringValidater.toInteger(req.getQuantity()));
-        data.setAmount(AmountUtil.mul(data.getPrice(), data.getQuantity()));
-        data.setApplyUser(req.getUserId());
-        data.setApplyDatetime(new Date());
-        data.setStatus(EAdoptOrderStatus.TO_PAY.getCode());
-        String code = adoptOrderBO.saveAdoptOrder(data);
+
+        // 落地订单
+        String orderCode = adoptOrderBO.saveAdoptOrder(user, product,
+            productSpecs, quantity);
+
         // 更改树状态
-        for (Tree tree : treeList) {
-            treeBO.refreshAdoptTree(tree.getCode(), code);
+        for (Tree tree : treeRemainList) {
+            treeBO.refreshAdoptTree(tree.getCode(), orderCode);
         }
-        return code;
+        return orderCode;
     }
 
     @Override
-    public void cancelAdoptOrder(String code) {
+    @Transactional
+    public void cancelAdoptOrder(String code, String userId, String remark) {
         AdoptOrder data = adoptOrderBO.getAdoptOrder(code);
         if (!EAdoptOrderStatus.TO_PAY.getCode().equals(data.getStatus())) {
-            throw new BizException("xn0000", "订单不是待支付状态，不能取消");
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "订单不是待支付状态，不能取消");
         }
-        data.setStatus(EAdoptOrderStatus.CANCELED.getCode());
-        data.setUpdater(data.getApplyUser());
-        data.setUpdateDatetime(new Date());
-        adoptOrderBO.cancelAdoptOrder(data);
+
+        if (!data.getApplyUser().equals(userId)) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "当前订单不是您本人的，不能取消");
+        }
+        adoptOrderBO.cancelAdoptOrder(data, remark);
+
         // 更新树状态
         List<Tree> treeList = treeBO.queryTreeListByOrderCode(data.getCode(),
             ETreeStatus.TO_PAY.getCode());
@@ -106,37 +116,45 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
 
     @Override
     @Transactional
-    public void payAdoptOrder(String code, String payType, String isJfDeduct) {
+    public Object toPayAdoptOrder(String code, String payType, String isJfDeduct) {
         AdoptOrder data = adoptOrderBO.getAdoptOrder(code);
         if (!EAdoptOrderStatus.TO_PAY.getCode().equals(data.getStatus())) {
             throw new BizException("xn0000", "订单不是待支付状态，不能支付");
         }
-        if (EBoolean.YES.getCode().equals(isJfDeduct)) {// 使用积分抵扣
-            Account account = accountBO.getAccountByUser(data.getApplyUser(),
-                ECurrency.JF.getCode());
-            // accountBO.changeAmount(account, account.getAmount(),
-            // EPayType.BALANCE.getCode(), null, data.getCode(),
-            // ECustomerJFAccountBizType.COLLECTIVE.getCode(), null);
-            data.setJfDeductAmount(0l);
+
+        // 支付订单
+        Object result = null;
+        if (EPayType.YE.getCode().equals(payType)) {// 余额支付
+            result = toPayAdoptOrderYue(data, isJfDeduct);
+        } else if (EPayType.ALIPAY.getCode().equals(payType)) {// 支付宝支付
+
+        } else if (EPayType.WEIXIN_H5.getCode().equals(payType)) {// 微信支付
+        }
+        return result;
+    }
+
+    // 1、判断余额是否足够，并扣除账户余额
+    // 2、进行分销
+    // 3、更新订单和树状态
+    private Object toPayAdoptOrderYue(AdoptOrder data, String isDk) {
+        XN629048Res resultRes = adoptOrderBO.getOrderDkAmount(data, isDk);
+        Account cnyAccount = accountBO.getAccountByUser(data.getApplyUser(),
+            ECurrency.CNY.getCode());
+        BigDecimal payAmount = data.getAmount().subtract(
+            resultRes.getCnyAmount());
+        if (cnyAccount.getAmount().compareTo(payAmount) == -1) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "人民币账户余额不足");
         }
 
-        if (EPayType.BALANCE.getCode().equals(payType)) {// 余额支付
+        Account sysAccount = accountBO.getAccount(ESystemAccount.SYS_ACOUNT_CNY
+            .getCode());
+        // accountBO.transAmount(cnyAccount, sysAccount, data.getAmount(),
+        // EJourBizTypePlat.AJ_SUBSIDY.getCode(),
+        // EJourBizTypeUser.AJ_CHARGE.getCode(),
+        // EJourBizTypePlat.AJ_SUBSIDY.getValue(),
+        // EJourBizTypeUser.AJ_CHARGE.getValue(), "用户充值");
 
-        }
-        // TODO 支付宝微信银行卡
-        data.setPayType(payType);
-        data.setPayAmount(0l);
-        data.setPayDatetime(new Date());
-        data.setBackJfAmount(0l);
-        data.setUpdater(data.getApplyUser());
-        data.setUpdateDatetime(new Date());
-        if (data.getPayDatetime().getTime() < data.getStartDatetime().getTime()) {// 支付时间小于认养开始时间
-            data.setStatus(EAdoptOrderStatus.TO_ADOPT.getCode());
-        } else {
-            data.setStatus(EAdoptOrderStatus.ADOPT.getCode());
-        }
-        adoptOrderBO.payAdoptOrder(data);
-
+        adoptOrderBO.payYueSuccess(data, resultRes, BigDecimal.ZERO);
         List<Tree> treeList = treeBO.queryTreeListByOrderCode(data.getCode(),
             ETreeStatus.TO_PAY.getCode());
         if (CollectionUtils.isNotEmpty(treeList)) {
@@ -144,13 +162,20 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
                 // 更新树状态
                 treeBO.refreshPayTree(tree.getCode());
                 // 分配认养权
-                adoptOrderTreeBO
-                    .saveAdoptOrderTree(data.getCode(), tree.getTreeNumber(),
-                        data.getStartDatetime(), data.getEndDatetime(),
-                        data.getPrice(), data.getApplyUser());
+                adoptOrderTreeBO.saveAdoptOrderTree(data, tree.getTreeNumber());
             }
         }
-        // 分配分红 TODO
+        return new BooleanRes(true);
+    }
+
+    @Override
+    public XN629048Res getOrderDkAmount(String code) {
+        AdoptOrder data = adoptOrderBO.getAdoptOrder(code);
+        if (!EAdoptOrderStatus.TO_PAY.getCode().equals(data.getStatus())) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "当前订单不是待支付状态");
+        }
+        return adoptOrderBO.getOrderDkAmount(data, EBoolean.YES.getCode());
     }
 
     @Override

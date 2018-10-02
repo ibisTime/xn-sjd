@@ -25,16 +25,6 @@ public class TreeBOImpl extends PaginableBOImpl<Tree> implements ITreeBO {
     private ITreeDAO treeDAO;
 
     @Override
-    public boolean isTreeExist(String code) {
-        Tree condition = new Tree();
-        condition.setCode(code);
-        if (treeDAO.selectTotalCount(condition) > 0) {
-            return true;
-        }
-        return false;
-    }
-
-    @Override
     public boolean isTreeNumberExist(String treeNumber) {
         Tree condition = new Tree();
         condition.setTreeNumber(treeNumber);
@@ -182,17 +172,30 @@ public class TreeBOImpl extends PaginableBOImpl<Tree> implements ITreeBO {
     }
 
     @Override
-    public List<Tree> queryTreeListByProduct(String productCode,
-            String status) {
+    public List<Tree> queryTreeListByProduct(String productCode, String status) {
         Tree condition = new Tree();
         condition.setProductCode(productCode);
         condition.setStatus(status);
         return treeDAO.selectList(condition);
     }
 
+    // 获取树木总量
+    public int getTreeCount(String productCode) {
+        Tree condition = new Tree();
+        condition.setProductCode(productCode);
+        return (int) treeDAO.selectTotalCount(condition);
+    }
+
+    // 获取树木各个状态总量
+    public int getTreeCount(String productCode, String status) {
+        Tree condition = new Tree();
+        condition.setProductCode(productCode);
+        condition.setStatus(status);
+        return (int) treeDAO.selectTotalCount(condition);
+    }
+
     @Override
-    public List<Tree> queryTreeListByOrderCode(String orderCode,
-            String status) {
+    public List<Tree> queryTreeListByOrderCode(String orderCode, String status) {
         Tree condition = new Tree();
         condition.setCurOrderCode(orderCode);
         condition.setStatus(status);

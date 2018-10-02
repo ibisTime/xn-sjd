@@ -54,6 +54,10 @@ public class XN629010Req extends BaseReq {
     @NotBlank
     private String rank;
 
+    // 描述
+    @NotBlank
+    private String description;
+
     // 省
     @NotBlank
     private String province;
@@ -71,12 +75,14 @@ public class XN629010Req extends BaseReq {
     private String town;
 
     // 募集开始时间
+    @NotBlank
     private String raiseStartDatetime;
 
     // 募集结束时间
+    @NotBlank
     private String raiseEndDatetime;
 
-    // 募集总量
+    // 募集总数量
     private String raiseCount;
 
     // 产品规格列表
@@ -93,6 +99,14 @@ public class XN629010Req extends BaseReq {
 
     // 备注
     private String remark;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public String getName() {
         return name;

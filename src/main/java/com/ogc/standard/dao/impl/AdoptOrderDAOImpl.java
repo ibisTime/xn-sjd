@@ -19,7 +19,7 @@ public class AdoptOrderDAOImpl extends AMybatisTemplate implements
 
     @Override
     public int delete(AdoptOrder data) {
-        return super.delete(NAMESPACE.concat("delete_adoptOrder"), data);
+        return 0;
     }
 
     @Override
@@ -48,18 +48,27 @@ public class AdoptOrderDAOImpl extends AMybatisTemplate implements
     }
 
     @Override
-    public int update(AdoptOrder data) {
-        return super.update(NAMESPACE.concat("update_adoptOrder"), data);
-    }
-
-    @Override
     public void updateCancelAdoptOrder(AdoptOrder data) {
         super.update(NAMESPACE.concat("update_cancelAdoptOrder"), data);
     }
 
+    // 余额支付
     @Override
-    public void updatepayAdoptOrder(AdoptOrder data) {
-        super.update(NAMESPACE.concat("update_payAdoptOrder"), data);
+    public void updatePayYueSuccess(AdoptOrder data) {
+        super.update(NAMESPACE.concat("update_payYueSuccess"), data);
+    }
+
+    // 预支付更新
+    @Override
+    public void updatePayGroup(AdoptOrder data) {
+        super.update(NAMESPACE.concat("update_payGroup"), data);
+    }
+
+    // 支付回调成功
+    @Override
+    public void updatePaySuccess(AdoptOrder data) {
+        super.update(NAMESPACE.concat("update_paySuccess"), data);
+
     }
 
 }

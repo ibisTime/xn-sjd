@@ -18,8 +18,8 @@ import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.exception.BizException;
 
 @Component
-public class ProductSpecsBOImpl extends PaginableBOImpl<ProductSpecs>
-        implements IProductSpecsBO {
+public class ProductSpecsBOImpl extends PaginableBOImpl<ProductSpecs> implements
+        IProductSpecsBO {
 
     @Autowired
     private IProductSpecsDAO productSpecsDAO;
@@ -28,14 +28,13 @@ public class ProductSpecsBOImpl extends PaginableBOImpl<ProductSpecs>
     public String saveProductSpecs(String productCode, XN629010ReqSpecs specs) {
         ProductSpecs data = new ProductSpecs();
 
-        String code = OrderNoGenerater
-            .generate(EGeneratePrefix.ProductSpec.getCode());
+        String code = OrderNoGenerater.generate(EGeneratePrefix.ProductSpec
+            .getCode());
         data.setCode(code);
         data.setProductCode(productCode);
         data.setName(specs.getName());
-        data.setPrice(StringValidater.toLong(specs.getPrice()));
+        data.setPrice(StringValidater.toBigDecimal(specs.getPrice()));
 
-        data.setYear(Float.parseFloat(specs.getYear()));
         data.setStartDatetime(DateUtil.strToDate(specs.getStartDatetime(),
             DateUtil.FRONT_DATE_FORMAT_STRING));
         data.setEndDatetime(DateUtil.strToDate(specs.getEndDatetime(),
@@ -52,8 +51,7 @@ public class ProductSpecsBOImpl extends PaginableBOImpl<ProductSpecs>
     }
 
     @Override
-    public List<ProductSpecs> queryProductSpecsListByProduct(
-            String productCode) {
+    public List<ProductSpecs> queryProductSpecsListByProduct(String productCode) {
         ProductSpecs condition = new ProductSpecs();
         condition.setProductCode(productCode);
         return productSpecsDAO.selectList(condition);
