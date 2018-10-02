@@ -40,6 +40,9 @@ CREATE TABLE `tzb_product` (
   `code` varchar(32) NOT NULL COMMENT '编号',
   `name` varchar(255) DEFAULT NULL COMMENT '名称',
   `sell_type` varchar(4) DEFAULT NULL COMMENT '销售分类（0个人/1定向/2捐赠/3集体）',
+  `direct_type` varchar(32) DEFAULT NULL COMMENT '定向类型(1=等级 2=个人)',
+  `direct_object` varchar(255) DEFAULT NULL COMMENT '定向对象',
+  
   `owner_id` varchar(32) DEFAULT NULL COMMENT '产权方编号',
   `category_code` varchar(32) DEFAULT NULL COMMENT '产品分类',
   `list_pic` text COMMENT '列表图片',

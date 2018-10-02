@@ -6,6 +6,9 @@
 		<result column="code" property="code" />
 		<result column="name" property="name" />
 		<result column="sell_type" property="sellType" />
+		<result column="direct_type" property="directType" />
+		<result column="direct_object" property="directObject" />
+		
 		<result column="owner_id" property="ownerId" />
 		<result column="category_code" property="categoryCode" />
 		
@@ -45,6 +48,9 @@
 			<if test="sellType != null and sellType != '' ">
 				AND t.sell_type = #{sellType}
 			</if>
+			<if test="directType != null and directType != '' ">
+				AND t.direct_type = #{directType}
+			</if>
 			<if test="ownerId != null and ownerId != '' ">
 				AND t.owner_id = #{ownerId}
 			</if>
@@ -78,6 +84,8 @@
 		t.code
 		,t.name
 		,t.sell_type
+		,t.direct_type
+		,t.direct_object
 		,t.owner_id
 		,t.category_code
 		
@@ -127,6 +135,8 @@
 		code
 		,name
 		,sell_type
+		,direct_type
+		,direct_object
 		,owner_id
 		,category_code
 		
@@ -159,6 +169,8 @@
 		#{code}
 		,#{name}
 		,#{sellType}
+		,#{directType}
+		,#{directObject}
 		,#{ownerId}
 		,#{categoryCode}
 		
@@ -194,6 +206,8 @@
 		SET
 		name = #{name}
 		,sell_type = #{sellType}
+		,direct_type = #{directType}
+		,direct_object =#{directObject}
 		,category_code = #{categoryCode}
 		,list_pic = #{listPic}
 		,banner_pic = #{bannerPic}

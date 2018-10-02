@@ -28,8 +28,10 @@ import com.ogc.standard.dto.res.XN629048Res;
 import com.ogc.standard.enums.EAdoptOrderStatus;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECurrency;
+import com.ogc.standard.enums.EDirectType;
 import com.ogc.standard.enums.EPayType;
 import com.ogc.standard.enums.EProductStatus;
+import com.ogc.standard.enums.ESellType;
 import com.ogc.standard.enums.ESystemAccount;
 import com.ogc.standard.enums.ETreeStatus;
 import com.ogc.standard.exception.BizException;
@@ -69,7 +71,8 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
         ProductSpecs productSpecs = productSpecsBO.getProductSpecs(specsCode);
         Product product = productBO.getProduct(productSpecs.getProductCode());
         if (!EProductStatus.TO_ADOPT.getCode().equals(product.getStatus())) {
-            throw new BizException("xn0000", "认养产品不是已上架待认养状态，不能下单");
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "认养产品不是已上架待认养状态，不能下单");
         }
 
         int treeRemainCount = treeBO.getTreeCount(product.getCode(),
@@ -77,7 +80,24 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
         List<Tree> treeRemainList = treeBO.queryTreeListByOrderCode(
             product.getCode(), ETreeStatus.TO_ADOPT.getCode());
         if (quantity > treeRemainCount) {
-            throw new BizException("xn0000", "库存数量不足，不能下单");
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "库存数量不足，不能下单");
+        }
+
+        // 定向产品针对类型校验
+        if (ESellType.DIRECT.getCode().equals(product.getSellType())) {
+            if (EDirectType.LEVEL.getCode().equals(product.getDirectType())) {
+                if (!product.getDirectObject().equals(user.getLevel())) {
+                    throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                        "定向产品等级不符，不能下单");
+                }
+            } else if (EDirectType.ONE_USER.getCode().equals(
+                product.getDirectType())) {
+                if (!product.getDirectObject().equals(user.getUserId())) {
+                    throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                        "定向产品针对用户不符，不能下单");
+                }
+            }
         }
 
         // 落地订单
@@ -148,6 +168,7 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
 
         Account sysAccount = accountBO.getAccount(ESystemAccount.SYS_ACOUNT_CNY
             .getCode());
+
         // accountBO.transAmount(cnyAccount, sysAccount, data.getAmount(),
         // EJourBizTypePlat.AJ_SUBSIDY.getCode(),
         // EJourBizTypeUser.AJ_CHARGE.getCode(),

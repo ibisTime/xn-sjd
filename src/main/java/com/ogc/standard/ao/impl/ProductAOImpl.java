@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,6 +53,13 @@ public class ProductAOImpl implements IProductAO {
         if (ECategoryStatus.PUT_OFF.getCode().equals(category.getStatus())) {
             throw new BizException("xn0000", "产品分类已下架，请重新选择！");
         }
+        if (ESellType.DIRECT.getCode().equals(req.getSellType())) {
+            if (StringUtils.isBlank(req.getDirectType())
+                    || StringUtils.isBlank(req.getDirectObject())) {
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                    "定向产品方向和针对对象不能为空");
+            }
+        }
         Product product = productBO.saveProduct(req);
 
         // 添加产品规格
@@ -80,7 +88,13 @@ public class ProductAOImpl implements IProductAO {
         if (ECategoryStatus.PUT_OFF.getCode().equals(category.getStatus())) {
             throw new BizException("xn0000", "产品分类已下架，请重新选择！");
         }
-
+        if (ESellType.DIRECT.getCode().equals(req.getSellType())) {
+            if (StringUtils.isBlank(req.getDirectType())
+                    || StringUtils.isBlank(req.getDirectObject())) {
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                    "定向产品方向和针对对象不能为空");
+            }
+        }
         Product data = productBO.getProduct(req.getCode());
         // 未提交和已下架后可修改
         if (!EProductStatus.DRAFT.getCode().equals(data.getStatus())

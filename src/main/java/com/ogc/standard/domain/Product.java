@@ -25,6 +25,12 @@ public class Product extends ABaseDO {
     // 销售分类（0个人/1定向/2捐赠/3集体）
     private String sellType;
 
+    // 定向类型(1=等级 2=个人)
+    private String directType;
+
+    // 定向对象
+    private String directObject;
+
     // 产权方编号
     private String ownerId;
 
@@ -127,6 +133,22 @@ public class Product extends ABaseDO {
 
     // 产品最大价格
     private BigDecimal maxPrice;
+
+    public String getDirectType() {
+        return directType;
+    }
+
+    public void setDirectType(String directType) {
+        this.directType = directType;
+    }
+
+    public String getDirectObject() {
+        return directObject;
+    }
+
+    public void setDirectObject(String directObject) {
+        this.directObject = directObject;
+    }
 
     public BigDecimal getMinPrice() {
         return minPrice;

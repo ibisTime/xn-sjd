@@ -47,8 +47,8 @@ public class ChargeAOImpl implements IChargeAO {
         Account account = accountBO.getAccount(accountNumber);
         // 生成充值订单
         String code = chargeBO.applyOrderOffline(account,
-            EJourBizTypeUser.AJ_CHARGE.getCode(), amount, payCardInfo,
-            payCardNo, applyUser, applyNote);
+            EJourBizTypeUser.CHARGE.getCode(), amount, payCardInfo, payCardNo,
+            applyUser, applyNote);
         return code;
     }
 

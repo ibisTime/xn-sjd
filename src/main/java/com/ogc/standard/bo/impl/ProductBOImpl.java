@@ -37,6 +37,8 @@ public class ProductBOImpl extends PaginableBOImpl<Product> implements
         data.setCode(code);
         data.setName(req.getName());
         data.setSellType(req.getSellType());
+        data.setDirectType(req.getDirectType());
+        data.setDirectObject(req.getDirectObject());
         data.setCategoryCode(req.getCategoryCode());
         data.setOwnerId(req.getOwnerId());
 
@@ -81,6 +83,8 @@ public class ProductBOImpl extends PaginableBOImpl<Product> implements
     public void refreshProduct(Product data, XN629011Req req) {
         data.setName(req.getName());
         data.setSellType(req.getSellType());
+        data.setDirectType(req.getDirectType());
+        data.setDirectObject(req.getDirectObject());
         data.setCategoryCode(req.getCategoryCode());
         data.setOwnerId(req.getOwnerId());
         data.setListPic(req.getListPic());

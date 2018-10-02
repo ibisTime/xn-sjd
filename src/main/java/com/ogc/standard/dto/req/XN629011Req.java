@@ -26,6 +26,12 @@ public class XN629011Req extends BaseReq {
     @NotBlank
     private String sellType;
 
+    // 定向类型(1=等级 2=个人)
+    private String directType;
+
+    // 定向对象
+    private String directObject;
+
     // 产权方编号
     @NotBlank
     private String ownerId;
@@ -284,6 +290,22 @@ public class XN629011Req extends BaseReq {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getDirectType() {
+        return directType;
+    }
+
+    public void setDirectType(String directType) {
+        this.directType = directType;
+    }
+
+    public String getDirectObject() {
+        return directObject;
+    }
+
+    public void setDirectObject(String directObject) {
+        this.directObject = directObject;
     }
 
 }
