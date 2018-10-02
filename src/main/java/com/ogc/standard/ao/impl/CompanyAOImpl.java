@@ -32,7 +32,7 @@ public class CompanyAOImpl implements ICompanyAO {
         if (ESYSUserStatus.TO_FILL_IN.getCode().equals(user.getStatus())) {
             throw new BizException("xn0000", "不是待填写公司资料状态，不能操作");
         }
-        sysUserBO.refreshStatus(user.getUserId(), ESYSUserStatus.TO_APPROVE,
+        sysUserBO.refreshStatus(user.getUserId(), ESYSUserStatus.NORMAL,
             req.getUserId(), null);
         Company data = new Company();
         data.setUserId(user.getUserId());

@@ -25,7 +25,7 @@ public class XN629040 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
 
-        return new PKCodeRes(adoptOrderAO.addAdoptOrder(req));
+        return new PKCodeRes(adoptOrderAO.commitAdoptOrder(req));
     }
 
     @Override
