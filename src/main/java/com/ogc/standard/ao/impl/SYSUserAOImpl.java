@@ -125,7 +125,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
         data.setLoginPwd(MD5Util.md5("888888"));
         data.setLoginPwdStrength(PwdUtil.calculateSecurityLevel("888888"));
         data.setCreateDatetime(new Date());
-        data.setStatus(ESYSUserStatus.TO_APPROVE.getCode());// 代注册的也是待审核？
+        data.setStatus(ESYSUserStatus.NORMAL.getCode());// 代注册的也是待审核？
         data.setRemark(remark);
         sysUserBO.doSaveSYSuser(data);
         // 生成待填写的公司
@@ -142,7 +142,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
             throw new BizException("xn805050", "用户不存在");
         }
         SYSUser data = sysUserBO.getSYSUser(userId);
-        if (!ESYSUserStatus.TO_APPROVE.getCode().equals(data.getStatus())) {
+        if (!ESYSUserStatus.NORMAL.getCode().equals(data.getStatus())) {
             throw new BizException("xn805050", "用户不是待审核状态");
         }
         if (EBoolean.YES.getCode().equals(approveResult)) {
