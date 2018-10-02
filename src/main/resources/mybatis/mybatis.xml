@@ -54,5 +54,6 @@
 		<typeAlias alias="giftOrder" type="com.ogc.standard.domain.GiftOrder"/>
 		<typeAlias alias="visitor" type="com.ogc.standard.domain.Visitor"/>
 		<typeAlias alias="article" type="com.ogc.standard.domain.Article"/>
+		<typeAlias alias="carbonBubbleOrder" type="com.ogc.standard.domain.CarbonBubbleOrder"/>
 	</typeAliases>
 </configuration>
