@@ -18,7 +18,7 @@ public class XN629042Req {
     @NotBlank
     private String payType;
 
-    // 支付方式
+    // 是否积分抵扣0否1是
     @NotBlank
     private String isJfDeduct;
 

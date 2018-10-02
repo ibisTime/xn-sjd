@@ -12,9 +12,9 @@ public class AmountUtil {
         return a.multiply(b).longValue();
     }
 
-    public static BigDecimal mul(BigDecimal amount, double number) {
+    public static BigDecimal mul(BigDecimal amount, double rate) {
         BigDecimal a = amount;
-        BigDecimal b = new BigDecimal(Double.toString(number));
+        BigDecimal b = new BigDecimal(Double.toString(rate));
         return a.multiply(b);
     }
 

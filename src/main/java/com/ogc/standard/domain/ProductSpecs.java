@@ -1,5 +1,6 @@
 package com.ogc.standard.domain;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import com.ogc.standard.dao.base.ABaseDO;
@@ -24,10 +25,7 @@ public class ProductSpecs extends ABaseDO {
     private String productCode;
 
     // 认养价格
-    private long price;
-
-    // 认养年限
-    private float year;
+    private BigDecimal price;
 
     // 认养开始时间
     private Date startDatetime;
@@ -59,20 +57,12 @@ public class ProductSpecs extends ABaseDO {
         return productCode;
     }
 
-    public long getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(long price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
-    }
-
-    public float getYear() {
-        return year;
-    }
-
-    public void setYear(float year) {
-        this.year = year;
     }
 
     public Date getStartDatetime() {

@@ -13,7 +13,6 @@ import com.ogc.standard.bo.IGiveTreeRecordBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.AdoptOrderTree;
 import com.ogc.standard.domain.GiveTreeRecord;
-import com.ogc.standard.exception.BizException;
 
 @Service
 public class AdoptOrderTreeAOImpl implements IAdoptOrderTreeAO {
@@ -40,22 +39,6 @@ public class AdoptOrderTreeAOImpl implements IAdoptOrderTreeAO {
         record.setToUserId(toUserId);
         record.setCreateDatetime(new Date());
         giveTreeRecordBO.saveGiveTreeRecord(record);
-    }
-
-    @Override
-    public int editAdoptOrderTree(AdoptOrderTree data) {
-        if (!adoptOrderTreeBO.isAdoptOrderTreeExist(data.getCode())) {
-            throw new BizException("xn0000", "记录编号不存在");
-        }
-        return adoptOrderTreeBO.refreshAdoptOrderTree(data);
-    }
-
-    @Override
-    public int dropAdoptOrderTree(String code) {
-        if (!adoptOrderTreeBO.isAdoptOrderTreeExist(code)) {
-            throw new BizException("xn0000", "记录编号不存在");
-        }
-        return adoptOrderTreeBO.removeAdoptOrderTree(code);
     }
 
     @Override

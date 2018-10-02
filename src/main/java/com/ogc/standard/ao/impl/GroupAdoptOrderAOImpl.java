@@ -65,11 +65,10 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
         }
         GroupAdoptOrder data = new GroupAdoptOrder();
         data.setProductCode(req.getProductCode());
-        ProductSpecs productSpecs = productSpecsBO
-            .getProductSpecs(req.getSpecsCode());
+        ProductSpecs productSpecs = productSpecsBO.getProductSpecs(req
+            .getSpecsCode());
         data.setProductSpecsName(productSpecs.getName());
         data.setPrice(productSpecs.getPrice());
-        data.setYear(productSpecs.getYear());
         data.setStartDatetime(productSpecs.getStartDatetime());
         data.setEndDatetime(productSpecs.getEndDatetime());
         data.setQuantity(StringValidater.toInteger(req.getQuantity()));
@@ -103,16 +102,14 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
         if (new Date().getTime() > product.getRaiseEndDatetime().getTime()) {
             throw new BizException("xn0000", "认养产品募集时间已结束，不能下单");
         }
-        if (StringValidater
-            .toInteger(req.getQuantity()) > (product.getRaiseCount()
-                    - product.getNowCount())) {
+        if (StringValidater.toInteger(req.getQuantity()) > (product
+            .getRaiseCount() - product.getNowCount())) {
             throw new BizException("xn0000", "库存数量不足，不能下单");
         }
         GroupAdoptOrder data = new GroupAdoptOrder();
         data.setProductCode(order.getProductCode());
         data.setProductSpecsName(order.getProductSpecsName());
         data.setPrice(order.getPrice());
-        data.setYear(order.getYear());
         data.setStartDatetime(order.getStartDatetime());
         data.setEndDatetime(order.getEndDatetime());
         data.setQuantity(StringValidater.toInteger(req.getQuantity()));
@@ -171,15 +168,14 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
         data.setPayType(type);
         data.setPayGroup("");
         data.setPayCode("");
-        data.setPayAmount(0l);
+        // data.setPayAmount(0l);
         // TODO 积分抵扣 积分账户查询余额 默认抵扣还是选择抵扣?
-        data.setJfDeductAmount(0l);
+        // data.setJfDeductAmount(0l);
         data.setPayDatetime(new Date());
-        data.setBackJfAmount(0l);
+        // data.setBackJfAmount(0l);
         data.setUpdater(data.getApplyUser());
         data.setUpdateDatetime(new Date());
-        if (data.getPayDatetime().getTime() < data.getStartDatetime()
-            .getTime()) {// 支付时间小于认养开始时间
+        if (data.getPayDatetime().getTime() < data.getStartDatetime().getTime()) {// 支付时间小于认养开始时间
             data.setStatus(EAdoptOrderStatus.TO_ADOPT.getCode());
         } else {
             data.setStatus(EAdoptOrderStatus.ADOPT.getCode());
@@ -191,11 +187,11 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
             for (Tree tree : treeList) {
                 // 更新树状态
                 treeBO.refreshPayTree(tree.getCode());
-                // 分配认养权
-                adoptOrderTreeBO.saveAdoptOrderTree(data.getCode(),
-                    tree.getTreeNumber(), data.getStartDatetime(),
-                    data.getEndDatetime(), data.getPrice(),
-                    data.getApplyUser());
+                // // 分配认养权
+                // adoptOrderTreeBO
+                // .saveAdoptOrderTree(data.getCode(), tree.getTreeNumber(),
+                // data.getStartDatetime(), data.getEndDatetime(),
+                // data.getPrice(), data.getApplyUser());
             }
         }
         // 分配分红 TODO

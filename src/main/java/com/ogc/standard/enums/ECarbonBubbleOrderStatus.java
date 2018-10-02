@@ -1,16 +1,16 @@
 package com.ogc.standard.enums;
 
 /**
- * 文章权限 公开程度
+ * 碳泡泡产生订单状态
  * @author: jiafr 
- * @since: 2018年10月2日 上午1:19:59 
+ * @since: 2018年10月2日 下午3:17:13 
  * @history:
  */
-public enum EArticleRight {
+public enum ECarbonBubbleOrderStatus {
 
-    OPEN("1", "公开"), PRIVACY("2", "私密"), ONLY_FRIEND("3", "仅好友可见");
+    TO_TAKE("0", "待收取"), TAKED("1", "已收取"), INVALID("2", "已过期");
 
-    EArticleRight(String code, String value) {
+    ECarbonBubbleOrderStatus(String code, String value) {
         this.code = code;
         this.value = value;
     }

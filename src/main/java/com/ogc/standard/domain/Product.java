@@ -1,5 +1,6 @@
 package com.ogc.standard.domain;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -23,6 +24,12 @@ public class Product extends ABaseDO {
 
     // 销售分类（0个人/1定向/2捐赠/3集体）
     private String sellType;
+
+    // 定向类型(1=等级 2=个人)
+    private String directType;
+
+    // 定向对象
+    private String directObject;
 
     // 产权方编号
     private String ownerId;
@@ -48,6 +55,9 @@ public class Product extends ABaseDO {
     // 级别
     private String rank;
 
+    // 产品描述
+    private String description;
+
     // 省
     private String province;
 
@@ -60,16 +70,16 @@ public class Product extends ABaseDO {
     // 镇
     private String town;
 
-    // 募集开始时间
+    // 募集开始时间(集体售卖开始时间/捐赠开始时间)
     private Date raiseStartDatetime;
 
-    // 募集结束时间
+    // 募集结束时间(集体售卖结束时间/捐赠结束时间)
     private Date raiseEndDatetime;
 
-    // 募集总量
+    // 募集总量(集体/捐赠)
     private Integer raiseCount;
 
-    // 已募集数量
+    // 已募集数量(集体/捐赠)
     private Integer nowCount;
 
     // UI位置
@@ -106,14 +116,87 @@ public class Product extends ABaseDO {
     // 产品规格列表
     private List<ProductSpecs> productSpecsList;
 
-    // 树木列表
-    private List<Tree> treeList;
-
     // 树木数量
-    private Integer treeCount;
+    private Integer treeTotalCount;
+
+    // 树木列表
+    private List<Tree> treeRemainList;
+
+    // 剩余数量
+    private Integer treeRemainCount;
 
     // 产品类型名称
     private String categoryName;
+
+    // 产品最小价格
+    private BigDecimal minPrice;
+
+    // 产品最大价格
+    private BigDecimal maxPrice;
+
+    public String getDirectType() {
+        return directType;
+    }
+
+    public void setDirectType(String directType) {
+        this.directType = directType;
+    }
+
+    public String getDirectObject() {
+        return directObject;
+    }
+
+    public void setDirectObject(String directObject) {
+        this.directObject = directObject;
+    }
+
+    public BigDecimal getMinPrice() {
+        return minPrice;
+    }
+
+    public void setMinPrice(BigDecimal minPrice) {
+        this.minPrice = minPrice;
+    }
+
+    public BigDecimal getMaxPrice() {
+        return maxPrice;
+    }
+
+    public void setMaxPrice(BigDecimal maxPrice) {
+        this.maxPrice = maxPrice;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Integer getTreeTotalCount() {
+        return treeTotalCount;
+    }
+
+    public void setTreeTotalCount(Integer treeTotalCount) {
+        this.treeTotalCount = treeTotalCount;
+    }
+
+    public List<Tree> getTreeRemainList() {
+        return treeRemainList;
+    }
+
+    public void setTreeRemainList(List<Tree> treeRemainList) {
+        this.treeRemainList = treeRemainList;
+    }
+
+    public Integer getTreeRemainCount() {
+        return treeRemainCount;
+    }
+
+    public void setTreeRemainCount(Integer treeRemainCount) {
+        this.treeRemainCount = treeRemainCount;
+    }
 
     public void setCode(String code) {
         this.code = code;
@@ -353,22 +436,6 @@ public class Product extends ABaseDO {
 
     public void setProductSpecsList(List<ProductSpecs> productSpecsList) {
         this.productSpecsList = productSpecsList;
-    }
-
-    public List<Tree> getTreeList() {
-        return treeList;
-    }
-
-    public void setTreeList(List<Tree> treeList) {
-        this.treeList = treeList;
-    }
-
-    public Integer getTreeCount() {
-        return treeCount;
-    }
-
-    public void setTreeCount(Integer treeCount) {
-        this.treeCount = treeCount;
     }
 
     public String getCategoryName() {

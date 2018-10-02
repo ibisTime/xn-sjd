@@ -96,7 +96,7 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
 
         // 统计累计充值金额
         dbAccount.setInAmount(dbAccount.getInAmount());
-        if (EJourBizTypeUser.AJ_CHARGE.getCode().equals(bizType)) {
+        if (EJourBizTypeUser.CHARGE.getCode().equals(bizType)) {
             dbAccount.setInAmount(dbAccount.getInAmount().add(transAmount));
         }
         dbAccount.setLastOrder(lastOrder);

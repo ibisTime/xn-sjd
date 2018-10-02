@@ -1,5 +1,6 @@
 package com.ogc.standard.domain;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import com.ogc.standard.dao.base.ABaseDO;
@@ -27,10 +28,7 @@ public class GroupAdoptOrder extends ABaseDO {
     private String productSpecsName;
 
     // 认养价格
-    private Long price;
-
-    // 认养年限
-    private float year;
+    private BigDecimal price;
 
     // 认养开始时间
     private Date startDatetime;
@@ -42,7 +40,7 @@ public class GroupAdoptOrder extends ABaseDO {
     private Integer quantity;
 
     // 金额
-    private Long amount;
+    private BigDecimal amount;
 
     // 下单人编号
     private String applyUser;
@@ -63,16 +61,16 @@ public class GroupAdoptOrder extends ABaseDO {
     private String payCode;
 
     // 支付金额
-    private Long payAmount;
+    private BigDecimal payAmount;
 
     // 积分抵扣金额
-    private Long jfDeductAmount;
+    private BigDecimal jfDeductAmount;
 
     // 支付时间
     private Date payDatetime;
 
     // 积分返点金额
-    private Long backJfAmount;
+    private BigDecimal backJfAmount;
 
     // 更新人
     private String updater;
@@ -95,52 +93,44 @@ public class GroupAdoptOrder extends ABaseDO {
 
     private Date endDatetimeEnd;// 认养结束时间止
 
-    public void setCode(String code) {
-        this.code = code;
-    }
-
     public String getCode() {
         return code;
     }
 
-    public void setIdentifyCode(String identifyCode) {
-        this.identifyCode = identifyCode;
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getIdentifyCode() {
         return identifyCode;
     }
 
-    public void setProductCode(String productCode) {
-        this.productCode = productCode;
+    public void setIdentifyCode(String identifyCode) {
+        this.identifyCode = identifyCode;
     }
 
     public String getProductCode() {
         return productCode;
     }
 
-    public void setProductSpecsName(String productSpecsName) {
-        this.productSpecsName = productSpecsName;
+    public void setProductCode(String productCode) {
+        this.productCode = productCode;
     }
 
     public String getProductSpecsName() {
         return productSpecsName;
     }
 
-    public Long getPrice() {
+    public void setProductSpecsName(String productSpecsName) {
+        this.productSpecsName = productSpecsName;
+    }
+
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(Long price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
-    }
-
-    public float getYear() {
-        return year;
-    }
-
-    public void setYear(float year) {
-        this.year = year;
     }
 
     public Date getStartDatetime() {
@@ -167,20 +157,20 @@ public class GroupAdoptOrder extends ABaseDO {
         this.quantity = quantity;
     }
 
-    public Long getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(Long amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
-    }
-
-    public void setApplyUser(String applyUser) {
-        this.applyUser = applyUser;
     }
 
     public String getApplyUser() {
         return applyUser;
+    }
+
+    public void setApplyUser(String applyUser) {
+        this.applyUser = applyUser;
     }
 
     public Date getApplyDatetime() {
@@ -191,51 +181,51 @@ public class GroupAdoptOrder extends ABaseDO {
         this.applyDatetime = applyDatetime;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     public String getStatus() {
         return status;
     }
 
-    public void setPayType(String payType) {
-        this.payType = payType;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getPayType() {
         return payType;
     }
 
-    public void setPayGroup(String payGroup) {
-        this.payGroup = payGroup;
+    public void setPayType(String payType) {
+        this.payType = payType;
     }
 
     public String getPayGroup() {
         return payGroup;
     }
 
-    public void setPayCode(String payCode) {
-        this.payCode = payCode;
+    public void setPayGroup(String payGroup) {
+        this.payGroup = payGroup;
     }
 
     public String getPayCode() {
         return payCode;
     }
 
-    public Long getPayAmount() {
+    public void setPayCode(String payCode) {
+        this.payCode = payCode;
+    }
+
+    public BigDecimal getPayAmount() {
         return payAmount;
     }
 
-    public void setPayAmount(Long payAmount) {
+    public void setPayAmount(BigDecimal payAmount) {
         this.payAmount = payAmount;
     }
 
-    public Long getJfDeductAmount() {
+    public BigDecimal getJfDeductAmount() {
         return jfDeductAmount;
     }
 
-    public void setJfDeductAmount(Long jfDeductAmount) {
+    public void setJfDeductAmount(BigDecimal jfDeductAmount) {
         this.jfDeductAmount = jfDeductAmount;
     }
 
@@ -247,20 +237,20 @@ public class GroupAdoptOrder extends ABaseDO {
         this.payDatetime = payDatetime;
     }
 
-    public Long getBackJfAmount() {
+    public BigDecimal getBackJfAmount() {
         return backJfAmount;
     }
 
-    public void setBackJfAmount(Long backJfAmount) {
+    public void setBackJfAmount(BigDecimal backJfAmount) {
         this.backJfAmount = backJfAmount;
-    }
-
-    public void setUpdater(String updater) {
-        this.updater = updater;
     }
 
     public String getUpdater() {
         return updater;
+    }
+
+    public void setUpdater(String updater) {
+        this.updater = updater;
     }
 
     public Date getUpdateDatetime() {
@@ -271,12 +261,12 @@ public class GroupAdoptOrder extends ABaseDO {
         this.updateDatetime = updateDatetime;
     }
 
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
-
     public String getRemark() {
         return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     public Date getStartDatetimeStart() {

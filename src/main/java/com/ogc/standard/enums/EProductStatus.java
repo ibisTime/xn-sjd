@@ -10,7 +10,7 @@ public enum EProductStatus {
 
     DRAFT("0", "草稿"), TO_APPROVE("1", "已提交待审核"), APPROVE_NO("2",
             "审核不通过"), TO_PUTON("3", "审核通过待上架"), TO_ADOPT("4", "已上架待认养"), LOCKED(
-                    "5", "已锁定"), TO_PUTOFF("6", "已认养可下架"), PUTOFFED("7", "已下架");
+                    "5", "已锁定"), ADOPT("6", "已认养可下架"), PUTOFFED("7", "已下架");
 
     EProductStatus(String code, String value) {
         this.code = code;

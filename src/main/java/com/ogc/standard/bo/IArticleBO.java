@@ -11,7 +11,7 @@ public interface IArticleBO extends IPaginableBO<Article> {
     public boolean isArticleExist(String code);
 
     public String saveArticle(String adoptTreeCode, String treeNo, String type,
-            String right, String title, String content, String photo,
+            String openLevel, String title, String content, String photo,
             EArticleStatus status, String updater);
 
     public int removeArticle(String code);

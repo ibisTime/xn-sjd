@@ -11,10 +11,6 @@ import com.ogc.standard.domain.AdoptOrderTree;
 public interface IAdoptOrderTreeAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
-    public int dropAdoptOrderTree(String code);
-
-    public int editAdoptOrderTree(AdoptOrderTree data);
-
     public Paginable<AdoptOrderTree> queryAdoptOrderTreePage(int start,
             int limit, AdoptOrderTree condition);
 

@@ -4,6 +4,7 @@ import com.ogc.standard.ao.IAdoptOrderAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.ObjValidater;
+import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.dto.req.XN629040Req;
 import com.ogc.standard.dto.res.PKCodeRes;
 import com.ogc.standard.exception.BizException;
@@ -24,8 +25,9 @@ public class XN629040 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-
-        return new PKCodeRes(adoptOrderAO.commitAdoptOrder(req));
+        Integer quantity = StringValidater.toInteger(req.getQuantity());
+        return new PKCodeRes(adoptOrderAO.commitAdoptOrder(req.getUserId(),
+            req.getSpecsCode(), quantity));
     }
 
     @Override

@@ -10,14 +10,6 @@ import org.hibernate.validator.constraints.NotBlank;
  */
 public class XN629040Req {
 
-    // 订单类型（1个人/2定向/3捐赠）
-    @NotBlank
-    private String type;
-
-    // 认养产品编号
-    @NotBlank
-    private String productCode;
-
     // 产品规格编号
     @NotBlank
     private String specsCode;
@@ -29,22 +21,6 @@ public class XN629040Req {
     // 数量
     @NotBlank
     private String quantity;
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getProductCode() {
-        return productCode;
-    }
-
-    public void setProductCode(String productCode) {
-        this.productCode = productCode;
-    }
 
     public String getSpecsCode() {
         return specsCode;

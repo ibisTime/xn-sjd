@@ -27,7 +27,7 @@ public class Visitor extends ABaseDO {
     private String photo;
 
     // 来访时间
-    private String createDatetime;
+    private Date createDatetime;
 
     /**********DB properties***********/
 
@@ -73,12 +73,12 @@ public class Visitor extends ABaseDO {
         return photo;
     }
 
-    public void setCreateDatetime(String createDatetime) {
-        this.createDatetime = createDatetime;
+    public Date getCreateDatetime() {
+        return createDatetime;
     }
 
-    public String getCreateDatetime() {
-        return createDatetime;
+    public void setCreateDatetime(Date createDatetime) {
+        this.createDatetime = createDatetime;
     }
 
     public Date getCreateDatetimeStart() {

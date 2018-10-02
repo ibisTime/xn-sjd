@@ -8,7 +8,7 @@ package com.ogc.standard.enums;
  */
 public enum ESellType {
 
-    PERSON("0", "个人"), DIRECT("1", "定向"), DONATE("2", "捐赠"), COLLECTIVE("3",
+    PERSON("1", "个人"), DIRECT("2", "定向"), DONATE("3", "捐赠"), COLLECTIVE("4",
             "集体");
 
     ESellType(String code, String value) {

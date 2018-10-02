@@ -6,53 +6,65 @@ import java.util.Map;
 import com.ogc.standard.exception.BizException;
 
 /**
- * 
- * @author: lei 
- * @since: 2018年8月23日 下午10:04:20 
+ * @author: xieyj 
+ * @since: 2018年10月2日 下午10:52:13 
  * @history:
  */
 public enum EJourBizTypeUser {
 
-    AJ_CHARGE("charge", "充币"), 
-    AJ_WITHDRAW("withdraw", "提币"), 
-    AJ_WITHDRAW_FEE("withdraw_fee", "提币手续费"),
-    AJ_WITHDRAW_FROZEN("withdraw_frozen", "提币冻结"),
-    AJ_WITHDRAW_UNFROZEN("withdraw_unfrozen", "提币解冻"),
+    // 人民币账户,代理方,养护方
+    CHARGE("charge", "充值"),
 
-    AJ_ACCEPT_BUY("accept_buy", "场外承兑商购买"), 
-    AJ_ACCEPT_SELL("accept_sell","场外承兑商出售"), 
-    AJ_ACCEPT_FEE("accept_fee", "场外承兑商手续费"),
-    AJ_ACCEPT_FROZEN("accept_frozen", "场外承兑商冻结"),
-    AJ_ACCEPT_UNFROZEN("accept_unfrozen", "场外承兑商解冻"),
-    
-    AJ_CCORDER_BUY("ccorder_buy", "场外cc买入"), 
-    AJ_CCORDER_SELL("ccorder_sell", "场外cc卖出"), 
-    AJ_CCORDER_FEE("ccorder_fee", "场外cc手续费"),
-    AJ_CCORDER_FROZEN("ccorder_frozen", "场外cc冻结"),
-    AJ_CCORDER_UNFROZEN_REVOKE("ccorder_unfrozen_revoke", "场外cc撤单解冻"),
-    AJ_CCORDER_UNFROZEN_TRADE("ccorder_unfrozen_trade", "场外cc成交解冻"),
+    WITHDRAW("withdraw", "取现"),
 
-    AJ_BBORDER_BUY("bborder_buy", "币币交易兑入"), 
-    AJ_BBORDER_SELL("bborder_sell", "币币交易兑出"), 
-    AJ_BBORDER_FEE("bborder_fee", "币币交易手续费"),
-    AJ_BBORDER_FROZEN("bborder_frozen", "币币交易冻结"),
-    AJ_BBORDER_UNFROZEN_REVOKE("bborder_unfrozen_revoke", "币币撤单解冻"),
-    AJ_BBORDER_UNFROZEN_TRADE("bborder_unfrozen_trade", "币币交易解冻"),
+    WITHDRAW_FEE("withdraw_fee", "取现手续费"),
 
-    AJ_HC("hc", "红冲"), 
-    AJ_LB("lb", "蓝补"),
-    
-    AJ_DIVIDE("divide", "分红"),
-    AJ_AWARD_REG("award_reg", "拉新奖励"),
-    AJ_AWARD_SPECIAL("award_special", "特殊奖励"),
-    AJ_AWARD_CCORDER("award_ccorder", "场外交易奖励"),
-    AJ_AWARD_BBORDER("award_bborder", "币币交易奖励"),
+    WITHDRAW_FROZEN("withdraw_frozen", "取现冻结"),
 
-    AJ_GAME_IN("game_in", "游戏转入"), // 转账记录用type区分类型
-    AJ_GAME_OUT("game_out", "游戏转出"); // 转账记录用type区分类型
+    WITHDRAW_UNFROZEN("withdraw_unfrozen", "取现解冻"),
 
-   
-    
+    HC("hc", "红冲"),
+
+    LB("lb", "蓝补"),
+
+    ADOPT("adopt", "认养"),
+
+    AGENT_DEDUCT("agent_deduct", "代理提成"),
+
+    OWNER_DEDECT("owner_deduct", "产权收益"),
+
+    MAINTAIN_DEDUCT("maintain_deduct", "养护提成"),
+
+    // 碳泡泡账户
+    ADOPT_BACK("adopt_back", "认养消费每日返碳泡泡"),
+
+    SHARE("share", "分享"),
+
+    PRESENT("present", "赠送"),
+
+    // 积分账户
+    REGIST("reg", "注册送积分"),
+
+    BIND_MOBILE("bind_mobile", "绑定手机"),
+
+    BIND_email("bind_email", "绑定邮箱"),
+
+    UPLOAD_PHOTO("upload_photo", "上传头像"),
+
+    COMPLETE_INFO("complete_info", "完善用户信息"),
+
+    REAL_AUTH("real_auth", "实名认证"),
+
+    SIGN("sign", "签到"),
+
+    ONE_ADOPT_BACK("one_adopt_back", "直推认养消费返积分"),
+
+    TWO_ADOPT_BACK("two_adopt_back", "间推认养消费返积分"),
+
+    INVITE_USER("invite_user", "邀请好友注册"),
+
+    ADOPT_DEDUCT("adopt_deduct", "认养抵扣");
+
     public static EJourBizTypeUser getBizType(String code) {
         Map<String, EJourBizTypeUser> map = getBizTypeMap();
         EJourBizTypeUser result = map.get(code);

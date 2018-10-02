@@ -1,17 +1,16 @@
 package com.ogc.standard.enums;
 
 /**
- * 用户积分账户总金额流水bizType
+ * 文章权限 公开程度
  * @author: jiafr 
- * @since: 2018年9月29日 下午10:19:51 
+ * @since: 2018年10月2日 上午1:19:59 
  * @history:
  */
-public enum ECustomerJFAccountBizType {
+public enum EArticleOpenLevel {
 
-    PERSON("0", "个人"), DIRECT("1", "定向"), DONATE("2", "捐赠"), COLLECTIVE("3",
-            "集体");
+    OPEN("1", "公开"), PRIVACY("2", "私密"), ONLY_FRIEND("3", "仅好友可见");
 
-    ECustomerJFAccountBizType(String code, String value) {
+    EArticleOpenLevel(String code, String value) {
         this.code = code;
         this.value = value;
     }
@@ -27,4 +26,5 @@ public enum ECustomerJFAccountBizType {
     public String getValue() {
         return value;
     }
+
 }

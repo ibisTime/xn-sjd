@@ -1,5 +1,6 @@
 package com.ogc.standard.domain;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import com.ogc.standard.dao.base.ABaseDO;
@@ -27,10 +28,7 @@ public class AdoptOrder extends ABaseDO {
     private String productSpecsName;
 
     // 认养价格
-    private Long price;
-
-    // 认养年限
-    private Float year;
+    private BigDecimal price;
 
     // 认养开始时间
     private Date startDatetime;
@@ -42,7 +40,7 @@ public class AdoptOrder extends ABaseDO {
     private Integer quantity;
 
     // 金额
-    private Long amount;
+    private BigDecimal amount;
 
     // 下单人编号
     private String applyUser;
@@ -62,17 +60,20 @@ public class AdoptOrder extends ABaseDO {
     // 支付渠道编号
     private String payCode;
 
-    // 支付金额
-    private Long payAmount;
+    // 抵扣人民币
+    private BigDecimal cnyDeductAmount;
 
     // 积分抵扣金额
-    private Long jfDeductAmount;
+    private BigDecimal jfDeductAmount;
+
+    // 支付金额
+    private BigDecimal payAmount;
 
     // 支付时间
     private Date payDatetime;
 
     // 积分返点金额
-    private Long backJfAmount;
+    private BigDecimal backJfAmount;
 
     // 更新人
     private String updater;
@@ -94,6 +95,14 @@ public class AdoptOrder extends ABaseDO {
     private Date endDatetimeStart;// 认养结束时间起
 
     private Date endDatetimeEnd;// 认养结束时间止
+
+    public BigDecimal getCnyDeductAmount() {
+        return cnyDeductAmount;
+    }
+
+    public void setCnyDeductAmount(BigDecimal cnyDeductAmount) {
+        this.cnyDeductAmount = cnyDeductAmount;
+    }
 
     public void setCode(String code) {
         this.code = code;
@@ -127,20 +136,12 @@ public class AdoptOrder extends ABaseDO {
         return productSpecsName;
     }
 
-    public Long getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(Long price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
-    }
-
-    public Float getYear() {
-        return year;
-    }
-
-    public void setYear(Float year) {
-        this.year = year;
     }
 
     public Date getStartDatetime() {
@@ -167,12 +168,16 @@ public class AdoptOrder extends ABaseDO {
         this.quantity = quantity;
     }
 
-    public Long getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(Long amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
+    }
+
+    public void setPayAmount(BigDecimal payAmount) {
+        this.payAmount = payAmount;
     }
 
     public void setApplyUser(String applyUser) {
@@ -223,22 +228,6 @@ public class AdoptOrder extends ABaseDO {
         return payCode;
     }
 
-    public Long getPayAmount() {
-        return payAmount;
-    }
-
-    public void setPayAmount(Long payAmount) {
-        this.payAmount = payAmount;
-    }
-
-    public Long getJfDeductAmount() {
-        return jfDeductAmount;
-    }
-
-    public void setJfDeductAmount(Long jfDeductAmount) {
-        this.jfDeductAmount = jfDeductAmount;
-    }
-
     public Date getPayDatetime() {
         return payDatetime;
     }
@@ -247,11 +236,19 @@ public class AdoptOrder extends ABaseDO {
         this.payDatetime = payDatetime;
     }
 
-    public Long getBackJfAmount() {
+    public BigDecimal getJfDeductAmount() {
+        return jfDeductAmount;
+    }
+
+    public void setJfDeductAmount(BigDecimal jfDeductAmount) {
+        this.jfDeductAmount = jfDeductAmount;
+    }
+
+    public BigDecimal getBackJfAmount() {
         return backJfAmount;
     }
 
-    public void setBackJfAmount(Long backJfAmount) {
+    public void setBackJfAmount(BigDecimal backJfAmount) {
         this.backJfAmount = backJfAmount;
     }
 
@@ -309,6 +306,10 @@ public class AdoptOrder extends ABaseDO {
 
     public void setEndDatetimeEnd(Date endDatetimeEnd) {
         this.endDatetimeEnd = endDatetimeEnd;
+    }
+
+    public BigDecimal getPayAmount() {
+        return payAmount;
     }
 
 }

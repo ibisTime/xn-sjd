@@ -19,9 +19,7 @@ import com.ogc.standard.domain.User;
 import com.ogc.standard.dto.res.XN802347Res;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.EChargeStatus;
-import com.ogc.standard.enums.EJourBizTypePlat;
 import com.ogc.standard.enums.EJourBizTypeUser;
-import com.ogc.standard.enums.ESystemAccount;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
 
@@ -49,8 +47,8 @@ public class ChargeAOImpl implements IChargeAO {
         Account account = accountBO.getAccount(accountNumber);
         // 生成充值订单
         String code = chargeBO.applyOrderOffline(account,
-            EJourBizTypeUser.AJ_CHARGE.getCode(), amount, payCardInfo,
-            payCardNo, applyUser, applyNote);
+            EJourBizTypeUser.CHARGE.getCode(), amount, payCardInfo, payCardNo,
+            applyUser, applyNote);
         return code;
     }
 
@@ -80,13 +78,11 @@ public class ChargeAOImpl implements IChargeAO {
         Account userAccount = accountBO.getAccount(data.getAccountNumber());
         User user = userBO.getUser(userAccount.getUserId());
 
-        Account platAccount = accountBO.getAccount(ESystemAccount
-            .getPlatAccount("CNY_ACCEPT"));
-        accountBO.transAmount(platAccount, userAccount, data.getAmount(),
-            EJourBizTypePlat.AJ_SUBSIDY.getCode(),
-            EJourBizTypeUser.AJ_CHARGE.getCode(),
-            EJourBizTypePlat.AJ_SUBSIDY.getValue(),
-            EJourBizTypeUser.AJ_CHARGE.getValue(), "用户充值");
+        // accountBO.transAmount(, userAccount, data.getAmount(),
+        // EJourBizTypePlat.AJ_SUBSIDY.getCode(),
+        // EJourBizTypeUser.AJ_CHARGE.getCode(),
+        // EJourBizTypePlat.AJ_SUBSIDY.getValue(),
+        // EJourBizTypeUser.AJ_CHARGE.getValue(), "用户充值");
 
     }
 

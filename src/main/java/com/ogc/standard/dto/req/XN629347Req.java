@@ -20,7 +20,7 @@ public class XN629347Req extends AListReq {
     private String type;
 
     // 权限（1公开、2私密、3仅好友可见）
-    private String right;
+    private String openLevel;
 
     // 状态（1保存、2待审核、3发布、4下架）
     private String status;
@@ -55,12 +55,12 @@ public class XN629347Req extends AListReq {
         this.type = type;
     }
 
-    public String getRight() {
-        return right;
+    public String getOpenLevel() {
+        return openLevel;
     }
 
-    public void setRight(String right) {
-        this.right = right;
+    public void setOpenLevel(String openLevel) {
+        this.openLevel = openLevel;
     }
 
     public String getStatus() {

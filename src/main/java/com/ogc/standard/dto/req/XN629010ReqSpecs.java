@@ -19,10 +19,6 @@ public class XN629010ReqSpecs extends BaseReq {
     @NotBlank
     private String price;
 
-    // 认养年限
-    @NotBlank
-    private String year;
-
     // 认养开始时间
     @NotBlank
     private String startDatetime;
@@ -45,14 +41,6 @@ public class XN629010ReqSpecs extends BaseReq {
 
     public void setPrice(String price) {
         this.price = price;
-    }
-
-    public String getYear() {
-        return year;
-    }
-
-    public void setYear(String year) {
-        this.year = year;
     }
 
     public String getStartDatetime() {
