@@ -1,0 +1,4 @@
+
+INSERT INTO `tb_tool` (`code`,`name`,`type`,`pic`,`price`,`description`,`validity_term`,`status`,`order_no`,`updater`,`update_datetime`,`remark`) VALUES ('T1538479526','砖石罩','0','',1000.00,'砖石保护罩',12,'1','1','admin',now(),NULL);
+INSERT INTO `tb_tool` (`code`,`name`,`type`,`pic`,`price`,`description`,`validity_term`,`status`,`order_no`,`updater`,`update_datetime`,`remark`) VALUES ('T1538479527','黄金罩','0','',5000.00,'黄金保护罩',12,'1','2','admin',now(),NULL);
+INSERT INTO `tb_tool` (`code`,`name`,`type`,`pic`,`price`,`description`,`validity_term`,`status`,`order_no`,`updater`,`update_datetime`,`remark`) VALUES ('T1538479528','一键收取','1','',100.00,'一键全收取',12,'1','3','admin',now(),NULL);

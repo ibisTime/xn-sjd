@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.AgentUser;
+import com.ogc.standard.dto.res.XN627300Res;
 
 @Component
 public interface IAgentUserAO {
@@ -15,7 +16,7 @@ public interface IAgentUserAO {
     public String doRegister(String mobile, String loginPwd, String smsCaptcha);
 
     // 用户登录
-    public String doLogin(String loginName, String loginPwd);
+    public XN627300Res doLogin(String loginName, String loginPwd);
 
     // 申请分销商
     public String applyAgent(String mobile, String realName, String loginPwd,

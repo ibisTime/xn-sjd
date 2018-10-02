@@ -169,4 +169,12 @@
 		<property name="paginableDAO" ref="articleDAOImpl"/>
 	</bean>
 	
+	<bean id="toolBO" class="com.ogc.standard.bo.impl.ToolBOImpl">
+		<property name="paginableDAO" ref="toolDAOImpl"/>
+	</bean>
+	
+	<bean id="toolOrderBO" class="com.ogc.standard.bo.impl.ToolOrderBOImpl">
+		<property name="paginableDAO" ref="toolOrderDAOImpl"/>
+	</bean>
+	
 </beans>

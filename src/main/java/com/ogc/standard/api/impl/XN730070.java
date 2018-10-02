@@ -5,7 +5,7 @@ import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.ObjValidater;
 import com.ogc.standard.dto.req.XN730070Req;
-import com.ogc.standard.dto.res.PKCodeRes;
+import com.ogc.standard.dto.res.PKUserRes;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
@@ -24,7 +24,7 @@ public class XN730070 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return new PKCodeRes(agentUserAO.doRegister(req.getMobile(),
+        return new PKUserRes(agentUserAO.doRegister(req.getMobile(),
             req.getLoginPwd(), req.getSmsCaptcha()));
     }
 

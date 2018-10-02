@@ -19,12 +19,6 @@ public class XN730085Req extends APageReq {
     // 状态（0待审核/1合伙中/2已解除合伙/3已注销）
     private String status;
 
-    // 创建开始时间
-    private String dateStart;
-
-    // 创建结束时间
-    private String dateEnd;
-
     // 关键字(名字，手机号模糊查询)
     private String keyword;
 
@@ -50,22 +44,6 @@ public class XN730085Req extends APageReq {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public String getDateStart() {
-        return dateStart;
-    }
-
-    public void setDateStart(String dateStart) {
-        this.dateStart = dateStart;
-    }
-
-    public String getDateEnd() {
-        return dateEnd;
-    }
-
-    public void setDateEnd(String dateEnd) {
-        this.dateEnd = dateEnd;
     }
 
     public String getKeyword() {

@@ -1,11 +1,3 @@
-/**
- * @Title ECurrency.java 
- * @Package com.ibis.account.enums 
- * @Description 
- * @author miyb  
- * @date 2015-3-15 下午4:41:06 
- * @version V1.0   
- */
 package com.ogc.standard.enums;
 
 import java.util.HashMap;
@@ -14,8 +6,9 @@ import java.util.Map;
 import com.ogc.standard.exception.BizException;
 
 /**
- * @author: xieyj 
- * @since: 2016年12月24日 下午1:51:38 
+ * 
+ * @author: lei 
+ * @since: 2018年10月2日 下午8:03:24 
  * @history:
  */
 public enum ECurrency {

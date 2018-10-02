@@ -54,8 +54,8 @@ public class CompanyAOImpl implements ICompanyAO {
     @Override
     public int editCompany(XN630302Req req) {
         Company data = companyBO.getCompanyByUserId(req.getUserId());
-
         data.setBussinessLicense(req.getBussinessLicense());
+        data.setOrganizationCode(req.getOrganizationCode());
         data.setCertificateTemplate(req.getCertificateTemplate());
         data.setChargeMobile(req.getChargerMobile());
         data.setAddress(req.getCompanyAddress());

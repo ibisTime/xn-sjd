@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ogc.standard.ao.IAgentUserAO;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IAgentUserBO;
+import com.ogc.standard.bo.ICompanyBO;
 import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.ISmsOutBO;
 import com.ogc.standard.bo.base.Paginable;
@@ -22,6 +23,8 @@ import com.ogc.standard.common.PwdUtil;
 import com.ogc.standard.common.SysConstants;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.domain.AgentUser;
+import com.ogc.standard.domain.Company;
+import com.ogc.standard.dto.res.XN627300Res;
 import com.ogc.standard.enums.EAccountType;
 import com.ogc.standard.enums.EAgentUserKind;
 import com.ogc.standard.enums.EAgentUserStatus;
@@ -45,6 +48,9 @@ public class AgentUserAOImpl implements IAgentUserAO {
     @Autowired
     private IAccountBO accountBO;
 
+    @Autowired
+    private ICompanyBO companyBO;
+
     @Override
     public String doRegister(String mobile, String loginPwd,
             String smsCaptcha) {
@@ -65,11 +71,17 @@ public class AgentUserAOImpl implements IAgentUserAO {
         accountBO.distributeAccount(userId, EAccountType.AGENT,
             ECurrency.JF.getCode());
 
+        // 生成待填写的公司
+        Company company = new Company();
+        company.setUserId(userId);
+        company.setCreateDatetime(new Date());
+        companyBO.saveCompany(company);
+
         return userId;
     }
 
     @Override
-    public String doLogin(String loginName, String loginPwd) {
+    public XN627300Res doLogin(String loginName, String loginPwd) {
         AgentUser condition = new AgentUser();
         condition.setMobile(loginName);
         List<AgentUser> agentUserList = agentUserBO
@@ -86,23 +98,26 @@ public class AgentUserAOImpl implements IAgentUserAO {
         }
 
         String userId = null;
+        String status = null;
         for (AgentUser agentUser : listAgentUser) {
             if (loginName.equals(agentUser.getMobile())) {
                 userId = agentUser.getUserId();
+                status = agentUser.getStatus();
                 break;
             }
         }
 
         if (userId == null) {
-            throw new BizException("xn805050", "登录密码错误");
+            throw new BizException("xn805050", "用户:" + userId + "不存在");
         }
 
-        AgentUser agentUser = agentUserBO.getAgentUser(userId);
-        if (!EAgentUserStatus.Partner.getCode().equals(agentUser.getStatus())) {
-            throw new BizException("xn805050", "该账号未处于合伙关系中，无法登录！");
-        }
+        // AgentUser agentUser = agentUserBO.getAgentUser(userId);
+        // if
+        // (!EAgentUserStatus.Partner.getCode().equals(agentUser.getStatus())) {
+        // throw new BizException("xn805050", "该账号未处于合伙关系中，无法登录！");
+        // }
 
-        return userId;
+        return new XN627300Res(userId, status);
     }
 
     @Override
@@ -280,16 +295,35 @@ public class AgentUserAOImpl implements IAgentUserAO {
     @Override
     public Paginable<AgentUser> queryAgentUserPage(int start, int limit,
             AgentUser condition) {
-        return agentUserBO.getPaginable(start, limit, condition);
+        Paginable<AgentUser> page = agentUserBO.getPaginable(start, limit,
+            condition);
+        if (null != page) {
+            for (AgentUser agentUser : page.getList()) {
+                init(agentUser);
+            }
+        }
+        return page;
     }
 
     @Override
     public List<AgentUser> queryAgentUserList(AgentUser condition) {
-        return agentUserBO.queryAgentUserList(condition);
+        List<AgentUser> agentUserList = agentUserBO
+            .queryAgentUserList(condition);
+        for (AgentUser agentUser : agentUserList) {
+            init(agentUser);
+        }
+        return agentUserList;
     }
 
     @Override
     public AgentUser getAgentUser(String code) {
-        return agentUserBO.getAgentUser(code);
+        AgentUser agentUser = agentUserBO.getAgentUser(code);
+        init(agentUser);
+        return agentUser;
+    }
+
+    public void init(AgentUser data) {
+        Company company = companyBO.getCompanyByUserId(data.getUserId());
+        data.setCompanyInfo(company);
     }
 }

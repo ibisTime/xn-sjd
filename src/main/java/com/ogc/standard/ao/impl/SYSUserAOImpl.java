@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +25,8 @@ import com.ogc.standard.domain.Company;
 import com.ogc.standard.domain.SYSRole;
 import com.ogc.standard.domain.SYSUser;
 import com.ogc.standard.dto.req.XN630060Req;
+import com.ogc.standard.dto.req.XN630064Req;
+import com.ogc.standard.dto.res.XN627300Res;
 import com.ogc.standard.enums.EApplyBindMaintainStatus;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ERoleCode;
@@ -86,7 +87,6 @@ public class SYSUserAOImpl implements ISYSUserAO {
         String userId = OrderNoGenerater.generate("U");
         data.setUserId(userId);
         data.setKind(req.getKind());
-        data.setRealName(req.getCompanyCharger());
         data.setMobile(req.getMobile());
         data.setLoginName(req.getMobile());
         if (ESYSUserKind.OWNER.getCode().equals(req.getKind())) {
@@ -96,41 +96,60 @@ public class SYSUserAOImpl implements ISYSUserAO {
             data.setRoleCode(ERoleCode.MAINTAIN.getCode());
         }
         data.setLoginPwd(MD5Util.md5(req.getLoginPwd()));
-        data.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(req
-            .getLoginPwd()));
+        data.setLoginPwdStrength(
+            PwdUtil.calculateSecurityLevel(req.getLoginPwd()));
         data.setCreateDatetime(new Date());
         data.setStatus(ESYSUserStatus.TO_FILL_IN.getCode());// 待填公司资料
+
+        // 生成待填写的公司
+        Company company = new Company();
+        company.setUserId(userId);
+        company.setCreateDatetime(new Date());
+        String companyCode = companyBO.saveCompany(company);
+
+        data.setCompanyCode(companyCode);
         sysUserBO.doSaveSYSuser(data);
         return userId;
     }
 
     // 代申请
     @Override
-    public String proxyApplySYSUser(String kind, String loginName,
-            String mobile, String realName, String remark) {
-        sysUserBO.isMobileExist(mobile);
+    public String proxyApplySYSUser(XN630064Req req) {
+        sysUserBO.isMobileExist(req.getMobile());
         SYSUser data = new SYSUser();
         String userId = OrderNoGenerater.generate("U");
         data.setUserId(userId);
-        data.setKind(kind);
-        data.setRealName(realName);
-        data.setMobile(mobile);
-        data.setLoginName(loginName);
-        if (ESYSUserKind.OWNER.getCode().equals(kind)) {
+        data.setKind(req.getKind());
+        data.setRealName(req.getRealName());
+        data.setMobile(req.getMobile());
+        data.setLoginName(req.getLoginName());
+        if (ESYSUserKind.OWNER.getCode().equals(req.getKind())) {
             data.setRoleCode("");// TODO
         }
-        if (ESYSUserKind.MAINTAIN.getCode().equals(kind)) {
+        if (ESYSUserKind.MAINTAIN.getCode().equals(req.getKind())) {
             data.setRoleCode("");// TODO
         }
         data.setLoginPwd(MD5Util.md5("888888"));
         data.setLoginPwdStrength(PwdUtil.calculateSecurityLevel("888888"));
         data.setCreateDatetime(new Date());
         data.setStatus(ESYSUserStatus.NORMAL.getCode());// 代注册的也是待审核？
-        data.setRemark(remark);
+        data.setRemark(req.getRemark());
         sysUserBO.doSaveSYSuser(data);
-        // 生成待填写的公司
+        // 待申请填写公司资料，生成公司
         Company company = new Company();
         company.setUserId(userId);
+        company.setName(req.getCompanyName());
+        company.setCharger(req.getCompanyCharger());
+        company.setChargeMobile(req.getChargerMobile());
+        company.setAddress(req.getCompanyAddress());
+        company.setDescription(req.getDescription());
+        company.setBussinessLicense(req.getBussinessLicense());
+        company.setOrganizationCode(req.getOrganizationCode());
+        company.setCertificateTemplate(req.getCertificateTemplate());
+        company.setContractTemplate(req.getContractTemplate());
+        company.setCreateDatetime(new Date());
+        company.setUpdater(userId);
+        company.setUpdateDatetime(new Date());
         companyBO.saveCompany(company);
         return userId;
     }
@@ -142,7 +161,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
             throw new BizException("xn805050", "用户不存在");
         }
         SYSUser data = sysUserBO.getSYSUser(userId);
-        if (!ESYSUserStatus.NORMAL.getCode().equals(data.getStatus())) {
+        if (!ESYSUserStatus.TO_FILL_IN.getCode().equals(data.getStatus())) {
             throw new BizException("xn805050", "用户不是待审核状态");
         }
         if (EBoolean.YES.getCode().equals(approveResult)) {
@@ -158,7 +177,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
 
     // 用户登录
     @Override
-    public String doLogin(String loginName, String loginPwd) {
+    public XN627300Res doLogin(String loginName, String loginPwd) {
         SYSUser condition = new SYSUser();
         condition.setLoginName(loginName);
         List<SYSUser> userList1 = sysUserBO.queryUserList(condition);
@@ -171,7 +190,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
             throw new BizException("xn805050", "登录密码错误");
         }
         SYSUser user = userList2.get(0);
-        return user.getUserId();
+        return new XN627300Res(user.getUserId(), user.getStatus());
     }
 
     // 注销，激活其他管理员
@@ -188,7 +207,8 @@ public class SYSUserAOImpl implements ISYSUserAO {
         String mobile = user.getMobile();
         String smsContent = "";
         ESYSUserStatus userStatus = null;
-        if (ESYSUserStatus.NORMAL.getCode().equalsIgnoreCase(user.getStatus())) {
+        if (ESYSUserStatus.NORMAL.getCode()
+            .equalsIgnoreCase(user.getStatus())) {
             smsContent = "您的账号已被管理员封禁";
             userStatus = ESYSUserStatus.Ren_Locked;
         } else {
@@ -198,8 +218,8 @@ public class SYSUserAOImpl implements ISYSUserAO {
         sysUserBO.refreshStatus(userId, userStatus, updater, remark);
         if (PhoneUtil.isMobile(mobile)) {
             // 发送短信
-            smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
-                    + smsContent, "805091");
+            smsOutBO.sendSmsOut(mobile,
+                "尊敬的" + PhoneUtil.hideMobile(mobile) + smsContent, "805091");
         }
 
     }
@@ -242,14 +262,12 @@ public class SYSUserAOImpl implements ISYSUserAO {
         smsOutBO.checkCaptcha(mobile, smsCaptcha, "630053");
         sysUserBO.resetSelfPwd(user, newLoginPwd);
         // 发送短信
-        smsOutBO.sendSmsOut(
-            mobile,
-            "尊敬的"
-                    + PhoneUtil.hideMobile(mobile)
-                    + "用户，您于"
+        smsOutBO.sendSmsOut(mobile,
+            "尊敬的" + PhoneUtil.hideMobile(mobile) + "用户，您于"
                     + DateUtil.dateToStr(new Date(),
-                        DateUtil.DATA_TIME_PATTERN_1) + "已更改登录密码"
-                    + "，请妥善保管您的账户相关信息。", "631072");
+                        DateUtil.DATA_TIME_PATTERN_1)
+                    + "已更改登录密码" + "，请妥善保管您的账户相关信息。",
+            "631072");
     }
 
     @Override
@@ -287,14 +305,13 @@ public class SYSUserAOImpl implements ISYSUserAO {
         smsOutBO.checkCaptcha(newMobile, smsCaptcha, "630052");
         sysUserBO.resetBindMobile(user, newMobile);
         // 发送短信
-        smsOutBO.sendSmsOut(
-            oldMobile,
-            "尊敬的"
-                    + PhoneUtil.hideMobile(oldMobile)
-                    + "用户，您于"
+        smsOutBO.sendSmsOut(oldMobile,
+            "尊敬的" + PhoneUtil.hideMobile(oldMobile) + "用户，您于"
                     + DateUtil.dateToStr(new Date(),
-                        DateUtil.DATA_TIME_PATTERN_1) + "已将手机号码改为" + newMobile
-                    + "，您的登录名更改为" + newMobile + "，请妥善保管您的账户相关信息。", "631072");
+                        DateUtil.DATA_TIME_PATTERN_1)
+                    + "已将手机号码改为" + newMobile + "，您的登录名更改为" + newMobile
+                    + "，请妥善保管您的账户相关信息。",
+            "631072");
 
     }
 
@@ -304,8 +321,8 @@ public class SYSUserAOImpl implements ISYSUserAO {
             SYSUser condition) {
         if (condition.getCreateDatetimeStart() != null
                 && condition.getCreateDatetimeEnd() != null
-                && condition.getCreateDatetimeStart().after(
-                    condition.getCreateDatetimeEnd())) {
+                && condition.getCreateDatetimeStart()
+                    .after(condition.getCreateDatetimeEnd())) {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
         Paginable<SYSUser> page = sysUserBO.getPaginable(start, limit,
@@ -334,6 +351,10 @@ public class SYSUserAOImpl implements ISYSUserAO {
     }
 
     public void init(SYSUser data) {
+
+        Company company = companyBO.getCompanyByUserId(data.getUserId());
+        data.setCompany(company);
+
         if (ESYSUserKind.OWNER.getCode().equals(data.getKind())) { // 产权方
             long count = treeBO.getTotalCountByOwnerId(data.getUserId());
             data.setTreeQuantity(String.valueOf(count));
@@ -346,15 +367,11 @@ public class SYSUserAOImpl implements ISYSUserAO {
             List<ApplyBindMaintain> abmList = applyBindMaintainBO
                 .queryApplyBindMaintainList(abmCondition);
             if (CollectionUtils.isNotEmpty(abmList)) {
-                SYSUser sysUser2 = sysUserBO.getSYSUser(abmList.get(0)
-                    .getOwnerId());
+                SYSUser sysUser2 = sysUserBO
+                    .getSYSUser(abmList.get(0).getOwnerId());
                 data.setOwner(sysUser2.getRealName());
             }
             data.setTotalIncome("0");// TODO 总收入
-        }
-        if (StringUtils.isNotBlank(data.getCompanyCode())) {
-            Company company = companyBO.getCompany(data.getCompanyCode());
-            data.setCompany(company);
         }
     }
 }

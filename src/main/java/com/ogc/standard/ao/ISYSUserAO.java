@@ -5,6 +5,8 @@ import java.util.List;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.SYSUser;
 import com.ogc.standard.dto.req.XN630060Req;
+import com.ogc.standard.dto.req.XN630064Req;
+import com.ogc.standard.dto.res.XN627300Res;
 
 /**
  * 系统用户
@@ -21,7 +23,7 @@ public interface ISYSUserAO {
             String loginName, String loginPwd, String photo, String remark);
 
     // 用户登录
-    public String doLogin(String loginName, String loginPwd);
+    public XN627300Res doLogin(String loginName, String loginPwd);
 
     // 注销 | 激活其他管理员
     public void doCloseOpen(String userId, String updater, String remark);
@@ -58,8 +60,7 @@ public interface ISYSUserAO {
     public SYSUser getSYSUser(String userId);
 
     // 代申请
-    public String proxyApplySYSUser(String kind, String loginName,
-            String mobile, String realName, String remark);
+    public String proxyApplySYSUser(XN630064Req req);
 
     // 注册用户（产权/养护）
     public String registerSYSUserOwner(XN630060Req req);

@@ -16,8 +16,8 @@ import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.exception.BizException;
 
 @Component
-public class CompanyBOImpl extends PaginableBOImpl<Company> implements
-        ICompanyBO {
+public class CompanyBOImpl extends PaginableBOImpl<Company>
+        implements ICompanyBO {
 
     @Autowired
     private ICompanyDAO companyDAO;

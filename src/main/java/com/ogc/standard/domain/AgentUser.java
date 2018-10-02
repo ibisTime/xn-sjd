@@ -80,6 +80,9 @@ public class AgentUser extends ABaseDO {
     // 关键字(名字，手机号模糊查询)
     private String keyword;
 
+    // 公司信息
+    private Company companyInfo;
+
     public void setUserId(String userId) {
         this.userId = userId;
     }
@@ -254,6 +257,14 @@ public class AgentUser extends ABaseDO {
 
     public void setKeyword(String keyword) {
         this.keyword = keyword;
+    }
+
+    public Company getCompanyInfo() {
+        return companyInfo;
+    }
+
+    public void setCompanyInfo(Company companyInfo) {
+        this.companyInfo = companyInfo;
     }
 
 }
