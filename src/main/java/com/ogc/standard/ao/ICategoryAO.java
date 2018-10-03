@@ -2,8 +2,6 @@ package com.ogc.standard.ao;
 
 import java.util.List;
 
-import org.springframework.stereotype.Component;
-
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Category;
 
@@ -13,7 +11,6 @@ import com.ogc.standard.domain.Category;
  * @since: 2018年9月26日 下午2:22:04 
  * @history:
  */
-@Component
 public interface ICategoryAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 

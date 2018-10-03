@@ -2,8 +2,6 @@ package com.ogc.standard.ao;
 
 import java.util.List;
 
-import org.springframework.stereotype.Component;
-
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.AdoptOrder;
 import com.ogc.standard.dto.res.XN629048Res;
@@ -14,7 +12,6 @@ import com.ogc.standard.dto.res.XN629048Res;
  * @since: 2018年9月26日 下午6:31:15 
  * @history:
  */
-@Component
 public interface IAdoptOrderAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 

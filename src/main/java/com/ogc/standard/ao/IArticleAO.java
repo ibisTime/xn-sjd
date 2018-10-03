@@ -2,8 +2,6 @@ package com.ogc.standard.ao;
 
 import java.util.List;
 
-import org.springframework.stereotype.Component;
-
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Article;
 import com.ogc.standard.dto.req.XN629340Req;
@@ -12,7 +10,6 @@ import com.ogc.standard.dto.req.XN629342Req;
 import com.ogc.standard.dto.req.XN629343Req;
 import com.ogc.standard.dto.req.XN629344Req;
 
-@Component
 public interface IArticleAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 

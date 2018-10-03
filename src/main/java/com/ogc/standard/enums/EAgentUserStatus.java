@@ -7,8 +7,8 @@ package com.ogc.standard.enums;
  * @history:
  */
 public enum EAgentUserStatus {
-    TO_APPROVE("0", "待审核"), APPROVE_NO("1", "审核不通过"), Partner("2",
-            "合伙中"), Non_Partner("3", "已解除合伙"), Logout("4", "已注销");
+    TO_FILL("-1", "待填写资料"), TO_APPROVE("0", "待审核"), APPROVE_NO("1", "审核不通过"), NORMAL(
+            "2", "正常"), CANCEL("3", "已注销");
 
     EAgentUserStatus(String code, String value) {
         this.code = code;

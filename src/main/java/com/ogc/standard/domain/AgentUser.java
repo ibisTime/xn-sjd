@@ -16,32 +16,14 @@ public class AgentUser extends ABaseDO {
     // 用户编号
     private String userId;
 
-    // 类型（代理商/业务员）
+    // 类型（0代理商/1业务员）
     private String type;
-
-    // 用户等级
-    private String level;
-
-    // 省
-    private String province;
-
-    // 市
-    private String city;
-
-    // 区
-    private String area;
-
-    // 真实姓名
-    private String realName;
-
-    // 头像
-    private String photo;
-
-    // 手机号
-    private String mobile;
 
     // 登陆名
     private String loginName;
+
+    // 手机号
+    private String mobile;
 
     // 登陆密码
     private String loginPwd;
@@ -55,11 +37,20 @@ public class AgentUser extends ABaseDO {
     // 安全密码强度
     private String tradePwdStrength;
 
+    // 真实姓名
+    private String realName;
+
+    // 头像
+    private String photo;
+
     // 注册时间
     private Date createDatetime;
 
-    // 状态（0待审核/1审核不通过/2合伙中/3已解除合伙/4已注销）
+    // 状态(0待审核/1审核不通过/2正常/3已注销)
     private String status;
+
+    // 父级用户编号
+    private String parentUserId;
 
     // 修改人
     private String updater;
@@ -72,13 +63,41 @@ public class AgentUser extends ABaseDO {
 
     // **************DB Properties**************
     // 创建开始时间
-    private Date dateStart;
+    private Date createDatetimeStart;
 
     // 创建结束时间
-    private Date dateEnd;
+    private Date createDatetimeEnd;
 
     // 关键字(名字，手机号模糊查询)
     private String keyword;
+
+    private String realNameForQuery;
+
+    private Company company;
+
+    public Company getCompany() {
+        return company;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
+    }
+
+    public String getRealNameForQuery() {
+        return realNameForQuery;
+    }
+
+    public void setRealNameForQuery(String realNameForQuery) {
+        this.realNameForQuery = realNameForQuery;
+    }
+
+    public String getParentUserId() {
+        return parentUserId;
+    }
+
+    public void setParentUserId(String parentUserId) {
+        this.parentUserId = parentUserId;
+    }
 
     public void setUserId(String userId) {
         this.userId = userId;
@@ -94,38 +113,6 @@ public class AgentUser extends ABaseDO {
 
     public String getType() {
         return type;
-    }
-
-    public void setLevel(String level) {
-        this.level = level;
-    }
-
-    public String getLevel() {
-        return level;
-    }
-
-    public void setProvince(String province) {
-        this.province = province;
-    }
-
-    public String getProvince() {
-        return province;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setArea(String area) {
-        this.area = area;
-    }
-
-    public String getArea() {
-        return area;
     }
 
     public void setRealName(String realName) {
@@ -232,20 +219,20 @@ public class AgentUser extends ABaseDO {
         return remark;
     }
 
-    public Date getDateStart() {
-        return dateStart;
+    public Date getCreateDatetimeStart() {
+        return createDatetimeStart;
     }
 
-    public void setDateStart(Date dateStart) {
-        this.dateStart = dateStart;
+    public void setCreateDatetimeStart(Date createDatetimeStart) {
+        this.createDatetimeStart = createDatetimeStart;
     }
 
-    public Date getDateEnd() {
-        return dateEnd;
+    public Date getCreateDatetimeEnd() {
+        return createDatetimeEnd;
     }
 
-    public void setDateEnd(Date dateEnd) {
-        this.dateEnd = dateEnd;
+    public void setCreateDatetimeEnd(Date createDatetimeEnd) {
+        this.createDatetimeEnd = createDatetimeEnd;
     }
 
     public String getKeyword() {

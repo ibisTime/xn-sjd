@@ -29,7 +29,7 @@ public class CompanyAOImpl implements ICompanyAO {
     @Override
     public String addCompany(XN630300Req req) {
         SYSUser user = sysUserBO.getSYSUser(req.getUserId());
-        if (ESYSUserStatus.TO_FILL_IN.getCode().equals(user.getStatus())) {
+        if (ESYSUserStatus.TO_APPROVE.getCode().equals(user.getStatus())) {
             throw new BizException("xn0000", "不是待填写公司资料状态，不能操作");
         }
         sysUserBO.refreshStatus(user.getUserId(), ESYSUserStatus.NORMAL,
@@ -66,14 +66,6 @@ public class CompanyAOImpl implements ICompanyAO {
         data.setUpdateDatetime(new Date());
         data.setUpdater(req.getUserId());
         return companyBO.refreshCompany(data);
-    }
-
-    @Override
-    public int dropCompany(String code) {
-        if (!companyBO.isCompanyExist(code)) {
-            throw new BizException("xn0000", "记录编号不存在");
-        }
-        return companyBO.removeCompany(code);
     }
 
     @Override

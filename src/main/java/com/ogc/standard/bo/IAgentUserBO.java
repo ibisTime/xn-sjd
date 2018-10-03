@@ -13,14 +13,8 @@ import com.ogc.standard.domain.AgentUser;
  */
 public interface IAgentUserBO extends IPaginableBO<AgentUser> {
 
-    // 用户是否存在
-    public boolean isAgentUserExist(String userId);
-
     // 根据手机号和类型判断手机号是否存在
     public void isMobileExist(String mobile);
-
-    // 判断登录名是否存在
-    public boolean isLoginNameExist(String loginName);
 
     // 注册用户
     public String doRegister(String mobile, String loginPwd);
@@ -29,7 +23,7 @@ public interface IAgentUserBO extends IPaginableBO<AgentUser> {
     public String doAddSalesman(String mobile, String loginPwd);
 
     // 添加用户
-    public void doAddAgentUser(AgentUser data);
+    public String doAddAgentUser(String mobile, String loginPwd);
 
     // 验证支付密码:拿tradePwd进行MD5后与数据库中userId得数据库支付密码比对
     public void checkTradePwd(String userId, String tradePwd);
@@ -52,18 +46,16 @@ public interface IAgentUserBO extends IPaginableBO<AgentUser> {
     // 修改手机号
     public void refreshMobile(String userId, String mobile);
 
+    // 提交信息
+    public void refreshToApprove(AgentUser agentUser, String parentUserId,
+            String updater, String remark);
+
     // 修改状态
     public void refreshStatus(String userId, String status, String updater,
             String remark);
 
     // 修改头像
     public void refreshPhoto(String userId, String photo);
-
-    // 修改等级
-    public void refreshLevel(String userId, String level);
-
-    // 根据手机号获取用户
-    public AgentUser getUserByMobile(String mobile);
 
     public List<AgentUser> queryAgentUserList(AgentUser condition);
 

@@ -3,9 +3,9 @@ package com.ogc.standard.dto.req;
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
- * 审核分销商
- * @author: silver 
- * @since: 2018年9月28日 下午3:49:20 
+ * 提交资料
+ * @author: xieyj 
+ * @since: 2018年10月4日 上午12:58:16 
  * @history:
  */
 public class XN730073Req extends BaseReq {
@@ -16,16 +16,59 @@ public class XN730073Req extends BaseReq {
     @NotBlank
     private String userId;
 
-    // 审核结果
+    // 上级代理
+    private String parentMobile;
+
+    // 公司名称
+    private String name;
+
+    // 负责人
     @NotBlank
-    private String approveResult;
+    private String charger;
+
+    // 联系方式
+    @NotBlank
+    private String chargeMobile;
+
+    // 省
+    @NotBlank
+    private String province;
+
+    // 市
+    @NotBlank
+    private String city;
+
+    // 区
+    @NotBlank
+    private String area;
+
+    // 地址
+    @NotBlank
+    private String address;
+
+    // 简介
+    @NotBlank
+    private String description;
+
+    // 营业执照
+    @NotBlank
+    private String bussinessLicense;
+
+    // 组织机构代码
+    @NotBlank
+    private String organizationCode;
 
     // 更新人
     @NotBlank
     private String updater;
 
-    // 备注
-    private String remark;
+    public String getParentMobile() {
+        return parentMobile;
+    }
+
+    public void setParentMobile(String parentMobile) {
+        this.parentMobile = parentMobile;
+    }
 
     public String getUserId() {
         return userId;
@@ -35,12 +78,84 @@ public class XN730073Req extends BaseReq {
         this.userId = userId;
     }
 
-    public String getApproveResult() {
-        return approveResult;
+    public String getName() {
+        return name;
     }
 
-    public void setApproveResult(String approveResult) {
-        this.approveResult = approveResult;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getCharger() {
+        return charger;
+    }
+
+    public void setCharger(String charger) {
+        this.charger = charger;
+    }
+
+    public String getChargeMobile() {
+        return chargeMobile;
+    }
+
+    public void setChargeMobile(String chargeMobile) {
+        this.chargeMobile = chargeMobile;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getBussinessLicense() {
+        return bussinessLicense;
+    }
+
+    public void setBussinessLicense(String bussinessLicense) {
+        this.bussinessLicense = bussinessLicense;
+    }
+
+    public String getOrganizationCode() {
+        return organizationCode;
+    }
+
+    public void setOrganizationCode(String organizationCode) {
+        this.organizationCode = organizationCode;
     }
 
     public String getUpdater() {
@@ -50,13 +165,4 @@ public class XN730073Req extends BaseReq {
     public void setUpdater(String updater) {
         this.updater = updater;
     }
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
-
 }

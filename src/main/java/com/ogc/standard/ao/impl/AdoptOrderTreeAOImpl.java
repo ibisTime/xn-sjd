@@ -10,15 +10,20 @@ import com.ogc.standard.ao.IAdoptOrderTreeAO;
 import com.ogc.standard.bo.IAdoptOrderTreeBO;
 import com.ogc.standard.bo.IBizLogBO;
 import com.ogc.standard.bo.IGiveTreeRecordBO;
+import com.ogc.standard.bo.ITreeBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.AdoptOrderTree;
 import com.ogc.standard.domain.GiveTreeRecord;
+import com.ogc.standard.domain.Tree;
 
 @Service
 public class AdoptOrderTreeAOImpl implements IAdoptOrderTreeAO {
 
     @Autowired
     private IAdoptOrderTreeBO adoptOrderTreeBO;
+
+    @Autowired
+    private ITreeBO treeBO;
 
     @Autowired
     private IGiveTreeRecordBO giveTreeRecordBO;
@@ -44,17 +49,34 @@ public class AdoptOrderTreeAOImpl implements IAdoptOrderTreeAO {
     @Override
     public Paginable<AdoptOrderTree> queryAdoptOrderTreePage(int start,
             int limit, AdoptOrderTree condition) {
-        return adoptOrderTreeBO.getPaginable(start, limit, condition);
+        Paginable<AdoptOrderTree> page = adoptOrderTreeBO.getPaginable(start,
+            limit, condition);
+        for (AdoptOrderTree adoptOrderTree : page.getList()) {
+            initAdoptOrderTree(adoptOrderTree);
+        }
+        return page;
     }
 
     @Override
     public List<AdoptOrderTree> queryAdoptOrderTreeList(AdoptOrderTree condition) {
-        return adoptOrderTreeBO.queryAdoptOrderTreeList(condition);
+        List<AdoptOrderTree> list = adoptOrderTreeBO
+            .queryAdoptOrderTreeList(condition);
+        for (AdoptOrderTree adoptOrderTree : list) {
+            initAdoptOrderTree(adoptOrderTree);
+        }
+        return list;
     }
 
     @Override
     public AdoptOrderTree getAdoptOrderTree(String code) {
-        return adoptOrderTreeBO.getAdoptOrderTree(code);
+        AdoptOrderTree data = adoptOrderTreeBO.getAdoptOrderTree(code);
+        initAdoptOrderTree(data);
+        return data;
+    }
+
+    private void initAdoptOrderTree(AdoptOrderTree data) {
+        Tree tree = treeBO.getTreeByTreeNumber(data.getTreeNumber());
+        data.setTree(tree);
     }
 
 }

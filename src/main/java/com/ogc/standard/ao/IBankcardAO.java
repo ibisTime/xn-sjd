@@ -2,8 +2,6 @@ package com.ogc.standard.ao;
 
 import java.util.List;
 
-import org.springframework.stereotype.Component;
-
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Bankcard;
 import com.ogc.standard.dto.req.XN802020Req;
@@ -16,7 +14,6 @@ import com.ogc.standard.dto.req.XN802023Req;
  * @since: 2018年9月11日 下午5:41:25 
  * @history:
  */
-@Component
 public interface IBankcardAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 

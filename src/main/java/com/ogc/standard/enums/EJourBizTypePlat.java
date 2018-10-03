@@ -16,7 +16,7 @@ public enum EJourBizTypePlat {
 
     WITHDRAW_ENTER("withdraw_enter", "提现回录"),
 
-    ADOPT_DEDUCT("c", "认养提成"),
+    ADOPT_DEDUCT("adopt_deduct", "认养提成"),
 
     DIFF_EMPTY_DEDUCT("diff_empty_deduct", "级差轮空提成");
 

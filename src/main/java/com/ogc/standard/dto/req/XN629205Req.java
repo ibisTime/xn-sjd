@@ -13,11 +13,21 @@ public class XN629205Req extends APageReq {
     // 认养订单编号
     private String orderCode;
 
+    private String categoryCode;
+
     // 状态(1待认养2认养中3已到期)
     private String status;
 
     // 当前持有人
     private String currentHolder;
+
+    public String getCategoryCode() {
+        return categoryCode;
+    }
+
+    public void setCategoryCode(String categoryCode) {
+        this.categoryCode = categoryCode;
+    }
 
     public String getOrderCode() {
         return orderCode;

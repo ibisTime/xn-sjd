@@ -19,6 +19,9 @@ public class XN629045Req extends APageReq {
     // 规格名称
     private String productSpecsName;
 
+    // 用户编号
+    private String userId;
+
     // 状态(0待支付1已取消2待认养3认养中4已到期)
     private String status;
 
@@ -52,6 +55,14 @@ public class XN629045Req extends APageReq {
 
     public void setProductSpecsName(String productSpecsName) {
         this.productSpecsName = productSpecsName;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getStatus() {
@@ -93,5 +104,4 @@ public class XN629045Req extends APageReq {
     public void setEndDatetimeEnd(String endDatetimeEnd) {
         this.endDatetimeEnd = endDatetimeEnd;
     }
-
 }

@@ -25,7 +25,7 @@ public class XN629600 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
 
-        return new PKCodeRes(applyBindMaintainAO.addApplyBindMaintain(req));
+        return new PKCodeRes(applyBindMaintainAO.applyBindMaintain(req));
     }
 
     @Override

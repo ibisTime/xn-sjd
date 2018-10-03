@@ -18,7 +18,7 @@ public class CompanyDAOImpl extends AMybatisTemplate implements ICompanyDAO {
 
     @Override
     public int delete(Company data) {
-        return super.delete(NAMESPACE.concat("delete_company"), data);
+        return 0;
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.ogc.standard.bo.impl;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,9 +16,11 @@ import com.ogc.standard.common.PwdUtil;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.IAgentUserDAO;
 import com.ogc.standard.domain.AgentUser;
-import com.ogc.standard.enums.EAgentUserKind;
 import com.ogc.standard.enums.EAgentUserStatus;
+import com.ogc.standard.enums.EAgentUserType;
+import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.exception.BizException;
+import com.ogc.standard.exception.EBizErrorCode;
 
 @Component
 public class AgentUserBOImpl extends PaginableBOImpl<AgentUser> implements
@@ -25,16 +28,6 @@ public class AgentUserBOImpl extends PaginableBOImpl<AgentUser> implements
 
     @Autowired
     private IAgentUserDAO agentUserDAO;
-
-    @Override
-    public boolean isAgentUserExist(String userId) {
-        AgentUser condition = new AgentUser();
-        condition.setUserId(userId);
-        if (agentUserDAO.selectTotalCount(condition) > 0) {
-            return true;
-        }
-        return false;
-    }
 
     @Override
     public void isMobileExist(String mobile) {
@@ -50,32 +43,17 @@ public class AgentUserBOImpl extends PaginableBOImpl<AgentUser> implements
     }
 
     @Override
-    public boolean isLoginNameExist(String loginName) {
-        AgentUser condition = new AgentUser();
-        condition.setLoginName(loginName);
-        if (agentUserDAO.selectTotalCount(condition) > 0) {
-            return true;
-        }
-        return false;
-    }
-
-    @Override
     public String doRegister(String mobile, String loginPwd) {
         AgentUser agentUser = new AgentUser();
-
         String userId = OrderNoGenerater.generate("AU");
         agentUser.setUserId(userId);
         agentUser.setMobile(mobile);
         agentUser.setLoginName(mobile);
-        agentUser.setStatus(EAgentUserStatus.TO_APPROVE.getCode());
+        agentUser.setStatus(EAgentUserStatus.TO_FILL.getCode());
+        agentUser.setLoginPwd(MD5Util.md5(loginPwd));
 
-        if (StringUtils.isNotBlank(loginPwd)) {
-            agentUser.setLoginPwd(MD5Util.md5(loginPwd));
-            agentUser.setLoginPwdStrength(PwdUtil
-                .calculateSecurityLevel(loginPwd));
-        }
-
-        agentUser.setType(EAgentUserKind.Agent.getCode());
+        agentUser.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(loginPwd));
+        agentUser.setType(EAgentUserType.Agent.getCode());
         agentUser.setCreateDatetime(new Date());
         agentUserDAO.insert(agentUser);
         return userId;
@@ -84,28 +62,39 @@ public class AgentUserBOImpl extends PaginableBOImpl<AgentUser> implements
     @Override
     public String doAddSalesman(String mobile, String loginPwd) {
         AgentUser agentUser = new AgentUser();
-
-        String userId = OrderNoGenerater.generate("AU");
+        String userId = OrderNoGenerater.generate(EGeneratePrefix.AgentUser
+            .getCode());
         agentUser.setUserId(userId);
+        agentUser.setType(EAgentUserType.Salesman.getCode());
         agentUser.setMobile(mobile);
+
         agentUser.setLoginName(mobile);
-        agentUser.setStatus(EAgentUserStatus.TO_APPROVE.getCode());
-
-        if (StringUtils.isNotBlank(loginPwd)) {
-            agentUser.setLoginPwd(MD5Util.md5(loginPwd));
-            agentUser.setLoginPwdStrength(PwdUtil
-                .calculateSecurityLevel(loginPwd));
-        }
-
-        agentUser.setType(EAgentUserKind.Salesman.getCode());
+        agentUser.setLoginPwd(MD5Util.md5(loginPwd));
+        agentUser.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(loginPwd));
         agentUser.setCreateDatetime(new Date());
+        agentUser.setStatus(EAgentUserStatus.NORMAL.getCode());
+
         agentUserDAO.insert(agentUser);
         return userId;
     }
 
     @Override
-    public void doAddAgentUser(AgentUser data) {
+    public String doAddAgentUser(String mobile, String loginPwd) {
+        AgentUser data = new AgentUser();
+        String userId = OrderNoGenerater.generate(EGeneratePrefix.AgentUser
+            .getCode());
+        data.setUserId(userId);
+        data.setType(EAgentUserType.Agent.getCode());
+        data.setLoginName(mobile);
+
+        data.setMobile(mobile);
+        data.setLoginPwd(MD5Util.md5(loginPwd));
+        data.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(loginPwd));
+        data.setCreateDatetime(new Date());
+        data.setStatus(EAgentUserStatus.NORMAL.getCode());
+
         agentUserDAO.insert(data);
+        return userId;
     }
 
     @Override
@@ -196,6 +185,17 @@ public class AgentUserBOImpl extends PaginableBOImpl<AgentUser> implements
     }
 
     @Override
+    public void refreshToApprove(AgentUser data, String parentUserId,
+            String updater, String remark) {
+        data.setStatus(EAgentUserStatus.TO_APPROVE.getCode());
+        data.setParentUserId(parentUserId);
+        data.setUpdater(updater);
+        data.setUpdateDatetime(new Date());
+        data.setRemark(remark);
+        agentUserDAO.updateToApprove(data);
+    }
+
+    @Override
     public void refreshStatus(String userId, String status, String updater,
             String remark) {
         AgentUser data = new AgentUser();
@@ -216,26 +216,6 @@ public class AgentUserBOImpl extends PaginableBOImpl<AgentUser> implements
     }
 
     @Override
-    public void refreshLevel(String userId, String level) {
-        AgentUser data = new AgentUser();
-        data.setUserId(userId);
-        data.setLevel(level);
-        data.setUpdateDatetime(new Date());
-        agentUserDAO.updateLevel(data);
-    }
-
-    @Override
-    public AgentUser getUserByMobile(String mobile) {
-        AgentUser data = null;
-        if (StringUtils.isNotBlank(mobile)) {
-            AgentUser condition = new AgentUser();
-            condition.setMobile(mobile);
-            data = agentUserDAO.select(condition);
-        }
-        return data;
-    }
-
-    @Override
     public List<AgentUser> queryAgentUserList(AgentUser condition) {
         return agentUserDAO.selectList(condition);
     }
@@ -246,7 +226,12 @@ public class AgentUserBOImpl extends PaginableBOImpl<AgentUser> implements
         if (StringUtils.isNotBlank(mobile)) {
             AgentUser condition = new AgentUser();
             condition.setMobile(mobile);
-            data = agentUserDAO.select(condition);
+            List<AgentUser> list = agentUserDAO.selectList(condition);
+            if (CollectionUtils.isEmpty(list)) {
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(), "代理用户"
+                        + mobile + "不存在！");
+            }
+            data = list.get(0);
         }
         return data;
     }
@@ -264,5 +249,4 @@ public class AgentUserBOImpl extends PaginableBOImpl<AgentUser> implements
         }
         return data;
     }
-
 }

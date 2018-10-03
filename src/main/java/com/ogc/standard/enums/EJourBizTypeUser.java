@@ -36,7 +36,7 @@ public enum EJourBizTypeUser {
     MAINTAIN_DEDUCT("maintain_deduct", "养护提成"),
 
     // 碳泡泡账户
-    ADOPT_BACK("adopt_back", "认养消费每日返碳泡泡"),
+    ADOPT_DAY_BACK("adopt_day_back", "认养消费每日返碳泡泡"),
 
     SHARE("share", "分享"),
 
@@ -63,7 +63,9 @@ public enum EJourBizTypeUser {
 
     INVITE_USER("invite_user", "邀请好友注册"),
 
-    ADOPT_DEDUCT("adopt_deduct", "认养抵扣");
+    ADOPT_DEDUCT("adopt_deduct", "认养抵扣"),
+
+    ADOPT_PAY_BACK("adopt_pay_back", "认养消费返利");
 
     public static EJourBizTypeUser getBizType(String code) {
         Map<String, EJourBizTypeUser> map = getBizTypeMap();

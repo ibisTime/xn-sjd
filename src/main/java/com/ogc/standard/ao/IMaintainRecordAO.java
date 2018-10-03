@@ -2,13 +2,10 @@ package com.ogc.standard.ao;
 
 import java.util.List;
 
-import org.springframework.stereotype.Component;
-
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.MaintainRecord;
 import com.ogc.standard.dto.req.XN629630Req;
 
-@Component
 public interface IMaintainRecordAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
@@ -25,8 +22,7 @@ public interface IMaintainRecordAO {
     public Paginable<MaintainRecord> queryMaintainRecordPage(int start,
             int limit, MaintainRecord condition);
 
-    public List<MaintainRecord> queryMaintainRecordList(
-            MaintainRecord condition);
+    public List<MaintainRecord> queryMaintainRecordList(MaintainRecord condition);
 
     public MaintainRecord getMaintainRecord(String code);
 

@@ -2,12 +2,11 @@ package com.ogc.standard.ao;
 
 import java.util.List;
 
-import org.springframework.stereotype.Component;
-
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.AgentUser;
+import com.ogc.standard.dto.req.XN730072Req;
+import com.ogc.standard.dto.req.XN730073Req;
 
-@Component
 public interface IAgentUserAO {
     static final String DEFAULT_ORDER_COLUMN = "user_id";
 
@@ -17,17 +16,15 @@ public interface IAgentUserAO {
     // 用户登录
     public String doLogin(String loginName, String loginPwd);
 
-    // 申请分销商
-    public String applyAgent(String mobile, String realName, String loginPwd,
-            String photo);
+    // 代注册分销商
+    public String doAddAgent(XN730072Req req);
+
+    // 填写资料
+    public void commitCompany(XN730073Req req);
 
     // 审核用户
     public void approveAgentUser(String userId, String approveResult,
-            String remark, String updater);
-
-    // 修改重提
-    public void reApproveAgentUser(String userId, String updater,
-            String remark);
+            String updater, String remark);
 
     // 修改手机号
     public void doChangeMoblie(String userId, String newMobile,

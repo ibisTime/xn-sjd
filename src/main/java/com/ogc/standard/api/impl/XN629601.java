@@ -21,9 +21,13 @@ public class XN629601 extends AProcessor {
 
     private XN629601Req req = null;
 
+    /** 
+     * @see com.ogc.standard.api.IProcessor#doBusiness()
+     */
     @Override
     public Object doBusiness() throws BizException {
-        return new Boolean(applyBindMaintainAO.editApplyBindMaintain(req));
+        // TODO Auto-generated method stub
+        return null;
     }
 
     @Override

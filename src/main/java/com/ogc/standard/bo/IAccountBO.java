@@ -46,6 +46,11 @@ public interface IAccountBO extends IPaginableBO<Account> {
             String toBizNote, String refNo);
 
     // 内部转账
+    public void transAmount(String fromUserId, String toUserId,
+            String currency, BigDecimal transAmount, String fromBizType,
+            String toBizType, String fromBizNote, String toBizNote, String refNo);
+
+    // 内部转账
     public void transAmount(Account fromAccount, Account toAccount,
             BigDecimal transAmount, String fromBizType, String toBizType,
             String fromBizNote, String toBizNote, String refNo);

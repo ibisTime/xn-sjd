@@ -8,8 +8,8 @@ package com.ogc.standard.enums;
  */
 public enum EApplyBindMaintainStatus {
 
-    APPROVE("1", "审核"), NO_PASS("2", "审核不通过"), BIND("3", "已绑定"), UNBIND("4",
-            "已解除");
+    TO_APPROVE("1", "待审核"), NO_PASS("2", "审核不通过"), BIND("3", "已绑定"), UNBIND(
+            "4", "已解除");
 
     EApplyBindMaintainStatus(String code, String value) {
         this.code = code;

@@ -12,29 +12,36 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ogc.standard.ao.IAgentUserAO;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IAgentUserBO;
+import com.ogc.standard.bo.ICompanyBO;
 import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.ISmsOutBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.common.MD5Util;
 import com.ogc.standard.common.PhoneUtil;
-import com.ogc.standard.common.PwdUtil;
+import com.ogc.standard.common.RandomUtil;
 import com.ogc.standard.common.SysConstants;
-import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.domain.AgentUser;
+import com.ogc.standard.domain.Company;
+import com.ogc.standard.dto.req.XN730072Req;
+import com.ogc.standard.dto.req.XN730073Req;
 import com.ogc.standard.enums.EAccountType;
-import com.ogc.standard.enums.EAgentUserKind;
 import com.ogc.standard.enums.EAgentUserStatus;
+import com.ogc.standard.enums.EAgentUserType;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECaptchaType;
 import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.exception.BizException;
+import com.ogc.standard.exception.EBizErrorCode;
 
 @Service
 public class AgentUserAOImpl implements IAgentUserAO {
 
     @Autowired
     private IAgentUserBO agentUserBO;
+
+    @Autowired
+    private ICompanyBO companyBO;
 
     @Autowired
     private ISmsOutBO smsOutBO;
@@ -46,8 +53,7 @@ public class AgentUserAOImpl implements IAgentUserAO {
     private IAccountBO accountBO;
 
     @Override
-    public String doRegister(String mobile, String loginPwd,
-            String smsCaptcha) {
+    public String doRegister(String mobile, String loginPwd, String smsCaptcha) {
         // 验证手机号是否存在
         agentUserBO.isMobileExist(mobile);
 
@@ -60,11 +66,6 @@ public class AgentUserAOImpl implements IAgentUserAO {
         // 分配人民币账户
         accountBO.distributeAccount(userId, EAccountType.AGENT,
             ECurrency.CNY.getCode());
-
-        // 分配积分账户
-        accountBO.distributeAccount(userId, EAccountType.AGENT,
-            ECurrency.JF.getCode());
-
         return userId;
     }
 
@@ -78,90 +79,96 @@ public class AgentUserAOImpl implements IAgentUserAO {
             throw new BizException("xn805050", "登录名不存在");
         }
 
-        AgentUser con = new AgentUser();
-        con.setLoginPwd(MD5Util.md5(loginPwd));
-        List<AgentUser> listAgentUser = agentUserBO.queryAgentUserList(con);
+        AgentUser agentUserCondition = new AgentUser();
+        agentUserCondition.setMobile(loginName);
+        agentUserCondition.setLoginPwd(MD5Util.md5(loginPwd));
+        List<AgentUser> listAgentUser = agentUserBO
+            .queryAgentUserList(agentUserCondition);
+        AgentUser agentUser = null;
         if (CollectionUtils.isEmpty(listAgentUser)) {
             throw new BizException("xn805050", "登录密码错误");
+        } else {
+            agentUser = listAgentUser.get(0);
         }
 
-        String userId = null;
-        for (AgentUser agentUser : listAgentUser) {
-            if (loginName.equals(agentUser.getMobile())) {
-                userId = agentUser.getUserId();
-                break;
-            }
+        if (EAgentUserStatus.CANCEL.getCode().equals(agentUser.getStatus())) {
+            throw new BizException("xn805050", "您的账号异常，请联系管理员处理");
         }
+        return agentUser.getUserId();
+    }
 
-        if (userId == null) {
-            throw new BizException("xn805050", "登录密码错误");
-        }
+    @Override
+    @Transactional
+    public String doAddAgent(XN730072Req req) {
+        // 验证手机号是否存在
+        agentUserBO.isMobileExist(req.getMobile());
+        String loginPwd = RandomUtil.generate6();
+        String userId = agentUserBO.doAddAgentUser(req.getMobile(), loginPwd);
+        companyBO.saveCompany(req, userId);
 
-        AgentUser agentUser = agentUserBO.getAgentUser(userId);
-        if (!EAgentUserStatus.Partner.getCode().equals(agentUser.getStatus())) {
-            throw new BizException("xn805050", "该账号未处于合伙关系中，无法登录！");
-        }
+        // 发送短信
+        smsOutBO.sendSmsOut(
+            req.getMobile(),
+            String.format(SysConstants.DO_ADD_USER_CN,
+                PhoneUtil.hideMobile(req.getMobile())),
+            ECaptchaType.AG_REG.getCode());
 
         return userId;
     }
 
     @Override
-    public String applyAgent(String mobile, String realName, String loginPwd,
-            String photo) {
-        // 验证手机号是否存在
-        agentUserBO.isMobileExist(mobile);
-
-        AgentUser agentUser = new AgentUser();
-        String userId = OrderNoGenerater.generate("AU");
-        agentUser.setUserId(userId);
-        agentUser.setMobile(mobile);
-        agentUser.setRealName(realName);
-        agentUser.setPhoto(photo);
-
-        if (StringUtils.isNotBlank(loginPwd)) {
-            agentUser.setLoginPwd(MD5Util.md5(loginPwd));
-            agentUser
-                .setLoginPwdStrength(PwdUtil.calculateSecurityLevel(loginPwd));
+    @Transactional
+    public void commitCompany(XN730073Req req) {
+        AgentUser agentUser = agentUserBO.getAgentUser(req.getUserId());
+        if (EAgentUserType.Agent.getCode().equals(agentUser.getType())) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "当前用户不是代理商");
+        }
+        if (!EAgentUserStatus.TO_FILL.getCode().equals(agentUser.getStatus())
+                && !EAgentUserStatus.APPROVE_NO.getCode().equals(
+                    agentUser.getStatus())) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "当前用户状态不是待提交资料或审核不通过，不能提交");
         }
 
-        agentUser.setType(EAgentUserKind.Agent.getCode());
-        agentUser.setStatus(EAgentUserStatus.TO_APPROVE.getCode());
-        agentUser.setCreateDatetime(new Date());
+        // 获取上级代理商信息
+        String parentUserId = null;
+        if (StringUtils.isNotBlank(req.getParentMobile())) {
+            AgentUser parentAgentUser = agentUserBO.getAgentUserByMobile(req
+                .getParentMobile());
+            if (!EAgentUserType.Agent.getCode().equals(
+                parentAgentUser.getType())) {
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                    "推荐用户不是代理商");
+            }
+            if (!EAgentUserStatus.NORMAL.getCode().equals(
+                parentAgentUser.getStatus())) {
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                    "推荐用户状态异常");
+            }
+        }
 
-        agentUserBO.doAddAgentUser(agentUser);
-        return userId;
+        // 更新资料
+        agentUserBO.refreshToApprove(agentUser, parentUserId, req.getUserId(),
+            "资料提交待审核");
+        companyBO.refreshCompany(req);
     }
 
     @Override
     public void approveAgentUser(String userId, String approveResult,
-            String remark, String updater) {
+            String updater, String remark) {
         AgentUser agentUser = agentUserBO.getAgentUser(userId);
         if (!EAgentUserStatus.TO_APPROVE.getCode()
             .equals(agentUser.getStatus())) {
-            throw new BizException("xn0000", "该用户未处于可审核状态！");
+            throw new BizException("xn0000", "当前用户不处于待审核状态！");
         }
 
         String status = null;
-        if (EBoolean.NO.getCode().equals(approveResult)) {
-            status = EAgentUserStatus.APPROVE_NO.getCode();
+        if (EBoolean.YES.getCode().equals(approveResult)) {
+            status = EAgentUserStatus.NORMAL.getCode();
         } else {
-            status = EAgentUserStatus.Partner.getCode();
+            status = EAgentUserStatus.APPROVE_NO.getCode();
         }
-
         agentUserBO.refreshStatus(userId, status, updater, remark);
-    }
-
-    @Override
-    public void reApproveAgentUser(String userId, String updater,
-            String remark) {
-        AgentUser agentUser = agentUserBO.getAgentUser(userId);
-        if (!EAgentUserStatus.APPROVE_NO.getCode()
-            .equals(agentUser.getStatus())) {
-            throw new BizException("xn00000", "用户未处于可重新审核状态！");
-        }
-
-        agentUserBO.refreshStatus(userId, EAgentUserStatus.Partner.getCode(),
-            updater, remark);
     }
 
     @Override
@@ -178,18 +185,16 @@ public class AgentUserAOImpl implements IAgentUserAO {
         agentUserBO.isMobileExist(newMobile);
 
         // 短信验证码是否正确（往新手机号发送）
-        // smsOutBO.checkCaptcha(newMobile, smsCaptcha, "730075");
+        smsOutBO.checkCaptcha(newMobile, smsCaptcha, "730075");
 
         // 修改手机号
         agentUserBO.refreshMobile(userId, newMobile);
 
         // 发送短信
-        smsOutBO.sendSmsOut(oldMobile,
-            String.format(SysConstants.DO_CHANGE_MOBILE_CN,
-                PhoneUtil.hideMobile(oldMobile),
-                DateUtil.dateToStr(new Date(), DateUtil.DATA_TIME_PATTERN_1),
-                newMobile),
-            ECaptchaType.MOBILE_CHANGE.getCode());
+        smsOutBO.sendSmsOut(oldMobile, String.format(
+            SysConstants.DO_CHANGE_MOBILE_CN, PhoneUtil.hideMobile(oldMobile),
+            DateUtil.dateToStr(new Date(), DateUtil.DATA_TIME_PATTERN_1),
+            newMobile), ECaptchaType.MOBILE_CHANGE.getCode());
     }
 
     @Override
@@ -213,7 +218,8 @@ public class AgentUserAOImpl implements IAgentUserAO {
         agentUserBO.refreshLoginPwd(userId, newLoginPwd);
 
         // 发送短信
-        smsOutBO.sendSmsOut(agentUser.getMobile(),
+        smsOutBO.sendSmsOut(
+            agentUser.getMobile(),
             String.format(SysConstants.DO_MODIFY_LOGIN_PWD_CN,
                 PhoneUtil.hideMobile(agentUser.getMobile())),
             ECaptchaType.MODIFY_LOGIN_PWD.getCode());
@@ -240,13 +246,14 @@ public class AgentUserAOImpl implements IAgentUserAO {
         }
 
         // 短信验证码是否正确
-        // smsOutBO.checkCaptcha(mobile, smsCaptcha, "730079");
+        smsOutBO.checkCaptcha(mobile, smsCaptcha, "730079");
 
         // 修改密码
         agentUserBO.refreshLoginPwd(agentUser.getUserId(), newLoginPwd);
 
         // 发送短信
-        smsOutBO.sendSmsOut(mobile,
+        smsOutBO.sendSmsOut(
+            mobile,
             String.format(SysConstants.DO_RESET_LOGIN_PWD_CN,
                 PhoneUtil.hideMobile(mobile)),
             ECaptchaType.LOGIN_PWD_RESET.getCode());
@@ -257,10 +264,10 @@ public class AgentUserAOImpl implements IAgentUserAO {
         AgentUser agentUser = agentUserBO.getAgentUser(userId);
 
         String status = null;
-        if (EAgentUserStatus.Logout.getCode().equals(agentUser.getStatus())) {
+        if (EAgentUserStatus.CANCEL.getCode().equals(agentUser.getStatus())) {
             status = EAgentUserStatus.TO_APPROVE.getCode();
         } else {
-            status = EAgentUserStatus.Logout.getCode();
+            status = EAgentUserStatus.CANCEL.getCode();
         }
 
         agentUserBO.refreshStatus(userId, status, updater, remark);
@@ -272,9 +279,7 @@ public class AgentUserAOImpl implements IAgentUserAO {
         agentUserBO.isMobileExist(mobile);
 
         // 注册用户
-        String userId = agentUserBO.doAddSalesman(mobile, loginPwd);
-
-        return userId;
+        return agentUserBO.doAddSalesman(mobile, loginPwd);
     }
 
     @Override
@@ -289,7 +294,11 @@ public class AgentUserAOImpl implements IAgentUserAO {
     }
 
     @Override
-    public AgentUser getAgentUser(String code) {
-        return agentUserBO.getAgentUser(code);
+    public AgentUser getAgentUser(String userId) {
+        AgentUser data = agentUserBO.getAgentUser(userId);
+        Company company = companyBO.getCompanyByUserId(userId);
+        data.setCompany(company);
+
+        return data;
     }
 }

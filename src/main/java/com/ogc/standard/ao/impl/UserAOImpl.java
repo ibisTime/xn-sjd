@@ -41,7 +41,6 @@ import com.ogc.standard.dto.req.XN802399Req;
 import com.ogc.standard.dto.req.XN802400Req;
 import com.ogc.standard.dto.req.XN805041Req;
 import com.ogc.standard.dto.req.XN805042Req;
-import com.ogc.standard.dto.req.XN805043Req;
 import com.ogc.standard.dto.req.XN805081Req;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECaptchaType;
@@ -103,45 +102,14 @@ public class UserAOImpl implements IUserAO {
             ECaptchaType.C_REG.getCode());
 
         User refereeUser = userBO.getUserByMobile(req.getUserReferee());
-        AgentUser agentUser = agentUserBO.getUserByMobile(req.getAgent());
-        AgentUser salesUser = agentUserBO.getUserByMobile(req.getSalesman());
+        AgentUser agentUser = agentUserBO.getAgentUserByMobile(req.getAgent());
+        AgentUser salesUser = agentUserBO.getAgentUserByMobile(req
+            .getSalesman());
 
         // 注册用户
         String userId = userBO.doRegister(req.getMobile(), req.getNickname(),
             req.getLoginPwd(), refereeUser, agentUser, salesUser,
             req.getProvince(), req.getCity(), req.getArea());
-
-        if (agentUser != null) {
-            // 代理商分成
-            settleBO.saveSettle(agentUser.getUserId(),
-                EUserKind.Customer.getCode(), "", userId, "用户注册代理商分成");
-        }
-
-        // ext中添加数据
-        userExtBO.addUserExt(userId);
-
-        // 分配账户
-        accountAO.distributeAccount(userId);
-        return userId;
-    }
-
-    @Override
-    @Transactional
-    public String doRegisterByEmail(XN805043Req req) {
-        // 验证邮箱是否存在
-        userBO.isEmailExist(req.getEmail());
-
-        // 验证邮箱验证码
-        smsOutBO.checkCaptcha(req.getEmail(), req.getCaptcha(), "805043");
-
-        User refereeUser = userBO.getUserByMobile(req.getUserReferee());
-        // 注册用户
-        String userId = userBO.doRegistByEmail(req);
-        if (refereeUser != null) {
-            // 推荐人分佣
-            // awardBO.saveRegistAward(refereeUser.getUserId(),
-            // refereeUser.getKind(), userId, "用户注册推荐人分佣");
-        }
 
         // ext中添加数据
         userExtBO.addUserExt(userId);
@@ -161,7 +129,7 @@ public class UserAOImpl implements IUserAO {
         user.setLoginName(req.getMobile());
         user.setMobile(req.getMobile());
         if (StringUtils.isBlank(req.getLoginPwd())) {
-            req.setLoginPwd(EUserPwd.InitPwd.getCode());
+            req.setLoginPwd(EUserPwd.InitPwd8.getCode());
         }
         user.setLoginPwd(MD5Util.md5(req.getLoginPwd()));
         user.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(req

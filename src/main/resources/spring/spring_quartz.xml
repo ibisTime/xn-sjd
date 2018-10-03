@@ -15,34 +15,26 @@
 			expression="org.springframework.stereotype.Controller" />
 	</context:component-scan>
 	
-	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+	<!-- <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
-			
-				<!-- 行情 -->
-       		    <!-- <ref bean="marketTrigger"/> -->
-       		    
-       		    <!-- 币币交易 -->
-       		    <!-- <ref bean="doScanPairTrigger"/> -->
-       		    <!-- <ref bean="doSaveKLineTrigger"/> -->
-       		    <!-- <ref bean="doScanMatchResultTrigger"/> -->
-       		    
-				<!-- <ref bean="doERC20CollectTrigger"/>
-				<ref bean="doERC20CheckGetFeeTxTrigger"/>
-				<ref bean="doERC20CheckCollectTxTrigger"/>       		    
-				<ref bean="doEthCollectTxTrigger"/>    
-				<ref bean="doETHAndTokenWithDrawGetTxTrigger"/>-->
-				
+       		    <ref bean="adoptOrderTrigger"/>
 			</list>
 		</property>
 		<property name="autoStartup" value="true" />
 	</bean>
-
-	<!-- 定时获取行情 -->
-<!-- 	<bean id="marketTrigger"
+	
+	定时扫描未支付订单
+	<bean id="adoptOrderTrigger"
 		  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-		<property name="jobDetail" ref="market" />
-		<property name="cronExpression" value="*/30 * * * * ?" />
+		<property name="jobDetail" ref="doCancelAdoptOrder" />
+		<property name="cronExpression" value="0 */1 * * * ?"/>每分钟执行
+	</bean>
+	<bean id="doCancelAdoptOrder"
+		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="adoptOrderAOImpl" />
+		<property name="targetMethod" value="doCancelAdoptOrder" />
+		<property name="concurrent" value="false" />
 	</bean> -->
 
 </beans>

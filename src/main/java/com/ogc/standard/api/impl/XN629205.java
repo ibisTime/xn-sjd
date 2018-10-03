@@ -14,9 +14,9 @@ import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
 
 /**
- * 分页查产品分类
- * @author: silver 
- * @since: 2018年9月26日 下午5:45:52 
+ * 分页查询认养权
+ * @author: xieyj 
+ * @since: 2018年10月3日 下午9:16:23 
  * @history:
  */
 public class XN629205 extends AProcessor {
@@ -30,6 +30,7 @@ public class XN629205 extends AProcessor {
     public Object doBusiness() throws BizException {
         AdoptOrderTree condition = new AdoptOrderTree();
         condition.setOrderCode(req.getOrderCode());
+        condition.setCategoryCode(req.getCategoryCode());
         condition.setStatus(req.getStatus());
         condition.setCurrentHolder(req.getCurrentHolder());
 

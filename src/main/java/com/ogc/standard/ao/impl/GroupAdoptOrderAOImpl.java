@@ -148,7 +148,7 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
         List<Tree> treeList = treeBO.queryTreeListByOrderCode(data.getCode(),
             ETreeStatus.TO_PAY.getCode());
         for (Tree tree : treeList) {
-            treeBO.refreshCancelTree(tree.getCode());
+            treeBO.refreshCancelTree(tree);
         }
         groupAdoptOrderBO.refreshCancelGroupAdoptOrder(data);
     }
@@ -186,12 +186,10 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
         if (CollectionUtils.isNotEmpty(treeList)) {
             for (Tree tree : treeList) {
                 // 更新树状态
-                treeBO.refreshPayTree(tree.getCode());
-                // // 分配认养权
-                // adoptOrderTreeBO
-                // .saveAdoptOrderTree(data.getCode(), tree.getTreeNumber(),
-                // data.getStartDatetime(), data.getEndDatetime(),
-                // data.getPrice(), data.getApplyUser());
+                treeBO.refreshPayTree(tree);
+                // 分配认养权
+                // adoptOrderTreeBO.saveAdoptOrderTree(data,
+                // tree.getTreeNumber());
             }
         }
         // 分配分红 TODO

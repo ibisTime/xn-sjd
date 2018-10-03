@@ -6,10 +6,10 @@ package com.ogc.standard.enums;
  * @since: 2018年9月28日 下午2:08:17 
  * @history:
  */
-public enum EAgentUserKind {
+public enum EAgentUserType {
     Agent("0", "代理商"), Salesman("1", "业务员");
 
-    EAgentUserKind(String code, String value) {
+    EAgentUserType(String code, String value) {
         this.code = code;
         this.value = value;
     }

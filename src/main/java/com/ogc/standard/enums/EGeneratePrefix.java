@@ -27,7 +27,7 @@ public enum EGeneratePrefix {
             "MR", "养护记录"),
 
     Settle("S", "结算订单"), GiveCarbonBubbleRecord("GCBR", "赠送碳泡泡记录"), ShareRecord(
-            "SR", "分享记录");
+            "SR", "分享记录"), AgentUser("AG", "代理人");
 
     public static Map<String, EGeneratePrefix> getMap() {
         Map<String, EGeneratePrefix> map = new HashMap<String, EGeneratePrefix>();

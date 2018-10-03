@@ -1,5 +1,6 @@
 package com.ogc.standard.bo.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -12,6 +13,8 @@ import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.ICompanyDAO;
 import com.ogc.standard.domain.Company;
+import com.ogc.standard.dto.req.XN730072Req;
+import com.ogc.standard.dto.req.XN730073Req;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.exception.BizException;
 
@@ -23,13 +26,48 @@ public class CompanyBOImpl extends PaginableBOImpl<Company> implements
     private ICompanyDAO companyDAO;
 
     @Override
-    public boolean isCompanyExist(String code) {
-        Company condition = new Company();
-        condition.setCode(code);
-        if (companyDAO.selectTotalCount(condition) > 0) {
-            return true;
-        }
-        return false;
+    public String saveCompany(XN730072Req req, String userId) {
+        Company data = new Company();
+        String code = OrderNoGenerater.generate(EGeneratePrefix.GS.getCode());
+        data.setCode(code);
+        data.setUserId(userId);
+        data.setName(req.getName());
+
+        data.setCharger(req.getCharger());
+        data.setChargeMobile(req.getChargeMobile());
+        data.setProvince(req.getProvince());
+        data.setCity(req.getCity());
+        data.setArea(req.getArea());
+
+        data.setAddress(req.getAddress());
+        data.setDescription(req.getDescription());
+        data.setBussinessLicense(req.getBussinessLicense());
+        data.setOrganizationCode(req.getOrganizationCode());
+        data.setUpdater(req.getUpdater());
+
+        data.setUpdateDatetime(new Date());
+        companyDAO.insert(data);
+        return code;
+    }
+
+    @Override
+    public void refreshCompany(XN730073Req req) {
+        Company data = getCompanyByUserId(req.getUserId());
+        data.setName(req.getName());
+        data.setCharger(req.getCharger());
+        data.setChargeMobile(req.getChargeMobile());
+        data.setProvince(req.getProvince());
+
+        data.setCity(req.getCity());
+        data.setArea(req.getArea());
+        data.setAddress(req.getAddress());
+        data.setDescription(req.getDescription());
+        data.setBussinessLicense(req.getBussinessLicense());
+
+        data.setOrganizationCode(req.getOrganizationCode());
+        data.setUpdater(req.getUpdater());
+        data.setUpdateDatetime(new Date());
+        companyDAO.update(data);
     }
 
     @Override
@@ -41,17 +79,6 @@ public class CompanyBOImpl extends PaginableBOImpl<Company> implements
             companyDAO.insert(data);
         }
         return code;
-    }
-
-    @Override
-    public int removeCompany(String code) {
-        int count = 0;
-        if (StringUtils.isNotBlank(code)) {
-            Company data = new Company();
-            data.setCode(code);
-            count = companyDAO.delete(data);
-        }
-        return count;
     }
 
     @Override
@@ -76,7 +103,7 @@ public class CompanyBOImpl extends PaginableBOImpl<Company> implements
             condition.setCode(code);
             data = companyDAO.select(condition);
             if (data == null) {
-                throw new BizException("xn0000", "公司编号不存在");
+                throw new BizException("xn0000", "公司不存在");
             }
         }
         return data;

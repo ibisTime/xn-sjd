@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IAdoptOrderBO;
 import com.ogc.standard.bo.ISYSConfigBO;
+import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.common.AmountUtil;
 import com.ogc.standard.common.SysConstants;
@@ -40,6 +41,9 @@ public class AdoptOrderBOImpl extends PaginableBOImpl<AdoptOrder> implements
 
     @Autowired
     private ISYSConfigBO sysConfigBO;
+
+    @Autowired
+    private IUserBO userBO;
 
     @Autowired
     private IAccountBO accountBO;

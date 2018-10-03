@@ -28,8 +28,8 @@ import com.ogc.standard.http.JsonUtils;
  * @history:
  */
 @Component
-public class SYSConfigBOImpl extends PaginableBOImpl<SYSConfig>
-        implements ISYSConfigBO {
+public class SYSConfigBOImpl extends PaginableBOImpl<SYSConfig> implements
+        ISYSConfigBO {
 
     static Logger logger = Logger.getLogger(SYSConfigBOImpl.class);
 
@@ -72,6 +72,21 @@ public class SYSConfigBOImpl extends PaginableBOImpl<SYSConfig>
     }
 
     @Override
+    public Map<String, String> getConfigsMap() {
+        Map<String, String> map = new HashMap<String, String>();
+
+        SYSConfig condition = new SYSConfig();
+        List<SYSConfig> list = sysConfigDAO.selectList(condition);
+        if (CollectionUtils.isNotEmpty(list)) {
+            for (SYSConfig sysConfig : list) {
+                map.put(sysConfig.getCkey(), sysConfig.getCvalue());
+            }
+        }
+
+        return map;
+    }
+
+    @Override
     public Map<String, String> getConfigsMap(String type) {
         Map<String, String> map = new HashMap<String, String>();
 
@@ -101,8 +116,8 @@ public class SYSConfigBOImpl extends PaginableBOImpl<SYSConfig>
         try {
             result = Double.valueOf(config.getCvalue());
         } catch (Exception e) {
-            logger.error(
-                "参数名为" + key + "的配置转换成Double类型发生错误, 原因：" + e.getMessage());
+            logger.error("参数名为" + key + "的配置转换成Double类型发生错误, 原因："
+                    + e.getMessage());
         }
         return result;
     }
@@ -126,8 +141,8 @@ public class SYSConfigBOImpl extends PaginableBOImpl<SYSConfig>
         try {
             result = new BigDecimal(config.getCvalue());
         } catch (Exception e) {
-            logger.error(
-                "参数名为" + key + "的配置转换成BigDecimal类型发生错误, 原因：" + e.getMessage());
+            logger.error("参数名为" + key + "的配置转换成BigDecimal类型发生错误, 原因："
+                    + e.getMessage());
         }
         return result;
     }

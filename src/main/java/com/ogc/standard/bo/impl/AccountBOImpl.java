@@ -244,8 +244,24 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
             String toUserId, String toCurrency, BigDecimal transAmount,
             String fromBizType, String toBizType, String fromBizNote,
             String toBizNote, String refNo) {
+        if (transAmount.compareTo(BigDecimal.ZERO) == 0) {
+            return;
+        }
         Account fromAccount = this.getAccountByUser(fromUserId, fromCurrency);
         Account toAccount = this.getAccountByUser(toUserId, toCurrency);
+        transAmount(fromAccount, toAccount, transAmount, fromBizType,
+            toBizType, fromBizNote, toBizNote, refNo);
+    }
+
+    @Override
+    public void transAmount(String fromUserId, String toUserId,
+            String currency, BigDecimal transAmount, String fromBizType,
+            String toBizType, String fromBizNote, String toBizNote, String refNo) {
+        if (transAmount.compareTo(BigDecimal.ZERO) == 0) {
+            return;
+        }
+        Account fromAccount = getAccountByUser(fromUserId, currency);
+        Account toAccount = getAccountByUser(toUserId, currency);
         transAmount(fromAccount, toAccount, transAmount, fromBizType,
             toBizType, fromBizNote, toBizNote, refNo);
     }
@@ -254,6 +270,9 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
     public void transAmount(Account fromAccount, Account toAccount,
             BigDecimal transAmount, String fromBizType, String toBizType,
             String fromBizNote, String toBizNote, String refNo) {
+        if (transAmount.compareTo(BigDecimal.ZERO) == 0) {
+            return;
+        }
         String fromAccountNumber = fromAccount.getAccountNumber();
         String toAccountNumber = toAccount.getAccountNumber();
         if (fromAccountNumber.equals(toAccountNumber)) {

@@ -60,4 +60,24 @@ public class SysConstants {
 
     public static final String CNY2JF_RATE = "CNY2JF_RATE"; // 积分兑换人民币比例
 
+    // 认养分销
+    public static String DIST_OWENER_RATE = "DIST_OWENER_RATE"; // 产权方的总额
+
+    public static String DIST_MAINTAIN_RATE = "DIST_MAINTAIN_RATE"; // 养护方的总额
+
+    public static String DIST_PLAT_RATE = "DIST_PLAT_RATE"; // 平台方的总额
+
+    public static String DIST_AGENT_RATE = "DIST_AGENT_RATE"; // 代理方的总额
+
+    public static String DIST_USER_BACK_JF_RATE = "DIST_USER_BACK_JF_RATE"; // 用户返积分的总额
+
+    // 代理等级分成
+    public static String DIST_AGENT1_RATE = "DIST_AGENT1_RATE"; // 一级代理分成比例
+
+    public static String DIST_AGENT2_RATE = "DIST_AGENT2_RATE"; // 二级代理分成比例
+
+    public static String DIST_AGENT3_RATE = "DIST_AGENT3_RATE"; // 三级代理分成比例
+
+    public static String DIST_AGENT4_RATE = "DIST_AGENT4_RATE"; // 四级代理分成比例
+
 }

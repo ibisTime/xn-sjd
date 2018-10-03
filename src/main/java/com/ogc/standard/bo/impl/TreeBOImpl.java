@@ -2,6 +2,7 @@ package com.ogc.standard.bo.impl;
 
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -93,18 +94,14 @@ public class TreeBOImpl extends PaginableBOImpl<Tree> implements ITreeBO {
     }
 
     @Override
-    public void refreshCancelTree(String code) {
-        Tree tree = new Tree();
-        tree.setCode(code);
+    public void refreshCancelTree(Tree tree) {
         tree.setCurOrderCode(null);
         tree.setStatus(ETreeStatus.TO_ADOPT.getCode());
         treeDAO.updateCancelTree(tree);
     }
 
     @Override
-    public void refreshPayTree(String code) {
-        Tree tree = new Tree();
-        tree.setCode(code);
+    public void refreshPayTree(Tree tree) {
         tree.setStatus(ETreeStatus.ADOPTED.getCode());
         treeDAO.updatePayTree(tree);
     }
@@ -148,10 +145,11 @@ public class TreeBOImpl extends PaginableBOImpl<Tree> implements ITreeBO {
         if (StringUtils.isNotBlank(treeNumber)) {
             Tree condition = new Tree();
             condition.setTreeNumber(treeNumber);
-            data = treeDAO.select(condition);
-            if (data == null) {
+            List<Tree> treeList = treeDAO.selectList(condition);
+            if (CollectionUtils.isEmpty(treeList)) {
                 throw new BizException("xn0000", "古树不存在！");
             }
+            data = treeList.get(0);
         }
         return data;
     }
@@ -192,6 +190,13 @@ public class TreeBOImpl extends PaginableBOImpl<Tree> implements ITreeBO {
         condition.setProductCode(productCode);
         condition.setStatus(status);
         return (int) treeDAO.selectTotalCount(condition);
+    }
+
+    @Override
+    public List<Tree> queryTreeListByOrderCode(String orderCode) {
+        Tree condition = new Tree();
+        condition.setCurOrderCode(orderCode);
+        return treeDAO.selectList(condition);
     }
 
     @Override

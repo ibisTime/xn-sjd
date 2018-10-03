@@ -7,7 +7,8 @@ package com.ogc.standard.enums;
  */
 public enum ESysConfigType {
 
-    QINIU("qiniu", "七牛"), PAY_RULE("pay_rule", "支付规则");
+    QINIU("qiniu", "七牛"), PAY_RULE("pay_rule", "支付规则"), DIST_RULE("DIST_RULE",
+            "分销规则");
 
     ESysConfigType(String code, String value) {
         this.code = code;

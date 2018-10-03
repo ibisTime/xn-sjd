@@ -11,9 +11,9 @@ import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
 
 /**
- * 审核分销商
- * @author: silver 
- * @since: 2018年9月28日 下午3:48:19 
+ * 提交资料
+ * @author: xieyj 
+ * @since: 2018年10月4日 上午12:59:08 
  * @history:
  */
 public class XN730073 extends AProcessor {
@@ -24,9 +24,7 @@ public class XN730073 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        agentUserAO.approveAgentUser(req.getUserId(), req.getApproveResult(),
-            req.getRemark(), req.getUpdater());
-
+        agentUserAO.commitCompany(req);
         return new BooleanRes(true);
     }
 

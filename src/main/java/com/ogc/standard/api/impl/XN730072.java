@@ -24,8 +24,8 @@ public class XN730072 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return new PKCodeRes(agentUserAO.applyAgent(req.getMobile(),
-            req.getRealName(), req.getLoginPwd(), req.getPhoto()));
+        String code = agentUserAO.doAddAgent(req);
+        return new PKCodeRes(code);
     }
 
     @Override

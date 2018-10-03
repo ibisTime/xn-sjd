@@ -2,14 +2,11 @@ package com.ogc.standard.ao;
 
 import java.util.List;
 
-import org.springframework.stereotype.Component;
-
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.GroupAdoptOrder;
 import com.ogc.standard.dto.req.XN629050Req;
 import com.ogc.standard.dto.req.XN629051Req;
 
-@Component
 public interface IGroupAdoptOrderAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 

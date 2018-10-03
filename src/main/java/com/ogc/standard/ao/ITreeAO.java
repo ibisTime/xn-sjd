@@ -2,8 +2,6 @@ package com.ogc.standard.ao;
 
 import java.util.List;
 
-import org.springframework.stereotype.Component;
-
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Tree;
 import com.ogc.standard.dto.req.XN629030Req;
@@ -15,7 +13,6 @@ import com.ogc.standard.dto.req.XN629031Req;
  * @since: 2018年9月27日 下午4:06:36 
  * @history:
  */
-@Component
 public interface ITreeAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 

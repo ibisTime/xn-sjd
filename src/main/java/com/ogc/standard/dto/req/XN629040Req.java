@@ -1,5 +1,7 @@
 package com.ogc.standard.dto.req;
 
+import javax.validation.constraints.Min;
+
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
@@ -19,7 +21,7 @@ public class XN629040Req {
     private String userId;
 
     // 数量
-    @NotBlank
+    @Min(1)
     private String quantity;
 
     public String getSpecsCode() {

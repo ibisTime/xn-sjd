@@ -5,6 +5,7 @@
 	<resultMap id="adoptOrderTree_DB_Result" type="adoptOrderTree">
 		<result column="code" property="code" />
 		<result column="order_code" property="orderCode" />
+		<result column="category_code" property="categoryCode" />
 		<result column="tree_number" property="treeNumber" />
 		<result column="start_datetime" property="startDatetime" />
 		<result column="end_datetime" property="endDatetime" />
@@ -20,6 +21,13 @@
 			<if test="orderCode != null and orderCode != '' ">
 				AND t.order_code = #{orderCode}
 			</if>
+			<if test="categoryCode != null and categoryCode != '' ">
+				AND t.category_code = #{categoryCode}
+			</if>
+			
+			<if test="treeNumber != null and treeNumber != '' ">
+				AND t.tree_number = #{treeNumber}
+			</if>
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
 			</if>
@@ -32,6 +40,7 @@
 		SELECT
 		t.code
 		,t.order_code
+		,t.category_code
 		,t.tree_number
 		,t.start_datetime
 		,t.end_datetime
@@ -59,6 +68,7 @@
 		try_adopt_order_tree(
 		code
 		,order_code
+		,category_code
 		,tree_number
 		,start_datetime
 		,end_datetime
@@ -69,6 +79,7 @@
 		VALUES(
 		#{code}
 		,#{orderCode}
+		,#{categoryCode}
 		,#{treeNumber}
 		,#{startDatetime}
 		,#{endDatetime}
@@ -78,16 +89,10 @@
 		)
 	</insert>
 
-	<update id="update_adoptOrderTree" parameterType="adoptOrderTree">
+	<update id="update_status" parameterType="adoptOrderTree">
 		UPDATE try_adopt_order_tree
 		SET
-		order_code = #{orderCode}
-		,tree_number = #{treeNumber}
-		,start_datetime = #{startDatetime}
-		,end_datetime = #{endDatetime}
-		,amount = #{amount}
-		,status = #{status}
-		,current_holder = #{currentHolder}
+		status = #{status}
 		WHERE code = #{code}
 	</update>
 	

@@ -1,7 +1,6 @@
 package com.ogc.standard.domain;
 
 import java.util.Date;
-import java.util.List;
 
 import com.ogc.standard.dao.base.ABaseDO;
 
@@ -68,9 +67,6 @@ public class SYSUser extends ABaseDO {
     // ***********db properties***********
 
     /************辅助字段***************/
-    // 系统用户列表
-    private List<SYSUser> sysUserList;
-
     // 注册时间起
     private Date createDatetimeStart;
 
@@ -226,14 +222,6 @@ public class SYSUser extends ABaseDO {
 
     public void setSystemCode(String systemCode) {
         this.systemCode = systemCode;
-    }
-
-    public List<SYSUser> getSysUserList() {
-        return sysUserList;
-    }
-
-    public void setSysUserList(List<SYSUser> sysUserList) {
-        this.sysUserList = sysUserList;
     }
 
     public Date getCreateDatetimeStart() {

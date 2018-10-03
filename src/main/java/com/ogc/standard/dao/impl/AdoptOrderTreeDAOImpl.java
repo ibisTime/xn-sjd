@@ -19,7 +19,7 @@ public class AdoptOrderTreeDAOImpl extends AMybatisTemplate implements
 
     @Override
     public int delete(AdoptOrderTree data) {
-        return super.delete(NAMESPACE.concat("delete_adoptOrderTree"), data);
+        return 0;
     }
 
     @Override
@@ -48,8 +48,8 @@ public class AdoptOrderTreeDAOImpl extends AMybatisTemplate implements
     }
 
     @Override
-    public int update(AdoptOrderTree data) {
-        return super.update(NAMESPACE.concat("update_adoptOrderTree"), data);
+    public int updateStatus(AdoptOrderTree data) {
+        return super.update(NAMESPACE.concat("update_status"), data);
     }
 
     @Override

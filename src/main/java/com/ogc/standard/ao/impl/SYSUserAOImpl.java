@@ -27,11 +27,11 @@ import com.ogc.standard.domain.SYSRole;
 import com.ogc.standard.domain.SYSUser;
 import com.ogc.standard.dto.req.XN630060Req;
 import com.ogc.standard.enums.EApplyBindMaintainStatus;
-import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ERoleCode;
 import com.ogc.standard.enums.ESYSUserKind;
 import com.ogc.standard.enums.ESYSUserStatus;
 import com.ogc.standard.enums.EUser;
+import com.ogc.standard.enums.EUserPwd;
 import com.ogc.standard.exception.BizException;
 
 @Service
@@ -99,7 +99,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
         data.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(req
             .getLoginPwd()));
         data.setCreateDatetime(new Date());
-        data.setStatus(ESYSUserStatus.TO_FILL_IN.getCode());// 待填公司资料
+        data.setStatus(ESYSUserStatus.TO_APPROVE.getCode());// 待填公司资料
         sysUserBO.doSaveSYSuser(data);
         return userId;
     }
@@ -122,8 +122,9 @@ public class SYSUserAOImpl implements ISYSUserAO {
         if (ESYSUserKind.MAINTAIN.getCode().equals(kind)) {
             data.setRoleCode("");// TODO
         }
-        data.setLoginPwd(MD5Util.md5("888888"));
-        data.setLoginPwdStrength(PwdUtil.calculateSecurityLevel("888888"));
+        data.setLoginPwd(MD5Util.md5(EUserPwd.InitPwd8.getCode()));
+        data.setLoginPwdStrength(PwdUtil
+            .calculateSecurityLevel(EUserPwd.InitPwd8.getCode()));
         data.setCreateDatetime(new Date());
         data.setStatus(ESYSUserStatus.NORMAL.getCode());// 代注册的也是待审核？
         data.setRemark(remark);
@@ -145,11 +146,11 @@ public class SYSUserAOImpl implements ISYSUserAO {
         if (!ESYSUserStatus.NORMAL.getCode().equals(data.getStatus())) {
             throw new BizException("xn805050", "用户不是待审核状态");
         }
-        if (EBoolean.YES.getCode().equals(approveResult)) {
-            data.setStatus(ESYSUserStatus.PARTNER.getCode());
-        } else {
-            data.setStatus(ESYSUserStatus.APPROVE_NO.getCode());
-        }
+        // if (EBoolean.YES.getCode().equals(approveResult)) {
+        // data.setStatus(ESYSUserStatus.PARTNER.getCode());
+        // } else {
+        // data.setStatus(ESYSUserStatus.APPROVE_NO.getCode());
+        // }
         data.setUpdater(updater);
         data.setUpdateDatetime(new Date());
         data.setRemark(remark);
@@ -338,8 +339,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
             long count = treeBO.getTotalCountByOwnerId(data.getUserId());
             data.setTreeQuantity(String.valueOf(count));
             data.setTreeValue("0");// TODO 古树市值
-        }
-        if (ESYSUserKind.MAINTAIN.getCode().equals(data.getKind())) {// 养护方
+        } else if (ESYSUserKind.MAINTAIN.getCode().equals(data.getKind())) {// 养护方
             ApplyBindMaintain abmCondition = new ApplyBindMaintain();
             abmCondition.setStatus(EApplyBindMaintainStatus.BIND.getCode());
             abmCondition.setMaintainId(data.getUserId());

@@ -21,6 +21,9 @@ public class AdoptOrderTree extends ABaseDO {
     // 认养订单编号
     private String orderCode;
 
+    // 分类
+    private String categoryCode;
+
     // 古树编号
     private String treeNumber;
 
@@ -38,6 +41,25 @@ public class AdoptOrderTree extends ABaseDO {
 
     // 当前持有人
     private String currentHolder;
+
+    // ***************db properties***************
+    private Tree tree;
+
+    public String getCategoryCode() {
+        return categoryCode;
+    }
+
+    public void setCategoryCode(String categoryCode) {
+        this.categoryCode = categoryCode;
+    }
+
+    public Tree getTree() {
+        return tree;
+    }
+
+    public void setTree(Tree tree) {
+        this.tree = tree;
+    }
 
     public void setCode(String code) {
         this.code = code;

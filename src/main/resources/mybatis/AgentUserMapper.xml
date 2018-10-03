@@ -5,22 +5,18 @@
 	<resultMap id="agentUser_DB_Result" type="agentUser">
 		<result column="user_id" property="userId" />
 		<result column="type" property="type" />
-		<result column="level" property="level" />
-		<result column="province" property="province" />
-		<result column="city" property="city" />
+		<result column="login_name" property="loginName" />
+		<result column="mobile" property="mobile" />
+		<result column="login_pwd_strength" property="loginPwdStrength" />
 		
-		<result column="area" property="area" />
+		<result column="trade_pwd_strength" property="tradePwdStrength" />
 		<result column="real_name" property="realName" />
 		<result column="photo" property="photo" />
-		<result column="mobile" property="mobile" />
-		<result column="login_name" property="loginName" />
-		
-		<result column="login_pwd_strength" property="loginPwdStrength" />
-		<result column="trade_pwd_strength" property="tradePwdStrength" />
 		<result column="create_datetime" property="createDatetime" />
 		<result column="status" property="status" />
-		<result column="updater" property="updater" />
 		
+		<result column="parent_user_id" property="parentUserId" />
+		<result column="updater" property="updater" />
 		<result column="update_datetime" property="updateDatetime" />
 		<result column="remark" property="remark" />
 	</resultMap>
@@ -32,12 +28,6 @@
 			</if>
 			<if test="type != null and type != '' ">
 				AND t.type = #{type}
-			</if>
-			<if test="level != null and level != '' ">
-				AND t.level = #{level}
-			</if>
-			<if test="realName != null and realName != '' ">
-				AND t.real_name = #{realName}
 			</if>
 			<if test="mobile != null and mobile != '' ">
 				AND t.mobile = #{mobile}
@@ -54,15 +44,18 @@
 			<if test="tradePwd != null and tradePwd != '' ">
 				AND t.trade_pwd = #{tradePwd}
 			</if>	
+			<if test="realNameForQuery != null and realNameForQuery != '' ">
+				AND t.real_name = #{realNameForQuery}
+			</if>
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
 			</if>
 			
-			<if test="dateStart != null and dateStart != '' ">
-				<![CDATA[AND t.create_datetime >= #{dateStart}]]>
+			<if test="createDatetimeStart != null and createDatetimeStart != '' ">
+				<![CDATA[AND t.create_datetime >= #{createDatetimeStart}]]>
 			</if>
-			<if test="dateEnd != null and dateEnd != '' ">
-				<![CDATA[AND t.create_datetime <= #{dateEnd}]]>
+			<if test="createDatetimeEnd != null and createDatetimeEnd != '' ">
+				<![CDATA[AND t.create_datetime <= #{createDatetimeEnd}]]>
 			</if>
 		</trim>
 	</sql>
@@ -71,22 +64,18 @@
 		SELECT
 		t.user_id
 		,t.type
-		,t.level
-		,t.province
-		,t.city
+		,t.login_name
+		,t.mobile
+		,t.login_pwd_strength
 		
-		,t.area
+		,t.trade_pwd_strength
 		,t.real_name
 		,t.photo
-		,t.mobile
-		,t.login_name
-		
-		,t.login_pwd_strength
-		,t.trade_pwd_strength
 		,t.create_datetime
 		,t.status
-		,t.updater
 		
+		,t.parent_user_id
+		,t.updater
 		,t.update_datetime
 		,t.remark
 		FROM
@@ -110,23 +99,19 @@
 		tsys_agent_user(
 		user_id
 		,type
-		,level
-		,province
-		,city
-		
-		,area
-		,real_name
-		,photo
-		,mobile
 		,login_name
-		
+		,mobile
 		,login_pwd
+		
 		,login_pwd_strength
 		,trade_pwd
 		,trade_pwd_strength
-		,create_datetime
+		,real_name
+		,photo
 		
+		,create_datetime
 		,status
+		,parent_user_id
 		,updater
 		,update_datetime
 		,remark
@@ -134,28 +119,35 @@
 		VALUES(
 		#{userId}
 		,#{type}
-		,#{level}
-		,#{province}
-		,#{city}
-		
-		,#{area}
-		,#{realName}
-		,#{photo}
-		,#{mobile}
 		,#{loginName}
-		
+		,#{mobile}
 		,#{loginPwd}
+		
 		,#{loginPwdStrength}
 		,#{tradePwd}
 		,#{tradePwdStrength}
-		,#{createDatetime}
+		,#{realName}
+		,#{photo}
 		
+		,#{createDatetime}
 		,#{status}
+		,#{parentUserId}
 		,#{updater}
 		,#{updateDatetime}
 		,#{remark}
 		)
 	</insert>
+	
+	<update id="update_toApprove" parameterType="agentUser">
+		UPDATE tsys_agent_user
+		SET
+		status = #{status}
+		,parent_user_id = #{parentUserId}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE user_id = #{userId}
+	</update>
 	
 	<update id="update_mobile" parameterType="agentUser">
 		UPDATE tsys_agent_user
@@ -174,6 +166,7 @@
 		photo = #{photo}
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
 		WHERE user_id = #{userId}
 	</update>
 	
@@ -183,32 +176,26 @@
 		real_name = #{realName}
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
 		WHERE user_id = #{userId}
 	</update>
 	
 	<update id="update_loginPwd" parameterType="user">
 		UPDATE tsys_agent_user
 		SET
-		 login_pwd = #{loginPwd}
+		login_pwd = #{loginPwd}
 		,login_pwd_strength = #{loginPwdStrength}
+		,remark = #{remark}
 		WHERE user_id = #{userId}	
 	</update>	
 	
 	<update id="update_tradePwd" parameterType="user">
 		UPDATE tsys_agent_user
 		SET
-		 trade_pwd = #{tradePwd}
+		trade_pwd = #{tradePwd}
 		,trade_pwd_strength = #{tradePwdStrength}
+		,remark = #{remark}
 		WHERE user_id = #{userId}	
-	</update>
-	
-	<update id="update_level" parameterType="agentUser">
-		UPDATE tsys_agent_user
-		SET
-		level = #{level}
-		,updater = #{updater}
-		,update_datetime = #{updateDatetime}
-		WHERE user_id = #{userId}
 	</update>
 	
 	<update id="update_status" parameterType="agentUser">
@@ -220,6 +207,5 @@
 		,remark = #{remark}
 		WHERE user_id = #{userId}
 	</update>
-
 
 </mapper>

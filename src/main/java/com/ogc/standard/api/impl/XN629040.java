@@ -26,8 +26,9 @@ public class XN629040 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         Integer quantity = StringValidater.toInteger(req.getQuantity());
-        return new PKCodeRes(adoptOrderAO.commitAdoptOrder(req.getUserId(),
-            req.getSpecsCode(), quantity));
+        String code = adoptOrderAO.commitAdoptOrder(req.getUserId(),
+            req.getSpecsCode(), quantity);
+        return new PKCodeRes(code);
     }
 
     @Override

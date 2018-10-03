@@ -16,11 +16,11 @@ import com.ogc.standard.domain.ApplyBindMaintain;
 import com.ogc.standard.domain.Company;
 import com.ogc.standard.domain.SYSUser;
 import com.ogc.standard.dto.req.XN629600Req;
-import com.ogc.standard.dto.req.XN629601Req;
 import com.ogc.standard.dto.req.XN629602Req;
 import com.ogc.standard.enums.EApplyBindMaintainStatus;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.exception.BizException;
+import com.ogc.standard.exception.EBizErrorCode;
 
 @Service
 public class ApplyBindMaintainAOImpl implements IApplyBindMaintainAO {
@@ -35,41 +35,34 @@ public class ApplyBindMaintainAOImpl implements IApplyBindMaintainAO {
     private ICompanyBO companyBO;
 
     @Override
-    public String addApplyBindMaintain(XN629600Req req) {
-        ApplyBindMaintain data = new ApplyBindMaintain();
-        data.setOwnerId(req.getOwnerId());
-        data.setMaintainId(req.getMaintainId());
-        data.setStatus(EApplyBindMaintainStatus.APPROVE.getCode());
+    public String applyBindMaintain(XN629600Req req) {
+        // 判断是否已绑定养护方
+        String maintainId = applyBindMaintainBO.getMaintainId(req.getOwnerId());
+        if (StringUtils.isNotBlank(maintainId)) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "您已绑定养护方");
+        }
+        return applyBindMaintainBO.saveApplyBindMaintain(req);
+    }
+
+    @Override
+    public void approveApplyBindMaintain(XN629602Req req) {
+        ApplyBindMaintain data = applyBindMaintainBO.getApplyBindMaintain(req
+            .getCode());
+        if (!EApplyBindMaintainStatus.TO_APPROVE.getCode().equals(
+            data.getStatus())) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "当前申请记录不是待审核");
+        }
+
+        if (EBoolean.YES.getCode().equals(req.getApproveResult())) {
+            data.setStatus(EApplyBindMaintainStatus.BIND.getCode());
+        } else {
+            data.setStatus(EApplyBindMaintainStatus.NO_PASS.getCode());
+        }
         data.setUpdater(req.getUpdater());
         data.setUpdateDatetime(new Date());
         data.setRemark(req.getRemark());
-        return applyBindMaintainBO.saveApplyBindMaintain(data);
-    }
-
-    @Override
-    public boolean editApplyBindMaintain(XN629601Req req) {
-        if (null != req
-                && applyBindMaintainBO.isApplyBindMaintainExist(req.getCode())) {
-            ApplyBindMaintain data = applyBindMaintainBO
-                .getApplyBindMaintain(req.getCode());
-            data.setMaintainId(req.getMaintainId());
-            data.setUpdater(req.getUpdater());
-            data.setRemark(req.getRemark());
-            data.setStatus(EApplyBindMaintainStatus.APPROVE.getCode());
-            data.setUpdateDatetime(new Date());
-            applyBindMaintainBO.refreshApplyBindMaintain(data);
-        } else {
-            throw new BizException("xn0000", "记录编号不存在");
-        }
-        return true;
-    }
-
-    @Override
-    public int dropApplyBindMaintain(String code) {
-        if (!applyBindMaintainBO.isApplyBindMaintainExist(code)) {
-            throw new BizException("xn0000", "记录编号不存在");
-        }
-        return applyBindMaintainBO.removeApplyBindMaintain(code);
+        applyBindMaintainBO.approveApplyBindMaintain(data);
     }
 
     @Override
@@ -95,22 +88,7 @@ public class ApplyBindMaintainAOImpl implements IApplyBindMaintainAO {
         return applyBindMaintainBO.getApplyBindMaintain(code);
     }
 
-    @Override
-    public void approveApplyBindMaintain(XN629602Req req) {
-        ApplyBindMaintain data = applyBindMaintainBO.getApplyBindMaintain(req
-            .getCode());
-        if (EBoolean.YES.getCode().equals(req.getApproveResult())) {
-            data.setStatus(EApplyBindMaintainStatus.BIND.getCode());
-        } else {
-            data.setStatus(EApplyBindMaintainStatus.NO_PASS.getCode());
-        }
-        data.setUpdater(req.getUpdater());
-        data.setUpdateDatetime(new Date());
-        data.setRemark(req.getRemark());
-        applyBindMaintainBO.approveApplyBindMaintain(data);
-    }
-
-    public void init(ApplyBindMaintain data) {
+    private void init(ApplyBindMaintain data) {
         // 产权方用户
         SYSUser ownerUser = sysUserBO.getSYSUser(data.getOwnerId());
         data.setOwnerUser(ownerUser);
@@ -125,7 +103,7 @@ public class ApplyBindMaintainAOImpl implements IApplyBindMaintainAO {
         if (StringUtils.isNotBlank(maintainUser.getCompanyCode())) {
             Company maintainCompany = companyBO.getCompany(maintainUser
                 .getCompanyCode());
-            ownerUser.setCompany(maintainCompany);
+            maintainUser.setCompany(maintainCompany);
         }
     }
 }

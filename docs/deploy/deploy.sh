@@ -1,10 +1,10 @@
 
 #!/usr/bin/expect
 
-set tomcat_path "/mnt/www/hmoney/tomcat_hmoney_biz"
-set war_name "ogc-standard"
-set host_ip "120.26.6.213"
-set host_pwd "cdkj123456Q"
+set tomcat_path "/mnt/www/sjd/tomcat_sjd_biz/webapps"
+set war_name "xn-sjd.war"
+set host_ip "47.99.147.67"
+set host_pwd "123456qqA"
 
 ######## 1.传输文件至服务器根目录 ########
 spawn scp ./${war_name}.war root@${host_ip}:~/

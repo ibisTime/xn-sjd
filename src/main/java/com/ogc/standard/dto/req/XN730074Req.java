@@ -3,7 +3,7 @@ package com.ogc.standard.dto.req;
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
- * 修改
+ * 审核分销商
  * @author: silver 
  * @since: 2018年9月28日 下午3:49:20 
  * @history:
@@ -15,6 +15,10 @@ public class XN730074Req extends BaseReq {
     // 用户编号
     @NotBlank
     private String userId;
+
+    // 审核结果
+    @NotBlank
+    private String approveResult;
 
     // 更新人
     @NotBlank
@@ -29,6 +33,14 @@ public class XN730074Req extends BaseReq {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getApproveResult() {
+        return approveResult;
+    }
+
+    public void setApproveResult(String approveResult) {
+        this.approveResult = approveResult;
     }
 
     public String getUpdater() {

@@ -2,8 +2,6 @@ package com.ogc.standard.ao;
 
 import java.util.List;
 
-import org.springframework.stereotype.Component;
-
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Settle;
 
@@ -13,7 +11,6 @@ import com.ogc.standard.domain.Settle;
  * @since: Sep 29, 2018 5:33:11 PM 
  * @history:
  */
-@Component
 public interface ISettleAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 

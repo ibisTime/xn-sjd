@@ -12,6 +12,7 @@ import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.IAdoptOrderTreeDAO;
 import com.ogc.standard.domain.AdoptOrder;
 import com.ogc.standard.domain.AdoptOrderTree;
+import com.ogc.standard.domain.Product;
 import com.ogc.standard.enums.EAdoptOrderStatus;
 import com.ogc.standard.enums.EAdoptOrderTreeStatus;
 import com.ogc.standard.enums.EGeneratePrefix;
@@ -25,12 +26,14 @@ public class AdoptOrderTreeBOImpl extends PaginableBOImpl<AdoptOrderTree>
     private IAdoptOrderTreeDAO adoptOrderTreeDAO;
 
     @Override
-    public String saveAdoptOrderTree(AdoptOrder adoptOrder, String treeNumber) {
+    public String saveAdoptOrderTree(Product product, AdoptOrder adoptOrder,
+            String treeNumber) {
         AdoptOrderTree data = new AdoptOrderTree();
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.ADOPT_ORDER_TREE.getCode());
         data.setCode(code);
         data.setOrderCode(adoptOrder.getCode());
+        data.setCategoryCode(product.getCategoryCode());
         data.setTreeNumber(treeNumber);
 
         data.setStartDatetime(adoptOrder.getStartDatetime());
@@ -60,7 +63,7 @@ public class AdoptOrderTreeBOImpl extends PaginableBOImpl<AdoptOrderTree>
             condition.setCode(code);
             data = adoptOrderTreeDAO.select(condition);
             if (data == null) {
-                throw new BizException("xn0000", "树不存在");
+                throw new BizException("xn0000", "认养权不存在");
             }
         }
         return data;
@@ -68,7 +71,7 @@ public class AdoptOrderTreeBOImpl extends PaginableBOImpl<AdoptOrderTree>
 
     @Override
     public void giveTree(AdoptOrderTree data) {
-        if (StringUtils.isNotBlank(data.getCode())) {
+        if (data != null) {
             adoptOrderTreeDAO.giveTree(data);
         }
     }

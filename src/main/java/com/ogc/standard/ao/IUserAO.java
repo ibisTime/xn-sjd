@@ -6,7 +6,6 @@ import com.ogc.standard.dto.req.XN802399Req;
 import com.ogc.standard.dto.req.XN802400Req;
 import com.ogc.standard.dto.req.XN805041Req;
 import com.ogc.standard.dto.req.XN805042Req;
-import com.ogc.standard.dto.req.XN805043Req;
 import com.ogc.standard.dto.req.XN805081Req;
 
 /**
@@ -23,21 +22,16 @@ public interface IUserAO {
     // 注册前端用户
     public String doRegisterByMobile(XN805041Req req);
 
-    // 邮箱注册
-    public String doRegisterByEmail(XN805043Req req);
-
     // 代注册
     public String doAddUser(XN805042Req req);
 
-    public void doBindMobile(String isSendSms, String mobile, String smsCaptcha,
-            String userId);
+    // 绑定手机号
+    public void doBindMobile(String isSendSms, String mobile,
+            String smsCaptcha, String userId);
 
     // 平台代注册渠道商用户
     public String doAddQDS(String mobile, String idKind, String idNo,
             String realName, String respArea);
-
-    // // 申请注册
-    // public String doApplyRegUser(XN805043Req req);
 
     // 用户登录
     public String doLogin(String loginName, String loginPwd, String client,
@@ -46,20 +40,6 @@ public interface IUserAO {
     // 修改定位信息
     public void doChangeLocation(XN805081Req req);
 
-    // // 验证码登录注册
-    // public XN805041Res doCaptchaLoginReg(String countryCode, String mobile,
-    // String smsCaptcha, String inviteCode, String companyCode,
-    // String systemCode);
-    //
-    // // 检查登录密码是否正确
-    // public void doCheckLoginPwd(String userId, String password);
-    //
-    // // 绑定邮箱
-    // public void doBindEmail(String userId, String email, String captcha);
-    //
-    // // 添加备注
-    // public void doAddRemark(String userId, String remark);
-    //
     // 更换手机号
     public void doChangeMoblie(String userId, String newMobile,
             String smsCaptcha);
@@ -81,12 +61,10 @@ public interface IUserAO {
             String adminUserId, String adminPwd);
 
     // 管理员重置推荐人
-    public void doResetReferee(String userId, String userReferee,
-            String updater);
+    public void doResetReferee(String userId, String userReferee, String updater);
 
     // 设置支付密码
-    public void doSetTradePwd(String userId, String tradePwd,
-            String smsCaptcha);
+    public void doSetTradePwd(String userId, String tradePwd, String smsCaptcha);
 
     // 重置支付密码
     public void doResetTradePwd(String userId, String newTradePwd,

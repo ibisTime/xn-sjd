@@ -88,6 +88,10 @@ public class AdoptOrder extends ABaseDO {
 
     /*********辅助字段**********/
 
+    private Date applyDatetimeStart;// 下单时间起
+
+    private Date applyDatetimeEnd;// 下单时间止
+
     private Date startDatetimeStart;// 认养开始时间起
 
     private Date startDatetimeEnd;// 认养开始时间止
@@ -95,6 +99,22 @@ public class AdoptOrder extends ABaseDO {
     private Date endDatetimeStart;// 认养结束时间起
 
     private Date endDatetimeEnd;// 认养结束时间止
+
+    public Date getApplyDatetimeStart() {
+        return applyDatetimeStart;
+    }
+
+    public void setApplyDatetimeStart(Date applyDatetimeStart) {
+        this.applyDatetimeStart = applyDatetimeStart;
+    }
+
+    public Date getApplyDatetimeEnd() {
+        return applyDatetimeEnd;
+    }
+
+    public void setApplyDatetimeEnd(Date applyDatetimeEnd) {
+        this.applyDatetimeEnd = applyDatetimeEnd;
+    }
 
     public BigDecimal getCnyDeductAmount() {
         return cnyDeductAmount;
