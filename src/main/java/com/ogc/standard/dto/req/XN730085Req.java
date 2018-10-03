@@ -13,10 +13,11 @@ public class XN730085Req extends APageReq {
     // 类型（0代理商/1业务员）
     private String type;
 
-    // 用户等级
-    private String level;
+    private String userId;
 
-    // 状态（0待审核/1合伙中/2已解除合伙/3已注销）
+    private String parentUserId;
+
+    // 状态
     private String status;
 
     // 关键字(名字，手机号模糊查询)
@@ -30,12 +31,20 @@ public class XN730085Req extends APageReq {
         this.type = type;
     }
 
-    public String getLevel() {
-        return level;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setLevel(String level) {
-        this.level = level;
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getParentUserId() {
+        return parentUserId;
+    }
+
+    public void setParentUserId(String parentUserId) {
+        this.parentUserId = parentUserId;
     }
 
     public String getStatus() {
@@ -53,5 +62,4 @@ public class XN730085Req extends APageReq {
     public void setKeyword(String keyword) {
         this.keyword = keyword;
     }
-
 }

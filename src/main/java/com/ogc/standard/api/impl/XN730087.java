@@ -28,14 +28,15 @@ public class XN730087 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         AgentUser condition = new AgentUser();
-        condition.setStatus(req.getStatus());
         condition.setType(req.getType());
-        condition.setLevel(req.getLevel());
+        condition.setUserId(req.getUserId());
+        condition.setParentUserId(req.getParentUserId());
+        condition.setStatus(req.getStatus());
         condition.setKeyword(req.getKeyword());
-        condition.setDateStart(DateUtil.strToDate(req.getDateStart(),
-            DateUtil.DATA_TIME_PATTERN_1));
-        condition.setDateEnd(
-            DateUtil.strToDate(req.getDateEnd(), DateUtil.DATA_TIME_PATTERN_1));
+        condition.setCreateDatetimeStart(DateUtil.getFrontDate(
+            req.getDateStart(), false));
+        condition.setCreateDatetimeEnd(DateUtil.getFrontDate(req.getDateEnd(),
+            true));
 
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {

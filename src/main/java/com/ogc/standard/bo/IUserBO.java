@@ -13,7 +13,6 @@ import java.util.List;
 import com.ogc.standard.bo.base.IPaginableBO;
 import com.ogc.standard.domain.AgentUser;
 import com.ogc.standard.domain.User;
-import com.ogc.standard.dto.req.XN805043Req;
 import com.ogc.standard.enums.EUserStatus;
 
 /** 
@@ -44,9 +43,6 @@ public interface IUserBO extends IPaginableBO<User> {
     public String doRegister(String mobile, String nickname, String loginPwd,
             User refereeUser, AgentUser agentUser, AgentUser salesmanUser,
             String province, String city, String area);
-
-    // 邮箱注册
-    public String doRegistByEmail(XN805043Req req);
 
     // 渠道商代注册
     public String doAddQDS(String mobile, String idKind, String idNo,
@@ -100,8 +96,8 @@ public interface IUserBO extends IPaginableBO<User> {
 
     public List<User> queryUserList(User condition);
 
-    public void refreshStatus(String userId, EUserStatus normal, String updater,
-            String remark);
+    public void refreshStatus(String userId, EUserStatus normal,
+            String updater, String remark);
 
     public void refreshNickname(String userId, String nickname);
 
@@ -121,7 +117,6 @@ public interface IUserBO extends IPaginableBO<User> {
     public void refreshRespArea(String userId, String respArea, String updater);
 
     // 修改推荐人
-    public void refreshReferee(String userId, String userReferee,
-            String updater);
+    public void refreshReferee(String userId, String userReferee, String updater);
 
 }
