@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ogc.standard.dao.IToolDAO">
+	<resultMap id="tool_DB_Result" type="tool">
+		<result column="code" property="code" />
+		<result column="name" property="name" />
+		<result column="type" property="type" />
+		<result column="pic" property="pic" />
+		<result column="price" property="price" />
+		
+		<result column="description" property="description" />
+		<result column="validity_term" property="validityTerm" />
+		<result column="status" property="status" />
+		<result column="order_no" property="orderNo" />
+		<result column="updater" property="updater" />
+		
+		<result column="update_datetime" property="updateDatetime" />
+		<result column="remark" property="remark" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="nameForQuery != null and nameForQuery != '' ">
+				AND t.name like "%"#{nameForQuery}"%"
+			</if>
+			<if test="type != null and type != '' ">
+				AND t.type = #{type}
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+			<if test="updater != null and updater != '' ">
+				AND t.updater = #{updater}
+			</if>
+		</trim>
+	</sql>
+	<select id="select_tool" parameterType="tool" resultMap="tool_DB_Result">
+		SELECT
+		t.code
+		,t.name
+		,t.type
+		,t.pic
+		,t.price
+		
+		,t.description
+		,t.validity_term
+		,t.status
+		,t.order_no
+		,t.updater
+		
+		,t.update_datetime
+		,t.remark
+		FROM
+		tb_tool t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_tool_count" parameterType="tool"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tb_tool t
+		<include refid="where_condition" />
+	</select>
+
+	<update id="update_tool" parameterType="tool">
+		UPDATE tb_tool
+		SET
+		name = #{name}
+		,pic = #{pic}
+		,price = #{price}
+		,description = #{description}
+		,validity_term = #{validityTerm}
+		
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+
+	<update id="update_up" parameterType="tool">
+		UPDATE tb_tool
+		SET
+		status = #{status}
+		,order_no = #{orderNo}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_down" parameterType="tool">
+		UPDATE tb_tool
+		SET
+		status = #{status}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+
+</mapper>

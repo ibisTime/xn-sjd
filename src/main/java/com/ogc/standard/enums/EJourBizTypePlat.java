@@ -18,6 +18,8 @@ public enum EJourBizTypePlat {
 
     ADOPT_DEDUCT("adopt_deduct", "认养提成"),
 
+    TOOL_DEDUCT("tool_deduct", "道具购买抵扣"),
+
     DIFF_EMPTY_DEDUCT("diff_empty_deduct", "级差轮空提成");
 
     public static EJourBizTypePlat getBizType(String code) {

@@ -107,7 +107,8 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         String userId = OrderNoGenerater.generate("U");
         data.setUserId(userId);
         data.setKind(EUserKind.Customer.getCode());
-        data.setNickname(userId.substring(userId.length() - 8, userId.length()));
+        data.setNickname(
+            userId.substring(userId.length() - 8, userId.length()));
         userDAO.insert(data);
         return userId;
     }
@@ -142,8 +143,8 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             user.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(loginPwd));
         }
         if (nickname == null) {
-            user.setNickname(userId.substring(userId.length() - 8,
-                userId.length()));
+            user.setNickname(
+                userId.substring(userId.length() - 8, userId.length()));
         }
         user.setNickname(nickname);
         if (refereeUser != null) {
@@ -175,11 +176,12 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         data.setLoginName(req.getEmail());
         data.setEmail(req.getEmail());
         data.setKind(EUserKind.Customer.getCode());
-        data.setNickname(userId.substring(userId.length() - 8, userId.length()));
+        data.setNickname(
+            userId.substring(userId.length() - 8, userId.length()));
         if (StringUtils.isNotBlank(req.getLoginPwd())) {
             data.setLoginPwd(MD5Util.md5(req.getLoginPwd()));
-            data.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(req
-                .getLoginPwd()));
+            data.setLoginPwdStrength(
+                PwdUtil.calculateSecurityLevel(req.getLoginPwd()));
         }
         data.setUserReferee(req.getUserReferee());
         data.setLevel(EUserLevel.ONE.getCode());
@@ -274,8 +276,12 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             data = userDAO.select(condition);
         }
         if (data == null) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "用户编号"
-                    + userId + "不存在");
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "用户编号" + userId + "不存在");
+        }
+        if (!EUserStatus.NORMAL.getCode().equals(data.getStatus())) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "用户已被锁定，请联系管理员");
         }
         return data;
     }
@@ -388,7 +394,8 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
 
     @Override
     public void checkTradePwd(String userId, String tradePwd) {
-        if (StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(tradePwd)) {
+        if (StringUtils.isNotBlank(userId)
+                && StringUtils.isNotBlank(tradePwd)) {
             User user = this.getUser(userId);
             if (StringUtils.isBlank(user.getTradePwdStrength())) {
                 throw new BizException("jd00001", "请您先设置支付密码！");
@@ -406,7 +413,8 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
 
     @Override
     public void checkLoginPwd(String userId, String loginPwd) {
-        if (StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(loginPwd)) {
+        if (StringUtils.isNotBlank(userId)
+                && StringUtils.isNotBlank(loginPwd)) {
             User condition = new User();
             condition.setUserId(userId);
             condition.setLoginPwd(MD5Util.md5(loginPwd));
@@ -421,7 +429,8 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
 
     @Override
     public void checkLoginPwd(String userId, String loginPwd, String alertStr) {
-        if (StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(loginPwd)) {
+        if (StringUtils.isNotBlank(userId)
+                && StringUtils.isNotBlank(loginPwd)) {
             User condition = new User();
             condition.setUserId(userId);
             condition.setLoginPwd(MD5Util.md5(loginPwd));
@@ -444,14 +453,14 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         List<User> userList = userDAO.selectList(condition);
         if (CollectionUtils.isNotEmpty(userList)) {
             User data = userList.get(0);
-            throw new BizException("xn000001", "用户[" + data.getMobile()
-                    + "]已使用该身份信息，请重新填写");
+            throw new BizException("xn000001",
+                "用户[" + data.getMobile() + "]已使用该身份信息，请重新填写");
         }
     }
 
     @Override
-    public void refreshStatus(String userId, EUserStatus status,
-            String updater, String remark) {
+    public void refreshStatus(String userId, EUserStatus status, String updater,
+            String remark) {
         if (StringUtils.isNotBlank(userId)) {
             User data = new User();
             data.setUserId(userId);
@@ -510,7 +519,8 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     }
 
     @Override
-    public void refreshReferee(String userId, String userReferee, String updater) {
+    public void refreshReferee(String userId, String userReferee,
+            String updater) {
         if (StringUtils.isNotBlank(userId)) {
             User data = new User();
             data.setUserId(userId);
@@ -550,13 +560,15 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         user.setCreateDatetime(new Date());
         user.setLoginPwd(MD5Util.md5(loginPwd));
         user.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(loginPwd));
-        user.setNickname(userId.substring(userId.length() - 8, userId.length()));
+        user.setNickname(
+            userId.substring(userId.length() - 8, userId.length()));
         userDAO.insert(user);
         return userId;
     }
 
     @Override
-    public void refreshRespArea(String userId, String respArea, String updater) {
+    public void refreshRespArea(String userId, String respArea,
+            String updater) {
         User data = new User();
         data.setUserId(userId);
         data.setUpdater(updater);

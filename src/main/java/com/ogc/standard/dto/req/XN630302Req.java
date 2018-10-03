@@ -13,6 +13,9 @@ public class XN630302Req {
     // 营业执照
     private String bussinessLicense;
 
+    // 组织编号
+    private String organizationCode;
+
     // 证书模板
     private String certificateTemplate;
 
@@ -49,6 +52,14 @@ public class XN630302Req {
 
     public void setBussinessLicense(String bussinessLicense) {
         this.bussinessLicense = bussinessLicense;
+    }
+
+    public void setOrganizationCode(String organizationCode) {
+        this.organizationCode = organizationCode;
+    }
+
+    public String getOrganizationCode() {
+        return organizationCode;
     }
 
     public String getCertificateTemplate() {

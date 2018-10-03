@@ -47,14 +47,17 @@ public class AgentUserBOImpl extends PaginableBOImpl<AgentUser> implements
         AgentUser agentUser = new AgentUser();
         String userId = OrderNoGenerater.generate("AU");
         agentUser.setUserId(userId);
-        agentUser.setMobile(mobile);
-        agentUser.setLoginName(mobile);
-        agentUser.setStatus(EAgentUserStatus.TO_FILL.getCode());
-        agentUser.setLoginPwd(MD5Util.md5(loginPwd));
-
-        agentUser.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(loginPwd));
         agentUser.setType(EAgentUserType.Agent.getCode());
+        agentUser.setMobile(mobile);
+
+        agentUser.setLoginName(mobile);
+        agentUser.setLoginPwd(MD5Util.md5(loginPwd));
+        agentUser.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(loginPwd));
+        agentUser.setLoginPwd(MD5Util.md5(loginPwd));
+        agentUser.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(loginPwd));
+
         agentUser.setCreateDatetime(new Date());
+        agentUser.setStatus(EAgentUserStatus.TO_FILL.getCode());
         agentUserDAO.insert(agentUser);
         return userId;
     }

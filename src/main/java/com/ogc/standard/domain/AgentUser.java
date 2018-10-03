@@ -99,6 +99,9 @@ public class AgentUser extends ABaseDO {
         this.parentUserId = parentUserId;
     }
 
+    // 公司信息
+    private Company companyInfo;
+
     public void setUserId(String userId) {
         this.userId = userId;
     }
@@ -241,6 +244,14 @@ public class AgentUser extends ABaseDO {
 
     public void setKeyword(String keyword) {
         this.keyword = keyword;
+    }
+
+    public Company getCompanyInfo() {
+        return companyInfo;
+    }
+
+    public void setCompanyInfo(Company companyInfo) {
+        this.companyInfo = companyInfo;
     }
 
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.SYSUser;
 import com.ogc.standard.dto.req.XN630060Req;
+import com.ogc.standard.dto.req.XN630064Req;
 
 /**
  * 系统用户
@@ -58,8 +59,7 @@ public interface ISYSUserAO {
     public SYSUser getSYSUser(String userId);
 
     // 代申请
-    public String proxyApplySYSUser(String kind, String loginName,
-            String mobile, String realName, String remark);
+    public String proxyApplySYSUser(XN630064Req req);
 
     // 注册用户（产权/养护）
     public String registerSYSUserOwner(XN630060Req req);

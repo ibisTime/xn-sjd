@@ -41,9 +41,6 @@ public class AgentUserAOImpl implements IAgentUserAO {
     private IAgentUserBO agentUserBO;
 
     @Autowired
-    private ICompanyBO companyBO;
-
-    @Autowired
     private ISmsOutBO smsOutBO;
 
     @Autowired
@@ -51,6 +48,9 @@ public class AgentUserAOImpl implements IAgentUserAO {
 
     @Autowired
     private IAccountBO accountBO;
+
+    @Autowired
+    private ICompanyBO companyBO;
 
     @Override
     public String doRegister(String mobile, String loginPwd, String smsCaptcha) {
@@ -66,6 +66,7 @@ public class AgentUserAOImpl implements IAgentUserAO {
         // 分配人民币账户
         accountBO.distributeAccount(userId, EAccountType.AGENT,
             ECurrency.CNY.getCode());
+
         return userId;
     }
 
@@ -91,9 +92,6 @@ public class AgentUserAOImpl implements IAgentUserAO {
             agentUser = listAgentUser.get(0);
         }
 
-        if (EAgentUserStatus.CANCEL.getCode().equals(agentUser.getStatus())) {
-            throw new BizException("xn805050", "您的账号异常，请联系管理员处理");
-        }
         return agentUser.getUserId();
     }
 
@@ -105,7 +103,6 @@ public class AgentUserAOImpl implements IAgentUserAO {
         String loginPwd = RandomUtil.generate6();
         String userId = agentUserBO.doAddAgentUser(req.getMobile(), loginPwd);
         companyBO.saveCompany(req, userId);
-
         // 发送短信
         smsOutBO.sendSmsOut(
             req.getMobile(),
@@ -285,20 +282,35 @@ public class AgentUserAOImpl implements IAgentUserAO {
     @Override
     public Paginable<AgentUser> queryAgentUserPage(int start, int limit,
             AgentUser condition) {
-        return agentUserBO.getPaginable(start, limit, condition);
+        Paginable<AgentUser> page = agentUserBO.getPaginable(start, limit,
+            condition);
+        if (null != page) {
+            for (AgentUser data : page.getList()) {
+                initAgentUser(data);
+            }
+        }
+        return page;
     }
 
     @Override
     public List<AgentUser> queryAgentUserList(AgentUser condition) {
-        return agentUserBO.queryAgentUserList(condition);
+        List<AgentUser> list = agentUserBO.queryAgentUserList(condition);
+        for (AgentUser data : list) {
+            initAgentUser(data);
+        }
+        return list;
     }
 
     @Override
     public AgentUser getAgentUser(String userId) {
         AgentUser data = agentUserBO.getAgentUser(userId);
-        Company company = companyBO.getCompanyByUserId(userId);
-        data.setCompany(company);
-
+        initAgentUser(data);
         return data;
     }
+
+    private void initAgentUser(AgentUser data) {
+        Company company = companyBO.getCompanyByUserId(data.getUserId());
+        data.setCompany(company);
+    }
+
 }

@@ -5,7 +5,7 @@ import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.ObjValidater;
 import com.ogc.standard.dto.req.XN630051Req;
-import com.ogc.standard.dto.res.XN627300Res;
+import com.ogc.standard.dto.res.PKUserRes;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
@@ -23,8 +23,8 @@ public class XN630051 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return new XN627300Res(
-            userAO.doLogin(req.getLoginName(), req.getLoginPwd()));
+        String userId = userAO.doLogin(req.getLoginName(), req.getLoginPwd());
+        return new PKUserRes(userId);
     }
 
     @Override

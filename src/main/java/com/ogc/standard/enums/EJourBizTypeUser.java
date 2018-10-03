@@ -65,7 +65,9 @@ public enum EJourBizTypeUser {
 
     ADOPT_DEDUCT("adopt_deduct", "认养抵扣"),
 
-    ADOPT_PAY_BACK("adopt_pay_back", "认养消费返利");
+    ADOPT_PAY_BACK("adopt_pay_back", "认养消费返利"),
+
+    TOOL_DEDUCT("tool_deduct", "道具购买抵扣");
 
     public static EJourBizTypeUser getBizType(String code) {
         Map<String, EJourBizTypeUser> map = getBizTypeMap();

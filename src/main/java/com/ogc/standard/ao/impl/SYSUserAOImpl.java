@@ -4,11 +4,11 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ogc.standard.ao.ISYSUserAO;
+import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IApplyBindMaintainBO;
 import com.ogc.standard.bo.ICompanyBO;
 import com.ogc.standard.bo.ISYSRoleBO;
@@ -26,6 +26,7 @@ import com.ogc.standard.domain.Company;
 import com.ogc.standard.domain.SYSRole;
 import com.ogc.standard.domain.SYSUser;
 import com.ogc.standard.dto.req.XN630060Req;
+import com.ogc.standard.dto.req.XN630064Req;
 import com.ogc.standard.enums.EApplyBindMaintainStatus;
 import com.ogc.standard.enums.ERoleCode;
 import com.ogc.standard.enums.ESYSUserKind;
@@ -33,27 +34,31 @@ import com.ogc.standard.enums.ESYSUserStatus;
 import com.ogc.standard.enums.EUser;
 import com.ogc.standard.enums.EUserPwd;
 import com.ogc.standard.exception.BizException;
+import com.ogc.standard.exception.EBizErrorCode;
 
 @Service
 public class SYSUserAOImpl implements ISYSUserAO {
 
     @Autowired
-    ISYSUserBO sysUserBO;
+    private IAccountBO accountBO;
 
     @Autowired
-    ISYSRoleBO sysRoleBO;
+    private ISYSUserBO sysUserBO;
 
     @Autowired
-    ISmsOutBO smsOutBO;
+    private ISYSRoleBO sysRoleBO;
 
     @Autowired
-    ITreeBO treeBO;
+    private ISmsOutBO smsOutBO;
 
     @Autowired
-    IApplyBindMaintainBO applyBindMaintainBO;
+    private ITreeBO treeBO;
 
     @Autowired
-    ICompanyBO companyBO;
+    private IApplyBindMaintainBO applyBindMaintainBO;
+
+    @Autowired
+    private ICompanyBO companyBO;
 
     // 新增用户（平台）
     @Override
@@ -86,7 +91,6 @@ public class SYSUserAOImpl implements ISYSUserAO {
         String userId = OrderNoGenerater.generate("U");
         data.setUserId(userId);
         data.setKind(req.getKind());
-        data.setRealName(req.getCompanyCharger());
         data.setMobile(req.getMobile());
         data.setLoginName(req.getMobile());
         if (ESYSUserKind.OWNER.getCode().equals(req.getKind())) {
@@ -99,27 +103,33 @@ public class SYSUserAOImpl implements ISYSUserAO {
         data.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(req
             .getLoginPwd()));
         data.setCreateDatetime(new Date());
-        data.setStatus(ESYSUserStatus.TO_APPROVE.getCode());// 待填公司资料
+        data.setStatus(ESYSUserStatus.TO_FILL.getCode());// 待填公司资料
+
+        // 生成待填写的公司
+        Company company = new Company();
+        company.setUserId(userId);
+        company.setCreateDatetime(new Date());
+        companyBO.saveCompany(company);
+
         sysUserBO.doSaveSYSuser(data);
         return userId;
     }
 
     // 代申请
     @Override
-    public String proxyApplySYSUser(String kind, String loginName,
-            String mobile, String realName, String remark) {
-        sysUserBO.isMobileExist(mobile);
+    public String proxyApplySYSUser(XN630064Req req) {
+        sysUserBO.isMobileExist(req.getMobile());
         SYSUser data = new SYSUser();
         String userId = OrderNoGenerater.generate("U");
         data.setUserId(userId);
-        data.setKind(kind);
-        data.setRealName(realName);
-        data.setMobile(mobile);
-        data.setLoginName(loginName);
-        if (ESYSUserKind.OWNER.getCode().equals(kind)) {
+        data.setKind(req.getKind());
+        data.setRealName(req.getRealName());
+        data.setMobile(req.getMobile());
+        data.setLoginName(req.getLoginName());
+        if (ESYSUserKind.OWNER.getCode().equals(req.getKind())) {
             data.setRoleCode("");// TODO
         }
-        if (ESYSUserKind.MAINTAIN.getCode().equals(kind)) {
+        if (ESYSUserKind.MAINTAIN.getCode().equals(req.getKind())) {
             data.setRoleCode("");// TODO
         }
         data.setLoginPwd(MD5Util.md5(EUserPwd.InitPwd8.getCode()));
@@ -127,11 +137,23 @@ public class SYSUserAOImpl implements ISYSUserAO {
             .calculateSecurityLevel(EUserPwd.InitPwd8.getCode()));
         data.setCreateDatetime(new Date());
         data.setStatus(ESYSUserStatus.NORMAL.getCode());// 代注册的也是待审核？
-        data.setRemark(remark);
+        data.setRemark(req.getRemark());
         sysUserBO.doSaveSYSuser(data);
-        // 生成待填写的公司
+        // 待申请填写公司资料，生成公司
         Company company = new Company();
         company.setUserId(userId);
+        company.setName(req.getCompanyName());
+        company.setCharger(req.getCompanyCharger());
+        company.setChargeMobile(req.getChargerMobile());
+        company.setAddress(req.getCompanyAddress());
+        company.setDescription(req.getDescription());
+        company.setBussinessLicense(req.getBussinessLicense());
+        company.setOrganizationCode(req.getOrganizationCode());
+        company.setCertificateTemplate(req.getCertificateTemplate());
+        company.setContractTemplate(req.getContractTemplate());
+        company.setCreateDatetime(new Date());
+        company.setUpdater(userId);
+        company.setUpdateDatetime(new Date());
         companyBO.saveCompany(company);
         return userId;
     }
@@ -143,14 +165,9 @@ public class SYSUserAOImpl implements ISYSUserAO {
             throw new BizException("xn805050", "用户不存在");
         }
         SYSUser data = sysUserBO.getSYSUser(userId);
-        if (!ESYSUserStatus.NORMAL.getCode().equals(data.getStatus())) {
+        if (!ESYSUserStatus.TO_APPROVE.getCode().equals(data.getStatus())) {
             throw new BizException("xn805050", "用户不是待审核状态");
         }
-        // if (EBoolean.YES.getCode().equals(approveResult)) {
-        // data.setStatus(ESYSUserStatus.PARTNER.getCode());
-        // } else {
-        // data.setStatus(ESYSUserStatus.APPROVE_NO.getCode());
-        // }
         data.setUpdater(updater);
         data.setUpdateDatetime(new Date());
         data.setRemark(remark);
@@ -172,6 +189,12 @@ public class SYSUserAOImpl implements ISYSUserAO {
             throw new BizException("xn805050", "登录密码错误");
         }
         SYSUser user = userList2.get(0);
+
+        if (ESYSUserStatus.Li_Locked.getCode().equals(user.getStatus())
+                || ESYSUserStatus.Ren_Locked.getCode().equals(user.getStatus())) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "当前用户已被锁定，请联系管理员");
+        }
         return user.getUserId();
     }
 
@@ -335,10 +358,14 @@ public class SYSUserAOImpl implements ISYSUserAO {
     }
 
     public void init(SYSUser data) {
+
+        Company company = companyBO.getCompanyByUserId(data.getUserId());
+        data.setCompany(company);
+
         if (ESYSUserKind.OWNER.getCode().equals(data.getKind())) { // 产权方
             long count = treeBO.getTotalCountByOwnerId(data.getUserId());
             data.setTreeQuantity(String.valueOf(count));
-            data.setTreeValue("0");// TODO 古树市值
+            // data.setTreeValue("0");// TODO 古树市值
         } else if (ESYSUserKind.MAINTAIN.getCode().equals(data.getKind())) {// 养护方
             ApplyBindMaintain abmCondition = new ApplyBindMaintain();
             abmCondition.setStatus(EApplyBindMaintainStatus.BIND.getCode());
@@ -351,10 +378,6 @@ public class SYSUserAOImpl implements ISYSUserAO {
                 data.setOwner(sysUser2.getRealName());
             }
             data.setTotalIncome("0");// TODO 总收入
-        }
-        if (StringUtils.isNotBlank(data.getCompanyCode())) {
-            Company company = companyBO.getCompany(data.getCompanyCode());
-            data.setCompany(company);
         }
     }
 }

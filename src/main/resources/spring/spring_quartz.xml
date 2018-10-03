@@ -15,26 +15,43 @@
 			expression="org.springframework.stereotype.Controller" />
 	</context:component-scan>
 	
-	<!-- <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
-       		    <ref bean="adoptOrderTrigger"/>
-			</list>
+				<ref bean="toolUseRecordTrigger"/>
+<!-- 				<ref bean="adoptOrderTrigger"/>
+ -->			</list>
 		</property>
 		<property name="autoStartup" value="true" />
 	</bean>
 	
-	定时扫描未支付订单
+	<!-- 道具使用是否过期扫描 -->
+	<bean id="toolUseRecordTrigger"
+		  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="toolUseRecord" />
+		<property name="cronExpression" value="0 0 */1 * * ?"/><!-- 每小时执行 -->
+	</bean>
+	
+	<bean id="toolUseRecord"
+		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="toolUseRecordAOImpl" />
+		<property name="targetMethod" value="recordStatusValidater" />
+		<property name="concurrent" value="false" />
+		<!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程 -->
+	</bean>	
+	
+	<!-- 订单过期扫描 -->
 	<bean id="adoptOrderTrigger"
 		  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="doCancelAdoptOrder" />
-		<property name="cronExpression" value="0 */1 * * * ?"/>每分钟执行
+		<property name="cronExpression" value="0 */15 * * * ?"/><!-- 每15分钟执行 -->
 	</bean>
+	
 	<bean id="doCancelAdoptOrder"
 		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject" ref="adoptOrderAOImpl" />
 		<property name="targetMethod" value="doCancelAdoptOrder" />
 		<property name="concurrent" value="false" />
-	</bean> -->
+	</bean> 
 
 </beans>

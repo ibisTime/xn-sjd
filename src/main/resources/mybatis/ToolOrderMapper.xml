@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ogc.standard.dao.IToolOrderDAO">
+	<resultMap id="toolOrder_DB_Result" type="toolOrder">
+		<result column="code" property="code" />
+		<result column="tool_code" property="toolCode" />
+		<result column="tool_name" property="toolName" />
+		<result column="tool_pic" property="toolPic" />
+		<result column="price" property="price" />
+		
+		<result column="validity_term" property="validityTerm" />
+		<result column="user_id" property="userId" />
+		<result column="create_datetime" property="createDatetime" />
+		<result column="status" property="status" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="toolCode != null and toolCode != '' ">
+				AND t.tool_code = #{toolCode}
+			</if>
+			<if test="toolNameForQuery != null and toolNameForQuery != '' ">
+				AND t.tool_name like "%"#{toolNameForQuery}"%"
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+			<if test="userId != null and userId != '' ">
+				AND t.user_id = #{userId}
+			</if>
+		</trim>
+	</sql>
+	<select id="select_toolOrder" parameterType="toolOrder" resultMap="toolOrder_DB_Result">
+		SELECT
+		t.code
+		,t.tool_code
+		,t.tool_name
+		,t.tool_pic
+		,t.price
+		
+		,t.validity_term
+		,t.user_id
+		,t.create_datetime
+		,t.status
+		FROM
+		tb_tool_order t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_toolOrder_count" parameterType="toolOrder"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tb_tool_order t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_toolOrder" parameterType="toolOrder">
+		INSERT INTO
+		tb_tool_order(
+		code
+		,tool_code
+		,tool_name
+		,tool_pic
+		,price
+		
+		,validity_term
+		,user_id
+		,create_datetime
+		,status
+		)
+		VALUES(
+		#{code}
+		,#{toolCode}
+		,#{toolName}
+		,#{toolPic}
+		,#{price}
+		
+		,#{validityTerm}
+		,#{userId}
+		,#{createDatetime}
+		,#{status}
+		)
+	</insert>
+	
+	<update id="update_status" parameterType="toolOrder">
+		UPDATE tb_tool_order
+		SET
+		status = #{status}
+		WHERE code = #{code}
+	</update>
+
+
+</mapper>

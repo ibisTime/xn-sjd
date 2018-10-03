@@ -24,9 +24,7 @@ public class XN630064 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return new PKCodeRes(sysUserAO.proxyApplySYSUser(req.getKind(),
-            req.getLoginName(), req.getMobile(), req.getRealName(),
-            req.getRemark()));
+        return new PKCodeRes(sysUserAO.proxyApplySYSUser(req));
     }
 
     @Override
