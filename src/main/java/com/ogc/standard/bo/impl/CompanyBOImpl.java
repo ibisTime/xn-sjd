@@ -13,14 +13,16 @@ import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.ICompanyDAO;
 import com.ogc.standard.domain.Company;
+import com.ogc.standard.dto.req.XN630061Req;
+import com.ogc.standard.dto.req.XN630063Req;
 import com.ogc.standard.dto.req.XN730072Req;
 import com.ogc.standard.dto.req.XN730073Req;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.exception.BizException;
 
 @Component
-public class CompanyBOImpl extends PaginableBOImpl<Company>
-        implements ICompanyBO {
+public class CompanyBOImpl extends PaginableBOImpl<Company> implements
+        ICompanyBO {
 
     @Autowired
     private ICompanyDAO companyDAO;
@@ -51,6 +53,60 @@ public class CompanyBOImpl extends PaginableBOImpl<Company>
     }
 
     @Override
+    public String saveCompany(XN630063Req req, String userId) {
+        Company data = new Company();
+        String code = OrderNoGenerater.generate(EGeneratePrefix.GS.getCode());
+        data.setCode(code);
+        data.setUserId(userId);
+        data.setName(req.getCompanyName());
+        data.setCharger(req.getCompanyCharger());
+        data.setChargeMobile(req.getChargerMobile());
+        data.setAddress(req.getCompanyAddress());
+        data.setDescription(req.getDescription());
+        data.setBussinessLicense(req.getBussinessLicense());
+        data.setOrganizationCode(req.getOrganizationCode());
+        data.setCertificateTemplate(req.getCertificateTemplate());
+        data.setContractTemplate(req.getContractTemplate());
+        data.setCreateDatetime(new Date());
+        data.setUpdater(userId);
+        data.setUpdateDatetime(new Date());
+        companyDAO.insert(data);
+        return code;
+    }
+
+    @Override
+    public String saveCompany(String userId) {
+        String code = null;
+        if (StringUtils.isNotBlank(userId)) {
+            Company data = new Company();
+            code = OrderNoGenerater.generate(EGeneratePrefix.GS.getCode());
+            data.setCode(code);
+            data.setUserId(userId);
+            data.setCreateDatetime(new Date());
+            companyDAO.insert(data);
+        }
+        return code;
+    }
+
+    @Override
+    public void refreshCompany(XN630061Req req) {
+        Company data = getCompanyByUserId(req.getUserId());
+        data.setName(req.getCompanyName());
+        data.setCharger(req.getCompanyCharger());
+        data.setChargeMobile(req.getChargerMobile());
+        data.setAddress(req.getCompanyAddress());
+        data.setDescription(req.getDescription());
+        data.setBussinessLicense(req.getBussinessLicense());
+        data.setOrganizationCode(req.getOrganizationCode());
+        data.setCertificateTemplate(req.getCertificateTemplate());
+        data.setContractTemplate(req.getContractTemplate());
+        data.setUpdater(req.getUserId());
+        data.setUpdateDatetime(new Date());
+        data.setRemark("资料重新提交");
+        companyDAO.update(data);
+    }
+
+    @Override
     public void refreshCompany(XN730073Req req) {
         Company data = getCompanyByUserId(req.getUserId());
         data.setName(req.getName());
@@ -68,17 +124,6 @@ public class CompanyBOImpl extends PaginableBOImpl<Company>
         data.setUpdater(req.getUpdater());
         data.setUpdateDatetime(new Date());
         companyDAO.update(data);
-    }
-
-    @Override
-    public String saveCompany(Company data) {
-        String code = null;
-        if (data != null) {
-            code = OrderNoGenerater.generate(EGeneratePrefix.GS.getCode());
-            data.setCode(code);
-            companyDAO.insert(data);
-        }
-        return code;
     }
 
     @Override

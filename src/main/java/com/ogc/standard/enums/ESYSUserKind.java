@@ -12,7 +12,7 @@ import com.ogc.standard.exception.BizException;
  * @history:
  */
 public enum ESYSUserKind {
-    PLATFORM("P", "平台方用户"), OWNER("O", "产权方用户"), MAINTAIN("M", "养护方用户");
+    PLAT("P", "平台方用户"), OWNER("O", "产权方用户"), MAINTAIN("M", "养护方用户");
 
     public static Map<String, ESYSUserKind> getAccountTypeResultMap() {
         Map<String, ESYSUserKind> map = new HashMap<String, ESYSUserKind>();

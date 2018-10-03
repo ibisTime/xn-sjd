@@ -11,9 +11,9 @@ import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
 
 /**
- * 审核用户（平台方）
- * @author: jiafr 
- * @since: 2018年9月28日 下午8:39:09 
+ * 提交资料
+ * @author: xieyj 
+ * @since: 2018年10月4日 上午2:52:36 
  * @history:
  */
 public class XN630061 extends AProcessor {
@@ -24,8 +24,7 @@ public class XN630061 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        sysUserAO.approveSYSUser(req.getUserId(), req.getApproveResult(),
-            req.getUpdater(), req.getRemark());
+        sysUserAO.commitCompany(req);
         return new BooleanRes(true);
     }
 
@@ -34,5 +33,7 @@ public class XN630061 extends AProcessor {
             throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN630061Req.class);
         ObjValidater.validateReq(req);
+
     }
+
 }

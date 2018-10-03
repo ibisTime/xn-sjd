@@ -12,15 +12,22 @@ import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.common.MD5Util;
 import com.ogc.standard.common.PhoneUtil;
+import com.ogc.standard.common.PwdUtil;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.ISYSUserDAO;
 import com.ogc.standard.domain.SYSUser;
+import com.ogc.standard.dto.req.XN630063Req;
+import com.ogc.standard.enums.EBoolean;
+import com.ogc.standard.enums.ERoleCode;
+import com.ogc.standard.enums.ESYSUserKind;
 import com.ogc.standard.enums.ESYSUserStatus;
+import com.ogc.standard.enums.EUserPwd;
 import com.ogc.standard.exception.BizException;
+import com.ogc.standard.exception.EBizErrorCode;
 
 @Component
-public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
-        implements ISYSUserBO {
+public class SYSUserBOImpl extends PaginableBOImpl<SYSUser> implements
+        ISYSUserBO {
 
     @Autowired
     private ISYSUserDAO sysUserDAO;
@@ -30,22 +37,59 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
         return sysUserDAO.selectList(data);
     }
 
-    // 注册
     @Override
-    public String doRegister(String loginName, String loginPwd) {
+    public void doSaveSYSuser(SYSUser data) {
+        sysUserDAO.insert(data);
+    }
+
+    @Override
+    public String doSaveSYSuser(XN630063Req req) {
+        SYSUser data = new SYSUser();
         String userId = OrderNoGenerater.generate("U");
-        SYSUser sysUser = new SYSUser();
-        sysUser.setUserId(userId);
+        data.setUserId(userId);
+        data.setKind(req.getKind());
+        // data.setRealName(req.getRealName());
+        data.setMobile(req.getMobile());
+        data.setLoginName(req.getMobile());
+        if (ESYSUserKind.OWNER.getCode().equals(req.getKind())) {
+            data.setRoleCode(ERoleCode.OWNER.getCode());
+        } else if (ESYSUserKind.MAINTAIN.getCode().equals(req.getKind())) {
+            data.setRoleCode(ERoleCode.MAINTAIN.getCode());
+        } else {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "用户类型不支持");
+        }
+        data.setLoginPwd(MD5Util.md5(EUserPwd.InitPwd8.getCode()));
+        data.setLoginPwdStrength(PwdUtil
+            .calculateSecurityLevel(EUserPwd.InitPwd8.getCode()));
+        data.setCreateDatetime(new Date());
+        data.setStatus(ESYSUserStatus.NORMAL.getCode());
+        data.setRemark(req.getRemark());
+        sysUserDAO.insert(data);
 
-        sysUser.setLoginName(loginName);
-
-        sysUserDAO.insert(sysUser);
         return userId;
     }
 
     @Override
-    public void doSaveSYSuser(SYSUser data) {
+    public String doSaveSYSUser(String kind, String mobile, String loginPwd) {
+        SYSUser data = new SYSUser();
+        String userId = OrderNoGenerater.generate("U");
+        data.setUserId(userId);
+        data.setKind(kind);
+        data.setMobile(mobile);
+        data.setLoginName(mobile);
+        if (ESYSUserKind.OWNER.getCode().equals(kind)) {
+            data.setRoleCode(ERoleCode.OWNER.getCode());
+        } else if (ESYSUserKind.MAINTAIN.getCode().equals(kind)) {
+            data.setRoleCode(ERoleCode.MAINTAIN.getCode());
+        } else {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "用户类型不支持");
+        }
+        data.setLoginPwd(MD5Util.md5(loginPwd));
+        data.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(loginPwd));
+        data.setCreateDatetime(new Date());
+        data.setStatus(ESYSUserStatus.TO_FILL.getCode());// 待填公司资料
         sysUserDAO.insert(data);
+        return userId;
     }
 
     @Override
@@ -144,8 +188,7 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
     // 密码检查
     @Override
     public void checkLoginPwd(String userId, String loginPwd) {
-        if (StringUtils.isNotBlank(userId)
-                && StringUtils.isNotBlank(loginPwd)) {
+        if (StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(loginPwd)) {
             SYSUser condition = new SYSUser();
             condition.setUserId(userId);
             condition.setLoginPwd(MD5Util.md5(loginPwd));
@@ -227,10 +270,18 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
     }
 
     @Override
-    public void approveSYSUser(SYSUser data) {
-        if (StringUtils.isNotBlank(data.getUserId())) {
-            sysUserDAO.updateApproveSYSUser(data);
+    public void approveSYSUser(SYSUser data, String approveResult,
+            String updater, String remark) {
+        String status = ESYSUserStatus.APPROVE_NO.getCode();
+        if (EBoolean.YES.getCode().equals(approveResult)) {
+            status = ESYSUserStatus.NORMAL.getCode();
         }
+        data.setStatus(status);
+        data.setUpdater(updater);
+
+        data.setUpdateDatetime(new Date());
+        data.setRemark(remark);
+        sysUserDAO.updateApproveSYSUser(data);
     }
 
     @Override

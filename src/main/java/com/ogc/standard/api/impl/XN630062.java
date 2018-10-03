@@ -4,33 +4,35 @@ import com.ogc.standard.ao.ISYSUserAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.ObjValidater;
-import com.ogc.standard.dto.req.XN630064Req;
-import com.ogc.standard.dto.res.PKCodeRes;
+import com.ogc.standard.dto.req.XN630062Req;
+import com.ogc.standard.dto.res.BooleanRes;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
 
 /**
- * 代申请用户
+ * 审核用户（平台方）
  * @author: jiafr 
- * @since: 2018年9月28日 下午6:13:19 
+ * @since: 2018年9月28日 下午8:39:09 
  * @history:
  */
-public class XN630064 extends AProcessor {
+public class XN630062 extends AProcessor {
     private ISYSUserAO sysUserAO = SpringContextHolder
         .getBean(ISYSUserAO.class);
 
-    private XN630064Req req = null;
+    private XN630062Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        return new PKCodeRes(sysUserAO.proxyApplySYSUser(req));
+        sysUserAO.approveSYSUser(req.getUserId(), req.getApproveResult(),
+            req.getUpdater(), req.getRemark());
+        return new BooleanRes(true);
     }
 
     @Override
     public void doCheck(String inputparams, String operator)
             throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN630064Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN630062Req.class);
         ObjValidater.validateReq(req);
     }
 }

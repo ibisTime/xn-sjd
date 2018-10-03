@@ -4,15 +4,17 @@ import java.util.List;
 
 import com.ogc.standard.bo.base.IPaginableBO;
 import com.ogc.standard.domain.SYSUser;
+import com.ogc.standard.dto.req.XN630063Req;
 import com.ogc.standard.enums.ESYSUserStatus;
 
 public interface ISYSUserBO extends IPaginableBO<SYSUser> {
 
-    // 注册
-    public String doRegister(String loginName, String loginPwd);
-
     // 新增系统用户
     public void doSaveSYSuser(SYSUser data);
+
+    public String doSaveSYSuser(XN630063Req req);
+
+    public String doSaveSYSUser(String kind, String mobile, String loginPwd);
 
     // 分配角色
     public void refreshRole(String userId, String roleCode, String updater,
@@ -64,6 +66,7 @@ public interface ISYSUserBO extends IPaginableBO<SYSUser> {
             String updater, String remark);
 
     // 审核注册用户
-    public void approveSYSUser(SYSUser data);
+    public void approveSYSUser(SYSUser data, String approveResult,
+            String updater, String remark);
 
 }

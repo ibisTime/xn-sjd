@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.ISYSUserAO;
 import com.ogc.standard.bo.IAccountBO;
@@ -20,19 +21,21 @@ import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.common.MD5Util;
 import com.ogc.standard.common.PhoneUtil;
 import com.ogc.standard.common.PwdUtil;
+import com.ogc.standard.common.SysConstants;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.domain.ApplyBindMaintain;
 import com.ogc.standard.domain.Company;
 import com.ogc.standard.domain.SYSRole;
 import com.ogc.standard.domain.SYSUser;
-import com.ogc.standard.dto.req.XN630060Req;
-import com.ogc.standard.dto.req.XN630064Req;
+import com.ogc.standard.dto.req.XN630061Req;
+import com.ogc.standard.dto.req.XN630063Req;
+import com.ogc.standard.enums.EAccountType;
 import com.ogc.standard.enums.EApplyBindMaintainStatus;
-import com.ogc.standard.enums.ERoleCode;
+import com.ogc.standard.enums.ECaptchaType;
+import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.ESYSUserKind;
 import com.ogc.standard.enums.ESYSUserStatus;
 import com.ogc.standard.enums.EUser;
-import com.ogc.standard.enums.EUserPwd;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
 
@@ -68,7 +71,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
         SYSUser data = new SYSUser();
         String userId = OrderNoGenerater.generate("U");
         data.setUserId(userId);
-        data.setKind(ESYSUserKind.PLATFORM.getCode());
+        data.setKind(ESYSUserKind.PLAT.getCode());
         data.setRealName(realName);
         data.setPhoto(photo);
         data.setMobile(mobile);
@@ -83,95 +86,81 @@ public class SYSUserAOImpl implements ISYSUserAO {
         return userId;
     }
 
-    // 注册用户(产权/养护)
     @Override
-    public String registerSYSUserOwner(XN630060Req req) {
-        sysUserBO.isMobileExist(req.getMobile());
-        SYSUser data = new SYSUser();
-        String userId = OrderNoGenerater.generate("U");
-        data.setUserId(userId);
-        data.setKind(req.getKind());
-        data.setMobile(req.getMobile());
-        data.setLoginName(req.getMobile());
-        if (ESYSUserKind.OWNER.getCode().equals(req.getKind())) {
-            data.setRoleCode(ERoleCode.OWNER.getCode());
-        }
-        if (ESYSUserKind.MAINTAIN.getCode().equals(req.getKind())) {
-            data.setRoleCode(ERoleCode.MAINTAIN.getCode());
-        }
-        data.setLoginPwd(MD5Util.md5(req.getLoginPwd()));
-        data.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(req
-            .getLoginPwd()));
-        data.setCreateDatetime(new Date());
-        data.setStatus(ESYSUserStatus.TO_FILL.getCode());// 待填公司资料
+    @Transactional
+    public String regOwnerAndMain(String kind, String mobile, String loginPwd,
+            String smsCaptcha) {
+        sysUserBO.isMobileExist(mobile);
+        // 短信验证码是否正确
+        smsOutBO.checkCaptcha(mobile, smsCaptcha, "630060");
 
-        // 生成待填写的公司
-        Company company = new Company();
-        company.setUserId(userId);
-        company.setCreateDatetime(new Date());
-        companyBO.saveCompany(company);
+        String userId = sysUserBO.doSaveSYSUser(kind, mobile, loginPwd);
+        companyBO.saveCompany(userId);
 
-        sysUserBO.doSaveSYSuser(data);
+        // 分配人民币账户
+        EAccountType accountType = EAccountType.OWNER;
+        if (ESYSUserKind.MAINTAIN.getCode().equals(kind)) {
+            accountType = EAccountType.MAINTAIN;
+        }
+        accountBO.distributeAccount(userId, accountType,
+            ECurrency.CNY.getCode());
         return userId;
+    }
+
+    @Override
+    @Transactional
+    public void commitCompany(XN630061Req req) {
+        SYSUser sysUser = sysUserBO.getSYSUser(req.getUserId());
+        if (ESYSUserKind.PLAT.getCode().equals(sysUser.getKind())) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "当前用户类型不支持");
+        }
+        if (!ESYSUserStatus.TO_FILL.getCode().equals(sysUser.getStatus())
+                && !ESYSUserStatus.APPROVE_NO.getCode().equals(
+                    sysUser.getStatus())) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "当前用户状态不是待提交资料或审核不通过，不能提交");
+        }
+
+        companyBO.refreshCompany(req);
+        sysUserBO.refreshStatus(req.getUserId(), ESYSUserStatus.TO_APPROVE,
+            req.getUserId(), "用户重新提交");
     }
 
     // 代申请
     @Override
-    public String proxyApplySYSUser(XN630064Req req) {
+    @Transactional
+    public String platApplySYSUser(XN630063Req req) {
         sysUserBO.isMobileExist(req.getMobile());
-        SYSUser data = new SYSUser();
-        String userId = OrderNoGenerater.generate("U");
-        data.setUserId(userId);
-        data.setKind(req.getKind());
-        data.setRealName(req.getRealName());
-        data.setMobile(req.getMobile());
-        data.setLoginName(req.getLoginName());
-        if (ESYSUserKind.OWNER.getCode().equals(req.getKind())) {
-            data.setRoleCode("");// TODO
-        }
+
+        // 落地数据
+        String userId = sysUserBO.doSaveSYSuser(req);
+        companyBO.saveCompany(req, userId);
+
+        // 分配人民币账户
+        EAccountType accountType = EAccountType.OWNER;
         if (ESYSUserKind.MAINTAIN.getCode().equals(req.getKind())) {
-            data.setRoleCode("");// TODO
+            accountType = EAccountType.MAINTAIN;
         }
-        data.setLoginPwd(MD5Util.md5(EUserPwd.InitPwd8.getCode()));
-        data.setLoginPwdStrength(PwdUtil
-            .calculateSecurityLevel(EUserPwd.InitPwd8.getCode()));
-        data.setCreateDatetime(new Date());
-        data.setStatus(ESYSUserStatus.NORMAL.getCode());// 代注册的也是待审核？
-        data.setRemark(req.getRemark());
-        sysUserBO.doSaveSYSuser(data);
-        // 待申请填写公司资料，生成公司
-        Company company = new Company();
-        company.setUserId(userId);
-        company.setName(req.getCompanyName());
-        company.setCharger(req.getCompanyCharger());
-        company.setChargeMobile(req.getChargerMobile());
-        company.setAddress(req.getCompanyAddress());
-        company.setDescription(req.getDescription());
-        company.setBussinessLicense(req.getBussinessLicense());
-        company.setOrganizationCode(req.getOrganizationCode());
-        company.setCertificateTemplate(req.getCertificateTemplate());
-        company.setContractTemplate(req.getContractTemplate());
-        company.setCreateDatetime(new Date());
-        company.setUpdater(userId);
-        company.setUpdateDatetime(new Date());
-        companyBO.saveCompany(company);
+        accountBO.distributeAccount(userId, accountType,
+            ECurrency.CNY.getCode());
+
+        // 发送短信
+        smsOutBO.sendSmsOut(
+            req.getMobile(),
+            String.format(SysConstants.DO_ADD_USER_CN,
+                PhoneUtil.hideMobile(req.getMobile())),
+            ECaptchaType.AG_REG.getCode());
         return userId;
     }
 
     @Override
     public void approveSYSUser(String userId, String approveResult,
             String updater, String remark) {
-        if (!sysUserBO.isUserExist(userId)) {
-            throw new BizException("xn805050", "用户不存在");
-        }
         SYSUser data = sysUserBO.getSYSUser(userId);
         if (!ESYSUserStatus.TO_APPROVE.getCode().equals(data.getStatus())) {
             throw new BizException("xn805050", "用户不是待审核状态");
         }
-        data.setUpdater(updater);
-        data.setUpdateDatetime(new Date());
-        data.setRemark(remark);
-        sysUserBO.approveSYSUser(data);
+        sysUserBO.approveSYSUser(data, approveResult, updater, remark);
     }
 
     // 用户登录

@@ -14,13 +14,25 @@ public class XN630060Req {
     @NotBlank
     private String kind;
 
+    // 手机号
+    @NotBlank
+    private String mobile;
+
     // 登录密码
     @NotBlank
     private String loginPwd;
 
-    // 手机号
+    // 验证码
     @NotBlank
-    private String mobile;
+    private String smsCaptcha;
+
+    public String getSmsCaptcha() {
+        return smsCaptcha;
+    }
+
+    public void setSmsCaptcha(String smsCaptcha) {
+        this.smsCaptcha = smsCaptcha;
+    }
 
     public String getKind() {
         return kind;
