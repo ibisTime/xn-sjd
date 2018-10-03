@@ -3,7 +3,7 @@ package com.ogc.standard.dto.req;
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
- * 新增道具购买订单
+ * 购买道具
  * @author: lei 
  * @since: 2018年10月2日 下午10:05:15 
  * @history:

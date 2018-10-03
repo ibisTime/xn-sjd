@@ -12,16 +12,17 @@ import com.ogc.standard.dto.req.XN629502Req;
 public interface IToolAO {
     static final String DEFAULT_ORDER_COLUMN = "order_no";
 
-    public int editTool(XN629502Req req);
+    public void editTool(XN629502Req req);
+
+    public void putUp(String code, String orderNo, String updater,
+            String remark);
+
+    public void putDown(String code, String updater, String remark);
 
     public Paginable<Tool> queryToolPage(int start, int limit, Tool condition);
 
     public List<Tool> queryToolList(Tool condition);
 
     public Tool getTool(String code);
-
-    public void putUp(String code, String updater, String remark);
-
-    public void getDown(String code, String updater, String remark);
 
 }

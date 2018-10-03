@@ -50,6 +50,8 @@ public interface ISYSUserBO extends IPaginableBO<SYSUser> {
     // 查询详情
     public SYSUser getSYSUser(String userId);
 
+    public SYSUser getSYSUserUnCheck(String userId);
+
     public SYSUser getSYSUser();
 
     //

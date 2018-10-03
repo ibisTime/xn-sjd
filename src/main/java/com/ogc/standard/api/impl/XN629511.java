@@ -4,39 +4,36 @@ import com.ogc.standard.ao.IToolOrderAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.ObjValidater;
-import com.ogc.standard.domain.ToolOrder;
-import com.ogc.standard.dto.req.XN629517Req;
+import com.ogc.standard.dto.req.XN629511Req;
+import com.ogc.standard.dto.res.BooleanRes;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
 
 /**
- * 列表查询道具购买订单
+ * 使用道具
  * @author: lei 
  * @since: 2018年10月2日 下午7:49:51 
  * @history:
  */
-public class XN629517 extends AProcessor {
+public class XN629511 extends AProcessor {
     private IToolOrderAO toolOrderAO = SpringContextHolder
         .getBean(IToolOrderAO.class);
 
-    private XN629517Req req = null;
+    private XN629511Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        ToolOrder condition = new ToolOrder();
-        condition.setToolCode(req.getToolCode());
-        condition.setToolName(req.getToolName());
-        condition.setUserId(req.getUserId());
-        condition.setStatus(req.getStatus());
-
-        return toolOrderAO.queryToolOrderList(condition);
+        toolOrderAO.useTool(req.getToolOrderCode(), req.getAdoptTreeCode(),
+            req.getUserId());
+        return new BooleanRes(true);
     }
 
     @Override
     public void doCheck(String inputparams, String operator)
             throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN629517Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN629511Req.class);
+        // req.setUserId(operator);
         ObjValidater.validateReq(req);
     }
 }

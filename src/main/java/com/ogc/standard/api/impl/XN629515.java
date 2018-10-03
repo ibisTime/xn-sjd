@@ -28,6 +28,10 @@ public class XN629515 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         ToolOrder condition = new ToolOrder();
+        condition.setToolCode(req.getToolCode());
+        condition.setToolNameForQuery(req.getToolName());
+        condition.setUserId(req.getUserId());
+        condition.setStatus(req.getStatus());
 
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {

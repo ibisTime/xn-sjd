@@ -10,18 +10,40 @@ public class XN629517Req extends AListReq {
 
     private static final long serialVersionUID = -6308551102694787370L;
 
-    // 选填，类型（0保护罩/1一件收取）
-    private String type;
+    // 道具编号
+    private String toolCode;
 
-    // 选填，状态（0上架/1下架）
+    // 道具名称
+    private String toolName;
+
+    // 购买人
+    private String userId;
+
+    // 状态（0未使用/1已使用）
     private String status;
 
-    public String getType() {
-        return type;
+    public String getToolCode() {
+        return toolCode;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setToolCode(String toolCode) {
+        this.toolCode = toolCode;
+    }
+
+    public String getToolName() {
+        return toolName;
+    }
+
+    public void setToolName(String toolName) {
+        this.toolName = toolName;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getStatus() {
@@ -31,5 +53,4 @@ public class XN629517Req extends AListReq {
     public void setStatus(String status) {
         this.status = status;
     }
-
 }

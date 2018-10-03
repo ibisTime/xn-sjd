@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ogc.standard.ao.ISYSUserAO;
+import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IApplyBindMaintainBO;
 import com.ogc.standard.bo.ICompanyBO;
 import com.ogc.standard.bo.ISYSRoleBO;
@@ -39,22 +40,25 @@ import com.ogc.standard.exception.BizException;
 public class SYSUserAOImpl implements ISYSUserAO {
 
     @Autowired
-    ISYSUserBO sysUserBO;
+    private IAccountBO accountBO;
 
     @Autowired
-    ISYSRoleBO sysRoleBO;
+    private ISYSUserBO sysUserBO;
 
     @Autowired
-    ISmsOutBO smsOutBO;
+    private ISYSRoleBO sysRoleBO;
 
     @Autowired
-    ITreeBO treeBO;
+    private ISmsOutBO smsOutBO;
 
     @Autowired
-    IApplyBindMaintainBO applyBindMaintainBO;
+    private ITreeBO treeBO;
 
     @Autowired
-    ICompanyBO companyBO;
+    private IApplyBindMaintainBO applyBindMaintainBO;
+
+    @Autowired
+    private ICompanyBO companyBO;
 
     // 新增用户（平台）
     @Override
@@ -109,6 +113,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
 
         data.setCompanyCode(companyCode);
         sysUserBO.doSaveSYSuser(data);
+
         return userId;
     }
 

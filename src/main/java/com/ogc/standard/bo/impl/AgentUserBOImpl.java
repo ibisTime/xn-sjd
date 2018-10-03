@@ -20,8 +20,8 @@ import com.ogc.standard.enums.EAgentUserStatus;
 import com.ogc.standard.exception.BizException;
 
 @Component
-public class AgentUserBOImpl extends PaginableBOImpl<AgentUser> implements
-        IAgentUserBO {
+public class AgentUserBOImpl extends PaginableBOImpl<AgentUser>
+        implements IAgentUserBO {
 
     @Autowired
     private IAgentUserDAO agentUserDAO;
@@ -71,8 +71,8 @@ public class AgentUserBOImpl extends PaginableBOImpl<AgentUser> implements
 
         if (StringUtils.isNotBlank(loginPwd)) {
             agentUser.setLoginPwd(MD5Util.md5(loginPwd));
-            agentUser.setLoginPwdStrength(PwdUtil
-                .calculateSecurityLevel(loginPwd));
+            agentUser
+                .setLoginPwdStrength(PwdUtil.calculateSecurityLevel(loginPwd));
         }
 
         agentUser.setType(EAgentUserKind.Agent.getCode());
@@ -93,8 +93,8 @@ public class AgentUserBOImpl extends PaginableBOImpl<AgentUser> implements
 
         if (StringUtils.isNotBlank(loginPwd)) {
             agentUser.setLoginPwd(MD5Util.md5(loginPwd));
-            agentUser.setLoginPwdStrength(PwdUtil
-                .calculateSecurityLevel(loginPwd));
+            agentUser
+                .setLoginPwdStrength(PwdUtil.calculateSecurityLevel(loginPwd));
         }
 
         agentUser.setType(EAgentUserKind.Salesman.getCode());
@@ -110,7 +110,8 @@ public class AgentUserBOImpl extends PaginableBOImpl<AgentUser> implements
 
     @Override
     public void checkTradePwd(String userId, String tradePwd) {
-        if (StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(tradePwd)) {
+        if (StringUtils.isNotBlank(userId)
+                && StringUtils.isNotBlank(tradePwd)) {
             AgentUser agentUser = this.getAgentUser(userId);
             if (StringUtils.isBlank(agentUser.getTradePwdStrength())) {
                 throw new BizException("jd00001", "请您先设置支付密码！");
@@ -128,7 +129,8 @@ public class AgentUserBOImpl extends PaginableBOImpl<AgentUser> implements
 
     @Override
     public void checkLoginPwd(String userId, String loginPwd) {
-        if (StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(loginPwd)) {
+        if (StringUtils.isNotBlank(userId)
+                && StringUtils.isNotBlank(loginPwd)) {
             AgentUser condition = new AgentUser();
             condition.setUserId(userId);
             condition.setLoginPwd(MD5Util.md5(loginPwd));
@@ -143,7 +145,8 @@ public class AgentUserBOImpl extends PaginableBOImpl<AgentUser> implements
 
     @Override
     public void checkLoginPwd(String userId, String loginPwd, String alertStr) {
-        if (StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(loginPwd)) {
+        if (StringUtils.isNotBlank(userId)
+                && StringUtils.isNotBlank(loginPwd)) {
             AgentUser condition = new AgentUser();
             condition.setUserId(userId);
             condition.setLoginPwd(MD5Util.md5(loginPwd));
@@ -261,6 +264,17 @@ public class AgentUserBOImpl extends PaginableBOImpl<AgentUser> implements
             if (data == null) {
                 throw new BizException("xn0000", "代理用户不存在！");
             }
+        }
+        return data;
+    }
+
+    @Override
+    public AgentUser getAgentUserUnCheck(String userId) {
+        AgentUser data = null;
+        if (StringUtils.isNotBlank(userId)) {
+            AgentUser condition = new AgentUser();
+            condition.setUserId(userId);
+            data = agentUserDAO.select(condition);
         }
         return data;
     }

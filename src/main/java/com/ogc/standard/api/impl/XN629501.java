@@ -23,7 +23,7 @@ public class XN629501 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        toolAO.putUp(req.getCode(), req.getUpdater(), req.getRemark());
+        toolAO.putDown(req.getCode(), req.getUpdater(), req.getRemark());
         return new BooleanRes(true);
     }
 

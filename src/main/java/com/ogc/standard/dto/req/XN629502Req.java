@@ -18,15 +18,8 @@ public class XN629502Req extends BaseReq {
     @NotBlank
     private String code;
 
-    // 必填，更新人
-    @NotBlank
-    private String updater;
-
     // 选填，名称
     private String name;
-
-    // 选填，分类
-    private String type;
 
     // 选填，图片
     private String pic;
@@ -43,11 +36,9 @@ public class XN629502Req extends BaseReq {
     @NotBlank
     private Integer validityTerm;
 
-    // 选填，状态（0上架/1下架）
-    private String status;
-
-    // 选填，序号
-    private String orderNo;
+    // 必填，更新人
+    @NotBlank
+    private String updater;
 
     // 备注
     private String remark;
@@ -60,28 +51,12 @@ public class XN629502Req extends BaseReq {
         this.code = code;
     }
 
-    public String getUpdater() {
-        return updater;
-    }
-
-    public void setUpdater(String updater) {
-        this.updater = updater;
-    }
-
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public String getPic() {
@@ -116,20 +91,12 @@ public class XN629502Req extends BaseReq {
         this.validityTerm = validityTerm;
     }
 
-    public String getStatus() {
-        return status;
+    public String getUpdater() {
+        return updater;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getOrderNo() {
-        return orderNo;
-    }
-
-    public void setOrderNo(String orderNo) {
-        this.orderNo = orderNo;
+    public void setUpdater(String updater) {
+        this.updater = updater;
     }
 
     public String getRemark() {

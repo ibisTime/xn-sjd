@@ -23,11 +23,17 @@
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
 			</if>
+			<if test="nameForQuery != null and nameForQuery != '' ">
+				AND t.name like "%"#{nameForQuery}"%"
+			</if>
 			<if test="type != null and type != '' ">
 				AND t.type = #{type}
 			</if>
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
+			</if>
+			<if test="updater != null and updater != '' ">
+				AND t.updater = #{updater}
 			</if>
 		</trim>
 	</sql>
@@ -63,62 +69,33 @@
 		<include refid="where_condition" />
 	</select>
 
-	<insert id="insert_tool" parameterType="tool">
-		INSERT INTO
-		tb_tool(
-		code
-		,name
-		,type
-		,pic
-		,price
-		
-		,description
-		,validity_term
-		,status
-		,order_no
-		,updater
-		
-		,update_datetime
-		,remark
-		)
-		VALUES(
-		#{code}
-		,#{name}
-		,#{type}
-		,#{pic}
-		,#{price}
-		
-		,#{description}
-		,#{validityTerm}
-		,#{status}
-		,#{orderNo}
-		,#{updater}
-		
-		,#{updateDatetime}
-		,#{remark}
-		)
-	</insert>
-
 	<update id="update_tool" parameterType="tool">
 		UPDATE tb_tool
 		SET
 		name = #{name}
-		,type = #{type}
 		,pic = #{pic}
 		,price = #{price}
 		,description = #{description}
-		
 		,validity_term = #{validityTerm}
-		,status = #{status}
-		,order_no = #{orderNo}
+		
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
-		
 		,remark = #{remark}
 		WHERE code = #{code}
 	</update>
 
-	<update id="update_status" parameterType="tool">
+	<update id="update_up" parameterType="tool">
+		UPDATE tb_tool
+		SET
+		status = #{status}
+		,order_no = #{orderNo}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_down" parameterType="tool">
 		UPDATE tb_tool
 		SET
 		status = #{status}

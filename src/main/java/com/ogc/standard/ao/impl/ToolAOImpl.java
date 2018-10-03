@@ -21,7 +21,7 @@ public class ToolAOImpl implements IToolAO {
     private IToolBO toolBO;
 
     @Override
-    public int editTool(XN629502Req req) {
+    public void editTool(XN629502Req req) {
 
         Tool data = toolBO.getTool(req.getCode());
 
@@ -30,7 +30,7 @@ public class ToolAOImpl implements IToolAO {
                 "当前道具不是可修改状态");
         }
 
-        return toolBO.refreshTool(data, req);
+        toolBO.refreshTool(data, req);
     }
 
     @Override
@@ -49,32 +49,30 @@ public class ToolAOImpl implements IToolAO {
     }
 
     @Override
-    public void putUp(String code, String updater, String remark) {
-
-        // 参数验证
-        Tool tool = toolBO.getTool(code);
+    public void putUp(String code, String orderNo, String updater,
+            String remark) {
 
         // 是否可上架
+        Tool tool = toolBO.getTool(code);
         if (!EToolStatus.DOWN.getCode().equals(tool.getStatus())) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "当前道具不是可上架状态");
         }
 
-        toolBO.refreshStatus(tool, updater, remark);
+        toolBO.refreshUp(tool, orderNo, updater, remark);
     }
 
     @Override
-    public void getDown(String code, String updater, String remark) {
-
-        // 参数验证
-        Tool tool = toolBO.getTool(code);
+    public void putDown(String code, String updater, String remark) {
 
         // 是否可上架
+        Tool tool = toolBO.getTool(code);
         if (!EToolStatus.UP.getCode().equals(tool.getStatus())) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "当前道具不是可下架状态");
         }
 
-        toolBO.refreshStatus(tool, updater, remark);
+        toolBO.refreshDown(tool, updater, remark);
     }
+
 }

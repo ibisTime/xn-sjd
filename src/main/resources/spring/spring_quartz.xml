@@ -19,19 +19,9 @@
 		<property name="triggers">
 			<list>
 			
-				<!-- 行情 -->
-       		    <!-- <ref bean="marketTrigger"/> -->
+				<!-- 道具使用记录失效验证 -->
+       		    <ref bean="toolUseRecordTrigger"/> 
        		    
-       		    <!-- 币币交易 -->
-       		    <!-- <ref bean="doScanPairTrigger"/> -->
-       		    <!-- <ref bean="doSaveKLineTrigger"/> -->
-       		    <!-- <ref bean="doScanMatchResultTrigger"/> -->
-       		    
-				<!-- <ref bean="doERC20CollectTrigger"/>
-				<ref bean="doERC20CheckGetFeeTxTrigger"/>
-				<ref bean="doERC20CheckCollectTxTrigger"/>       		    
-				<ref bean="doEthCollectTxTrigger"/>    
-				<ref bean="doETHAndTokenWithDrawGetTxTrigger"/>-->
 				
 			</list>
 		</property>
@@ -39,10 +29,17 @@
 	</bean>
 
 	<!-- 定时获取行情 -->
-<!-- 	<bean id="marketTrigger"
+	<bean id="toolUseRecordTrigger"
 		  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-		<property name="jobDetail" ref="market" />
-		<property name="cronExpression" value="*/30 * * * * ?" />
-	</bean> -->
+		<property name="jobDetail" ref="toolUseRecord" />
+		<property name="cronExpression" value="0 0/1 * * * ?" />
+	</bean>
+	<bean id="toolUseRecord"
+		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="toolUseRecordAOImpl" />
+		<property name="targetMethod" value="recordStatusValidater" />
+		<property name="concurrent" value="false" />
+		<!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程 -->
+	</bean>	
 
 </beans>

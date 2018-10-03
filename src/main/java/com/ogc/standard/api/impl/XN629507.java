@@ -24,8 +24,10 @@ public class XN629507 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         Tool condition = new Tool();
+        condition.setNameForQuery(req.getName());
         condition.setType(req.getType());
         condition.setStatus(req.getStatus());
+        condition.setUpdater(req.getUpdater());
         return toolAO.queryToolList(condition);
     }
 

@@ -16,6 +16,10 @@ public class XN629500Req extends BaseReq {
     @NotBlank
     private String code;
 
+    // 必填，序号
+    @NotBlank
+    private String orderNo;
+
     // 必填，操作人
     @NotBlank
     private String updater;
@@ -29,6 +33,14 @@ public class XN629500Req extends BaseReq {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getOrderNo() {
+        return orderNo;
+    }
+
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
     }
 
     public String getUpdater() {

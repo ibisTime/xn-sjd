@@ -22,35 +22,19 @@ public class ToolBOImpl extends PaginableBOImpl<Tool> implements IToolBO {
     private IToolDAO toolDAO;
 
     @Override
-    public int removeTool(String code) {
-        int count = 0;
-        if (StringUtils.isNotBlank(code)) {
-            Tool data = new Tool();
-            data.setCode(code);
-            count = toolDAO.delete(data);
-        }
-        return count;
-    }
-
-    @Override
-    public int refreshTool(Tool data, XN629502Req req) {
-        int count = 0;
+    public void refreshTool(Tool data, XN629502Req req) {
         if (StringUtils.isNotBlank(data.getCode())) {
             data.setName(req.getName());
-            data.setType(req.getType());
             data.setPic(req.getPic());
             data.setPrice(req.getPrice());
             data.setDescription(req.getDescription());
-
             data.setValidityTerm(req.getValidityTerm());
-            data.setStatus(req.getStatus());
-            data.setOrderNo(req.getOrderNo());
+
             data.setUpdater(req.getUpdater());
             data.setUpdateDatetime(new Date());
-
             data.setRemark(req.getRemark());
+            toolDAO.update(data);
         }
-        return count;
     }
 
     @Override
@@ -73,7 +57,25 @@ public class ToolBOImpl extends PaginableBOImpl<Tool> implements IToolBO {
     }
 
     @Override
-    public void refreshStatus(Tool tool, String updater, String remark) {
+    public void refreshUp(Tool tool, String orderNo, String updater,
+            String remark) {
+
+        if (!EToolStatus.DOWN.getCode().equals(tool.getStatus())) {
+            tool.setStatus(EToolStatus.UP.getCode());
+        } else {
+            tool.setStatus(EToolStatus.DOWN.getCode());
+        }
+
+        tool.setOrderNo(orderNo);
+        tool.setUpdater(updater);
+        tool.setUpdateDatetime(new Date());
+        tool.setRemark(remark);
+        toolDAO.updateUp(tool);
+
+    }
+
+    @Override
+    public void refreshDown(Tool tool, String updater, String remark) {
 
         if (!EToolStatus.DOWN.getCode().equals(tool.getStatus())) {
             tool.setStatus(EToolStatus.UP.getCode());
@@ -82,9 +84,9 @@ public class ToolBOImpl extends PaginableBOImpl<Tool> implements IToolBO {
         }
 
         tool.setUpdater(updater);
-        tool.setRemark(remark);
         tool.setUpdateDatetime(new Date());
-        toolDAO.updateStatus(tool);
+        tool.setRemark(remark);
+        toolDAO.updateDown(tool);
 
     }
 }

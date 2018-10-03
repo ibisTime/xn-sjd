@@ -51,6 +51,10 @@ public class Tool extends ABaseDO {
     // 备注
     private String remark;
 
+    // ************************ DB ************************
+
+    private String nameForQuery;
+
     public String getCode() {
         return code;
     }
@@ -145,6 +149,14 @@ public class Tool extends ABaseDO {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getNameForQuery() {
+        return nameForQuery;
+    }
+
+    public void setNameForQuery(String nameForQuery) {
+        this.nameForQuery = nameForQuery;
     }
 
 }

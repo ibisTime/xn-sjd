@@ -39,7 +39,13 @@ public class ToolOrder extends ABaseDO {
     // 购买时间
     private Date createDatetime;
 
+    // 状态（0未使用/1已使用）
+    private String status;
+
     // ************************* DB properties *************************
+
+    // 道具名称
+    private String toolNameForQuery;
 
     // 用户信息
     private User userInfo;
@@ -106,6 +112,22 @@ public class ToolOrder extends ABaseDO {
 
     public void setCreateDatetime(Date createDatetime) {
         this.createDatetime = createDatetime;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getToolNameForQuery() {
+        return toolNameForQuery;
+    }
+
+    public void setToolNameForQuery(String toolNameForQuery) {
+        this.toolNameForQuery = toolNameForQuery;
     }
 
     public User getUserInfo() {

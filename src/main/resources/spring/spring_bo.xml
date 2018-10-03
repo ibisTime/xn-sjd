@@ -177,6 +177,10 @@
 		<property name="paginableDAO" ref="toolOrderDAOImpl"/>
 	</bean>
 	
+	<bean id="toolUseRecordBO" class="com.ogc.standard.bo.impl.ToolUseRecordBOImpl">
+		<property name="paginableDAO" ref="toolUseRecordDAOImpl"/>
+	</bean>
+	
 	<bean id="carbonBubbleOrderBO" class="com.ogc.standard.bo.impl.CarbonBubbleOrderBOImpl">
 		<property name="paginableDAO" ref="carbonBubbleOrderDAOImpl"/>
 	</bean>

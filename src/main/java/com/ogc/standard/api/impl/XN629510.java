@@ -11,7 +11,7 @@ import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
 
 /**
- * 新增道具购买订单
+ * 购买道具
  * @author: lei 
  * @since: 2018年10月2日 下午10:03:27 
  * @history:
@@ -25,7 +25,7 @@ public class XN629510 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         return new PKCodeRes(
-            toolOrderAO.addToolOrder(req.getToolCode(), req.getUserId()));
+            toolOrderAO.buyTool(req.getToolCode(), req.getUserId()));
     }
 
     @Override

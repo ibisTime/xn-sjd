@@ -19,8 +19,8 @@ import com.ogc.standard.enums.ESYSUserStatus;
 import com.ogc.standard.exception.BizException;
 
 @Component
-public class SYSUserBOImpl extends PaginableBOImpl<SYSUser> implements
-        ISYSUserBO {
+public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
+        implements ISYSUserBO {
 
     @Autowired
     private ISYSUserDAO sysUserDAO;
@@ -96,6 +96,17 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser> implements
     }
 
     @Override
+    public SYSUser getSYSUserUnCheck(String userId) {
+        SYSUser data = null;
+        if (StringUtils.isNotBlank(userId)) {
+            SYSUser condition = new SYSUser();
+            condition.setUserId(userId);
+            data = sysUserDAO.select(condition);
+        }
+        return data;
+    }
+
+    @Override
     public SYSUser getSYSUser(String userId) {
         SYSUser data = null;
         if (StringUtils.isNotBlank(userId)) {
@@ -133,7 +144,8 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser> implements
     // 密码检查
     @Override
     public void checkLoginPwd(String userId, String loginPwd) {
-        if (StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(loginPwd)) {
+        if (StringUtils.isNotBlank(userId)
+                && StringUtils.isNotBlank(loginPwd)) {
             SYSUser condition = new SYSUser();
             condition.setUserId(userId);
             condition.setLoginPwd(MD5Util.md5(loginPwd));

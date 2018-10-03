@@ -7,5 +7,9 @@ import com.ogc.standard.domain.Tool;
 public interface IToolDAO extends IBaseDAO<Tool> {
     String NAMESPACE = IToolDAO.class.getName().concat(".");
 
-    public int updateStatus(Tool condition);
+    public int update(Tool data);
+
+    public int updateUp(Tool data);
+
+    public int updateDown(Tool data);
 }

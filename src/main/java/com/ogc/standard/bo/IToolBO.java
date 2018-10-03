@@ -8,14 +8,15 @@ import com.ogc.standard.dto.req.XN629502Req;
 
 public interface IToolBO extends IPaginableBO<Tool> {
 
-    public int removeTool(String code);
+    public void refreshUp(Tool tool, String orderNo, String updater,
+            String remark);
 
-    public int refreshTool(Tool data, XN629502Req req);
+    public void refreshDown(Tool tool, String updater, String remark);
+
+    public void refreshTool(Tool data, XN629502Req req);
 
     public List<Tool> queryToolList(Tool condition);
 
     public Tool getTool(String code);
-
-    public void refreshStatus(Tool tool, String updater, String remark);
 
 }

@@ -63,7 +63,9 @@ public enum EJourBizTypeUser {
 
     INVITE_USER("invite_user", "邀请好友注册"),
 
-    ADOPT_DEDUCT("adopt_deduct", "认养抵扣");
+    ADOPT_DEDUCT("adopt_deduct", "认养抵扣"),
+
+    TOOL_DEDUCT("tool_deduct", "道具购买抵扣");
 
     public static EJourBizTypeUser getBizType(String code) {
         Map<String, EJourBizTypeUser> map = getBizTypeMap();

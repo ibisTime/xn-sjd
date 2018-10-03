@@ -13,12 +13,12 @@ public class ToolDAOImpl extends AMybatisTemplate implements IToolDAO {
 
     @Override
     public int insert(Tool data) {
-        return super.insert(NAMESPACE.concat("insert_tool"), data);
+        return 0;
     }
 
     @Override
     public int delete(Tool data) {
-        return super.delete(NAMESPACE.concat("delete_tool"), data);
+        return 0;
     }
 
     @Override
@@ -46,8 +46,18 @@ public class ToolDAOImpl extends AMybatisTemplate implements IToolDAO {
     }
 
     @Override
-    public int updateStatus(Tool condition) {
-        return super.update(NAMESPACE.concat("update_status"), condition);
+    public int update(Tool data) {
+        return super.update(NAMESPACE.concat("update_tool"), data);
+    }
+
+    @Override
+    public int updateUp(Tool data) {
+        return super.update(NAMESPACE.concat("update_up"), data);
+    }
+
+    @Override
+    public int updateDown(Tool data) {
+        return super.update(NAMESPACE.concat("update_down"), data);
     }
 
 }

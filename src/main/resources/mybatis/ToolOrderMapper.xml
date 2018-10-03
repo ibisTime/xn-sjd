@@ -12,11 +12,24 @@
 		<result column="validity_term" property="validityTerm" />
 		<result column="user_id" property="userId" />
 		<result column="create_datetime" property="createDatetime" />
+		<result column="status" property="status" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
+			</if>
+			<if test="toolCode != null and toolCode != '' ">
+				AND t.tool_code = #{toolCode}
+			</if>
+			<if test="toolNameForQuery != null and toolNameForQuery != '' ">
+				AND t.tool_name like "%"#{toolNameForQuery}"%"
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+			<if test="userId != null and userId != '' ">
+				AND t.user_id = #{userId}
 			</if>
 		</trim>
 	</sql>
@@ -31,6 +44,7 @@
 		,t.validity_term
 		,t.user_id
 		,t.create_datetime
+		,t.status
 		FROM
 		tb_tool_order t
 		<include refid="where_condition" />
@@ -59,6 +73,7 @@
 		,validity_term
 		,user_id
 		,create_datetime
+		,status
 		)
 		VALUES(
 		#{code}
@@ -70,8 +85,16 @@
 		,#{validityTerm}
 		,#{userId}
 		,#{createDatetime}
+		,#{status}
 		)
 	</insert>
+	
+	<update id="update_status" parameterType="toolOrder">
+		UPDATE tb_tool_order
+		SET
+		status = #{status}
+		WHERE code = #{code}
+	</update>
 
 
 </mapper>
