@@ -25,7 +25,8 @@ public class XN730074 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         agentUserAO.approveAgentUser(req.getUserId(), req.getApproveResult(),
-            req.getRemark(), req.getUpdater());
+            req.getIsTop(), req.getParentUserId(), req.getUpdater(),
+            req.getRemark());
 
         return new BooleanRes(true);
     }

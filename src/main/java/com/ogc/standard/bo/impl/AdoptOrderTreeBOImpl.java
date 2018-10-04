@@ -56,6 +56,13 @@ public class AdoptOrderTreeBOImpl extends PaginableBOImpl<AdoptOrderTree>
     }
 
     @Override
+    public List<AdoptOrderTree> queryAdoptOrderTreeList(String orderCode) {
+        AdoptOrderTree condition = new AdoptOrderTree();
+        condition.setOrderCode(orderCode);
+        return adoptOrderTreeDAO.selectList(condition);
+    }
+
+    @Override
     public AdoptOrderTree getAdoptOrderTree(String code) {
         AdoptOrderTree data = null;
         if (StringUtils.isNotBlank(code)) {

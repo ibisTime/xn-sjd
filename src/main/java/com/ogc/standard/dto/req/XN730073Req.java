@@ -16,8 +16,8 @@ public class XN730073Req extends BaseReq {
     @NotBlank
     private String userId;
 
-    // 上级代理
-    private String parentMobile;
+    // 推荐代理手机号
+    private String refUserMobile;
 
     // 公司名称
     private String name;
@@ -62,12 +62,12 @@ public class XN730073Req extends BaseReq {
     @NotBlank
     private String updater;
 
-    public String getParentMobile() {
-        return parentMobile;
+    public String getRefUserMobile() {
+        return refUserMobile;
     }
 
-    public void setParentMobile(String parentMobile) {
-        this.parentMobile = parentMobile;
+    public void setRefUserMobile(String refUserMobile) {
+        this.refUserMobile = refUserMobile;
     }
 
     public String getUserId() {

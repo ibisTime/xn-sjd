@@ -12,7 +12,7 @@ import com.ogc.standard.exception.BizException;
  */
 public enum EJourBizTypeUser {
 
-    // 人民币账户,代理方,养护方
+    // 人民币账户
     CHARGE("charge", "充值"),
 
     WITHDRAW("withdraw", "取现"),
@@ -29,14 +29,8 @@ public enum EJourBizTypeUser {
 
     ADOPT("adopt", "认养"),
 
-    AGENT_DEDUCT("agent_deduct", "代理提成"),
-
-    OWNER_DEDECT("owner_deduct", "产权收益"),
-
-    MAINTAIN_DEDUCT("maintain_deduct", "养护提成"),
-
     // 碳泡泡账户
-    ADOPT_DAY_BACK("adopt_day_back", "认养消费每日返碳泡泡"),
+    ADOPT_DAY_BACK("adopt_day_back", "认养消费每日收取碳泡泡"),
 
     SHARE("share", "分享"),
 
@@ -63,11 +57,11 @@ public enum EJourBizTypeUser {
 
     INVITE_USER("invite_user", "邀请好友注册"),
 
-    ADOPT_DEDUCT("adopt_deduct", "认养抵扣"),
+    ADOPT_BUY_DEDUCT("adopt_buy_deduct", "认养抵扣"),
 
     ADOPT_PAY_BACK("adopt_pay_back", "认养消费返利"),
 
-    TOOL_DEDUCT("tool_deduct", "道具购买抵扣");
+    TOOL_BUY("tool_buy", "购买道具");
 
     public static EJourBizTypeUser getBizType(String code) {
         Map<String, EJourBizTypeUser> map = getBizTypeMap();

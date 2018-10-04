@@ -68,7 +68,11 @@ public class AdoptOrderDAOImpl extends AMybatisTemplate implements
     @Override
     public void updatePaySuccess(AdoptOrder data) {
         super.update(NAMESPACE.concat("update_paySuccess"), data);
+    }
 
+    @Override
+    public void updateSettleStatus(AdoptOrder data) {
+        super.update(NAMESPACE.concat("update_settleStatus"), data);
     }
 
 }

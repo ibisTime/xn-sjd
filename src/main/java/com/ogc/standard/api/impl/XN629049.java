@@ -29,8 +29,8 @@ public class XN629049 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         AdoptOrder condition = new AdoptOrder();
-        condition.setType(req.getType());
         condition.setApplyUser(req.getUserId());
+        condition.setType(req.getType());
         condition.setStatus(req.getStatus());
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {

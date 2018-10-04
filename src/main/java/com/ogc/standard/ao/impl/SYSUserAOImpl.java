@@ -21,6 +21,7 @@ import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.common.MD5Util;
 import com.ogc.standard.common.PhoneUtil;
 import com.ogc.standard.common.PwdUtil;
+import com.ogc.standard.common.RandomUtil;
 import com.ogc.standard.common.SysConstants;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.domain.ApplyBindMaintain;
@@ -133,7 +134,8 @@ public class SYSUserAOImpl implements ISYSUserAO {
         sysUserBO.isMobileExist(req.getMobile());
 
         // 落地数据
-        String userId = sysUserBO.doSaveSYSuser(req);
+        String loginPwd = RandomUtil.generate6();
+        String userId = sysUserBO.doSaveSYSuser(req, loginPwd);
         companyBO.saveCompany(req, userId);
 
         // 分配人民币账户
@@ -148,7 +150,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
         smsOutBO.sendSmsOut(
             req.getMobile(),
             String.format(SysConstants.DO_ADD_USER_CN,
-                PhoneUtil.hideMobile(req.getMobile())),
+                PhoneUtil.hideMobile(req.getMobile()), loginPwd),
             ECaptchaType.AG_REG.getCode());
         return userId;
     }
@@ -347,14 +349,11 @@ public class SYSUserAOImpl implements ISYSUserAO {
     }
 
     public void init(SYSUser data) {
-
-        Company company = companyBO.getCompanyByUserId(data.getUserId());
-        data.setCompany(company);
-
         if (ESYSUserKind.OWNER.getCode().equals(data.getKind())) { // 产权方
             long count = treeBO.getTotalCountByOwnerId(data.getUserId());
             data.setTreeQuantity(String.valueOf(count));
-            // data.setTreeValue("0");// TODO 古树市值
+            Company company = companyBO.getCompanyByUserId(data.getUserId());
+            data.setCompany(company);
         } else if (ESYSUserKind.MAINTAIN.getCode().equals(data.getKind())) {// 养护方
             ApplyBindMaintain abmCondition = new ApplyBindMaintain();
             abmCondition.setStatus(EApplyBindMaintainStatus.BIND.getCode());
@@ -367,6 +366,8 @@ public class SYSUserAOImpl implements ISYSUserAO {
                 data.setOwner(sysUser2.getRealName());
             }
             data.setTotalIncome("0");// TODO 总收入
+            Company company = companyBO.getCompanyByUserId(data.getUserId());
+            data.setCompany(company);
         }
     }
 }

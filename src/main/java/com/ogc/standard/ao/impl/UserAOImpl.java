@@ -46,11 +46,11 @@ import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECaptchaType;
 import com.ogc.standard.enums.EIDKind;
 import com.ogc.standard.enums.ESignLogType;
-import com.ogc.standard.enums.ESystemCode;
 import com.ogc.standard.enums.EUser;
 import com.ogc.standard.enums.EUserKind;
 import com.ogc.standard.enums.EUserLevel;
 import com.ogc.standard.enums.EUserPwd;
+import com.ogc.standard.enums.EUserRefereeType;
 import com.ogc.standard.enums.EUserStatus;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
@@ -101,14 +101,36 @@ public class UserAOImpl implements IUserAO {
         smsOutBO.checkCaptcha(req.getMobile(), req.getSmsCaptcha(),
             ECaptchaType.C_REG.getCode());
 
-        User refereeUser = userBO.getUserByMobile(req.getUserReferee());
-        AgentUser agentUser = agentUserBO.getAgentUserByMobile(req.getAgent());
-        AgentUser salesUser = agentUserBO.getAgentUserByMobile(req
-            .getSalesman());
+        // 获取推荐用户相对应的代理信息
+        String agentId = null;
+        String userReferee = null;
+        if (StringUtils.isNotBlank(req.getUserRefereeType())) {
+            if (EUserRefereeType.USER.getCode()
+                .equals(req.getUserRefereeType())) {
+                User refereeUser = userBO.getUserByMobile(req.getUserReferee());
+                userReferee = refereeUser.getUserId();
+                agentId = refereeUser.getAgentId();
+            } else if (EUserRefereeType.AGENT.getCode().equals(
+                req.getUserRefereeType())) {
+                AgentUser agentUser = agentUserBO.getAgentUserByMobile(req
+                    .getUserReferee());
+                userReferee = agentUser.getUserId();
+                agentId = agentUser.getUserId();
+            } else if (EUserRefereeType.SALEMANS.getCode().equals(
+                req.getUserRefereeType())) {
+                AgentUser agentUser = agentUserBO.getAgentUserByMobile(req
+                    .getUserReferee());
+                userReferee = agentUser.getUserId();
+                agentId = agentUser.getParentUserId();
+            } else {
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                    "推荐类型不支持");
+            }
+        }
 
         // 注册用户
         String userId = userBO.doRegister(req.getMobile(), req.getNickname(),
-            req.getLoginPwd(), refereeUser, agentUser, salesUser,
+            req.getLoginPwd(), agentId, userReferee, req.getUserRefereeType(),
             req.getProvince(), req.getCity(), req.getArea());
 
         // ext中添加数据
@@ -155,29 +177,6 @@ public class UserAOImpl implements IUserAO {
         userExtBO.addUserExt(userId);
         // 分配账户
         accountAO.distributeAccount(userId);
-        return userId;
-    }
-
-    @Override
-    // 渠道商用户代注册
-    @Transactional
-    public String doAddQDS(String mobile, String idKind, String idNo,
-            String realName, String respArea) {
-        // 检查手机号是否存在
-        userBO.isMobileExist(mobile);
-        // 注册
-        String loginPwd = (int) ((Math.random() * 9 + 1) * 100000) + "";
-        String userId = userBO.doAddQDS(mobile, idKind, idNo, realName,
-            respArea, loginPwd);
-        // ext中添加数据
-        userExtBO.addUserExt(userId);
-        // 分配账户
-        accountAO.distributeAccount(userId);
-        // 发送短信
-        String content = String.format(SysConstants.DO_ADD_USER_CN,
-            PhoneUtil.hideMobile(mobile), loginPwd);
-        smsOutBO.sendSmsOut(mobile, content, ESystemCode.BZ.getCode(),
-            ESystemCode.BZ.getCode());
         return userId;
     }
 
@@ -634,18 +633,6 @@ public class UserAOImpl implements IUserAO {
         }
         userBO.isEmailExist(email);
         userBO.refreshEmail(userId, email);
-    }
-
-    @Override
-    public void editRespArea(String userId, String respArea, String updater) {
-        // 判断用户是否存在
-        User user = userBO.getUser(userId);
-        // 判断是否为渠道商
-        if (!EUserKind.QDS.getCode().equals(user.getKind())) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "用户不是渠道商");
-        }
-        // 修改
-        userBO.refreshRespArea(userId, respArea, updater);
     }
 
     @Override

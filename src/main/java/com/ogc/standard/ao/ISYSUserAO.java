@@ -71,5 +71,4 @@ public interface ISYSUserAO {
 
     // 代申请
     public String platApplySYSUser(XN630063Req req);
-
 }

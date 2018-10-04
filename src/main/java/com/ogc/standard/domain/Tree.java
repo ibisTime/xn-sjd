@@ -1,6 +1,7 @@
 package com.ogc.standard.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import com.ogc.standard.dao.base.ABaseDO;
 
@@ -88,6 +89,30 @@ public class Tree extends ABaseDO {
 
     // 备注
     private String remark;
+
+    // ***********db properties
+
+    // 产权方列表
+    private List<String> ownerList;
+
+    // 养护方编号
+    private String maintainId;
+
+    public String getMaintainId() {
+        return maintainId;
+    }
+
+    public void setMaintainId(String maintainId) {
+        this.maintainId = maintainId;
+    }
+
+    public List<String> getOwnerList() {
+        return ownerList;
+    }
+
+    public void setOwnerList(List<String> ownerList) {
+        this.ownerList = ownerList;
+    }
 
     public String getCode() {
         return code;

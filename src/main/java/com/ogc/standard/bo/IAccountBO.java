@@ -75,6 +75,8 @@ public interface IAccountBO extends IPaginableBO<Account> {
 
     public List<Account> queryAccountList(String userId);
 
+    public List<Account> queryAccountList(String userId, String currency);
+
     public void distributePlatAccount(String symbol);
 
     public Account savePlatAccount(String accountNumber, ESysUser sysUser,

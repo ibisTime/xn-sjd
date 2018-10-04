@@ -25,6 +25,8 @@ public class XN629045Req extends APageReq {
     // 状态(0待支付1已取消2待认养3认养中4已到期)
     private String status;
 
+    private String settleStatus;
+
     private String startDatetimeStart;// 认养开始时间起
 
     private String startDatetimeEnd;// 认养开始时间止
@@ -32,6 +34,14 @@ public class XN629045Req extends APageReq {
     private String endDatetimeStart;// 认养结束时间起
 
     private String endDatetimeEnd;// 认养结束时间止
+
+    public String getSettleStatus() {
+        return settleStatus;
+    }
+
+    public void setSettleStatus(String settleStatus) {
+        this.settleStatus = settleStatus;
+    }
 
     public String getType() {
         return type;

@@ -13,11 +13,14 @@ public class XN629640Req extends BaseReq {
     // 参考订单编号
     private String refCode;
 
+    // 参考订单类型
+    private String refType;
+
     // 审核结果（0不通过/1通过）
     private String approveResult;
 
-    // 更新人
-    private String updater;
+    // 处理人
+    private String handler;
 
     // 处理说明
     private String handleNote;
@@ -30,6 +33,14 @@ public class XN629640Req extends BaseReq {
         this.refCode = refCode;
     }
 
+    public String getRefType() {
+        return refType;
+    }
+
+    public void setRefType(String refType) {
+        this.refType = refType;
+    }
+
     public String getApproveResult() {
         return approveResult;
     }
@@ -38,12 +49,12 @@ public class XN629640Req extends BaseReq {
         this.approveResult = approveResult;
     }
 
-    public String getUpdater() {
-        return updater;
+    public String getHandler() {
+        return handler;
     }
 
-    public void setUpdater(String updater) {
-        this.updater = updater;
+    public void setHandler(String handler) {
+        this.handler = handler;
     }
 
     public String getHandleNote() {

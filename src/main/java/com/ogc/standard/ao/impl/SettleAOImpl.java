@@ -8,11 +8,20 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.ISettleAO;
 import com.ogc.standard.bo.IAccountBO;
+import com.ogc.standard.bo.IAdoptOrderBO;
 import com.ogc.standard.bo.ISettleBO;
 import com.ogc.standard.bo.base.Paginable;
+import com.ogc.standard.domain.AdoptOrder;
 import com.ogc.standard.domain.Settle;
+import com.ogc.standard.enums.EAdoptOrderSettleStatus;
 import com.ogc.standard.enums.EBoolean;
-import com.ogc.standard.enums.ESettleStatus;
+import com.ogc.standard.enums.ECurrency;
+import com.ogc.standard.enums.EJourBizTypeAgent;
+import com.ogc.standard.enums.EJourBizTypePlat;
+import com.ogc.standard.enums.ESellType;
+import com.ogc.standard.enums.ESysUser;
+import com.ogc.standard.exception.BizException;
+import com.ogc.standard.exception.EBizErrorCode;
 
 @Service
 public class SettleAOImpl implements ISettleAO {
@@ -21,24 +30,41 @@ public class SettleAOImpl implements ISettleAO {
     private ISettleBO settleBO;
 
     @Autowired
+    private IAdoptOrderBO adoptOrderBO;
+
+    @Autowired
     private IAccountBO accountBO;
 
-    // TODO
     @Override
     @Transactional
-    public void approveSettleByRef(String refCode, String approveResult,
-            String handleNote) {
-        String status = null;
-        if (EBoolean.YES.getCode().equals(approveResult)) {
-            status = ESettleStatus.SETTLE_YES.getCode();
+    public void approveSettleByRefCode(String refCode, String refType,
+            String approveResult, String handler, String handleNote) {
+        if (!ESellType.COLLECTIVE.getCode().equals(refType)) {
+            AdoptOrder data = adoptOrderBO.getAdoptOrder(refCode);
+            if (!EAdoptOrderSettleStatus.TO_SETTLE.getCode().equals(
+                data.getSettleStatus())) {
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                    "订单不是待结算状态");
+            }
 
-            // 账户加钱
-
+            adoptOrderBO.refreshSettleStatus(data, handler, handleNote);
         } else {
-            status = ESettleStatus.SETTLE_NO.getCode();
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "暂不支持集体订单");
         }
 
-        settleBO.refreshStatusByRef(refCode, status, handleNote);
+        if (EBoolean.YES.getCode().equals(approveResult)) {
+            List<Settle> settleList = settleBO.querySettleList(refCode);
+            for (Settle settle : settleList) {
+                // 余额划转
+                accountBO.transAmount(ESysUser.SYS_USER.getCode(),
+                    settle.getUserId(), ECurrency.CNY.getCode(),
+                    settle.getAmount(), EJourBizTypePlat.ADOPT_DIST.getCode(),
+                    EJourBizTypeAgent.AGENT_DEDUCT.getCode(),
+                    settle.getRefNote(), settle.getRefNote(), settle.getCode());
+            }
+        }
+        settleBO.refreshStatusByRefCode(refCode, approveResult, handler,
+            handleNote);
     }
 
     @Override

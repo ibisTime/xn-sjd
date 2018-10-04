@@ -3,7 +3,7 @@ package com.ogc.standard.dto.req;
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
- * 申请分销商
+ * 代注册分销商
  * @author: silver 
  * @since: 2018年9月28日 下午3:49:20 
  * @history:
@@ -15,6 +15,14 @@ public class XN730072Req extends BaseReq {
     // 手机号
     @NotBlank
     private String mobile;
+
+    // 是否顶级
+    @NotBlank
+    private String isTop;
+
+    // 上级编号
+    @NotBlank
+    private String parentUserId;
 
     // 公司名称
     private String name;
@@ -58,6 +66,22 @@ public class XN730072Req extends BaseReq {
     // 更新人
     @NotBlank
     private String updater;
+
+    public String getIsTop() {
+        return isTop;
+    }
+
+    public void setIsTop(String isTop) {
+        this.isTop = isTop;
+    }
+
+    public String getParentUserId() {
+        return parentUserId;
+    }
+
+    public void setParentUserId(String parentUserId) {
+        this.parentUserId = parentUserId;
+    }
 
     public String getMobile() {
         return mobile;

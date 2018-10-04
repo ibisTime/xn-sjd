@@ -80,12 +80,19 @@ public class ApplyBindMaintainAOImpl implements IApplyBindMaintainAO {
     @Override
     public List<ApplyBindMaintain> queryApplyBindMaintainList(
             ApplyBindMaintain condition) {
-        return applyBindMaintainBO.queryApplyBindMaintainList(condition);
+        List<ApplyBindMaintain> list = applyBindMaintainBO
+            .queryApplyBindMaintainList(condition);
+        for (ApplyBindMaintain data : list) {
+            init(data);
+        }
+        return list;
     }
 
     @Override
     public ApplyBindMaintain getApplyBindMaintain(String code) {
-        return applyBindMaintainBO.getApplyBindMaintain(code);
+        ApplyBindMaintain data = applyBindMaintainBO.getApplyBindMaintain(code);
+        init(data);
+        return data;
     }
 
     private void init(ApplyBindMaintain data) {

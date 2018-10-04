@@ -66,12 +66,12 @@ public class ToolOrderAOImpl implements IToolOrderAO {
         String toolOrderCode = toolOrderBO.saveToolOrder(tool, user);
 
         // 划转积分
-        accountBO.transAmount(userId, ECurrency.JF.getCode(),
-            ESysUser.SYS_USER.getCode(), ECurrency.JF.getCode(),
-            tool.getPrice(), EJourBizTypeUser.TOOL_DEDUCT.getCode(),
-            EJourBizTypePlat.TOOL_DEDUCT.getCode(),
-            EJourBizTypeUser.TOOL_DEDUCT.getValue(),
-            EJourBizTypePlat.TOOL_DEDUCT.getValue(), toolOrderCode);
+        accountBO.transAmount(userId, ESysUser.SYS_USER.getCode(),
+            ECurrency.JF.getCode(), tool.getPrice(),
+            EJourBizTypeUser.TOOL_BUY.getCode(),
+            EJourBizTypePlat.TOOL_BUY.getCode(),
+            EJourBizTypeUser.TOOL_BUY.getValue(),
+            EJourBizTypePlat.TOOL_BUY.getValue(), toolOrderCode);
 
         return toolOrderCode;
     }
@@ -87,8 +87,7 @@ public class ToolOrderAOImpl implements IToolOrderAO {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(), "非本人操作");
         }
         if (toolOrder.getStatus().equals(EToolOrderStatus.USED.getCode())) { // （0未使用/1已使用）
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "当前道具已被使用！");
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "当前道具已被使用！");
         }
 
         // 验证用户
@@ -97,8 +96,8 @@ public class ToolOrderAOImpl implements IToolOrderAO {
         // 验证认养权
         AdoptOrderTree adoptOrderTree = adoptOrderTreeBO
             .getAdoptOrderTree(adoptTreeCode);
-        if (!EAdoptOrderTreeStatus.ADOPT.getCode()
-            .equals(adoptOrderTree.getStatus())) {
+        if (!EAdoptOrderTreeStatus.ADOPT.getCode().equals(
+            adoptOrderTree.getStatus())) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "当前认养权不在认养中！");
         }

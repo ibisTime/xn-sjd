@@ -12,6 +12,10 @@ public interface IApplyBindMaintainBO extends IPaginableBO<ApplyBindMaintain> {
 
     public void approveApplyBindMaintain(ApplyBindMaintain data);
 
+    public void doCheckBindMaintain(String ownerId);
+
+    public List<String> queryBindOwnerList(String maintainId);
+
     public List<ApplyBindMaintain> queryApplyBindMaintainList(
             ApplyBindMaintain condition);
 

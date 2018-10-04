@@ -12,7 +12,7 @@ public interface ISYSUserBO extends IPaginableBO<SYSUser> {
     // 新增系统用户
     public void doSaveSYSuser(SYSUser data);
 
-    public String doSaveSYSuser(XN630063Req req);
+    public String doSaveSYSuser(XN630063Req req, String loginPwd);
 
     public String doSaveSYSUser(String kind, String mobile, String loginPwd);
 
@@ -54,9 +54,6 @@ public interface ISYSUserBO extends IPaginableBO<SYSUser> {
 
     public SYSUser getSYSUserUnCheck(String userId);
 
-    public SYSUser getSYSUser();
-
-    //
     public void refreshLoginName(String userId, String loginName);
 
     // 判断用户编号是否存在

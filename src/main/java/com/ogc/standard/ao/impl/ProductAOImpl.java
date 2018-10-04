@@ -10,14 +10,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.IProductAO;
+import com.ogc.standard.bo.IApplyBindMaintainBO;
 import com.ogc.standard.bo.ICategoryBO;
+import com.ogc.standard.bo.ICompanyBO;
 import com.ogc.standard.bo.IProductBO;
 import com.ogc.standard.bo.IProductSpecsBO;
+import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.ITreeBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Category;
+import com.ogc.standard.domain.Company;
 import com.ogc.standard.domain.Product;
 import com.ogc.standard.domain.ProductSpecs;
+import com.ogc.standard.domain.SYSUser;
 import com.ogc.standard.domain.Tree;
 import com.ogc.standard.dto.req.XN629010Req;
 import com.ogc.standard.dto.req.XN629010ReqSpecs;
@@ -26,6 +31,7 @@ import com.ogc.standard.dto.req.XN629011Req;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECategoryStatus;
 import com.ogc.standard.enums.EProductStatus;
+import com.ogc.standard.enums.ESYSUserKind;
 import com.ogc.standard.enums.ESellType;
 import com.ogc.standard.enums.ETreeStatus;
 import com.ogc.standard.exception.BizException;
@@ -45,6 +51,15 @@ public class ProductAOImpl implements IProductAO {
 
     @Autowired
     private ITreeBO treeBO;
+
+    @Autowired
+    private ISYSUserBO sysUserBO;
+
+    @Autowired
+    private ICompanyBO companyBO;
+
+    @Autowired
+    private IApplyBindMaintainBO applyBindMaintainBO;
 
     @Override
     @Transactional
@@ -131,8 +146,22 @@ public class ProductAOImpl implements IProductAO {
 
     @Override
     public void submitProduct(String code, String updater, String remark) {
-        Product product = productBO.getProduct(code);
+        // 检查产权方信息是否完善
+        SYSUser sysUser = sysUserBO.getSYSUser(updater);
+        if (!ESYSUserKind.OWNER.getCode().equals(sysUser.getKind())) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "不是产权方用户不能提交产品");
+        }
+        Company company = companyBO.getCompanyByUserId(updater);
+        if (StringUtils.isBlank(company.getContractTemplate())
+                || StringUtils.isBlank(company.getCertificateTemplate())) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "请先完善合同模板和证书模板信息后方可提交产品");
+        }
+        // 验证是否绑定养护方
+        applyBindMaintainBO.doCheckBindMaintain(sysUser.getUserId());
 
+        Product product = productBO.getProduct(code);
         if (!EProductStatus.DRAFT.getCode().equals(product.getStatus())
                 && !EProductStatus.PUTOFFED.getCode().equals(
                     product.getStatus())
@@ -250,20 +279,18 @@ public class ProductAOImpl implements IProductAO {
         product.setMaxPrice(maxPrice);
 
         // 古树列表
-        List<Tree> treeRemainList = treeBO.queryTreeListByProduct(
-            product.getCode(), ETreeStatus.TO_ADOPT.getCode());
-        product.setTreeRemainList(treeRemainList);
-
-        // 树木剩余量数量
-        product.setTreeRemainCount(treeRemainList.size());
+        List<Tree> treeList = treeBO.queryTreeListByProduct(product.getCode());
+        product.setTreeList(treeList);
 
         // 树木总量获取
-        int treeTotalCount = treeBO.getTreeCount(product.getCode());
-        product.setTreeTotalCount(treeTotalCount);
+        product.setTreeTotalCount(treeList.size());
+
+        // 树木剩余量数量
+        product.setTreeRemainCount(treeBO.getTreeCount(product.getCode(),
+            ETreeStatus.TO_ADOPT.getCode()));
 
         // 类型
         Category category = categoryBO.getCategory(product.getCategoryCode());
         product.setCategoryName(category.getName());
     }
-
 }

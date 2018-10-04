@@ -46,11 +46,20 @@ public class AgentUser extends ABaseDO {
     // 注册时间
     private Date createDatetime;
 
-    // 状态(0待审核/1审核不通过/2正常/3已注销)
+    // 状态
     private String status;
+
+    // 推荐人编号
+    private String userReferee;
+
+    // 等级
+    private String level;
 
     // 父级用户编号
     private String parentUserId;
+
+    // 角色编号
+    private String roleCode;
 
     // 修改人
     private String updater;
@@ -74,6 +83,40 @@ public class AgentUser extends ABaseDO {
     private String realNameForQuery;
 
     private Company company;
+
+    private AgentUser parentAgentUser;
+
+    public AgentUser getParentAgentUser() {
+        return parentAgentUser;
+    }
+
+    public void setParentAgentUser(AgentUser parentAgentUser) {
+        this.parentAgentUser = parentAgentUser;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
+    }
+
+    public String getUserReferee() {
+        return userReferee;
+    }
+
+    public void setUserReferee(String userReferee) {
+        this.userReferee = userReferee;
+    }
+
+    public String getRoleCode() {
+        return roleCode;
+    }
+
+    public void setRoleCode(String roleCode) {
+        this.roleCode = roleCode;
+    }
 
     public Company getCompany() {
         return company;

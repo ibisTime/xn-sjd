@@ -45,14 +45,13 @@ public class User extends ABaseDO {
     // 用户等级
     private String level;
 
+    private String userRefereeType;
+
     // 推荐人
     private String userReferee;
 
     // 所属代理商
-    private String agent;
-
-    // 所属业务员
-    private String salesman;
+    private String agentId;
 
     // 证件类型
     private String idKind;
@@ -575,20 +574,20 @@ public class User extends ABaseDO {
         this.pdf = pdf;
     }
 
-    public String getAgent() {
-        return agent;
+    public String getUserRefereeType() {
+        return userRefereeType;
     }
 
-    public void setAgent(String agent) {
-        this.agent = agent;
+    public void setUserRefereeType(String userRefereeType) {
+        this.userRefereeType = userRefereeType;
     }
 
-    public String getSalesman() {
-        return salesman;
+    public String getAgentId() {
+        return agentId;
     }
 
-    public void setSalesman(String salesman) {
-        this.salesman = salesman;
+    public void setAgentId(String agentId) {
+        this.agentId = agentId;
     }
 
     public String getIntroduce() {

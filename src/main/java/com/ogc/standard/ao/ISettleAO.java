@@ -14,8 +14,8 @@ import com.ogc.standard.domain.Settle;
 public interface ISettleAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
-    public void approveSettleByRef(String refCode, String approveResult,
-            String handleNote);
+    public void approveSettleByRefCode(String refCode, String refType,
+            String approveResult, String handler, String handleNote);
 
     public Paginable<Settle> querySettlePage(int start, int limit,
             Settle condition);

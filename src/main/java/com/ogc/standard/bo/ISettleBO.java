@@ -1,8 +1,10 @@
 package com.ogc.standard.bo;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.ogc.standard.bo.base.IPaginableBO;
+import com.ogc.standard.domain.AgentUser;
 import com.ogc.standard.domain.Settle;
 
 /**
@@ -14,14 +16,17 @@ import com.ogc.standard.domain.Settle;
 public interface ISettleBO extends IPaginableBO<Settle> {
 
     // 添加结算订单
-    public String saveSettle(String userId, String userKind, String refType,
-            String refCode, String refNote);
+    public String saveSettle(AgentUser user, BigDecimal settleAmount,
+            BigDecimal settleRate, String refCode, String refType,
+            String refNote);
 
     // 更新参考订单下的状态
-    public void refreshStatusByRef(String refCode, String status,
-            String handleNote);
+    public void refreshStatusByRefCode(String refCode, String approveResult,
+            String handler, String handleNote);
 
     public List<Settle> querySettleList(Settle condition);
+
+    public List<Settle> querySettleList(String refCode);
 
     public Settle getSettle(String code);
 

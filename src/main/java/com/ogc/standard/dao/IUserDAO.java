@@ -32,9 +32,6 @@ public interface IUserDAO extends IBaseDAO<User> {
     // 更改位置信息
     public int updateLocation(User data);
 
-    // 更改负责区域
-    public int updateRespArea(User data);
-
     // 设置登录密码
     public int updateLoginPwd(User data);
 

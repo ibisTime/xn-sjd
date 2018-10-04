@@ -24,6 +24,9 @@ public interface IAgentUserDAO extends IBaseDAO<AgentUser> {
     // 更新父节点用户编号
     public int updateToApprove(AgentUser data);
 
+    // 审核通过
+    public int updatePass(AgentUser data);
+
     // 更新真实姓名
     public int updateRealName(AgentUser data);
 

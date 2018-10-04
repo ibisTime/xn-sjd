@@ -21,7 +21,6 @@ import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ERoleCode;
 import com.ogc.standard.enums.ESYSUserKind;
 import com.ogc.standard.enums.ESYSUserStatus;
-import com.ogc.standard.enums.EUserPwd;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
 
@@ -43,7 +42,7 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser> implements
     }
 
     @Override
-    public String doSaveSYSuser(XN630063Req req) {
+    public String doSaveSYSuser(XN630063Req req, String loginPwd) {
         SYSUser data = new SYSUser();
         String userId = OrderNoGenerater.generate("U");
         data.setUserId(userId);
@@ -58,9 +57,8 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser> implements
         } else {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(), "用户类型不支持");
         }
-        data.setLoginPwd(MD5Util.md5(EUserPwd.InitPwd8.getCode()));
-        data.setLoginPwdStrength(PwdUtil
-            .calculateSecurityLevel(EUserPwd.InitPwd8.getCode()));
+        data.setLoginPwd(MD5Util.md5(loginPwd));
+        data.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(loginPwd));
         data.setCreateDatetime(new Date());
         data.setStatus(ESYSUserStatus.NORMAL.getCode());
         data.setRemark(req.getRemark());
@@ -158,21 +156,17 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser> implements
             condition.setUserId(userId);
             data = sysUserDAO.select(condition);
             if (data == null) {
-                throw new BizException("xn0000", "系统用户不存在");
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                    "系统用户不存在");
+            }
+            if (ESYSUserStatus.Li_Locked.getCode().equals(data.getStatus())
+                    || ESYSUserStatus.Ren_Locked.getCode().equals(
+                        data.getStatus())) {
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                    "用户已被锁定，请联系管理员");
             }
         }
         return data;
-    }
-
-    @Override
-    public SYSUser getSYSUser() {
-        SYSUser condition = new SYSUser();
-        List<SYSUser> list = sysUserDAO.selectList(condition);
-        if (CollectionUtils.isEmpty(list)) {
-            throw new BizException("xn0000", "系统用户不存在");
-        }
-        return list.get(0);
-
     }
 
     @Override

@@ -8,7 +8,7 @@ package com.ogc.standard.enums;
  */
 public enum EAgentUserStatus {
     TO_FILL("-1", "待填写资料"), TO_APPROVE("0", "待审核"), APPROVE_NO("1", "审核不通过"), NORMAL(
-            "2", "正常"), CANCEL("3", "已注销");
+            "2", "正常"), Li_Locked("3", "程序锁定"), Ren_Locked("4", "人工锁定");
 
     EAgentUserStatus(String code, String value) {
         this.code = code;

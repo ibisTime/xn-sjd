@@ -30,6 +30,9 @@ public interface IAdoptOrderBO extends IPaginableBO<AdoptOrder> {
     public void paySuccess(AdoptOrder data, BigDecimal payAmount,
             BigDecimal backJfAmount);
 
+    public void refreshSettleStatus(AdoptOrder data, String updater,
+            String remark);
+
     public List<AdoptOrder> queryAdoptOrderList(AdoptOrder condition);
 
     public AdoptOrder getAdoptOrder(String code);

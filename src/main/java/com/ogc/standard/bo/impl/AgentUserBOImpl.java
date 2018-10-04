@@ -19,6 +19,7 @@ import com.ogc.standard.domain.AgentUser;
 import com.ogc.standard.enums.EAgentUserStatus;
 import com.ogc.standard.enums.EAgentUserType;
 import com.ogc.standard.enums.EGeneratePrefix;
+import com.ogc.standard.enums.ERoleCode;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
 
@@ -58,6 +59,7 @@ public class AgentUserBOImpl extends PaginableBOImpl<AgentUser> implements
 
         agentUser.setCreateDatetime(new Date());
         agentUser.setStatus(EAgentUserStatus.TO_FILL.getCode());
+        agentUser.setRoleCode(ERoleCode.AGENT.getCode());
         agentUserDAO.insert(agentUser);
         return userId;
     }
@@ -76,13 +78,14 @@ public class AgentUserBOImpl extends PaginableBOImpl<AgentUser> implements
         agentUser.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(loginPwd));
         agentUser.setCreateDatetime(new Date());
         agentUser.setStatus(EAgentUserStatus.NORMAL.getCode());
-
+        agentUser.setRoleCode(ERoleCode.SALEMANS.getCode());
         agentUserDAO.insert(agentUser);
         return userId;
     }
 
     @Override
-    public String doAddAgentUser(String mobile, String loginPwd) {
+    public String doAddAgentUser(String mobile, String loginPwd, String level,
+            String parentUserId) {
         AgentUser data = new AgentUser();
         String userId = OrderNoGenerater.generate(EGeneratePrefix.AgentUser
             .getCode());
@@ -96,6 +99,9 @@ public class AgentUserBOImpl extends PaginableBOImpl<AgentUser> implements
         data.setCreateDatetime(new Date());
         data.setStatus(EAgentUserStatus.NORMAL.getCode());
 
+        data.setLevel(level);
+        data.setParentUserId(parentUserId);
+        data.setRoleCode(ERoleCode.AGENT.getCode());
         agentUserDAO.insert(data);
         return userId;
     }
@@ -188,14 +194,26 @@ public class AgentUserBOImpl extends PaginableBOImpl<AgentUser> implements
     }
 
     @Override
-    public void refreshToApprove(AgentUser data, String parentUserId,
-            String updater, String remark) {
+    public void refreshToApprove(AgentUser data, String userReferee,
+            String parentUserId, String updater, String remark) {
         data.setStatus(EAgentUserStatus.TO_APPROVE.getCode());
+        data.setUserReferee(userReferee);
         data.setParentUserId(parentUserId);
         data.setUpdater(updater);
         data.setUpdateDatetime(new Date());
         data.setRemark(remark);
         agentUserDAO.updateToApprove(data);
+    }
+
+    @Override
+    public void refreshPass(AgentUser data, String level, String parentUserId,
+            String updater, String remark) {
+        data.setStatus(EAgentUserStatus.NORMAL.getCode());
+        data.setLevel(level);
+        data.setParentUserId(parentUserId);
+        data.setUpdater(updater);
+        data.setUpdateDatetime(new Date());
+        agentUserDAO.updatePass(data);
     }
 
     @Override

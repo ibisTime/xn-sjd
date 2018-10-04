@@ -1,5 +1,6 @@
 package com.ogc.standard.domain;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import com.ogc.standard.dao.base.ABaseDO;
@@ -24,10 +25,10 @@ public class Settle extends ABaseDO {
     private String userKind;
 
     // 结算金额
-    private Long amount;
+    private BigDecimal amount;
 
     // 结算比例
-    private Long rate;
+    private BigDecimal rate;
 
     // 参考类型
     private String refType;
@@ -44,6 +45,9 @@ public class Settle extends ABaseDO {
     // 创建时间
     private Date createDatetime;
 
+    // 处理人
+    private String handler;
+
     // 处理时间
     private Date handleDatetime;
 
@@ -59,6 +63,14 @@ public class Settle extends ABaseDO {
 
     // 创建结束时间
     private Date createEndDatetime;
+
+    public String getHandler() {
+        return handler;
+    }
+
+    public void setHandler(String handler) {
+        this.handler = handler;
+    }
 
     public String getCode() {
         return code;
@@ -84,19 +96,19 @@ public class Settle extends ABaseDO {
         this.userKind = userKind;
     }
 
-    public Long getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(Long amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 
-    public Long getRate() {
+    public BigDecimal getRate() {
         return rate;
     }
 
-    public void setRate(Long rate) {
+    public void setRate(BigDecimal rate) {
         this.rate = rate;
     }
 

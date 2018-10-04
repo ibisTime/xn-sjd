@@ -23,7 +23,8 @@ public interface IAgentUserBO extends IPaginableBO<AgentUser> {
     public String doAddSalesman(String mobile, String loginPwd);
 
     // 添加用户
-    public String doAddAgentUser(String mobile, String loginPwd);
+    public String doAddAgentUser(String mobile, String loginPwd, String level,
+            String parentUserId);
 
     // 验证支付密码:拿tradePwd进行MD5后与数据库中userId得数据库支付密码比对
     public void checkTradePwd(String userId, String tradePwd);
@@ -47,8 +48,12 @@ public interface IAgentUserBO extends IPaginableBO<AgentUser> {
     public void refreshMobile(String userId, String mobile);
 
     // 提交信息
-    public void refreshToApprove(AgentUser agentUser, String parentUserId,
-            String updater, String remark);
+    public void refreshToApprove(AgentUser agentUser, String userReferee,
+            String parentUserId, String updater, String remark);
+
+    // 审核通过
+    public void refreshPass(AgentUser agentUser, String level,
+            String parentUserId, String updater, String remark);
 
     // 修改状态
     public void refreshStatus(String userId, String status, String updater,
@@ -61,5 +66,5 @@ public interface IAgentUserBO extends IPaginableBO<AgentUser> {
 
     public AgentUser getAgentUser(String userId);
 
-    public AgentUser getAgentUserByMobile(String mobile);
+    public AgentUser getAgentUserByMobile(String parentUserId);
 }

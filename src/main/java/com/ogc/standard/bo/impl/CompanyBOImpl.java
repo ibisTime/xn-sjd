@@ -66,10 +66,10 @@ public class CompanyBOImpl extends PaginableBOImpl<Company> implements
         data.setBussinessLicense(req.getBussinessLicense());
         data.setOrganizationCode(req.getOrganizationCode());
         data.setCertificateTemplate(req.getCertificateTemplate());
-        data.setContractTemplate(req.getContractTemplate());
-        data.setCreateDatetime(new Date());
+        Date date = new Date();
+        data.setCreateDatetime(date);
         data.setUpdater(userId);
-        data.setUpdateDatetime(new Date());
+        data.setUpdateDatetime(date);
         companyDAO.insert(data);
         return code;
     }
@@ -98,8 +98,6 @@ public class CompanyBOImpl extends PaginableBOImpl<Company> implements
         data.setDescription(req.getDescription());
         data.setBussinessLicense(req.getBussinessLicense());
         data.setOrganizationCode(req.getOrganizationCode());
-        data.setCertificateTemplate(req.getCertificateTemplate());
-        data.setContractTemplate(req.getContractTemplate());
         data.setUpdater(req.getUserId());
         data.setUpdateDatetime(new Date());
         data.setRemark("资料重新提交");
@@ -127,12 +125,13 @@ public class CompanyBOImpl extends PaginableBOImpl<Company> implements
     }
 
     @Override
-    public int refreshCompany(Company data) {
-        int count = 0;
-        if (StringUtils.isNotBlank(data.getCode())) {
-            count = companyDAO.update(data);
-        }
-        return count;
+    public int refreshCompanyInfo(Company data, String certificateTemplate,
+            String contractTemplate) {
+        data.setCertificateTemplate(certificateTemplate);
+        data.setContractTemplate(contractTemplate);
+        data.setUpdater(data.getUserId());
+        data.setUpdateDatetime(new Date());
+        return companyDAO.updateInfo(data);
     }
 
     @Override

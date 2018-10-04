@@ -205,6 +205,14 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
         return accountDAO.selectList(condition);
     }
 
+    @Override
+    public List<Account> queryAccountList(String userId, String currency) {
+        Account condition = new Account();
+        condition.setUserId(userId);
+        condition.setCurrency(currency);
+        return accountDAO.selectList(condition);
+    }
+
     /**
     * @see com.std.account.bo.IAccountBO#getAccountByUser(java.lang.String,
     java.lang.String, java.lang.String)

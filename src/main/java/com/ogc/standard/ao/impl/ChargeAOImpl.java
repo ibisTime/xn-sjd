@@ -15,11 +15,14 @@ import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.Charge;
-import com.ogc.standard.domain.User;
 import com.ogc.standard.dto.res.XN802347Res;
 import com.ogc.standard.enums.EBoolean;
+import com.ogc.standard.enums.EChannelType;
 import com.ogc.standard.enums.EChargeStatus;
+import com.ogc.standard.enums.ECurrency;
+import com.ogc.standard.enums.EJourBizTypePlat;
 import com.ogc.standard.enums.EJourBizTypeUser;
+import com.ogc.standard.enums.ESystemAccount;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
 
@@ -75,15 +78,21 @@ public class ChargeAOImpl implements IChargeAO {
     private void payOrderYES(Charge data, String payUser, String payNote) {
         chargeBO.payOrder(data, true, payUser, payNote);
 
-        Account userAccount = accountBO.getAccount(data.getAccountNumber());
-        User user = userBO.getUser(userAccount.getUserId());
+        // 账户加钱
+        Account accountUser = accountBO.getAccount(data.getAccountNumber());
+        accountBO.changeAmount(accountUser, data.getAmount(),
+            EChannelType.Offline, null, data.getCode(),
+            EJourBizTypeUser.CHARGE.getCode(), "线下充值");
 
-        // accountBO.transAmount(, userAccount, data.getAmount(),
-        // EJourBizTypePlat.AJ_SUBSIDY.getCode(),
-        // EJourBizTypeUser.AJ_CHARGE.getCode(),
-        // EJourBizTypePlat.AJ_SUBSIDY.getValue(),
-        // EJourBizTypeUser.AJ_CHARGE.getValue(), "用户充值");
-
+        Account account = accountBO.getAccount(data.getAccountNumber());
+        if (ECurrency.CNY.getCode().equals(account.getCurrency())) {
+            // 线下托管账户加钱
+            Account sysAccountOffLine = accountBO
+                .getAccount(ESystemAccount.SYS_ACOUNT_OFFLINE.getCode());
+            accountBO.changeAmount(sysAccountOffLine, data.getAmount(),
+                EChannelType.Offline, null, data.getCode(),
+                EJourBizTypePlat.CHARGE.getCode(), "线下充值");
+        }
     }
 
     @Override

@@ -29,10 +29,6 @@ public interface IUserAO {
     public void doBindMobile(String isSendSms, String mobile,
             String smsCaptcha, String userId);
 
-    // 平台代注册渠道商用户
-    public String doAddQDS(String mobile, String idKind, String idNo,
-            String realName, String respArea);
-
     // 用户登录
     public String doLogin(String loginName, String loginPwd, String client,
             String location);
@@ -170,9 +166,6 @@ public interface IUserAO {
 
     // 绑定邮箱
     public void bindEmail(String captcha, String email, String userId);
-
-    // 修改负责区域
-    public void editRespArea(String userId, String respArea, String updater);
 
     // 直退用户查询
     public Paginable<User> queryFirstRefPage(XN802399Req req, int start,

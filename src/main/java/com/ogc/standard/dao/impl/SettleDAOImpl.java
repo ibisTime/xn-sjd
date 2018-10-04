@@ -22,8 +22,9 @@ public class SettleDAOImpl extends AMybatisTemplate implements ISettleDAO {
     }
 
     @Override
-    public int updateStatusByRef(Settle data) {
-        return super.update(NAMESPACE.concat("update_settleStatusByRef"), data);
+    public int updateStatusByRefCode(Settle data) {
+        return super.update(NAMESPACE.concat("update_settleStatusByRefCode"),
+            data);
     }
 
     @Override
@@ -46,8 +47,8 @@ public class SettleDAOImpl extends AMybatisTemplate implements ISettleDAO {
 
     @Override
     public List<Settle> selectList(Settle condition, int start, int count) {
-        return super.selectList(NAMESPACE.concat("select_settle"), start, count,
-            condition, Settle.class);
+        return super.selectList(NAMESPACE.concat("select_settle"), start,
+            count, condition, Settle.class);
     }
 
 }

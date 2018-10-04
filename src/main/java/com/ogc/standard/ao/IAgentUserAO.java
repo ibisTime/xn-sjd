@@ -24,7 +24,7 @@ public interface IAgentUserAO {
 
     // 审核用户
     public void approveAgentUser(String userId, String approveResult,
-            String updater, String remark);
+            String level, String parentUserId, String updater, String remark);
 
     // 修改手机号
     public void doChangeMoblie(String userId, String newMobile,

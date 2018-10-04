@@ -20,9 +20,6 @@ public class XN630061Req {
     // 营业执照
     private String bussinessLicense;
 
-    // 证书模板
-    private String certificateTemplate;
-
     // 负责人联系方式
     @NotBlank
     private String chargerMobile;
@@ -39,11 +36,24 @@ public class XN630061Req {
     @NotBlank
     private String companyName;
 
-    // 合同模板
-    private String contractTemplate;
-
     // 简介
     private String description;
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getOrganizationCode() {
+        return organizationCode;
+    }
+
+    public void setOrganizationCode(String organizationCode) {
+        this.organizationCode = organizationCode;
+    }
 
     public String getBussinessLicense() {
         return bussinessLicense;
@@ -51,14 +61,6 @@ public class XN630061Req {
 
     public void setBussinessLicense(String bussinessLicense) {
         this.bussinessLicense = bussinessLicense;
-    }
-
-    public String getCertificateTemplate() {
-        return certificateTemplate;
-    }
-
-    public void setCertificateTemplate(String certificateTemplate) {
-        this.certificateTemplate = certificateTemplate;
     }
 
     public String getChargerMobile() {
@@ -93,14 +95,6 @@ public class XN630061Req {
         this.companyName = companyName;
     }
 
-    public String getContractTemplate() {
-        return contractTemplate;
-    }
-
-    public void setContractTemplate(String contractTemplate) {
-        this.contractTemplate = contractTemplate;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -108,21 +102,4 @@ public class XN630061Req {
     public void setDescription(String description) {
         this.description = description;
     }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getOrganizationCode() {
-        return organizationCode;
-    }
-
-    public void setOrganizationCode(String organizationCode) {
-        this.organizationCode = organizationCode;
-    }
-
 }

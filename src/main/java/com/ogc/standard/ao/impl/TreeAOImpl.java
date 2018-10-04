@@ -3,11 +3,14 @@ package com.ogc.standard.ao.impl;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.ITreeAO;
+import com.ogc.standard.bo.IApplyBindMaintainBO;
 import com.ogc.standard.bo.IInteractBO;
 import com.ogc.standard.bo.ITreeBO;
 import com.ogc.standard.bo.base.Paginable;
@@ -31,6 +34,9 @@ public class TreeAOImpl implements ITreeAO {
 
     @Autowired
     private IInteractBO interactBO;
+
+    @Autowired
+    private IApplyBindMaintainBO applyBindMaintainBO;
 
     @Override
     public String addTree(XN629030Req req) {
@@ -130,6 +136,15 @@ public class TreeAOImpl implements ITreeAO {
 
     @Override
     public Paginable<Tree> queryTreePage(int start, int limit, Tree condition) {
+        if (StringUtils.isNotBlank(condition.getMaintainId())) {
+            List<String> ownerList = applyBindMaintainBO
+                .queryBindOwnerList(condition.getMaintainId());
+            if (CollectionUtils.isNotEmpty(ownerList)) {
+                condition.setOwnerList(ownerList);
+            } else {
+                condition.setOwnerId("not one");
+            }
+        }
         return treeBO.getPaginable(start, limit, condition);
     }
 

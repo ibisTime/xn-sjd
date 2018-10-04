@@ -41,9 +41,6 @@ public class XN630063Req {
     @NotBlank
     private String companyName;
 
-    // 合同模板
-    private String contractTemplate;
-
     // 简介
     private String description;
 
@@ -123,14 +120,6 @@ public class XN630063Req {
 
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
-    }
-
-    public String getContractTemplate() {
-        return contractTemplate;
-    }
-
-    public void setContractTemplate(String contractTemplate) {
-        this.contractTemplate = contractTemplate;
     }
 
     public String getDescription() {

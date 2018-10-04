@@ -25,7 +25,6 @@ import com.ogc.standard.common.PhoneUtil;
 import com.ogc.standard.common.PwdUtil;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.IUserDAO;
-import com.ogc.standard.domain.AgentUser;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.enums.EUserKind;
 import com.ogc.standard.enums.EUserLevel;
@@ -127,9 +126,8 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
 
     @Override
     public String doRegister(String mobile, String nickname, String loginPwd,
-            User refereeUser, AgentUser agentUser, AgentUser salesmanUser,
+            String agentId, String userReferee, String userRefereeType,
             String province, String city, String area) {
-
         String userId = OrderNoGenerater.generate("U");
         User user = new User();
         user.setUserId(userId);
@@ -145,15 +143,10 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
                 userId.length()));
         }
         user.setNickname(nickname);
-        if (refereeUser != null) {
-            user.setUserReferee(refereeUser.getMobile());
-        }
-        if (agentUser != null) {
-            user.setAgent(agentUser.getMobile());
-        }
-        if (salesmanUser != null) {
-            user.setSalesman(salesmanUser.getMobile());
-        }
+        user.setAgentId(agentId);
+        user.setUserReferee(userReferee);
+        user.setUserRefereeType(userRefereeType);
+
         user.setLevel(EUserLevel.ONE.getCode());
         user.setStatus(EUserStatus.NORMAL.getCode());
         user.setProvince(province);
@@ -506,36 +499,4 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         }
         return count;
     }
-
-    @Override
-    public String doAddQDS(String mobile, String idKind, String idNo,
-            String realName, String respArea, String loginPwd) {
-        String userId = OrderNoGenerater.generate("U");
-        User user = new User();
-        user.setKind(EUserKind.QDS.getCode());
-        user.setUserId(userId);
-        user.setCreateDatetime(new Date());
-        user.setMobile(mobile);
-        user.setLoginName(mobile);
-        user.setIdKind(idKind);
-        user.setIdNo(idNo);
-        user.setRealName(realName);
-        user.setStatus(EUserStatus.NORMAL.getCode());
-        user.setCreateDatetime(new Date());
-        user.setLoginPwd(MD5Util.md5(loginPwd));
-        user.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(loginPwd));
-        user.setNickname(userId.substring(userId.length() - 8, userId.length()));
-        userDAO.insert(user);
-        return userId;
-    }
-
-    @Override
-    public void refreshRespArea(String userId, String respArea, String updater) {
-        User data = new User();
-        data.setUserId(userId);
-        data.setUpdater(updater);
-        data.setUpdateDatetime(new Date());
-        userDAO.updateRespArea(data);
-    }
-
 }

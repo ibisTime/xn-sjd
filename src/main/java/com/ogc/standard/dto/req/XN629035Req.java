@@ -16,6 +16,9 @@ public class XN629035Req extends APageReq {
     // 产权方编号
     private String ownerId;
 
+    // 养护方编号
+    private String maintainId;
+
     // 树木编号
     private String treeNumber;
 
@@ -24,6 +27,14 @@ public class XN629035Req extends APageReq {
 
     // 状态（0待认养/1已认养）
     private String status;
+
+    public String getMaintainId() {
+        return maintainId;
+    }
+
+    public void setMaintainId(String maintainId) {
+        this.maintainId = maintainId;
+    }
 
     public String getProductCode() {
         return productCode;

@@ -1,7 +1,6 @@
 package com.ogc.standard.ao.impl;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -71,18 +70,7 @@ public class AccountAOImpl implements IAccountAO {
     @Override
     @Transactional
     public List<Account> getAccountByUserId(String userId, String currency) {
-        distributeAccount(userId);
-        List<Account> accounts = new ArrayList<>();
-
-        Account account = accountBO.getAccountByUser(userId, currency);
-        accounts.add(account);
-
-        return accounts;
-    }
-
-    @Override
-    public List<Account> queryAccountList(Account condition) {
-        return accountBO.queryAccountList(condition);
+        return accountBO.queryAccountList(userId, currency);
     }
 
     @Override

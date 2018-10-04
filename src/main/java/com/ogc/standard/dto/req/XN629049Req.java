@@ -1,5 +1,6 @@
 package com.ogc.standard.dto.req;
 
+import org.hibernate.validator.constraints.NotBlank;
 
 public class XN629049Req extends APageReq {
 
@@ -9,6 +10,7 @@ public class XN629049Req extends APageReq {
     private String type;
 
     // 用户编号
+    @NotBlank
     private String userId;
 
     // 状态(0待支付1已取消2待认养3认养中4已到期)

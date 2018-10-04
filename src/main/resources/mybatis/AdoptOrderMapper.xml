@@ -26,6 +26,8 @@
 		<result column="pay_amount" property="payAmount" />
 		<result column="pay_datetime" property="payDatetime" />
 		<result column="back_jf_amount" property="backJfAmount" />
+		
+		<result column="settle_status" property="settleStatus" />
 		<result column="updater" property="updater" />
 		<result column="update_datetime" property="updateDatetime" />
 		<result column="remark" property="remark" />
@@ -68,6 +70,9 @@
 			<if test="endDatetimeEnd != null and endDatetimeEnd != '' ">
 				<![CDATA[AND t.end_datetime <= #{endDatetimeEnd}]]>
 			</if>
+			<if test="settleStatus != null and settleStatus != '' ">
+				AND t.settle_status = #{settleStatus}
+			</if>
 		</trim>
 	</sql>
 	<select id="select_adoptOrder" parameterType="adoptOrder" resultMap="adoptOrder_DB_Result">
@@ -92,6 +97,7 @@
 		,t.jf_deduct_amount
 		,t.pay_datetime
 		,t.back_jf_amount
+		,t.settle_status
 		,t.updater
 		,t.update_datetime
 		,t.remark
@@ -126,6 +132,7 @@
 		,apply_user
 		,apply_datetime
 		,status
+		,settle_status
 		)
 		VALUES(
 		#{code}
@@ -140,6 +147,7 @@
 		,#{applyUser}
 		,#{applyDatetime}
 		,#{status}
+		,#{settleStatus}
 		)
 	</insert>
 
@@ -163,6 +171,7 @@
 		,pay_amount = #{payAmount}
 		,pay_datetime = #{payDatetime}
 		,back_jf_amount = #{backJfAmount}
+		,settle_status = #{settleStatus}
 		,remark = #{remark}
 		WHERE code = #{code}
 	</update>
@@ -185,7 +194,19 @@
 		,pay_amount = #{payAmount}
 		,pay_datetime = #{payDatetime}
 		,back_jf_amount = #{backJfAmount}
+		,settle_status = #{settleStatus}
 		,remark = #{remark}
 		WHERE code = #{code}
 	</update>
+	
+	<update id="update_settleStatus" parameterType="adoptOrder">
+		UPDATE try_adopt_order
+		SET
+		settle_status = #{settleStatus}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+	
 </mapper>

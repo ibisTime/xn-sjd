@@ -15,6 +15,7 @@
 		<result column="status" property="status" />
 		<result column="create_datetime" property="createDatetime" />
 		
+		<result column="handler" property="handler" />
 		<result column="handle_datetime" property="handleDatetime" />
 		<result column="handle_note" property="handleNote" />
 		<result column="remark" property="remark" />
@@ -98,8 +99,6 @@
 		,status
 		,create_datetime
 		
-		,handle_datetime
-		,handle_note
 		,remark
 		)
 		VALUES(
@@ -115,16 +114,15 @@
 		,#{status}
 		,#{createDatetime}
 		
-		,#{handleDatetime}
-		,#{handleNote}
 		,#{remark}
 		)
 	</insert>
 
-	<update id="update_settleStatusByRef" parameterType="settle">
+	<update id="update_settleStatusByRefCode" parameterType="settle">
 		UPDATE tsys_settle
 		SET
 		status = #{status}
+		,handler = #{handler}
 		,handle_note = #{handleNote}
 		,handle_datetime = #{handleDatetime}
 		WHERE ref_code = #{refCode}

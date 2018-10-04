@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -85,7 +84,7 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
         List<Tree> treeList = treeBO.queryTreeListByProduct(product.getCode(),
             ETreeStatus.TO_ADOPT.getCode());
         for (Tree tree : treeList) {
-            treeBO.refreshAdoptTree(tree.getCode(), code);
+            // treeBO.refreshAdoptTree(tree.getCode(), code);
         }
         return code;
     }
@@ -125,7 +124,7 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
         List<Tree> treeList = treeBO.queryTreeListByProduct(product.getCode(),
             ETreeStatus.TO_ADOPT.getCode());
         for (Tree tree : treeList) {
-            treeBO.refreshAdoptTree(tree.getCode(), code);
+            // treeBO.refreshAdoptTree(tree.getCode(), code);
         }
         return code;
     }
@@ -145,11 +144,11 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
         product.setNowCount(product.getNowCount() - data.getQuantity());
         productBO.refreshNowCount(product.getCode(), product.getNowCount());
         // 更新树状态
-        List<Tree> treeList = treeBO.queryTreeListByOrderCode(data.getCode(),
-            ETreeStatus.TO_PAY.getCode());
-        for (Tree tree : treeList) {
-            treeBO.refreshCancelTree(tree);
-        }
+        // List<Tree> treeList = treeBO.queryTreeListByOrderCode(data.getCode(),
+        // ETreeStatus.TO_PAY.getCode());
+        // for (Tree tree : treeList) {
+        // treeBO.refreshCancelTree(tree);
+        // }
         groupAdoptOrderBO.refreshCancelGroupAdoptOrder(data);
     }
 
@@ -181,17 +180,17 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
             data.setStatus(EAdoptOrderStatus.ADOPT.getCode());
         }
         groupAdoptOrderBO.payGroupAdoptOrder(data);
-        List<Tree> treeList = treeBO.queryTreeListByOrderCode(data.getCode(),
-            ETreeStatus.TO_PAY.getCode());
-        if (CollectionUtils.isNotEmpty(treeList)) {
-            for (Tree tree : treeList) {
-                // 更新树状态
-                treeBO.refreshPayTree(tree);
-                // 分配认养权
-                // adoptOrderTreeBO.saveAdoptOrderTree(data,
-                // tree.getTreeNumber());
-            }
-        }
+        // List<Tree> treeList = treeBO.queryTreeListByOrderCode(data.getCode(),
+        // ETreeStatus.TO_PAY.getCode());
+        // if (CollectionUtils.isNotEmpty(treeList)) {
+        // for (Tree tree : treeList) {
+        // // 更新树状态
+        // treeBO.refreshPayTree(tree);
+        // // 分配认养权
+        // // adoptOrderTreeBO.saveAdoptOrderTree(data,
+        // // tree.getTreeNumber());
+        // }
+        // }
         // 分配分红 TODO
         return identifyCode;
     }

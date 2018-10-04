@@ -23,9 +23,6 @@ public interface IAccountAO {
     // 根据用户编号获取账户列表
     public List<Account> getAccountByUserId(String userId, String currency);
 
-    // 列表查询账户
-    public List<Account> queryAccountList(Account condition);
-
     // 不同用户不同币种间资金划转
     public void transAmount(String fromUserId, String fromCurrency,
             String toUserId, String toCurrency, BigDecimal transAmount,

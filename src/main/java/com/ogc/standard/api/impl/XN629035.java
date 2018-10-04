@@ -30,10 +30,11 @@ public class XN629035 extends AProcessor {
         Tree condition = new Tree();
         condition.setTreeNumber(req.getTreeNumber());
         condition.setOwnerId(req.getOwnerId());
+        condition.setMaintainId(req.getMaintainId());
         condition.setProductCode(req.getProductCode());
+
         condition.setScientificName(req.getScientificName());
         condition.setStatus(req.getStatus());
-
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
             column = ITreeAO.DEFAULT_ORDER_COLUMN;

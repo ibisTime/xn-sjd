@@ -162,4 +162,16 @@
 		,remark = #{remark}
 		WHERE code = #{code}
 	</update>
+	
+	<update id="update_company_info" parameterType="company">
+		UPDATE tsys_company
+		SET
+		certificate_template = #{certificateTemplate}
+		,contract_template = #{contractTemplate}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
 </mapper>

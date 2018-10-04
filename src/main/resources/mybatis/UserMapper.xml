@@ -13,10 +13,10 @@
 		<result column="nickname" property="nickname" />
 		<result column="login_pwd_strength" property="loginPwdStrength" />		
 		<result column="level" property="level" />		
-		<result column="user_referee" property="userReferee" />
+		<result column="user_referee_type" property="userRefereeType" />
 		
-		<result column="agent" property="agent" />
-		<result column="salesman" property="salesman" />
+		<result column="user_referee" property="userReferee" />
+		<result column="agent_id" property="agentId" />
 		<result column="id_kind" property="idKind" />
 		<result column="id_no" property="idNo" />
 		<result column="real_name" property="realName" />
@@ -59,14 +59,14 @@
 			<if test="level != null and level != '' ">
 				AND t.level = #{level}
 			</if>	
+			<if test="userRefereeType != null and userRefereeType != '' ">
+				AND t.user_referee_type = #{userRefereeType}
+			</if>
 			<if test="userReferee != null and userReferee != '' ">
 				AND t.user_referee = #{userReferee}
 			</if>	
-			<if test="agent != null and agent != '' ">
-				AND t.agent = #{agent}
-			</if>
-			<if test="salesman != null and salesman != '' ">
-				AND t.salesman = #{salesman}
+			<if test="agentId != null and agentId != '' ">
+				AND t.agent_id = #{agentId}
 			</if>
 			<if test="mobile != null and mobile != '' ">
 				AND t.mobile = #{mobile}
@@ -147,10 +147,10 @@
 		,t.nickname
 		,t.login_pwd_strength
 		,t.level
+		,t.user_referee_type
 		,t.user_referee
 		
-		,t.agent
-		,t.salesman
+		,t.agent_id
 		,t.id_kind
 		,t.id_no
 		,t.real_name
@@ -199,9 +199,9 @@
 		,login_pwd_strength
 		,level
 		
+		,user_referee_type
 		,user_referee
-		,agent
-		,salesman
+		,agent_id
 		,id_kind
 		,id_no
 		
@@ -235,9 +235,9 @@
 		,#{loginPwdStrength}
 		,#{level}
 		
+		,#{userRefereeType}
 		,#{userReferee}
-		,#{agent}
-		,#{salesman}
+		,#{agentId}
 		,#{idKind}
 		,#{idNo}
 		
@@ -273,9 +273,10 @@
 	<update id="update_referee" parameterType="user">
 		UPDATE tstd_user
 		SET
-		user_referee= #{userReferee}
-		,updater=#{updater}
-		,update_datetime=#{updateDatetime}
+		user_referee_type = #{userRefereeType}
+		,user_referee = #{userReferee}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
 		WHERE
 		user_id = #{userId}	
 	</update>
@@ -301,15 +302,6 @@
 		SET
 		 trade_pwd = #{tradePwd}
 		,trade_pwd_strength = #{tradePwdStrength}
-		WHERE
-		user_id = #{userId}	
-	</update>
-	
-	<update id="update_resp_area" parameterType="user">
-		UPDATE tstd_user
-		SET
-		 updater=#{updater}
-		 ,update_datetime=#{updateDatetime}
 		WHERE
 		user_id = #{userId}	
 	</update>

@@ -13,5 +13,5 @@ public interface ISettleDAO extends IBaseDAO<Settle> {
     String NAMESPACE = ISettleDAO.class.getName().concat(".");
 
     // 修改参考订单状态
-    public int updateStatusByRef(Settle data);
+    public int updateStatusByRefCode(Settle data);
 }

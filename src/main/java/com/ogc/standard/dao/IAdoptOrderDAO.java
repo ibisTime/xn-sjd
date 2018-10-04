@@ -18,4 +18,6 @@ public interface IAdoptOrderDAO extends IBaseDAO<AdoptOrder> {
 
     // 支付回调成功
     void updatePaySuccess(AdoptOrder data);
+
+    void updateSettleStatus(AdoptOrder data);
 }

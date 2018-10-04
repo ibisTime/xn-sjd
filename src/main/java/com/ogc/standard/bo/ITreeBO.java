@@ -31,7 +31,7 @@ public interface ITreeBO extends IPaginableBO<Tree> {
     public void refreshTree(Tree data);
 
     // 认养古树
-    public void refreshAdoptTree(String code, String curOrderCode);
+    public void refreshAdoptTree(Tree tree, String curOrderCode);
 
     // 取消认养
     public void refreshCancelTree(Tree tree);
@@ -71,9 +71,6 @@ public interface ITreeBO extends IPaginableBO<Tree> {
     public long getTotalCountByOwnerId(String ownerId);
 
     public List<Tree> queryTreeListByOrderCode(String orderCode);
-
-    // 获取订单下的古树
-    public List<Tree> queryTreeListByOrderCode(String orderCode, String status);
 
     public List<Tree> queryTreeList(Tree condition);
 

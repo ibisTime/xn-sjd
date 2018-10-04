@@ -24,6 +24,7 @@ import com.ogc.standard.domain.Product;
 import com.ogc.standard.domain.ProductSpecs;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.dto.res.XN629048Res;
+import com.ogc.standard.enums.EAdoptOrderSettleStatus;
 import com.ogc.standard.enums.EAdoptOrderStatus;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECurrency;
@@ -70,6 +71,7 @@ public class AdoptOrderBOImpl extends PaginableBOImpl<AdoptOrder> implements
             data.setApplyUser(user.getUserId());
             data.setApplyDatetime(new Date());
             data.setStatus(EAdoptOrderStatus.TO_PAY.getCode());
+            data.setSettleStatus(EAdoptOrderSettleStatus.NO_SETTLE.getCode());
             adoptOrderDAO.insert(data);
         }
         return code;
@@ -91,6 +93,7 @@ public class AdoptOrderBOImpl extends PaginableBOImpl<AdoptOrder> implements
         data.setPayAmount(data.getAmount());
         data.setPayDatetime(nowDate);
         data.setBackJfAmount(backjfAmount);
+        data.setSettleStatus(EAdoptOrderSettleStatus.TO_SETTLE.getCode());
         data.setRemark("余额支付成功");
         adoptOrderDAO.updatePayYueSuccess(data);
     }
@@ -119,9 +122,19 @@ public class AdoptOrderBOImpl extends PaginableBOImpl<AdoptOrder> implements
         data.setPayAmount(payAmount);
         data.setPayDatetime(nowDate);
         data.setBackJfAmount(backJfAmount);
+        data.setSettleStatus(EAdoptOrderSettleStatus.TO_SETTLE.getCode());
         data.setRemark("第三方支付成功");
         adoptOrderDAO.updatePaySuccess(data);
+    }
 
+    @Override
+    public void refreshSettleStatus(AdoptOrder data, String updater,
+            String remark) {
+        data.setSettleStatus(EAdoptOrderSettleStatus.SETTLE.getCode());
+        data.setUpdater(updater);
+        data.setUpdateDatetime(new Date());
+        data.setRemark("已完成结算处理");
+        adoptOrderDAO.updateSettleStatus(data);
     }
 
     @Override

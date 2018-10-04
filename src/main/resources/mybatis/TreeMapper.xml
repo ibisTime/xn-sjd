@@ -45,6 +45,12 @@
 			<if test="ownerId != null and ownerId != '' ">
 				AND t.owner_id = #{ownerId}
 			</if>
+			<if test="ownerList != null and ownerList != '' ">
+				AND t.owner_id in 
+                <foreach item="item" index="index" collection="ownerList" open="(" separator="," close=")">
+	            	#{item}
+                </foreach> 
+			</if>
 			<if test="treeNumber != null and treeNumber != '' ">
 				AND t.tree_number = #{treeNumber}
 			</if>

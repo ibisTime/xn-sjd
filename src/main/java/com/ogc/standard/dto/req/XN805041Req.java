@@ -14,7 +14,9 @@ public class XN805041Req {
     @NotBlank
     private String loginPwd; // 登录密码
 
-    private String userReferee; // 推荐人(选填)
+    private String userRefereeType;// 推荐人类型
+
+    private String userReferee; // 推荐人手机号
 
     @NotBlank
     private String smsCaptcha; // 手机验证码
@@ -34,6 +36,14 @@ public class XN805041Req {
     private String city; // 市(选填)
 
     private String area; // 区(选填)
+
+    public String getUserRefereeType() {
+        return userRefereeType;
+    }
+
+    public void setUserRefereeType(String userRefereeType) {
+        this.userRefereeType = userRefereeType;
+    }
 
     public String getLongitude() {
         return longitude;

@@ -27,11 +27,7 @@ public class XN802301 extends AProcessor {
     */
     @Override
     public Object doBusiness() throws BizException {
-        synchronized (IAccountAO.class) {
-
-            return accountAO.getAccountByUserId(req.getUserId(),
-                req.getCurrency());
-        }
+        return accountAO.getAccountByUserId(req.getUserId(), req.getCurrency());
     }
 
     /** 

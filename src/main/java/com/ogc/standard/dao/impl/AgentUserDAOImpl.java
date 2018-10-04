@@ -47,6 +47,11 @@ public class AgentUserDAOImpl extends AMybatisTemplate implements IAgentUserDAO 
     }
 
     @Override
+    public int updatePass(AgentUser data) {
+        return super.update(NAMESPACE.concat("update_pass"), data);
+    }
+
+    @Override
     public int updatePhoto(AgentUser data) {
         return super.update(NAMESPACE.concat("update_photo"), data);
     }

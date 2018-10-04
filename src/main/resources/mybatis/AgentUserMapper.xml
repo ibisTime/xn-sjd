@@ -15,9 +15,13 @@
 		<result column="create_datetime" property="createDatetime" />
 		<result column="status" property="status" />
 		
+		<result column="user_referee" property="userReferee" />
+		<result column="level" property="level" />
 		<result column="parent_user_id" property="parentUserId" />
+		<result column="role_code" property="roleCode" />
 		<result column="updater" property="updater" />
 		<result column="update_datetime" property="updateDatetime" />
+		
 		<result column="remark" property="remark" />
 	</resultMap>
 	
@@ -50,12 +54,23 @@
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
 			</if>
-			
 			<if test="createDatetimeStart != null and createDatetimeStart != '' ">
 				<![CDATA[AND t.create_datetime >= #{createDatetimeStart}]]>
 			</if>
 			<if test="createDatetimeEnd != null and createDatetimeEnd != '' ">
 				<![CDATA[AND t.create_datetime <= #{createDatetimeEnd}]]>
+			</if>
+			<if test="userReferee != null and userReferee != '' ">
+				AND t.user_referee = #{userReferee}
+			</if>
+			<if test="level != null and level != '' ">
+				AND t.level = #{level}
+			</if>
+			<if test="parentUserId != null and parentUserId != '' ">
+				AND t.parent_user_id = #{parentUserId}
+			</if>
+			<if test="roleCode != null and roleCode != '' ">
+				AND t.role_code = #{roleCode}
 			</if>
 		</trim>
 	</sql>
@@ -74,7 +89,10 @@
 		,t.create_datetime
 		,t.status
 		
+		,t.user_referee
+		,t.level
 		,t.parent_user_id
+		,t.role_code
 		,t.updater
 		,t.update_datetime
 		,t.remark
@@ -111,7 +129,10 @@
 		
 		,create_datetime
 		,status
+		,user_referee
+		,level
 		,parent_user_id
+		,role_code
 		,updater
 		,update_datetime
 		,remark
@@ -131,7 +152,10 @@
 		
 		,#{createDatetime}
 		,#{status}
+		,#{userReferee}
+		,#{level}
 		,#{parentUserId}
+		,#{roleCode}
 		,#{updater}
 		,#{updateDatetime}
 		,#{remark}
@@ -142,6 +166,7 @@
 		UPDATE tsys_agent_user
 		SET
 		status = #{status}
+		,user_referee = #{userReferee}
 		,parent_user_id = #{parentUserId}
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
@@ -196,6 +221,18 @@
 		,trade_pwd_strength = #{tradePwdStrength}
 		,remark = #{remark}
 		WHERE user_id = #{userId}	
+	</update>
+	
+	<update id="update_pass" parameterType="agentUser">
+		UPDATE tsys_agent_user
+		SET
+		status = #{status}
+		,level = #{level}
+		,parent_user_id = #{parentUserId}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE user_id = #{userId}
 	</update>
 	
 	<update id="update_status" parameterType="agentUser">

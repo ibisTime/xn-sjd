@@ -20,12 +20,34 @@ public class XN730074Req extends BaseReq {
     @NotBlank
     private String approveResult;
 
+    // 是否顶级
+    private String isTop;
+
+    // 上级用户编号
+    private String parentUserId;
+
     // 更新人
     @NotBlank
     private String updater;
 
     // 备注
     private String remark;
+
+    public String getIsTop() {
+        return isTop;
+    }
+
+    public void setIsTop(String isTop) {
+        this.isTop = isTop;
+    }
+
+    public String getParentUserId() {
+        return parentUserId;
+    }
+
+    public void setParentUserId(String parentUserId) {
+        this.parentUserId = parentUserId;
+    }
 
     public String getUserId() {
         return userId;

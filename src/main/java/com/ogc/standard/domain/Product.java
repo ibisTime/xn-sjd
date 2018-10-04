@@ -120,7 +120,7 @@ public class Product extends ABaseDO {
     private Integer treeTotalCount;
 
     // 树木列表
-    private List<Tree> treeRemainList;
+    private List<Tree> treeList;
 
     // 剩余数量
     private Integer treeRemainCount;
@@ -182,12 +182,12 @@ public class Product extends ABaseDO {
         this.treeTotalCount = treeTotalCount;
     }
 
-    public List<Tree> getTreeRemainList() {
-        return treeRemainList;
+    public List<Tree> getTreeList() {
+        return treeList;
     }
 
-    public void setTreeRemainList(List<Tree> treeRemainList) {
-        this.treeRemainList = treeRemainList;
+    public void setTreeList(List<Tree> treeList) {
+        this.treeList = treeList;
     }
 
     public Integer getTreeRemainCount() {

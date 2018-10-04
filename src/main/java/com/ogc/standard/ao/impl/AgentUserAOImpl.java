@@ -26,6 +26,7 @@ import com.ogc.standard.domain.Company;
 import com.ogc.standard.dto.req.XN730072Req;
 import com.ogc.standard.dto.req.XN730073Req;
 import com.ogc.standard.enums.EAccountType;
+import com.ogc.standard.enums.EAgentUserLevel;
 import com.ogc.standard.enums.EAgentUserStatus;
 import com.ogc.standard.enums.EAgentUserType;
 import com.ogc.standard.enums.EBoolean;
@@ -53,6 +54,7 @@ public class AgentUserAOImpl implements IAgentUserAO {
     private ICompanyBO companyBO;
 
     @Override
+    @Transactional
     public String doRegister(String mobile, String loginPwd, String smsCaptcha) {
         // 验证手机号是否存在
         agentUserBO.isMobileExist(mobile);
@@ -62,6 +64,9 @@ public class AgentUserAOImpl implements IAgentUserAO {
 
         // 注册用户
         String userId = agentUserBO.doRegister(mobile, loginPwd);
+
+        // 保存公司
+        companyBO.saveCompany(userId);
 
         // 分配人民币账户
         accountBO.distributeAccount(userId, EAccountType.AGENT,
@@ -100,14 +105,28 @@ public class AgentUserAOImpl implements IAgentUserAO {
     public String doAddAgent(XN730072Req req) {
         // 验证手机号是否存在
         agentUserBO.isMobileExist(req.getMobile());
+
+        String level = null;
+        if (EBoolean.YES.getCode().equals(req.getIsTop())) {
+            req.setParentUserId("0");
+            level = EAgentUserLevel.FIRST.getCode();
+        } else {
+            AgentUser parentAgentUser = agentUserBO.getAgentUser(req
+                .getParentUserId());
+            checkAgent(parentAgentUser);
+            level = Integer.valueOf(parentAgentUser.getLevel()) + 1 + "";
+        }
+
         String loginPwd = RandomUtil.generate6();
-        String userId = agentUserBO.doAddAgentUser(req.getMobile(), loginPwd);
+        String userId = agentUserBO.doAddAgentUser(req.getMobile(), loginPwd,
+            level, req.getParentUserId());
         companyBO.saveCompany(req, userId);
+
         // 发送短信
         smsOutBO.sendSmsOut(
             req.getMobile(),
             String.format(SysConstants.DO_ADD_USER_CN,
-                PhoneUtil.hideMobile(req.getMobile())),
+                PhoneUtil.hideMobile(req.getMobile()), loginPwd),
             ECaptchaType.AG_REG.getCode());
 
         return userId;
@@ -117,7 +136,7 @@ public class AgentUserAOImpl implements IAgentUserAO {
     @Transactional
     public void commitCompany(XN730073Req req) {
         AgentUser agentUser = agentUserBO.getAgentUser(req.getUserId());
-        if (EAgentUserType.Agent.getCode().equals(agentUser.getType())) {
+        if (!EAgentUserType.Agent.getCode().equals(agentUser.getType())) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(), "当前用户不是代理商");
         }
         if (!EAgentUserStatus.TO_FILL.getCode().equals(agentUser.getStatus())
@@ -128,44 +147,95 @@ public class AgentUserAOImpl implements IAgentUserAO {
         }
 
         // 获取上级代理商信息
+        String userReferee = null;
         String parentUserId = null;
-        if (StringUtils.isNotBlank(req.getParentMobile())) {
-            AgentUser parentAgentUser = agentUserBO.getAgentUserByMobile(req
-                .getParentMobile());
+        if (StringUtils.isNotBlank(req.getRefUserMobile())) {
+            AgentUser refUserAgentUser = agentUserBO.getAgentUserByMobile(req
+                .getRefUserMobile());
+            userReferee = refUserAgentUser.getUserId();
             if (!EAgentUserType.Agent.getCode().equals(
-                parentAgentUser.getType())) {
+                refUserAgentUser.getType())) {
                 throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                     "推荐用户不是代理商");
             }
             if (!EAgentUserStatus.NORMAL.getCode().equals(
-                parentAgentUser.getStatus())) {
+                refUserAgentUser.getStatus())) {
                 throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                    "推荐用户状态异常");
+                    "推荐用户状态被锁定，请先解锁！");
+            }
+            if (EAgentUserLevel.FOUR.getCode().equals(
+                refUserAgentUser.getLevel())) {
+                parentUserId = null;
+            } else {
+                parentUserId = refUserAgentUser.getUserId();
             }
         }
 
         // 更新资料
-        agentUserBO.refreshToApprove(agentUser, parentUserId, req.getUserId(),
-            "资料提交待审核");
+        agentUserBO.refreshToApprove(agentUser, userReferee, parentUserId,
+            req.getUserId(), "资料提交待审核");
         companyBO.refreshCompany(req);
+    }
+
+    private void checkAgent(AgentUser parentAgentUser) {
+        if (!EAgentUserType.Agent.getCode().equals(parentAgentUser.getType())) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "上级用户不是代理商");
+        }
+        if (StringUtils.isBlank(parentAgentUser.getLevel())) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "上级用户代理等级不存在");
+        }
+        if (!EAgentUserStatus.NORMAL.getCode().equals(
+            parentAgentUser.getStatus())) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "上级用户状态被锁定，请先解锁！");
+        }
+        if (EAgentUserLevel.FOUR.getCode().equals(parentAgentUser.getLevel())) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "上级用户是四级代理，不能往下添加");
+        }
     }
 
     @Override
     public void approveAgentUser(String userId, String approveResult,
-            String updater, String remark) {
+            String isTop, String parentUserId, String updater, String remark) {
         AgentUser agentUser = agentUserBO.getAgentUser(userId);
         if (!EAgentUserStatus.TO_APPROVE.getCode()
             .equals(agentUser.getStatus())) {
-            throw new BizException("xn0000", "当前用户不处于待审核状态！");
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "当前用户不处于待审核状态！");
         }
 
-        String status = null;
         if (EBoolean.YES.getCode().equals(approveResult)) {
-            status = EAgentUserStatus.NORMAL.getCode();
+            pass(agentUser, isTop, parentUserId, updater, remark);
         } else {
-            status = EAgentUserStatus.APPROVE_NO.getCode();
+            agentUserBO.refreshStatus(userId,
+                EAgentUserStatus.APPROVE_NO.getCode(), updater, remark);
         }
-        agentUserBO.refreshStatus(userId, status, updater, remark);
+    }
+
+    private void pass(AgentUser agentUser, String isTop, String parentUserId,
+            String updater, String remark) {
+        if (StringUtils.isBlank(isTop)) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "是否顶级不能为空");
+        }
+
+        String level = null;
+        if (EBoolean.YES.getCode().equals(isTop)) {// 判断是否顶级
+            level = EAgentUserLevel.FIRST.getCode();
+            parentUserId = "0";
+        } else {
+            if (StringUtils.isBlank(parentUserId)) {
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                    "上级用户编号不能为空");
+            }
+            AgentUser parentAgentUser = agentUserBO.getAgentUser(parentUserId);
+            checkAgent(parentAgentUser);
+            level = Integer.valueOf(parentAgentUser.getLevel()) + 1 + "";
+        }
+
+        agentUserBO
+            .refreshPass(agentUser, level, parentUserId, updater, remark);
     }
 
     @Override
@@ -261,10 +331,12 @@ public class AgentUserAOImpl implements IAgentUserAO {
         AgentUser agentUser = agentUserBO.getAgentUser(userId);
 
         String status = null;
-        if (EAgentUserStatus.CANCEL.getCode().equals(agentUser.getStatus())) {
-            status = EAgentUserStatus.TO_APPROVE.getCode();
+        if (EAgentUserStatus.Ren_Locked.getCode().equals(agentUser.getStatus())
+                || EAgentUserStatus.Li_Locked.getCode().equals(
+                    agentUser.getStatus())) {
+            status = EAgentUserStatus.NORMAL.getCode();
         } else {
-            status = EAgentUserStatus.CANCEL.getCode();
+            status = EAgentUserStatus.Ren_Locked.getCode();
         }
 
         agentUserBO.refreshStatus(userId, status, updater, remark);
@@ -309,8 +381,15 @@ public class AgentUserAOImpl implements IAgentUserAO {
     }
 
     private void initAgentUser(AgentUser data) {
-        Company company = companyBO.getCompanyByUserId(data.getUserId());
-        data.setCompany(company);
+        if (EAgentUserType.Agent.getCode().equals(data.getType())) {
+            Company company = companyBO.getCompanyByUserId(data.getUserId());
+            data.setCompany(company);
+            if (StringUtils.isNotBlank(data.getParentUserId())
+                    && !EBoolean.NO.getCode().equals(data.getParentUserId())) {
+                AgentUser parentAgentUser = agentUserBO.getAgentUser(data
+                    .getParentUserId());
+                data.setParentAgentUser(parentAgentUser);
+            }
+        }
     }
-
 }

@@ -2,6 +2,7 @@ package com.ogc.standard.domain;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 import com.ogc.standard.dao.base.ABaseDO;
 
@@ -75,6 +76,9 @@ public class AdoptOrder extends ABaseDO {
     // 积分返点金额
     private BigDecimal backJfAmount;
 
+    // 结算状态
+    private String settleStatus;
+
     // 更新人
     private String updater;
 
@@ -99,6 +103,54 @@ public class AdoptOrder extends ABaseDO {
     private Date endDatetimeStart;// 认养结束时间起
 
     private Date endDatetimeEnd;// 认养结束时间止
+
+    private Product product;
+
+    private String ownerContractTemplate;// 产权方协议模板
+
+    private List<AdoptOrderTree> adoptOrderTreeList;
+
+    private List<Tree> treeList;
+
+    public String getSettleStatus() {
+        return settleStatus;
+    }
+
+    public void setSettleStatus(String settleStatus) {
+        this.settleStatus = settleStatus;
+    }
+
+    public String getOwnerContractTemplate() {
+        return ownerContractTemplate;
+    }
+
+    public void setOwnerContractTemplate(String ownerContractTemplate) {
+        this.ownerContractTemplate = ownerContractTemplate;
+    }
+
+    public List<AdoptOrderTree> getAdoptOrderTreeList() {
+        return adoptOrderTreeList;
+    }
+
+    public void setAdoptOrderTreeList(List<AdoptOrderTree> adoptOrderTreeList) {
+        this.adoptOrderTreeList = adoptOrderTreeList;
+    }
+
+    public List<Tree> getTreeList() {
+        return treeList;
+    }
+
+    public void setTreeList(List<Tree> treeList) {
+        this.treeList = treeList;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
 
     public Date getApplyDatetimeStart() {
         return applyDatetimeStart;

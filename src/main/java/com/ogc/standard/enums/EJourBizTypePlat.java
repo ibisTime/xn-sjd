@@ -11,16 +11,56 @@ import com.ogc.standard.exception.BizException;
  * @history:
  */
 public enum EJourBizTypePlat {
+    // 人民币账户
+    CHARGE("charge", "充值"),
+
+    WITHDRAW_FEE("withdraw_fee", "取现手续费"),
 
     WITHDRAW_TRANS_FEE("withdraw_trans_fee", "取现转账费"),
 
     WITHDRAW_ENTER("withdraw_enter", "提现回录"),
 
-    ADOPT_DEDUCT("adopt_deduct", "认养提成"),
+    ADOPT_DIST("adopt_dist", "认养分成"),
 
-    TOOL_DEDUCT("tool_deduct", "道具购买抵扣"),
+    ADOPT_PROFIT("adopt_profit", "认养收益"),
 
-    DIFF_EMPTY_DEDUCT("diff_empty_deduct", "级差轮空提成");
+    HC("hc", "红冲"),
+
+    LB("lb", "蓝补"),
+
+    // 碳泡泡账户
+    ADOPT_DAY_BACK("adopt_day_back", "认养消费每日收取碳泡泡"),
+
+    SHARE("share", "分享"),
+
+    PRESENT("present", "赠送"),
+
+    // 积分账户
+    REGIST("reg", "注册送积分"),
+
+    BIND_MOBILE("bind_mobile", "绑定手机"),
+
+    BIND_email("bind_email", "绑定邮箱"),
+
+    UPLOAD_PHOTO("upload_photo", "上传头像"),
+
+    COMPLETE_INFO("complete_info", "完善用户信息"),
+
+    REAL_AUTH("real_auth", "实名认证"),
+
+    SIGN("sign", "签到"),
+
+    ONE_ADOPT_BACK("one_adopt_back", "直推认养消费返积分"),
+
+    TWO_ADOPT_BACK("two_adopt_back", "间推认养消费返积分"),
+
+    INVITE_USER("invite_user", "邀请好友注册"),
+
+    ADOPT_BUY_DEDUCT("adopt_buy_deduct", "认养抵扣"),
+
+    ADOPT_PAY_BACK("adopt_pay_back", "认养消费返利"),
+
+    TOOL_BUY("tool_buy", "购买道具");
 
     public static EJourBizTypePlat getBizType(String code) {
         Map<String, EJourBizTypePlat> map = getBizTypeMap();

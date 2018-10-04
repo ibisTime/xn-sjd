@@ -1,5 +1,6 @@
 package com.ogc.standard.bo.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -17,6 +18,7 @@ import com.ogc.standard.dto.req.XN629600Req;
 import com.ogc.standard.enums.EApplyBindMaintainStatus;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.exception.BizException;
+import com.ogc.standard.exception.EBizErrorCode;
 
 @Component
 public class ApplyBindMaintainBOImpl extends PaginableBOImpl<ApplyBindMaintain>
@@ -49,6 +51,31 @@ public class ApplyBindMaintainBOImpl extends PaginableBOImpl<ApplyBindMaintain>
         if (StringUtils.isNotBlank(data.getCode())) {
             applyBindMaintainDAO.approveApplyBindMaintain(data);
         }
+    }
+
+    @Override
+    public void doCheckBindMaintain(String ownerId) {
+        ApplyBindMaintain condition = new ApplyBindMaintain();
+        condition.setOwnerId(ownerId);
+        condition.setStatus(EApplyBindMaintainStatus.BIND.getCode());
+        int count = (int) applyBindMaintainDAO.selectTotalCount(condition);
+        if (count < 0) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "请先绑定养护方");
+        }
+    }
+
+    @Override
+    public List<String> queryBindOwnerList(String maintainId) {
+        ApplyBindMaintain condition = new ApplyBindMaintain();
+        condition.setMaintainId(maintainId);
+        condition.setStatus(EApplyBindMaintainStatus.BIND.getCode());
+        List<ApplyBindMaintain> list = applyBindMaintainDAO
+            .selectList(condition);
+        List<String> ownerList = new ArrayList<String>();
+        for (ApplyBindMaintain applyBindMaintain : list) {
+            ownerList.add(applyBindMaintain.getOwnerId());
+        }
+        return ownerList;
     }
 
     @Override

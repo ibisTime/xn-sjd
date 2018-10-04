@@ -14,6 +14,8 @@ public interface IAdoptOrderTreeBO extends IPaginableBO<AdoptOrderTree> {
 
     public List<AdoptOrderTree> queryAdoptOrderTreeList(AdoptOrderTree condition);
 
+    public List<AdoptOrderTree> queryAdoptOrderTreeList(String orderCode);
+
     public AdoptOrderTree getAdoptOrderTree(String code);
 
     public void giveTree(AdoptOrderTree data);
