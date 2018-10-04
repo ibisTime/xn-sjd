@@ -14,6 +14,16 @@ public class XN629046Req {
     @NotBlank
     private String code;
 
+    private String isSettle;
+
+    public String getIsSettle() {
+        return isSettle;
+    }
+
+    public void setIsSettle(String isSettle) {
+        this.isSettle = isSettle;
+    }
+
     public String getCode() {
         return code;
     }

@@ -112,6 +112,26 @@ public class AdoptOrder extends ABaseDO {
 
     private List<Tree> treeList;
 
+    private List<String> statusList;
+
+    private List<Settle> settleList;
+
+    public List<Settle> getSettleList() {
+        return settleList;
+    }
+
+    public void setSettleList(List<Settle> settleList) {
+        this.settleList = settleList;
+    }
+
+    public List<String> getStatusList() {
+        return statusList;
+    }
+
+    public void setStatusList(List<String> statusList) {
+        this.statusList = statusList;
+    }
+
     public String getSettleStatus() {
         return settleStatus;
     }

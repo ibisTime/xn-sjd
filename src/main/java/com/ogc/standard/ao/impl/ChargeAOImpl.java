@@ -9,13 +9,19 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.IChargeAO;
 import com.ogc.standard.bo.IAccountBO;
+import com.ogc.standard.bo.IAgentUserBO;
 import com.ogc.standard.bo.IChargeBO;
 import com.ogc.standard.bo.IJourBO;
+import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Account;
+import com.ogc.standard.domain.AgentUser;
 import com.ogc.standard.domain.Charge;
+import com.ogc.standard.domain.SYSUser;
+import com.ogc.standard.domain.User;
 import com.ogc.standard.dto.res.XN802347Res;
+import com.ogc.standard.enums.EAccountType;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.EChannelType;
 import com.ogc.standard.enums.EChargeStatus;
@@ -32,13 +38,19 @@ public class ChargeAOImpl implements IChargeAO {
     private IAccountBO accountBO;
 
     @Autowired
-    private IUserBO userBO;
-
-    @Autowired
     private IChargeBO chargeBO;
 
     @Autowired
     private IJourBO jourBO;
+
+    @Autowired
+    private IUserBO userBO;
+
+    @Autowired
+    private ISYSUserBO sysUserBO;
+
+    @Autowired
+    private IAgentUserBO agentUserBO;
 
     @Override
     public String applyOrder(String accountNumber, BigDecimal amount,
@@ -100,24 +112,50 @@ public class ChargeAOImpl implements IChargeAO {
             Charge condition) {
         Paginable<Charge> page = chargeBO.getPaginable(start, limit, condition);
         List<Charge> chargeList = page.getList();
+        for (Charge charge : chargeList) {
+            initCharge(charge);
+        }
         return page;
     }
 
     @Override
     public List<Charge> queryChargeList(Charge condition) {
         List<Charge> list = chargeBO.queryChargeList(condition);
+        for (Charge charge : list) {
+            initCharge(charge);
+        }
         return list;
     }
 
     @Override
     public Charge getCharge(String code) {
-        return chargeBO.getCharge(code);
+        Charge charge = chargeBO.getCharge(code);
+        initCharge(charge);
+        return charge;
+    }
+
+    private void initCharge(Charge charge) {
+        if (EAccountType.OWNER.getCode().equals(charge.getAccountType())
+                || EAccountType.MAINTAIN.getCode().equals(
+                    charge.getAccountType())) {
+            SYSUser sysUser = sysUserBO.getSYSUser(charge.getApplyUser());
+            charge.setMobile(sysUser.getMobile());
+        } else if (EAccountType.AGENT.getCode().equals(charge.getAccountType())) {
+            AgentUser agentUser = agentUserBO.getAgentUser(charge
+                .getAccountType());
+            charge.setMobile(agentUser.getMobile());
+        } else if (EAccountType.CUSTOMER.getCode().equals(
+            charge.getAccountType())) {
+            User user = userBO.getUserUnCheck(charge.getApplyUser());
+            if (null != user) {
+                charge.setMobile(user.getMobile());
+            }
+        }
     }
 
     @Override
     public XN802347Res getChargeCheckInfo(String code) {
         XN802347Res res = new XN802347Res();
-
         return res;
     }
 }

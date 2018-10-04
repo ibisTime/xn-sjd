@@ -64,6 +64,16 @@ public class Settle extends ABaseDO {
     // 创建结束时间
     private Date createEndDatetime;
 
+    private AgentUser agentUser;
+
+    public AgentUser getAgentUser() {
+        return agentUser;
+    }
+
+    public void setAgentUser(AgentUser agentUser) {
+        this.agentUser = agentUser;
+    }
+
     public String getHandler() {
         return handler;
     }

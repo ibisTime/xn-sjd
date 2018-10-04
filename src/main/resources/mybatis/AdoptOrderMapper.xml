@@ -58,6 +58,12 @@
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
 			</if>
+			<if test="statusList != null and statusList != '' ">
+				AND t.status in 
+                <foreach item="item" index="index" collection="statusList" open="(" separator="," close=")">
+	            	#{item}
+                </foreach> 
+			</if>
 			<if test="startDatetimeStart != null and startDatetimeStart != '' ">
 				<![CDATA[AND t.start_datetime >= #{startDatetimeStart}]]>
 			</if>
@@ -195,6 +201,26 @@
 		,pay_datetime = #{payDatetime}
 		,back_jf_amount = #{backJfAmount}
 		,settle_status = #{settleStatus}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_startAdopt" parameterType="adoptOrder">
+		UPDATE try_adopt_order
+		SET
+		status = #{status}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_endAdopt" parameterType="adoptOrder">
+		UPDATE try_adopt_order
+		SET
+		status = #{status}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
 		,remark = #{remark}
 		WHERE code = #{code}
 	</update>

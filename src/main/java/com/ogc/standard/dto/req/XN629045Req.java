@@ -1,5 +1,7 @@
 package com.ogc.standard.dto.req;
 
+import java.util.List;
+
 /**
  * 分页查询个人捐赠专属认养订单
  * @author: jiafr 
@@ -25,6 +27,8 @@ public class XN629045Req extends APageReq {
     // 状态(0待支付1已取消2待认养3认养中4已到期)
     private String status;
 
+    private List<String> statusList;
+
     private String settleStatus;
 
     private String startDatetimeStart;// 认养开始时间起
@@ -34,6 +38,14 @@ public class XN629045Req extends APageReq {
     private String endDatetimeStart;// 认养结束时间起
 
     private String endDatetimeEnd;// 认养结束时间止
+
+    public List<String> getStatusList() {
+        return statusList;
+    }
+
+    public void setStatusList(List<String> statusList) {
+        this.statusList = statusList;
+    }
 
     public String getSettleStatus() {
         return settleStatus;

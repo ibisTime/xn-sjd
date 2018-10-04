@@ -30,6 +30,12 @@ public interface IAdoptOrderBO extends IPaginableBO<AdoptOrder> {
     public void paySuccess(AdoptOrder data, BigDecimal payAmount,
             BigDecimal backJfAmount);
 
+    // 开始订单
+    public void startAdoptOrder(AdoptOrder data);
+
+    // 结束订单
+    public void endAdoptOrder(AdoptOrder data);
+
     public void refreshSettleStatus(AdoptOrder data, String updater,
             String remark);
 

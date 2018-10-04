@@ -71,6 +71,16 @@ public class AdoptOrderDAOImpl extends AMybatisTemplate implements
     }
 
     @Override
+    public void updateStartAdopt(AdoptOrder data) {
+        super.update(NAMESPACE.concat("update_startAdopt"), data);
+    }
+
+    @Override
+    public void updateEndAdopt(AdoptOrder data) {
+        super.update(NAMESPACE.concat("update_endAdopt"), data);
+    }
+
+    @Override
     public void updateSettleStatus(AdoptOrder data) {
         super.update(NAMESPACE.concat("update_settleStatus"), data);
     }

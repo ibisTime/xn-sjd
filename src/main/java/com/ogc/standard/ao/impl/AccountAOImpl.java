@@ -1,6 +1,5 @@
 package com.ogc.standard.ao.impl;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -10,15 +9,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.IAccountAO;
 import com.ogc.standard.bo.IAccountBO;
+import com.ogc.standard.bo.IAgentUserBO;
+import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Account;
+import com.ogc.standard.domain.AgentUser;
+import com.ogc.standard.domain.SYSUser;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.enums.EAccountType;
 import com.ogc.standard.enums.ECurrency;
-import com.ogc.standard.enums.ESysUser;
-import com.ogc.standard.exception.BizException;
-import com.ogc.standard.exception.EBizErrorCode;
 
 @Service
 public class AccountAOImpl implements IAccountAO {
@@ -28,6 +28,12 @@ public class AccountAOImpl implements IAccountAO {
 
     @Autowired
     private IUserBO userBO;
+
+    @Autowired
+    private ISYSUserBO sysUserBO;
+
+    @Autowired
+    private IAgentUserBO agentUserBO;
 
     @Override
     @Transactional
@@ -43,28 +49,22 @@ public class AccountAOImpl implements IAccountAO {
     @Override
     public Paginable<Account> queryAccountPage(int start, int limit,
             Account condition) {
-
         Paginable<Account> page = accountBO.getPaginable(start, limit,
             condition);
-
         if (null != page) {
             List<Account> list = page.getList();
             for (Account account : list) {
-                User user = userBO.getUserUnCheck(account.getUserId());
-                if (null != user) {
-                    account.setRealName(user.getRealName());
-                    account.setMobile(user.getMobile());
-                }
-
+                initAccount(account);
             }
         }
-
         return page;
     }
 
     @Override
     public Account getAccount(String accountNumber) {
-        return accountBO.getAccount(accountNumber);
+        Account account = accountBO.getAccount(accountNumber);
+        initAccount(account);
+        return account;
     }
 
     @Override
@@ -73,73 +73,22 @@ public class AccountAOImpl implements IAccountAO {
         return accountBO.queryAccountList(userId, currency);
     }
 
-    @Override
-    @Transactional
-    public void transAmount(String fromUserId, String fromCurrency,
-            String toUserId, String toCurrency, BigDecimal transAmount,
-            String fromBizType, String toBizType, String fromBizNote,
-            String toBizNote, String refNo) {
-        // 检查平台账户是否已存在，如不存在就创建
-        checkSystemAccount(fromUserId, fromCurrency);
-        checkSystemAccount(toUserId, toCurrency);
-        accountBO.transAmount(fromUserId, fromCurrency, toUserId, toCurrency,
-            transAmount, fromBizType, toBizType, fromBizNote, toBizNote, refNo);
-    }
-
-    private void checkSystemAccount(String userId, String currency) {
-        ESysUser sysUser = ESysUser.getDirectionMap().get(userId);
-        if (sysUser != null) {
-            Account condition = new Account();
-            condition.setUserId(userId);
-            condition.setCurrency(currency);
-            if (accountBO.getTotalCount(condition) <= 0) {
-
+    private void initAccount(Account account) {
+        if (EAccountType.OWNER.getCode().equals(account.getType())
+                || EAccountType.MAINTAIN.getCode().equals(account.getType())) {
+            SYSUser sysUser = sysUserBO.getSYSUser(account.getUserId());
+            account.setRealName(sysUser.getRealName());
+            account.setMobile(sysUser.getMobile());
+        } else if (EAccountType.AGENT.getCode().equals(account.getType())) {
+            AgentUser agentUser = agentUserBO.getAgentUser(account.getUserId());
+            account.setRealName(agentUser.getRealName());
+            account.setMobile(agentUser.getMobile());
+        } else if (EAccountType.CUSTOMER.getCode().equals(account.getType())) {
+            User user = userBO.getUserUnCheck(account.getUserId());
+            if (null != user) {
+                account.setRealName(user.getRealName());
+                account.setMobile(user.getMobile());
             }
         }
-    }
-
-    @Override
-    public Account frozenAmount(String userId, String currency,
-            BigDecimal freezeAmount, String bizType, String bizNote,
-            String refNo) {
-        Account dbAccount = accountBO.getAccountByUser(userId, currency);
-        return accountBO.frozenAmount(dbAccount, freezeAmount, bizType,
-            bizNote, refNo);
-    }
-
-    @Override
-    public Account unfrozenAmount(String userId, String currency,
-            BigDecimal unfreezeAmount, String bizType, String bizNote,
-            String refNo) {
-        Account dbAccount = accountBO.getAccountByUser(userId, currency);
-        return accountBO.unfrozenAmount(dbAccount, unfreezeAmount, bizType,
-            bizNote, refNo);
-    }
-
-    @Override
-    public void transAmount(String fromAddress, String toAddress,
-            BigDecimal transAmount, String currency) {
-        Account fromAccount = getAccount(fromAddress, currency);
-        Account toAccount = getAccount(toAddress, currency);
-        if (fromAccount == null || toAccount == null) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "账户未找到");
-        }
-
-        if (transAmount.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "转账金额需大于0");
-        }
-
-        // 账户可用余额是否充足
-        if (fromAccount.getAmount().subtract(fromAccount.getFrozenAmount())
-            .compareTo(transAmount) == -1) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "个人账户可用余额不足");
-        }
-    }
-
-    private Account getAccount(String address, String currency) {
-        Account account = null;
-
-        return account;
     }
 }

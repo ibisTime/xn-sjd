@@ -24,7 +24,7 @@ public class XN629046 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return adoptOrderAO.getAdoptOrder(req.getCode());
+        return adoptOrderAO.getAdoptOrder(req.getCode(), req.getIsSettle());
     }
 
     @Override

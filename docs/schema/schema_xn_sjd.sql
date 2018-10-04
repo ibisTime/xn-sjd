@@ -9,79 +9,63 @@
  Target Server Version : 50633
  File Encoding         : utf-8
 
- Date: 10/02/2018 11:40:16 AM
+ Date: 10/05/2018 00:38:32 AM
 */
 
 SET NAMES utf8;
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
---  Table structure for `tzb_category`
+--  Table structure for `tb_tool`
 -- ----------------------------
-DROP TABLE IF EXISTS `tzb_category`;
-CREATE TABLE `tzb_category` (
+DROP TABLE IF EXISTS `tb_tool`;
+CREATE TABLE `tb_tool` (
   `code` varchar(32) NOT NULL COMMENT '编号',
-  `parent_code` varchar(32) DEFAULT NULL COMMENT '上级编号',
   `name` varchar(255) DEFAULT NULL COMMENT '名称',
+  `type` varchar(32) DEFAULT NULL COMMENT '分类',
   `pic` text COMMENT '图片',
-  `order_no` int(11) DEFAULT '0' COMMENT '顺序',
-  `status` varchar(4) DEFAULT NULL COMMENT '状态(0待上架/1已上架)',
+  `price` decimal(64,0) DEFAULT NULL COMMENT '价格',
+  `description` text COMMENT '描述',
+  `validity_term` int(11) DEFAULT NULL COMMENT '有效时长(单位小时)',
+  `status` varchar(4) DEFAULT NULL COMMENT '状态（0上架/1下架）',
+  `order_no` varchar(32) DEFAULT NULL COMMENT '序号',
   `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
   `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='分类';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
---  Table structure for `tzb_product`
+--  Table structure for `tb_tool_order`
 -- ----------------------------
-DROP TABLE IF EXISTS `tzb_product`;
-CREATE TABLE `tzb_product` (
+DROP TABLE IF EXISTS `tb_tool_order`;
+CREATE TABLE `tb_tool_order` (
   `code` varchar(32) NOT NULL COMMENT '编号',
-  `name` varchar(255) DEFAULT NULL COMMENT '名称',
-  `sell_type` varchar(4) DEFAULT NULL COMMENT '销售分类（0个人/1定向/2捐赠/3集体）',
-  `direct_type` varchar(32) DEFAULT NULL COMMENT '定向类型(1=等级 2=个人)',
-  `direct_object` varchar(255) DEFAULT NULL COMMENT '定向对象',
-  
-  `owner_id` varchar(32) DEFAULT NULL COMMENT '产权方编号',
-  `category_code` varchar(32) DEFAULT NULL COMMENT '产品分类',
-  `list_pic` text COMMENT '列表图片',
-  `banner_pic` text COMMENT '详情banner图',
-  `origin_place` varchar(255) DEFAULT NULL COMMENT '产地',
-  `scientific_name` varchar(255) DEFAULT NULL COMMENT '学名',
-  `variety` varchar(255) DEFAULT NULL COMMENT '品种',
-  `rank` varchar(32) DEFAULT NULL COMMENT '级别',
-  `description` text DEFAULT NULL COMMENT '产品描述',
-  `province` varchar(32) DEFAULT NULL COMMENT '省',
-  `city` varchar(32) DEFAULT NULL COMMENT '市',
-  `area` varchar(32) DEFAULT NULL COMMENT '区',
-  `town` varchar(32) DEFAULT NULL COMMENT '镇',
-  `raise_start_datetime` datetime DEFAULT NULL COMMENT '募集开始时间',
-  `raise_end_datetime` datetime DEFAULT NULL COMMENT '募集结束时间',
-  `raise_count` int(11) DEFAULT '0' COMMENT '募集总量',
-  `now_count` int(11) DEFAULT '0' COMMENT '已募集数量',
-  `location` varchar(32) DEFAULT NULL COMMENT 'UI位置',
-  `order_no` int(11) DEFAULT '0' COMMENT 'UI次序',
-  `status` varchar(4) DEFAULT NULL COMMENT '状态（0草稿/1已提交待审核/2审核不通过/3审核通过待上架/4已上架待认养/5已锁定/7已认养可下架/8已下架）',
-  `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
-  `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
-  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  `tool_code` varchar(32) DEFAULT NULL COMMENT '道具编号',
+  `tool_name` varchar(32) DEFAULT NULL COMMENT '道具名称',
+  `tool_pic` varchar(255) DEFAULT NULL COMMENT '道具图片',
+  `price` decimal(64,0) DEFAULT NULL COMMENT '购买价格',
+  `validity_term` int(11) DEFAULT NULL COMMENT '购买时长(单位小时)',
+  `user_id` varchar(32) DEFAULT NULL COMMENT '购买人',
+  `create_datetime` datetime DEFAULT NULL COMMENT '购买时间',
+  `status` varchar(32) DEFAULT NULL COMMENT '状态（0未使用/1已使用）',
   PRIMARY KEY (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='产品';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
---  Table structure for `tzb_product_specs`
+--  Table structure for `tb_tool_use_record`
 -- ----------------------------
-DROP TABLE IF EXISTS `tzb_product_specs`;
-CREATE TABLE `tzb_product_specs` (
+DROP TABLE IF EXISTS `tb_tool_use_record`;
+CREATE TABLE `tb_tool_use_record` (
   `code` varchar(32) NOT NULL COMMENT '编号',
-  `name` varchar(255) DEFAULT NULL COMMENT '规格名称',
-  `product_code` varchar(32) DEFAULT NULL COMMENT '产品编号',
-  `price` decimal(64,0) DEFAULT NULL COMMENT '认养价格',
-  `start_datetime` datetime DEFAULT NULL COMMENT '认养开始时间',
-  `end_datetime` datetime DEFAULT NULL COMMENT '认养结束时间',
+  `tool_order_code` varchar(32) DEFAULT NULL COMMENT '道具订单编号',
+  `adopt_tree_code` varchar(32) DEFAULT NULL COMMENT '认养权编号',
+  `status` varchar(32) DEFAULT NULL COMMENT '状态(1生效中 2已失效)',
+  `user_id` varchar(32) DEFAULT NULL COMMENT '使用人',
+  `create_datetime` datetime DEFAULT NULL COMMENT '使用时间',
+  `invalid_datetime` datetime DEFAULT NULL COMMENT '失效时间',
   PRIMARY KEY (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='产品规格';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `try_adopt_order`
@@ -116,37 +100,6 @@ CREATE TABLE `try_adopt_order` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='个人/定向/捐赠认养订单';
 
 -- ----------------------------
---  Table structure for `try_group_adopt_order`
--- ----------------------------
-DROP TABLE IF EXISTS `try_group_adopt_order`;
-CREATE TABLE `try_group_adopt_order` (
-  `code` varchar(32) NOT NULL COMMENT '编号',
-  `identify_code` varchar(32) DEFAULT NULL COMMENT '识别码',
-  `product_code` varchar(32) DEFAULT NULL COMMENT '认养产品编号',
-  `product_specs_name` varchar(255) DEFAULT NULL COMMENT '规格名称',
-  `price` decimal(64,0) DEFAULT NULL COMMENT '认养价格',
-  `start_datetime` datetime DEFAULT NULL COMMENT '认养开始时间',
-  `end_datetime` datetime DEFAULT NULL COMMENT '认养结束时间',
-  `quantity` int(11) DEFAULT '0' COMMENT '数量',
-  `amount` decimal(64,0) DEFAULT NULL COMMENT '金额',
-  `apply_user` varchar(32) DEFAULT NULL COMMENT '下单人编号',
-  `apply_datetime` datetime DEFAULT NULL COMMENT '下单时间',
-  `status` varchar(4) DEFAULT NULL COMMENT '状态',
-  `pay_type` varchar(4) DEFAULT NULL COMMENT '支付方式',
-  `pay_group` varchar(32) DEFAULT NULL COMMENT '支付组号',
-  `pay_code` varchar(32) DEFAULT NULL COMMENT '支付渠道编号',
-  `cny_deduct_amount` decimal(64,0) DEFAULT NULL COMMENT '人民币抵扣金额',
-  `jf_deduct_amount` decimal(64,0) DEFAULT NULL COMMENT '积分抵扣金额',
-  `pay_amount` decimal(64,0)  DEFAULT NULL COMMENT '支付金额',
-  `pay_datetime` datetime DEFAULT NULL COMMENT '支付时间',
-  `back_jf_amount` decimal(64,0) DEFAULT NULL COMMENT '积分返点金额',
-  `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
-  `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
-  `remark` text COMMENT '备注',
-  PRIMARY KEY (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='集体认养订单';
-
--- ----------------------------
 --  Table structure for `try_adopt_order_tree`
 -- ----------------------------
 DROP TABLE IF EXISTS `try_adopt_order_tree`;
@@ -164,49 +117,35 @@ CREATE TABLE `try_adopt_order_tree` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='认养权';
 
 -- ----------------------------
---  Table structure for `tb_tool`
+--  Table structure for `try_group_adopt_order`
 -- ----------------------------
-DROP TABLE IF EXISTS `tb_tool`;
-CREATE TABLE `tb_tool` (
+DROP TABLE IF EXISTS `try_group_adopt_order`;
+CREATE TABLE `try_group_adopt_order` (
   `code` varchar(32) NOT NULL COMMENT '编号',
-  `name` varchar(255) DEFAULT NULL COMMENT '名称',
-  `type` varchar(32) DEFAULT NULL COMMENT '分类',
-  `pic` text DEFAULT NULL COMMENT '图片',
-  `price` decimal(64,0) DEFAULT NULL COMMENT '价格',
-  `description` text DEFAULT NULL COMMENT '描述',
-  `validity_term` int(11) DEFAULT NULL COMMENT '有效时长(单位小时)',
-  `status` varchar(4) DEFAULT NULL COMMENT '状态（0上架/1下架）',
-  `order_no` varchar(32) DEFAULT NULL COMMENT '序号',
+  `identify_code` varchar(32) DEFAULT NULL COMMENT '识别码',
+  `product_code` varchar(32) DEFAULT NULL COMMENT '认养产品编号',
+  `product_specs_name` varchar(255) DEFAULT NULL COMMENT '规格名称',
+  `price` decimal(64,0) DEFAULT NULL COMMENT '认养价格',
+  `year` float DEFAULT NULL COMMENT '认养年限',
+  `start_datetime` datetime DEFAULT NULL COMMENT '认养开始时间',
+  `end_datetime` datetime DEFAULT NULL COMMENT '认养结束时间',
+  `quantity` int(11) DEFAULT '0' COMMENT '数量',
+  `amount` decimal(64,0) DEFAULT NULL COMMENT '金额',
+  `apply_user` varchar(32) DEFAULT NULL COMMENT '下单人编号',
+  `apply_datetime` datetime DEFAULT NULL COMMENT '下单时间',
+  `status` varchar(4) DEFAULT NULL COMMENT '状态',
+  `pay_type` varchar(4) DEFAULT NULL COMMENT '支付方式',
+  `pay_group` varchar(32) DEFAULT NULL COMMENT '支付组号',
+  `pay_code` varchar(32) DEFAULT NULL COMMENT '支付渠道编号',
+  `pay_amount` decimal(64,0) DEFAULT NULL COMMENT '支付金额',
+  `jf_deduct_amount` decimal(64,0) DEFAULT NULL COMMENT '积分抵扣金额',
+  `pay_datetime` datetime DEFAULT NULL COMMENT '支付时间',
+  `back_jf_amount` decimal(64,0) DEFAULT NULL COMMENT '积分返点金额',
   `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
   `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
-  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  `remark` text COMMENT '备注',
   PRIMARY KEY (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-DROP TABLE IF EXISTS `tb_tool_order`;
-CREATE TABLE `tb_tool_order` (
-  `code` varchar(32) NOT NULL COMMENT '编号',
-  `tool_code` varchar(32) DEFAULT NULL COMMENT '道具编号',
-  `tool_name` varchar(32) DEFAULT NULL COMMENT '道具名称',
-  `tool_pic` varchar(255) DEFAULT NULL COMMENT '道具图片',
-  `price` decimal(64，0) DEFAULT NULL COMMENT '购买价格',
-  `validity_term` int(11) DEFAULT NULL COMMENT '购买时长(单位小时)',
-  `user_id` varchar(32) DEFAULT NULL COMMENT '购买人',
-  `create_datetime` datetime DEFAULT NULL COMMENT '购买时间',
-  PRIMARY KEY (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-DROP TABLE IF EXISTS `tb_tool_use_record`;
-CREATE TABLE `tb_tool_use_record` (
-  `code` varchar(32) NOT NULL COMMENT '编号',
-  `tool_order_code` varchar(32) DEFAULT NULL COMMENT '道具订单编号',
-  `adopt_tree_code` varchar(32) DEFAULT NULL COMMENT '认养权编号',
-  `status` varchar(32) DEFAULT NULL COMMENT '状态(1生效中 2已失效)',
-  `user_id` varchar(32) DEFAULT NULL COMMENT '使用人',
-  `create_datetime` datetime DEFAULT NULL COMMENT '使用时间',
-  `invalid_datetime` datetime DEFAULT NULL COMMENT '失效时间',
-  PRIMARY KEY (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='集体认养订单';
 
 -- ----------------------------
 --  Table structure for `tsj_article`
@@ -241,14 +180,14 @@ DROP TABLE IF EXISTS `tsj_carbon_bubble_order`;
 CREATE TABLE `tsj_carbon_bubble_order` (
   `code` varchar(32) NOT NULL COMMENT '编号',
   `adopt_tree_code` varchar(32) DEFAULT NULL COMMENT '认养权编号',
-  `create_datetime` varchar(32) DEFAULT NULL COMMENT '生成时间',
-  `invalid_datetime` varchar(4) DEFAULT NULL COMMENT '过期时间',
-  `quantity` varchar(255) DEFAULT NULL COMMENT '碳泡泡数量',
-  `status` text COMMENT '状态（待收取、已收完、已过期）',
-  `taker` text COMMENT '收取人',
-  `taker_datetime` int(11) DEFAULT NULL COMMENT '收取时间',
+  `create_datetime` datetime DEFAULT NULL COMMENT '生成时间',
+  `invalid_datetime` datetime DEFAULT NULL COMMENT '过期时间',
+  `quantity` int(11) DEFAULT NULL COMMENT '碳泡泡数量',
+  `status` varchar(4) DEFAULT NULL COMMENT '状态（0待收取1已收取2已过期）',
+  `taker` varchar(32) DEFAULT NULL COMMENT '收取人',
+  `take_datetime` datetime DEFAULT NULL COMMENT '收取时间',
   PRIMARY KEY (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='碳泡泡产生订单';
 
 -- ----------------------------
 --  Table structure for `tsj_gift_order`
@@ -258,7 +197,7 @@ CREATE TABLE `tsj_gift_order` (
   `code` varchar(32) NOT NULL COMMENT '编号',
   `adopt_tree_code` varchar(32) DEFAULT NULL COMMENT '认养权编号',
   `name` varchar(255) DEFAULT NULL COMMENT '礼物名称',
-  `price` decimal(18,8) DEFAULT NULL COMMENT '礼物价格',
+  `price` decimal(64,0) DEFAULT NULL COMMENT '礼物价格',
   `description` varchar(255) DEFAULT NULL COMMENT '礼物描述',
   `receiver` varchar(255) DEFAULT NULL COMMENT '收货人',
   `re_address` varchar(255) DEFAULT NULL COMMENT '收货地址',
@@ -455,7 +394,7 @@ CREATE TABLE `tstd_read` (
   `read_datetime` datetime DEFAULT NULL COMMENT '阅读时间',
   `delete_datetime` datetime DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `tstd_sign_log`
@@ -470,7 +409,7 @@ CREATE TABLE `tstd_sign_log` (
   `location` varchar(255) DEFAULT NULL COMMENT '登录时定位',
   `create_datetime` datetime DEFAULT NULL COMMENT '签到时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=225 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `tstd_sms`
@@ -663,7 +602,7 @@ CREATE TABLE `tsys_company` (
   `charge_mobile` varchar(32) DEFAULT NULL COMMENT '负责人联系方式',
   `province` varchar(255) DEFAULT NULL COMMENT '省',
   `city` varchar(255) DEFAULT NULL COMMENT '市',
-  `area` varchar(255) DEFAULT NULL COMMENT '区',  
+  `area` varchar(255) DEFAULT NULL COMMENT '区',
   `address` varchar(255) DEFAULT NULL COMMENT '地址',
   `description` varchar(255) DEFAULT NULL COMMENT '简介',
   `bussiness_license` text COMMENT '营业执照',
@@ -690,7 +629,7 @@ CREATE TABLE `tsys_config` (
   `update_datetime` datetime DEFAULT NULL COMMENT '最近修改人',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `tsys_dict`
@@ -706,7 +645,7 @@ CREATE TABLE `tsys_dict` (
   `update_datetime` datetime DEFAULT NULL COMMENT '最近修改人',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=156 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `tsys_maintain_project`
@@ -788,7 +727,7 @@ CREATE TABLE `tsys_menu_role` (
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8392 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `tsys_role`
@@ -812,8 +751,8 @@ CREATE TABLE `tsys_settle` (
   `code` varchar(32) NOT NULL COMMENT '编号',
   `user_id` varchar(32) DEFAULT NULL COMMENT '用户编号',
   `user_kind` varchar(4) DEFAULT NULL COMMENT '用户种类',
-  `amount` decimal(18,8) DEFAULT NULL COMMENT '结算金额',
-  `rate` decimal(18,8) DEFAULT NULL COMMENT '结算比例',
+  `amount` decimal(64,0) DEFAULT NULL COMMENT '结算金额',
+  `rate` decimal(64,0) DEFAULT NULL COMMENT '结算比例',
   `ref_type` varchar(4) DEFAULT NULL COMMENT '参考类型',
   `ref_code` varchar(32) DEFAULT NULL COMMENT '参考订单编号',
   `ref_note` varchar(255) DEFAULT NULL COMMENT '参考说明',
@@ -851,6 +790,73 @@ CREATE TABLE `tsys_user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='系统用户';
 
 -- ----------------------------
+--  Table structure for `tzb_category`
+-- ----------------------------
+DROP TABLE IF EXISTS `tzb_category`;
+CREATE TABLE `tzb_category` (
+  `code` varchar(32) NOT NULL COMMENT '编号',
+  `parent_code` varchar(32) DEFAULT NULL COMMENT '上级编号',
+  `name` varchar(255) DEFAULT NULL COMMENT '名称',
+  `pic` text COMMENT '图片',
+  `order_no` int(11) DEFAULT '0' COMMENT '顺序',
+  `status` varchar(4) DEFAULT NULL COMMENT '状态(0待上架/1已上架)',
+  `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `remark` text COMMENT '备注',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+--  Table structure for `tzb_product`
+-- ----------------------------
+DROP TABLE IF EXISTS `tzb_product`;
+CREATE TABLE `tzb_product` (
+  `code` varchar(32) NOT NULL COMMENT '编号',
+  `name` varchar(255) DEFAULT NULL COMMENT '名称',
+  `sell_type` varchar(4) DEFAULT NULL COMMENT '销售分类（0个人/1定向/2捐赠/3集体）',
+  `direct_type` varchar(32) DEFAULT NULL COMMENT '定向类型(1=等级 2=个人)',
+  `direct_object` varchar(255) DEFAULT NULL COMMENT '定向对象',
+  `owner_id` varchar(32) DEFAULT NULL COMMENT '产权方编号',
+  `category_code` varchar(32) DEFAULT NULL COMMENT '产品分类',
+  `list_pic` text COMMENT '列表图片',
+  `banner_pic` text COMMENT '详情banner图',
+  `origin_place` varchar(255) DEFAULT NULL COMMENT '产地',
+  `scientific_name` varchar(255) DEFAULT NULL COMMENT '学名',
+  `variety` varchar(255) DEFAULT NULL COMMENT '品种',
+  `rank` varchar(32) DEFAULT NULL COMMENT '级别',
+  `description` text COMMENT '产品描述',
+  `province` varchar(32) DEFAULT NULL COMMENT '省',
+  `city` varchar(32) DEFAULT NULL COMMENT '市',
+  `area` varchar(32) DEFAULT NULL COMMENT '区',
+  `town` varchar(32) DEFAULT NULL COMMENT '镇',
+  `raise_start_datetime` datetime DEFAULT NULL COMMENT '募集开始时间',
+  `raise_end_datetime` datetime DEFAULT NULL COMMENT '募集结束时间',
+  `raise_count` int(11) DEFAULT '0' COMMENT '募集总量',
+  `now_count` int(11) DEFAULT '0' COMMENT '已募集数量',
+  `location` varchar(32) DEFAULT NULL COMMENT 'UI位置',
+  `order_no` int(11) DEFAULT '0' COMMENT 'UI次序',
+  `status` varchar(4) DEFAULT NULL COMMENT '状态（0草稿/1已提交待审核/2审核不通过/3审核通过待上架/4已上架待认养/5已锁定/7已认养可下架/8已下架）',
+  `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='产品';
+
+-- ----------------------------
+--  Table structure for `tzb_product_specs`
+-- ----------------------------
+DROP TABLE IF EXISTS `tzb_product_specs`;
+CREATE TABLE `tzb_product_specs` (
+  `code` varchar(32) NOT NULL COMMENT '编号',
+  `name` varchar(255) DEFAULT NULL COMMENT '规格名称',
+  `product_code` varchar(32) DEFAULT NULL COMMENT '产品编号',
+  `price` decimal(64,0) DEFAULT NULL COMMENT '认养价格',
+  `start_datetime` datetime DEFAULT NULL COMMENT '认养开始时间',
+  `end_datetime` datetime DEFAULT NULL COMMENT '认养结束时间',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='产品规格';
+
+-- ----------------------------
 --  Table structure for `tzb_tree`
 -- ----------------------------
 DROP TABLE IF EXISTS `tzb_tree`;
@@ -879,8 +885,27 @@ CREATE TABLE `tzb_tree` (
   `adopt_count` int(11) DEFAULT '0' COMMENT '认养次数',
   `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
   `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
-  `remark` text COMMENT '备注',
+  `remark` varchar(255) COMMENT '备注',
   PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+--  Table structure for `tsys_channel_bank`
+-- ----------------------------
+DROP TABLE IF EXISTS `tsys_channel_bank`;
+CREATE TABLE `tsys_channel_bank` (
+  `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT '编号（自增长）',
+  `bank_code` varchar(32) DEFAULT NULL COMMENT '银行编号',
+  `bank_name` varchar(32) DEFAULT NULL COMMENT '银行名称',
+  `channel_type` varchar(4) DEFAULT NULL COMMENT '渠道类型',
+  `status` varchar(4) DEFAULT NULL COMMENT '状态（启用/不启用）',
+  `channel_bank` varchar(32) DEFAULT NULL COMMENT '渠道给银行的代号',
+  `max_order` bigint(32) DEFAULT NULL COMMENT '笔数限制',
+  `order_amount` bigint(32) DEFAULT NULL COMMENT '单笔限额',
+  `day_amount` bigint(32) DEFAULT NULL COMMENT '每日限额',
+  `month_amount` bigint(32) DEFAULT NULL COMMENT '每月限额',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 SET FOREIGN_KEY_CHECKS = 1;

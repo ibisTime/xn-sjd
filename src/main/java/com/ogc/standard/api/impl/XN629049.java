@@ -31,7 +31,7 @@ public class XN629049 extends AProcessor {
         AdoptOrder condition = new AdoptOrder();
         condition.setApplyUser(req.getUserId());
         condition.setType(req.getType());
-        condition.setStatus(req.getStatus());
+        condition.setStatusList(req.getStatusList());
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
             column = IAdoptOrderAO.DEFAULT_ORDER_COLUMN;

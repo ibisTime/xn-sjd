@@ -13,7 +13,6 @@ import com.ogc.standard.ao.IJourAO;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IJourBO;
 import com.ogc.standard.bo.base.Paginable;
-import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.Jour;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.EJourStatus;
@@ -52,7 +51,6 @@ public class JourAOImpl implements IJourAO {
             throw new BizException("xn000000", "该流水<" + code + ">不处于待对账状态");
         }
         if (checkAmount.compareTo(BigDecimal.ZERO) != 0) {
-            Account account = accountBO.getAccount(jour.getAccountNumber());
             jourBO.doCheckJour(jour, EBoolean.NO, checkAmount, checkUser,
                 checkNote);
         } else {
@@ -105,31 +103,4 @@ public class JourAOImpl implements IJourAO {
         return jourBO.getTotalAmount(bizType, channelType, accountNumber,
             dateStart, dateEnd);
     }
-
-    // @Override
-    // public XN802901Res getTotalAmountByDate(String accountNumber,
-    // String dateStart, String dateEnd) {
-    // Jour condition = new Jour();
-    // condition.setAccountNumber(accountNumber);
-    // condition
-    // .setCreateDatetimeStart(DateUtil.getFrontDate(dateStart, false));
-    // condition.setCreateDatetimeEnd(DateUtil.getFrontDate(dateEnd, true));
-    //
-    // List<Jour> jourList = jourBO.queryJourList(condition);
-    // BigDecimal incomeAmount = BigDecimal.ZERO;// 收入金额
-    // BigDecimal withdrawAmount = BigDecimal.ZERO;// 取现金额
-    // for (Jour jour : jourList) {
-    // BigDecimal transAmount = jour.getTransAmount();
-    // if (transAmount.compareTo(BigDecimal.ZERO) == 1
-    // && !EJourBizTypeUser.AJ_WITHDRAW.getCode()
-    // .equals(jour.getBizType())) {// 取现解冻排除
-    // incomeAmount = incomeAmount.add(transAmount);
-    // }
-    // if (EJourBizTypeUser.AJ_WITHDRAW.getCode()
-    // .equals(jour.getBizType())) {
-    // withdrawAmount = withdrawAmount.add(transAmount);
-    // }
-    // }
-    // return new XN802901Res(incomeAmount, withdrawAmount.negate());
-    // }
 }

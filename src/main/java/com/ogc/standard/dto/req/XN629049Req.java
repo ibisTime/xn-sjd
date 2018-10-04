@@ -1,5 +1,7 @@
 package com.ogc.standard.dto.req;
 
+import java.util.List;
+
 import org.hibernate.validator.constraints.NotBlank;
 
 public class XN629049Req extends APageReq {
@@ -14,7 +16,15 @@ public class XN629049Req extends APageReq {
     private String userId;
 
     // 状态(0待支付1已取消2待认养3认养中4已到期)
-    private String status;
+    private List<String> statusList;
+
+    public List<String> getStatusList() {
+        return statusList;
+    }
+
+    public void setStatusList(List<String> statusList) {
+        this.statusList = statusList;
+    }
 
     public String getType() {
         return type;
@@ -30,13 +40,5 @@ public class XN629049Req extends APageReq {
 
     public void setUserId(String userId) {
         this.userId = userId;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 }

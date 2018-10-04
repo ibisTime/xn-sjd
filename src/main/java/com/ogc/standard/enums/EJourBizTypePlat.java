@@ -20,6 +20,8 @@ public enum EJourBizTypePlat {
 
     WITHDRAW_ENTER("withdraw_enter", "提现回录"),
 
+    ADOPT("adopt", "认养"),
+
     ADOPT_DIST("adopt_dist", "认养分成"),
 
     ADOPT_PROFIT("adopt_profit", "认养收益"),

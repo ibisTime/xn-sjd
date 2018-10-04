@@ -72,6 +72,16 @@ public class Charge extends ABaseDO {
     // 申请人
     private User payer;
 
+    private String mobile;
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
     public User getPayer() {
         return payer;
     }

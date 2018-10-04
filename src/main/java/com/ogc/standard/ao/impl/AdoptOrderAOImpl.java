@@ -24,6 +24,7 @@ import com.ogc.standard.bo.IProductBO;
 import com.ogc.standard.bo.IProductSpecsBO;
 import com.ogc.standard.bo.ISYSConfigBO;
 import com.ogc.standard.bo.ISYSUserBO;
+import com.ogc.standard.bo.ISettleBO;
 import com.ogc.standard.bo.ITreeBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
@@ -31,9 +32,11 @@ import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.AdoptOrder;
 import com.ogc.standard.domain.AdoptOrderTree;
+import com.ogc.standard.domain.AgentUser;
 import com.ogc.standard.domain.Company;
 import com.ogc.standard.domain.Product;
 import com.ogc.standard.domain.ProductSpecs;
+import com.ogc.standard.domain.Settle;
 import com.ogc.standard.domain.Tree;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.dto.res.BooleanRes;
@@ -42,6 +45,7 @@ import com.ogc.standard.enums.EAdoptOrderStatus;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EDirectType;
+import com.ogc.standard.enums.EJourBizTypePlat;
 import com.ogc.standard.enums.EJourBizTypeUser;
 import com.ogc.standard.enums.EPayType;
 import com.ogc.standard.enums.EProductStatus;
@@ -96,6 +100,9 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
 
     @Autowired
     private IDistributionOrderBO distributionOrderBO;
+
+    @Autowired
+    private ISettleBO settleBO;
 
     @Override
     @Transactional
@@ -217,15 +224,15 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
         Account sysCnyAccount = accountBO
             .getAccount(ESystemAccount.SYS_ACOUNT_CNY.getCode());
         accountBO.transAmount(userCnyAccount, sysCnyAccount, data.getAmount(),
-            EJourBizTypeUser.ADOPT.getCode(), EJourBizTypeUser.ADOPT.getCode(),
+            EJourBizTypeUser.ADOPT.getCode(), EJourBizTypePlat.ADOPT.getCode(),
             EJourBizTypeUser.ADOPT.getValue(),
-            EJourBizTypeUser.ADOPT.getValue(), data.getCode());
+            EJourBizTypePlat.ADOPT.getValue(), data.getCode());
 
         accountBO.transAmount(data.getApplyUser(), ESysUser.SYS_USER.getCode(),
             ECurrency.JF.getCode(), data.getAmount(),
-            EJourBizTypeUser.ADOPT.getCode(), EJourBizTypeUser.ADOPT.getCode(),
+            EJourBizTypeUser.ADOPT.getCode(), EJourBizTypePlat.ADOPT.getCode(),
             EJourBizTypeUser.ADOPT.getValue(),
-            EJourBizTypeUser.ADOPT.getValue(), data.getCode());
+            EJourBizTypePlat.ADOPT.getValue(), data.getCode());
 
         // 进行分销
         distributionOrderBO.distribution(data);
@@ -249,7 +256,7 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
     public void doCancelAdoptOrder() {
         logger.info("***************开始扫描未支付订单***************");
         AdoptOrder condition = new AdoptOrder();
-        condition.setStatus(EAdoptOrderStatus.TO_ADOPT.getCode());
+        condition.setStatus(EAdoptOrderStatus.TO_PAY.getCode());
         // 前15分钟还未支付的订单
         condition.setApplyDatetimeEnd(DateUtil.getRelativeDateOfMinute(
             new Date(), -15));
@@ -275,7 +282,34 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
                 treeBO.refreshCancelTree(tree);
             }
         }
+    }
 
+    public void doDailyAdoptOrder() {
+        logger.info("***************开始扫描已支付待认养订单***************");
+        AdoptOrder condition = new AdoptOrder();
+        condition.setStatus(EAdoptOrderStatus.TO_ADOPT.getCode());
+        condition.setStartDatetimeStart(new Date());
+        List<AdoptOrder> startAdoptOrderList = adoptOrderBO
+            .queryAdoptOrderList(condition);
+        if (CollectionUtils.isNotEmpty(startAdoptOrderList)) {
+            for (AdoptOrder adoptOrder : startAdoptOrderList) {
+                adoptOrderBO.startAdoptOrder(adoptOrder);
+            }
+        }
+        logger.info("***************结束扫描已支付待认养订单***************");
+
+        logger.info("***************开始扫描已认养订单***************");
+        AdoptOrder condition2 = new AdoptOrder();
+        condition2.setStatus(EAdoptOrderStatus.ADOPT.getCode());
+        condition.setEndDatetimeEnd(new Date());
+        List<AdoptOrder> endAdoptOrderList = adoptOrderBO
+            .queryAdoptOrderList(condition);
+        if (CollectionUtils.isNotEmpty(endAdoptOrderList)) {
+            for (AdoptOrder adoptOrder : endAdoptOrderList) {
+                adoptOrderBO.endAdoptOrder(adoptOrder);
+            }
+        }
+        logger.info("***************结束扫描已认养订单***************");
     }
 
     @Override
@@ -310,12 +344,23 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
     }
 
     @Override
-    public AdoptOrder getAdoptOrder(String code) {
+    public AdoptOrder getAdoptOrder(String code, String isSettle) {
         AdoptOrder data = adoptOrderBO.getAdoptOrder(code);
         initAdoptOrder(data);
         Company company = companyBO.getCompanyByUserId(data.getProduct()
             .getOwnerId());
         data.setOwnerContractTemplate(company.getContractTemplate());
+        if (EBoolean.YES.getCode().equals(isSettle)) {
+            List<Settle> settleList = settleBO.querySettleList(code);
+            if (CollectionUtils.isNotEmpty(settleList)) {
+                for (Settle settle : settleList) {
+                    AgentUser agentUser = agentUserBO.getAgentUser(settle
+                        .getUserId());
+                    settle.setAgentUser(agentUser);
+                }
+            }
+            data.setSettleList(settleList);
+        }
         return data;
     }
 

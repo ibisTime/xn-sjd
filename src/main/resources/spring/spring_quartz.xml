@@ -19,8 +19,9 @@
 		<property name="triggers">
 			<list>
 				<ref bean="toolUseRecordTrigger"/>
-<!-- 				<ref bean="adoptOrderTrigger"/>
- -->			</list>
+			    <ref bean="doCancelAdoptOrderTrigger"/>
+			    <ref bean="doDailyAdoptOrderTrigger"/>
+ 			</list>
 		</property>
 		<property name="autoStartup" value="true" />
 	</bean>
@@ -41,7 +42,7 @@
 	</bean>	
 	
 	<!-- 订单过期扫描 -->
-	<bean id="adoptOrderTrigger"
+	<bean id="doCancelAdoptOrderTrigger"
 		  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="doCancelAdoptOrder" />
 		<property name="cronExpression" value="0 */15 * * * ?"/><!-- 每15分钟执行 -->
@@ -51,6 +52,20 @@
 		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject" ref="adoptOrderAOImpl" />
 		<property name="targetMethod" value="doCancelAdoptOrder" />
+		<property name="concurrent" value="false" />
+	</bean> 
+	
+	<!-- 订单已支付或即将过期扫描 -->
+	<bean id="doDailyAdoptOrderTrigger"
+		  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="doDailyAdoptOrder" />
+		<property name="cronExpression" value="0 0 0 * * ?"/><!-- 每天零点执行 -->
+	</bean>
+	
+	<bean id="doDailyAdoptOrder"
+		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="adoptOrderAOImpl" />
+		<property name="targetMethod" value="doDailyAdoptOrder" />
 		<property name="concurrent" value="false" />
 	</bean> 
 

@@ -127,6 +127,23 @@ public class AdoptOrderBOImpl extends PaginableBOImpl<AdoptOrder> implements
         adoptOrderDAO.updatePaySuccess(data);
     }
 
+    // 开始订单
+    @Override
+    public void startAdoptOrder(AdoptOrder data) {
+        data.setStatus(EAdoptOrderStatus.ADOPT.getCode());
+        data.setRemark("开始认养");
+        adoptOrderDAO.updateStartAdopt(data);
+    }
+
+    // 结束订单
+    @Override
+    public void endAdoptOrder(AdoptOrder data) {
+        data.setStatus(EAdoptOrderStatus.END.getCode());
+        data.setRemark("结束认养");
+        adoptOrderDAO.updateStartAdopt(data);
+
+    }
+
     @Override
     public void refreshSettleStatus(AdoptOrder data, String updater,
             String remark) {

@@ -30,7 +30,7 @@ public interface IAdoptOrderAO {
 
     public List<AdoptOrder> queryAdoptOrderList(AdoptOrder condition);
 
-    public AdoptOrder getAdoptOrder(String code);
+    public AdoptOrder getAdoptOrder(String code, String isSettle);
 
     // 获取订单抵扣金额
     public XN629048Res getOrderDkAmount(String code);
