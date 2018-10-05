@@ -12,10 +12,12 @@ import com.ogc.standard.bo.IBizLogBO;
 import com.ogc.standard.bo.ICarbonBubbleOrderBO;
 import com.ogc.standard.bo.IGiveTreeRecordBO;
 import com.ogc.standard.bo.ITreeBO;
+import com.ogc.standard.bo.IVisitorBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.AdoptOrderTree;
 import com.ogc.standard.domain.GiveTreeRecord;
 import com.ogc.standard.domain.Tree;
+import com.ogc.standard.domain.Visitor;
 import com.ogc.standard.enums.EAdoptOrderTreeStatus;
 
 @Service
@@ -35,6 +37,9 @@ public class AdoptOrderTreeAOImpl implements IAdoptOrderTreeAO {
 
     @Autowired
     private IBizLogBO bizLogBO;
+
+    @Autowired
+    private IVisitorBO visitorBO;
 
     public void doDailyAdoptOrderTree() {
         AdoptOrderTree condition = new AdoptOrderTree();
@@ -61,6 +66,22 @@ public class AdoptOrderTreeAOImpl implements IAdoptOrderTreeAO {
     }
 
     @Override
+    public long leaveMessage(String code, String note, String userId) {
+        return bizLogBO.leaveMessage(code, note, userId);
+    }
+
+    @Override
+    public String visit(String code, String userId) {
+        // 查询前10条是否有此来访人，如果存在则删除
+        Visitor visitor = visitorBO.getTopTenVisitor(code, userId);
+        if (null != visitor) {
+            visitorBO.removeVisitor(visitor.getCode());
+        }
+
+        return visitorBO.saveVisitor(code, userId);
+    }
+
+    @Override
     public Paginable<AdoptOrderTree> queryAdoptOrderTreePage(int start,
             int limit, AdoptOrderTree condition) {
         Paginable<AdoptOrderTree> page = adoptOrderTreeBO.getPaginable(start,
@@ -72,7 +93,8 @@ public class AdoptOrderTreeAOImpl implements IAdoptOrderTreeAO {
     }
 
     @Override
-    public List<AdoptOrderTree> queryAdoptOrderTreeList(AdoptOrderTree condition) {
+    public List<AdoptOrderTree> queryAdoptOrderTreeList(
+            AdoptOrderTree condition) {
         List<AdoptOrderTree> list = adoptOrderTreeBO
             .queryAdoptOrderTreeList(condition);
         for (AdoptOrderTree adoptOrderTree : list) {

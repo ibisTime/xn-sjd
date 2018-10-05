@@ -25,6 +25,12 @@
 			<if test="type != null and type != '' ">
 				AND t.type = #{type}
 			</if>
+			<if test="typeList != null and typeList != '' ">
+                AND t.type in
+                <foreach item="item" index="index" collection="typeList" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
 			<if test="userId != null and userId != '' ">
 				AND t.user_id = #{userId}
 			</if>

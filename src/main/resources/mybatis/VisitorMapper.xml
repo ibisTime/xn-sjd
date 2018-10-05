@@ -9,6 +9,7 @@
 		<result column="photo" property="photo" />
 		<result column="create_datetime" property="createDatetime" />
 	</resultMap>
+	
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != '' ">
@@ -28,6 +29,7 @@
 			</if>
 		</trim>
 	</sql>
+	
 	<select id="select_visitor" parameterType="visitor" resultMap="visitor_DB_Result">
 		SELECT
 		t.code
@@ -69,15 +71,7 @@
 		)
 	</insert>
 
-	<update id="update_visitor" parameterType="visitor">
-		UPDATE tsj_visitor
-		SET
-		adopt_tree_code = #{adoptTreeCode}
-		,user_id = #{userId}
-		,photo = #{photo}
-		,create_datetime = #{createDatetime}
-		WHERE code = #{code}
-	</update>
-
-
+	<delete id="delete_visitor">
+		DELETE FROM tsj_visitor WHERE code = #{code}
+	</delete>
 </mapper>

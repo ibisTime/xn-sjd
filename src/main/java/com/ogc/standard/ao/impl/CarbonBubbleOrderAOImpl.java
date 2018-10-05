@@ -1,6 +1,5 @@
 package com.ogc.standard.ao.impl;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -17,6 +16,7 @@ import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.CarbonBubbleOrder;
 import com.ogc.standard.domain.User;
+import com.ogc.standard.enums.EBizLogType;
 import com.ogc.standard.enums.ECarbonBubbleOrderStatus;
 import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.exception.BizException;
@@ -54,12 +54,12 @@ public class CarbonBubbleOrderAOImpl implements ICarbonBubbleOrderAO {
         // 收取人碳泡泡账户加上碳泡泡
         Account tppAccount = accountBO.getAccountByUser(collector,
             ECurrency.TPP.getCode());
-        accountBO.changeAmount(tppAccount, new BigDecimal(data.getQuantity()),
-            null, null, data.getCode(), null, null);// TODO 流水业务类型枚举
+        accountBO.changeAmount(tppAccount, data.getQuantity(), null, null,
+            data.getCode(), null, null);// TODO 流水业务类型枚举
 
         // 添加日志
         bizLogBO.gatherCarbonBubble(data.getAdoptTreeCode(), data.getQuantity(),
-            collector);
+            collector, EBizLogType.GATHER.getCode());
     }
 
     @Override

@@ -23,11 +23,6 @@ public class BizLogAOImpl implements IBizLogAO {
     private IUserBO userBO;
 
     @Override
-    public long leaveMessage(String adoptTreeCode, String note, String userId) {
-        return bizLogBO.leaveMessage(adoptTreeCode, note, userId);
-    }
-
-    @Override
     public XN629900Res weekTpp(String userId, String toUserId) {
         XN629900Res res = new XN629900Res();
 
