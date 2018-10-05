@@ -18,7 +18,7 @@ public interface IBizLogBO extends IPaginableBO<BizLog> {
             String userId, String type);
 
     // 本周用户碳泡泡总量
-    public long getWeekQuantitySum(String adoptUserId, String userId);
+    public BigDecimal getWeekQuantitySum(String adoptUserId, String userId);
 
     public List<BizLog> queryBizLogList(BizLog condition);
 

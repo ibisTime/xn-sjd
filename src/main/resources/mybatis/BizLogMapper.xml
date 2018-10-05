@@ -76,7 +76,7 @@
 	</select>
 
 	<select id="select_bizLog_quantitySum" parameterType="bizLog"
-		resultType="java.lang.Long">
+		resultType="java.math.BigDecimal">
 		SELECT IFNULL(SUM(t.quantity), 0) FROM tsys_biz_log t
 		<include refid="where_condition" />
 	</select>

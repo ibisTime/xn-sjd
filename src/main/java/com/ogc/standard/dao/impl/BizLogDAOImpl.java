@@ -1,5 +1,6 @@
 package com.ogc.standard.dao.impl;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
@@ -34,9 +35,9 @@ public class BizLogDAOImpl extends AMybatisTemplate implements IBizLogDAO {
     }
 
     @Override
-    public long selectQuantitySum(BizLog condition) {
+    public BigDecimal selectQuantitySum(BizLog condition) {
         return super.select(NAMESPACE.concat("select_bizLog_quantitySum"),
-            condition, Long.class);
+            condition, BigDecimal.class);
     }
 
     @Override
@@ -53,8 +54,8 @@ public class BizLogDAOImpl extends AMybatisTemplate implements IBizLogDAO {
 
     @Override
     public List<BizLog> selectList(BizLog condition, int start, int count) {
-        return super.selectList(NAMESPACE.concat("select_bizLog"), start, count,
-            condition, BizLog.class);
+        return super.selectList(NAMESPACE.concat("select_bizLog"), start,
+            count, condition, BizLog.class);
     }
 
 }

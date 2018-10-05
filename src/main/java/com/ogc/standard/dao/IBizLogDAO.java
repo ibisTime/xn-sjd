@@ -1,5 +1,7 @@
 package com.ogc.standard.dao;
 
+import java.math.BigDecimal;
+
 import com.ogc.standard.dao.base.IBaseDAO;
 import com.ogc.standard.domain.BizLog;
 
@@ -11,5 +13,5 @@ public interface IBizLogDAO extends IBaseDAO<BizLog> {
     public long selectMaxId();
 
     // 查询操作数量总量
-    public long selectQuantitySum(BizLog condition);
+    public BigDecimal selectQuantitySum(BizLog condition);
 }

@@ -10,9 +10,9 @@ import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
 
 /**
- * 629900
- * @author: silver 
- * @since: Oct 5, 2018 3:15:36 PM 
+ * 查询好友周比拼
+ * @author: xieyj 
+ * @since: 2018年10月5日 下午10:39:34 
  * @history:
  */
 public class XN629900 extends AProcessor {

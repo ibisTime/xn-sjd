@@ -1,5 +1,7 @@
 package com.ogc.standard.dto.res;
 
+import java.math.BigDecimal;
+
 import com.ogc.standard.domain.User;
 
 /**
@@ -10,10 +12,10 @@ import com.ogc.standard.domain.User;
  */
 public class XN629900Res {
     // 用户本周总量
-    private long userWeekQuantity;
+    private BigDecimal userWeekQuantity;
 
     // 好友本周总量
-    private long toUserWeekQuantity;
+    private BigDecimal toUserWeekQuantity;
 
     // 用户信息
     private User userInfo;
@@ -21,19 +23,19 @@ public class XN629900Res {
     // 好友用户信息
     private User toUserInfo;
 
-    public long getUserWeekQuantity() {
+    public BigDecimal getUserWeekQuantity() {
         return userWeekQuantity;
     }
 
-    public void setUserWeekQuantity(long userWeekQuantity) {
+    public void setUserWeekQuantity(BigDecimal userWeekQuantity) {
         this.userWeekQuantity = userWeekQuantity;
     }
 
-    public long getToUserWeekQuantity() {
+    public BigDecimal getToUserWeekQuantity() {
         return toUserWeekQuantity;
     }
 
-    public void setToUserWeekQuantity(long toUserWeekQuantity) {
+    public void setToUserWeekQuantity(BigDecimal toUserWeekQuantity) {
         this.toUserWeekQuantity = toUserWeekQuantity;
     }
 

@@ -1,5 +1,6 @@
 package com.ogc.standard.ao.impl;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,14 +35,15 @@ public class BizLogAOImpl implements IBizLogAO {
         User toUserInfo = userBO.getUser(toUserId);
         res.setToUserInfo(toUserInfo);
 
-        // 用户本周碳泡泡数量
-        long userWeekQuantity = bizLogBO.getWeekQuantitySum(toUserId, userId);
+        // 用户本周取好友碳泡泡数量
+        BigDecimal userWeekQuantity = bizLogBO.getWeekQuantitySum(toUserId,
+            userId);
         res.setUserWeekQuantity(userWeekQuantity);
 
-        // 好友本周碳泡泡数量
-        long toUserWeekQuantity = bizLogBO.getWeekQuantitySum(userId, toUserId);
+        // 好友本周取用户碳泡泡数量
+        BigDecimal toUserWeekQuantity = bizLogBO.getWeekQuantitySum(userId,
+            toUserId);
         res.setToUserWeekQuantity(toUserWeekQuantity);
-
         return res;
     }
 

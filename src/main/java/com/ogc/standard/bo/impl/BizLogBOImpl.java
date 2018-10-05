@@ -76,7 +76,7 @@ public class BizLogBOImpl extends PaginableBOImpl<BizLog> implements IBizLogBO {
     }
 
     @Override
-    public long getWeekQuantitySum(String adoptUserId, String userId) {
+    public BigDecimal getWeekQuantitySum(String adoptUserId, String userId) {
         BizLog condition = new BizLog();
         condition.setAdoptUserId(adoptUserId);
         condition.setUserId(userId);
