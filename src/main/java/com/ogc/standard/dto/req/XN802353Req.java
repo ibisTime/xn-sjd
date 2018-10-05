@@ -33,7 +33,9 @@ public class XN802353Req {
     @NotBlank
     private String channelOrder;
 
-    private String transFee;
+    // 转账手续费
+    @NotBlank
+    private String payFee;
 
     public List<String> getCodeList() {
         return codeList;
@@ -75,12 +77,11 @@ public class XN802353Req {
         this.channelOrder = channelOrder;
     }
 
-    public String getTransFee() {
-        return transFee;
+    public String getPayFee() {
+        return payFee;
     }
 
-    public void setTransFee(String transFee) {
-        this.transFee = transFee;
+    public void setPayFee(String payFee) {
+        this.payFee = payFee;
     }
-
 }

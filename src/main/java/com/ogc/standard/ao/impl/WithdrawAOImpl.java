@@ -18,6 +18,8 @@ import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.Withdraw;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.EChannelType;
+import com.ogc.standard.enums.ECurrency;
+import com.ogc.standard.enums.EJourBizTypePlat;
 import com.ogc.standard.enums.EJourBizTypeUser;
 import com.ogc.standard.enums.EWithdrawStatus;
 import com.ogc.standard.exception.BizException;
@@ -65,9 +67,8 @@ public class WithdrawAOImpl implements IWithdrawAO {
         String withdrawCode = withdrawBO.applyOrder(dbAccount, amount, fee,
             payCardInfo, payCardNo, applyUser, applyNote);
 
-        BigDecimal totalAmount = amount.add(fee);
         // 冻结取现金额
-        dbAccount = accountBO.frozenAmount(dbAccount, totalAmount,
+        dbAccount = accountBO.frozenAmount(dbAccount, amount,
             EJourBizTypeUser.WITHDRAW_FROZEN.getCode(),
             EJourBizTypeUser.WITHDRAW_FROZEN.getValue(), withdrawCode);
 
@@ -113,7 +114,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
     @Override
     @Transactional
     public void payOrder(String code, String payUser, String payResult,
-            String payNote, String channelOrder, BigDecimal transFee) {
+            String payNote, String channelOrder, BigDecimal payFee) {
         Withdraw data = withdrawBO.getWithdraw(code);
         if (data == null) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(), "不存在编号为"
@@ -123,7 +124,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
             throw new BizException("xn000000", "申请记录状态不是待支付状态，无法支付");
         }
         if (EBoolean.YES.getCode().equals(payResult)) {
-            payOrderYES(data, payUser, payNote, channelOrder, transFee);
+            payOrderYES(data, payUser, payNote, channelOrder, payFee);
         } else {
             payOrderNO(data, payUser, payNote, channelOrder);
         }
@@ -136,32 +137,36 @@ public class WithdrawAOImpl implements IWithdrawAO {
 
         Account dbAccount = accountBO.getAccount(data.getAccountNumber());
         // 释放冻结流水
-        BigDecimal totalAmount = data.getAmount().add(data.getFee());
-        accountBO.unfrozenAmount(dbAccount, totalAmount,
+        accountBO.unfrozenAmount(dbAccount, data.getAmount(),
             EJourBizTypeUser.WITHDRAW_UNFROZEN.getCode(), "取现失败退回",
             data.getCode());
     }
 
     private void payOrderYES(Withdraw data, String payUser, String payNote,
-            String payCode, BigDecimal transFee) {
+            String payCode, BigDecimal payFee) {
         withdrawBO.payOrder(data, EWithdrawStatus.Pay_YES, payUser, payNote,
-            payCode, transFee);
+            payCode, payFee);
 
         Account dbAccount = accountBO.getAccount(data.getAccountNumber());
         // 先解冻，然后扣减余额
         accountBO.unfrozenAmount(dbAccount, data.getAmount(),
-            EJourBizTypeUser.WITHDRAW.getCode(),
-            EJourBizTypeUser.WITHDRAW.getValue(), data.getCode());
-
-        BigDecimal totalAmount = data.getAmount().add(data.getFee());
-        accountBO.unfrozenAmount(dbAccount, totalAmount,
-            EJourBizTypeUser.WITHDRAW_UNFROZEN.getCode(), "取现解冻",
-            data.getCode());
+            EJourBizTypeUser.WITHDRAW_UNFROZEN.getCode(),
+            EJourBizTypeUser.WITHDRAW_UNFROZEN.getValue(), data.getCode());
 
         // 取现扣钱
-        accountBO.changeAmount(dbAccount, totalAmount.negate(),
+        accountBO.changeAmount(dbAccount, data.getAmount().negate(),
             EChannelType.Offline, null, data.getCode(),
             EJourBizTypeUser.WITHDRAW.getCode(), "取现成功");
+
+        // 取现扣钱
+        Account sysAccount = accountBO.getSysAccountNumber(ECurrency.CNY);
+        accountBO.changeAmount(sysAccount, data.getFee(), EChannelType.Offline,
+            null, data.getCode(), EJourBizTypePlat.WITHDRAW_FEE.getCode(),
+            "取现手续费");
+
+        accountBO.changeAmount(sysAccount, payFee.negate(),
+            EChannelType.Offline, null, data.getCode(),
+            EJourBizTypePlat.WITHDRAW_TRANS_FEE.getCode(), "取现转账手续费");
     }
 
     @Override

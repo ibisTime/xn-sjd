@@ -1,11 +1,11 @@
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('WITH','CUSERMONTIMES','5','',now(),'每月取现次数');
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('WITH','CUSERQXBS','5','',now(),'取现金额倍数');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('WITH','USERMONTIMES','5','',now(),'每月取现次数');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('WITH','USERQXBS','5','',now(),'取现金额倍数');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('WITH','QXDBZDJE','50000','',now(),'取现单笔最大金额');
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('WITH','CUSERQXFL','0.01','',now(),'取现手续费率');
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('WITH','CUSERDZTS','5','',now(),'取现到账天数');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('WITH','USERQXFL','0.01','',now(),'取现手续费率');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('WITH','USERDZTS','5','',now(),'取现到账天数');
 
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('SYS_TXT','STRATEGY','攻略','',now(),'攻略说明');
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('tpp_rule','present_tpp','10','',now(),'赠送碳泡泡数量');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('TPP_RULE','PRESENT_TPP_QUANTITY','10','',now(),'赠送碳泡泡数量');
 /*
 -- Query: SELECT * FROM dev_xn_sjd.tzb_category
 LIMIT 0, 500

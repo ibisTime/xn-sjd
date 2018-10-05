@@ -28,9 +28,9 @@ public class XN802353 extends AProcessor {
     public Object doBusiness() throws BizException {
         synchronized (XN802353.class) {
             for (String code : req.getCodeList()) {
-                BigDecimal transFee = new BigDecimal(req.getTransFee());
+                BigDecimal payFee = new BigDecimal(req.getPayFee());
                 withdrawAO.payOrder(code, req.getPayUser(), req.getPayResult(),
-                    req.getPayNote(), req.getChannelOrder(), transFee);
+                    req.getPayNote(), req.getChannelOrder(), payFee);
             }
             return new BooleanRes(true);
         }

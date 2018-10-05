@@ -114,6 +114,7 @@ CREATE TABLE `try_adopt_order_tree` (
   `amount` decimal(64,0) DEFAULT NULL COMMENT '认养金额',
   `status` varchar(4) DEFAULT NULL COMMENT '状态',
   `current_holder` varchar(32) DEFAULT NULL COMMENT '当前持有人',
+  `certificate_template` varchar(255) DEFAULT NULL COMMENT '证书模板',
   `remark` varchar(255) COMMENT '备注',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='认养权';
