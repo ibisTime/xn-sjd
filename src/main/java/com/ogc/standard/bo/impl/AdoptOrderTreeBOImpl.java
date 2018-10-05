@@ -8,11 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.ogc.standard.bo.IAdoptOrderTreeBO;
+import com.ogc.standard.bo.ICompanyBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.IAdoptOrderTreeDAO;
 import com.ogc.standard.domain.AdoptOrder;
 import com.ogc.standard.domain.AdoptOrderTree;
+import com.ogc.standard.domain.Company;
 import com.ogc.standard.domain.Product;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.enums.EAdoptOrderStatus;
@@ -26,6 +28,9 @@ public class AdoptOrderTreeBOImpl extends PaginableBOImpl<AdoptOrderTree>
 
     @Autowired
     private IAdoptOrderTreeDAO adoptOrderTreeDAO;
+
+    @Autowired
+    private ICompanyBO companyBO;
 
     @Override
     public String saveAdoptOrderTree(Product product, AdoptOrder adoptOrder,
@@ -42,19 +47,23 @@ public class AdoptOrderTreeBOImpl extends PaginableBOImpl<AdoptOrderTree>
         data.setStartDatetime(adoptOrder.getStartDatetime());
         data.setEndDatetime(adoptOrder.getEndDatetime());
         data.setAmount(adoptOrder.getPrice());
-        if (EAdoptOrderStatus.TO_ADOPT.getCode().equals(adoptOrder.getStatus())) {
+        if (EAdoptOrderStatus.TO_ADOPT.getCode()
+            .equals(adoptOrder.getStatus())) {
             data.setStatus(EAdoptOrderTreeStatus.TO_ADOPT.getCode());
         } else {
             data.setStatus(EAdoptOrderTreeStatus.ADOPT.getCode());
         }
 
+        Company company = companyBO.getCompanyByUserId(product.getOwnerId());
+        data.setCertificateTemplate(company.getCertificateTemplate());
         data.setCurrentHolder(adoptOrder.getApplyUser());
         adoptOrderTreeDAO.insert(data);
         return code;
     }
 
     @Override
-    public List<AdoptOrderTree> queryAdoptOrderTreeList(AdoptOrderTree condition) {
+    public List<AdoptOrderTree> queryAdoptOrderTreeList(
+            AdoptOrderTree condition) {
         return adoptOrderTreeDAO.selectList(condition);
     }
 

@@ -12,10 +12,6 @@ public class XN629360Req extends BaseReq {
 
     private static final long serialVersionUID = -6308551102694787370L;
 
-    // 赠送数量
-    @NotBlank
-    private String quantity;
-
     // 赠送人
     @NotBlank
     private String userId;
@@ -23,14 +19,6 @@ public class XN629360Req extends BaseReq {
     // 被赠送人
     @NotBlank
     private String toUserId;
-
-    public String getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(String quantity) {
-        this.quantity = quantity;
-    }
 
     public String getUserId() {
         return userId;

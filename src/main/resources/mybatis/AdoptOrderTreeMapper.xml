@@ -15,6 +15,7 @@
 		<result column="status" property="status" />
 		<result column="current_holder" property="currentHolder" />
 		
+		<result column="certificate_template" property="certificateTemplate" />
 		<result column="remark" property="remark" />
 	</resultMap>
 	
@@ -57,6 +58,8 @@
 		,t.amount
 		,t.status
 		,t.current_holder
+		
+		,t.certificate_template
 		,t.remark
 		FROM
 		try_adopt_order_tree t
@@ -88,6 +91,8 @@
 		,amount
 		,status
 		,current_holder
+		
+		,certificate_template
 		,remark
 		)
 		VALUES(
@@ -102,6 +107,8 @@
 		,#{amount}
 		,#{status}
 		,#{currentHolder}
+		
+		,#{certificateTemplate}
 		,#{remark}
 		)
 	</insert>

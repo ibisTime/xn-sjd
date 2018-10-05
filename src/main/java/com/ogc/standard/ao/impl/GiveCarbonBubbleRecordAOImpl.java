@@ -2,6 +2,7 @@ package com.ogc.standard.ao.impl;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,13 +12,17 @@ import com.ogc.standard.ao.IGiveCarbonBubbleRecordAO;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IBizLogBO;
 import com.ogc.standard.bo.IGiveCarbonBubbleRecordBO;
+import com.ogc.standard.bo.ISYSConfigBO;
 import com.ogc.standard.bo.base.Paginable;
+import com.ogc.standard.common.AmountUtil;
+import com.ogc.standard.common.SysConstants;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.GiveCarbonBubbleRecord;
 import com.ogc.standard.enums.EBizLogType;
 import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EJourBizTypePlat;
 import com.ogc.standard.enums.EJourBizTypeUser;
+import com.ogc.standard.enums.ESysConfigType;
 import com.ogc.standard.exception.BizException;
 
 @Service
@@ -32,10 +37,18 @@ public class GiveCarbonBubbleRecordAOImpl implements IGiveCarbonBubbleRecordAO {
     @Autowired
     private IBizLogBO bizLogBO;
 
+    @Autowired
+    private ISYSConfigBO sysConfigBO;
+
     @Override
     @Transactional
-    public String addGiveCarbonBubbleRecord(String userId, String toUserId,
-            BigDecimal quantity) {
+    public String addGiveCarbonBubbleRecord(String userId, String toUserId) {
+        Map<String, String> configMap = sysConfigBO
+            .getConfigsMap(ESysConfigType.TPP_RULE.getCode());
+        BigDecimal quantity = new BigDecimal(
+            configMap.get(SysConstants.PRESENT_TPP));
+        quantity = AmountUtil.mul(quantity, 1000L);
+
         Account userTppAccount = accountBO.getAccountByUser(userId,
             ECurrency.TPP.getCode());
         if (quantity.compareTo(userTppAccount.getAmount()) == 1) {

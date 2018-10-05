@@ -87,4 +87,7 @@ public class SysConstants {
 
     public static final String TPP_EXPIRE_HOUR = "TPP_EXPIRE_HOUR";// 碳泡泡过期时间
 
+    // 碳泡泡规则
+    public static final String PRESENT_TPP = "PRESENT_TPP_QUANTITY";// 赠送碳泡泡记录
+
 }

@@ -1,6 +1,5 @@
 package com.ogc.standard.ao;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import com.ogc.standard.bo.base.Paginable;
@@ -16,8 +15,7 @@ public interface IGiveCarbonBubbleRecordAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
     // 赠送碳泡泡
-    public String addGiveCarbonBubbleRecord(String userId, String toUserId,
-            BigDecimal quantity);
+    public String addGiveCarbonBubbleRecord(String userId, String toUserId);
 
     public Paginable<GiveCarbonBubbleRecord> queryGiveCarbonBubbleRecordPage(
             int start, int limit, GiveCarbonBubbleRecord condition);

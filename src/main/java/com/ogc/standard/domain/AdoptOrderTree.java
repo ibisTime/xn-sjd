@@ -45,6 +45,9 @@ public class AdoptOrderTree extends ABaseDO {
     // 当前持有人
     private String currentHolder;
 
+    // 证书模板
+    private String certificateTemplate;
+
     // 备注
     private String remark;
 
@@ -155,6 +158,14 @@ public class AdoptOrderTree extends ABaseDO {
 
     public void setProductCode(String productCode) {
         this.productCode = productCode;
+    }
+
+    public String getCertificateTemplate() {
+        return certificateTemplate;
+    }
+
+    public void setCertificateTemplate(String certificateTemplate) {
+        this.certificateTemplate = certificateTemplate;
     }
 
 }
