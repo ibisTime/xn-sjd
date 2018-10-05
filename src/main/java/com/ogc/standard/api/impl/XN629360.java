@@ -1,7 +1,5 @@
 package com.ogc.standard.api.impl;
 
-import java.math.BigDecimal;
-
 import com.ogc.standard.ao.IGiveCarbonBubbleRecordAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
@@ -26,9 +24,8 @@ public class XN629360 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        BigDecimal quantity = new BigDecimal(req.getQuantity());
-        return new PKCodeRes(giveCarbonBubbleRecordAO.addGiveCarbonBubbleRecord(
-            req.getUserId(), req.getToUserId(), quantity));
+        return new PKCodeRes(giveCarbonBubbleRecordAO
+            .addGiveCarbonBubbleRecord(req.getUserId(), req.getToUserId()));
     }
 
     @Override

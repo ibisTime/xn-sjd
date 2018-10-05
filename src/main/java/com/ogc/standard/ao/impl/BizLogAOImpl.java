@@ -35,11 +35,11 @@ public class BizLogAOImpl implements IBizLogAO {
         res.setToUserInfo(toUserInfo);
 
         // 用户本周碳泡泡数量
-        long userWeekQuantity = bizLogBO.getWeekQuantitySum(userId);
+        long userWeekQuantity = bizLogBO.getWeekQuantitySum(toUserId, userId);
         res.setUserWeekQuantity(userWeekQuantity);
 
         // 好友本周碳泡泡数量
-        long toUserWeekQuantity = bizLogBO.getWeekQuantitySum(toUserId);
+        long toUserWeekQuantity = bizLogBO.getWeekQuantitySum(userId, toUserId);
         res.setToUserWeekQuantity(toUserWeekQuantity);
 
         return res;
