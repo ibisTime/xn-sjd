@@ -4,7 +4,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.ogc.standard.ao.IUserAO;
 import com.ogc.standard.api.AProcessor;
-import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.ObjValidater;
@@ -45,10 +44,10 @@ public class XN805120 extends AProcessor {
         condition.setArea(req.getArea());
         condition.setLongitude(req.getLongitude());
         condition.setLatitude(req.getLatitude());
-        condition.setCreateDatetimeStart(
-            DateUtil.getFrontDate(req.getCreateDatetimeStart(), false));
-        condition.setCreateDatetimeEnd(
-            DateUtil.getFrontDate(req.getCreateDatetimeEnd(), true));
+        condition.setCreateDatetimeStart(DateUtil.getFrontDate(
+            req.getCreateDatetimeStart(), false));
+        condition.setCreateDatetimeEnd(DateUtil.getFrontDate(
+            req.getCreateDatetimeEnd(), true));
 
         condition.setUpdater(req.getUpdater());
         String column = req.getOrderColumn();
@@ -58,10 +57,7 @@ public class XN805120 extends AProcessor {
         condition.setOrder(column, req.getOrderDir());
         int start = Integer.valueOf(req.getStart());
         int limit = Integer.valueOf(req.getLimit());
-        Paginable<User> paginable = userAO.queryUserPage(start, limit,
-            condition);
-
-        return paginable;
+        return userAO.queryUserPage(start, limit, condition);
     }
 
     @Override

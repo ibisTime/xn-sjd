@@ -1,11 +1,5 @@
 package com.ogc.standard.dto.req;
 
-/**
- * 分页查询产品分类
- * @author: silver 
- * @since: 2018年9月26日 下午5:47:38 
- * @history:
- */
 public class XN629355Req extends APageReq {
 
     private static final long serialVersionUID = -1173760757219371605L;

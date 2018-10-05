@@ -499,21 +499,11 @@ public class UserAOImpl implements IUserAO {
 
     @Override
     public Paginable<User> queryUserPage(int start, int limit, User condition) {
-
-        Paginable<User> page = null;
-        try {
-            page = userBO.getPaginable(start, limit, condition);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        Paginable<User> page = userBO.getPaginable(start, limit, condition);
         List<User> list = page.getList();
         for (User user : list) {
             // 推荐人转义
-            User userReferee = userBO.getUserByMobile(user.getUserReferee());
-            if (userReferee != null) {
-                user.setRefereeUser(userReferee);
-            }
+            initUserRef(user);
         }
         return page;
     }
@@ -521,26 +511,6 @@ public class UserAOImpl implements IUserAO {
     @Override
     public User doGetUser(String userId) {
         User user = userBO.getUser(userId);
-
-        if (StringUtils.isNotBlank(user.getUserReferee())) {
-            String mobile = null;
-            if (EUserRefereeType.AGENT.getCode().equals(
-                user.getUserRefereeType())
-                    || EUserRefereeType.SALEMANS.getCode().equals(
-                        user.getUserRefereeType())) {
-                AgentUser agentUser = agentUserBO.getAgentUser(user
-                    .getUserReferee());
-                mobile = agentUser.getMobile();
-            } else if (EUserRefereeType.USER.getCode().equals(
-                user.getUserRefereeType())) {
-                User userReferee = userBO.getUser(user.getUserReferee());
-                mobile = userReferee.getMobile();
-            }
-            // 拉取推荐人信息
-            User refereeUser = new User();
-            refereeUser.setMobile(mobile);
-            user.setRefereeUser(refereeUser);
-        }
 
         // 是否设置过交易密码
         if (StringUtils.isNotBlank(user.getTradePwdStrength())) {
@@ -576,12 +546,29 @@ public class UserAOImpl implements IUserAO {
             user.setWorkTime(data.getWorkTime());
             user.setGradDatetime(data.getGradDatetime());
         }
-
-        // 用户统计信息
-
-        // 获取信任数量
-
         return user;
+    }
+
+    private void initUserRef(User user) {
+        if (StringUtils.isNotBlank(user.getUserReferee())) {
+            String mobile = null;
+            if (EUserRefereeType.AGENT.getCode().equals(
+                user.getUserRefereeType())
+                    || EUserRefereeType.SALEMANS.getCode().equals(
+                        user.getUserRefereeType())) {
+                AgentUser agentUser = agentUserBO.getAgentUser(user
+                    .getUserReferee());
+                mobile = agentUser.getMobile();
+            } else if (EUserRefereeType.USER.getCode().equals(
+                user.getUserRefereeType())) {
+                User userReferee = userBO.getUser(user.getUserReferee());
+                mobile = userReferee.getMobile();
+            }
+            // 拉取推荐人信息
+            User refereeUser = new User();
+            refereeUser.setMobile(mobile);
+            user.setRefereeUser(refereeUser);
+        }
     }
 
     @Override
