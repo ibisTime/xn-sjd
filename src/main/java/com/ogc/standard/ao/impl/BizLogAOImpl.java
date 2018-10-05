@@ -17,6 +17,11 @@ public class BizLogAOImpl implements IBizLogAO {
     private IBizLogBO bizLogBO;
 
     @Override
+    public long leaveMessage(String adoptTreeCode, String note, String userId) {
+        return bizLogBO.leaveMessage(adoptTreeCode, note, userId);
+    }
+
+    @Override
     public Paginable<BizLog> queryBizLogPage(int start, int limit,
             BizLog condition) {
         return bizLogBO.getPaginable(start, limit, condition);
@@ -31,4 +36,5 @@ public class BizLogAOImpl implements IBizLogAO {
     public BizLog getBizLog(int id) {
         return bizLogBO.getBizLog(id);
     }
+
 }

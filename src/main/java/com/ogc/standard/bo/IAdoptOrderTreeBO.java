@@ -24,4 +24,7 @@ public interface IAdoptOrderTreeBO extends IPaginableBO<AdoptOrderTree> {
     public void refreshAdoptOrderTree(AdoptOrderTree data,
             EAdoptOrderTreeStatus adoptOrderTreeStatus);
 
+    // 用户的认养权数量
+    public long getCountByCurrentHolder(String currentHolder);
+
 }

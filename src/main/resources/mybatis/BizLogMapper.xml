@@ -5,11 +5,15 @@
 	<resultMap id="bizLog_DB_Result" type="bizLog">
 		<result column="id" property="id" />
 		<result column="adopt_tree_code" property="adoptTreeCode" />
+		<result column="adopt_user_id" property="adoptUserId" />
 		<result column="type" property="type" />
 		<result column="note" property="note" />
+		
 		<result column="user_id" property="userId" />
+		<result column="quantity" property="quantity" />
 		<result column="create_datetime" property="createDatetime" />
 	</resultMap>
+	
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != '' ">
@@ -17,6 +21,9 @@
 			</if>
 			<if test="adoptTreeCode != null and adoptTreeCode != '' ">
 				AND t.adopt_tree_code = #{adoptTreeCode}
+			</if>
+			<if test="adoptUserId != null and adoptUserId != '' ">
+				AND t.adopt_user_id = #{adoptUserId}
 			</if>
 			<if test="type != null and type != '' ">
 				AND t.type = #{type}
@@ -32,13 +39,17 @@
 			</if>
 		</trim>
 	</sql>
+	
 	<select id="select_bizLog" parameterType="bizLog" resultMap="bizLog_DB_Result">
 		SELECT
 		t.id
 		,t.adopt_tree_code
+		,t.adopt_user_id
 		,t.type
 		,t.note
+		
 		,t.user_id
+		,t.quantity
 		,t.create_datetime
 		FROM
 		tsys_biz_log t
@@ -55,37 +66,34 @@
 		SELECT count(1) FROM tsys_biz_log t
 		<include refid="where_condition" />
 	</select>
+	
+	<select id="select_bizLog_maxId" parameterType="bizLog"
+		resultType="java.lang.Long">
+		SELECT max(t.ID) FROM tsys_biz_log t
+	</select>
 
 	<insert id="insert_bizLog" parameterType="bizLog">
 		INSERT INTO
 		tsys_biz_log(
-		id
-		,adopt_tree_code
+		adopt_tree_code
+		,adopt_user_id
 		,type
 		,note
 		,user_id
+		
+		,quantity
 		,create_datetime
 		)
 		VALUES(
-		#{id}
-		,#{adoptTreeCode}
+		#{adoptTreeCode}
+		,#{adoptUserId}
 		,#{type}
 		,#{note}
 		,#{userId}
+		
+		,#{quantity}
 		,#{createDatetime}
 		)
 	</insert>
-
-	<update id="update_bizLog" parameterType="bizLog">
-		UPDATE tsys_biz_log
-		SET
-		adopt_tree_code = #{adoptTreeCode}
-		,type = #{type}
-		,note = #{note}
-		,user_id = #{userId}
-		,create_datetime = #{createDatetime}
-		WHERE code = #{code}
-	</update>
-
 
 </mapper>

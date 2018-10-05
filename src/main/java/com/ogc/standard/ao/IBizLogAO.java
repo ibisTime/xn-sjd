@@ -8,6 +8,9 @@ import com.ogc.standard.domain.BizLog;
 public interface IBizLogAO {
     static final String DEFAULT_ORDER_COLUMN = "id";
 
+    // 留言
+    public long leaveMessage(String adoptTreeCode, String note, String userId);
+
     public Paginable<BizLog> queryBizLogPage(int start, int limit,
             BizLog condition);
 

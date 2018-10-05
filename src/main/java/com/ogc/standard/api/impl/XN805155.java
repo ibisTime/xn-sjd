@@ -38,6 +38,8 @@ public class XN805155 extends AProcessor {
         condition.setUserId(req.getUserId());
         condition.setToUser(req.getToUser());
         condition.setType(req.getType());
+        condition.setFriendUserId(req.getFriendUserId());
+
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
         return userRelationAO.queryUserRelationPage(start, limit, condition);

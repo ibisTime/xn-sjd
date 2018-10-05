@@ -91,4 +91,16 @@ public class AdoptOrderTreeBOImpl extends PaginableBOImpl<AdoptOrderTree>
             adoptOrderTreeDAO.updateStatus(data);
         }
     }
+
+    public long getCountByCurrentHolder(String currentHolder) {
+        long count = 0;
+
+        if (StringUtils.isNotBlank(currentHolder)) {
+            AdoptOrderTree condition = new AdoptOrderTree();
+            condition.setCurrentHolder(currentHolder);
+            count = adoptOrderTreeDAO.selectTotalCount(condition);
+        }
+
+        return count;
+    }
 }

@@ -8,6 +8,7 @@
  */
 package com.ogc.standard.domain;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import com.ogc.standard.dao.base.ABaseDO;
@@ -38,11 +39,21 @@ public class UserRelation extends ABaseDO {
     // 创建时间
     private Date createDatetime;
 
+    // **************DB Properties**************
+    // 好友编号
+    private String friendUserId;
+
     // 用户
     private User fromUserInfo;
 
     // 用户
     private User toUserInfo;
+
+    // 证书个数
+    private long certificateCount;
+
+    // 碳泡泡余额
+    public BigDecimal tppAmount;
 
     public String getCode() {
         return code;
@@ -107,4 +118,29 @@ public class UserRelation extends ABaseDO {
     public void setType(String type) {
         this.type = type;
     }
+
+    public String getFriendUserId() {
+        return friendUserId;
+    }
+
+    public void setFriendUserId(String friendUserId) {
+        this.friendUserId = friendUserId;
+    }
+
+    public long getCertificateCount() {
+        return certificateCount;
+    }
+
+    public void setCertificateCount(long certificateCount) {
+        this.certificateCount = certificateCount;
+    }
+
+    public BigDecimal getTppAmount() {
+        return tppAmount;
+    }
+
+    public void setTppAmount(BigDecimal tppAmount) {
+        this.tppAmount = tppAmount;
+    }
+
 }

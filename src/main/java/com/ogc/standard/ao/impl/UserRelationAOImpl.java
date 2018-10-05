@@ -17,11 +17,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.IUserRelationAO;
+import com.ogc.standard.bo.IAccountBO;
+import com.ogc.standard.bo.IAdoptOrderTreeBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.IUserRelationBO;
 import com.ogc.standard.bo.base.Paginable;
+import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.domain.UserRelation;
+import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.ESystemCode;
 import com.ogc.standard.enums.EUserReleationType;
 import com.ogc.standard.exception.BizException;
@@ -40,46 +44,61 @@ public class UserRelationAOImpl implements IUserRelationAO {
     @Autowired
     IUserBO userBO;
 
+    @Autowired
+    private IAdoptOrderTreeBO adoptOrderTreeBO;
+
+    @Autowired
+    private IAccountBO accountBO;
+
     /**
      * @see com.std.user.ao.IUserRelationAO#queryUserRelationPage(int, int, com.std.user.domain.UserRelation)
      */
     @Override
     public Paginable<UserRelation> queryUserRelationPage(int start, int limit,
             UserRelation condition) {
-        Paginable<UserRelation> page = userRelationBO.getPaginable(start,
-            limit, condition);
+        Paginable<UserRelation> page = userRelationBO.getPaginable(start, limit,
+            condition);
         for (UserRelation userRelation : page.getList()) {
 
-            User lookUser = null;
+            if (EUserReleationType.TRUST.getCode()
+                .equals(userRelation.getType())) {
+                if (StringUtils.isNotBlank(condition.getUserId())) {
 
-            if (StringUtils.isNotBlank(condition.getUserId())) {
+                    // 查询——我信任的
+                    User toUser = userBO.getUser(userRelation.getToUser());
+                    userRelation.setToUserInfo(toUser);
 
-                // 查询——我信任的
-                User toUser = userBO.getUser(userRelation.getToUser());
-                lookUser = toUser;
-                //
-                userRelation.setToUserInfo(toUser);
+                } else {
 
-            } else {
+                    // 查询——信任我的
+                    User fromUser = userBO.getUser(userRelation.getUserId());
+                    userRelation.setFromUserInfo(fromUser);
 
-                // 查询——信任我的
-                User fromUser = userBO.getUser(userRelation.getUserId());
-                lookUser = fromUser;
-                userRelation.setFromUserInfo(fromUser);
-
+                }
             }
 
-            // 查询统计信息
-            // 查询对方的 统计信息
-            if (lookUser != null) {
-                //
-                // UserStatistics userStatistics = new UserStatistics();
-                // userStatistics = this.tradeOrderBO.obtainUserStatistics(
-                // lookUser.getUserId(), null);
-                // userStatistics.setBeiXinRenCount(this.userRelationBO
-                // .getRelationCount(lookUser.getUserId(),
-                // EUserReleationType.TRUST.getCode()));
-                // lookUser.setUserStatistics(userStatistics);
+            if (EUserReleationType.FRIEND.getCode()
+                .equals(userRelation.getType())) {
+                if (StringUtils.isNotBlank(condition.getFriendUserId())) {
+                    // 被关注人
+                    String toUserId = userRelation.getToUser();
+                    if (condition.getFriendUserId().equals(toUserId)) {
+                        toUserId = userRelation.getUserId();
+                    }
+
+                    User toUser = userBO.getUser(toUserId);
+                    userRelation.setToUserInfo(toUser);
+
+                    // 证书个数
+                    long certificateCount = adoptOrderTreeBO
+                        .getCountByCurrentHolder(toUserId);
+                    userRelation.setCertificateCount(certificateCount);
+
+                    // 碳泡泡余额
+                    Account tppAccount = accountBO.getAccountByUser(toUserId,
+                        ECurrency.TPP.getCode());
+                    userRelation.setTppAmount(tppAccount.getAmount());
+                }
             }
 
         }
@@ -154,7 +173,8 @@ public class UserRelationAOImpl implements IUserRelationAO {
     }
 
     @Override
-    public boolean isExistUserRelation(String userId, String toUser, String type) {
+    public boolean isExistUserRelation(String userId, String toUser,
+            String type) {
         List<UserRelation> userRelationList = userRelationBO
             .queryUserRelationList(userId, toUser, type);
         boolean flag = false;

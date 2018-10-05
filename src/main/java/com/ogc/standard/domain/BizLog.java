@@ -20,7 +20,10 @@ public class BizLog extends ABaseDO {
     // 认养权编号
     private String adoptTreeCode;
 
-    // 类型（1赠送碳泡泡/2留言/3分享/4收取碳泡泡）
+    // 认养人编号
+    private String adoptUserId;
+
+    // 类型（1留言/2收取碳泡泡）
     private String type;
 
     // 说明
@@ -28,6 +31,9 @@ public class BizLog extends ABaseDO {
 
     // 操作人
     private String userId;
+
+    // 操作数量
+    private Integer quantity;
 
     // 产生时间
     private Date createDatetime;
@@ -103,6 +109,22 @@ public class BizLog extends ABaseDO {
 
     public void setCreateDatetimeEnd(Date createDatetimeEnd) {
         this.createDatetimeEnd = createDatetimeEnd;
+    }
+
+    public String getAdoptUserId() {
+        return adoptUserId;
+    }
+
+    public void setAdoptUserId(String adoptUserId) {
+        this.adoptUserId = adoptUserId;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 
 }

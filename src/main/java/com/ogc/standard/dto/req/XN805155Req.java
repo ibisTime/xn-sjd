@@ -27,6 +27,9 @@ public class XN805155Req extends APageReq {
     // 类型 0拉黑 1信任
     private String type;
 
+    // 好友编号
+    private String friendUserId;
+
     public String getUserId() {
         return userId;
     }
@@ -50,4 +53,13 @@ public class XN805155Req extends APageReq {
     public void setType(String type) {
         this.type = type;
     }
+
+    public String getFriendUserId() {
+        return friendUserId;
+    }
+
+    public void setFriendUserId(String friendUserId) {
+        this.friendUserId = friendUserId;
+    }
+
 }
