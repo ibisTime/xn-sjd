@@ -18,7 +18,7 @@ public class XN629010Req extends BaseReq {
     @NotBlank
     private String name;
 
-    // 销售分类（0个人/1定向/2捐赠/3集体）
+    // 销售分类
     @NotBlank
     private String sellType;
 

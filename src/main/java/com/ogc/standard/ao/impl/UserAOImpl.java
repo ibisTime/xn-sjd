@@ -505,8 +505,22 @@ public class UserAOImpl implements IUserAO {
         User user = userBO.getUser(userId);
 
         if (StringUtils.isNotBlank(user.getUserReferee())) {
+            String mobile = null;
+            if (EUserRefereeType.AGENT.getCode().equals(
+                user.getUserRefereeType())
+                    || EUserRefereeType.SALEMANS.getCode().equals(
+                        user.getUserRefereeType())) {
+                AgentUser agentUser = agentUserBO.getAgentUser(user
+                    .getUserReferee());
+                mobile = agentUser.getMobile();
+            } else if (EUserRefereeType.USER.getCode().equals(
+                user.getUserRefereeType())) {
+                User userReferee = userBO.getUser(user.getUserReferee());
+                mobile = userReferee.getMobile();
+            }
             // 拉取推荐人信息
-            User refereeUser = userBO.getUser(user.getUserReferee());
+            User refereeUser = new User();
+            refereeUser.setMobile(mobile);
             user.setRefereeUser(refereeUser);
         }
 

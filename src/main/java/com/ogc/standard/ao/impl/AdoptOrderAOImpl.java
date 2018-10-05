@@ -223,13 +223,13 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
         // 余额划转
         Account sysCnyAccount = accountBO
             .getAccount(ESystemAccount.SYS_ACOUNT_CNY.getCode());
-        accountBO.transAmount(userCnyAccount, sysCnyAccount, data.getAmount(),
+        accountBO.transAmount(userCnyAccount, sysCnyAccount, payAmount,
             EJourBizTypeUser.ADOPT.getCode(), EJourBizTypePlat.ADOPT.getCode(),
             EJourBizTypeUser.ADOPT.getValue(),
             EJourBizTypePlat.ADOPT.getValue(), data.getCode());
 
         accountBO.transAmount(data.getApplyUser(), ESysUser.SYS_USER.getCode(),
-            ECurrency.JF.getCode(), data.getAmount(),
+            ECurrency.JF.getCode(), resultRes.getJfAmount(),
             EJourBizTypeUser.ADOPT.getCode(), EJourBizTypePlat.ADOPT.getCode(),
             EJourBizTypeUser.ADOPT.getValue(),
             EJourBizTypePlat.ADOPT.getValue(), data.getCode());
