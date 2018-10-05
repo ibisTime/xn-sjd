@@ -1,5 +1,6 @@
 package com.ogc.standard.domain;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import com.ogc.standard.dao.base.ABaseDO;
@@ -30,7 +31,7 @@ public class CarbonBubbleOrder extends ABaseDO {
     private Date invalidDatetime;
 
     // 碳泡泡数量
-    private Integer quantity;
+    private BigDecimal quantity;
 
     // 状态（待收取、已收完、已过期）
     private String status;
@@ -51,10 +52,16 @@ public class CarbonBubbleOrder extends ABaseDO {
     // 生成时间止
     private Date createDatetimeEnd;
 
-    // 收取时间
+    // 过期时间起
+    private Date invalidDatetimeStart;
+
+    // 过期时间止
+    private Date invalidDatetimeEnd;
+
+    // 收取时间起
     private Date takeDatetimeStart;
 
-    // 收取时间
+    // 收取时间止
     private Date takeDatetimeEnd;
 
     // 收取人用户信息
@@ -108,11 +115,11 @@ public class CarbonBubbleOrder extends ABaseDO {
         this.invalidDatetime = invalidDatetime;
     }
 
-    public Integer getQuantity() {
+    public BigDecimal getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(Integer quantity) {
+    public void setQuantity(BigDecimal quantity) {
         this.quantity = quantity;
     }
 
@@ -171,4 +178,21 @@ public class CarbonBubbleOrder extends ABaseDO {
     public void setTakeDatetimeEnd(Date takeDatetimeEnd) {
         this.takeDatetimeEnd = takeDatetimeEnd;
     }
+
+    public Date getInvalidDatetimeStart() {
+        return invalidDatetimeStart;
+    }
+
+    public void setInvalidDatetimeStart(Date invalidDatetimeStart) {
+        this.invalidDatetimeStart = invalidDatetimeStart;
+    }
+
+    public Date getInvalidDatetimeEnd() {
+        return invalidDatetimeEnd;
+    }
+
+    public void setInvalidDatetimeEnd(Date invalidDatetimeEnd) {
+        this.invalidDatetimeEnd = invalidDatetimeEnd;
+    }
+
 }

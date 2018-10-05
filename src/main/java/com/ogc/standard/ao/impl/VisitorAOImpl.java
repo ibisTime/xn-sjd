@@ -12,7 +12,6 @@ import com.ogc.standard.bo.IVisitorBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.domain.Visitor;
-import com.ogc.standard.exception.BizException;
 
 @Service
 public class VisitorAOImpl implements IVisitorAO {
@@ -22,27 +21,6 @@ public class VisitorAOImpl implements IVisitorAO {
 
     @Autowired
     private IUserBO userBO;
-
-    @Override
-    public String addVisitor(Visitor data) {
-        return visitorBO.saveVisitor(data);
-    }
-
-    @Override
-    public int editVisitor(Visitor data) {
-        if (!visitorBO.isVisitorExist(data.getCode())) {
-            throw new BizException("xn0000", "记录编号不存在");
-        }
-        return visitorBO.refreshVisitor(data);
-    }
-
-    @Override
-    public int dropVisitor(String code) {
-        if (!visitorBO.isVisitorExist(code)) {
-            throw new BizException("xn0000", "记录编号不存在");
-        }
-        return visitorBO.removeVisitor(code);
-    }
 
     @Override
     public Paginable<Visitor> queryVisitorPage(int start, int limit,

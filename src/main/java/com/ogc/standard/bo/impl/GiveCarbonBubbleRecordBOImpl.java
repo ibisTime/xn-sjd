@@ -1,5 +1,6 @@
 package com.ogc.standard.bo.impl;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class GiveCarbonBubbleRecordBOImpl extends
 
     @Override
     public String saveGiveCarbonBubbleRecord(String userId, String toUserId,
-            Integer quantity) {
+            BigDecimal quantity) {
         GiveCarbonBubbleRecord data = new GiveCarbonBubbleRecord();
 
         String code = OrderNoGenerater

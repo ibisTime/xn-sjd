@@ -1,5 +1,6 @@
 package com.ogc.standard.bo.impl;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -33,15 +34,30 @@ public class CarbonBubbleOrderBOImpl extends PaginableBOImpl<CarbonBubbleOrder>
     }
 
     @Override
-    public String saveCarbonBubbleOrder(CarbonBubbleOrder data) {
-        String code = null;
-        if (data != null) {
-            code = OrderNoGenerater
-                .generate(EGeneratePrefix.CARBON_BUBBLE_ORDER.getCode());
-            data.setCode(code);
-            carbonBubbleOrderDAO.insert(data);
-        }
+    public String saveCarbonBubbleOrder(String adoptTreeCode,
+            Date createDatetime, Date invalidDatetime, String adoptUserId,
+            BigDecimal quantity) {
+        CarbonBubbleOrder data = new CarbonBubbleOrder();
+        String code = OrderNoGenerater
+            .generate(EGeneratePrefix.CARBON_BUBBLE_ORDER.getCode());
+        data.setCode(code);
+        data.setAdoptTreeCode(adoptTreeCode);
+        data.setAdoptUserId(adoptUserId);
+        data.setCreateDatetime(createDatetime);
+        data.setQuantity(quantity);
+
+        data.setStatus(ECarbonBubbleOrderStatus.TO_TAKE.getCode());
+        data.setInvalidDatetime(invalidDatetime);
+        carbonBubbleOrderDAO.insert(data);
         return code;
+    }
+
+    @Override
+    public void expireCarbonBubbleOrder(String code) {
+        CarbonBubbleOrder condition = new CarbonBubbleOrder();
+        condition.setCode(code);
+        condition.setStatus(ECarbonBubbleOrderStatus.INVALID.getCode());
+        carbonBubbleOrderDAO.updateExpireCarbonBubble(condition);
     }
 
     @Override

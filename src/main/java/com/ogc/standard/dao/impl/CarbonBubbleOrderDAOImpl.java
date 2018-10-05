@@ -9,8 +9,8 @@ import com.ogc.standard.dao.base.support.AMybatisTemplate;
 import com.ogc.standard.domain.CarbonBubbleOrder;
 
 @Repository("carbonBubbleOrderDAOImpl")
-public class CarbonBubbleOrderDAOImpl extends AMybatisTemplate implements
-        ICarbonBubbleOrderDAO {
+public class CarbonBubbleOrderDAOImpl extends AMybatisTemplate
+        implements ICarbonBubbleOrderDAO {
 
     @Override
     public int insert(CarbonBubbleOrder data) {
@@ -20,6 +20,17 @@ public class CarbonBubbleOrderDAOImpl extends AMybatisTemplate implements
     @Override
     public int delete(CarbonBubbleOrder data) {
         return 0;
+    }
+
+    @Override
+    public int updateExpireCarbonBubble(CarbonBubbleOrder data) {
+        return super.update(NAMESPACE.concat("update_expireCarbonBubble"),
+            data);
+    }
+
+    @Override
+    public void updateTakeCarbonBubble(CarbonBubbleOrder data) {
+        super.update(NAMESPACE.concat("update_takeCarbonBubble"), data);
     }
 
     @Override
@@ -45,11 +56,6 @@ public class CarbonBubbleOrderDAOImpl extends AMybatisTemplate implements
             int start, int count) {
         return super.selectList(NAMESPACE.concat("select_carbonBubbleOrder"),
             start, count, condition, CarbonBubbleOrder.class);
-    }
-
-    @Override
-    public void updateTakeCarbonBubble(CarbonBubbleOrder data) {
-        super.update(NAMESPACE.concat("update_takeCarbonBubble"), data);
     }
 
 }

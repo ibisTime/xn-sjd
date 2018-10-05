@@ -1,5 +1,6 @@
 package com.ogc.standard.bo;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.ogc.standard.bo.base.IPaginableBO;
@@ -13,8 +14,8 @@ public interface IBizLogBO extends IPaginableBO<BizLog> {
     public long leaveMessage(String adoptTreeCode, String note, String userId);
 
     // 收取碳泡泡
-    public long gatherCarbonBubble(String adoptTreeCode, Integer quantity,
-            String userId);
+    public long gatherCarbonBubble(String adoptTreeCode, BigDecimal quantity,
+            String userId, String type);
 
     // 本周用户碳泡泡总量
     public long getWeekQuantitySum(String userId);

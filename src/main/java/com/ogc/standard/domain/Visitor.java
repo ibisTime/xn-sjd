@@ -30,8 +30,6 @@ public class Visitor extends ABaseDO {
     private Date createDatetime;
 
     /**********DB properties***********/
-
-    /*************辅助字段**************/
     // 来访时间起
     private Date createDatetimeStart;
 

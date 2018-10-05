@@ -1,5 +1,6 @@
 package com.ogc.standard.bo;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.ogc.standard.bo.base.IPaginableBO;
@@ -16,7 +17,7 @@ public interface IGiveCarbonBubbleRecordBO
 
     // 添加记录
     public String saveGiveCarbonBubbleRecord(String userId, String toUserId,
-            Integer quantity);
+            BigDecimal quantity);
 
     public List<GiveCarbonBubbleRecord> queryGiveCarbonBubbleRecordList(
             GiveCarbonBubbleRecord condition);

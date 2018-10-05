@@ -7,5 +7,10 @@ import com.ogc.standard.domain.CarbonBubbleOrder;
 public interface ICarbonBubbleOrderDAO extends IBaseDAO<CarbonBubbleOrder> {
     String NAMESPACE = ICarbonBubbleOrderDAO.class.getName().concat(".");
 
+    // 收取
     void updateTakeCarbonBubble(CarbonBubbleOrder data);
+
+    // 过期
+    public int updateExpireCarbonBubble(CarbonBubbleOrder data);
+
 }

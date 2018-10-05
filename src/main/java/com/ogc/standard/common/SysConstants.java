@@ -82,4 +82,9 @@ public class SysConstants {
 
     public static final String WEIGHT_RATE2 = "WEIGHT_RATE2"; // 好友权重比例2
 
+    // 产生碳泡泡
+    public static final String CREATE_TPP_RATE = "CREATE_TPP_RATE";// 碳泡泡产生比例
+
+    public static final String TPP_EXPIRE_HOUR = "TPP_EXPIRE_HOUR";// 碳泡泡过期时间
+
 }

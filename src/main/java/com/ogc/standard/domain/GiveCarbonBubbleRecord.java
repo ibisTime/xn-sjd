@@ -1,5 +1,6 @@
 package com.ogc.standard.domain;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import com.ogc.standard.dao.base.ABaseDO;
@@ -18,7 +19,7 @@ public class GiveCarbonBubbleRecord extends ABaseDO {
     private String code;
 
     // 赠送数量
-    private Integer quantity;
+    private BigDecimal quantity;
 
     // 赠送人
     private String userId;
@@ -37,11 +38,11 @@ public class GiveCarbonBubbleRecord extends ABaseDO {
         return code;
     }
 
-    public void setQuantity(Integer quantity) {
+    public void setQuantity(BigDecimal quantity) {
         this.quantity = quantity;
     }
 
-    public Integer getQuantity() {
+    public BigDecimal getQuantity() {
         return quantity;
     }
 

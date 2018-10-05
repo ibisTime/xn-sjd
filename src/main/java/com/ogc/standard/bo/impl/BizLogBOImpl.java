@@ -1,5 +1,7 @@
 package com.ogc.standard.bo.impl;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -52,15 +54,18 @@ public class BizLogBOImpl extends PaginableBOImpl<BizLog> implements IBizLogBO {
     }
 
     @Override
-    public long gatherCarbonBubble(String adoptTreeCode, Integer quantity,
-            String userId) {
-        AdoptOrderTree adoptOrderTree = adoptOrderTreeBO
-            .getAdoptOrderTree(adoptTreeCode);
-
+    public long gatherCarbonBubble(String adoptTreeCode, BigDecimal quantity,
+            String userId, String type) {
         BizLog data = new BizLog();
+
+        if (null != adoptTreeCode) {
+            AdoptOrderTree adoptOrderTree = adoptOrderTreeBO
+                .getAdoptOrderTree(adoptTreeCode);
+            data.setAdoptUserId(adoptOrderTree.getCurrentHolder());
+        }
+
         data.setAdoptTreeCode(adoptTreeCode);
-        data.setAdoptUserId(adoptOrderTree.getCurrentHolder());
-        data.setType(EBizLogType.GATHER.getCode());
+        data.setType(type);
         data.setQuantity(quantity);
         data.setUserId(userId);
 
@@ -76,6 +81,11 @@ public class BizLogBOImpl extends PaginableBOImpl<BizLog> implements IBizLogBO {
         condition.setUserId(userId);
         condition.setCreateDatetimeStart(DateUtil.getBeginDayOfWeek());
         condition.setCreateDatetimeEnd(DateUtil.getEndDayOfWeek());
+
+        List<String> typeList = new ArrayList<String>();
+        typeList.add(EBizLogType.GATHER.getCode());
+        typeList.add(EBizLogType.GIVE.getCode());
+        condition.setTypeList(typeList);
 
         return bizLogDAO.selectQuantitySum(condition);
     }

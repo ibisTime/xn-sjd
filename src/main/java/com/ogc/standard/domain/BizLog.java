@@ -1,6 +1,8 @@
 package com.ogc.standard.domain;
 
+import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 import com.ogc.standard.dao.base.ABaseDO;
 
@@ -23,7 +25,7 @@ public class BizLog extends ABaseDO {
     // 认养人编号
     private String adoptUserId;
 
-    // 类型（1留言/2收取碳泡泡）
+    // 类型（1赠送碳泡泡/2留言/3收取碳泡泡）
     private String type;
 
     // 说明
@@ -33,7 +35,7 @@ public class BizLog extends ABaseDO {
     private String userId;
 
     // 操作数量
-    private Integer quantity;
+    private BigDecimal quantity;
 
     // 产生时间
     private Date createDatetime;
@@ -47,6 +49,9 @@ public class BizLog extends ABaseDO {
 
     // 本周操作数量
     private Integer weekQuantity;
+
+    // 类型列表
+    private List<String> typeList;
 
     public Integer getId() {
         return id;
@@ -120,11 +125,11 @@ public class BizLog extends ABaseDO {
         this.adoptUserId = adoptUserId;
     }
 
-    public Integer getQuantity() {
+    public BigDecimal getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(Integer quantity) {
+    public void setQuantity(BigDecimal quantity) {
         this.quantity = quantity;
     }
 
@@ -134,6 +139,14 @@ public class BizLog extends ABaseDO {
 
     public void setWeekQuantity(Integer weekQuantity) {
         this.weekQuantity = weekQuantity;
+    }
+
+    public List<String> getTypeList() {
+        return typeList;
+    }
+
+    public void setTypeList(List<String> typeList) {
+        this.typeList = typeList;
     }
 
 }
