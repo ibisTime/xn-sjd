@@ -22,6 +22,7 @@
 			    <ref bean="doCancelAdoptOrderTrigger"/>
 			    <ref bean="doDailyAdoptOrderTrigger"/>
 			    <ref bean="doDailyAdoptOrderTreeTrigger"/>
+			    <ref bean="doExpireCarbonBubbleTrigger"/>
  			</list>
 		</property>
 		<property name="autoStartup" value="true" />
@@ -70,7 +71,7 @@
 		<property name="concurrent" value="false" />
 	</bean>
 	
-	<!-- 订单已支付或即将过期扫描 -->
+	<!-- 每天凌晨产生碳泡泡 -->
 	<bean id="doDailyAdoptOrderTreeTrigger"
 		  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="doDailyAdoptOrderTree" />
@@ -81,6 +82,20 @@
 		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject" ref="adoptOrderTreeAOImpl" />
 		<property name="targetMethod" value="doDailyAdoptOrderTree" />
+		<property name="concurrent" value="false" />
+	</bean> 
+	
+	<!-- 碳泡泡过期扫描 -->
+	<bean id="doExpireCarbonBubbleTrigger"
+		  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="doExpireCarbonBubble" />
+		<property name="cronExpression" value="0 0 */1 * * ?"/><!-- 每小时执行 -->
+	</bean>
+	
+	<bean id="doExpireCarbonBubble"
+		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="carbonBubbleOrderAOImpl" />
+		<property name="targetMethod" value="expireCarbonBubble" />
 		<property name="concurrent" value="false" />
 	</bean> 
 

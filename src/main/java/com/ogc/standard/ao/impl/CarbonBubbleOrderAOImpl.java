@@ -3,6 +3,8 @@ package com.ogc.standard.ao.impl;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,16 +15,22 @@ import com.ogc.standard.bo.IBizLogBO;
 import com.ogc.standard.bo.ICarbonBubbleOrderBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
+import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.CarbonBubbleOrder;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.enums.EBizLogType;
 import com.ogc.standard.enums.ECarbonBubbleOrderStatus;
 import com.ogc.standard.enums.ECurrency;
+import com.ogc.standard.enums.EJourBizTypePlat;
+import com.ogc.standard.enums.EJourBizTypeUser;
+import com.ogc.standard.enums.ESystemAccount;
 import com.ogc.standard.exception.BizException;
 
 @Service
 public class CarbonBubbleOrderAOImpl implements ICarbonBubbleOrderAO {
+    static final Logger logger = LoggerFactory
+        .getLogger(AdoptOrderAOImpl.class);
 
     @Autowired
     private ICarbonBubbleOrderBO carbonBubbleOrderBO;
@@ -35,6 +43,21 @@ public class CarbonBubbleOrderAOImpl implements ICarbonBubbleOrderAO {
 
     @Autowired
     private IBizLogBO bizLogBO;
+
+    public void expireCarbonBubble() {
+        logger.info("***************开始扫描已过期碳泡泡***************");
+        CarbonBubbleOrder carCondition = new CarbonBubbleOrder();
+        carCondition.setStatus(ECarbonBubbleOrderStatus.TO_TAKE.getCode());
+        carCondition.setInvalidDatetime(DateUtil.getHourStart());
+        List<CarbonBubbleOrder> carList = carbonBubbleOrderBO
+            .queryCarbonBubbleOrderList(carCondition);
+
+        for (CarbonBubbleOrder carbonBubbleOrder : carList) {
+            carbonBubbleOrderBO
+                .expireCarbonBubbleOrder(carbonBubbleOrder.getCode());
+        }
+        logger.info("***************结束扫描已过期碳泡泡***************");
+    }
 
     @Override
     @Transactional
@@ -52,10 +75,16 @@ public class CarbonBubbleOrderAOImpl implements ICarbonBubbleOrderAO {
         carbonBubbleOrderBO.takeCarbonBubble(code, collector);
 
         // 收取人碳泡泡账户加上碳泡泡
-        Account tppAccount = accountBO.getAccountByUser(collector,
+        Account sysTppAccount = accountBO
+            .getAccount(ESystemAccount.SYS_ACOUNT_TPP.getCode());
+        Account userTppAccount = accountBO.getAccountByUser(collector,
             ECurrency.TPP.getCode());
-        accountBO.changeAmount(tppAccount, data.getQuantity(), null, null,
-            data.getCode(), null, null);// TODO 流水业务类型枚举
+
+        accountBO.transAmount(sysTppAccount, userTppAccount, data.getQuantity(),
+            EJourBizTypeUser.PRESENT.getCode(),
+            EJourBizTypePlat.ADOPT_DAY_BACK.getCode(),
+            EJourBizTypeUser.ADOPT_DAY_BACK.getValue(),
+            EJourBizTypePlat.ADOPT_DAY_BACK.getValue(), data.getCode());
 
         // 添加日志
         bizLogBO.gatherCarbonBubble(data.getAdoptTreeCode(), data.getQuantity(),

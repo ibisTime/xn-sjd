@@ -346,8 +346,15 @@ public class DateUtil {
         return new Timestamp(calendar.getTimeInMillis());
     }
 
+    public static Date getHourStart() {
+        Calendar currentDate = new GregorianCalendar();
+        currentDate.set(Calendar.MINUTE, 0);
+        currentDate.set(Calendar.SECOND, 0);
+        return (Date) currentDate.getTime().clone();
+    }
+
     public static void main(String[] args) {
-        System.out.println(getEndDayOfWeek());
+        System.out.println(getHourStart());
     }
 
     /**

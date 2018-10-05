@@ -501,6 +501,8 @@ INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`r
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('DIST_AGENT_RATE','DIST_AGENT2_RATE','0.9','admin',now(),'二级代理分成比例');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('DIST_AGENT_RATE','DIST_AGENT3_RATE','0.8','admin',now(),'三级代理分成比例');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('DIST_AGENT_RATE','DIST_AGENT4_RATE','0.7','admin',now(),'四级代理分成比例');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('CREATE_TPP','TPP_EXPIRE_HOUR','72','admin',now(),'碳泡泡过期时间');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('CREATE_TPP','CREATE_TPP_RATE','0.01','admin',now(),'碳泡泡产生比例');
 
 /*
 -- Query: SELECT bank_code,bank_name,channel_type,status,channel_bank,max_order,order_amount,day_amount,month_amount,remark FROM tsys_channel_bank

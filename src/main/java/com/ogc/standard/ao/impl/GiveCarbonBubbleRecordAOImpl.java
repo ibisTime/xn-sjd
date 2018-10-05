@@ -38,12 +38,12 @@ public class GiveCarbonBubbleRecordAOImpl implements IGiveCarbonBubbleRecordAO {
             BigDecimal quantity) {
         Account userTppAccount = accountBO.getAccountByUser(userId,
             ECurrency.TPP.getCode());
-        Account toUserTppAccount = accountBO.getAccountByUser(toUserId,
-            ECurrency.TPP.getCode());
-
         if (quantity.compareTo(userTppAccount.getAmount()) == 1) {
             throw new BizException("xn000", "碳泡泡余额不足，无法赠送!");
         }
+
+        Account toUserTppAccount = accountBO.getAccountByUser(toUserId,
+            ECurrency.TPP.getCode());
 
         String recordCode = giveCarbonBubbleRecordBO
             .saveGiveCarbonBubbleRecord(userId, toUserId, quantity);
