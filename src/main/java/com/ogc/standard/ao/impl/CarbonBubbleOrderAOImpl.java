@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.ICarbonBubbleOrderAO;
 import com.ogc.standard.bo.IAccountBO;
+import com.ogc.standard.bo.IBizLogBO;
 import com.ogc.standard.bo.ICarbonBubbleOrderBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
@@ -32,6 +33,9 @@ public class CarbonBubbleOrderAOImpl implements ICarbonBubbleOrderAO {
     @Autowired
     private IAccountBO accountBO;
 
+    @Autowired
+    private IBizLogBO bizLogBO;
+
     @Override
     @Transactional
     public void takeCarbonBubble(String code, String collector) {
@@ -39,16 +43,23 @@ public class CarbonBubbleOrderAOImpl implements ICarbonBubbleOrderAO {
         if (ECarbonBubbleOrderStatus.TAKED.getCode().equals(data.getStatus())) {
             throw new BizException("xn0000", "碳泡泡已被收取，不能重复收取");
         }
-        if (ECarbonBubbleOrderStatus.INVALID.getCode().equals(data.getStatus())) {
+        if (ECarbonBubbleOrderStatus.INVALID.getCode()
+            .equals(data.getStatus())) {
             throw new BizException("xn0000", "碳泡泡已过期，不能收取");
         }
+
         // 更改碳泡泡产生订单状态
         carbonBubbleOrderBO.takeCarbonBubble(code, collector);
+
         // 收取人碳泡泡账户加上碳泡泡
         Account tppAccount = accountBO.getAccountByUser(collector,
             ECurrency.TPP.getCode());
         accountBO.changeAmount(tppAccount, new BigDecimal(data.getQuantity()),
             null, null, data.getCode(), null, null);// TODO 流水业务类型枚举
+
+        // 添加日志
+        bizLogBO.gatherCarbonBubble(data.getAdoptTreeCode(), data.getQuantity(),
+            collector);
     }
 
     @Override

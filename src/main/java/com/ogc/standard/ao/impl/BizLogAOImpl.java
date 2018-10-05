@@ -17,8 +17,8 @@ public class BizLogAOImpl implements IBizLogAO {
     private IBizLogBO bizLogBO;
 
     @Override
-    public int addBizLog(BizLog data) {
-        return bizLogBO.saveBizLog(data);
+    public long leaveMessage(String adoptTreeCode, String note, String userId) {
+        return bizLogBO.leaveMessage(adoptTreeCode, note, userId);
     }
 
     @Override
@@ -36,4 +36,5 @@ public class BizLogAOImpl implements IBizLogAO {
     public BizLog getBizLog(int id) {
         return bizLogBO.getBizLog(id);
     }
+
 }

@@ -20,6 +20,9 @@
 			<if test="toUser != null and toUser != '' ">
 				AND t.to_user = #{toUser}
 			</if>
+			<if test="friendUserId != null and friendUserId != '' ">
+				AND (t.to_user = #{friendUserId} or t.user_id = #{friendUserId})
+			</if>
 			<if test="type != null and type != '' ">
 				AND t.type = #{type}
 			</if>

@@ -1,14 +1,18 @@
 package com.ogc.standard.bo.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.ogc.standard.bo.IAdoptOrderTreeBO;
 import com.ogc.standard.bo.IBizLogBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.dao.IBizLogDAO;
+import com.ogc.standard.domain.AdoptOrderTree;
 import com.ogc.standard.domain.BizLog;
+import com.ogc.standard.enums.EBizLogType;
 import com.ogc.standard.exception.BizException;
 
 @Component
@@ -17,23 +21,44 @@ public class BizLogBOImpl extends PaginableBOImpl<BizLog> implements IBizLogBO {
     @Autowired
     private IBizLogDAO bizLogDAO;
 
+    @Autowired
+    private IAdoptOrderTreeBO adoptOrderTreeBO;
+
     @Override
-    public boolean isBizLogExist(int id) {
-        BizLog condition = new BizLog();
-        condition.setId(id);
-        if (bizLogDAO.selectTotalCount(condition) > 0) {
-            return true;
-        }
-        return false;
+    public long leaveMessage(String adoptTreeCode, String note, String userId) {
+        AdoptOrderTree adoptOrderTree = adoptOrderTreeBO
+            .getAdoptOrderTree(adoptTreeCode);
+
+        BizLog data = new BizLog();
+        data.setAdoptTreeCode(adoptTreeCode);
+        data.setAdoptUserId(adoptOrderTree.getCurrentHolder());
+        data.setType(EBizLogType.LEAVE_MESSAGE.getCode());
+        data.setNote(note);
+        data.setUserId(userId);
+
+        data.setCreateDatetime(new Date());
+        bizLogDAO.insert(data);
+
+        return bizLogDAO.selectMaxId();
     }
 
     @Override
-    public int saveBizLog(BizLog data) {
-        Integer id = null;
-        if (data != null) {
-            id = bizLogDAO.insert(data);
-        }
-        return id;
+    public long gatherCarbonBubble(String adoptTreeCode, Integer quantity,
+            String userId) {
+        AdoptOrderTree adoptOrderTree = adoptOrderTreeBO
+            .getAdoptOrderTree(adoptTreeCode);
+
+        BizLog data = new BizLog();
+        data.setAdoptTreeCode(adoptTreeCode);
+        data.setAdoptUserId(adoptOrderTree.getCurrentHolder());
+        data.setType(EBizLogType.GATHER.getCode());
+        data.setQuantity(quantity);
+        data.setUserId(userId);
+
+        data.setCreateDatetime(new Date());
+        bizLogDAO.insert(data);
+
+        return bizLogDAO.selectMaxId();
     }
 
     @Override
@@ -54,4 +79,5 @@ public class BizLogBOImpl extends PaginableBOImpl<BizLog> implements IBizLogBO {
         }
         return data;
     }
+
 }

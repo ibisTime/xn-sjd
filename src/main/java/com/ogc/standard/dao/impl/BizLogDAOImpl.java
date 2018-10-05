@@ -28,6 +28,12 @@ public class BizLogDAOImpl extends AMybatisTemplate implements IBizLogDAO {
     }
 
     @Override
+    public long selectMaxId() {
+        return super.select(NAMESPACE.concat("select_bizLog_maxId"), null,
+            Long.class);
+    }
+
+    @Override
     public long selectTotalCount(BizLog condition) {
         return super.selectTotalCount(NAMESPACE.concat("select_bizLog_count"),
             condition);
@@ -41,8 +47,8 @@ public class BizLogDAOImpl extends AMybatisTemplate implements IBizLogDAO {
 
     @Override
     public List<BizLog> selectList(BizLog condition, int start, int count) {
-        return super.selectList(NAMESPACE.concat("select_bizLog"), start,
-            count, condition, BizLog.class);
+        return super.selectList(NAMESPACE.concat("select_bizLog"), start, count,
+            condition, BizLog.class);
     }
 
 }

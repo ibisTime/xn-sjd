@@ -12,12 +12,16 @@ public interface IAdoptOrderTreeBO extends IPaginableBO<AdoptOrderTree> {
     public String saveAdoptOrderTree(Product product, AdoptOrder adoptOrder,
             String treeNumber);
 
-    public List<AdoptOrderTree> queryAdoptOrderTreeList(AdoptOrderTree condition);
+    public List<AdoptOrderTree> queryAdoptOrderTreeList(
+            AdoptOrderTree condition);
 
     public List<AdoptOrderTree> queryAdoptOrderTreeList(String orderCode);
 
     public AdoptOrderTree getAdoptOrderTree(String code);
 
     public void giveTree(AdoptOrderTree data);
+
+    // 用户的认养权数量
+    public long getCountByCurrentHolder(String currentHolder);
 
 }

@@ -5,8 +5,7 @@ package com.ogc.standard.enums;
  */
 public enum EUserReleationType {
 
-    BLACKLIST("0", "拉黑"),
-    TRUST("1", "信任");
+    BLACKLIST("0", "拉黑"), TRUST("1", "信任"), FRIEND("2", "好友");
 
     EUserReleationType(String code, String value) {
         this.code = code;

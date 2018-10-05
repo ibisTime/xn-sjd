@@ -5,5 +5,8 @@ import com.ogc.standard.domain.BizLog;
 
 //dao层 
 public interface IBizLogDAO extends IBaseDAO<BizLog> {
-	String NAMESPACE = IBizLogDAO.class.getName().concat(".");
+    String NAMESPACE = IBizLogDAO.class.getName().concat(".");
+
+    // 查询最大的id
+    public long selectMaxId();
 }
