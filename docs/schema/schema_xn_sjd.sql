@@ -918,6 +918,7 @@ CREATE TABLE `tsys_channel_bank` (
 -- ----------------------------
 --  Table structure for `tstd_user_relation`
 -- ----------------------------
+DROP TABLE IF EXISTS `tstd_user_relation`;
 CREATE TABLE `tstd_user_relation` (
   `code` varchar(32) NOT NULL COMMENT '编号',
   `user_id` varchar(32) DEFAULT NULL COMMENT '用户编号',
@@ -925,7 +926,7 @@ CREATE TABLE `tstd_user_relation` (
   `type` varchar(4) DEFAULT NULL COMMENT '关系类型',
   `status` varchar(4) DEFAULT NULL COMMENT '状态',
   `create_datetime` datetime DEFAULT NULL COMMENT '创建时间'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 SET FOREIGN_KEY_CHECKS = 1;

@@ -122,6 +122,10 @@ public class AgentUserAOImpl implements IAgentUserAO {
             level, req.getParentUserId());
         companyBO.saveCompany(req, userId);
 
+        // 分配人民币账户
+        accountBO.distributeAccount(userId, EAccountType.AGENT,
+            ECurrency.CNY.getCode());
+
         // 发送短信
         smsOutBO.sendSmsOut(
             req.getMobile(),

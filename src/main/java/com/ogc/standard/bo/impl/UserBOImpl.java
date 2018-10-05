@@ -151,7 +151,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         user.setUserReferee(userReferee);
         user.setUserRefereeType(userRefereeType);
 
-        user.setLevel(EUserLevel.ONE.getCode());
+        user.setLevel(EUserLevel.ZERO.getCode());
         user.setStatus(EUserStatus.NORMAL.getCode());
         user.setProvince(province);
         user.setCity(city);

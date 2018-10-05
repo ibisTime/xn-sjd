@@ -174,7 +174,7 @@ public class UserAOImpl implements IUserAO {
         user.setLoginPwd(MD5Util.md5(req.getLoginPwd()));
         user.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(req
             .getLoginPwd()));
-        user.setLevel(EUserLevel.ONE.getCode());
+        user.setLevel(EUserLevel.ZERO.getCode());
         user.setUserReferee(req.getUserReferee());
         user.setIdKind(req.getIdKind());
         user.setIdNo(req.getIdNo());

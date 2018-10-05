@@ -21,7 +21,6 @@ public class XN730072Req extends BaseReq {
     private String isTop;
 
     // 上级编号
-    @NotBlank
     private String parentUserId;
 
     // 公司名称
