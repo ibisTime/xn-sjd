@@ -12,15 +12,13 @@ public class SysConstants {
     public static String QINIU_DOMAIN = "qiniu_domain";
 
     // 取现规则配置
-    public static String CUSERQXBS = "CUSERQXBS"; // C端用户取现倍数
+    public static String USERQXBS = "USERQXBS"; // C端用户取现倍数
 
-    public static String CUSERQXFL = "CUSERQXFL"; // C端用户取现费率
+    public static String USERQXFL = "USERQXFL"; // C端用户取现费率
 
-    public static String CUSERQXSX = "CUSERQXSX"; // C端用户取现时效
+    public static String USERQXSX = "USERQXSX"; // C端用户取现时效
 
-    public static String CUSERMONTIMES = "CUSERMONTIMES"; // C端用户每月取现次数
-
-    public static String TRANSAMOUNTBS = "TRANSAMOUNTBS"; // C端2C端转账金额倍数
+    public static String USERMONTIMES = "USERMONTIMES"; // C端用户每月取现次数
 
     public static String QXDBZDJE = "QXDBZDJE"; // 取现单笔最大金额
 

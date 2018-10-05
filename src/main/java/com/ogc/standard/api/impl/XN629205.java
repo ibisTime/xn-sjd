@@ -31,6 +31,8 @@ public class XN629205 extends AProcessor {
         AdoptOrderTree condition = new AdoptOrderTree();
         condition.setOrderCode(req.getOrderCode());
         condition.setCategoryCode(req.getCategoryCode());
+        condition.setProductCode(req.getProductCode());
+        condition.setTreeNumber(req.getTreeNumber());
         condition.setStatus(req.getStatus());
         condition.setCurrentHolder(req.getCurrentHolder());
 

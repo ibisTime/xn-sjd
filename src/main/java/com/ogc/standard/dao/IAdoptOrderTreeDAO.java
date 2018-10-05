@@ -8,6 +8,4 @@ public interface IAdoptOrderTreeDAO extends IBaseDAO<AdoptOrderTree> {
     String NAMESPACE = IAdoptOrderTreeDAO.class.getName().concat(".");
 
     int updateStatus(AdoptOrderTree data);
-
-    void giveTree(AdoptOrderTree data);
 }

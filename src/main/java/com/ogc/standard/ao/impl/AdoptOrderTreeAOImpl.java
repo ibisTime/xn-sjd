@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.IAdoptOrderTreeAO;
 import com.ogc.standard.bo.IAdoptOrderTreeBO;
@@ -18,17 +19,20 @@ import com.ogc.standard.bo.ICarbonBubbleOrderBO;
 import com.ogc.standard.bo.IGiveTreeRecordBO;
 import com.ogc.standard.bo.ISYSConfigBO;
 import com.ogc.standard.bo.ITreeBO;
+import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.IVisitorBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.AmountUtil;
 import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.common.SysConstants;
 import com.ogc.standard.domain.AdoptOrderTree;
-import com.ogc.standard.domain.GiveTreeRecord;
 import com.ogc.standard.domain.Tree;
+import com.ogc.standard.domain.User;
 import com.ogc.standard.domain.Visitor;
 import com.ogc.standard.enums.EAdoptOrderTreeStatus;
 import com.ogc.standard.enums.ESysConfigType;
+import com.ogc.standard.exception.BizException;
+import com.ogc.standard.exception.EBizErrorCode;
 
 @Service
 public class AdoptOrderTreeAOImpl implements IAdoptOrderTreeAO {
@@ -40,6 +44,9 @@ public class AdoptOrderTreeAOImpl implements IAdoptOrderTreeAO {
 
     @Autowired
     private ITreeBO treeBO;
+
+    @Autowired
+    private IUserBO userBO;
 
     @Autowired
     private IGiveTreeRecordBO giveTreeRecordBO;
@@ -60,10 +67,10 @@ public class AdoptOrderTreeAOImpl implements IAdoptOrderTreeAO {
         logger.info("***************开始生成碳泡泡***************");
         Map<String, String> configMap = sysConfigBO
             .getConfigsMap(ESysConfigType.CREATE_TPP.getCode());
-        Double rate = Double
-            .valueOf(configMap.get(SysConstants.CREATE_TPP_RATE));
-        Integer expireHours = Integer
-            .valueOf(configMap.get(SysConstants.TPP_EXPIRE_HOUR));
+        Double rate = Double.valueOf(configMap
+            .get(SysConstants.CREATE_TPP_RATE));
+        Integer expireHours = Integer.valueOf(configMap
+            .get(SysConstants.TPP_EXPIRE_HOUR));
 
         Date createDatetime = DateUtil.getTodayStart();// 创建时间
         Date invalidDatetime = DateUtil.getRelativeDateOfHour(createDatetime,
@@ -76,14 +83,14 @@ public class AdoptOrderTreeAOImpl implements IAdoptOrderTreeAO {
         Integer limit = 10;
 
         while (true) {
-            Paginable<AdoptOrderTree> page = adoptOrderTreeBO
-                .getPaginable(start, limit, condition);
+            Paginable<AdoptOrderTree> page = adoptOrderTreeBO.getPaginable(
+                start, limit, condition);
 
             if (null != page && CollectionUtils.isNotEmpty(page.getList())) {
                 // 按订单比例产生碳泡泡
                 for (AdoptOrderTree adoptOrderTree : page.getList()) {
-                    BigDecimal quantity = AmountUtil
-                        .mul(adoptOrderTree.getAmount(), rate);
+                    BigDecimal quantity = AmountUtil.mul(
+                        adoptOrderTree.getAmount(), rate);
                     carbonBubbleOrderBO.saveCarbonBubbleOrder(
                         adoptOrderTree.getCode(), createDatetime,
                         invalidDatetime, adoptOrderTree.getCurrentHolder(),
@@ -101,18 +108,20 @@ public class AdoptOrderTreeAOImpl implements IAdoptOrderTreeAO {
     }
 
     @Override
-    public void giveTree(String code, String toUserId, String userId) {
-        // 更改认养权持有人
+    @Transactional
+    public void giveTree(String code, String userId, String toMobile) {
+        User user = userBO.getUser(userId);
+        User toUser = userBO.getUserByMobile(toMobile);
+
+        // 终止现有认养权，产生新的认养权，更改认养权持有人
         AdoptOrderTree data = adoptOrderTreeBO.getAdoptOrderTree(code);
-        data.setCurrentHolder(toUserId);
-        adoptOrderTreeBO.giveTree(data);
+        if (EAdoptOrderTreeStatus.ADOPT.getCode().equals(data.getStatus())) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "认养权不在认养中");
+        }
+        adoptOrderTreeBO.giveTree(data, user, toUser);
         // 新增赠送树记录
-        GiveTreeRecord record = new GiveTreeRecord();
-        record.setAdoptTreeCode(code);
-        record.setUserId(userId);
-        record.setToUserId(toUserId);
-        record.setCreateDatetime(new Date());
-        giveTreeRecordBO.saveGiveTreeRecord(record);
+        giveTreeRecordBO.saveGiveTreeRecord(userId, toUser.getUserId(),
+            data.getCode());
     }
 
     @Override
@@ -143,8 +152,7 @@ public class AdoptOrderTreeAOImpl implements IAdoptOrderTreeAO {
     }
 
     @Override
-    public List<AdoptOrderTree> queryAdoptOrderTreeList(
-            AdoptOrderTree condition) {
+    public List<AdoptOrderTree> queryAdoptOrderTreeList(AdoptOrderTree condition) {
         List<AdoptOrderTree> list = adoptOrderTreeBO
             .queryAdoptOrderTreeList(condition);
         for (AdoptOrderTree adoptOrderTree : list) {
@@ -163,6 +171,8 @@ public class AdoptOrderTreeAOImpl implements IAdoptOrderTreeAO {
     private void initAdoptOrderTree(AdoptOrderTree data) {
         Tree tree = treeBO.getTreeByTreeNumber(data.getTreeNumber());
         data.setTree(tree);
+        User user = userBO.getUser(data.getCurrentHolder());
+        data.setUser(user);
     }
 
 }

@@ -16,6 +16,7 @@
 		<result column="current_holder" property="currentHolder" />
 		
 		<result column="certificate_template" property="certificateTemplate" />
+		<result column="remark" property="remark" />
 	</resultMap>
 	
 	<sql id="where_condition">
@@ -59,6 +60,7 @@
 		,t.current_holder
 		
 		,t.certificate_template
+		,t.remark
 		FROM
 		try_adopt_order_tree t
 		<include refid="where_condition" />
@@ -91,6 +93,7 @@
 		,current_holder
 		
 		,certificate_template
+		,remark
 		)
 		VALUES(
 		#{code}
@@ -106,6 +109,7 @@
 		,#{currentHolder}
 		
 		,#{certificateTemplate}
+		,#{remark}
 		)
 	</insert>
 
@@ -113,14 +117,7 @@
 		UPDATE try_adopt_order_tree
 		SET
 		status = #{status}
+		,remark = #{remark}
 		WHERE code = #{code}
 	</update>
-	
-	<update id="update_giveTree" parameterType="adoptOrderTree">
-		UPDATE try_adopt_order_tree
-		SET
-		current_holder = #{currentHolder}
-		WHERE code = #{code}
-	</update>
-
 </mapper>

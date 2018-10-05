@@ -8,12 +8,6 @@ import com.ogc.standard.domain.GiveTreeRecord;
 public interface IGiveTreeRecordAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
-    public String addGiveTreeRecord(GiveTreeRecord data);
-
-    public int dropGiveTreeRecord(String code);
-
-    public int editGiveTreeRecord(GiveTreeRecord data);
-
     public Paginable<GiveTreeRecord> queryGiveTreeRecordPage(int start,
             int limit, GiveTreeRecord condition);
 

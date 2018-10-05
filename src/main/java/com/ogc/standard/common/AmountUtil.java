@@ -18,6 +18,12 @@ public class AmountUtil {
         return a.multiply(b);
     }
 
+    public static BigDecimal mul(BigDecimal amount, Long radix) {
+        BigDecimal a = amount;
+        BigDecimal b = new BigDecimal(radix);
+        return a.multiply(b);
+    }
+
     public static BigDecimal mul(BigDecimal amount, BigDecimal rate) {
         BigDecimal a = amount;
         BigDecimal b = rate;

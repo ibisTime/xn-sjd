@@ -95,7 +95,7 @@ CREATE TABLE `try_adopt_order` (
   `settle_status` varchar(32) DEFAULT NULL COMMENT '结算状态(0 不结算 1 待结算 2 已结算)',
   `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
   `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
-  `remark` text COMMENT '备注',
+  `remark` varchar(255) COMMENT '备注',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='个人/定向/捐赠认养订单';
 
@@ -114,6 +114,7 @@ CREATE TABLE `try_adopt_order_tree` (
   `amount` decimal(64,0) DEFAULT NULL COMMENT '认养金额',
   `status` varchar(4) DEFAULT NULL COMMENT '状态',
   `current_holder` varchar(32) DEFAULT NULL COMMENT '当前持有人',
+  `remark` varchar(255) COMMENT '备注',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='认养权';
 

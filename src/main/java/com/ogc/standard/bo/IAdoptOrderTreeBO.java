@@ -6,6 +6,7 @@ import com.ogc.standard.bo.base.IPaginableBO;
 import com.ogc.standard.domain.AdoptOrder;
 import com.ogc.standard.domain.AdoptOrderTree;
 import com.ogc.standard.domain.Product;
+import com.ogc.standard.domain.User;
 import com.ogc.standard.enums.EAdoptOrderTreeStatus;
 
 public interface IAdoptOrderTreeBO extends IPaginableBO<AdoptOrderTree> {
@@ -19,7 +20,7 @@ public interface IAdoptOrderTreeBO extends IPaginableBO<AdoptOrderTree> {
 
     public AdoptOrderTree getAdoptOrderTree(String code);
 
-    public void giveTree(AdoptOrderTree data);
+    public void giveTree(AdoptOrderTree data, User user, User toUser);
 
     public void refreshAdoptOrderTree(AdoptOrderTree data,
             EAdoptOrderTreeStatus adoptOrderTreeStatus);

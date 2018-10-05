@@ -1,5 +1,7 @@
 package com.ogc.standard.api.impl;
 
+import java.math.BigDecimal;
+
 import com.ogc.standard.ao.IWithdrawAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
@@ -11,9 +13,9 @@ import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
 
 /**
- * 提现广播
- * @author: haiqingzheng 
- * @since: 2017年11月8日 下午2:07:37 
+ * 提现支付回录
+ * @author: xieyj 
+ * @since: 2018年10月5日 下午9:00:50 
  * @history:
  */
 public class XN802353 extends AProcessor {
@@ -25,8 +27,11 @@ public class XN802353 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         synchronized (XN802353.class) {
-            withdrawAO.broadcast(req.getCode(), req.getmAddressId(),
-                req.getApproveUser());
+            for (String code : req.getCodeList()) {
+                BigDecimal transFee = new BigDecimal(req.getTransFee());
+                withdrawAO.payOrder(code, req.getPayUser(), req.getPayResult(),
+                    req.getPayNote(), req.getChannelOrder(), transFee);
+            }
             return new BooleanRes(true);
         }
     }

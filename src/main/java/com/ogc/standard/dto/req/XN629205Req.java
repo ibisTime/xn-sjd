@@ -15,11 +15,31 @@ public class XN629205Req extends APageReq {
 
     private String categoryCode;
 
+    private String productCode;
+
+    private String treeNumber;
+
     // 状态(1待认养2认养中3已到期)
     private String status;
 
     // 当前持有人
     private String currentHolder;
+
+    public String getTreeNumber() {
+        return treeNumber;
+    }
+
+    public void setTreeNumber(String treeNumber) {
+        this.treeNumber = treeNumber;
+    }
+
+    public String getProductCode() {
+        return productCode;
+    }
+
+    public void setProductCode(String productCode) {
+        this.productCode = productCode;
+    }
 
     public String getCategoryCode() {
         return categoryCode;

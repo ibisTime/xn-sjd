@@ -31,10 +31,6 @@
 		<result column="pay_fee" property="payFee" />
 		<result column="pay_datetime" property="payDatetime" />
 	</resultMap>
-	<!-- <resultMap id="addressUseInfo_DB_Result" type="ethAddress">
-		<result column="use_count" property="useCount" />
-		<result column="use_amount" property="useAmount" />
-	</resultMap> -->
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != '' ">
@@ -240,23 +236,6 @@
 		,pay_datetime = #{payDatetime}
 		WHERE code = #{code}
 	</update>
-	
-	<update id="broadcast_order" parameterType="withdraw">
-		UPDATE tstd_withdraw
-		SET
-		status = #{status}
-		,channel_order = #{channelOrder}
-		WHERE code = #{code}
-	</update>
-	
-<!-- 	<select id="select_addressUseInfo" parameterType="withdraw" -->
-<!-- 		resultMap="addressUseInfo_DB_Result"> -->
-<!-- 		SELECT  -->
-<!-- 		COUNT(*) as use_count,  -->
-<!-- 		COALESCE(SUM(amount)-SUM(fee),0) as use_amount -->
-<!-- 		FROM tstd_withdraw t -->
-<!-- 		<include refid="where_condition" /> -->
-<!-- 	</select> -->
 	
 	<select id="select_totalAmount" parameterType="withdraw"
 		resultType="java.math.BigDecimal">

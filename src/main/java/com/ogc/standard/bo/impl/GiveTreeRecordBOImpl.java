@@ -1,5 +1,6 @@
 package com.ogc.standard.bo.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -22,45 +23,21 @@ public class GiveTreeRecordBOImpl extends PaginableBOImpl<GiveTreeRecord>
     private IGiveTreeRecordDAO giveTreeRecordDAO;
 
     @Override
-    public boolean isGiveTreeRecordExist(String code) {
-        GiveTreeRecord condition = new GiveTreeRecord();
-        condition.setCode(code);
-        if (giveTreeRecordDAO.selectTotalCount(condition) > 0) {
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public String saveGiveTreeRecord(GiveTreeRecord data) {
+    public String saveGiveTreeRecord(String userId, String toUserId,
+            String adoptTreeCode) {
         String code = null;
-        if (data != null) {
+        if (StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(toUserId)) {
+            GiveTreeRecord data = new GiveTreeRecord();
             code = OrderNoGenerater.generate(EGeneratePrefix.GIVE_TREE_RECORD
                 .getCode());
             data.setCode(code);
+            data.setAdoptTreeCode(adoptTreeCode);
+            data.setUserId(userId);
+            data.setToUserId(toUserId);
+            data.setCreateDatetime(new Date());
             giveTreeRecordDAO.insert(data);
         }
         return code;
-    }
-
-    @Override
-    public int removeGiveTreeRecord(String code) {
-        int count = 0;
-        if (StringUtils.isNotBlank(code)) {
-            GiveTreeRecord data = new GiveTreeRecord();
-            data.setCode(code);
-            count = giveTreeRecordDAO.delete(data);
-        }
-        return count;
-    }
-
-    @Override
-    public int refreshGiveTreeRecord(GiveTreeRecord data) {
-        int count = 0;
-        if (StringUtils.isNotBlank(data.getCode())) {
-            count = giveTreeRecordDAO.update(data);
-        }
-        return count;
     }
 
     @Override
@@ -76,7 +53,7 @@ public class GiveTreeRecordBOImpl extends PaginableBOImpl<GiveTreeRecord>
             condition.setCode(code);
             data = giveTreeRecordDAO.select(condition);
             if (data == null) {
-                throw new BizException("xn0000", "�� ��Ų�����");
+                throw new BizException("xn0000", "赠送记录不存在");
             }
         }
         return data;

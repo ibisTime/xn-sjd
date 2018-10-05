@@ -10,19 +10,17 @@ import com.ogc.standard.enums.EWithdrawStatus;
 
 public interface IWithdrawBO extends IPaginableBO<Withdraw> {
 
-    public void doCheckTimes(Account account);
-
     String applyOrder(Account account, BigDecimal amount, BigDecimal fee,
             String payCardInfo, String payCardNo, String applyUser,
             String applyNote);
+
+    BigDecimal doCheckAndGetFee(Account account, BigDecimal amount);
 
     void approveOrder(Withdraw data, EWithdrawStatus status,
             String approveUser, String approveNote);
 
     void payOrder(Withdraw data, EWithdrawStatus status, String payUser,
             String payNote, String channelOrder, BigDecimal payFee);
-
-    void broadcastOrder(Withdraw data, String txHash, String updater);
 
     List<Withdraw> queryWithdrawList(Withdraw condition);
 
@@ -31,6 +29,4 @@ public interface IWithdrawBO extends IPaginableBO<Withdraw> {
     public Withdraw getWithdrawByChannelOrder(String hash);
 
     public BigDecimal getTotalWithdraw(String currency);
-
-    public void returnOrder(String code, String payUser, String payNote);
 }

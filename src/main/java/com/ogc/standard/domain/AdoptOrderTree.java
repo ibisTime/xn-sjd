@@ -39,7 +39,7 @@ public class AdoptOrderTree extends ABaseDO {
     // 认养金额
     private BigDecimal amount;
 
-    // 状态(1待认养2认养中3已到期)
+    // 状态(1待认养2认养中3已到期4已赠送)
     private String status;
 
     // 当前持有人
@@ -48,8 +48,29 @@ public class AdoptOrderTree extends ABaseDO {
     // 证书模板
     private String certificateTemplate;
 
+    // 备注
+    private String remark;
+
     // ***************db properties***************
     private Tree tree;
+
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 
     public String getCategoryCode() {
         return categoryCode;

@@ -52,9 +52,4 @@ public class AdoptOrderTreeDAOImpl extends AMybatisTemplate implements
         return super.update(NAMESPACE.concat("update_status"), data);
     }
 
-    @Override
-    public void giveTree(AdoptOrderTree data) {
-        super.update(NAMESPACE.concat("update_giveTree"), data);
-    }
-
 }
