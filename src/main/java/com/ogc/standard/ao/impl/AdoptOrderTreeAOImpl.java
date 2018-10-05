@@ -63,50 +63,6 @@ public class AdoptOrderTreeAOImpl implements IAdoptOrderTreeAO {
     @Autowired
     private ISYSConfigBO sysConfigBO;
 
-    public void doDailyAdoptOrderTree() {
-        logger.info("***************开始生成碳泡泡***************");
-        Map<String, String> configMap = sysConfigBO
-            .getConfigsMap(ESysConfigType.CREATE_TPP.getCode());
-        Double rate = Double.valueOf(configMap
-            .get(SysConstants.CREATE_TPP_RATE));
-        Integer expireHours = Integer.valueOf(configMap
-            .get(SysConstants.TPP_EXPIRE_HOUR));
-
-        Date createDatetime = DateUtil.getTodayStart();// 创建时间
-        Date invalidDatetime = DateUtil.getRelativeDateOfHour(createDatetime,
-            expireHours);// 过期时间
-
-        AdoptOrderTree condition = new AdoptOrderTree();
-        condition.setStatus(EAdoptOrderTreeStatus.ADOPT.getCode());
-
-        Integer start = 0;
-        Integer limit = 10;
-
-        while (true) {
-            Paginable<AdoptOrderTree> page = adoptOrderTreeBO.getPaginable(
-                start, limit, condition);
-
-            if (null != page && CollectionUtils.isNotEmpty(page.getList())) {
-                // 按订单比例产生碳泡泡
-                for (AdoptOrderTree adoptOrderTree : page.getList()) {
-                    BigDecimal quantity = AmountUtil.mul(
-                        adoptOrderTree.getAmount(), rate);
-                    carbonBubbleOrderBO.saveCarbonBubbleOrder(
-                        adoptOrderTree.getCode(), createDatetime,
-                        invalidDatetime, adoptOrderTree.getCurrentHolder(),
-                        quantity);
-                }
-            } else {
-                break;
-            }
-
-            start = start + limit;
-        }
-
-        logger.info("***************结束生成碳泡泡***************");
-
-    }
-
     @Override
     @Transactional
     public void giveTree(String code, String userId, String toMobile) {
@@ -173,6 +129,50 @@ public class AdoptOrderTreeAOImpl implements IAdoptOrderTreeAO {
         data.setTree(tree);
         User user = userBO.getUser(data.getCurrentHolder());
         data.setUser(user);
+    }
+
+    public void doDailyAdoptOrderTree() {
+        logger.info("***************开始生成碳泡泡***************");
+        Map<String, String> configMap = sysConfigBO
+            .getConfigsMap(ESysConfigType.CREATE_TPP.getCode());
+        Double rate = Double.valueOf(configMap
+            .get(SysConstants.CREATE_TPP_RATE));
+        Integer expireHours = Integer.valueOf(configMap
+            .get(SysConstants.TPP_EXPIRE_HOUR));
+
+        Date createDatetime = DateUtil.getTodayStart();// 创建时间
+        Date invalidDatetime = DateUtil.getRelativeDateOfHour(createDatetime,
+            expireHours);// 过期时间
+
+        AdoptOrderTree condition = new AdoptOrderTree();
+        condition.setStatus(EAdoptOrderTreeStatus.ADOPT.getCode());
+
+        Integer start = 0;
+        Integer limit = 10;
+
+        while (true) {
+            Paginable<AdoptOrderTree> page = adoptOrderTreeBO.getPaginable(
+                start, limit, condition);
+
+            if (null != page && CollectionUtils.isNotEmpty(page.getList())) {
+                // 按订单比例产生碳泡泡
+                for (AdoptOrderTree adoptOrderTree : page.getList()) {
+                    BigDecimal quantity = AmountUtil.mul(
+                        adoptOrderTree.getAmount(), rate);
+                    carbonBubbleOrderBO.saveCarbonBubbleOrder(
+                        adoptOrderTree.getCode(), createDatetime,
+                        invalidDatetime, adoptOrderTree.getCurrentHolder(),
+                        quantity);
+                }
+            } else {
+                break;
+            }
+
+            start = start + limit;
+        }
+
+        logger.info("***************结束生成碳泡泡***************");
+
     }
 
 }
