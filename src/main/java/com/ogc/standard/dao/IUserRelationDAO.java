@@ -8,6 +8,8 @@
  */
 package com.ogc.standard.dao;
 
+import java.util.List;
+
 import com.ogc.standard.dao.base.IBaseDAO;
 import com.ogc.standard.domain.UserRelation;
 
@@ -21,5 +23,12 @@ public interface IUserRelationDAO extends IBaseDAO<UserRelation> {
 
     // 更新关系表状态
     public int updateStatus(UserRelation data);
+
+    public long selectMyTotalCount(UserRelation condition);
+
+    public List<UserRelation> selectMyList(UserRelation condition, int start,
+            int count);
+
+    public List<UserRelation> selectMyList(UserRelation condition);
 
 }

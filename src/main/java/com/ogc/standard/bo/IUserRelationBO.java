@@ -8,10 +8,11 @@
  */
 package com.ogc.standard.bo;
 
-import com.ogc.standard.bo.base.IPaginableBO;
-import com.ogc.standard.domain.UserRelation;
-
 import java.util.List;
+
+import com.ogc.standard.bo.base.IPaginableBO;
+import com.ogc.standard.bo.base.Paginable;
+import com.ogc.standard.domain.UserRelation;
 
 /** 
  * 用户关系表
@@ -20,20 +21,26 @@ import java.util.List;
  * @history:
  */
 public interface IUserRelationBO extends IPaginableBO<UserRelation> {
-    public boolean isExistUserRelation(String userId, String toUser,String type);
+    public boolean isExistUserRelation(String userId, String toUser, String type);
 
-    public String saveUserRelation(String userId, String toUser,String type,
-            String systemCode);
+    public String saveUserRelation(String userId, String toUser, String type);
 
-    public int refreshUserRelation(String userId, String toUser,String type);
+    public int refreshUserRelation(String userId, String toUser, String type);
 
-    public int removeUserRelation(String userId, String toUser,String type);
+    public int removeUserRelation(String userId, String toUser, String type);
 
-    public List<UserRelation> queryUserRelationList(String userId, String toUser,String type);
+    public List<UserRelation> queryUserRelationList(String userId,
+            String toUser, String type);
 
     // 有多少人信任我
-    public long getRelationCount(String toUser,String type);
+    public long getRelationCount(String toUser, String type);
 
-    //userId 信任 toUser
+    // userId 信任 toUser
     public boolean checkReleation(String userId, String toUser, String type);
+
+    public Paginable<UserRelation> queryMyPaginable(int start, int pageSize,
+            UserRelation condition);
+
+    public List<UserRelation> queryMyUserRelationList(UserRelation condition);
+
 }

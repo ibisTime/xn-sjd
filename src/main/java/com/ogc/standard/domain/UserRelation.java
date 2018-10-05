@@ -33,15 +33,13 @@ public class UserRelation extends ABaseDO {
     // 状态(1 正常 0 假删除定时器删除 预留)
     private String status;
 
-    // 关系类型(0拉黑/1信任/2好友)
+    // 关系类型(1信任/2好友)
     private String type;
 
     // 创建时间
     private Date createDatetime;
 
     // **************DB Properties**************
-    // 好友编号
-    private String friendUserId;
 
     // 用户
     private User fromUserInfo;
@@ -50,10 +48,43 @@ public class UserRelation extends ABaseDO {
     private User toUserInfo;
 
     // 证书个数
-    private long certificateCount;
+    private int certificateCount;
+
+    // 序号
+    private int rowNo;
 
     // 碳泡泡余额
     public BigDecimal tppAmount;
+
+    public String mySelf;
+
+    public BigDecimal weightRate1;
+
+    public BigDecimal weightRate2;
+
+    public String getMySelf() {
+        return mySelf;
+    }
+
+    public void setMySelf(String mySelf) {
+        this.mySelf = mySelf;
+    }
+
+    public BigDecimal getWeightRate1() {
+        return weightRate1;
+    }
+
+    public void setWeightRate1(BigDecimal weightRate1) {
+        this.weightRate1 = weightRate1;
+    }
+
+    public BigDecimal getWeightRate2() {
+        return weightRate2;
+    }
+
+    public void setWeightRate2(BigDecimal weightRate2) {
+        this.weightRate2 = weightRate2;
+    }
 
     public String getCode() {
         return code;
@@ -119,19 +150,11 @@ public class UserRelation extends ABaseDO {
         this.type = type;
     }
 
-    public String getFriendUserId() {
-        return friendUserId;
-    }
-
-    public void setFriendUserId(String friendUserId) {
-        this.friendUserId = friendUserId;
-    }
-
-    public long getCertificateCount() {
+    public int getCertificateCount() {
         return certificateCount;
     }
 
-    public void setCertificateCount(long certificateCount) {
+    public void setCertificateCount(int certificateCount) {
         this.certificateCount = certificateCount;
     }
 
@@ -141,6 +164,14 @@ public class UserRelation extends ABaseDO {
 
     public void setTppAmount(BigDecimal tppAmount) {
         this.tppAmount = tppAmount;
+    }
+
+    public int getRowNo() {
+        return rowNo;
+    }
+
+    public void setRowNo(int rowNo) {
+        this.rowNo = rowNo;
     }
 
 }

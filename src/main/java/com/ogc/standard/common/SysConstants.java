@@ -80,4 +80,8 @@ public class SysConstants {
 
     public static String DIST_AGENT4_RATE = "DIST_AGENT4_RATE"; // 四级代理分成比例
 
+    public static final String WEIGHT_RATE1 = "WEIGHT_RATE1"; // 好友权重比例1
+
+    public static final String WEIGHT_RATE2 = "WEIGHT_RATE2"; // 好友权重比例2
+
 }

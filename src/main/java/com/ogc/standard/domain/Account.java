@@ -34,6 +34,8 @@ public class Account extends ABaseDO {
     // 余额
     private BigDecimal amount;
 
+    private BigDecimal totalAmount;
+
     // 冻结金额
     private BigDecimal frozenAmount;
 
@@ -68,6 +70,14 @@ public class Account extends ABaseDO {
 
     // 手机号
     private String mobile;
+
+    public BigDecimal getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(BigDecimal totalAmount) {
+        this.totalAmount = totalAmount;
+    }
 
     public String getAccountNumber() {
         return accountNumber;

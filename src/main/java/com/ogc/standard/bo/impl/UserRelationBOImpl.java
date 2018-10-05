@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.ogc.standard.bo.IUserRelationBO;
+import com.ogc.standard.bo.base.Page;
+import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.IUserRelationDAO;
@@ -29,8 +31,8 @@ import com.ogc.standard.enums.EBoolean;
  * @history:
  */
 @Component
-public class UserRelationBOImpl extends PaginableBOImpl<UserRelation>
-        implements IUserRelationBO {
+public class UserRelationBOImpl extends PaginableBOImpl<UserRelation> implements
+        IUserRelationBO {
     @Autowired
     private IUserRelationDAO userRelationDAO;
 
@@ -38,8 +40,7 @@ public class UserRelationBOImpl extends PaginableBOImpl<UserRelation>
      * @see com.std.user.bo.IUserRelationBO#isExistUserRelation(java.lang.String, java.lang.String)
      */
     @Override
-    public boolean isExistUserRelation(String userId, String toUser,
-            String type) {
+    public boolean isExistUserRelation(String userId, String toUser, String type) {
         UserRelation condition = new UserRelation();
         condition.setUserId(userId);
         condition.setToUser(toUser);
@@ -55,8 +56,7 @@ public class UserRelationBOImpl extends PaginableBOImpl<UserRelation>
      * @see com.std.user.bo.IUserRelationBO#saveUserRelation(java.lang.String, java.lang.String)
      */
     @Override
-    public String saveUserRelation(String userId, String toUser, String type,
-            String systemCode) {
+    public String saveUserRelation(String userId, String toUser, String type) {
         String code = null;
         if (StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(toUser)) {
             UserRelation data = new UserRelation();
@@ -125,5 +125,26 @@ public class UserRelationBOImpl extends PaginableBOImpl<UserRelation>
         condition.setToUser(toUser);
         condition.setType(type);
         return this.userRelationDAO.selectTotalCount(condition) >= 1;
+    }
+
+    @Override
+    public Paginable<UserRelation> queryMyPaginable(int start, int pageSize,
+            UserRelation condition) {
+        prepare(condition);
+        long totalCount = userRelationDAO.selectMyTotalCount(condition);
+
+        Paginable<UserRelation> page = new Page<UserRelation>(start, pageSize,
+            totalCount);
+
+        List<UserRelation> dataList = userRelationDAO.selectMyList(condition,
+            page.getStart(), page.getPageSize());
+
+        page.setList(dataList);
+        return page;
+    }
+
+    @Override
+    public List<UserRelation> queryMyUserRelationList(UserRelation condition) {
+        return userRelationDAO.selectMyList(condition);
     }
 }
