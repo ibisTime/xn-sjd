@@ -2,6 +2,7 @@ package com.ogc.standard.ao.impl;
 
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,16 +47,29 @@ public class CarbonBubbleOrderAOImpl implements ICarbonBubbleOrderAO {
 
     public void expireCarbonBubble() {
         logger.info("***************开始扫描已过期碳泡泡***************");
-        CarbonBubbleOrder carCondition = new CarbonBubbleOrder();
-        carCondition.setStatus(ECarbonBubbleOrderStatus.TO_TAKE.getCode());
-        carCondition.setInvalidDatetime(DateUtil.getHourStart());
-        List<CarbonBubbleOrder> carList = carbonBubbleOrderBO
-            .queryCarbonBubbleOrderList(carCondition);
+        CarbonBubbleOrder condition = new CarbonBubbleOrder();
+        condition.setStatus(ECarbonBubbleOrderStatus.TO_TAKE.getCode());
+        condition.setInvalidDatetimeEnd(DateUtil.getHourStart());
 
-        for (CarbonBubbleOrder carbonBubbleOrder : carList) {
-            carbonBubbleOrderBO
-                .expireCarbonBubbleOrder(carbonBubbleOrder.getCode());
+        Integer start = 0;
+        Integer limit = 10;
+
+        while (true) {
+            Paginable<CarbonBubbleOrder> page = carbonBubbleOrderBO
+                .getPaginable(start, limit, condition);
+
+            if (null != page && CollectionUtils.isNotEmpty(page.getList())) {
+                for (CarbonBubbleOrder carbonBubbleOrder : page.getList()) {
+                    carbonBubbleOrderBO
+                        .expireCarbonBubbleOrder(carbonBubbleOrder.getCode());
+                }
+            } else {
+                break;
+            }
+
+            start = start + limit;
         }
+
         logger.info("***************结束扫描已过期碳泡泡***************");
     }
 

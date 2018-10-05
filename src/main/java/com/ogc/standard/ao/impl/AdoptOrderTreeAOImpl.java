@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,11 +58,6 @@ public class AdoptOrderTreeAOImpl implements IAdoptOrderTreeAO {
 
     public void doDailyAdoptOrderTree() {
         logger.info("***************开始生成碳泡泡***************");
-        AdoptOrderTree condition = new AdoptOrderTree();
-        condition.setStatus(EAdoptOrderTreeStatus.ADOPT.getCode());
-        List<AdoptOrderTree> adoptList = adoptOrderTreeBO
-            .queryAdoptOrderTreeList(condition);
-
         Map<String, String> configMap = sysConfigBO
             .getConfigsMap(ESysConfigType.CREATE_TPP.getCode());
         Double rate = Double
@@ -69,18 +65,37 @@ public class AdoptOrderTreeAOImpl implements IAdoptOrderTreeAO {
         Integer expireHours = Integer
             .valueOf(configMap.get(SysConstants.TPP_EXPIRE_HOUR));
 
-        Date createDatetime = DateUtil.getTodayStart();
+        Date createDatetime = DateUtil.getTodayStart();// 创建时间
         Date invalidDatetime = DateUtil.getRelativeDateOfHour(createDatetime,
-            expireHours);
+            expireHours);// 过期时间
 
-        // 按订单比例产生碳泡泡
-        for (AdoptOrderTree adoptOrderTree : adoptList) {
-            BigDecimal quantity = AmountUtil.mul(adoptOrderTree.getAmount(),
-                rate);
-            carbonBubbleOrderBO.saveCarbonBubbleOrder(adoptOrderTree.getCode(),
-                createDatetime, invalidDatetime,
-                adoptOrderTree.getCurrentHolder(), quantity);
+        AdoptOrderTree condition = new AdoptOrderTree();
+        condition.setStatus(EAdoptOrderTreeStatus.ADOPT.getCode());
+
+        Integer start = 0;
+        Integer limit = 10;
+
+        while (true) {
+            Paginable<AdoptOrderTree> page = adoptOrderTreeBO
+                .getPaginable(start, limit, condition);
+
+            if (null != page && CollectionUtils.isNotEmpty(page.getList())) {
+                // 按订单比例产生碳泡泡
+                for (AdoptOrderTree adoptOrderTree : page.getList()) {
+                    BigDecimal quantity = AmountUtil
+                        .mul(adoptOrderTree.getAmount(), rate);
+                    carbonBubbleOrderBO.saveCarbonBubbleOrder(
+                        adoptOrderTree.getCode(), createDatetime,
+                        invalidDatetime, adoptOrderTree.getCurrentHolder(),
+                        quantity);
+                }
+            } else {
+                break;
+            }
+
+            start = start + limit;
         }
+
         logger.info("***************结束生成碳泡泡***************");
 
     }

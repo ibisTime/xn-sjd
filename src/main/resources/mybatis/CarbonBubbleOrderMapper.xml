@@ -30,8 +30,8 @@
 			<if test="createDatetimeEnd != null and createDatetimeEnd != '' ">
 				<![CDATA[AND t.create_datetime <= #{createDatetimeEnd}]]>
 			</if>
-			<if test="invalidDatetime != null and invalidDatetime != '' ">
-				<![CDATA[AND t.invalid_datetime = #{invalidDatetime}]]>
+			<if test="invalidDatetimeEnd != null and invalidDatetimeEnd != '' ">
+				<![CDATA[AND t.invalid_datetime <= #{invalidDatetimeEnd}]]>
 			</if>
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}

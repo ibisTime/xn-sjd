@@ -52,10 +52,16 @@ public class CarbonBubbleOrder extends ABaseDO {
     // 生成时间止
     private Date createDatetimeEnd;
 
-    // 收取时间
+    // 过期时间起
+    private Date invalidDatetimeStart;
+
+    // 过期时间止
+    private Date invalidDatetimeEnd;
+
+    // 收取时间起
     private Date takeDatetimeStart;
 
-    // 收取时间
+    // 收取时间止
     private Date takeDatetimeEnd;
 
     // 收取人用户信息
@@ -172,4 +178,21 @@ public class CarbonBubbleOrder extends ABaseDO {
     public void setTakeDatetimeEnd(Date takeDatetimeEnd) {
         this.takeDatetimeEnd = takeDatetimeEnd;
     }
+
+    public Date getInvalidDatetimeStart() {
+        return invalidDatetimeStart;
+    }
+
+    public void setInvalidDatetimeStart(Date invalidDatetimeStart) {
+        this.invalidDatetimeStart = invalidDatetimeStart;
+    }
+
+    public Date getInvalidDatetimeEnd() {
+        return invalidDatetimeEnd;
+    }
+
+    public void setInvalidDatetimeEnd(Date invalidDatetimeEnd) {
+        this.invalidDatetimeEnd = invalidDatetimeEnd;
+    }
+
 }
