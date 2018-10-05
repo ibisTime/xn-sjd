@@ -85,7 +85,7 @@ public class TreeBOImpl extends PaginableBOImpl<Tree> implements ITreeBO {
     }
 
     @Override
-    public void refreshAdoptTree(Tree tree, String curOrderCode) {
+    public void refreshToPayTree(Tree tree, String curOrderCode) {
         tree.setCurOrderCode(curOrderCode);
         tree.setStatus(ETreeStatus.TO_PAY.getCode());
         treeDAO.updateAdoptTree(tree);

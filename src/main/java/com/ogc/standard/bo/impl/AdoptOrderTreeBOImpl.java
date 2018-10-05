@@ -82,4 +82,13 @@ public class AdoptOrderTreeBOImpl extends PaginableBOImpl<AdoptOrderTree>
             adoptOrderTreeDAO.giveTree(data);
         }
     }
+
+    @Override
+    public void refreshAdoptOrderTree(AdoptOrderTree data,
+            EAdoptOrderTreeStatus adoptOrderTreeStatus) {
+        if (data != null) {
+            data.setStatus(adoptOrderTreeStatus.getCode());
+            adoptOrderTreeDAO.updateStatus(data);
+        }
+    }
 }

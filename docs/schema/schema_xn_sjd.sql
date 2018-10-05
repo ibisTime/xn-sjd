@@ -180,6 +180,7 @@ DROP TABLE IF EXISTS `tsj_carbon_bubble_order`;
 CREATE TABLE `tsj_carbon_bubble_order` (
   `code` varchar(32) NOT NULL COMMENT '编号',
   `adopt_tree_code` varchar(32) DEFAULT NULL COMMENT '认养权编号',
+  `adopt_user_id` varchar(32) DEFAULT NULL COMMENT '用户编号',
   `create_datetime` datetime DEFAULT NULL COMMENT '生成时间',
   `invalid_datetime` datetime DEFAULT NULL COMMENT '过期时间',
   `quantity` int(11) DEFAULT NULL COMMENT '碳泡泡数量',
@@ -565,7 +566,9 @@ DROP TABLE IF EXISTS `tsys_biz_log`;
 CREATE TABLE `tsys_biz_log` (
   `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT 'ID主键',
   `adopt_tree_code` varchar(32) DEFAULT NULL COMMENT '认养权编号',
+  `adopt_user_id` varchar(32) DEFAULT NULL COMMENT '认养用户编号',
   `type` varchar(4) DEFAULT NULL COMMENT '类型（1赠送/2留言/3收取碳泡泡）',
+  `quantity` int(1) DEFAULT NULL COMMENT '数量',
   `note` varchar(255) DEFAULT NULL COMMENT '说明',
   `user_id` varchar(32) DEFAULT NULL COMMENT '操作人',
   `create_datetime` datetime DEFAULT NULL COMMENT '产生时间',

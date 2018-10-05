@@ -24,8 +24,7 @@ public class XN629350 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-
-        carbonBubbleOrderAO.takeCarbonBubble(req.getCode(), req.getCollector());
+        carbonBubbleOrderAO.takeCarbonBubble(req.getCode(), req.getUserId());
         return new BooleanRes(true);
     }
 

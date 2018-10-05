@@ -20,6 +20,9 @@ public class CarbonBubbleOrder extends ABaseDO {
     // 认养权编号
     private String adoptTreeCode;
 
+    // 用户编号
+    private String adoptUserId;
+
     // 生成时间
     private Date createDatetime;
 
@@ -54,11 +57,24 @@ public class CarbonBubbleOrder extends ABaseDO {
     // 收取时间
     private Date takeDatetimeEnd;
 
-    // 收取人昵称
-    private String takerNickname;
+    // 收取人用户信息
+    private User takeUser;
 
-    // 收取人头像
-    private String takerPhoto;
+    public String getAdoptUserId() {
+        return adoptUserId;
+    }
+
+    public void setAdoptUserId(String adoptUserId) {
+        this.adoptUserId = adoptUserId;
+    }
+
+    public User getTakeUser() {
+        return takeUser;
+    }
+
+    public void setTakeUser(User takeUser) {
+        this.takeUser = takeUser;
+    }
 
     public void setCode(String code) {
         this.code = code;
@@ -155,21 +171,4 @@ public class CarbonBubbleOrder extends ABaseDO {
     public void setTakeDatetimeEnd(Date takeDatetimeEnd) {
         this.takeDatetimeEnd = takeDatetimeEnd;
     }
-
-    public String getTakerNickname() {
-        return takerNickname;
-    }
-
-    public void setTakerNickname(String takerNickname) {
-        this.takerNickname = takerNickname;
-    }
-
-    public String getTakerPhoto() {
-        return takerPhoto;
-    }
-
-    public void setTakerPhoto(String takerPhoto) {
-        this.takerPhoto = takerPhoto;
-    }
-
 }

@@ -52,27 +52,6 @@ public class CarbonBubbleOrderAOImpl implements ICarbonBubbleOrderAO {
     }
 
     @Override
-    public String addCarbonBubbleOrder(CarbonBubbleOrder data) {
-        return carbonBubbleOrderBO.saveCarbonBubbleOrder(data);
-    }
-
-    @Override
-    public int editCarbonBubbleOrder(CarbonBubbleOrder data) {
-        if (!carbonBubbleOrderBO.isCarbonBubbleOrderExist(data.getCode())) {
-            throw new BizException("xn0000", "碳泡泡产生订单不存在");
-        }
-        return carbonBubbleOrderBO.refreshCarbonBubbleOrder(data);
-    }
-
-    @Override
-    public int dropCarbonBubbleOrder(String code) {
-        if (!carbonBubbleOrderBO.isCarbonBubbleOrderExist(code)) {
-            throw new BizException("xn0000", "碳泡泡产生订单不存在");
-        }
-        return carbonBubbleOrderBO.removeCarbonBubbleOrder(code);
-    }
-
-    @Override
     public Paginable<CarbonBubbleOrder> queryCarbonBubbleOrderPage(int start,
             int limit, CarbonBubbleOrder condition) {
         Paginable<CarbonBubbleOrder> paginable = carbonBubbleOrderBO
@@ -102,11 +81,10 @@ public class CarbonBubbleOrderAOImpl implements ICarbonBubbleOrderAO {
         return data;
     }
 
-    public void init(CarbonBubbleOrder data) {
+    private void init(CarbonBubbleOrder data) {
         if (StringUtils.isNotBlank(data.getTaker())) {
-            User user = userBO.getUser(data.getTaker());
-            data.setTakerNickname(user.getNickname());
-            data.setTakerPhoto(user.getPhoto());
+            User takeUser = userBO.getUser(data.getTaker());
+            data.setTakeUser(takeUser);
         }
     }
 }

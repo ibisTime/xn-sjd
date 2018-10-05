@@ -16,7 +16,7 @@ public class XN629350Req {
 
     // 收取人
     @NotBlank
-    private String collector;
+    private String userId;
 
     public String getCode() {
         return code;
@@ -26,12 +26,11 @@ public class XN629350Req {
         this.code = code;
     }
 
-    public String getCollector() {
-        return collector;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setCollector(String collector) {
-        this.collector = collector;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
-
 }

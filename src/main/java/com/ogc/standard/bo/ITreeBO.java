@@ -31,7 +31,7 @@ public interface ITreeBO extends IPaginableBO<Tree> {
     public void refreshTree(Tree data);
 
     // 认养古树
-    public void refreshAdoptTree(Tree tree, String curOrderCode);
+    public void refreshToPayTree(Tree tree, String curOrderCode);
 
     // 取消认养
     public void refreshCancelTree(Tree tree);

@@ -42,6 +42,7 @@ import com.ogc.standard.domain.User;
 import com.ogc.standard.dto.res.BooleanRes;
 import com.ogc.standard.dto.res.XN629048Res;
 import com.ogc.standard.enums.EAdoptOrderStatus;
+import com.ogc.standard.enums.EAdoptOrderTreeStatus;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EDirectType;
@@ -152,7 +153,7 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
             if (count >= quantity) {
                 break;
             }
-            treeBO.refreshAdoptTree(tree, orderCode);
+            treeBO.refreshToPayTree(tree, orderCode);
             count++;
         }
         return orderCode;
@@ -293,7 +294,7 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
             .queryAdoptOrderList(condition);
         if (CollectionUtils.isNotEmpty(startAdoptOrderList)) {
             for (AdoptOrder adoptOrder : startAdoptOrderList) {
-                adoptOrderBO.startAdoptOrder(adoptOrder);
+                startAdoptOrder(adoptOrder);
             }
         }
         logger.info("***************结束扫描已支付待认养订单***************");
@@ -306,10 +307,43 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
             .queryAdoptOrderList(condition);
         if (CollectionUtils.isNotEmpty(endAdoptOrderList)) {
             for (AdoptOrder adoptOrder : endAdoptOrderList) {
-                adoptOrderBO.endAdoptOrder(adoptOrder);
+                endAdoptOrder(adoptOrder);
             }
         }
         logger.info("***************结束扫描已认养订单***************");
+    }
+
+    // 1、认养订单更改
+    // 2、认养权更改
+    private void startAdoptOrder(AdoptOrder adoptOrder) {
+        adoptOrderBO.startAdoptOrder(adoptOrder);
+        List<AdoptOrderTree> list = adoptOrderTreeBO
+            .queryAdoptOrderTreeList(adoptOrder.getCode());
+        for (AdoptOrderTree adoptOrderTree : list) {
+            adoptOrderTreeBO.refreshAdoptOrderTree(adoptOrderTree,
+                EAdoptOrderTreeStatus.ADOPT);
+        }
+    }
+
+    // 1、订单结束
+    // 2、认养权结束
+    // 3、个人或定向树解锁
+    private void endAdoptOrder(AdoptOrder adoptOrder) {
+        adoptOrderBO.endAdoptOrder(adoptOrder);
+        List<AdoptOrderTree> list = adoptOrderTreeBO
+            .queryAdoptOrderTreeList(adoptOrder.getCode());
+        for (AdoptOrderTree adoptOrderTree : list) {
+            adoptOrderTreeBO.refreshAdoptOrderTree(adoptOrderTree,
+                EAdoptOrderTreeStatus.END);
+        }
+        if (ESellType.PERSON.getCode().equals(adoptOrder.getType())
+                || ESellType.DIRECT.getCode().equals(adoptOrder.getType())) {
+            List<Tree> treeList = treeBO.queryTreeListByOrderCode(adoptOrder
+                .getCode());
+            for (Tree tree : treeList) {
+                treeBO.refreshCancelTree(tree);
+            }
+        }
     }
 
     @Override

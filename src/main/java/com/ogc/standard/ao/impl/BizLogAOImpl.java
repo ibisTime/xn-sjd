@@ -17,11 +17,6 @@ public class BizLogAOImpl implements IBizLogAO {
     private IBizLogBO bizLogBO;
 
     @Override
-    public int addBizLog(BizLog data) {
-        return bizLogBO.saveBizLog(data);
-    }
-
-    @Override
     public Paginable<BizLog> queryBizLogPage(int start, int limit,
             BizLog condition) {
         return bizLogBO.getPaginable(start, limit, condition);

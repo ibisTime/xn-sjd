@@ -8,8 +8,6 @@ import com.ogc.standard.domain.BizLog;
 public interface IBizLogAO {
     static final String DEFAULT_ORDER_COLUMN = "id";
 
-    public int addBizLog(BizLog data);
-
     public Paginable<BizLog> queryBizLogPage(int start, int limit,
             BizLog condition);
 

@@ -18,16 +18,6 @@ public class BizLogBOImpl extends PaginableBOImpl<BizLog> implements IBizLogBO {
     private IBizLogDAO bizLogDAO;
 
     @Override
-    public boolean isBizLogExist(int id) {
-        BizLog condition = new BizLog();
-        condition.setId(id);
-        if (bizLogDAO.selectTotalCount(condition) > 0) {
-            return true;
-        }
-        return false;
-    }
-
-    @Override
     public int saveBizLog(BizLog data) {
         Integer id = null;
         if (data != null) {

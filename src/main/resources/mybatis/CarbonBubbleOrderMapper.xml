@@ -5,6 +5,7 @@
 	<resultMap id="carbonBubbleOrder_DB_Result" type="carbonBubbleOrder">
 		<result column="code" property="code" />
 		<result column="adopt_tree_code" property="adoptTreeCode" />
+		<result column="adopt_user_id" property="adoptUserId" />
 		<result column="create_datetime" property="createDatetime" />
 		<result column="invalid_datetime" property="invalidDatetime" />
 		<result column="quantity" property="quantity" />
@@ -19,6 +20,9 @@
 			</if>
 			<if test="adoptTreeCode != null and adoptTreeCode != '' ">
 				AND t.adopt_tree_code = #{adoptTreeCode}
+			</if>
+			<if test="adoptUserId != null and adoptUserId != '' ">
+				AND t.adopt_user_id = #{adoptUserId}
 			</if>
 			<if test="createDatetimeStart != null and createDatetimeStart != '' ">
 				<![CDATA[AND t.create_datetime >= #{startDatetimeStart}]]>
@@ -44,6 +48,7 @@
 		SELECT
 		t.code
 		,t.adopt_tree_code
+		,t.adopt_user_id
 		,t.create_datetime
 		,t.invalid_datetime
 		,t.quantity
@@ -71,6 +76,7 @@
 		tsj_carbon_bubble_order(
 		code
 		,adopt_tree_code
+		,adopt_user_id
 		,create_datetime
 		,invalid_datetime
 		,quantity
@@ -81,6 +87,7 @@
 		VALUES(
 		#{code}
 		,#{adoptTreeCode}
+		,#{adoptUserId}
 		,#{createDatetime}
 		,#{invalidDatetime}
 		,#{quantity}
@@ -90,19 +97,6 @@
 		)
 	</insert>
 
-	<update id="update_carbonBubbleOrder" parameterType="carbonBubbleOrder">
-		UPDATE tsj_carbon_bubble_order
-		SET
-		adopt_tree_code = #{adoptTreeCode}
-		,create_datetime = #{createDatetime}
-		,invalid_datetime = #{invalidDatetime}
-		,quantity = #{quantity}
-		,status = #{status}
-		,taker = #{taker}
-		,take_datetime = #{takeDatetime}
-		WHERE code = #{code}
-	</update>
-	
 	<update id="update_takeCarbonBubble" parameterType="carbonBubbleOrder">
 		UPDATE tsj_carbon_bubble_order
 		SET
