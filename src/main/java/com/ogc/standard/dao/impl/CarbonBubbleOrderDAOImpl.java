@@ -19,7 +19,7 @@ public class CarbonBubbleOrderDAOImpl extends AMybatisTemplate implements
 
     @Override
     public int delete(CarbonBubbleOrder data) {
-        return super.delete(NAMESPACE.concat("delete_carbonBubbleOrder"), data);
+        return 0;
     }
 
     @Override
@@ -45,11 +45,6 @@ public class CarbonBubbleOrderDAOImpl extends AMybatisTemplate implements
             int start, int count) {
         return super.selectList(NAMESPACE.concat("select_carbonBubbleOrder"),
             start, count, condition, CarbonBubbleOrder.class);
-    }
-
-    @Override
-    public int update(CarbonBubbleOrder data) {
-        return super.update(NAMESPACE.concat("update_carbonBubbleOrder"), data);
     }
 
     @Override

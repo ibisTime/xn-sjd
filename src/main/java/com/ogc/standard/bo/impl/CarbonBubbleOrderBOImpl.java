@@ -33,16 +33,6 @@ public class CarbonBubbleOrderBOImpl extends PaginableBOImpl<CarbonBubbleOrder>
     }
 
     @Override
-    public boolean isCarbonBubbleOrderExist(String code) {
-        CarbonBubbleOrder condition = new CarbonBubbleOrder();
-        condition.setCode(code);
-        if (carbonBubbleOrderDAO.selectTotalCount(condition) > 0) {
-            return true;
-        }
-        return false;
-    }
-
-    @Override
     public String saveCarbonBubbleOrder(CarbonBubbleOrder data) {
         String code = null;
         if (data != null) {
@@ -52,26 +42,6 @@ public class CarbonBubbleOrderBOImpl extends PaginableBOImpl<CarbonBubbleOrder>
             carbonBubbleOrderDAO.insert(data);
         }
         return code;
-    }
-
-    @Override
-    public int removeCarbonBubbleOrder(String code) {
-        int count = 0;
-        if (StringUtils.isNotBlank(code)) {
-            CarbonBubbleOrder data = new CarbonBubbleOrder();
-            data.setCode(code);
-            count = carbonBubbleOrderDAO.delete(data);
-        }
-        return count;
-    }
-
-    @Override
-    public int refreshCarbonBubbleOrder(CarbonBubbleOrder data) {
-        int count = 0;
-        if (StringUtils.isNotBlank(data.getCode())) {
-            count = carbonBubbleOrderDAO.update(data);
-        }
-        return count;
     }
 
     @Override

@@ -40,8 +40,7 @@ public class AdoptOrderTreeBOImpl extends PaginableBOImpl<AdoptOrderTree>
         data.setStartDatetime(adoptOrder.getStartDatetime());
         data.setEndDatetime(adoptOrder.getEndDatetime());
         data.setAmount(adoptOrder.getPrice());
-        if (EAdoptOrderStatus.TO_ADOPT.getCode()
-            .equals(adoptOrder.getStatus())) {
+        if (EAdoptOrderStatus.TO_ADOPT.getCode().equals(adoptOrder.getStatus())) {
             data.setStatus(EAdoptOrderTreeStatus.TO_ADOPT.getCode());
         } else {
             data.setStatus(EAdoptOrderTreeStatus.ADOPT.getCode());
@@ -53,8 +52,7 @@ public class AdoptOrderTreeBOImpl extends PaginableBOImpl<AdoptOrderTree>
     }
 
     @Override
-    public List<AdoptOrderTree> queryAdoptOrderTreeList(
-            AdoptOrderTree condition) {
+    public List<AdoptOrderTree> queryAdoptOrderTreeList(AdoptOrderTree condition) {
         return adoptOrderTreeDAO.selectList(condition);
     }
 
@@ -87,6 +85,14 @@ public class AdoptOrderTreeBOImpl extends PaginableBOImpl<AdoptOrderTree>
     }
 
     @Override
+    public void refreshAdoptOrderTree(AdoptOrderTree data,
+            EAdoptOrderTreeStatus adoptOrderTreeStatus) {
+        if (data != null) {
+            data.setStatus(adoptOrderTreeStatus.getCode());
+            adoptOrderTreeDAO.updateStatus(data);
+        }
+    }
+
     public long getCountByCurrentHolder(String currentHolder) {
         long count = 0;
 

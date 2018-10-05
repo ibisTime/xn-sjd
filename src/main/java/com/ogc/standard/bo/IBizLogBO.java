@@ -7,6 +7,8 @@ import com.ogc.standard.domain.BizLog;
 
 public interface IBizLogBO extends IPaginableBO<BizLog> {
 
+    public int saveBizLog(BizLog data);
+
     // 留言
     public long leaveMessage(String adoptTreeCode, String note, String userId);
 

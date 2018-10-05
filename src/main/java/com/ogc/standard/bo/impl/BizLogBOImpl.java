@@ -26,6 +26,14 @@ public class BizLogBOImpl extends PaginableBOImpl<BizLog> implements IBizLogBO {
     private IAdoptOrderTreeBO adoptOrderTreeBO;
 
     @Override
+    public int saveBizLog(BizLog data) {
+        Integer id = null;
+        if (data != null) {
+            id = bizLogDAO.insert(data);
+        }
+        return id;
+    }
+
     public long leaveMessage(String adoptTreeCode, String note, String userId) {
         AdoptOrderTree adoptOrderTree = adoptOrderTreeBO
             .getAdoptOrderTree(adoptTreeCode);

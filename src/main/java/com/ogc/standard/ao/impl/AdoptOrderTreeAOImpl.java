@@ -9,12 +9,14 @@ import org.springframework.stereotype.Service;
 import com.ogc.standard.ao.IAdoptOrderTreeAO;
 import com.ogc.standard.bo.IAdoptOrderTreeBO;
 import com.ogc.standard.bo.IBizLogBO;
+import com.ogc.standard.bo.ICarbonBubbleOrderBO;
 import com.ogc.standard.bo.IGiveTreeRecordBO;
 import com.ogc.standard.bo.ITreeBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.AdoptOrderTree;
 import com.ogc.standard.domain.GiveTreeRecord;
 import com.ogc.standard.domain.Tree;
+import com.ogc.standard.enums.EAdoptOrderTreeStatus;
 
 @Service
 public class AdoptOrderTreeAOImpl implements IAdoptOrderTreeAO {
@@ -29,7 +31,19 @@ public class AdoptOrderTreeAOImpl implements IAdoptOrderTreeAO {
     private IGiveTreeRecordBO giveTreeRecordBO;
 
     @Autowired
+    private ICarbonBubbleOrderBO carbonBubbleOrderBO;
+
+    @Autowired
     private IBizLogBO bizLogBO;
+
+    public void doDailyAdoptOrderTree() {
+        AdoptOrderTree condition = new AdoptOrderTree();
+        condition.setStatus(EAdoptOrderTreeStatus.ADOPT.getCode());
+        List<AdoptOrderTree> list = adoptOrderTreeBO
+            .queryAdoptOrderTreeList(condition);
+        for (AdoptOrderTree adoptOrderTree : list) {
+        }
+    }
 
     @Override
     public void giveTree(String code, String toUserId, String userId) {

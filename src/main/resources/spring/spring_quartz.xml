@@ -21,6 +21,7 @@
 				<ref bean="toolUseRecordTrigger"/>
 			    <ref bean="doCancelAdoptOrderTrigger"/>
 			    <ref bean="doDailyAdoptOrderTrigger"/>
+			    <ref bean="doDailyAdoptOrderTreeTrigger"/>
  			</list>
 		</property>
 		<property name="autoStartup" value="true" />
@@ -66,6 +67,20 @@
 		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject" ref="adoptOrderAOImpl" />
 		<property name="targetMethod" value="doDailyAdoptOrder" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<!-- 订单已支付或即将过期扫描 -->
+	<bean id="doDailyAdoptOrderTreeTrigger"
+		  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="doDailyAdoptOrderTree" />
+		<property name="cronExpression" value="0 0 0 * * ?"/><!-- 每天零点执行 -->
+	</bean>
+	
+	<bean id="doDailyAdoptOrderTree"
+		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="adoptOrderTreeAOImpl" />
+		<property name="targetMethod" value="doDailyAdoptOrderTree" />
 		<property name="concurrent" value="false" />
 	</bean> 
 

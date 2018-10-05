@@ -8,12 +8,6 @@ import com.ogc.standard.domain.CarbonBubbleOrder;
 public interface ICarbonBubbleOrderAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
-    public String addCarbonBubbleOrder(CarbonBubbleOrder data);
-
-    public int dropCarbonBubbleOrder(String code);
-
-    public int editCarbonBubbleOrder(CarbonBubbleOrder data);
-
     public Paginable<CarbonBubbleOrder> queryCarbonBubbleOrderPage(int start,
             int limit, CarbonBubbleOrder condition);
 
@@ -23,6 +17,6 @@ public interface ICarbonBubbleOrderAO {
     public CarbonBubbleOrder getCarbonBubbleOrder(String code);
 
     // 收取碳泡泡
-    public void takeCarbonBubble(String code, String collector);
+    public void takeCarbonBubble(String code, String userId);
 
 }
