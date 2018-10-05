@@ -16,6 +16,5 @@ public interface IAdoptOrderTreeAO {
     public AdoptOrderTree getAdoptOrderTree(String code);
 
     // 赠送树
-    public void giveTree(String code, String toUserId, String userId);
-
+    public void giveTree(String code, String userId, String toMobile);
 }

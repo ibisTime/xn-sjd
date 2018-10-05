@@ -120,6 +120,10 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             if (CollectionUtils.isNotEmpty(list)) {
                 user = list.get(0);
             }
+            if (user == null) {
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                    "用户手机号不存在");
+            }
         }
         return user;
     }

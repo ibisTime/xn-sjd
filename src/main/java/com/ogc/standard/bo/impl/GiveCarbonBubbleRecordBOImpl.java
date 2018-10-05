@@ -16,9 +16,9 @@ import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.exception.BizException;
 
 @Component
-public class GiveCarbonBubbleRecordBOImpl
-        extends PaginableBOImpl<GiveCarbonBubbleRecord>
-        implements IGiveCarbonBubbleRecordBO {
+public class GiveCarbonBubbleRecordBOImpl extends
+        PaginableBOImpl<GiveCarbonBubbleRecord> implements
+        IGiveCarbonBubbleRecordBO {
 
     @Autowired
     private IGiveCarbonBubbleRecordDAO giveCarbonBubbleRecordDAO;

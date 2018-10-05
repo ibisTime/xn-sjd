@@ -70,7 +70,7 @@
 		<property name="concurrent" value="false" />
 	</bean>
 	
-	<!-- 订单已支付或即将过期扫描 -->
+	<!-- 产权碳泡泡扫描 -->
 	<bean id="doDailyAdoptOrderTreeTrigger"
 		  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="doDailyAdoptOrderTree" />

@@ -14,13 +14,13 @@ public class XN629200Req {
     @NotBlank
     private String code;
 
-    // 赠送对象
-    @NotBlank
-    private String toUserId;
-
     // 赠送人
     @NotBlank
     private String userId;
+
+    // 赠送对象
+    @NotBlank
+    private String toMobile;
 
     public String getCode() {
         return code;
@@ -30,12 +30,12 @@ public class XN629200Req {
         this.code = code;
     }
 
-    public String getToUserId() {
-        return toUserId;
+    public String getToMobile() {
+        return toMobile;
     }
 
-    public void setToUserId(String toUserId) {
-        this.toUserId = toUserId;
+    public void setToMobile(String toMobile) {
+        this.toMobile = toMobile;
     }
 
     public String getUserId() {
@@ -45,5 +45,4 @@ public class XN629200Req {
     public void setUserId(String userId) {
         this.userId = userId;
     }
-
 }

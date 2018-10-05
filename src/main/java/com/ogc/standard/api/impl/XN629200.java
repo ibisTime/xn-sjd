@@ -24,8 +24,8 @@ public class XN629200 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        adoptOrderTreeAO.giveTree(req.getCode(), req.getToUserId(),
-            req.getUserId());
+        adoptOrderTreeAO.giveTree(req.getCode(), req.getUserId(),
+            req.getToMobile());
         return new BooleanRes(true);
     }
 

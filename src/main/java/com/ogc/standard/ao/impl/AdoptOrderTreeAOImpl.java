@@ -1,10 +1,10 @@
 package com.ogc.standard.ao.impl;
 
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.IAdoptOrderTreeAO;
 import com.ogc.standard.bo.IAdoptOrderTreeBO;
@@ -12,11 +12,14 @@ import com.ogc.standard.bo.IBizLogBO;
 import com.ogc.standard.bo.ICarbonBubbleOrderBO;
 import com.ogc.standard.bo.IGiveTreeRecordBO;
 import com.ogc.standard.bo.ITreeBO;
+import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.AdoptOrderTree;
-import com.ogc.standard.domain.GiveTreeRecord;
 import com.ogc.standard.domain.Tree;
+import com.ogc.standard.domain.User;
 import com.ogc.standard.enums.EAdoptOrderTreeStatus;
+import com.ogc.standard.exception.BizException;
+import com.ogc.standard.exception.EBizErrorCode;
 
 @Service
 public class AdoptOrderTreeAOImpl implements IAdoptOrderTreeAO {
@@ -26,6 +29,9 @@ public class AdoptOrderTreeAOImpl implements IAdoptOrderTreeAO {
 
     @Autowired
     private ITreeBO treeBO;
+
+    @Autowired
+    private IUserBO userBO;
 
     @Autowired
     private IGiveTreeRecordBO giveTreeRecordBO;
@@ -46,18 +52,20 @@ public class AdoptOrderTreeAOImpl implements IAdoptOrderTreeAO {
     }
 
     @Override
-    public void giveTree(String code, String toUserId, String userId) {
-        // 更改认养权持有人
+    @Transactional
+    public void giveTree(String code, String userId, String toMobile) {
+        User user = userBO.getUser(userId);
+        User toUser = userBO.getUserByMobile(toMobile);
+
+        // 终止现有认养权，产生新的认养权，更改认养权持有人
         AdoptOrderTree data = adoptOrderTreeBO.getAdoptOrderTree(code);
-        data.setCurrentHolder(toUserId);
-        adoptOrderTreeBO.giveTree(data);
+        if (EAdoptOrderTreeStatus.ADOPT.getCode().equals(data.getStatus())) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "认养权不在认养中");
+        }
+        adoptOrderTreeBO.giveTree(data, user, toUser);
         // 新增赠送树记录
-        GiveTreeRecord record = new GiveTreeRecord();
-        record.setAdoptTreeCode(code);
-        record.setUserId(userId);
-        record.setToUserId(toUserId);
-        record.setCreateDatetime(new Date());
-        giveTreeRecordBO.saveGiveTreeRecord(record);
+        giveTreeRecordBO.saveGiveTreeRecord(userId, toUser.getUserId(),
+            data.getCode());
     }
 
     @Override
@@ -91,6 +99,8 @@ public class AdoptOrderTreeAOImpl implements IAdoptOrderTreeAO {
     private void initAdoptOrderTree(AdoptOrderTree data) {
         Tree tree = treeBO.getTreeByTreeNumber(data.getTreeNumber());
         data.setTree(tree);
+        User user = userBO.getUser(data.getCurrentHolder());
+        data.setUser(user);
     }
 
 }

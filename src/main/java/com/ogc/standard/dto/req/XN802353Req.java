@@ -1,6 +1,9 @@
 package com.ogc.standard.dto.req;
 
+import java.util.List;
+
 import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * 广播
@@ -11,38 +14,73 @@ import org.hibernate.validator.constraints.NotBlank;
 public class XN802353Req {
 
     // 取现订单编号(必填)
+    @NotEmpty
+    private List<String> codeList;
+
+    // 支付回录人(必填)
     @NotBlank
-    private String code;
+    private String payUser;
 
-    // 散取地址编id号(币种为以太坊时必填)
-    private Long mAddressId;
-
-    // 操作人(必填)
+    // 审核结果1 是 0 否(必填)
     @NotBlank
-    private String approveUser;
+    private String payResult;
 
-    public String getCode() {
-        return code;
+    // 支付回录说明(必填)
+    @NotBlank
+    private String payNote;
+
+    // 支付渠道订单编号（支付渠道代表）(必填)
+    @NotBlank
+    private String channelOrder;
+
+    private String transFee;
+
+    public List<String> getCodeList() {
+        return codeList;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setCodeList(List<String> codeList) {
+        this.codeList = codeList;
     }
 
-    public Long getmAddressId() {
-        return mAddressId;
+    public String getPayUser() {
+        return payUser;
     }
 
-    public void setmAddressId(Long mAddressId) {
-        this.mAddressId = mAddressId;
+    public void setPayUser(String payUser) {
+        this.payUser = payUser;
     }
 
-    public String getApproveUser() {
-        return approveUser;
+    public String getPayResult() {
+        return payResult;
     }
 
-    public void setApproveUser(String approveUser) {
-        this.approveUser = approveUser;
+    public void setPayResult(String payResult) {
+        this.payResult = payResult;
+    }
+
+    public String getPayNote() {
+        return payNote;
+    }
+
+    public void setPayNote(String payNote) {
+        this.payNote = payNote;
+    }
+
+    public String getChannelOrder() {
+        return channelOrder;
+    }
+
+    public void setChannelOrder(String channelOrder) {
+        this.channelOrder = channelOrder;
+    }
+
+    public String getTransFee() {
+        return transFee;
+    }
+
+    public void setTransFee(String transFee) {
+        this.transFee = transFee;
     }
 
 }

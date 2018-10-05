@@ -1,5 +1,6 @@
 package com.ogc.standard.bo.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -13,6 +14,7 @@ import com.ogc.standard.dao.IAdoptOrderTreeDAO;
 import com.ogc.standard.domain.AdoptOrder;
 import com.ogc.standard.domain.AdoptOrderTree;
 import com.ogc.standard.domain.Product;
+import com.ogc.standard.domain.User;
 import com.ogc.standard.enums.EAdoptOrderStatus;
 import com.ogc.standard.enums.EAdoptOrderTreeStatus;
 import com.ogc.standard.enums.EGeneratePrefix;
@@ -78,10 +80,30 @@ public class AdoptOrderTreeBOImpl extends PaginableBOImpl<AdoptOrderTree>
     }
 
     @Override
-    public void giveTree(AdoptOrderTree data) {
-        if (data != null) {
-            adoptOrderTreeDAO.giveTree(data);
-        }
+    public void giveTree(AdoptOrderTree data, User user, User toUser) {
+        // 终止现有的认养权
+        data.setStatus(EAdoptOrderTreeStatus.PRESENT.getCode());
+        data.setRemark("赠送给" + toUser.getMobile());
+        adoptOrderTreeDAO.updateStatus(data);
+
+        // 产生新的认养权
+        AdoptOrderTree newData = new AdoptOrderTree();
+        String code = OrderNoGenerater
+            .generate(EGeneratePrefix.ADOPT_ORDER_TREE.getCode());
+        newData.setCode(code);
+        newData.setOrderCode(data.getCode());
+        newData.setCategoryCode(data.getCategoryCode());
+        newData.setProductCode(data.getCode());
+        newData.setTreeNumber(data.getTreeNumber());
+
+        newData.setStartDatetime(new Date());
+        newData.setEndDatetime(data.getEndDatetime());
+        newData.setAmount(data.getAmount());
+        newData.setStatus(EAdoptOrderTreeStatus.ADOPT.getCode());
+        newData.setCurrentHolder(toUser.getUserId());
+        newData.setRemark(user.getMobile() + "赠送");
+
+        adoptOrderTreeDAO.insert(newData);
     }
 
     @Override
@@ -93,6 +115,7 @@ public class AdoptOrderTreeBOImpl extends PaginableBOImpl<AdoptOrderTree>
         }
     }
 
+    @Override
     public long getCountByCurrentHolder(String currentHolder) {
         long count = 0;
 
