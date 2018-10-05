@@ -11,6 +11,7 @@
 		
 		<result column="status" property="status" />
 		<result column="amount" property="amount" />
+		<result column="total_amount" property="totalAmount" />
 		<result column="frozen_amount" property="frozenAmount" />
 		<result column="md5" property="md5" />
 		<result column="in_amount" property="inAmount" />
@@ -72,6 +73,7 @@
 		
 		,t.status
 		,t.amount
+		,t.total_amount
 		,t.frozen_amount
 		,t.md5
 		,t.in_amount
@@ -105,6 +107,7 @@
 		
 		,status
 		,amount
+		,total_amount
 		,frozen_amount
 		,md5
 		,in_amount
@@ -122,6 +125,7 @@
 		
 		,#{status}
 		,#{amount}
+		,#{totalAmount}
 		,#{frozenAmount}
 		,#{md5}
 		,#{inAmount}
@@ -135,7 +139,8 @@
 	<update id="update_account_amount" parameterType="account">
 		UPDATE tstd_account
 		SET
-		amount= #{amount}
+		amount = #{amount}
+		,total_amount = #{totalAmount}
 		,md5 = #{md5}
 		,in_amount = #{inAmount}
 		,last_order = #{lastOrder}

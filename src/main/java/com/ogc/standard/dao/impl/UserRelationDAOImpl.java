@@ -87,4 +87,23 @@ public class UserRelationDAOImpl extends AMybatisTemplate implements
             count, condition, UserRelation.class);
     }
 
+    @Override
+    public long selectMyTotalCount(UserRelation condition) {
+        return super.selectTotalCount(
+            NAMESPACE.concat("select_myUserRelation_count"), condition);
+    }
+
+    @Override
+    public List<UserRelation> selectMyList(UserRelation condition, int start,
+            int count) {
+        return super.selectList(NAMESPACE.concat("select_myUserRelation_list"),
+            start, count, condition, UserRelation.class);
+    }
+
+    @Override
+    public List<UserRelation> selectMyList(UserRelation condition) {
+        return super.selectList(NAMESPACE.concat("select_myUserRelation_list"),
+            condition, UserRelation.class);
+    }
+
 }

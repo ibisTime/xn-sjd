@@ -18,9 +18,6 @@ import com.ogc.standard.domain.UserRelation;
  */
 public interface IUserRelationAO {
 
-    public Paginable<UserRelation> queryUserRelationPage(int start, int limit,
-                                                         UserRelation condition);
-
     /**
      * 关注某人
      *
@@ -51,4 +48,23 @@ public interface IUserRelationAO {
      * @history:
      */
     public boolean isExistUserRelation(String userId, String toUser, String type);
+
+    /**
+     * 分页查询
+     * @param start
+     * @param limit
+     * @param condition
+     * @return 
+     * @create: 2018年10月5日 下午3:10:54 xieyj
+     * @history:
+     */
+    public Paginable<UserRelation> queryUserRelationPage(int start, int limit,
+            UserRelation condition);
+
+    // 分页查询我的好友排行榜
+    public Paginable<UserRelation> queryMyUserRelationPage(int start,
+            int limit, UserRelation condition);
+
+    // 查询我的排行榜
+    public UserRelation getMyUserRelation(UserRelation condition);
 }

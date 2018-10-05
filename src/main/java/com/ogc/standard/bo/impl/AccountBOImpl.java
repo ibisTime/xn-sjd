@@ -91,6 +91,10 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
 
         // 更改余额
         dbAccount.setAmount(nowAmount);
+        if (transAmount.longValue() > 0) {
+            dbAccount.setTotalAmount(dbAccount.getTotalAmount()
+                .add(transAmount));// 增加累计值
+        }
         dbAccount.setMd5(AccountUtil.md5(dbAccount.getMd5(),
             dbAccount.getAmount(), nowAmount));
 

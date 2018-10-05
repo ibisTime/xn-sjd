@@ -2,7 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ogc.standard.dao.IUserRelationDAO">
-	
 	<resultMap id="userRelation_DB_Result" type="userRelation">
 		<result column="code" property="code" />
 		<result column="user_id" property="userId" />
@@ -19,9 +18,6 @@
 			</if>
 			<if test="toUser != null and toUser != '' ">
 				AND t.to_user = #{toUser}
-			</if>
-			<if test="friendUserId != null and friendUserId != '' ">
-				AND (t.to_user = #{friendUserId} or t.user_id = #{friendUserId})
 			</if>
 			<if test="type != null and type != '' ">
 				AND t.type = #{type}
@@ -45,13 +41,41 @@
 		<include refid="where_condition" />
 		ORDER BY t.code DESC
 	</select>
-
+	
 	<select id="select_userRelation_count" parameterType="userRelation"
 		resultType="java.lang.Long">
 		SELECT count(1) FROM tstd_user_relation t
 		<include refid="where_condition" />
 	</select>
-
+	
+	<resultMap id="myUserRelation_DB_Result" type="userRelation">
+		<result column="rank" property="rank" />
+		<result column="to_user" property="toUser" />
+		<result column="certificate_count" property="certificateCount" />
+		<result column="tpp_amount" property="tppAmount" />
+	</resultMap>
+	
+	<select id="select_myUserRelation_list" parameterType="userRelation" resultMap="myUserRelation_DB_Result">
+		select 
+        (@rowNO:= @rowNo+1) as rank,
+		a.to_user,
+		ifnull((select total_amount from tstd_account where user_id = a.to_user and currency='TPP') * #{weightRate1}+
+		(select sum(amount) from try_adopt_order_tree) * #{weightRate2},0) as weight,
+		(select count(*) from try_adopt_order_tree where current_holder = a.to_user) as certificate_count,
+		ifnull((select amount from tstd_account where user_id = a.to_user and currency='TPP'),0) tpp_amount
+		from
+		(select to_user from tstd_user_relation where user_id=#{userId}) a,(select @rowNO:=0) b
+		order by (ifnull((select total_amount from tstd_account where user_id = a.to_user and currency='TPP') * #{weightRate1}+
+		(select sum(amount) from try_adopt_order_tree) * #{weightRate2},0)) desc
+	</select>
+	
+	<select id="select_myUserRelation_count" parameterType="userRelation"
+		resultType="java.lang.Long">
+		select count(*) from
+		(select to_user from tstd_user_relation where user_id=#{userId}) a
+		order by (ifnull((select total_amount from tstd_account where user_id = a.to_user and currency='TPP') * #{weightRate1}+
+		(select sum(amount) from try_adopt_order_tree) * #{weightRate2},0)) desc
+	</select>
 	
 	<insert id="insert_userRelation" parameterType="userRelation">
 		INSERT INTO
