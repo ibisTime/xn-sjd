@@ -16,9 +16,6 @@
 	
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
-			<if test="code != null and code != '' ">
-				AND t.code = #{code}
-			</if>
 			<if test="adoptTreeCode != null and adoptTreeCode != '' ">
 				AND t.adopt_tree_code = #{adoptTreeCode}
 			</if>
@@ -35,7 +32,7 @@
 				<![CDATA[AND t.create_datetime >= #{createDatetimeStart}]]>
 			</if>
 			<if test="createDatetimeEnd != null and createDatetimeEnd != '' ">
-				<![CDATA[AND t.create_datetime >= #{createDatetimeEnd}]]>
+				<![CDATA[AND t.create_datetime <= #{createDatetimeEnd}]]>
 			</if>
 		</trim>
 	</sql>
@@ -72,6 +69,12 @@
 		SELECT max(t.ID) FROM tsys_biz_log t
 	</select>
 
+	<select id="select_bizLog_quantitySum" parameterType="bizLog"
+		resultType="java.lang.Long">
+		SELECT IFNULL(SUM(t.quantity), 0) FROM tsys_biz_log t
+		<include refid="where_condition" />
+	</select>
+	
 	<insert id="insert_bizLog" parameterType="bizLog">
 		INSERT INTO
 		tsys_biz_log(

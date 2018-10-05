@@ -33,7 +33,7 @@ public class UserRelation extends ABaseDO {
     // 状态(1 正常 0 假删除定时器删除 预留)
     private String status;
 
-    // @see EUserReleationType
+    // 关系类型(0拉黑/1信任/2好友)
     private String type;
 
     // 创建时间

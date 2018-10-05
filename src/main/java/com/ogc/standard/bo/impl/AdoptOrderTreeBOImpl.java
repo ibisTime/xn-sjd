@@ -34,6 +34,7 @@ public class AdoptOrderTreeBOImpl extends PaginableBOImpl<AdoptOrderTree>
         data.setCode(code);
         data.setOrderCode(adoptOrder.getCode());
         data.setCategoryCode(product.getCategoryCode());
+        data.setProductCode(product.getCode());
         data.setTreeNumber(treeNumber);
 
         data.setStartDatetime(adoptOrder.getStartDatetime());

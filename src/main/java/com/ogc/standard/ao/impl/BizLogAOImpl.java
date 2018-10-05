@@ -7,8 +7,11 @@ import org.springframework.stereotype.Service;
 
 import com.ogc.standard.ao.IBizLogAO;
 import com.ogc.standard.bo.IBizLogBO;
+import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.BizLog;
+import com.ogc.standard.domain.User;
+import com.ogc.standard.dto.res.XN629900Res;
 
 @Service
 public class BizLogAOImpl implements IBizLogAO {
@@ -16,9 +19,35 @@ public class BizLogAOImpl implements IBizLogAO {
     @Autowired
     private IBizLogBO bizLogBO;
 
+    @Autowired
+    private IUserBO userBO;
+
     @Override
     public long leaveMessage(String adoptTreeCode, String note, String userId) {
         return bizLogBO.leaveMessage(adoptTreeCode, note, userId);
+    }
+
+    @Override
+    public XN629900Res weekTpp(String userId, String toUserId) {
+        XN629900Res res = new XN629900Res();
+
+        // 用户信息
+        User userInfo = userBO.getUser(userId);
+        res.setUserInfo(userInfo);
+
+        // 好友信息
+        User toUserInfo = userBO.getUser(toUserId);
+        res.setToUserInfo(toUserInfo);
+
+        // 用户本周碳泡泡数量
+        long userWeekQuantity = bizLogBO.getWeekQuantitySum(userId);
+        res.setUserWeekQuantity(userWeekQuantity);
+
+        // 好友本周碳泡泡数量
+        long toUserWeekQuantity = bizLogBO.getWeekQuantitySum(toUserId);
+        res.setToUserWeekQuantity(toUserWeekQuantity);
+
+        return res;
     }
 
     @Override

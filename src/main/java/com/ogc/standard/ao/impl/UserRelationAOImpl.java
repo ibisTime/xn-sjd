@@ -79,26 +79,26 @@ public class UserRelationAOImpl implements IUserRelationAO {
 
             if (EUserReleationType.FRIEND.getCode()
                 .equals(userRelation.getType())) {
-                if (StringUtils.isNotBlank(condition.getFriendUserId())) {
-                    // 被关注人
-                    String toUserId = userRelation.getToUser();
-                    if (condition.getFriendUserId().equals(toUserId)) {
-                        toUserId = userRelation.getUserId();
-                    }
-
-                    User toUser = userBO.getUser(toUserId);
-                    userRelation.setToUserInfo(toUser);
-
-                    // 证书个数
-                    long certificateCount = adoptOrderTreeBO
-                        .getCountByCurrentHolder(toUserId);
-                    userRelation.setCertificateCount(certificateCount);
-
-                    // 碳泡泡余额
-                    Account tppAccount = accountBO.getAccountByUser(toUserId,
-                        ECurrency.TPP.getCode());
-                    userRelation.setTppAmount(tppAccount.getAmount());
+                // 被关注人
+                String toUserId = userRelation.getToUser();
+                if (condition.getFriendUserId().equals(toUserId)) {
+                    toUserId = userRelation.getUserId();
                 }
+
+                User toUser = userBO.getUser(toUserId);
+                userRelation.setToUserInfo(toUser);
+
+                // 证书个数
+                long certificateCount = adoptOrderTreeBO
+                    .getCountByCurrentHolder(toUserId);
+                userRelation.setCertificateCount(certificateCount);
+
+                // 碳泡泡余额
+                Account tppAccount = accountBO.getAccountByUser(toUserId,
+                    ECurrency.TPP.getCode());
+                userRelation.setTppAmount(tppAccount.getAmount());
+
+                // 用户排名
             }
 
         }

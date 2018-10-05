@@ -34,6 +34,12 @@ public class BizLogDAOImpl extends AMybatisTemplate implements IBizLogDAO {
     }
 
     @Override
+    public long selectQuantitySum(BizLog condition) {
+        return super.select(NAMESPACE.concat("select_bizLog_quantitySum"),
+            condition, Long.class);
+    }
+
+    @Override
     public long selectTotalCount(BizLog condition) {
         return super.selectTotalCount(NAMESPACE.concat("select_bizLog_count"),
             condition);
