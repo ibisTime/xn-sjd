@@ -22,7 +22,7 @@ public class Product extends ABaseDO {
     // 名称
     private String name;
 
-    // 销售分类（0个人/1定向/2捐赠/3集体）
+    // 销售分类
     private String sellType;
 
     // 定向类型(1=等级 2=个人)
