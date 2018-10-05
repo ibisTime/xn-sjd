@@ -33,6 +33,7 @@ public class UserRelation extends ABaseDO {
     // 状态(1 正常 0 假删除定时器删除 预留)
     private String status;
 
+    // 关系类型(1信任/2好友)
     private String type;
 
     // 创建时间
@@ -50,7 +51,7 @@ public class UserRelation extends ABaseDO {
     private int certificateCount;
 
     // 序号
-    private int rank;
+    private int rowNo;
 
     // 碳泡泡余额
     public BigDecimal tppAmount;
@@ -165,11 +166,12 @@ public class UserRelation extends ABaseDO {
         this.tppAmount = tppAmount;
     }
 
-    public int getRank() {
-        return rank;
+    public int getRowNo() {
+        return rowNo;
     }
 
-    public void setRank(int rank) {
-        this.rank = rank;
+    public void setRowNo(int rowNo) {
+        this.rowNo = rowNo;
     }
+
 }

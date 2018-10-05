@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import com.ogc.standard.bo.IAdoptOrderTreeBO;
 import com.ogc.standard.bo.IBizLogBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
+import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.dao.IBizLogDAO;
 import com.ogc.standard.domain.AdoptOrderTree;
 import com.ogc.standard.domain.BizLog;
@@ -67,6 +68,16 @@ public class BizLogBOImpl extends PaginableBOImpl<BizLog> implements IBizLogBO {
         bizLogDAO.insert(data);
 
         return bizLogDAO.selectMaxId();
+    }
+
+    @Override
+    public long getWeekQuantitySum(String userId) {
+        BizLog condition = new BizLog();
+        condition.setUserId(userId);
+        condition.setCreateDatetimeStart(DateUtil.getBeginDayOfWeek());
+        condition.setCreateDatetimeEnd(DateUtil.getEndDayOfWeek());
+
+        return bizLogDAO.selectQuantitySum(condition);
     }
 
     @Override

@@ -6,13 +6,16 @@
 		<result column="code" property="code" />
 		<result column="order_code" property="orderCode" />
 		<result column="category_code" property="categoryCode" />
+		<result column="product_code" property="productCode" />
 		<result column="tree_number" property="treeNumber" />
+		
 		<result column="start_datetime" property="startDatetime" />
 		<result column="end_datetime" property="endDatetime" />
 		<result column="amount" property="amount" />
 		<result column="status" property="status" />
 		<result column="current_holder" property="currentHolder" />
 	</resultMap>
+	
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != '' ">
@@ -23,6 +26,9 @@
 			</if>
 			<if test="categoryCode != null and categoryCode != '' ">
 				AND t.category_code = #{categoryCode}
+			</if>
+			<if test="productCode != null and productCode != '' ">
+				AND t.product_code = #{productCode}
 			</if>
 			
 			<if test="treeNumber != null and treeNumber != '' ">
@@ -41,7 +47,9 @@
 		t.code
 		,t.order_code
 		,t.category_code
+		,t.product_code
 		,t.tree_number
+		
 		,t.start_datetime
 		,t.end_datetime
 		,t.amount
@@ -69,7 +77,9 @@
 		code
 		,order_code
 		,category_code
+		,product_code
 		,tree_number
+		
 		,start_datetime
 		,end_datetime
 		,amount
@@ -80,7 +90,9 @@
 		#{code}
 		,#{orderCode}
 		,#{categoryCode}
+		,#{productCode}
 		,#{treeNumber}
+		
 		,#{startDatetime}
 		,#{endDatetime}
 		,#{amount}

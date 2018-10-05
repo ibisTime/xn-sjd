@@ -39,13 +39,14 @@ public class BizLog extends ABaseDO {
     private Date createDatetime;
 
     /*********DB properties*********/
-
-    /*********辅助字段*****************/
     // 产生时间起
     private Date createDatetimeStart;
 
     // 产生时间止
     private Date createDatetimeEnd;
+
+    // 本周操作数量
+    private Integer weekQuantity;
 
     public Integer getId() {
         return id;
@@ -125,6 +126,14 @@ public class BizLog extends ABaseDO {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public Integer getWeekQuantity() {
+        return weekQuantity;
+    }
+
+    public void setWeekQuantity(Integer weekQuantity) {
+        this.weekQuantity = weekQuantity;
     }
 
 }

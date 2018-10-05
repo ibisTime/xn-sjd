@@ -49,7 +49,7 @@
 	</select>
 	
 	<resultMap id="myUserRelation_DB_Result" type="userRelation">
-		<result column="rank" property="rank" />
+		<result column="row_no" property="rowNo" />
 		<result column="to_user" property="toUser" />
 		<result column="certificate_count" property="certificateCount" />
 		<result column="tpp_amount" property="tppAmount" />
@@ -57,7 +57,7 @@
 	
 	<select id="select_myUserRelation_list" parameterType="userRelation" resultMap="myUserRelation_DB_Result">
 		select 
-        (@rowNO:= @rowNo+1) as rank,
+        (@rowNO:= @rowNo+1) as row_no,
 		a.to_user,
 		ifnull((select total_amount from tstd_account where user_id = a.to_user and currency='TPP') * #{weightRate1}+
 		(select sum(amount) from try_adopt_order_tree) * #{weightRate2},0) as weight,

@@ -24,6 +24,9 @@ public class AdoptOrderTree extends ABaseDO {
     // 分类
     private String categoryCode;
 
+    // 产品编号
+    private String productCode;
+
     // 古树编号
     private String treeNumber;
 
@@ -123,6 +126,14 @@ public class AdoptOrderTree extends ABaseDO {
 
     public String getCurrentHolder() {
         return currentHolder;
+    }
+
+    public String getProductCode() {
+        return productCode;
+    }
+
+    public void setProductCode(String productCode) {
+        this.productCode = productCode;
     }
 
 }
