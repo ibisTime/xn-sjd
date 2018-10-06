@@ -186,7 +186,7 @@ public class AdoptOrderBOImpl extends PaginableBOImpl<AdoptOrder> implements
     }
 
     @Override
-    public XN629048Res getOrderDkAmount(AdoptOrder data, String isDk) {
+    public XN629048Res getOrderDeductAmount(AdoptOrder data, String isDk) {
         BigDecimal cnyAmount = BigDecimal.ZERO;// 抵扣多少人民币
         BigDecimal jfAmount = BigDecimal.ZERO;// 抵扣积分
         if (data.getAmount().longValue() > 0

@@ -111,8 +111,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
             String approveResult, String approveNote) {
         Withdraw data = withdrawBO.getWithdraw(code);
         if (null == data) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "取现订单编号不存在");
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "取现订单编号不存在");
         }
         if (!EWithdrawStatus.toApprove.getCode().equals(data.getStatus())) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
@@ -127,8 +126,8 @@ public class WithdrawAOImpl implements IWithdrawAO {
 
     private void approveOrderYES(Withdraw data, String approveUser,
             String approveNote) {
-        withdrawBO.approveOrder(data, EWithdrawStatus.Approved_YES, approveUser,
-            approveNote);
+        withdrawBO.approveOrder(data, EWithdrawStatus.Approved_YES,
+            approveUser, approveNote);
     }
 
     private void approveOrderNO(Withdraw data, String approveUser,
@@ -147,10 +146,6 @@ public class WithdrawAOImpl implements IWithdrawAO {
     public void payOrder(String code, String payUser, String payResult,
             String payNote, String channelOrder, BigDecimal payFee) {
         Withdraw data = withdrawBO.getWithdraw(code);
-        if (data == null) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "不存在编号为" + code + "的订单");
-        }
         if (!EWithdrawStatus.Approved_YES.getCode().equals(data.getStatus())) {
             throw new BizException("xn000000", "申请记录状态不是待支付状态，无法支付");
         }
@@ -196,8 +191,8 @@ public class WithdrawAOImpl implements IWithdrawAO {
             EJourBizTypeUser.WITHDRAW.getCode(), "取现成功");
 
         // 取现扣钱
-        Account sysAccount = accountBO
-            .getAccount(ESystemAccount.SYS_ACOUNT_CNY.getCode());
+        Account sysAccount = accountBO.getAccount(ESystemAccount.SYS_ACOUNT_CNY
+            .getCode());
         accountBO.changeAmount(sysAccount, data.getFee(), EChannelType.Offline,
             payCode, data.getCode(), EJourBizTypePlat.WITHDRAW_FEE.getCode(),
             "取现手续费");
@@ -213,12 +208,11 @@ public class WithdrawAOImpl implements IWithdrawAO {
             String withDate, String channelOrder, String withNote,
             String updater) {
         if (!ESystemAccount.SYS_ACOUNT_OFFLINE.getCode().equals(accountNumber)
-                && !ESystemAccount.SYS_ACOUNT_ALIPAY.getCode()
-                    .equals(accountNumber)
-                && !ESystemAccount.SYS_ACOUNT_WEIXIN.getCode()
-                    .equals(accountNumber)) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "只支持系统托管账户");
+                && !ESystemAccount.SYS_ACOUNT_ALIPAY.getCode().equals(
+                    accountNumber)
+                && !ESystemAccount.SYS_ACOUNT_WEIXIN.getCode().equals(
+                    accountNumber)) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "只支持系统托管账户");
         }
 
         Account account = accountBO.getAccount(accountNumber);
@@ -278,19 +272,18 @@ public class WithdrawAOImpl implements IWithdrawAO {
     }
 
     private void initWithdraw(Withdraw withdraw) {
-        if (EAccountType.CUSTOMER.getCode()
-            .equals(withdraw.getApplyUserType())) {
+        if (EAccountType.CUSTOMER.getCode().equals(withdraw.getApplyUserType())) {
 
             // C端用户
             User user = userBO.getUser(withdraw.getApplyUser());
             withdraw.setUser(user);
 
-        } else if (EAccountType.AGENT.getCode()
-            .equals(withdraw.getApplyUserType())) {
+        } else if (EAccountType.AGENT.getCode().equals(
+            withdraw.getApplyUserType())) {
 
             // 代理用户
-            AgentUser agentUser = agentUserBO
-                .getAgentUser(withdraw.getApplyUser());
+            AgentUser agentUser = agentUserBO.getAgentUser(withdraw
+                .getApplyUser());
             User user = new User();
             user.setMobile(agentUser.getMobile());
             withdraw.setUser(user);

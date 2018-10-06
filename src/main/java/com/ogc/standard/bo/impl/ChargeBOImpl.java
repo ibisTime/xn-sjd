@@ -16,6 +16,7 @@ import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.Charge;
 import com.ogc.standard.enums.EChannelType;
 import com.ogc.standard.enums.EChargeStatus;
+import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
 
@@ -57,62 +58,32 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
         return code;
     }
 
-    // @Override
+    @Override
     public String applyOrderOnline(Account account, String payGroup,
-            String refNo, String bizType, String bizNote,
-            BigDecimal transAmount, EChannelType channelType, String applyUser,
-            String fromAddress) {
+            String bizType, String bizNote, BigDecimal transAmount,
+            EChannelType channelType, String applyUser) {
         if (transAmount.compareTo(BigDecimal.ZERO) == 0) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "充值金额不能为0");
+            throw new BizException("xn000000", "充值金额不能为0");
         }
-        String code = OrderNoGenerater.generate("CZ");
+        String code = OrderNoGenerater.generate(EGeneratePrefix.Charge
+            .getCode());
         Charge data = new Charge();
-
         data.setCode(code);
+        data.setPayGroup(payGroup);
         data.setAccountNumber(account.getAccountNumber());
-        data.setAccountType(account.getType());
         data.setAmount(transAmount);
-        data.setCurrency(account.getCurrency());
 
+        data.setAccountType(account.getType());
+        data.setCurrency(account.getCurrency());
         data.setBizType(bizType);
         data.setBizNote(bizNote);
-        data.setPayCardInfo(account.getCurrency());
-        data.setPayCardNo(fromAddress);
+        data.setPayCardInfo(null);
+        data.setPayCardNo(null);
 
-        data.setStatus(EChargeStatus.Pay_YES.getCode());
+        data.setStatus(EChargeStatus.toPay.getCode());
         data.setApplyUser(applyUser);
-        data.setApplyNote("线上充值");
         data.setApplyDatetime(new Date());
         data.setChannelType(channelType.getCode());
-        chargeDAO.insert(data);
-        return code;
-    }
-
-    @Override
-    public String applyOrderOnline(Account account, String payCardInfo,
-            String fromAddress, BigDecimal transAmount,
-            EChannelType channelType, String channalOrder, String payNote,
-            String hash) {
-        if (transAmount.compareTo(BigDecimal.ZERO) == 0) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "充值金额不能为0");
-        }
-        String code = OrderNoGenerater.generate("CZ");
-        Charge data = new Charge();
-
-        data.setCode(code);
-        data.setAccountNumber(account.getAccountNumber());
-        data.setAccountType(account.getType());
-        data.setAmount(transAmount);
-        data.setCurrency(account.getCurrency());
-
-        data.setPayCardInfo(payCardInfo);
-        data.setStatus(EChargeStatus.Pay_YES.getCode());
-        data.setPayUser(fromAddress);
-        data.setPayNote(payNote);
-        data.setPayDatetime(new Date());
-
-        data.setChannelType(channelType.getCode());
-        data.setChannelOrder(hash);
         chargeDAO.insert(data);
         return code;
     }

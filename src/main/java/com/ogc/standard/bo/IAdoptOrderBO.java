@@ -43,6 +43,6 @@ public interface IAdoptOrderBO extends IPaginableBO<AdoptOrder> {
 
     public AdoptOrder getAdoptOrder(String code);
 
-    public XN629048Res getOrderDkAmount(AdoptOrder data, String isDk);
+    public XN629048Res getOrderDeductAmount(AdoptOrder data, String isDk);
 
 }

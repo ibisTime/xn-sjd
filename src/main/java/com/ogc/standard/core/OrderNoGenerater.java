@@ -17,7 +17,7 @@ public class OrderNoGenerater {
      * @history:
      */
     public static String generate(String prefix) {
-        int random = (int) (Math.random() * (9999 - 1000 + 1)) + 1000;
+        int random = (int) (Math.random() * (99999 - 10000 + 1)) + 10000;
         String today = DateUtil.getToday(DateUtil.DATA_TIME_PATTERN_5);
         return prefix + today + String.valueOf(random);
     }

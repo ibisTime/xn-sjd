@@ -343,6 +343,7 @@ CREATE TABLE `tstd_charge` (
   `pay_card_no` varchar(255) DEFAULT NULL COMMENT '支付渠道账号',
   `status` varchar(4) NOT NULL COMMENT '状态 1待支付 2支付失败 3支付成功',
   `apply_user` varchar(32) DEFAULT NULL COMMENT '申请人',
+  `apply_user_type` varchar(32) DEFAULT NULL COMMENT '申请人类型',
   `apply_note` varchar(255) DEFAULT NULL COMMENT '申请说明',
   `apply_datetime` datetime DEFAULT NULL COMMENT '申请时间',
   `pay_user` varchar(32) DEFAULT NULL COMMENT '支付回录人',
@@ -509,6 +510,7 @@ CREATE TABLE `tstd_withdraw` (
   `pay_card_no` varchar(255) DEFAULT NULL COMMENT '支付渠道账号',
   `status` varchar(4) NOT NULL COMMENT '状态',
   `apply_user` varchar(32) DEFAULT NULL COMMENT '申请人',
+  `apply_user_type` varchar(32) DEFAULT NULL COMMENT '申请人类型',
   `apply_note` varchar(255) DEFAULT NULL COMMENT '申请说明',
   `apply_datetime` datetime DEFAULT NULL COMMENT '申请时间',
   `approve_user` varchar(32) DEFAULT NULL COMMENT '审批人',
@@ -928,6 +930,20 @@ CREATE TABLE `tstd_user_relation` (
   `type` varchar(4) DEFAULT NULL COMMENT '关系类型',
   `status` varchar(4) DEFAULT NULL COMMENT '状态',
   `create_datetime` datetime DEFAULT NULL COMMENT '创建时间'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `tstd_address`;
+CREATE TABLE `tstd_address` (
+  `code` varchar(32) NOT NULL COMMENT '收件编号',
+  `addressee` varchar(64) DEFAULT NULL COMMENT '收件人姓名',
+  `mobile` varchar(32) DEFAULT NULL COMMENT '手机号',
+  `province` varchar(64) DEFAULT NULL COMMENT '省份',
+  `city` varchar(64) DEFAULT NULL COMMENT '城市',
+  `district` varchar(64) DEFAULT NULL COMMENT '区',
+  `detail_address` varchar(255) DEFAULT NULL COMMENT '详细地址',
+  `is_default` char(1) DEFAULT NULL COMMENT '是否默认地址',
+  `user_id` varchar(32) DEFAULT NULL COMMENT '用户编号',
+  PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 

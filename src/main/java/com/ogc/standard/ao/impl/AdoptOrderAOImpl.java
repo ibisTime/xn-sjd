@@ -17,6 +17,7 @@ import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IAdoptOrderBO;
 import com.ogc.standard.bo.IAdoptOrderTreeBO;
 import com.ogc.standard.bo.IAgentUserBO;
+import com.ogc.standard.bo.IAlipayBO;
 import com.ogc.standard.bo.IApplyBindMaintainBO;
 import com.ogc.standard.bo.ICompanyBO;
 import com.ogc.standard.bo.IDistributionOrderBO;
@@ -105,6 +106,9 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
     @Autowired
     private ISettleBO settleBO;
 
+    @Autowired
+    private IAlipayBO alipayBO;
+
     @Override
     @Transactional
     public String commitAdoptOrder(String userId, String specsCode,
@@ -132,8 +136,8 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
                     throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                         "定向产品等级不符，不能下单");
                 }
-            } else if (EDirectType.ONE_USER.getCode()
-                .equals(product.getDirectType())) {
+            } else if (EDirectType.ONE_USER.getCode().equals(
+                product.getDirectType())) {
                 if (!product.getDirectObject().equals(user.getUserId())) {
                     throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                         "定向产品针对用户不符，不能下单");
@@ -177,8 +181,8 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
         // 更新树状态
         if (ESellType.PERSON.getCode().equals(data.getType())
                 || ESellType.DIRECT.getCode().equals(data.getType())) {
-            List<Tree> treeList = treeBO
-                .queryTreeListByOrderCode(data.getCode());
+            List<Tree> treeList = treeBO.queryTreeListByOrderCode(data
+                .getCode());
             for (Tree tree : treeList) {
                 treeBO.refreshCancelTree(tree);
             }
@@ -187,21 +191,26 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
 
     @Override
     @Transactional
-    public Object toPayAdoptOrder(String code, String payType,
-            String isJfDeduct) {
+    public Object toPayAdoptOrder(String code, String payType, String isJfDeduct) {
         AdoptOrder data = adoptOrderBO.getAdoptOrder(code);
         if (!EAdoptOrderStatus.TO_PAY.getCode().equals(data.getStatus())) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "订单不是待支付状态，不能支付");
         }
+        // 积分抵扣处理
+        XN629048Res deductRes = adoptOrderBO.getOrderDeductAmount(data,
+            isJfDeduct);
 
         // 支付订单
         Object result = null;
         if (EPayType.YE.getCode().equals(payType)) {// 余额支付
-            result = toPayAdoptOrderYue(data, isJfDeduct);
+            result = toPayAdoptOrderYue(data, deductRes);
         } else if (EPayType.ALIPAY.getCode().equals(payType)) {// 支付宝支付
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "暂不支持支付宝支付");
+            adoptOrderBO.refreshPayGroup(data, payType, deductRes);
+            result = alipayBO.getSignedH5Order(data.getApplyUser(),
+                ESysUser.SYS_USER.getCode(), data.getPayGroup(),
+                EJourBizTypeUser.ADOPT.getCode(),
+                EJourBizTypeUser.ADOPT.getValue(), data.getAmount());
         } else if (EPayType.WEIXIN_H5.getCode().equals(payType)) {// 微信支付
             throw new BizException(EBizErrorCode.DEFAULT.getCode(), "暂不支持微信支付");
 
@@ -212,16 +221,13 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
     // 1、判断余额是否足够，并扣除账户余额
     // 2、进行分销
     // 3、更新订单和树状态
-    private Object toPayAdoptOrderYue(AdoptOrder data, String isDk) {
-        XN629048Res resultRes = adoptOrderBO.getOrderDkAmount(data, isDk);
-        Account userCnyAccount = accountBO.getAccountByUser(data.getApplyUser(),
-            ECurrency.CNY.getCode());
-
-        BigDecimal payAmount = data.getAmount()
-            .subtract(resultRes.getCnyAmount());// 实际付款人民币金额
+    private Object toPayAdoptOrderYue(AdoptOrder data, XN629048Res resultRes) {
+        Account userCnyAccount = accountBO.getAccountByUser(
+            data.getApplyUser(), ECurrency.CNY.getCode());
+        BigDecimal payAmount = data.getAmount().subtract(
+            resultRes.getCnyAmount());// 实际付款人民币金额
         if (userCnyAccount.getAmount().compareTo(payAmount) < 0) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "人民币账户余额不足");
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "人民币账户余额不足");
         }
 
         // 人民币余额划转
@@ -263,8 +269,8 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
         AdoptOrder condition = new AdoptOrder();
         condition.setStatus(EAdoptOrderStatus.TO_PAY.getCode());
         // 前15分钟还未支付的订单
-        condition.setApplyDatetimeEnd(
-            DateUtil.getRelativeDateOfMinute(new Date(), -15));
+        condition.setApplyDatetimeEnd(DateUtil.getRelativeDateOfMinute(
+            new Date(), -15));
         List<AdoptOrder> adoptOrderList = adoptOrderBO
             .queryAdoptOrderList(condition);
         if (CollectionUtils.isNotEmpty(adoptOrderList)) {
@@ -281,8 +287,8 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
         if (ESellType.PERSON.getCode().equals(data.getType())
                 || ESellType.DIRECT.getCode().equals(data.getType())) {
             // 树的状态变更
-            List<Tree> treeList = treeBO
-                .queryTreeListByOrderCode(data.getCode());
+            List<Tree> treeList = treeBO.queryTreeListByOrderCode(data
+                .getCode());
             for (Tree tree : treeList) {
                 treeBO.refreshCancelTree(tree);
             }
@@ -342,8 +348,8 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
         }
         if (ESellType.PERSON.getCode().equals(adoptOrder.getType())
                 || ESellType.DIRECT.getCode().equals(adoptOrder.getType())) {
-            List<Tree> treeList = treeBO
-                .queryTreeListByOrderCode(adoptOrder.getCode());
+            List<Tree> treeList = treeBO.queryTreeListByOrderCode(adoptOrder
+                .getCode());
             for (Tree tree : treeList) {
                 treeBO.refreshCancelTree(tree);
             }
@@ -357,7 +363,7 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "当前订单不是待支付状态");
         }
-        return adoptOrderBO.getOrderDkAmount(data, EBoolean.YES.getCode());
+        return adoptOrderBO.getOrderDeductAmount(data, EBoolean.YES.getCode());
     }
 
     @Override
@@ -385,15 +391,15 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
     public AdoptOrder getAdoptOrder(String code, String isSettle) {
         AdoptOrder data = adoptOrderBO.getAdoptOrder(code);
         initAdoptOrder(data);
-        Company company = companyBO
-            .getCompanyByUserId(data.getProduct().getOwnerId());
+        Company company = companyBO.getCompanyByUserId(data.getProduct()
+            .getOwnerId());
         data.setOwnerContractTemplate(company.getContractTemplate());
         if (EBoolean.YES.getCode().equals(isSettle)) {
             List<Settle> settleList = settleBO.querySettleList(code);
             if (CollectionUtils.isNotEmpty(settleList)) {
                 for (Settle settle : settleList) {
-                    AgentUser agentUser = agentUserBO
-                        .getAgentUser(settle.getUserId());
+                    AgentUser agentUser = agentUserBO.getAgentUser(settle
+                        .getUserId());
                     settle.setAgentUser(agentUser);
                 }
             }
@@ -411,8 +417,8 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
 
         List<Tree> treeList = new ArrayList<Tree>();
         for (AdoptOrderTree adoptOrderTree : adoptOrderTreeList) {
-            Tree tree = treeBO
-                .getTreeByTreeNumber(adoptOrderTree.getTreeNumber());
+            Tree tree = treeBO.getTreeByTreeNumber(adoptOrderTree
+                .getTreeNumber());
             treeList.add(tree);
         }
         data.setTreeList(treeList);

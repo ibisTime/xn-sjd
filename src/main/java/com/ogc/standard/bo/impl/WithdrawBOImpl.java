@@ -97,13 +97,17 @@ public class WithdrawBOImpl extends PaginableBOImpl<Withdraw>
 
     @Override
     public Withdraw getWithdraw(String code) {
-        Withdraw order = null;
+        Withdraw data = null;
         if (StringUtils.isNotBlank(code)) {
             Withdraw condition = new Withdraw();
             condition.setCode(code);
-            order = withdrawDAO.select(condition);
+            data = withdrawDAO.select(condition);
+            if (data == null) {
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(), "取现订单"
+                        + code + "不存在");
+            }
         }
-        return order;
+        return data;
     }
 
     @Override
