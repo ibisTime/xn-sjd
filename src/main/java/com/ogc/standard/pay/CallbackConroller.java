@@ -13,7 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.ogc.standard.bo.IAlipayBO;
+import com.ogc.standard.ao.impl.IAlipayAO;
+import com.ogc.standard.enums.EBoolean;
 
 /** 
  * @author: haiqingzheng 
@@ -26,10 +27,10 @@ public class CallbackConroller {
     private static Logger logger = Logger.getLogger(CallbackConroller.class);
 
     @Autowired
-    IAlipayBO alipayBO;
+    IAlipayAO alipayAO;
 
-    // 支付宝h5支付回调
-    @RequestMapping("/alipay/h5/callback")
+    // 支付宝支付回调
+    @RequestMapping("/alipay/callback")
     public synchronized void doCallbackAlipayAPP(HttpServletRequest request,
             HttpServletResponse response) {
         try {
@@ -46,8 +47,10 @@ public class CallbackConroller {
             outSteam.close();
             inStream.close();
             String result = new String(outSteam.toByteArray(), "utf-8");
-            // 回调业务biz
-            // alipayAO.doCallbackAPP(result);
+            boolean isSuccess = alipayAO.doCallback(result);
+            if (EBoolean.YES.getCode().equals(isSuccess)) {
+                // 回调业务biz
+            }
             // 通知支付宝我已收到请求，不用再继续回调我了
             out.print("success");
         } catch (Exception e) {

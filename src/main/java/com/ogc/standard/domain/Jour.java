@@ -55,22 +55,6 @@ public class Jour extends ABaseDO {
 
     private String postAmountString;
 
-    public String getPreAmountString() {
-        return preAmountString;
-    }
-
-    public void setPreAmountString(String preAmountString) {
-        this.preAmountString = preAmountString;
-    }
-
-    public String getPostAmountString() {
-        return postAmountString;
-    }
-
-    public void setPostAmountString(String postAmountString) {
-        this.postAmountString = postAmountString;
-    }
-
     // 状态
     private String status;
 
@@ -356,6 +340,22 @@ public class Jour extends ABaseDO {
 
     public void setTransAmountString(String transAmountString) {
         this.transAmountString = transAmountString;
+    }
+
+    public String getPreAmountString() {
+        return preAmountString;
+    }
+
+    public void setPreAmountString(String preAmountString) {
+        this.preAmountString = preAmountString;
+    }
+
+    public String getPostAmountString() {
+        return postAmountString;
+    }
+
+    public void setPostAmountString(String postAmountString) {
+        this.postAmountString = postAmountString;
     }
 
 }

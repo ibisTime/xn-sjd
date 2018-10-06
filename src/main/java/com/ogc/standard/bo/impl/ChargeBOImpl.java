@@ -14,6 +14,7 @@ import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.IChargeDAO;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.Charge;
+import com.ogc.standard.enums.EAccountType;
 import com.ogc.standard.enums.EChannelType;
 import com.ogc.standard.enums.EChargeStatus;
 import com.ogc.standard.enums.EGeneratePrefix;
@@ -82,6 +83,7 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
 
         data.setStatus(EChargeStatus.toPay.getCode());
         data.setApplyUser(applyUser);
+        data.setApplyUserType(EAccountType.CUSTOMER.getCode());
         data.setApplyDatetime(new Date());
         data.setChannelType(channelType.getCode());
         chargeDAO.insert(data);

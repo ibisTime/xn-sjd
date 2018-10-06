@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ogc.standard.ao.IChargeAO;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IAgentUserBO;
+import com.ogc.standard.bo.IAlipayBO;
 import com.ogc.standard.bo.IChargeBO;
 import com.ogc.standard.bo.IJourBO;
 import com.ogc.standard.bo.ISYSUserBO;
@@ -20,7 +21,6 @@ import com.ogc.standard.domain.AgentUser;
 import com.ogc.standard.domain.Charge;
 import com.ogc.standard.domain.SYSUser;
 import com.ogc.standard.domain.User;
-import com.ogc.standard.dto.res.XN802347Res;
 import com.ogc.standard.enums.EAccountType;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.EChannelType;
@@ -28,12 +28,14 @@ import com.ogc.standard.enums.EChargeStatus;
 import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EJourBizTypePlat;
 import com.ogc.standard.enums.EJourBizTypeUser;
+import com.ogc.standard.enums.EPayType;
 import com.ogc.standard.enums.ESystemAccount;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
 
 @Service
 public class ChargeAOImpl implements IChargeAO {
+
     @Autowired
     private IAccountBO accountBO;
 
@@ -51,6 +53,25 @@ public class ChargeAOImpl implements IChargeAO {
 
     @Autowired
     private IAgentUserBO agentUserBO;
+
+    @Autowired
+    private IAlipayBO alipayBO;
+
+    @Override
+    public String applyOrderOnline(String userId, String payType,
+            BigDecimal transAmount) {
+        User user = userBO.getUser(userId);
+        String result = null;
+        if (EPayType.ALIPAY.getCode().equals(payType)) {
+            result = alipayBO.getSignedOrder(user.getUserId(),
+                user.getUserId(), EJourBizTypeUser.CHARGE.getCode(),
+                EJourBizTypeUser.CHARGE.getCode(),
+                EJourBizTypeUser.CHARGE.getValue(), transAmount);
+        } else {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "暂不支持支付方式");
+        }
+        return result;
+    }
 
     @Override
     public String applyOrder(String accountNumber, BigDecimal amount,
@@ -153,12 +174,12 @@ public class ChargeAOImpl implements IChargeAO {
             User user = userBO.getUser(charge.getApplyUser());
             charge.setPayer(user);
 
-        } else if (EAccountType.AGENT.getCode()
-            .equals(charge.getApplyUserType())) {
+        } else if (EAccountType.AGENT.getCode().equals(
+            charge.getApplyUserType())) {
 
             // 代理用户
-            AgentUser agentUser = agentUserBO
-                .getAgentUser(charge.getApplyUser());
+            AgentUser agentUser = agentUserBO.getAgentUser(charge
+                .getApplyUser());
             User user = new User();
             user.setMobile(agentUser.getMobile());
             charge.setPayer(user);
@@ -172,11 +193,5 @@ public class ChargeAOImpl implements IChargeAO {
             charge.setPayer(user);
 
         }
-    }
-
-    @Override
-    public XN802347Res getChargeCheckInfo(String code) {
-        XN802347Res res = new XN802347Res();
-        return res;
     }
 }

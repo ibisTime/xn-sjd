@@ -5,11 +5,13 @@ import java.util.List;
 
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Charge;
-import com.ogc.standard.dto.res.XN802347Res;
 
 public interface IChargeAO {
 
     String DEFAULT_ORDER_COLUMN = "code";
+
+    public String applyOrderOnline(String userId, String payType,
+            BigDecimal transAmount);
 
     public String applyOrder(String accountNumber, BigDecimal amount,
             String payCardInfo, String payCardNo, String applyUser,
@@ -26,8 +28,4 @@ public interface IChargeAO {
     public List<Charge> queryChargeList(Charge condition);
 
     public Charge getCharge(String code);
-
-    // 充币对账详情
-    public XN802347Res getChargeCheckInfo(String code);
-
 }

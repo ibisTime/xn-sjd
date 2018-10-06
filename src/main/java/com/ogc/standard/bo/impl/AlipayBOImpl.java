@@ -28,6 +28,7 @@ import com.ogc.standard.bo.IAlipayBO;
 import com.ogc.standard.bo.IChargeBO;
 import com.ogc.standard.bo.ISYSConfigBO;
 import com.ogc.standard.common.AmountUtil;
+import com.ogc.standard.common.PropertiesUtil;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.enums.EChannelType;
 import com.ogc.standard.enums.ECurrency;
@@ -56,7 +57,7 @@ public class AlipayBOImpl implements IAlipayBO {
     ISYSConfigBO sysConfigBO;
 
     @Override
-    public Object getSignedH5Order(String applyUser, String toUser,
+    public String getSignedOrder(String applyUser, String toUser,
             String payGroup, String bizType, String bizNote,
             BigDecimal transAmount) {
         if (transAmount.compareTo(BigDecimal.ZERO) == 0) {
@@ -114,6 +115,8 @@ public class AlipayBOImpl implements IAlipayBO {
         String form = null;
         try {
             form = client.sdkExecute(alipay_request).getBody();
+            form = PropertiesUtil.Config.ALIPAY_GATEWAY.concat("?")
+                .concat(form);
             // form = client.pageExecute(alipay_request).getBody();
             // logger.info("*********h5支付表单唤醒参数：" + form + "*********");
         } catch (AlipayApiException e) {
@@ -147,13 +150,6 @@ public class AlipayBOImpl implements IAlipayBO {
             }
         }
         return map;
-    }
-
-    public static void main(String[] args) {
-        String currentLat2 = "2.415675";
-        BigDecimal b = new BigDecimal(currentLat2);
-        b = b.divide(new BigDecimal(3), 2, BigDecimal.ROUND_HALF_UP);
-        System.out.println(b);
     }
 
 }

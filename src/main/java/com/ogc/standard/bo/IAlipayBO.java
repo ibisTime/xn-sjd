@@ -16,8 +16,9 @@ import java.math.BigDecimal;
  * @history:
  */
 public interface IAlipayBO {
+
     // 支付宝h5支付，第一步：获取签名后的订单信息。
-    public Object getSignedH5Order(String applyUser, String toUser,
+    public String getSignedOrder(String applyUser, String userId,
             String payGroup, String bizType, String bizNote,
             BigDecimal transAmount);
 

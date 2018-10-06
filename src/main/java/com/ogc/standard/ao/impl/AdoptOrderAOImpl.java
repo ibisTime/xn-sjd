@@ -207,7 +207,7 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
             result = toPayAdoptOrderYue(data, deductRes);
         } else if (EPayType.ALIPAY.getCode().equals(payType)) {// 支付宝支付
             adoptOrderBO.refreshPayGroup(data, payType, deductRes);
-            result = alipayBO.getSignedH5Order(data.getApplyUser(),
+            result = alipayBO.getSignedOrder(data.getApplyUser(),
                 ESysUser.SYS_USER.getCode(), data.getPayGroup(),
                 EJourBizTypeUser.ADOPT.getCode(),
                 EJourBizTypeUser.ADOPT.getValue(), data.getAmount());
