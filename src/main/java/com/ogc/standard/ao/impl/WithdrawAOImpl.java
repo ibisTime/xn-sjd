@@ -3,6 +3,7 @@ package com.ogc.standard.ao.impl;
 import java.math.BigDecimal;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,13 +15,14 @@ import com.ogc.standard.bo.ISYSConfigBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.IWithdrawBO;
 import com.ogc.standard.bo.base.Paginable;
+import com.ogc.standard.common.AmountUtil;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.Withdraw;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.EChannelType;
-import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EJourBizTypePlat;
 import com.ogc.standard.enums.EJourBizTypeUser;
+import com.ogc.standard.enums.ESystemAccount;
 import com.ogc.standard.enums.EWithdrawStatus;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
@@ -155,18 +157,47 @@ public class WithdrawAOImpl implements IWithdrawAO {
 
         // 取现扣钱
         accountBO.changeAmount(dbAccount, data.getAmount().negate(),
-            EChannelType.Offline, null, data.getCode(),
+            EChannelType.Offline, payCode, data.getCode(),
             EJourBizTypeUser.WITHDRAW.getCode(), "取现成功");
 
         // 取现扣钱
-        Account sysAccount = accountBO.getSysAccountNumber(ECurrency.CNY);
+        Account sysAccount = accountBO.getAccount(ESystemAccount.SYS_ACOUNT_CNY
+            .getCode());
         accountBO.changeAmount(sysAccount, data.getFee(), EChannelType.Offline,
-            null, data.getCode(), EJourBizTypePlat.WITHDRAW_FEE.getCode(),
+            payCode, data.getCode(), EJourBizTypePlat.WITHDRAW_FEE.getCode(),
             "取现手续费");
 
         accountBO.changeAmount(sysAccount, payFee.negate(),
-            EChannelType.Offline, null, data.getCode(),
+            EChannelType.Offline, payCode, data.getCode(),
             EJourBizTypePlat.WITHDRAW_TRANS_FEE.getCode(), "取现转账手续费");
+    }
+
+    // 取现回录
+    @Override
+    public void withdrawEnter(String accountNumber, BigDecimal amount,
+            String withDate, String channelOrder, String withNote,
+            String updater) {
+        if (!ESystemAccount.SYS_ACOUNT_OFFLINE.getCode().equals(accountNumber)
+                && !ESystemAccount.SYS_ACOUNT_ALIPAY.getCode().equals(
+                    accountNumber)
+                && !ESystemAccount.SYS_ACOUNT_WEIXIN.getCode().equals(
+                    accountNumber)) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "只支持系统托管账户");
+        }
+
+        Account account = accountBO.getAccount(accountNumber);
+        if (account.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "账户余额不足");
+        }
+
+        String bizNote = "平台于" + withDate + "进行取现"
+                + AmountUtil.div(amount, 1000L) + "元";
+        if (StringUtils.isNotBlank(withNote)) {
+            bizNote = bizNote + withNote;
+        }
+        accountBO.changeAmount(account, amount.negate(), EChannelType.Offline,
+            channelOrder, channelOrder,
+            EJourBizTypePlat.WITHDRAW_ENTER.getCode(), bizNote);
     }
 
     @Override

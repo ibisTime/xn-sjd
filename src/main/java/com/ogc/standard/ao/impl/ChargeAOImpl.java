@@ -107,6 +107,18 @@ public class ChargeAOImpl implements IChargeAO {
         }
     }
 
+    // 手动增发
+    @Override
+    @Transactional
+    public void addSysJf(BigDecimal amount, String bizNote, String updater) {
+        Account account = accountBO
+            .getAccount(ESystemAccount.SYS_ACOUNT_JF_POOL.getCode());
+        accountBO.changeAmount(account, amount, EChannelType.Offline,
+            EJourBizTypePlat.HAND_CHARGE.getCode(),
+            EJourBizTypePlat.HAND_CHARGE.getCode(),
+            EJourBizTypePlat.HAND_CHARGE.getCode(), bizNote);
+    }
+
     @Override
     public Paginable<Charge> queryChargePage(int start, int limit,
             Charge condition) {

@@ -6,7 +6,7 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
- * 广播
+ * 取现支付
  * @author: xieyj 
  * @since: 2017年5月12日 上午10:02:36 
  * @history:

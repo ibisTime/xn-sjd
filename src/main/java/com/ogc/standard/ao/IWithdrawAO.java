@@ -24,6 +24,10 @@ public interface IWithdrawAO {
     public void payOrder(String code, String payUser, String payResult,
             String payNote, String channelOrder, BigDecimal transFee);
 
+    public void withdrawEnter(String accountNumber, BigDecimal amount,
+            String withDate, String channelOrder, String withNote,
+            String updater);
+
     public Paginable<Withdraw> queryWithdrawPage(int start, int limit,
             Withdraw condition);
 

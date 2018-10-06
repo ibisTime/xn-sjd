@@ -8,7 +8,6 @@ import com.ogc.standard.domain.Account;
 import com.ogc.standard.enums.EAccountStatus;
 import com.ogc.standard.enums.EAccountType;
 import com.ogc.standard.enums.EChannelType;
-import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.ESysUser;
 
 /**
@@ -63,9 +62,6 @@ public interface IAccountBO extends IPaginableBO<Account> {
 
     // 通过用户编号和币种获取币种
     public Account getAccountByUser(String userId, String currency);
-
-    // 根据系统编号,公司编号和币种获取对应的系统账户(账户类型确定为系统账户)
-    public Account getSysAccountNumber(ECurrency currency);
 
     // 获取账户列表
     public List<Account> queryAccountList(Account data);

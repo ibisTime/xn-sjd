@@ -21,5 +21,4 @@ public interface IAccountAO {
 
     // 根据用户编号获取账户列表
     public List<Account> getAccountByUserId(String userId, String currency);
-
 }

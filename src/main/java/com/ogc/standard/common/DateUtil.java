@@ -35,8 +35,8 @@ public class DateUtil {
     public static final String TIME_END = " 23:59:59";
 
     public static Date getStartDatetime(String startDate) {
-        Date repayDatetime = DateUtil.strToDate(startDate + DateUtil.TIME_BEGIN,
-            DateUtil.DATA_TIME_PATTERN_1);
+        Date repayDatetime = DateUtil.strToDate(
+            startDate + DateUtil.TIME_BEGIN, DateUtil.DATA_TIME_PATTERN_1);
         return repayDatetime;
     }
 
@@ -199,6 +199,18 @@ public class DateUtil {
     }
 
     /**
+     * 按格式获取时间
+     * @param pattern
+     * @return 
+     * @create: 2015-5-7 上午11:22:04 miyb
+     * @history:
+     */
+    public static String getDate(Date date, String pattern) {
+        SimpleDateFormat df = new SimpleDateFormat(pattern);
+        return df.format(date);
+    }
+
+    /**
      * 
      * @param date
      * @param addOneDay 是否加1天
@@ -231,8 +243,7 @@ public class DateUtil {
      * @param format 时间格式
      * @return
      */
-    public static int daysBetween(String beginStr, String endStr,
-            String format) {
+    public static int daysBetween(String beginStr, String endStr, String format) {
         Date end = strToDate(endStr, format);
         Date begin = strToDate(beginStr, format);
         long times = end.getTime() - begin.getTime();
