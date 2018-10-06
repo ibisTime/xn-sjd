@@ -522,8 +522,25 @@ INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`r
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('WITH','USERDZTS','5','',now(),'取现到账天数');
 
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('SYS_TXT','STRATEGY','攻略','',now(),'攻略说明');
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('TPP_RULE','PRESENT_TPP_QUANTITY','10','',now(),'赠送碳泡泡数量');
 
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('TPP_RULE','PRESENT_TPP_QUANTITY','10','',now(),'好友赠送碳泡泡数量');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('TPP_RULE','SIGN_TPP','50','',now(),'签到赠送碳泡泡数量');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('TPP_RULE','SHARE','10','',now(),'分享');
+
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('JF_RULE','REGISTER','50','',now(),'注册送积分');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('JF_RULE','BIND_MOBILE','10','',now(),'绑定手机号');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('JF_RULE','BIND_EMAIL','10','',now(),'绑定邮箱');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('JF_RULE','UPLOAD_PHOTO','10','',now(),'上传头像');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('JF_RULE','COMPLETE_INFO','10','',now(),'完善用户信息');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('JF_RULE','REAL_AUTH','50','',now(),'实名认证');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('JF_RULE','SIGN_JF','1','',now(),'签到');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('JF_RULE','ONE_ADOPT_BACK','10','',now(),'直推认养消费返积分');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('JF_RULE','TWO_ADOPT_BACK','50','',now(),'间推认养消费返积分');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('JF_RULE','INVITE_USER','50','',now(),'邀请好友注册');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('JF_RULE','ADOPT_BUY_DEDUCT','50','',now(),'认养抵扣');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('JF_RULE','ADOPT_PAY_BACK','10','',now(),'认养消费返利');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('JF_RULE','TOOL_BUY','50','',now(),'购买道具');
+    
 /*
 -- Query: SELECT bank_code,bank_name,channel_type,status,channel_bank,max_order,order_amount,day_amount,month_amount,remark FROM tsys_channel_bank
 -- Date: 2017-08-24 12:26
@@ -834,3 +851,6 @@ INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_d
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','user_releation_type','1','信任','admin',now(),'');
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','user_releation_type','2','好友','admin',now(),'');
 
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('0',NULL,'share_type','分享类型','admin',now(),'');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','share_type','1','微信','admin',now(),'');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','share_type','2','微博','admin',now(),'');

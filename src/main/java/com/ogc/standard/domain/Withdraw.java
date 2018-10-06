@@ -53,6 +53,9 @@ public class Withdraw extends ABaseDO {
     // 申请人
     private String applyUser;
 
+    // 申请人类型(C:C端用户/O:产权方/M:养护方/A:代理商/P:平台方)
+    private String applyUserType;
+
     // 申请说明
     private String applyNote;
 
@@ -362,6 +365,14 @@ public class Withdraw extends ABaseDO {
 
     public void setCurrencyList(List<String> currencyList) {
         this.currencyList = currencyList;
+    }
+
+    public String getApplyUserType() {
+        return applyUserType;
+    }
+
+    public void setApplyUserType(String applyUserType) {
+        this.applyUserType = applyUserType;
     }
 
 }

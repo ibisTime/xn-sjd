@@ -18,6 +18,7 @@
 		
 		<result column="status" property="status" />
 		<result column="apply_user" property="applyUser" />
+		<result column="apply_user_type" property="applyUserType" />
 		<result column="apply_note" property="applyNote" />
 		<result column="apply_datetime" property="applyDatetime" />
 		<result column="pay_user" property="payUser" />
@@ -67,6 +68,9 @@
 			<if test="applyUser != null and applyUser != '' ">
 				AND t.apply_user = #{applyUser}
 			</if>
+			<if test="applyUserType != null and applyUserType != '' ">
+				AND t.apply_user_type = #{applyUserType}
+			</if>
 			<if test="applyDatetimeStart != null and applyDatetimeStart != '' ">
 				<![CDATA[AND t.apply_datetime >= #{applyDatetimeStart}]]>
 			</if>
@@ -107,6 +111,7 @@
 		
 		,t.status
 		,t.apply_user
+		,t.apply_user_type
 		,t.apply_note
 		,t.apply_datetime
 		,t.pay_user
@@ -146,9 +151,9 @@
 		,pay_card_info
 		,pay_card_no
 		
-		
 		,status
 		,apply_user
+		,apply_user_type
 		,apply_note
 		,apply_datetime
 		,pay_note
@@ -172,9 +177,9 @@
 		,#{payCardInfo}
 		,#{payCardNo}
 		
-		
 		,#{status}
 		,#{applyUser}
+		,#{applyUserType}
 		,#{applyNote}
 		,#{applyDatetime}
 		,#{payNote}

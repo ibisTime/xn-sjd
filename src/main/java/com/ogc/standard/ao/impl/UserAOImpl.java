@@ -8,9 +8,11 @@
  */
 package com.ogc.standard.ao.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -20,7 +22,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.IAccountAO;
 import com.ogc.standard.ao.IUserAO;
+import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IAgentUserBO;
+import com.ogc.standard.bo.ISYSConfigBO;
 import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.ISettleBO;
 import com.ogc.standard.bo.ISignLogBO;
@@ -29,11 +33,13 @@ import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.IUserExtBO;
 import com.ogc.standard.bo.IUserRelationBO;
 import com.ogc.standard.bo.base.Paginable;
+import com.ogc.standard.common.AmountUtil;
 import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.common.MD5Util;
 import com.ogc.standard.common.PhoneUtil;
 import com.ogc.standard.common.PwdUtil;
 import com.ogc.standard.common.SysConstants;
+import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.AgentUser;
 import com.ogc.standard.domain.SignLog;
 import com.ogc.standard.domain.User;
@@ -45,8 +51,13 @@ import com.ogc.standard.dto.req.XN805042Req;
 import com.ogc.standard.dto.req.XN805081Req;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECaptchaType;
+import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EIDKind;
+import com.ogc.standard.enums.EJourBizTypePlat;
+import com.ogc.standard.enums.EJourBizTypeUser;
 import com.ogc.standard.enums.ESignLogType;
+import com.ogc.standard.enums.ESysConfigType;
+import com.ogc.standard.enums.ESystemAccount;
 import com.ogc.standard.enums.EUser;
 import com.ogc.standard.enums.EUserKind;
 import com.ogc.standard.enums.EUserLevel;
@@ -91,6 +102,12 @@ public class UserAOImpl implements IUserAO {
     @Autowired
     private IUserRelationBO userRelationBO;
 
+    @Autowired
+    private IAccountBO accountBO;
+
+    @Autowired
+    private ISYSConfigBO sysConfigBO;
+
     @Override
     public void doCheckMobile(String mobile) {
         userBO.isMobileExist(mobile);
@@ -115,16 +132,16 @@ public class UserAOImpl implements IUserAO {
                 User refereeUser = userBO.getUserByMobile(req.getUserReferee());
                 userReferee = refereeUser.getUserId();
                 agentId = refereeUser.getAgentId();
-            } else if (EUserRefereeType.AGENT.getCode().equals(
-                req.getUserRefereeType())) {
-                AgentUser agentUser = agentUserBO.getAgentUserByMobile(req
-                    .getUserReferee());
+            } else if (EUserRefereeType.AGENT.getCode()
+                .equals(req.getUserRefereeType())) {
+                AgentUser agentUser = agentUserBO
+                    .getAgentUserByMobile(req.getUserReferee());
                 userReferee = agentUser.getUserId();
                 agentId = agentUser.getUserId();
-            } else if (EUserRefereeType.SALEMANS.getCode().equals(
-                req.getUserRefereeType())) {
-                AgentUser agentUser = agentUserBO.getAgentUserByMobile(req
-                    .getUserReferee());
+            } else if (EUserRefereeType.SALEMANS.getCode()
+                .equals(req.getUserRefereeType())) {
+                AgentUser agentUser = agentUserBO
+                    .getAgentUserByMobile(req.getUserReferee());
                 userReferee = agentUser.getUserId();
                 agentId = agentUser.getParentUserId();
             } else {
@@ -161,6 +178,45 @@ public class UserAOImpl implements IUserAO {
 
     @Override
     @Transactional
+    public void doAssignRegistJf(String userId, String userReferee) {
+        // 用户注册添加积分
+        Map<String, String> configMap = sysConfigBO
+            .getConfigsMap(ESysConfigType.JF_RULE.getCode());
+        BigDecimal quantity = new BigDecimal(
+            configMap.get(SysConstants.REGISTER));
+        quantity = AmountUtil.mul(quantity, 1000L);
+
+        Account userJfAccount = accountBO.getAccountByUser(userId,
+            ECurrency.JF.getCode());
+        Account sysJfAccount = accountBO
+            .getAccount(ESystemAccount.SYS_ACOUNT_JF_POOL.getCode());
+
+        accountBO.transAmount(sysJfAccount, userJfAccount, quantity,
+            EJourBizTypeUser.REGIST.getCode(),
+            EJourBizTypePlat.REGIST.getCode(),
+            EJourBizTypeUser.REGIST.getValue(),
+            EJourBizTypePlat.REGIST.getValue(), userId);
+
+        // 推荐用户添加积分
+        if (StringUtils.isNotBlank(userReferee)) {
+            User refereeUser = userBO.getUserByMobile(userReferee);
+            Account userRefereeJfAccount = accountBO.getAccountByUser(
+                refereeUser.getUserId(), ECurrency.JF.getCode());
+            quantity = new BigDecimal(configMap.get(SysConstants.INVITE_USER));
+            quantity = AmountUtil.mul(quantity, 1000L);
+
+            accountBO.transAmount(sysJfAccount, userRefereeJfAccount, quantity,
+                EJourBizTypeUser.INVITE_USER.getCode(),
+                EJourBizTypePlat.INVITE_USER.getCode(),
+                EJourBizTypeUser.INVITE_USER.getValue(),
+                EJourBizTypePlat.INVITE_USER.getValue(),
+                refereeUser.getUserId());
+        }
+
+    }
+
+    @Override
+    @Transactional
     public String doAddUser(XN805042Req req) {
         String userId = null;
         User user = new User();
@@ -172,8 +228,8 @@ public class UserAOImpl implements IUserAO {
             req.setLoginPwd(EUserPwd.InitPwd8.getCode());
         }
         user.setLoginPwd(MD5Util.md5(req.getLoginPwd()));
-        user.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(req
-            .getLoginPwd()));
+        user.setLoginPwdStrength(
+            PwdUtil.calculateSecurityLevel(req.getLoginPwd()));
         user.setLevel(EUserLevel.ZERO.getCode());
         user.setUserReferee(req.getUserReferee());
         user.setIdKind(req.getIdKind());
@@ -231,10 +287,48 @@ public class UserAOImpl implements IUserAO {
         }
         User user = userBO.getUser(userId);
         if (!EUserStatus.NORMAL.getCode().equals(user.getStatus())) {
-            throw new BizException("xn805050", "该账号"
-                    + EUserStatus.getMap().get(user.getStatus()).getValue()
-                    + "，请联系工作人员");
+            throw new BizException("xn805050",
+                "该账号" + EUserStatus.getMap().get(user.getStatus()).getValue()
+                        + "，请联系工作人员");
         }
+
+        if (!signLogBO.isCheckIn(userId)) {
+            // 添加积分
+            Map<String, String> configMap = sysConfigBO
+                .getConfigsMap(ESysConfigType.JF_RULE.getCode());
+            BigDecimal quantity = new BigDecimal(
+                configMap.get(SysConstants.SIGN_JF));
+            quantity = AmountUtil.mul(quantity, 1000L);
+
+            Account userJfAccount = accountBO.getAccountByUser(userId,
+                ECurrency.JF.getCode());
+            Account sysJfAccount = accountBO
+                .getAccount(ESystemAccount.SYS_ACOUNT_JF_POOL.getCode());
+
+            accountBO.transAmount(sysJfAccount, userJfAccount, quantity,
+                EJourBizTypeUser.SIGN.getCode(),
+                EJourBizTypePlat.SIGN.getCode(),
+                EJourBizTypeUser.SIGN.getValue(),
+                EJourBizTypePlat.SIGN.getValue(), userId);
+
+            // 添加碳泡泡
+            configMap = sysConfigBO
+                .getConfigsMap(ESysConfigType.TPP_RULE.getCode());
+            quantity = new BigDecimal(configMap.get(SysConstants.SIGN_TPP));
+            quantity = AmountUtil.mul(quantity, 1000L);
+            Account userTppAccount = accountBO.getAccountByUser(userId,
+                ECurrency.TPP.getCode());
+            Account sysTppAccount = accountBO
+                .getAccount(ESystemAccount.SYS_ACOUNT_TPP.getCode());
+
+            accountBO.transAmount(sysTppAccount, userTppAccount, quantity,
+                EJourBizTypeUser.SIGN.getCode(),
+                EJourBizTypePlat.SIGN.getCode(),
+                EJourBizTypeUser.SIGN.getValue(),
+                EJourBizTypePlat.SIGN.getValue(), userId);
+
+        }
+
         // 增加登陆日志
         SignLog data = new SignLog();
         data.setUserId(user.getUserId());
@@ -244,34 +338,6 @@ public class UserAOImpl implements IUserAO {
         signLogBO.saveSignLog(data);
 
         return userId;
-        // User condition = new User();
-        //
-        // condition.setLoginName(loginName);
-        //
-        // List<User> userList1 = userBO.queryUserList(condition);
-        // if (CollectionUtils.isEmpty(userList1)) {
-        // throw new BizException("xn805050", "登录名不存在");
-        // }
-        // condition.setLoginPwd(MD5Util.md5(loginPwd));
-        // List<User> userList2 = userBO.queryUserList(condition);
-        // if (CollectionUtils.isEmpty(userList2)) {
-        // throw new BizException("xn805050", "登录密码错误");
-        // }
-        // User user = userList2.get(0);
-        // if (!EUserStatus.NORMAL.getCode().equals(user.getStatus())) {
-        // throw new BizException("xn805050",
-        // "该账号" + EUserStatus.getMap().get(user.getStatus()).getValue()
-        // + "，请联系工作人员");
-        // }
-        // // 增加登陆日志
-        // SignLog data = new SignLog();
-        // data.setUserId(user.getUserId());
-        // data.setType(ESignLogType.LOGIN.getCode());
-        // data.setClient(client);
-        // data.setLocation(location);
-        // signLogBO.saveSignLog(data);
-        //
-        // return user.getUserId();
     }
 
     @Override
@@ -292,10 +358,12 @@ public class UserAOImpl implements IUserAO {
 
         // 发送短信
 
-        smsOutBO.sendSmsOut(oldMobile, String.format(
-            SysConstants.DO_CHANGE_MOBILE_CN, PhoneUtil.hideMobile(oldMobile),
-            DateUtil.dateToStr(new Date(), DateUtil.DATA_TIME_PATTERN_1),
-            newMobile), ECaptchaType.MOBILE_CHANGE.getCode());
+        smsOutBO.sendSmsOut(oldMobile,
+            String.format(SysConstants.DO_CHANGE_MOBILE_CN,
+                PhoneUtil.hideMobile(oldMobile),
+                DateUtil.dateToStr(new Date(), DateUtil.DATA_TIME_PATTERN_1),
+                newMobile),
+            ECaptchaType.MOBILE_CHANGE.getCode());
 
     }
 
@@ -319,10 +387,12 @@ public class UserAOImpl implements IUserAO {
         userBO.refreshMobile(userId, newMobile);
 
         // 发送短信
-        smsOutBO.sendSmsOut(oldMobile, String.format(
-            SysConstants.DO_CHANGE_MOBILE_CN, PhoneUtil.hideMobile(oldMobile),
-            DateUtil.dateToStr(new Date(), DateUtil.DATA_TIME_PATTERN_1),
-            newMobile), ECaptchaType.MOBILE_CHANGE.getCode());
+        smsOutBO.sendSmsOut(oldMobile,
+            String.format(SysConstants.DO_CHANGE_MOBILE_CN,
+                PhoneUtil.hideMobile(oldMobile),
+                DateUtil.dateToStr(new Date(), DateUtil.DATA_TIME_PATTERN_1),
+                newMobile),
+            ECaptchaType.MOBILE_CHANGE.getCode());
     }
 
     @Override
@@ -337,8 +407,7 @@ public class UserAOImpl implements IUserAO {
         smsOutBO.checkCaptcha(mobile, smsCaptcha, "805063");
         userBO.refreshLoginPwd(userId, newLoginPwd);
         // 发送短信
-        smsOutBO.sendSmsOut(
-            mobile,
+        smsOutBO.sendSmsOut(mobile,
             String.format(SysConstants.DO_RESET_LOGIN_PWD_CN,
                 PhoneUtil.hideMobile(mobile)),
             ECaptchaType.LOGIN_PWD_RESET.getCode());
@@ -359,8 +428,7 @@ public class UserAOImpl implements IUserAO {
         userBO.refreshLoginPwd(userId, newLoginPwd);
         // 发送短信
 
-        smsOutBO.sendSmsOut(
-            user.getMobile(),
+        smsOutBO.sendSmsOut(user.getMobile(),
             String.format(SysConstants.DO_MODIFY_LOGIN_PWD_CN,
                 PhoneUtil.hideMobile(user.getMobile())),
             ECaptchaType.MODIFY_LOGIN_PWD.getCode());
@@ -378,7 +446,8 @@ public class UserAOImpl implements IUserAO {
 
     @Override
     @Transactional
-    public void doSetTradePwd(String userId, String tradePwd, String smsCaptcha) {
+    public void doSetTradePwd(String userId, String tradePwd,
+            String smsCaptcha) {
         User user = userBO.getUser(userId);
         // 短信验证码是否正确
         smsOutBO.checkCaptcha(user.getMobile(), smsCaptcha, "805066");
@@ -401,8 +470,7 @@ public class UserAOImpl implements IUserAO {
         smsOutBO.checkCaptcha(mobile, smsCaptcha, "805067");
         userBO.refreshTradePwd(userId, newTradePwd);
         // 发短信
-        smsOutBO.sendSmsOut(
-            mobile,
+        smsOutBO.sendSmsOut(mobile,
             String.format(SysConstants.DO_RESET_TRADE_PWD_CN,
                 PhoneUtil.hideMobile(mobile)),
             ECaptchaType.RESET_TRADE_PWD.getCode());
@@ -418,8 +486,8 @@ public class UserAOImpl implements IUserAO {
             throw new BizException("li01004", "请先实名认证");
         }
         // 证件是否正确
-        if (!(user.getIdKind().equalsIgnoreCase(idKind) && user.getIdNo()
-            .equalsIgnoreCase(idNo))) {
+        if (!(user.getIdKind().equalsIgnoreCase(idKind)
+                && user.getIdNo().equalsIgnoreCase(idNo))) {
             throw new BizException("li01009", "身份证不符合");
         }
         // 短信验证码是否正确
@@ -427,8 +495,7 @@ public class UserAOImpl implements IUserAO {
         smsOutBO.checkCaptcha(mobile, smsCaptcha, "805068");
         userBO.refreshTradePwd(userId, newTradePwd);
         // 发短信
-        smsOutBO.sendSmsOut(
-            mobile,
+        smsOutBO.sendSmsOut(mobile,
             String.format(SysConstants.DO_RESET_TRADE_PWD_CN,
                 PhoneUtil.hideMobile(mobile)),
             ECaptchaType.RESET_TRADE_PWD.getCode());
@@ -455,16 +522,34 @@ public class UserAOImpl implements IUserAO {
         userBO.refreshTradePwd(userId, newTradePwd);
         String mobile = user.getMobile();
         // 发短信
-        smsOutBO.sendSmsOut(
-            mobile,
+        smsOutBO.sendSmsOut(mobile,
             String.format(SysConstants.DO_MODIFY_TRADE_PWD_CN,
                 PhoneUtil.hideMobile(mobile)),
             ECaptchaType.MODIFY_TRADE_PWD.getCode());
     }
 
     @Override
+    @Transactional
     public void modifyPhoto(String userId, String photo) {
         userBO.refreshPhoto(userId, photo);
+
+        // 添加积分
+        Map<String, String> configMap = sysConfigBO
+            .getConfigsMap(ESysConfigType.JF_RULE.getCode());
+        BigDecimal quantity = new BigDecimal(
+            configMap.get(SysConstants.UPLOAD_PHOTO));
+        quantity = AmountUtil.mul(quantity, 1000L);
+
+        Account userJfAccount = accountBO.getAccountByUser(userId,
+            ECurrency.JF.getCode());
+        Account sysJfAccount = accountBO
+            .getAccount(ESystemAccount.SYS_ACOUNT_JF_POOL.getCode());
+
+        accountBO.transAmount(sysJfAccount, userJfAccount, quantity,
+            EJourBizTypeUser.UPLOAD_PHOTO.getCode(),
+            EJourBizTypePlat.UPLOAD_PHOTO.getCode(),
+            EJourBizTypeUser.UPLOAD_PHOTO.getValue(),
+            EJourBizTypePlat.UPLOAD_PHOTO.getValue(), userId);
     }
 
     @Override
@@ -474,7 +559,7 @@ public class UserAOImpl implements IUserAO {
 
     @Override
     public void doCloseOpen(String userId, String updater, String remark) {
-        User user = userBO.getUser(userId);
+        User user = userBO.getUserUnCheck(userId);
         // admin 不注销
         if (EUser.ADMIN.getCode().equals(user.getLoginName())) {
             throw new BizException("li01004", "管理员无法注销");
@@ -552,15 +637,15 @@ public class UserAOImpl implements IUserAO {
     private void initUserRef(User user) {
         if (StringUtils.isNotBlank(user.getUserReferee())) {
             String mobile = null;
-            if (EUserRefereeType.AGENT.getCode().equals(
-                user.getUserRefereeType())
-                    || EUserRefereeType.SALEMANS.getCode().equals(
-                        user.getUserRefereeType())) {
-                AgentUser agentUser = agentUserBO.getAgentUser(user
-                    .getUserReferee());
+            if (EUserRefereeType.AGENT.getCode()
+                .equals(user.getUserRefereeType())
+                    || EUserRefereeType.SALEMANS.getCode()
+                        .equals(user.getUserRefereeType())) {
+                AgentUser agentUser = agentUserBO
+                    .getAgentUser(user.getUserReferee());
                 mobile = agentUser.getMobile();
-            } else if (EUserRefereeType.USER.getCode().equals(
-                user.getUserRefereeType())) {
+            } else if (EUserRefereeType.USER.getCode()
+                .equals(user.getUserRefereeType())) {
                 User userReferee = userBO.getUser(user.getUserReferee());
                 mobile = userReferee.getMobile();
             }
@@ -572,8 +657,9 @@ public class UserAOImpl implements IUserAO {
     }
 
     @Override
-    public void doBindMobile(String isSendSms, String mobile,
-            String smsCaptcha, String userId) {
+    @Transactional
+    public void doBindMobile(String isSendSms, String mobile, String smsCaptcha,
+            String userId) {
         User user = userBO.getUser(userId);
 
         if (user.getMobile() != null) {
@@ -581,16 +667,39 @@ public class UserAOImpl implements IUserAO {
         }
         // 验证手机号
         userBO.isMobileExist(mobile);
+
         // 短信验证码是否正确
         smsOutBO.checkCaptcha(mobile, smsCaptcha, "805060");
+
         userBO.refreshMobile(userId, mobile);
+
+        // 添加积分
+        Map<String, String> configMap = sysConfigBO
+            .getConfigsMap(ESysConfigType.JF_RULE.getCode());
+        BigDecimal quantity = new BigDecimal(
+            configMap.get(SysConstants.BIND_MOBILE));
+        quantity = AmountUtil.mul(quantity, 1000L);
+
+        Account userJfAccount = accountBO.getAccountByUser(userId,
+            ECurrency.JF.getCode());
+        Account sysJfAccount = accountBO
+            .getAccount(ESystemAccount.SYS_ACOUNT_JF_POOL.getCode());
+
+        accountBO.transAmount(sysJfAccount, userJfAccount, quantity,
+            EJourBizTypeUser.BIND_MOBILE.getCode(),
+            EJourBizTypePlat.BIND_MOBILE.getCode(),
+            EJourBizTypeUser.BIND_MOBILE.getValue(),
+            EJourBizTypePlat.BIND_MOBILE.getValue(), userId);
 
         // 发送短信
         if (isSendSms.equals(EBoolean.YES.getCode())) {
-            smsOutBO.sendSmsOut(mobile, String.format(
-                SysConstants.DO_BIND_MOBILE_CN, PhoneUtil.hideMobile(mobile),
-                DateUtil.dateToStr(new Date(), DateUtil.DATA_TIME_PATTERN_1),
-                mobile), ECaptchaType.MOBILE_CHANGE.getCode());
+            smsOutBO.sendSmsOut(mobile,
+                String.format(SysConstants.DO_BIND_MOBILE_CN,
+                    PhoneUtil.hideMobile(mobile),
+                    DateUtil.dateToStr(new Date(),
+                        DateUtil.DATA_TIME_PATTERN_1),
+                    mobile),
+                ECaptchaType.MOBILE_CHANGE.getCode());
         }
     }
 
@@ -610,7 +719,8 @@ public class UserAOImpl implements IUserAO {
     }
 
     @Override
-    public void doResetReferee(String userId, String userReferee, String updater) {
+    public void doResetReferee(String userId, String userReferee,
+            String updater) {
         User data = userBO.getUser(userId);
         userBO.refreshReferee(userId, userReferee, updater);
     }
@@ -619,8 +729,8 @@ public class UserAOImpl implements IUserAO {
     public void doIdentify(String userId, String idKind, String idNo,
             String realName) {
         // 更新用户表
-        userBO
-            .refreshIdentity(userId, realName, EIDKind.IDCard.getCode(), idNo);
+        userBO.refreshIdentity(userId, realName, EIDKind.IDCard.getCode(),
+            idNo);
     }
 
     @Override
@@ -628,8 +738,8 @@ public class UserAOImpl implements IUserAO {
             String realName) {
         User user = userBO.getUser(userId);
         // 更新用户表
-        userBO
-            .refreshIdentity(userId, realName, EIDKind.IDCard.getCode(), idNo);
+        userBO.refreshIdentity(userId, realName, EIDKind.IDCard.getCode(),
+            idNo);
 
     }
 
@@ -638,20 +748,41 @@ public class UserAOImpl implements IUserAO {
             String realName, String cardNo, String bindMobile) {
         // 三方认证
         // 更新用户表
-        userBO
-            .refreshIdentity(userId, realName, EIDKind.IDCard.getCode(), idNo);
+        userBO.refreshIdentity(userId, realName, EIDKind.IDCard.getCode(),
+            idNo);
 
     }
 
     @Override
+    @Transactional
     public void bindEmail(String captcha, String email, String userId) {
         smsOutBO.checkCaptcha(email, captcha, "805086");
+
         User data = userBO.getUser(userId);
         if (data.getEmail() != null) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(), "用户已绑定邮箱");
         }
         userBO.isEmailExist(email);
+
         userBO.refreshEmail(userId, email);
+
+        // 添加积分
+        Map<String, String> configMap = sysConfigBO
+            .getConfigsMap(ESysConfigType.JF_RULE.getCode());
+        BigDecimal quantity = new BigDecimal(
+            configMap.get(SysConstants.BIND_EMAIL));
+        quantity = AmountUtil.mul(quantity, 1000L);
+
+        Account userJfAccount = accountBO.getAccountByUser(userId,
+            ECurrency.JF.getCode());
+        Account sysJfAccount = accountBO
+            .getAccount(ESystemAccount.SYS_ACOUNT_JF_POOL.getCode());
+
+        accountBO.transAmount(sysJfAccount, userJfAccount, quantity,
+            EJourBizTypeUser.BIND_email.getCode(),
+            EJourBizTypePlat.BIND_email.getCode(),
+            EJourBizTypeUser.BIND_email.getValue(),
+            EJourBizTypePlat.BIND_email.getValue(), userId);
     }
 
     @Override

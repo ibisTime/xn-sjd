@@ -13,7 +13,7 @@ public interface IChargeAO {
 
     public String applyOrder(String accountNumber, BigDecimal amount,
             String payCardInfo, String payCardNo, String applyUser,
-            String applyNote);
+            String applyUserType, String applyNote);
 
     public void payOrder(String code, String payUser, String payResult,
             String payNote);

@@ -3,6 +3,7 @@ package com.ogc.standard.ao.impl;
 import java.math.BigDecimal;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,14 +11,20 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.IWithdrawAO;
 import com.ogc.standard.bo.IAccountBO;
+import com.ogc.standard.bo.IAgentUserBO;
 import com.ogc.standard.bo.IJourBO;
 import com.ogc.standard.bo.ISYSConfigBO;
+import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.IWithdrawBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.AmountUtil;
 import com.ogc.standard.domain.Account;
+import com.ogc.standard.domain.AgentUser;
+import com.ogc.standard.domain.SYSUser;
+import com.ogc.standard.domain.User;
 import com.ogc.standard.domain.Withdraw;
+import com.ogc.standard.enums.EAccountType;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.EChannelType;
 import com.ogc.standard.enums.EJourBizTypePlat;
@@ -40,6 +47,12 @@ public class WithdrawAOImpl implements IWithdrawAO {
     private IUserBO userBO;
 
     @Autowired
+    private ISYSUserBO sysUserBO;
+
+    @Autowired
+    private IAgentUserBO agentUserBO;
+
+    @Autowired
     private IWithdrawBO withdrawBO;
 
     @Autowired
@@ -49,9 +62,24 @@ public class WithdrawAOImpl implements IWithdrawAO {
     @Transactional
     public String applyOrder(String accountNumber, BigDecimal amount,
             String payCardInfo, String payCardNo, String tradePwd,
-            String applyUser, String applyNote) {
+            String applyUser, String applyUserType, String applyNote) {
+
         // 校验资金密码
-        userBO.checkTradePwd(applyUser, tradePwd);
+        if (EAccountType.CUSTOMER.getCode().equals(applyUserType)) {
+
+            // C端用户
+            userBO.checkTradePwd(applyUser, tradePwd);
+
+        } else if (EAccountType.AGENT.getCode().equals(applyUserType)) {
+
+            // 代理用户
+            agentUserBO.checkTradePwd(applyUser, tradePwd);
+
+        } else {
+            // 其他用户
+            sysUserBO.checkTradePwd(applyUser, tradePwd);
+
+        }
 
         Account dbAccount = accountBO.getAccount(accountNumber);
         // 取现获取手续费
@@ -67,7 +95,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
         }
         // 生成取现订单
         String withdrawCode = withdrawBO.applyOrder(dbAccount, amount, fee,
-            payCardInfo, payCardNo, applyUser, applyNote);
+            payCardInfo, payCardNo, applyUser, applyUserType, applyNote);
 
         // 冻结取现金额
         dbAccount = accountBO.frozenAmount(dbAccount, amount,
@@ -83,7 +111,8 @@ public class WithdrawAOImpl implements IWithdrawAO {
             String approveResult, String approveNote) {
         Withdraw data = withdrawBO.getWithdraw(code);
         if (null == data) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "取现订单编号不存在");
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "取现订单编号不存在");
         }
         if (!EWithdrawStatus.toApprove.getCode().equals(data.getStatus())) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
@@ -98,8 +127,8 @@ public class WithdrawAOImpl implements IWithdrawAO {
 
     private void approveOrderYES(Withdraw data, String approveUser,
             String approveNote) {
-        withdrawBO.approveOrder(data, EWithdrawStatus.Approved_YES,
-            approveUser, approveNote);
+        withdrawBO.approveOrder(data, EWithdrawStatus.Approved_YES, approveUser,
+            approveNote);
     }
 
     private void approveOrderNO(Withdraw data, String approveUser,
@@ -119,8 +148,8 @@ public class WithdrawAOImpl implements IWithdrawAO {
             String payNote, String channelOrder, BigDecimal payFee) {
         Withdraw data = withdrawBO.getWithdraw(code);
         if (data == null) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "不存在编号为"
-                    + code + "的订单");
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "不存在编号为" + code + "的订单");
         }
         if (!EWithdrawStatus.Approved_YES.getCode().equals(data.getStatus())) {
             throw new BizException("xn000000", "申请记录状态不是待支付状态，无法支付");
@@ -161,8 +190,8 @@ public class WithdrawAOImpl implements IWithdrawAO {
             EJourBizTypeUser.WITHDRAW.getCode(), "取现成功");
 
         // 取现扣钱
-        Account sysAccount = accountBO.getAccount(ESystemAccount.SYS_ACOUNT_CNY
-            .getCode());
+        Account sysAccount = accountBO
+            .getAccount(ESystemAccount.SYS_ACOUNT_CNY.getCode());
         accountBO.changeAmount(sysAccount, data.getFee(), EChannelType.Offline,
             payCode, data.getCode(), EJourBizTypePlat.WITHDRAW_FEE.getCode(),
             "取现手续费");
@@ -178,11 +207,12 @@ public class WithdrawAOImpl implements IWithdrawAO {
             String withDate, String channelOrder, String withNote,
             String updater) {
         if (!ESystemAccount.SYS_ACOUNT_OFFLINE.getCode().equals(accountNumber)
-                && !ESystemAccount.SYS_ACOUNT_ALIPAY.getCode().equals(
-                    accountNumber)
-                && !ESystemAccount.SYS_ACOUNT_WEIXIN.getCode().equals(
-                    accountNumber)) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "只支持系统托管账户");
+                && !ESystemAccount.SYS_ACOUNT_ALIPAY.getCode()
+                    .equals(accountNumber)
+                && !ESystemAccount.SYS_ACOUNT_WEIXIN.getCode()
+                    .equals(accountNumber)) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "只支持系统托管账户");
         }
 
         Account account = accountBO.getAccount(accountNumber);
@@ -203,21 +233,69 @@ public class WithdrawAOImpl implements IWithdrawAO {
     @Override
     public Paginable<Withdraw> queryWithdrawPage(int start, int limit,
             Withdraw condition) {
-        return withdrawBO.getPaginable(start, limit, condition);
+        Paginable<Withdraw> page = withdrawBO.getPaginable(start, limit,
+            condition);
+
+        if (null != page && CollectionUtils.isNotEmpty(page.getList())) {
+            for (Withdraw withdraw : page.getList()) {
+                initWithdraw(withdraw);
+            }
+        }
+
+        return page;
     }
 
     @Override
     public List<Withdraw> queryWithdrawList(Withdraw condition) {
-        return withdrawBO.queryWithdrawList(condition);
+        List<Withdraw> list = withdrawBO.queryWithdrawList(condition);
+
+        if (CollectionUtils.isNotEmpty(list)) {
+            for (Withdraw withdraw : list) {
+                initWithdraw(withdraw);
+            }
+        }
+        return list;
     }
 
     @Override
     public Withdraw getWithdraw(String code) {
-        return withdrawBO.getWithdraw(code);
+        Withdraw withdraw = withdrawBO.getWithdraw(code);
+
+        initWithdraw(withdraw);
+
+        return withdraw;
     }
 
     @Override
     public BigDecimal getTotalWithdraw(String currency) {
         return withdrawBO.getTotalWithdraw(currency);
+    }
+
+    private void initWithdraw(Withdraw withdraw) {
+        if (EAccountType.CUSTOMER.getCode()
+            .equals(withdraw.getApplyUserType())) {
+
+            // C端用户
+            User user = userBO.getUser(withdraw.getApplyUser());
+            withdraw.setUser(user);
+
+        } else if (EAccountType.AGENT.getCode()
+            .equals(withdraw.getApplyUserType())) {
+
+            // 代理用户
+            AgentUser agentUser = agentUserBO
+                .getAgentUser(withdraw.getApplyUser());
+            User user = new User();
+            user.setMobile(agentUser.getMobile());
+            withdraw.setUser(user);
+
+        } else {
+            // 其他用户
+            SYSUser sysUser = sysUserBO.getSYSUser(withdraw.getApplyUser());
+            User user = new User();
+            user.setMobile(sysUser.getMobile());
+            withdraw.setUser(user);
+
+        }
     }
 }

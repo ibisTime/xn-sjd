@@ -90,4 +90,35 @@ public class SysConstants {
     // 碳泡泡规则
     public static final String PRESENT_TPP = "PRESENT_TPP_QUANTITY";// 赠送碳泡泡记录
 
+    public static final String SIGN_TPP = "SIGN_TPP";// 签到
+
+    public static final String SHARE = "SHARE";// 分享
+
+    // 积分规则
+    public static final String REGISTER = "REGISTER";// 注册送积分
+
+    public static final String BIND_MOBILE = "BIND_MOBILE";// 绑定手机号
+
+    public static final String BIND_EMAIL = "BIND_EMAIL";// 绑定邮箱
+
+    public static final String UPLOAD_PHOTO = "UPLOAD_PHOTO";// 上传头像
+
+    public static final String COMPLETE_INFO = "COMPLETE_INFO";// 完善用户信息
+
+    public static final String REAL_AUTH = "REAL_AUTH";// 实名认证
+
+    public static final String SIGN_JF = "SIGN_JF";// 签到
+
+    public static final String ONE_ADOPT_BACK = "ONE_ADOPT_BACK";// 直推认养消费返积分
+
+    public static final String TWO_ADOPT_BACK = "TWO_ADOPT_BACK";// 间推认养消费返积分
+
+    public static final String INVITE_USER = "INVITE_USER";// 邀请好友注册
+
+    public static final String ADOPT_BUY_DEDUCT = "ADOPT_BUY_DEDUCT";// 认养抵扣
+
+    public static final String ADOPT_PAY_BACK = "ADOPT_PAY_BACK";// 认养消费返利
+
+    public static final String TOOL_BUY = "TOOL_BUY";// 购买道具
+
 }

@@ -12,12 +12,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.ICarbonBubbleOrderAO;
 import com.ogc.standard.bo.IAccountBO;
+import com.ogc.standard.bo.IAdoptOrderTreeBO;
 import com.ogc.standard.bo.IBizLogBO;
 import com.ogc.standard.bo.ICarbonBubbleOrderBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.domain.Account;
+import com.ogc.standard.domain.AdoptOrderTree;
 import com.ogc.standard.domain.CarbonBubbleOrder;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.enums.EBizLogType;
@@ -44,6 +46,9 @@ public class CarbonBubbleOrderAOImpl implements ICarbonBubbleOrderAO {
 
     @Autowired
     private IBizLogBO bizLogBO;
+
+    @Autowired
+    private IAdoptOrderTreeBO adoptOrderTreeBO;
 
     public void expireCarbonBubble() {
         logger.info("***************开始扫描已过期碳泡泡***************");
@@ -101,8 +106,11 @@ public class CarbonBubbleOrderAOImpl implements ICarbonBubbleOrderAO {
             EJourBizTypePlat.ADOPT_DAY_BACK.getValue(), data.getCode());
 
         // 添加日志
-        bizLogBO.gatherCarbonBubble(data.getAdoptTreeCode(), data.getQuantity(),
-            collector, EBizLogType.GATHER.getCode());
+        AdoptOrderTree adoptOrderTree = adoptOrderTreeBO
+            .getAdoptOrderTree(data.getAdoptTreeCode());
+        bizLogBO.gatherCarbonBubble(adoptOrderTree.getCode(),
+            adoptOrderTree.getCurrentHolder(), data.getQuantity(), collector,
+            EBizLogType.GATHER.getCode());
     }
 
     @Override

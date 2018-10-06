@@ -25,7 +25,6 @@ import com.ogc.standard.common.RandomUtil;
 import com.ogc.standard.common.SysConstants;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.domain.ApplyBindMaintain;
-import com.ogc.standard.domain.Company;
 import com.ogc.standard.domain.SYSRole;
 import com.ogc.standard.domain.SYSUser;
 import com.ogc.standard.dto.req.XN630061Req;
@@ -193,7 +192,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
     // 注销，激活其他管理员
     @Override
     public void doCloseOpen(String userId, String updater, String remark) {
-        SYSUser user = sysUserBO.getSYSUser(userId);
+        SYSUser user = sysUserBO.getSYSUserUnCheck(userId);
         if (user == null) {
             throw new BizException("li01004", "用户不存在");
         }
@@ -403,8 +402,6 @@ public class SYSUserAOImpl implements ISYSUserAO {
         if (ESYSUserKind.OWNER.getCode().equals(data.getKind())) { // 产权方
             long count = treeBO.getTotalCountByOwnerId(data.getUserId());
             data.setTreeQuantity(String.valueOf(count));
-            Company company = companyBO.getCompanyByUserId(data.getUserId());
-            data.setCompany(company);
         } else if (ESYSUserKind.MAINTAIN.getCode().equals(data.getKind())) {// 养护方
             ApplyBindMaintain abmCondition = new ApplyBindMaintain();
             abmCondition.setStatus(EApplyBindMaintainStatus.BIND.getCode());
@@ -417,8 +414,6 @@ public class SYSUserAOImpl implements ISYSUserAO {
                 data.setOwner(sysUser2.getRealName());
             }
             data.setTotalIncome("0");// TODO 总收入
-            Company company = companyBO.getCompanyByUserId(data.getUserId());
-            data.setCompany(company);
         }
     }
 

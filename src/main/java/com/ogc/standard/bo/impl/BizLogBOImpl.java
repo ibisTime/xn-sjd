@@ -27,15 +27,6 @@ public class BizLogBOImpl extends PaginableBOImpl<BizLog> implements IBizLogBO {
     @Autowired
     private IAdoptOrderTreeBO adoptOrderTreeBO;
 
-    @Override
-    public int saveBizLog(BizLog data) {
-        Integer id = null;
-        if (data != null) {
-            id = bizLogDAO.insert(data);
-        }
-        return id;
-    }
-
     public long leaveMessage(String adoptTreeCode, String note, String userId) {
         AdoptOrderTree adoptOrderTree = adoptOrderTreeBO
             .getAdoptOrderTree(adoptTreeCode);
@@ -54,16 +45,11 @@ public class BizLogBOImpl extends PaginableBOImpl<BizLog> implements IBizLogBO {
     }
 
     @Override
-    public long gatherCarbonBubble(String adoptTreeCode, BigDecimal quantity,
-            String userId, String type) {
+    public long gatherCarbonBubble(String adoptTreeCode, String adoptUserId,
+            BigDecimal quantity, String userId, String type) {
         BizLog data = new BizLog();
 
-        if (null != adoptTreeCode) {
-            AdoptOrderTree adoptOrderTree = adoptOrderTreeBO
-                .getAdoptOrderTree(adoptTreeCode);
-            data.setAdoptUserId(adoptOrderTree.getCurrentHolder());
-        }
-
+        data.setAdoptUserId(adoptUserId);
         data.setAdoptTreeCode(adoptTreeCode);
         data.setType(type);
         data.setQuantity(quantity);

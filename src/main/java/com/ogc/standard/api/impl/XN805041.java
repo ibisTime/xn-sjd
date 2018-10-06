@@ -23,16 +23,21 @@ public class XN805041 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
+        String userId = null;
+
+        // 注册用户
         synchronized (IUserAO.class) {
-            return new PKCodeRes(userAO.doRegisterByMobile(req));
+            userId = userAO.doRegisterByMobile(req);
+            userAO.doAssignRegistJf(userId, req.getUserReferee());
         }
+
+        return new PKCodeRes(userId);
     }
 
     @Override
     public void doCheck(String inputparams, String operator)
             throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN805041Req.class);
-        // PhoneUtil.checkMobile(req.getMobile());// 判断格式
         ObjValidater.validateReq(req);
     }
 }

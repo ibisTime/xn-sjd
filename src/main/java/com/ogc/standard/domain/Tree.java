@@ -98,6 +98,9 @@ public class Tree extends ABaseDO {
     // 养护方编号
     private String maintainId;
 
+    // 养护方
+    private SYSUser maintainer;
+
     public String getMaintainId() {
         return maintainId;
     }
@@ -312,6 +315,14 @@ public class Tree extends ABaseDO {
 
     public void setCurOrderCode(String curOrderCode) {
         this.curOrderCode = curOrderCode;
+    }
+
+    public SYSUser getMaintainer() {
+        return maintainer;
+    }
+
+    public void setMaintainer(SYSUser maintainer) {
+        this.maintainer = maintainer;
     }
 
 }
