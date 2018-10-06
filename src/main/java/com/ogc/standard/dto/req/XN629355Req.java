@@ -7,6 +7,9 @@ public class XN629355Req extends APageReq {
     // 认养权编号
     private String adoptTreeCode;
 
+    // 用户编号
+    private String adoptUserId;
+
     // 生成时间起
     private String createDatetimeStart;
 
@@ -79,6 +82,14 @@ public class XN629355Req extends APageReq {
 
     public void setTakeDatetimeEnd(String takeDatetimeEnd) {
         this.takeDatetimeEnd = takeDatetimeEnd;
+    }
+
+    public String getAdoptUserId() {
+        return adoptUserId;
+    }
+
+    public void setAdoptUserId(String adoptUserId) {
+        this.adoptUserId = adoptUserId;
     }
 
 }

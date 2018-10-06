@@ -31,6 +31,7 @@ public class XN629355 extends AProcessor {
     public Object doBusiness() throws BizException {
         CarbonBubbleOrder condition = new CarbonBubbleOrder();
         condition.setAdoptTreeCode(req.getAdoptTreeCode());
+        condition.setAdoptUserId(req.getAdoptUserId());
         condition.setCreateDatetimeStart(DateUtil.strToDate(
             req.getCreateDatetimeStart(), DateUtil.DATA_TIME_PATTERN_1));
         condition.setCreateDatetimeEnd(DateUtil.strToDate(
@@ -39,8 +40,8 @@ public class XN629355 extends AProcessor {
         condition.setTaker(req.getTaker());
         condition.setTakeDatetimeStart(DateUtil.strToDate(
             req.getTakeDatetimeStart(), DateUtil.DATA_TIME_PATTERN_1));
-        condition.setTakeDatetimeEnd(DateUtil.strToDate(
-            req.getTakeDatetimeEnd(), DateUtil.DATA_TIME_PATTERN_1));
+        condition.setTakeDatetimeEnd(DateUtil
+            .strToDate(req.getTakeDatetimeEnd(), DateUtil.DATA_TIME_PATTERN_1));
 
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {

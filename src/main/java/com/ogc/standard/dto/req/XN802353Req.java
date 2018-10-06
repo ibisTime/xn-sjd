@@ -25,16 +25,13 @@ public class XN802353Req {
     @NotBlank
     private String payResult;
 
-    // 支付回录说明(必填)
-    @NotBlank
+    // 支付回录说明
     private String payNote;
 
-    // 支付渠道订单编号（支付渠道代表）(必填)
-    @NotBlank
+    // 支付渠道订单编号（支付渠道代表）
     private String channelOrder;
 
     // 转账手续费
-    @NotBlank
     private String payFee;
 
     public List<String> getCodeList() {

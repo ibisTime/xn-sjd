@@ -7,10 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ogc.standard.ao.IArticleAO;
-import com.ogc.standard.bo.IAdoptOrderTreeBO;
 import com.ogc.standard.bo.IArticleBO;
 import com.ogc.standard.bo.base.Paginable;
-import com.ogc.standard.domain.AdoptOrderTree;
 import com.ogc.standard.domain.Article;
 import com.ogc.standard.dto.req.XN629340Req;
 import com.ogc.standard.dto.req.XN629341Req;
@@ -29,29 +27,30 @@ public class ArticleAOImpl implements IArticleAO {
     @Autowired
     private IArticleBO articleBO;
 
-    @Autowired
-    private IAdoptOrderTreeBO adoptOrderTreeBO;
-
     @Override
     public String addArticle(XN629340Req req) {
         EArticleStatus status = null;
-        String treeNo = null;
-        String openLevel = null;
+        String treeNo = req.getTreeNo();
+        String openLevel = req.getOpenLevel();
+
         if (EBoolean.NO.getCode().equals(req.getDealType())) {// 保存
+
             status = EArticleStatus.DRAFT;
+
         } else {// 提交
+
             if (EArticleType.PLAT.getCode().equals(req.getType())) {// 平台
+
                 status = EArticleStatus.TO_PUT_ON;
-                treeNo = req.getTreeNo();
                 openLevel = EArticleOpenLevel.OPEN.getCode();
+
             } else {// 用户
+
                 status = EArticleStatus.TO_APPROVE;
-                AdoptOrderTree aot = adoptOrderTreeBO.getAdoptOrderTree(req
-                    .getAdoptTreeCode());
-                treeNo = aot.getTreeNumber();
-                openLevel = req.getOpenLevel();
             }
+
         }
+
         return articleBO.saveArticle(req.getAdoptTreeCode(), treeNo,
             req.getType(), openLevel, req.getTitle(), req.getContent(),
             req.getPhoto(), status, req.getUpdater());
@@ -65,22 +64,19 @@ public class ArticleAOImpl implements IArticleAO {
                     .equals(data.getStatus())) {
             throw new BizException("xn0000", "文章不是可以修改的状态");
         }
+
         EArticleStatus status = null;
-        String treeNo = null;
-        String openLevel = null;
+        String treeNo = req.getTreeNo();
+        String openLevel = req.getOpenLevel();
+
         if (EBoolean.NO.getCode().equals(req.getDealType())) {// 保存
             status = EArticleStatus.DRAFT;
         } else {// 提交
             if (EArticleType.PLAT.getCode().equals(data.getType())) {// 平台
                 status = EArticleStatus.TO_PUT_ON;
-                treeNo = req.getTreeNo();
                 openLevel = EArticleOpenLevel.OPEN.getCode();
             } else {// 用户
                 status = EArticleStatus.TO_APPROVE;
-                AdoptOrderTree aot = adoptOrderTreeBO.getAdoptOrderTree(req
-                    .getAdoptTreeCode());
-                treeNo = aot.getTreeNumber();
-                openLevel = req.getOpenLevel();
             }
         }
         data.setAdoptTreeCode(req.getAdoptTreeCode());
