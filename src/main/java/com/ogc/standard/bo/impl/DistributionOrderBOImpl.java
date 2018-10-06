@@ -84,49 +84,46 @@ public class DistributionOrderBOImpl implements IDistributionOrderBO {
         // 产权方分销
         BigDecimal ownerDeductAmount = data.getAmount().multiply(
             new BigDecimal(mapList.get(SysConstants.DIST_OWENER_RATE)));
-        accountBO.transAmount(ESysUser.SYS_USER.getCode(),
-            product.getOwnerId(), ECurrency.CNY.getCode(), ownerDeductAmount,
+        accountBO.transAmount(ESysUser.SYS_USER.getCode(), product.getOwnerId(),
+            ECurrency.CNY.getCode(), ownerDeductAmount,
             EJourBizTypePlat.ADOPT_DIST.getCode(),
             EJourBizTypeOwner.OWNER_PROFIT.getCode(),
             EJourBizTypePlat.ADOPT_DIST.getValue(),
             EJourBizTypeOwner.OWNER_PROFIT.getValue(), data.getCode());
 
         // 判断养护方是否存在，没有则平台回收
-        String maintainId = applyBindMaintainBO.getMaintainId(product
-            .getOwnerId());
+        String maintainId = applyBindMaintainBO
+            .getMaintainId(product.getOwnerId());
         if (StringUtils.isNotBlank(maintainId)) {
             BigDecimal maintainDeductAmount = data.getAmount().multiply(
                 new BigDecimal(mapList.get(SysConstants.DIST_MAINTAIN_RATE)));
-            accountBO
-                .transAmount(ESysUser.SYS_USER.getCode(), maintainId,
-                    ECurrency.CNY.getCode(), maintainDeductAmount,
-                    EJourBizTypePlat.ADOPT_DIST.getCode(),
-                    EJourBizTypeMaintain.MAINTAIN_DEDECT.getCode(),
-                    EJourBizTypePlat.ADOPT_DIST.getValue(),
-                    EJourBizTypeMaintain.MAINTAIN_DEDECT.getValue(),
-                    data.getCode());
+            accountBO.transAmount(ESysUser.SYS_USER.getCode(), maintainId,
+                ECurrency.CNY.getCode(), maintainDeductAmount,
+                EJourBizTypePlat.ADOPT_DIST.getCode(),
+                EJourBizTypeMaintain.MAINTAIN_DEDECT.getCode(),
+                EJourBizTypePlat.ADOPT_DIST.getValue(),
+                EJourBizTypeMaintain.MAINTAIN_DEDECT.getValue(),
+                data.getCode());
         }
 
         // 代理方分销
         distributionAgent(data, mapList);
 
         // 用户同等金额积分奖励
-        BigDecimal jfAwardAmount = data.getAmount().multiply(
-            new BigDecimal(mapList.get(SysConstants.DIST_USER_BACK_JF_RATE)));
-        BigDecimal CNY2JF_RATE = sysConfigBO
-            .getBigDecimalValue(SysConstants.CNY2JF_RATE);
-        BigDecimal jfAmount = jfAwardAmount.multiply(CNY2JF_RATE);// 积分总量
-        accountBO.transAmount(ESysUser.SYS_USER.getCode(), data.getApplyUser(),
-            ECurrency.JF.getCode(), jfAmount,
-            EJourBizTypeUser.ADOPT_PAY_BACK.getCode(),
-            EJourBizTypeUser.ADOPT_PAY_BACK.getCode(),
-            EJourBizTypeUser.ADOPT_PAY_BACK.getValue(),
-            EJourBizTypeUser.ADOPT_PAY_BACK.getValue(), data.getCode());
+        BigDecimal cnyAwardAmount = data.getAmount().multiply(
+            new BigDecimal(mapList.get(SysConstants.DIST_USER_BACK_JF_RATE)));// 人民币比例金额
+        accountBO.transAmount(ESysUser.SYS_USER.getCode(),
+            ECurrency.CNY.getCode(), data.getApplyUser(),
+            ECurrency.JF.getCode(), cnyAwardAmount,
+            EJourBizTypeUser.ADOPT.getCode(), EJourBizTypePlat.ADOPT.getCode(),
+            EJourBizTypeUser.ADOPT.getValue(),
+            EJourBizTypePlat.ADOPT.getValue(), data.getCode());
 
     }
 
     // 代理等级分销
-    private void distributionAgent(AdoptOrder data, Map<String, String> mapList) {
+    private void distributionAgent(AdoptOrder data,
+            Map<String, String> mapList) {
         // 拿到下单用户的代理商(下单用户一定有代理商)
         User applyUser = userBO.getUser(data.getApplyUser());
         if (StringUtils.isBlank(applyUser.getAgentId())) {
@@ -141,12 +138,14 @@ public class DistributionOrderBOImpl implements IDistributionOrderBO {
         AgentUser agentUser = agentUserBO.getAgentUser(applyUser.getAgentId());
         if (EAgentUserLevel.FOUR.getCode().equals(agentUser.getLevel())) {
             agent4Back(data, applyUser, agentUser, agentTotalAmount, mapList);
-        } else if (EAgentUserLevel.THREE.getCode().equals(agentUser.getLevel())) {
+        } else if (EAgentUserLevel.THREE.getCode()
+            .equals(agentUser.getLevel())) {
             agent3Back(data, applyUser, agentUser, agentTotalAmount, mapList);
         } else if (EAgentUserLevel.SECOND.getCode()
             .equals(agentUser.getLevel())) {
             agent2Back(data, applyUser, agentUser, agentTotalAmount, mapList);
-        } else if (EAgentUserLevel.FIRST.getCode().equals(agentUser.getLevel())) {
+        } else if (EAgentUserLevel.FIRST.getCode()
+            .equals(agentUser.getLevel())) {
             agent1Back(data, applyUser, agentUser, agentTotalAmount, mapList);
         } else {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(), "代理等级不存在");

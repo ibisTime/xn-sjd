@@ -3,6 +3,7 @@ package com.ogc.standard.bo.impl;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -11,7 +12,9 @@ import org.springframework.stereotype.Component;
 
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IJourBO;
+import com.ogc.standard.bo.ISYSConfigBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
+import com.ogc.standard.common.SysConstants;
 import com.ogc.standard.core.AccountUtil;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.IAccountDAO;
@@ -19,8 +22,10 @@ import com.ogc.standard.domain.Account;
 import com.ogc.standard.enums.EAccountStatus;
 import com.ogc.standard.enums.EAccountType;
 import com.ogc.standard.enums.EChannelType;
+import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.enums.EJourBizTypeUser;
+import com.ogc.standard.enums.ESysConfigType;
 import com.ogc.standard.enums.ESysUser;
 import com.ogc.standard.enums.ESystemAccount;
 import com.ogc.standard.exception.BizException;
@@ -32,13 +37,16 @@ import com.ogc.standard.exception.EBizErrorCode;
  * @history:
  */
 @Component
-public class AccountBOImpl extends PaginableBOImpl<Account> implements
-        IAccountBO {
+public class AccountBOImpl extends PaginableBOImpl<Account>
+        implements IAccountBO {
     @Autowired
     private IAccountDAO accountDAO;
 
     @Autowired
     private IJourBO jourBO;
+
+    @Autowired
+    private ISYSConfigBO sysConfigBO;
 
     @Override
     public String distributeAccount(String userId, EAccountType accountType,
@@ -46,8 +54,8 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
         String accountNumber = null;
         if (StringUtils.isNotBlank(userId)) {
 
-            accountNumber = OrderNoGenerater.generate(EGeneratePrefix.Account
-                .getCode());
+            accountNumber = OrderNoGenerater
+                .generate(EGeneratePrefix.Account.getCode());
             Account data = new Account();
             data.setAccountNumber(accountNumber);
             data.setUserId(userId);
@@ -94,8 +102,8 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
         // 更改余额
         dbAccount.setAmount(nowAmount);
         if (transAmount.longValue() > 0) {
-            dbAccount.setTotalAmount(dbAccount.getTotalAmount()
-                .add(transAmount));// 增加累计值
+            dbAccount
+                .setTotalAmount(dbAccount.getTotalAmount().add(transAmount));// 增加累计值
         }
         dbAccount.setMd5(AccountUtil.md5(dbAccount.getMd5(),
             dbAccount.getAmount(), nowAmount));
@@ -145,8 +153,8 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
         // 记录冻结流水
         String lastOrder = jourBO.addFrozenJour(dbAccount, EChannelType.NBZ,
             null, refNo, bizType, bizNote, freezeAmount);
-        BigDecimal nowFrozenAmount = dbAccount.getFrozenAmount().add(
-            freezeAmount);
+        BigDecimal nowFrozenAmount = dbAccount.getFrozenAmount()
+            .add(freezeAmount);
         dbAccount.setAccountNumber(dbAccount.getAccountNumber());
         dbAccount.setFrozenAmount(nowFrozenAmount);
         dbAccount.setLastOrder(lastOrder);
@@ -160,8 +168,8 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
         if (unfreezeAmount.compareTo(BigDecimal.ZERO) <= 0) {
             return dbAccount;
         }
-        BigDecimal nowFrozenAmount = dbAccount.getFrozenAmount().subtract(
-            unfreezeAmount);
+        BigDecimal nowFrozenAmount = dbAccount.getFrozenAmount()
+            .subtract(unfreezeAmount);
         if (nowFrozenAmount.compareTo(BigDecimal.ZERO) == -1) {
             throw new BizException("xn000000", "本次解冻会使账户冻结金额小于0");
         }
@@ -226,19 +234,20 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
     @Override
     public Account getAccountByUser(String userId, String currency) {
         Account data = null;
-        if (StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(currency)) {
+        if (StringUtils.isNotBlank(userId)
+                && StringUtils.isNotBlank(currency)) {
             Account condition = new Account();
             condition.setUserId(userId);
             condition.setCurrency(currency);
             List<Account> accountList = accountDAO.selectList(condition);
             if (CollectionUtils.isEmpty(accountList)) {
-                throw new BizException(EBizErrorCode.DEFAULT.getCode(), "用户["
-                        + userId + ";" + currency + "]无此类型账户");
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                    "用户[" + userId + ";" + currency + "]无此类型账户");
             }
             if (ESysUser.SYS_USER.getCode().equals(userId)) {
                 for (Account account : accountList) {
-                    if (ESystemAccount.SYS_ACOUNT_CNY.getCode().equals(
-                        account.getAccountNumber())) {
+                    if (ESystemAccount.SYS_ACOUNT_CNY.getCode()
+                        .equals(account.getAccountNumber())) {
                         data = account;
                     }
                 }
@@ -263,21 +272,21 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
         }
         Account fromAccount = this.getAccountByUser(fromUserId, fromCurrency);
         Account toAccount = this.getAccountByUser(toUserId, toCurrency);
-        transAmount(fromAccount, toAccount, transAmount, fromBizType,
-            toBizType, fromBizNote, toBizNote, refNo);
+        transAmount(fromAccount, toAccount, transAmount, fromBizType, toBizType,
+            fromBizNote, toBizNote, refNo);
     }
 
     @Override
-    public void transAmount(String fromUserId, String toUserId,
-            String currency, BigDecimal transAmount, String fromBizType,
-            String toBizType, String fromBizNote, String toBizNote, String refNo) {
+    public void transAmount(String fromUserId, String toUserId, String currency,
+            BigDecimal transAmount, String fromBizType, String toBizType,
+            String fromBizNote, String toBizNote, String refNo) {
         if (transAmount.compareTo(BigDecimal.ZERO) == 0) {
             return;
         }
         Account fromAccount = getAccountByUser(fromUserId, currency);
         Account toAccount = getAccountByUser(toUserId, currency);
-        transAmount(fromAccount, toAccount, transAmount, fromBizType,
-            toBizType, fromBizNote, toBizNote, refNo);
+        transAmount(fromAccount, toAccount, transAmount, fromBizType, toBizType,
+            fromBizNote, toBizNote, refNo);
     }
 
     @Override
@@ -293,10 +302,41 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "来去双方账号一致，无需内部划转");
         }
-        this.changeAmount(fromAccount, transAmount.negate(), EChannelType.NBZ,
-            null, refNo, fromBizType, fromBizNote);
-        this.changeAmount(toAccount, transAmount, EChannelType.NBZ, null,
+
+        BigDecimal fromTransAmount = transRate(fromAccount, toAccount,
+            transAmount);
+        BigDecimal toTransAmount = transRate(toAccount, fromAccount,
+            transAmount);
+
+        this.changeAmount(fromAccount, fromTransAmount.negate(),
+            EChannelType.NBZ, null, refNo, fromBizType, fromBizNote);
+        this.changeAmount(toAccount, toTransAmount, EChannelType.NBZ, null,
             refNo, toBizType, toBizNote);
+    }
+
+    private BigDecimal transRate(Account fromAccount, Account toAccount,
+            BigDecimal transAmount) {
+        BigDecimal amount = transAmount;
+
+        if (fromAccount.getCurrency().equals(toAccount.getCurrency())) {
+
+            // 相同币种划转
+            return amount;
+
+        } else if (ECurrency.CNY.getCode().equals(toAccount.getCurrency())
+                && ECurrency.JF.getCode().equals(fromAccount.getCurrency())) {
+
+            // 人民币转积分
+            Map<String, String> configMap = sysConfigBO
+                .getConfigsMap(ESysConfigType.PAY_RULE.getCode());
+            BigDecimal rate = new BigDecimal(
+                configMap.get(SysConstants.CNY2JF_RATE));
+
+            amount = transAmount.multiply(rate);
+
+        }
+
+        return amount;
     }
 
     @Override
@@ -315,11 +355,11 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
     public void distributePlatAccount(String symbol) {
         if (StringUtils.isNotBlank(symbol)) {
 
-            savePlatAccount("SYS_ACOUNT_" + symbol, ESysUser.SYS_USER, "平台"
-                    + symbol + "盈亏账户", symbol);
+            savePlatAccount("SYS_ACOUNT_" + symbol, ESysUser.SYS_USER,
+                "平台" + symbol + "盈亏账户", symbol);
 
-            savePlatAccount("SYS_ACOUNT_COLD_" + symbol + "",
-                ESysUser.SYS_USER, "平台" + symbol + "冷钱包", symbol);
+            savePlatAccount("SYS_ACOUNT_COLD_" + symbol + "", ESysUser.SYS_USER,
+                "平台" + symbol + "冷钱包", symbol);
 
         }
     }

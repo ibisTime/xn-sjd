@@ -191,6 +191,10 @@ public class UserAOImpl implements IUserAO {
         Account sysJfAccount = accountBO
             .getAccount(ESystemAccount.SYS_ACOUNT_JF_POOL.getCode());
 
+        if (quantity.compareTo(sysJfAccount.getAmount()) == 1) {
+            return;
+        }
+
         accountBO.transAmount(sysJfAccount, userJfAccount, quantity,
             EJourBizTypeUser.REGIST.getCode(),
             EJourBizTypePlat.REGIST.getCode(),
@@ -204,6 +208,10 @@ public class UserAOImpl implements IUserAO {
                 refereeUser.getUserId(), ECurrency.JF.getCode());
             quantity = new BigDecimal(configMap.get(SysConstants.INVITE_USER));
             quantity = AmountUtil.mul(quantity, 1000L);
+
+            if (quantity.compareTo(sysJfAccount.getAmount()) == 1) {
+                return;
+            }
 
             accountBO.transAmount(sysJfAccount, userRefereeJfAccount, quantity,
                 EJourBizTypeUser.INVITE_USER.getCode(),
@@ -305,11 +313,13 @@ public class UserAOImpl implements IUserAO {
             Account sysJfAccount = accountBO
                 .getAccount(ESystemAccount.SYS_ACOUNT_JF_POOL.getCode());
 
-            accountBO.transAmount(sysJfAccount, userJfAccount, quantity,
-                EJourBizTypeUser.SIGN.getCode(),
-                EJourBizTypePlat.SIGN.getCode(),
-                EJourBizTypeUser.SIGN.getValue(),
-                EJourBizTypePlat.SIGN.getValue(), userId);
+            if (quantity.compareTo(sysJfAccount.getAmount()) != 1) {
+                accountBO.transAmount(sysJfAccount, userJfAccount, quantity,
+                    EJourBizTypeUser.SIGN.getCode(),
+                    EJourBizTypePlat.SIGN.getCode(),
+                    EJourBizTypeUser.SIGN.getValue(),
+                    EJourBizTypePlat.SIGN.getValue(), userId);
+            }
 
             // 添加碳泡泡
             configMap = sysConfigBO
@@ -545,6 +555,10 @@ public class UserAOImpl implements IUserAO {
         Account sysJfAccount = accountBO
             .getAccount(ESystemAccount.SYS_ACOUNT_JF_POOL.getCode());
 
+        if (quantity.compareTo(sysJfAccount.getAmount()) == 1) {
+            return;
+        }
+
         accountBO.transAmount(sysJfAccount, userJfAccount, quantity,
             EJourBizTypeUser.UPLOAD_PHOTO.getCode(),
             EJourBizTypePlat.UPLOAD_PHOTO.getCode(),
@@ -685,6 +699,10 @@ public class UserAOImpl implements IUserAO {
         Account sysJfAccount = accountBO
             .getAccount(ESystemAccount.SYS_ACOUNT_JF_POOL.getCode());
 
+        if (quantity.compareTo(sysJfAccount.getAmount()) == 1) {
+            return;
+        }
+
         accountBO.transAmount(sysJfAccount, userJfAccount, quantity,
             EJourBizTypeUser.BIND_MOBILE.getCode(),
             EJourBizTypePlat.BIND_MOBILE.getCode(),
@@ -777,6 +795,10 @@ public class UserAOImpl implements IUserAO {
             ECurrency.JF.getCode());
         Account sysJfAccount = accountBO
             .getAccount(ESystemAccount.SYS_ACOUNT_JF_POOL.getCode());
+
+        if (quantity.compareTo(sysJfAccount.getAmount()) == 1) {
+            return;
+        }
 
         accountBO.transAmount(sysJfAccount, userJfAccount, quantity,
             EJourBizTypeUser.BIND_email.getCode(),
