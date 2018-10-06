@@ -14,6 +14,9 @@ public class Charge extends ABaseDO {
     // 充值编号
     private String code;
 
+    // 订单分组组号（信息代表）---核心字段1
+    private String payGroup;
+
     // 账户编号
     private String accountNumber;
 
@@ -308,4 +311,11 @@ public class Charge extends ABaseDO {
         this.channelOrder = channelOrder;
     }
 
+    public String getPayGroup() {
+        return payGroup;
+    }
+
+    public void setPayGroup(String payGroup) {
+        this.payGroup = payGroup;
+    }
 }

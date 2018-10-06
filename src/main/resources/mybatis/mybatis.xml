@@ -59,5 +59,7 @@
 		<typeAlias alias="toolOrder" type="com.ogc.standard.domain.ToolOrder"/>
 		<typeAlias alias="toolUseRecord" type="com.ogc.standard.domain.ToolUseRecord"/>
 		<typeAlias alias="carbonBubbleOrder" type="com.ogc.standard.domain.CarbonBubbleOrder"/>
+		
+		<typeAlias alias="address" type="com.ogc.standard.domain.Address"/>
 	</typeAliases>
 </configuration>

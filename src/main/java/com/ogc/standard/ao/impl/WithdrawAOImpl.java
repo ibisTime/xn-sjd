@@ -118,10 +118,6 @@ public class WithdrawAOImpl implements IWithdrawAO {
     public void payOrder(String code, String payUser, String payResult,
             String payNote, String channelOrder, BigDecimal payFee) {
         Withdraw data = withdrawBO.getWithdraw(code);
-        if (data == null) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "不存在编号为"
-                    + code + "的订单");
-        }
         if (!EWithdrawStatus.Approved_YES.getCode().equals(data.getStatus())) {
             throw new BizException("xn000000", "申请记录状态不是待支付状态，无法支付");
         }

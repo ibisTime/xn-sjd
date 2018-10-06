@@ -29,35 +29,27 @@ public class PropertiesUtil {
     public static final class Config {
         public static String SMS_URL = props.getProperty("SMS_URL");
 
-        public static String CERTI_URL = props.getProperty("CERTI_URL");
+        public static String ALIPAY_APPID = props.getProperty("alipay.appid");
 
-        public static String BC_WALLET_URL = props.getProperty("BC_WALLET_URL");// 云钱包
+        public static String ALIPAY_PRIVATEKEY = props
+            .getProperty("alipay.privatekey");
 
-        public static String CORE_URL = props.getProperty("CORE_URL");// 基础数据
+        public static String ALIPAY_PUBLICKEY = props
+            .getProperty("alipay.publickey");
 
-        public static String BLOCKCHAIN_DATA_URL = props
-            .getProperty("BLOCKCHAIN_DATA_URL");// 区块链全流水查询
+        public static String ALIPAY_NOTIFYURL = props
+            .getProperty("alipay.notifyurl");
 
-        public static String CTQ_URL = props.getProperty("CTQ_URL");
+        public static String ALIPAY_RETURNURL = props
+            .getProperty("alipay.returnurl");
 
-        public static String ETH_URL = props.getProperty("ETH_URL");
+        public static String ALIPAY_SIGNTYPE = props
+            .getProperty("alipay.signtype");
 
-        public static String BTC_ENV = props.getProperty("BTC_ENV");
+        public static String ALIPAY_GATEWAY = props
+            .getProperty("alipay.gateway");
 
-        public static String BTC_URL = props.getProperty("BTC_URL");
-
-        public static String BTC_FEE = props.getProperty("BTC_FEE");
-
-        public static String BTC_CORE_USER = props.getProperty("BTC_CORE_USER");
-
-        public static String BTC_CORE_PWD = props.getProperty("BTC_CORE_PWD");
-
-        public static String BTC_CORE_HOST = props.getProperty("BTC_CORE_HOST");
-
-        public static String BTC_CORE_PORT = props.getProperty("BTC_CORE_PORT");
-
-        public static String TOKEN_URL = props.getProperty("TOKEN_URL");
-        
-        public static String KEY_STORE_PATH = props.getProperty("KEY_STORE_PATH");
+        public static String ALIPAY_PROVIDERID = props
+            .getProperty("alipay.providerid");
     }
 }

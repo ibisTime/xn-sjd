@@ -17,6 +17,7 @@ import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IAdoptOrderBO;
 import com.ogc.standard.bo.IAdoptOrderTreeBO;
 import com.ogc.standard.bo.IAgentUserBO;
+import com.ogc.standard.bo.IAlipayBO;
 import com.ogc.standard.bo.IApplyBindMaintainBO;
 import com.ogc.standard.bo.ICompanyBO;
 import com.ogc.standard.bo.IDistributionOrderBO;
@@ -104,6 +105,9 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
 
     @Autowired
     private ISettleBO settleBO;
+
+    @Autowired
+    private IAlipayBO alipayBO;
 
     @Override
     @Transactional
@@ -193,13 +197,20 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "订单不是待支付状态，不能支付");
         }
+        // 积分抵扣处理
+        XN629048Res deductRes = adoptOrderBO.getOrderDeductAmount(data,
+            isJfDeduct);
 
         // 支付订单
         Object result = null;
         if (EPayType.YE.getCode().equals(payType)) {// 余额支付
-            result = toPayAdoptOrderYue(data, isJfDeduct);
+            result = toPayAdoptOrderYue(data, deductRes);
         } else if (EPayType.ALIPAY.getCode().equals(payType)) {// 支付宝支付
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "暂不支持支付宝支付");
+            adoptOrderBO.refreshPayGroup(data, payType, deductRes);
+            result = alipayBO.getSignedH5Order(data.getApplyUser(),
+                ESysUser.SYS_USER.getCode(), data.getPayGroup(),
+                EJourBizTypeUser.ADOPT.getCode(),
+                EJourBizTypeUser.ADOPT.getValue(), data.getAmount());
         } else if (EPayType.WEIXIN_H5.getCode().equals(payType)) {// 微信支付
             throw new BizException(EBizErrorCode.DEFAULT.getCode(), "暂不支持微信支付");
 
@@ -210,8 +221,7 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
     // 1、判断余额是否足够，并扣除账户余额
     // 2、进行分销
     // 3、更新订单和树状态
-    private Object toPayAdoptOrderYue(AdoptOrder data, String isDk) {
-        XN629048Res resultRes = adoptOrderBO.getOrderDkAmount(data, isDk);
+    private Object toPayAdoptOrderYue(AdoptOrder data, XN629048Res resultRes) {
         Account userCnyAccount = accountBO.getAccountByUser(
             data.getApplyUser(), ECurrency.CNY.getCode());
 
@@ -353,7 +363,7 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "当前订单不是待支付状态");
         }
-        return adoptOrderBO.getOrderDkAmount(data, EBoolean.YES.getCode());
+        return adoptOrderBO.getOrderDeductAmount(data, EBoolean.YES.getCode());
     }
 
     @Override

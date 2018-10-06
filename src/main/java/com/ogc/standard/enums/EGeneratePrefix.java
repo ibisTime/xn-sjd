@@ -10,10 +10,11 @@ import java.util.Map;
  */
 public enum EGeneratePrefix {
 
-    DH("DH", "导航"), JS("JS", "角色"), CD("CD", "菜单"), GS("GS", "公司"), XX("XX",
-            "信息"), RZ("RZ", "日志"), TRADE_ORDER("JY", "交易订单"),
+    DH("DH", "导航"), JS("JS", "角色"), ADDRESS("AD", "地址"), CD("CD", "菜单"), GS(
+            "GS", "公司"), XX("XX", "信息"), RZ("RZ", "日志"), TRADE_ORDER("JY",
+            "交易订单"),
 
-    Account("A", "账户"), SAccount("A", "账户"), AJour("AJ", "账户流水"),
+    Account("A", "账户"), AJour("AJ", "账户流水"), Charge("C", "充值"),
 
     Interact("I", "点赞"), BANK_CARD("BC", "银行卡"),
 

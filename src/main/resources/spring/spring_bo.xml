@@ -69,6 +69,10 @@
 		<property name="paginableDAO" ref="signLogDAOImpl"/>
 	</bean>
 	
+	<bean id="addressBO" class="com.ogc.standard.bo.impl.AddressBOImpl">
+		<property name="paginableDAO" ref="addressDAOImpl"/>
+	</bean>
+	
 	<bean id="smsBO" class="com.ogc.standard.bo.impl.SmsBOImpl">
 		<property name="paginableDAO" ref="smsDAOImpl"/>
 	</bean>
