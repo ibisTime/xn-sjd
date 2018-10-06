@@ -18,6 +18,7 @@ import com.ogc.standard.enums.EAccountType;
 import com.ogc.standard.enums.EChannelType;
 import com.ogc.standard.enums.EChargeStatus;
 import com.ogc.standard.enums.EGeneratePrefix;
+import com.ogc.standard.enums.EJourBizTypeUser;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
 
@@ -70,7 +71,11 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
             .getCode());
         Charge data = new Charge();
         data.setCode(code);
-        data.setPayGroup(payGroup);
+        if (EJourBizTypeUser.CHARGE.getCode().equals(bizType)) {
+            data.setPayGroup(code);
+        } else {
+            data.setPayGroup(payGroup);
+        }
         data.setAccountNumber(account.getAccountNumber());
         data.setAmount(transAmount);
 

@@ -21,6 +21,7 @@
 		<result column="apply_user_type" property="applyUserType" />
 		<result column="apply_note" property="applyNote" />
 		<result column="apply_datetime" property="applyDatetime" />
+		<result column="pay_group" property="payGroup" />
 		<result column="pay_user" property="payUser" />
 		
 		<result column="pay_note" property="payNote" />
@@ -77,6 +78,9 @@
 			<if test="applyDatetimeEnd != null and applyDatetimeEnd != '' ">
 				<![CDATA[AND t.apply_datetime <= #{applyDatetimeEnd}]]>
 			</if>
+			<if test="payGroup != null and payGroup != '' ">
+				AND t.pay_group = #{payGroup}
+			</if>
 			<if test="payUser != null and payUser != '' ">
 				AND t.pay_user = #{payUser}
 			</if>
@@ -114,6 +118,7 @@
 		,t.apply_user_type
 		,t.apply_note
 		,t.apply_datetime
+		,t.pay_group
 		,t.pay_user
 		
 		,t.pay_note
@@ -156,6 +161,7 @@
 		,apply_user_type
 		,apply_note
 		,apply_datetime
+		,pay_group
 		,pay_note
 		
 		,pay_datetime
@@ -182,6 +188,7 @@
 		,#{applyUserType}
 		,#{applyNote}
 		,#{applyDatetime}
+		,#{payGroup}
 		,#{payNote}
 		
 		,#{payDatetime}

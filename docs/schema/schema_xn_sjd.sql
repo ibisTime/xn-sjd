@@ -346,6 +346,7 @@ CREATE TABLE `tstd_charge` (
   `apply_user_type` varchar(32) DEFAULT NULL COMMENT '申请人类型',
   `apply_note` varchar(255) DEFAULT NULL COMMENT '申请说明',
   `apply_datetime` datetime DEFAULT NULL COMMENT '申请时间',
+  `pay_group` varchar(32) DEFAULT NULL COMMENT '支付组号',
   `pay_user` varchar(32) DEFAULT NULL COMMENT '支付回录人',
   `pay_note` varchar(255) DEFAULT NULL COMMENT '支付渠道说明',
   `pay_datetime` datetime DEFAULT NULL COMMENT '支付时间',
