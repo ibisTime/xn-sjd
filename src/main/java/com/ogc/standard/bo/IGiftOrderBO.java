@@ -5,28 +5,27 @@ import java.util.List;
 import com.ogc.standard.bo.base.IPaginableBO;
 import com.ogc.standard.domain.GiftOrder;
 
-
-
-//CHECK ��鲢��ע�� 
+/**
+ * 礼物订单
+ * @author: silver 
+ * @since: Oct 6, 2018 10:41:52 PM 
+ * @history:
+ */
 public interface IGiftOrderBO extends IPaginableBO<GiftOrder> {
 
+    public boolean isGiftOrderExist(String code);
 
-	public boolean isGiftOrderExist(String code);
+    public String saveGiftOrder(GiftOrder data);
 
+    public int removeGiftOrder(String code);
 
-	public String saveGiftOrder(GiftOrder data);
+    public int refreshGiftOrder(GiftOrder data);
 
+    // 更新过期礼物
+    public void refreshExpireGift(String code);
 
-	public int removeGiftOrder(String code);
+    public List<GiftOrder> queryGiftOrderList(GiftOrder condition);
 
-
-	public int refreshGiftOrder(GiftOrder data);
-
-
-	public List<GiftOrder> queryGiftOrderList(GiftOrder condition);
-
-
-	public GiftOrder getGiftOrder(String code);
-
+    public GiftOrder getGiftOrder(String code);
 
 }

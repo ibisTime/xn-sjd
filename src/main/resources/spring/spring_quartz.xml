@@ -23,6 +23,7 @@
 			    <ref bean="doDailyAdoptOrderTrigger"/>
 			    <ref bean="doDailyAdoptOrderTreeTrigger"/>
 			    <ref bean="doExpireCarbonBubbleTrigger"/>
+			    <ref bean="doDailyExpireGiftTrigger"/>
  			</list>
 		</property>
 		<property name="autoStartup" value="true" />
@@ -96,6 +97,20 @@
 		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject" ref="carbonBubbleOrderAOImpl" />
 		<property name="targetMethod" value="expireCarbonBubble" />
+		<property name="concurrent" value="false" />
+	</bean> 
+	
+	<!-- 礼物过期扫描 -->
+	<bean id="doDailyExpireGiftTrigger"
+		  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="doDailyExpireGift" />
+		<property name="cronExpression" value="0 0 0 * * ?"/><!-- 每天零点执行 -->
+	</bean>
+	
+	<bean id="doDailyExpireGift"
+		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="giftOrderAOImpl" />
+		<property name="targetMethod" value="doDailyExpireGift" />
 		<property name="concurrent" value="false" />
 	</bean> 
 

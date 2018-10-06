@@ -59,6 +59,12 @@ public class GiftOrder extends ABaseDO {
 
     private Date claimDatetimeEnd;// 认领时间止
 
+    // 失效开始时间
+    private Date invalidStartDatetime;
+
+    // 失效结束时间
+    private Date invalidEndDatetime;
+
     public void setCode(String code) {
         this.code = code;
     }
@@ -177,6 +183,22 @@ public class GiftOrder extends ABaseDO {
 
     public void setClaimDatetimeEnd(Date claimDatetimeEnd) {
         this.claimDatetimeEnd = claimDatetimeEnd;
+    }
+
+    public Date getInvalidStartDatetime() {
+        return invalidStartDatetime;
+    }
+
+    public void setInvalidStartDatetime(Date invalidStartDatetime) {
+        this.invalidStartDatetime = invalidStartDatetime;
+    }
+
+    public Date getInvalidEndDatetime() {
+        return invalidEndDatetime;
+    }
+
+    public void setInvalidEndDatetime(Date invalidEndDatetime) {
+        this.invalidEndDatetime = invalidEndDatetime;
     }
 
 }

@@ -184,4 +184,8 @@
 	<bean id="carbonBubbleOrderBO" class="com.ogc.standard.bo.impl.CarbonBubbleOrderBOImpl">
 		<property name="paginableDAO" ref="carbonBubbleOrderDAOImpl"/>
 	</bean>
+	
+	<bean id="giftOrderBO" class="com.ogc.standard.bo.impl.GiftOrderBOImpl">
+		<property name="paginableDAO" ref="giftOrderDAOImpl"/>
+	</bean>
 </beans>

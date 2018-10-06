@@ -9,7 +9,8 @@ import com.ogc.standard.dao.base.support.AMybatisTemplate;
 import com.ogc.standard.domain.GiftOrder;
 
 @Repository("giftOrderDAOImpl")
-public class GiftOrderDAOImpl extends AMybatisTemplate implements IGiftOrderDAO {
+public class GiftOrderDAOImpl extends AMybatisTemplate
+        implements IGiftOrderDAO {
 
     @Override
     public int insert(GiftOrder data) {
@@ -19,6 +20,11 @@ public class GiftOrderDAOImpl extends AMybatisTemplate implements IGiftOrderDAO 
     @Override
     public int delete(GiftOrder data) {
         return super.delete(NAMESPACE.concat("delete_giftOrder"), data);
+    }
+
+    @Override
+    public int updateExpireGift(GiftOrder data) {
+        return super.update(NAMESPACE.concat("update_expireGiftOrder"), data);
     }
 
     @Override
@@ -35,12 +41,13 @@ public class GiftOrderDAOImpl extends AMybatisTemplate implements IGiftOrderDAO 
 
     @Override
     public List<GiftOrder> selectList(GiftOrder condition) {
-        return super.selectList(NAMESPACE.concat("select_giftOrder"),
-            condition, GiftOrder.class);
+        return super.selectList(NAMESPACE.concat("select_giftOrder"), condition,
+            GiftOrder.class);
     }
 
     @Override
-    public List<GiftOrder> selectList(GiftOrder condition, int start, int count) {
+    public List<GiftOrder> selectList(GiftOrder condition, int start,
+            int count) {
         return super.selectList(NAMESPACE.concat("select_giftOrder"), start,
             count, condition, GiftOrder.class);
     }

@@ -3,6 +3,9 @@ package com.ogc.standard.ao.impl;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +21,8 @@ import com.ogc.standard.exception.BizException;
 
 @Service
 public class GiftOrderAOImpl implements IGiftOrderAO {
+    static final Logger logger = LoggerFactory
+        .getLogger(AdoptOrderAOImpl.class);
 
     @Autowired
     private IGiftOrderBO giftOrderBO;
@@ -32,8 +37,8 @@ public class GiftOrderAOImpl implements IGiftOrderAO {
         data.setDescription(description);
         data.setStatus(EGiftOrderStatus.TO_CLAIM.getCode());
         data.setCreateDatetime(new Date());
-        data.setInvalidDatetime(DateUtil.strToDate(invalidDatetime,
-            DateUtil.DATA_TIME_PATTERN_1));
+        data.setInvalidDatetime(
+            DateUtil.strToDate(invalidDatetime, DateUtil.DATA_TIME_PATTERN_1));
         return giftOrderBO.saveGiftOrder(data);
     }
 
@@ -69,6 +74,32 @@ public class GiftOrderAOImpl implements IGiftOrderAO {
             throw new BizException("xn0000", "礼物编号不存在");
         }
         return giftOrderBO.removeGiftOrder(code);
+    }
+
+    public void doDailyExpireGift() {
+        logger.info("***************开始扫描已过期礼物***************");
+        GiftOrder condition = new GiftOrder();
+        condition.setStatus(EGiftOrderStatus.TO_CLAIM.getCode());
+        condition.setInvalidEndDatetime(DateUtil.getTodayStart());
+
+        Integer start = 0;
+        Integer limit = 10;
+
+        while (true) {
+            Paginable<GiftOrder> page = giftOrderBO.getPaginable(start, limit,
+                condition);
+
+            if (null != page && CollectionUtils.isNotEmpty(page.getList())) {
+                for (GiftOrder giftOrder : page.getList()) {
+                    giftOrderBO.refreshExpireGift(giftOrder.getCode());
+                }
+            } else {
+                break;
+            }
+
+            start = start + limit;
+        }
+        logger.info("***************开始扫描已过期礼物***************");
     }
 
     @Override

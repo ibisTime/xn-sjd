@@ -12,11 +12,12 @@ import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.IGiftOrderDAO;
 import com.ogc.standard.domain.GiftOrder;
 import com.ogc.standard.enums.EGeneratePrefix;
+import com.ogc.standard.enums.EGiftOrderStatus;
 import com.ogc.standard.exception.BizException;
 
 @Component
-public class GiftOrderBOImpl extends PaginableBOImpl<GiftOrder> implements
-        IGiftOrderBO {
+public class GiftOrderBOImpl extends PaginableBOImpl<GiftOrder>
+        implements IGiftOrderBO {
 
     @Autowired
     private IGiftOrderDAO giftOrderDAO;
@@ -35,8 +36,8 @@ public class GiftOrderBOImpl extends PaginableBOImpl<GiftOrder> implements
     public String saveGiftOrder(GiftOrder data) {
         String code = null;
         if (data != null) {
-            code = OrderNoGenerater.generate(EGeneratePrefix.GIFT_ORDER
-                .getCode());
+            code = OrderNoGenerater
+                .generate(EGeneratePrefix.GIFT_ORDER.getCode());
             data.setCode(code);
             giftOrderDAO.insert(data);
         }
@@ -64,6 +65,15 @@ public class GiftOrderBOImpl extends PaginableBOImpl<GiftOrder> implements
     }
 
     @Override
+    public void refreshExpireGift(String code) {
+        if (StringUtils.isNotBlank(code)) {
+            GiftOrder giftOrder = getGiftOrder(code);
+            giftOrder.setStatus(EGiftOrderStatus.EXPIRED.getCode());
+            giftOrderDAO.updateExpireGift(giftOrder);
+        }
+    }
+
+    @Override
     public List<GiftOrder> queryGiftOrderList(GiftOrder condition) {
         return giftOrderDAO.selectList(condition);
     }
@@ -81,4 +91,5 @@ public class GiftOrderBOImpl extends PaginableBOImpl<GiftOrder> implements
         }
         return data;
     }
+
 }

@@ -154,6 +154,12 @@ public class WithdrawAOImpl implements IWithdrawAO {
         if (!EWithdrawStatus.Approved_YES.getCode().equals(data.getStatus())) {
             throw new BizException("xn000000", "申请记录状态不是待支付状态，无法支付");
         }
+        if (EWithdrawStatus.Approved_YES.getCode().equals(data.getStatus())) {
+            if (StringUtils.isBlank(channelOrder) || null == payFee) {
+                throw new BizException("xn000000", "请填写渠道单号和转账费");
+            }
+        }
+
         if (EBoolean.YES.getCode().equals(payResult)) {
             payOrderYES(data, payUser, payNote, channelOrder, payFee);
         } else {

@@ -8,22 +8,45 @@
 		<result column="name" property="name" />
 		<result column="price" property="price" />
 		<result column="description" property="description" />
+		
 		<result column="receiver" property="receiver" />
 		<result column="re_address" property="reAddress" />
 		<result column="re_mobile" property="reMobile" />
 		<result column="status" property="status" />
 		<result column="create_datetime" property="createDatetime" />
+		
 		<result column="claimer" property="claimer" />
 		<result column="claim_datetime" property="claimDatetime" />
 		<result column="invalid_datetime" property="invalidDatetime" />
 	</resultMap>
+	
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
 			</if>
+			<if test="adoptTreeCode != null and adoptTreeCode != '' ">
+				AND t.adopt_tree_code = #{adoptTreeCode}
+			</if>
+			<if test="receiver != null and receiver != '' ">
+				AND t.receiver = #{receiver}
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+			<if test="claimer != null and claimer != '' ">
+				AND t.claimer = #{claimer}
+			</if>
+			
+			<if test="invalidStartDatetime != null and invalidStartDatetime != '' ">
+				<![CDATA[AND t.invalid_datetime >= #{invalidStartDatetime}]]>
+			</if>
+			<if test="invalidEndDatetime != null and invalidEndDatetime != '' ">
+				<![CDATA[AND t.invalid_datetime <= #{invalidEndDatetime}]]>
+			</if>
 		</trim>
 	</sql>
+	
 	<select id="select_giftOrder" parameterType="giftOrder" resultMap="giftOrder_DB_Result">
 		SELECT
 		t.code
@@ -104,6 +127,13 @@
 		,claimer = #{claimer}
 		,claim_datetime = #{claimDatetime}
 		,invalid_datetime = #{invalidDatetime}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_expireGiftOrder" parameterType="giftOrder">
+		UPDATE tsj_gift_order
+		SET
+		status = #{status}
 		WHERE code = #{code}
 	</update>
 	
