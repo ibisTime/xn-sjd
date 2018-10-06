@@ -34,6 +34,10 @@ public class XN802350Req {
     @NotBlank
     private String applyUser;
 
+    // 申请人类型（必填）
+    @NotBlank
+    private String applyUserType;
+
     // 申请说明（选填）
     private String applyNote;
 
@@ -91,6 +95,14 @@ public class XN802350Req {
 
     public void setApplyNote(String applyNote) {
         this.applyNote = applyNote;
+    }
+
+    public String getApplyUserType() {
+        return applyUserType;
+    }
+
+    public void setApplyUserType(String applyUserType) {
+        this.applyUserType = applyUserType;
     }
 
 }

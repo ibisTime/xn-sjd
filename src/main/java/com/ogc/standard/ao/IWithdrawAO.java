@@ -14,7 +14,7 @@ public interface IWithdrawAO {
     // 待申请
     public String applyOrder(String accountNumber, BigDecimal amount,
             String payCardInfo, String payCardNo, String tradePwd,
-            String applyUser, String applyNote);
+            String applyUser, String applyUserType, String applyNote);
 
     // 取现审核
     public void approveOrder(String code, String approveUser,

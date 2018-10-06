@@ -55,7 +55,7 @@ public class ChargeAOImpl implements IChargeAO {
     @Override
     public String applyOrder(String accountNumber, BigDecimal amount,
             String payCardInfo, String payCardNo, String applyUser,
-            String applyNote) {
+            String applyUserType, String applyNote) {
         if (amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(), "充值金额需大于零");
         }
@@ -63,7 +63,7 @@ public class ChargeAOImpl implements IChargeAO {
         // 生成充值订单
         String code = chargeBO.applyOrderOffline(account,
             EJourBizTypeUser.CHARGE.getCode(), amount, payCardInfo, payCardNo,
-            applyUser, applyNote);
+            applyUser, applyUserType, applyNote);
         return code;
     }
 
@@ -147,21 +147,30 @@ public class ChargeAOImpl implements IChargeAO {
     }
 
     private void initCharge(Charge charge) {
-        if (EAccountType.OWNER.getCode().equals(charge.getAccountType())
-                || EAccountType.MAINTAIN.getCode().equals(
-                    charge.getAccountType())) {
+        if (EAccountType.CUSTOMER.getCode().equals(charge.getApplyUserType())) {
+
+            // C端用户
+            User user = userBO.getUser(charge.getApplyUser());
+            charge.setPayer(user);
+
+        } else if (EAccountType.AGENT.getCode()
+            .equals(charge.getApplyUserType())) {
+
+            // 代理用户
+            AgentUser agentUser = agentUserBO
+                .getAgentUser(charge.getApplyUser());
+            User user = new User();
+            user.setMobile(agentUser.getMobile());
+            charge.setPayer(user);
+
+        } else {
+
+            // 其他用户
             SYSUser sysUser = sysUserBO.getSYSUser(charge.getApplyUser());
-            charge.setMobile(sysUser.getMobile());
-        } else if (EAccountType.AGENT.getCode().equals(charge.getAccountType())) {
-            AgentUser agentUser = agentUserBO.getAgentUser(charge
-                .getAccountType());
-            charge.setMobile(agentUser.getMobile());
-        } else if (EAccountType.CUSTOMER.getCode().equals(
-            charge.getAccountType())) {
-            User user = userBO.getUserUnCheck(charge.getApplyUser());
-            if (null != user) {
-                charge.setMobile(user.getMobile());
-            }
+            User user = new User();
+            user.setMobile(sysUser.getMobile());
+            charge.setPayer(user);
+
         }
     }
 

@@ -7,12 +7,15 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.ogc.standard.bo.IApplyBindMaintainBO;
+import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.ITreeBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.dao.ITreeDAO;
 import com.ogc.standard.domain.Product;
+import com.ogc.standard.domain.SYSUser;
 import com.ogc.standard.domain.Tree;
 import com.ogc.standard.dto.req.XN629010ReqTree;
 import com.ogc.standard.enums.EGeneratePrefix;
@@ -24,6 +27,12 @@ public class TreeBOImpl extends PaginableBOImpl<Tree> implements ITreeBO {
 
     @Autowired
     private ITreeDAO treeDAO;
+
+    @Autowired
+    private IApplyBindMaintainBO applyBindMaintainBO;
+
+    @Autowired
+    private ISYSUserBO sysUserBO;
 
     @Override
     public boolean isTreeNumberExist(String treeNumber) {
@@ -148,6 +157,7 @@ public class TreeBOImpl extends PaginableBOImpl<Tree> implements ITreeBO {
                 throw new BizException("xn0000", "古树不存在！");
             }
             data = treeList.get(0);
+            initTree(data);
         }
         return data;
     }
@@ -168,7 +178,8 @@ public class TreeBOImpl extends PaginableBOImpl<Tree> implements ITreeBO {
     }
 
     @Override
-    public List<Tree> queryTreeListByProduct(String productCode, String status) {
+    public List<Tree> queryTreeListByProduct(String productCode,
+            String status) {
         Tree condition = new Tree();
         condition.setProductCode(productCode);
         condition.setStatus(status);
@@ -212,8 +223,16 @@ public class TreeBOImpl extends PaginableBOImpl<Tree> implements ITreeBO {
             if (data == null) {
                 throw new BizException("xn0000", "古树不存在！");
             }
+            initTree(data);
         }
         return data;
+    }
+
+    private void initTree(Tree tree) {
+        // 养护人信息
+        SYSUser maintainer = sysUserBO
+            .getSYSUser(applyBindMaintainBO.getMaintainId(tree.getOwnerId()));
+        tree.setMaintainer(maintainer);
     }
 
 }

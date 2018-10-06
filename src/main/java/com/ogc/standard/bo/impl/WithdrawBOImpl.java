@@ -27,8 +27,8 @@ import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
 
 @Component
-public class WithdrawBOImpl extends PaginableBOImpl<Withdraw> implements
-        IWithdrawBO {
+public class WithdrawBOImpl extends PaginableBOImpl<Withdraw>
+        implements IWithdrawBO {
 
     @Autowired
     private IWithdrawDAO withdrawDAO;
@@ -37,9 +37,9 @@ public class WithdrawBOImpl extends PaginableBOImpl<Withdraw> implements
     ISYSConfigBO sysConfigBO;
 
     @Override
-    public String applyOrder(Account account, BigDecimal amount,
-            BigDecimal fee, String payCardInfo, String payCardNo,
-            String applyUser, String applyNote) {
+    public String applyOrder(Account account, BigDecimal amount, BigDecimal fee,
+            String payCardInfo, String payCardNo, String applyUser,
+            String applyUserType, String applyNote) {
         if (amount.compareTo(BigDecimal.ZERO) == 0) {
             throw new BizException("xn000000", "取现金额不能为0");
         }
@@ -60,6 +60,7 @@ public class WithdrawBOImpl extends PaginableBOImpl<Withdraw> implements
         data.setPayCardNo(payCardNo);
         data.setStatus(EWithdrawStatus.toApprove.getCode());
         data.setApplyUser(applyUser);
+        data.setApplyUserType(applyUserType);
         data.setApplyNote(applyNote);
         data.setApplyDatetime(new Date());
         withdrawDAO.insert(data);
@@ -139,8 +140,8 @@ public class WithdrawBOImpl extends PaginableBOImpl<Withdraw> implements
             long totalCount = withdrawDAO.selectTotalCount(cond);
             long maxMonthTimes = Long.valueOf(monthTimesValue);
             if (totalCount >= maxMonthTimes) {
-                throw new BizException("xn0000", "每月取现最多" + maxMonthTimes
-                        + "次,本月申请次数已用尽");
+                throw new BizException("xn0000",
+                    "每月取现最多" + maxMonthTimes + "次,本月申请次数已用尽");
             }
         }
 

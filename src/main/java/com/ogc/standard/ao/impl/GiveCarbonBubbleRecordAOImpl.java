@@ -69,7 +69,7 @@ public class GiveCarbonBubbleRecordAOImpl implements IGiveCarbonBubbleRecordAO {
             EJourBizTypePlat.PRESENT.getValue(), recordCode);
 
         // 添加日志
-        bizLogBO.gatherCarbonBubble(null, quantity, userId,
+        bizLogBO.gatherCarbonBubble(null, toUserId, quantity, userId,
             EBizLogType.GIVE.getCode());
 
         return recordCode;

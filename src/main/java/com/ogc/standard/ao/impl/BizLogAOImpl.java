@@ -1,8 +1,10 @@
+
 package com.ogc.standard.ao.impl;
 
 import java.math.BigDecimal;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -50,17 +52,41 @@ public class BizLogAOImpl implements IBizLogAO {
     @Override
     public Paginable<BizLog> queryBizLogPage(int start, int limit,
             BizLog condition) {
-        return bizLogBO.getPaginable(start, limit, condition);
+        Paginable<BizLog> page = bizLogBO.getPaginable(start, limit, condition);
+
+        if (null != page && CollectionUtils.isNotEmpty(page.getList())) {
+            for (BizLog bizLog : page.getList()) {
+                initBizLog(bizLog);
+            }
+        }
+        return page;
     }
 
     @Override
     public List<BizLog> queryBizLogList(BizLog condition) {
-        return bizLogBO.queryBizLogList(condition);
+        List<BizLog> list = bizLogBO.queryBizLogList(condition);
+
+        if (CollectionUtils.isNotEmpty(list)) {
+            for (BizLog bizLog : list) {
+                initBizLog(bizLog);
+            }
+        }
+
+        return list;
     }
 
     @Override
     public BizLog getBizLog(int id) {
-        return bizLogBO.getBizLog(id);
+        BizLog bizLog = bizLogBO.getBizLog(id);
+
+        initBizLog(bizLog);
+
+        return bizLog;
+    }
+
+    private void initBizLog(BizLog bizLog) {
+        User user = userBO.getUser(bizLog.getUserId());
+        bizLog.setUserInfo(user);
     }
 
 }

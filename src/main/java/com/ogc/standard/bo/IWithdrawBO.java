@@ -12,12 +12,12 @@ public interface IWithdrawBO extends IPaginableBO<Withdraw> {
 
     String applyOrder(Account account, BigDecimal amount, BigDecimal fee,
             String payCardInfo, String payCardNo, String applyUser,
-            String applyNote);
+            String applyUserType, String applyNote);
 
     BigDecimal doCheckAndGetFee(Account account, BigDecimal amount);
 
-    void approveOrder(Withdraw data, EWithdrawStatus status,
-            String approveUser, String approveNote);
+    void approveOrder(Withdraw data, EWithdrawStatus status, String approveUser,
+            String approveNote);
 
     void payOrder(Withdraw data, EWithdrawStatus status, String payUser,
             String payNote, String channelOrder, BigDecimal payFee);

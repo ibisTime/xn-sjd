@@ -224,14 +224,13 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
     private Object toPayAdoptOrderYue(AdoptOrder data, XN629048Res resultRes) {
         Account userCnyAccount = accountBO.getAccountByUser(
             data.getApplyUser(), ECurrency.CNY.getCode());
-
         BigDecimal payAmount = data.getAmount().subtract(
             resultRes.getCnyAmount());// 实际付款人民币金额
         if (userCnyAccount.getAmount().compareTo(payAmount) < 0) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(), "人民币账户余额不足");
         }
 
-        // 余额划转
+        // 人民币余额划转
         Account sysCnyAccount = accountBO
             .getAccount(ESystemAccount.SYS_ACOUNT_CNY.getCode());
         accountBO.transAmount(userCnyAccount, sysCnyAccount, payAmount,
@@ -239,6 +238,7 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
             EJourBizTypeUser.ADOPT.getValue(),
             EJourBizTypePlat.ADOPT.getValue(), data.getCode());
 
+        // 积分抵扣
         accountBO.transAmount(data.getApplyUser(), ESysUser.SYS_USER.getCode(),
             ECurrency.JF.getCode(), resultRes.getJfAmount(),
             EJourBizTypeUser.ADOPT.getCode(), EJourBizTypePlat.ADOPT.getCode(),

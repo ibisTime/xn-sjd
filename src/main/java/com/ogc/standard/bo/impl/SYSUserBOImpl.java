@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.ogc.standard.bo.ICompanyBO;
 import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.common.MD5Util;
@@ -15,6 +16,7 @@ import com.ogc.standard.common.PhoneUtil;
 import com.ogc.standard.common.PwdUtil;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.ISYSUserDAO;
+import com.ogc.standard.domain.Company;
 import com.ogc.standard.domain.SYSUser;
 import com.ogc.standard.dto.req.XN630063Req;
 import com.ogc.standard.enums.EBoolean;
@@ -30,6 +32,9 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
 
     @Autowired
     private ISYSUserDAO sysUserDAO;
+
+    @Autowired
+    private ICompanyBO companyBO;
 
     @Override
     public List<SYSUser> queryUserList(SYSUser data) {
@@ -165,6 +170,8 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
                 throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                     "用户已被锁定，请联系管理员");
             }
+
+            initUser(data);
         }
         return data;
     }
@@ -322,7 +329,13 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
             data.setRemark(remark);
             sysUserDAO.updateStatus(data); // change to updateStatus
         }
-
     }
 
+    private void initUser(SYSUser data) {
+        if (ESYSUserKind.OWNER.getCode().equals(data.getKind())
+                || ESYSUserKind.MAINTAIN.getCode().equals(data.getKind())) {
+            Company company = companyBO.getCompanyByUserId(data.getUserId());
+            data.setCompany(company);
+        }
+    }
 }

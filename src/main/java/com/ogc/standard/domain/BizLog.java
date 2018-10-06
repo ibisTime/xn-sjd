@@ -53,6 +53,9 @@ public class BizLog extends ABaseDO {
     // 类型列表
     private List<String> typeList;
 
+    // 操作人信息
+    private User userInfo;
+
     public Integer getId() {
         return id;
     }
@@ -147,6 +150,14 @@ public class BizLog extends ABaseDO {
 
     public void setTypeList(List<String> typeList) {
         this.typeList = typeList;
+    }
+
+    public User getUserInfo() {
+        return userInfo;
+    }
+
+    public void setUserInfo(User userInfo) {
+        this.userInfo = userInfo;
     }
 
 }
