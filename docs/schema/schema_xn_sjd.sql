@@ -787,6 +787,8 @@ CREATE TABLE `tsys_user` (
   `login_name` varchar(64) DEFAULT NULL COMMENT '登录名',
   `login_pwd` varchar(32) DEFAULT NULL COMMENT '登录密码',
   `login_pwd_strength` char(1) DEFAULT NULL COMMENT '登录密码强度',
+  `trade_pwd` varchar(32) DEFAULT NULL COMMENT '安全密码',
+  `trade_pwd_strength` char(1) DEFAULT NULL COMMENT '安全密码强度',
   `create_datetime` datetime DEFAULT NULL COMMENT '注册时间',
   `status` varchar(4) DEFAULT NULL COMMENT '状态（1待审核2合伙中3已解除合伙4已注销）',
   `updater` varchar(32) DEFAULT NULL COMMENT '更新人',

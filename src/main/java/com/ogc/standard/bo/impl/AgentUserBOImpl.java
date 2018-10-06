@@ -24,8 +24,8 @@ import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
 
 @Component
-public class AgentUserBOImpl extends PaginableBOImpl<AgentUser> implements
-        IAgentUserBO {
+public class AgentUserBOImpl extends PaginableBOImpl<AgentUser>
+        implements IAgentUserBO {
 
     @Autowired
     private IAgentUserDAO agentUserDAO;
@@ -67,8 +67,8 @@ public class AgentUserBOImpl extends PaginableBOImpl<AgentUser> implements
     @Override
     public String doAddSalesman(String mobile, String loginPwd) {
         AgentUser agentUser = new AgentUser();
-        String userId = OrderNoGenerater.generate(EGeneratePrefix.AgentUser
-            .getCode());
+        String userId = OrderNoGenerater
+            .generate(EGeneratePrefix.AgentUser.getCode());
         agentUser.setUserId(userId);
         agentUser.setType(EAgentUserType.Salesman.getCode());
         agentUser.setMobile(mobile);
@@ -87,8 +87,8 @@ public class AgentUserBOImpl extends PaginableBOImpl<AgentUser> implements
     public String doAddAgentUser(String mobile, String loginPwd, String level,
             String parentUserId) {
         AgentUser data = new AgentUser();
-        String userId = OrderNoGenerater.generate(EGeneratePrefix.AgentUser
-            .getCode());
+        String userId = OrderNoGenerater
+            .generate(EGeneratePrefix.AgentUser.getCode());
         data.setUserId(userId);
         data.setType(EAgentUserType.Agent.getCode());
         data.setLoginName(mobile);
@@ -108,7 +108,8 @@ public class AgentUserBOImpl extends PaginableBOImpl<AgentUser> implements
 
     @Override
     public void checkTradePwd(String userId, String tradePwd) {
-        if (StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(tradePwd)) {
+        if (StringUtils.isNotBlank(userId)
+                && StringUtils.isNotBlank(tradePwd)) {
             AgentUser agentUser = this.getAgentUser(userId);
             if (StringUtils.isBlank(agentUser.getTradePwdStrength())) {
                 throw new BizException("jd00001", "请您先设置支付密码！");
@@ -126,7 +127,8 @@ public class AgentUserBOImpl extends PaginableBOImpl<AgentUser> implements
 
     @Override
     public void checkLoginPwd(String userId, String loginPwd) {
-        if (StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(loginPwd)) {
+        if (StringUtils.isNotBlank(userId)
+                && StringUtils.isNotBlank(loginPwd)) {
             AgentUser condition = new AgentUser();
             condition.setUserId(userId);
             condition.setLoginPwd(MD5Util.md5(loginPwd));
@@ -141,7 +143,8 @@ public class AgentUserBOImpl extends PaginableBOImpl<AgentUser> implements
 
     @Override
     public void checkLoginPwd(String userId, String loginPwd, String alertStr) {
-        if (StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(loginPwd)) {
+        if (StringUtils.isNotBlank(userId)
+                && StringUtils.isNotBlank(loginPwd)) {
             AgentUser condition = new AgentUser();
             condition.setUserId(userId);
             condition.setLoginPwd(MD5Util.md5(loginPwd));
@@ -177,8 +180,8 @@ public class AgentUserBOImpl extends PaginableBOImpl<AgentUser> implements
     public void refreshTradePwd(String userId, String tradePwd) {
         AgentUser data = new AgentUser();
         data.setUserId(userId);
-        data.setLoginPwd(MD5Util.md5(tradePwd));
-        data.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(tradePwd));
+        data.setTradePwd(MD5Util.md5(tradePwd));
+        data.setTradePwdStrength(PwdUtil.calculateSecurityLevel(tradePwd));
         data.setUpdateDatetime(new Date());
         agentUserDAO.updateTradePwd(data);
     }
@@ -249,8 +252,8 @@ public class AgentUserBOImpl extends PaginableBOImpl<AgentUser> implements
             condition.setMobile(mobile);
             List<AgentUser> list = agentUserDAO.selectList(condition);
             if (CollectionUtils.isEmpty(list)) {
-                throw new BizException(EBizErrorCode.DEFAULT.getCode(), "代理用户"
-                        + mobile + "不存在！");
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                    "代理用户" + mobile + "不存在！");
             }
             data = list.get(0);
         }

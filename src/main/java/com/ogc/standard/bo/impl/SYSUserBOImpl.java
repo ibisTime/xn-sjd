@@ -25,8 +25,8 @@ import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
 
 @Component
-public class SYSUserBOImpl extends PaginableBOImpl<SYSUser> implements
-        ISYSUserBO {
+public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
+        implements ISYSUserBO {
 
     @Autowired
     private ISYSUserDAO sysUserDAO;
@@ -160,8 +160,8 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser> implements
                     "系统用户不存在");
             }
             if (ESYSUserStatus.Li_Locked.getCode().equals(data.getStatus())
-                    || ESYSUserStatus.Ren_Locked.getCode().equals(
-                        data.getStatus())) {
+                    || ESYSUserStatus.Ren_Locked.getCode()
+                        .equals(data.getStatus())) {
                 throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                     "用户已被锁定，请联系管理员");
             }
@@ -182,7 +182,8 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser> implements
     // 密码检查
     @Override
     public void checkLoginPwd(String userId, String loginPwd) {
-        if (StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(loginPwd)) {
+        if (StringUtils.isNotBlank(userId)
+                && StringUtils.isNotBlank(loginPwd)) {
             SYSUser condition = new SYSUser();
             condition.setUserId(userId);
             condition.setLoginPwd(MD5Util.md5(loginPwd));
@@ -217,6 +218,37 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser> implements
             data.setUserId(userId);
             data.setLoginName(loginName);
             sysUserDAO.updateLoginName(data);
+        }
+    }
+
+    @Override
+    public void refreshTradePwd(String userId, String tradePwd) {
+        if (StringUtils.isNotBlank(userId)
+                && StringUtils.isNotBlank(tradePwd)) {
+            SYSUser data = new SYSUser();
+            data.setUserId(userId);
+            data.setTradePwd(MD5Util.md5(tradePwd));
+            data.setTradePwdStrength(PwdUtil.calculateSecurityLevel(tradePwd));
+            sysUserDAO.updateTradePwd(data);
+        }
+    }
+
+    @Override
+    public void checkTradePwd(String userId, String tradePwd) {
+        if (StringUtils.isNotBlank(userId)
+                && StringUtils.isNotBlank(tradePwd)) {
+            SYSUser sysUser = getSYSUser(userId);
+            if (StringUtils.isBlank(sysUser.getTradePwdStrength())) {
+                throw new BizException("jd00001", "请您先设置支付密码！");
+            }
+            SYSUser condition = new SYSUser();
+            condition.setUserId(userId);
+            condition.setTradePwd(MD5Util.md5(tradePwd));
+            if (this.getTotalCount(condition) != 1) {
+                throw new BizException("jd00001", "支付密码错误");
+            }
+        } else {
+            throw new BizException("jd00001", "支付密码错误");
         }
     }
 

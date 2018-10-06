@@ -45,6 +45,17 @@ public interface IAgentUserAO {
     public void doResetLoginPwd(String mobile, String smsCaptcha,
             String newLoginPwd);
 
+    // 设置支付密码
+    public void setTradePwd(String userId, String tradePwd, String smsCaptcha);
+
+    // 修改支付密码
+    public void doModifyTradePwd(String userId, String newTradePwd,
+            String oldTradePwd);
+
+    // 重置支付密码
+    public void resetTradePwd(String userId, String newTradePwd,
+            String smsCaptcha);
+
     // 注销/激活用户
     public void doLogInOut(String userId, String updater, String remark);
 

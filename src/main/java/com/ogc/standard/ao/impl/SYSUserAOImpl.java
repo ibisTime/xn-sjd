@@ -113,11 +113,12 @@ public class SYSUserAOImpl implements ISYSUserAO {
     public void commitCompany(XN630061Req req) {
         SYSUser sysUser = sysUserBO.getSYSUser(req.getUserId());
         if (ESYSUserKind.PLAT.getCode().equals(sysUser.getKind())) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "当前用户类型不支持");
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "当前用户类型不支持");
         }
         if (!ESYSUserStatus.TO_FILL.getCode().equals(sysUser.getStatus())
-                && !ESYSUserStatus.APPROVE_NO.getCode().equals(
-                    sysUser.getStatus())) {
+                && !ESYSUserStatus.APPROVE_NO.getCode()
+                    .equals(sysUser.getStatus())) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "当前用户状态不是待提交资料或审核不通过，不能提交");
         }
@@ -147,8 +148,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
             ECurrency.CNY.getCode());
 
         // 发送短信
-        smsOutBO.sendSmsOut(
-            req.getMobile(),
+        smsOutBO.sendSmsOut(req.getMobile(),
             String.format(SysConstants.DO_ADD_USER_CN,
                 PhoneUtil.hideMobile(req.getMobile()), loginPwd),
             ECaptchaType.AG_REG.getCode());
@@ -182,7 +182,8 @@ public class SYSUserAOImpl implements ISYSUserAO {
         SYSUser user = userList2.get(0);
 
         if (ESYSUserStatus.Li_Locked.getCode().equals(user.getStatus())
-                || ESYSUserStatus.Ren_Locked.getCode().equals(user.getStatus())) {
+                || ESYSUserStatus.Ren_Locked.getCode()
+                    .equals(user.getStatus())) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "当前用户已被锁定，请联系管理员");
         }
@@ -203,7 +204,8 @@ public class SYSUserAOImpl implements ISYSUserAO {
         String mobile = user.getMobile();
         String smsContent = "";
         ESYSUserStatus userStatus = null;
-        if (ESYSUserStatus.NORMAL.getCode().equalsIgnoreCase(user.getStatus())) {
+        if (ESYSUserStatus.NORMAL.getCode()
+            .equalsIgnoreCase(user.getStatus())) {
             smsContent = "您的账号已被管理员封禁";
             userStatus = ESYSUserStatus.Ren_Locked;
         } else {
@@ -213,8 +215,8 @@ public class SYSUserAOImpl implements ISYSUserAO {
         sysUserBO.refreshStatus(userId, userStatus, updater, remark);
         if (PhoneUtil.isMobile(mobile)) {
             // 发送短信
-            smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
-                    + smsContent, "805091");
+            smsOutBO.sendSmsOut(mobile,
+                "尊敬的" + PhoneUtil.hideMobile(mobile) + smsContent, "805091");
         }
 
     }
@@ -257,14 +259,64 @@ public class SYSUserAOImpl implements ISYSUserAO {
         smsOutBO.checkCaptcha(mobile, smsCaptcha, "630053");
         sysUserBO.resetSelfPwd(user, newLoginPwd);
         // 发送短信
-        smsOutBO.sendSmsOut(
-            mobile,
-            "尊敬的"
-                    + PhoneUtil.hideMobile(mobile)
-                    + "用户，您于"
+        smsOutBO.sendSmsOut(mobile,
+            "尊敬的" + PhoneUtil.hideMobile(mobile) + "用户，您于"
                     + DateUtil.dateToStr(new Date(),
-                        DateUtil.DATA_TIME_PATTERN_1) + "已更改登录密码"
-                    + "，请妥善保管您的账户相关信息。", "631072");
+                        DateUtil.DATA_TIME_PATTERN_1)
+                    + "已更改登录密码" + "，请妥善保管您的账户相关信息。",
+            "631072");
+    }
+
+    @Override
+    public void setTradePwd(String userId, String tradePwd, String smsCaptcha) {
+        SYSUser sysUser = sysUserBO.getSYSUser(userId);
+
+        // 短信验证码是否正确
+        smsOutBO.checkCaptcha(sysUser.getMobile(), smsCaptcha, "630070");
+
+        // 修改支付密码
+        sysUserBO.refreshTradePwd(userId, tradePwd);
+    }
+
+    @Override
+    @Transactional
+    public void doModifyTradePwd(String userId, String newTradePwd,
+            String oldTradePwd) {
+        SYSUser condition = new SYSUser();
+        condition.setUserId(userId);
+        condition.setTradePwd(MD5Util.md5(oldTradePwd));
+        List<SYSUser> list = sysUserBO.queryUserList(condition);
+
+        SYSUser sysUser = null;
+        if (CollectionUtils.isNotEmpty(list)) {
+            sysUser = list.get(0);
+        } else {
+            throw new BizException("li01008", "旧支付密码密码不正确");
+        }
+        if (oldTradePwd.equals(newTradePwd)) {
+            throw new BizException("li01008", "新支付密码与原有支付密码重复");
+        }
+
+        sysUserBO.refreshTradePwd(userId, newTradePwd);
+
+        // 发短信
+        String mobile = sysUser.getMobile();
+        smsOutBO.sendSmsOut(mobile,
+            String.format(SysConstants.DO_MODIFY_TRADE_PWD_CN,
+                PhoneUtil.hideMobile(mobile)),
+            ECaptchaType.MODIFY_TRADE_PWD.getCode());
+    }
+
+    @Override
+    public void resetTradePwd(String userId, String newTradePwd,
+            String smsCaptcha) {
+        SYSUser sysUser = sysUserBO.getSYSUser(userId);
+
+        // 短信验证码是否正确
+        smsOutBO.checkCaptcha(sysUser.getMobile(), smsCaptcha, "630072");
+
+        // 修改支付密码
+        sysUserBO.refreshTradePwd(userId, newTradePwd);
     }
 
     @Override
@@ -302,14 +354,13 @@ public class SYSUserAOImpl implements ISYSUserAO {
         smsOutBO.checkCaptcha(newMobile, smsCaptcha, "630052");
         sysUserBO.resetBindMobile(user, newMobile);
         // 发送短信
-        smsOutBO.sendSmsOut(
-            oldMobile,
-            "尊敬的"
-                    + PhoneUtil.hideMobile(oldMobile)
-                    + "用户，您于"
+        smsOutBO.sendSmsOut(oldMobile,
+            "尊敬的" + PhoneUtil.hideMobile(oldMobile) + "用户，您于"
                     + DateUtil.dateToStr(new Date(),
-                        DateUtil.DATA_TIME_PATTERN_1) + "已将手机号码改为" + newMobile
-                    + "，您的登录名更改为" + newMobile + "，请妥善保管您的账户相关信息。", "631072");
+                        DateUtil.DATA_TIME_PATTERN_1)
+                    + "已将手机号码改为" + newMobile + "，您的登录名更改为" + newMobile
+                    + "，请妥善保管您的账户相关信息。",
+            "631072");
 
     }
 
@@ -319,8 +370,8 @@ public class SYSUserAOImpl implements ISYSUserAO {
             SYSUser condition) {
         if (condition.getCreateDatetimeStart() != null
                 && condition.getCreateDatetimeEnd() != null
-                && condition.getCreateDatetimeStart().after(
-                    condition.getCreateDatetimeEnd())) {
+                && condition.getCreateDatetimeStart()
+                    .after(condition.getCreateDatetimeEnd())) {
             throw new BizException("xn00000", "开始时间不能大于结束时间");
         }
         Paginable<SYSUser> page = sysUserBO.getPaginable(start, limit,
@@ -361,8 +412,8 @@ public class SYSUserAOImpl implements ISYSUserAO {
             List<ApplyBindMaintain> abmList = applyBindMaintainBO
                 .queryApplyBindMaintainList(abmCondition);
             if (CollectionUtils.isNotEmpty(abmList)) {
-                SYSUser sysUser2 = sysUserBO.getSYSUser(abmList.get(0)
-                    .getOwnerId());
+                SYSUser sysUser2 = sysUserBO
+                    .getSYSUser(abmList.get(0).getOwnerId());
                 data.setOwner(sysUser2.getRealName());
             }
             data.setTotalIncome("0");// TODO 总收入
@@ -370,4 +421,5 @@ public class SYSUserAOImpl implements ISYSUserAO {
             data.setCompany(company);
         }
     }
+
 }

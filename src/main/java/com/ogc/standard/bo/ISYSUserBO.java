@@ -26,6 +26,12 @@ public interface ISYSUserBO extends IPaginableBO<SYSUser> {
     // 重置代理密码
     public void resetSelfPwd(SYSUser user, String newLoginPwd);
 
+    // 修改交易密码
+    public void refreshTradePwd(String userId, String tradePwd);
+
+    // 验证支付密码
+    public void checkTradePwd(String userId, String tradePwd);
+
     // 修改照片
     public void refreshPhoto(SYSUser user, String photo);
 
