@@ -90,4 +90,9 @@ public class SYSUserDAOImpl extends AMybatisTemplate implements ISYSUserDAO {
         super.update(NAMESPACE.concat("update_approveSYSUser"), data);
     }
 
+    @Override
+    public int updateTradePwd(SYSUser data) {
+        return super.update(NAMESPACE.concat("update_trade_pwd"), data);
+    }
+
 }

@@ -205,7 +205,7 @@
 		WHERE user_id = #{userId}
 	</update>
 	
-	<update id="update_loginPwd" parameterType="user">
+	<update id="update_loginPwd" parameterType="agentUser">
 		UPDATE tsys_agent_user
 		SET
 		login_pwd = #{loginPwd}
@@ -214,12 +214,11 @@
 		WHERE user_id = #{userId}	
 	</update>	
 	
-	<update id="update_tradePwd" parameterType="user">
+	<update id="update_tradePwd" parameterType="agentUser">
 		UPDATE tsys_agent_user
 		SET
 		trade_pwd = #{tradePwd}
 		,trade_pwd_strength = #{tradePwdStrength}
-		,remark = #{remark}
 		WHERE user_id = #{userId}	
 	</update>
 	

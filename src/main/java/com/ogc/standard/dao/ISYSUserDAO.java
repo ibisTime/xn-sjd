@@ -23,7 +23,6 @@ public interface ISYSUserDAO extends IBaseDAO<SYSUser> {
     public int updateNickname(SYSUser data);
 
     // 更新用户手机号和真实信息
-
     public int update(SYSUser data);
 
     public void resetBindMobile(SYSUser user);
@@ -34,4 +33,6 @@ public interface ISYSUserDAO extends IBaseDAO<SYSUser> {
     // 审核注册用户
     public void updateApproveSYSUser(SYSUser data);
 
+    // 更新交易密码
+    public int updateTradePwd(SYSUser data);
 }

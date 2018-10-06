@@ -32,6 +32,7 @@ public class XN629305 extends AProcessor {
         condition.setAdoptTreeCode(req.getAdoptTreeCode());
         condition.setType(req.getType());
         condition.setUserId(req.getUserId());
+        condition.setAdoptUserId(req.getAdoptUserId());
         condition.setCreateDatetimeStart(DateUtil.strToDate(
             req.getCreateDatetimeStart(), DateUtil.DATA_TIME_PATTERN_1));
         condition.setCreateDatetimeEnd(DateUtil.strToDate(

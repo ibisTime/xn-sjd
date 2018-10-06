@@ -55,7 +55,8 @@ public class AgentUserAOImpl implements IAgentUserAO {
 
     @Override
     @Transactional
-    public String doRegister(String mobile, String loginPwd, String smsCaptcha) {
+    public String doRegister(String mobile, String loginPwd,
+            String smsCaptcha) {
         // 验证手机号是否存在
         agentUserBO.isMobileExist(mobile);
 
@@ -111,8 +112,8 @@ public class AgentUserAOImpl implements IAgentUserAO {
             req.setParentUserId("0");
             level = EAgentUserLevel.FIRST.getCode();
         } else {
-            AgentUser parentAgentUser = agentUserBO.getAgentUser(req
-                .getParentUserId());
+            AgentUser parentAgentUser = agentUserBO
+                .getAgentUser(req.getParentUserId());
             checkAgent(parentAgentUser);
             level = Integer.valueOf(parentAgentUser.getLevel()) + 1 + "";
         }
@@ -127,8 +128,7 @@ public class AgentUserAOImpl implements IAgentUserAO {
             ECurrency.CNY.getCode());
 
         // 发送短信
-        smsOutBO.sendSmsOut(
-            req.getMobile(),
+        smsOutBO.sendSmsOut(req.getMobile(),
             String.format(SysConstants.DO_ADD_USER_CN,
                 PhoneUtil.hideMobile(req.getMobile()), loginPwd),
             ECaptchaType.AG_REG.getCode());
@@ -141,11 +141,12 @@ public class AgentUserAOImpl implements IAgentUserAO {
     public void commitCompany(XN730073Req req) {
         AgentUser agentUser = agentUserBO.getAgentUser(req.getUserId());
         if (!EAgentUserType.Agent.getCode().equals(agentUser.getType())) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "当前用户不是代理商");
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "当前用户不是代理商");
         }
         if (!EAgentUserStatus.TO_FILL.getCode().equals(agentUser.getStatus())
-                && !EAgentUserStatus.APPROVE_NO.getCode().equals(
-                    agentUser.getStatus())) {
+                && !EAgentUserStatus.APPROVE_NO.getCode()
+                    .equals(agentUser.getStatus())) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "当前用户状态不是待提交资料或审核不通过，不能提交");
         }
@@ -154,21 +155,21 @@ public class AgentUserAOImpl implements IAgentUserAO {
         String userReferee = null;
         String parentUserId = null;
         if (StringUtils.isNotBlank(req.getRefUserMobile())) {
-            AgentUser refUserAgentUser = agentUserBO.getAgentUserByMobile(req
-                .getRefUserMobile());
+            AgentUser refUserAgentUser = agentUserBO
+                .getAgentUserByMobile(req.getRefUserMobile());
             userReferee = refUserAgentUser.getUserId();
-            if (!EAgentUserType.Agent.getCode().equals(
-                refUserAgentUser.getType())) {
+            if (!EAgentUserType.Agent.getCode()
+                .equals(refUserAgentUser.getType())) {
                 throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                     "推荐用户不是代理商");
             }
-            if (!EAgentUserStatus.NORMAL.getCode().equals(
-                refUserAgentUser.getStatus())) {
+            if (!EAgentUserStatus.NORMAL.getCode()
+                .equals(refUserAgentUser.getStatus())) {
                 throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                     "推荐用户状态被锁定，请先解锁！");
             }
-            if (EAgentUserLevel.FOUR.getCode().equals(
-                refUserAgentUser.getLevel())) {
+            if (EAgentUserLevel.FOUR.getCode()
+                .equals(refUserAgentUser.getLevel())) {
                 parentUserId = null;
             } else {
                 parentUserId = refUserAgentUser.getUserId();
@@ -183,14 +184,15 @@ public class AgentUserAOImpl implements IAgentUserAO {
 
     private void checkAgent(AgentUser parentAgentUser) {
         if (!EAgentUserType.Agent.getCode().equals(parentAgentUser.getType())) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "上级用户不是代理商");
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "上级用户不是代理商");
         }
         if (StringUtils.isBlank(parentAgentUser.getLevel())) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "上级用户代理等级不存在");
         }
-        if (!EAgentUserStatus.NORMAL.getCode().equals(
-            parentAgentUser.getStatus())) {
+        if (!EAgentUserStatus.NORMAL.getCode()
+            .equals(parentAgentUser.getStatus())) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "上级用户状态被锁定，请先解锁！");
         }
@@ -238,8 +240,8 @@ public class AgentUserAOImpl implements IAgentUserAO {
             level = Integer.valueOf(parentAgentUser.getLevel()) + 1 + "";
         }
 
-        agentUserBO
-            .refreshPass(agentUser, level, parentUserId, updater, remark);
+        agentUserBO.refreshPass(agentUser, level, parentUserId, updater,
+            remark);
     }
 
     @Override
@@ -262,10 +264,12 @@ public class AgentUserAOImpl implements IAgentUserAO {
         agentUserBO.refreshMobile(userId, newMobile);
 
         // 发送短信
-        smsOutBO.sendSmsOut(oldMobile, String.format(
-            SysConstants.DO_CHANGE_MOBILE_CN, PhoneUtil.hideMobile(oldMobile),
-            DateUtil.dateToStr(new Date(), DateUtil.DATA_TIME_PATTERN_1),
-            newMobile), ECaptchaType.MOBILE_CHANGE.getCode());
+        smsOutBO.sendSmsOut(oldMobile,
+            String.format(SysConstants.DO_CHANGE_MOBILE_CN,
+                PhoneUtil.hideMobile(oldMobile),
+                DateUtil.dateToStr(new Date(), DateUtil.DATA_TIME_PATTERN_1),
+                newMobile),
+            ECaptchaType.MOBILE_CHANGE.getCode());
     }
 
     @Override
@@ -289,8 +293,7 @@ public class AgentUserAOImpl implements IAgentUserAO {
         agentUserBO.refreshLoginPwd(userId, newLoginPwd);
 
         // 发送短信
-        smsOutBO.sendSmsOut(
-            agentUser.getMobile(),
+        smsOutBO.sendSmsOut(agentUser.getMobile(),
             String.format(SysConstants.DO_MODIFY_LOGIN_PWD_CN,
                 PhoneUtil.hideMobile(agentUser.getMobile())),
             ECaptchaType.MODIFY_LOGIN_PWD.getCode());
@@ -323,11 +326,61 @@ public class AgentUserAOImpl implements IAgentUserAO {
         agentUserBO.refreshLoginPwd(agentUser.getUserId(), newLoginPwd);
 
         // 发送短信
-        smsOutBO.sendSmsOut(
-            mobile,
+        smsOutBO.sendSmsOut(mobile,
             String.format(SysConstants.DO_RESET_LOGIN_PWD_CN,
                 PhoneUtil.hideMobile(mobile)),
             ECaptchaType.LOGIN_PWD_RESET.getCode());
+    }
+
+    @Override
+    public void setTradePwd(String userId, String tradePwd, String smsCaptcha) {
+        AgentUser agentUser = agentUserBO.getAgentUser(userId);
+
+        // 短信验证码是否正确
+        // smsOutBO.checkCaptcha(agentUser.getMobile(), smsCaptcha, "730082");
+
+        // 修改支付密码
+        agentUserBO.refreshTradePwd(userId, tradePwd);
+    }
+
+    @Override
+    public void doModifyTradePwd(String userId, String newTradePwd,
+            String oldTradePwd) {
+        AgentUser condition = new AgentUser();
+        condition.setUserId(userId);
+        condition.setTradePwd(MD5Util.md5(oldTradePwd));
+        List<AgentUser> list = agentUserBO.queryAgentUserList(condition);
+
+        AgentUser agentUser = null;
+        if (CollectionUtils.isNotEmpty(list)) {
+            agentUser = list.get(0);
+        } else {
+            throw new BizException("li01008", "旧支付密码密码不正确");
+        }
+        if (oldTradePwd.equals(newTradePwd)) {
+            throw new BizException("li01008", "新支付密码与原有支付密码重复");
+        }
+
+        agentUserBO.refreshTradePwd(userId, newTradePwd);
+
+        // 发短信
+        String mobile = agentUser.getMobile();
+        smsOutBO.sendSmsOut(mobile,
+            String.format(SysConstants.DO_MODIFY_TRADE_PWD_CN,
+                PhoneUtil.hideMobile(mobile)),
+            ECaptchaType.MODIFY_TRADE_PWD.getCode());
+    }
+
+    @Override
+    public void resetTradePwd(String userId, String newTradePwd,
+            String smsCaptcha) {
+        AgentUser agentUser = agentUserBO.getAgentUser(userId);
+
+        // 短信验证码是否正确
+        // smsOutBO.checkCaptcha(agentUser.getMobile(), smsCaptcha, "730084");
+
+        // 修改支付密码
+        agentUserBO.refreshTradePwd(userId, newTradePwd);
     }
 
     @Override
@@ -336,8 +389,8 @@ public class AgentUserAOImpl implements IAgentUserAO {
 
         String status = null;
         if (EAgentUserStatus.Ren_Locked.getCode().equals(agentUser.getStatus())
-                || EAgentUserStatus.Li_Locked.getCode().equals(
-                    agentUser.getStatus())) {
+                || EAgentUserStatus.Li_Locked.getCode()
+                    .equals(agentUser.getStatus())) {
             status = EAgentUserStatus.NORMAL.getCode();
         } else {
             status = EAgentUserStatus.Ren_Locked.getCode();
@@ -390,8 +443,8 @@ public class AgentUserAOImpl implements IAgentUserAO {
             data.setCompany(company);
             if (StringUtils.isNotBlank(data.getParentUserId())
                     && !EBoolean.NO.getCode().equals(data.getParentUserId())) {
-                AgentUser parentAgentUser = agentUserBO.getAgentUser(data
-                    .getParentUserId());
+                AgentUser parentAgentUser = agentUserBO
+                    .getAgentUser(data.getParentUserId());
                 data.setParentAgentUser(parentAgentUser);
             }
         }

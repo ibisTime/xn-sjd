@@ -19,6 +19,9 @@ public class XN629305Req extends APageReq {
     // 操作人
     private String userId;
 
+    // 认养人编号
+    private String adoptUserId;
+
     // 产生时间起
     private String createDatetimeStart;
 
@@ -63,6 +66,14 @@ public class XN629305Req extends APageReq {
 
     public void setCreateDatetimeEnd(String createDatetimeEnd) {
         this.createDatetimeEnd = createDatetimeEnd;
+    }
+
+    public String getAdoptUserId() {
+        return adoptUserId;
+    }
+
+    public void setAdoptUserId(String adoptUserId) {
+        this.adoptUserId = adoptUserId;
     }
 
 }

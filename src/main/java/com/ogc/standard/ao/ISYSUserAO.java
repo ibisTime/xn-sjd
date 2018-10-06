@@ -41,6 +41,17 @@ public interface ISYSUserAO {
     // 根据旧密码改新密码
     public void editPwd(String userId, String oldPwd, String newPwd);
 
+    // 设置支付密码
+    public void setTradePwd(String userId, String tradePwd, String smsCaptcha);
+
+    // 修改支付密码
+    public void doModifyTradePwd(String userId, String newTradePwd,
+            String oldTradePwd);
+
+    // 重置支付密码
+    public void resetTradePwd(String userId, String newTradePwd,
+            String smsCaptcha);
+
     // 修改照片
     public void doModifyPhoto(String userId, String photo);
 

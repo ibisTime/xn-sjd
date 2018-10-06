@@ -13,6 +13,7 @@
 		<result column="login_name" property="loginName" />		
 		<result column="login_pwd" property="loginPwd" />
 		<result column="login_pwd_strength" property="loginPwdStrength" />	
+		<result column="trade_pwd_strength" property="tradePwdStrength" />	
 		<result column="create_datetime" property="createDatetime" />
 		<result column="status" property="status" />
 		<result column="updater" property="updater" />
@@ -46,6 +47,9 @@
 			</if>	
 			<if test="loginPwd != null and loginPwd != '' ">
 				AND t.login_pwd = #{loginPwd}
+			</if>
+			<if test="tradePwd != null and tradePwd != '' ">
+				AND t.trade_pwd = #{tradePwd}
 			</if>				
 			<if test="updater != null and updater != '' ">
 				AND t.updater = #{updater}
@@ -81,6 +85,8 @@
 		,t.login_name		
 		,t.login_pwd
 		,t.login_pwd_strength
+		,t.trade_pwd
+		,t.trade_pwd_strength
 		,t.create_datetime
 		,t.status
 		,t.updater
@@ -116,6 +122,8 @@
 		,login_name		
 		,login_pwd
 		,login_pwd_strength
+		,trade_pwd
+		,trade_pwd_strength
 		,create_datetime
 		,status
 		,updater
@@ -133,6 +141,8 @@
 		,#{loginName}
 		,#{loginPwd}
 		,#{loginPwdStrength}	
+		,#{tradePwd}
+		,#{tradePwdStrength}	
 		,#{createDatetime}
 	    ,#{status}
 	    ,#{updater}
@@ -190,6 +200,14 @@
 		user_id = #{userId}	
 	</update>
 	
+	<update id="update_trade_pwd" parameterType="sysuser">
+		UPDATE tsys_user
+		SET
+		trade_pwd = #{tradePwd}
+		,trade_pwd_strength = #{tradePwdStrength}
+		WHERE
+		user_id = #{userId}	
+	</update>
 		
 	<update id="update_sysuser_loginName" parameterType="sysuser">
 		UPDATE tsys_user
@@ -215,7 +233,6 @@
 		,remark = #{remark}
 		WHERE user_id = #{userId}
 	</update>
-	
 		
 	<update id="update_role" parameterType="sysuser">
 		UPDATE tsys_user
@@ -228,7 +245,6 @@
 		WHERE
 		user_id = #{userId}	
 	</update>	
-	
 	
 	<update id="update_approveSYSUser" parameterType="sysuser">
 		UPDATE tsys_user

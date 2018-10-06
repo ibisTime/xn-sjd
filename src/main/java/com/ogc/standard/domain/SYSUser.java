@@ -46,6 +46,12 @@ public class SYSUser extends ABaseDO {
     // 登录密码强度
     private String loginPwdStrength;
 
+    // 交易密码
+    private String tradePwd;
+
+    // 交易密码强度
+    private String tradePwdStrength;
+
     // 创建时间
     private Date createDatetime;
 
@@ -294,6 +300,22 @@ public class SYSUser extends ABaseDO {
 
     public void setCompany(Company company) {
         this.company = company;
+    }
+
+    public String getTradePwd() {
+        return tradePwd;
+    }
+
+    public void setTradePwd(String tradePwd) {
+        this.tradePwd = tradePwd;
+    }
+
+    public String getTradePwdStrength() {
+        return tradePwdStrength;
+    }
+
+    public void setTradePwdStrength(String tradePwdStrength) {
+        this.tradePwdStrength = tradePwdStrength;
     }
 
 }
