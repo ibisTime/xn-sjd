@@ -23,6 +23,9 @@ public class ToolUseRecord extends ABaseDO {
     // 认养权编号
     private String adoptTreeCode;
 
+    // 道具类型（0保护罩/1一件收取）
+    private String toolType;
+
     // 状态(1生效中 0已失效)
     private String status;
 
@@ -124,6 +127,14 @@ public class ToolUseRecord extends ABaseDO {
 
     public void setUserInfo(User userInfo) {
         this.userInfo = userInfo;
+    }
+
+    public String getToolType() {
+        return toolType;
+    }
+
+    public void setToolType(String toolType) {
+        this.toolType = toolType;
     }
 
 }

@@ -60,6 +60,7 @@ CREATE TABLE `tb_tool_use_record` (
   `code` varchar(32) NOT NULL COMMENT '编号',
   `tool_order_code` varchar(32) DEFAULT NULL COMMENT '道具订单编号',
   `adopt_tree_code` varchar(32) DEFAULT NULL COMMENT '认养权编号',
+  `tool_type` varchar(4) DEFAULT NULL COMMENT '道具类型（0保护罩/1一件收取）',
   `status` varchar(32) DEFAULT NULL COMMENT '状态(1生效中 2已失效)',
   `user_id` varchar(32) DEFAULT NULL COMMENT '使用人',
   `create_datetime` datetime DEFAULT NULL COMMENT '使用时间',

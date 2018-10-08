@@ -55,6 +55,12 @@ public class Tool extends ABaseDO {
 
     private String nameForQuery;
 
+    // 购买用户编号
+    private String userId;
+
+    // 用户是否购买(0未购买/1已购买)
+    private String isBuy;
+
     public String getCode() {
         return code;
     }
@@ -157,6 +163,22 @@ public class Tool extends ABaseDO {
 
     public void setNameForQuery(String nameForQuery) {
         this.nameForQuery = nameForQuery;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getIsBuy() {
+        return isBuy;
+    }
+
+    public void setIsBuy(String isBuy) {
+        this.isBuy = isBuy;
     }
 
 }

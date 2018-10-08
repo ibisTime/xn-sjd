@@ -19,6 +19,9 @@ public class XN629507Req extends AListReq {
     // 选填，状态（0上架/1下架）
     private String status;
 
+    // 购买用户编号
+    private String userId;
+
     // 选填，更新人
     private String updater;
 
@@ -52,6 +55,14 @@ public class XN629507Req extends AListReq {
 
     public void setUpdater(String updater) {
         this.updater = updater;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
 }

@@ -13,6 +13,10 @@ public interface IToolUseRecordBO extends IPaginableBO<ToolUseRecord> {
     public String saveToolUseRecord(ToolOrder toolOrder,
             AdoptOrderTree adoptOrderTree, User user);
 
+    // 认养权的道具使用记录
+    public List<ToolUseRecord> queryTreeToolRecordList(String adoptTreeCode,
+            String toolType);
+
     public List<ToolUseRecord> queryToolUseRecordList(ToolUseRecord condition);
 
     public ToolUseRecord getToolUseRecord(String code);

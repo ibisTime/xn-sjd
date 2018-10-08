@@ -11,6 +11,10 @@ public interface IToolOrderBO extends IPaginableBO<ToolOrder> {
 
     public String saveToolOrder(Tool tool, User user);
 
+    // 用户购买记录
+    public List<ToolOrder> queryUserToolOrderList(String userId,
+            String toolCode, String status);
+
     public List<ToolOrder> queryToolOrderList(ToolOrder condition);
 
     public ToolOrder getToolOrder(String code);

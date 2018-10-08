@@ -47,6 +47,16 @@ public class ToolOrderBOImpl extends PaginableBOImpl<ToolOrder>
     }
 
     @Override
+    public List<ToolOrder> queryUserToolOrderList(String userId,
+            String toolCode, String status) {
+        ToolOrder condition = new ToolOrder();
+        condition.setUserId(userId);
+        condition.setToolCode(toolCode);
+        condition.setStatus(status);
+        return toolOrderDAO.selectList(condition);
+    }
+
+    @Override
     public List<ToolOrder> queryToolOrderList(ToolOrder condition) {
         return toolOrderDAO.selectList(condition);
     }
@@ -71,4 +81,5 @@ public class ToolOrderBOImpl extends PaginableBOImpl<ToolOrder>
         toolOrderDAO.updateStatus(toolOrder);
 
     }
+
 }

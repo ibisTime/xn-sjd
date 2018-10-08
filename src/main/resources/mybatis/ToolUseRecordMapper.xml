@@ -6,11 +6,14 @@
 		<result column="code" property="code" />
 		<result column="tool_order_code" property="toolOrderCode" />
 		<result column="adopt_tree_code" property="adoptTreeCode" />
+		<result column="tool_type" property="toolType" />
 		<result column="status" property="status" />
+		
 		<result column="user_id" property="userId" />
 		<result column="create_datetime" property="createDatetime" />
 		<result column="invalid_datetime" property="invalidDatetime" />
 	</resultMap>
+	
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != '' ">
@@ -22,6 +25,9 @@
 			<if test="adoptTreeCode != null and adoptTreeCode != '' ">
 				AND t.adopt_tree_code = #{adoptTreeCode}
 			</if>
+			<if test="toolType != null and toolType != '' ">
+				AND t.tool_type = #{toolType}
+			</if>
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
 			</if>
@@ -30,11 +36,13 @@
 			</if>
 		</trim>
 	</sql>
+	
 	<select id="select_toolUseRecord" parameterType="toolUseRecord" resultMap="toolUseRecord_DB_Result">
 		SELECT
 		t.code
 		,t.tool_order_code
 		,t.adopt_tree_code
+		,t.tool_type
 		,t.status
 		,t.user_id
 		,t.create_datetime
@@ -61,6 +69,7 @@
 		code
 		,tool_order_code
 		,adopt_tree_code
+		,tool_type
 		,status
 		,user_id
 		,create_datetime
@@ -70,6 +79,7 @@
 		#{code}
 		,#{toolOrderCode}
 		,#{adoptTreeCode}
+		,#{toolType}
 		,#{status}
 		,#{userId}
 		,#{createDatetime}

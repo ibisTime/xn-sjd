@@ -27,6 +27,7 @@ public class XN629507 extends AProcessor {
         condition.setNameForQuery(req.getName());
         condition.setType(req.getType());
         condition.setStatus(req.getStatus());
+        condition.setUserId(req.getUserId());
         condition.setUpdater(req.getUpdater());
         return toolAO.queryToolList(condition);
     }

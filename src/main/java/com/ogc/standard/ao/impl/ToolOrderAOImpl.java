@@ -1,5 +1,6 @@
 package com.ogc.standard.ao.impl;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import com.ogc.standard.bo.IToolOrderBO;
 import com.ogc.standard.bo.IToolUseRecordBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
+import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.AdoptOrderTree;
 import com.ogc.standard.domain.Tool;
 import com.ogc.standard.domain.ToolOrder;
@@ -22,7 +24,7 @@ import com.ogc.standard.enums.EAdoptOrderTreeStatus;
 import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EJourBizTypePlat;
 import com.ogc.standard.enums.EJourBizTypeUser;
-import com.ogc.standard.enums.ESysUser;
+import com.ogc.standard.enums.ESystemAccount;
 import com.ogc.standard.enums.EToolOrderStatus;
 import com.ogc.standard.enums.EToolStatus;
 import com.ogc.standard.exception.BizException;
@@ -66,12 +68,19 @@ public class ToolOrderAOImpl implements IToolOrderAO {
         String toolOrderCode = toolOrderBO.saveToolOrder(tool, user);
 
         // 划转积分
-        accountBO.transAmount(userId, ESysUser.SYS_USER.getCode(),
-            ECurrency.JF.getCode(), tool.getPrice(),
-            EJourBizTypeUser.TOOL_BUY.getCode(),
-            EJourBizTypePlat.TOOL_BUY.getCode(),
-            EJourBizTypeUser.TOOL_BUY.getValue(),
-            EJourBizTypePlat.TOOL_BUY.getValue(), toolOrderCode);
+        BigDecimal quantity = tool.getPrice();
+        Account userJfAccount = accountBO.getAccountByUser(userId,
+            ECurrency.JF.getCode());
+        Account sysJfAccount = accountBO
+            .getAccount(ESystemAccount.SYS_ACOUNT_JF_POOL.getCode());
+
+        if (quantity.compareTo(sysJfAccount.getAmount()) != 1) {
+            accountBO.transAmount(sysJfAccount, userJfAccount, quantity,
+                EJourBizTypeUser.TOOL_BUY.getCode(),
+                EJourBizTypePlat.TOOL_BUY.getCode(),
+                EJourBizTypeUser.TOOL_BUY.getValue(),
+                EJourBizTypePlat.TOOL_BUY.getValue(), userId);
+        }
 
         return toolOrderCode;
     }
@@ -87,7 +96,8 @@ public class ToolOrderAOImpl implements IToolOrderAO {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(), "非本人操作");
         }
         if (toolOrder.getStatus().equals(EToolOrderStatus.USED.getCode())) { // （0未使用/1已使用）
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "当前道具已被使用！");
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "当前道具已被使用！");
         }
 
         // 验证用户
@@ -96,8 +106,8 @@ public class ToolOrderAOImpl implements IToolOrderAO {
         // 验证认养权
         AdoptOrderTree adoptOrderTree = adoptOrderTreeBO
             .getAdoptOrderTree(adoptTreeCode);
-        if (!EAdoptOrderTreeStatus.ADOPT.getCode().equals(
-            adoptOrderTree.getStatus())) {
+        if (!EAdoptOrderTreeStatus.ADOPT.getCode()
+            .equals(adoptOrderTree.getStatus())) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "当前认养权不在认养中！");
         }

@@ -56,6 +56,9 @@ public class AdoptOrderTree extends ABaseDO {
 
     private User user;
 
+    // 是否使用保护罩(0未使用/1使用)
+    private String isShelter;
+
     public User getUser() {
         return user;
     }
@@ -166,6 +169,14 @@ public class AdoptOrderTree extends ABaseDO {
 
     public void setCertificateTemplate(String certificateTemplate) {
         this.certificateTemplate = certificateTemplate;
+    }
+
+    public String getIsShelter() {
+        return isShelter;
+    }
+
+    public void setIsShelter(String isShelter) {
+        this.isShelter = isShelter;
     }
 
 }

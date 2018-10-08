@@ -18,6 +18,7 @@ import com.ogc.standard.bo.IBizLogBO;
 import com.ogc.standard.bo.ICarbonBubbleOrderBO;
 import com.ogc.standard.bo.IGiveTreeRecordBO;
 import com.ogc.standard.bo.ISYSConfigBO;
+import com.ogc.standard.bo.IToolUseRecordBO;
 import com.ogc.standard.bo.ITreeBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.IVisitorBO;
@@ -26,11 +27,14 @@ import com.ogc.standard.common.AmountUtil;
 import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.common.SysConstants;
 import com.ogc.standard.domain.AdoptOrderTree;
+import com.ogc.standard.domain.ToolUseRecord;
 import com.ogc.standard.domain.Tree;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.domain.Visitor;
 import com.ogc.standard.enums.EAdoptOrderTreeStatus;
+import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ESysConfigType;
+import com.ogc.standard.enums.EToolType;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
 
@@ -62,6 +66,9 @@ public class AdoptOrderTreeAOImpl implements IAdoptOrderTreeAO {
 
     @Autowired
     private ISYSConfigBO sysConfigBO;
+
+    @Autowired
+    private IToolUseRecordBO toolUseRecordBO;
 
     @Override
     @Transactional
@@ -108,7 +115,8 @@ public class AdoptOrderTreeAOImpl implements IAdoptOrderTreeAO {
     }
 
     @Override
-    public List<AdoptOrderTree> queryAdoptOrderTreeList(AdoptOrderTree condition) {
+    public List<AdoptOrderTree> queryAdoptOrderTreeList(
+            AdoptOrderTree condition) {
         List<AdoptOrderTree> list = adoptOrderTreeBO
             .queryAdoptOrderTreeList(condition);
         for (AdoptOrderTree adoptOrderTree : list) {
@@ -125,20 +133,34 @@ public class AdoptOrderTreeAOImpl implements IAdoptOrderTreeAO {
     }
 
     private void initAdoptOrderTree(AdoptOrderTree data) {
+        // 树木信息
         Tree tree = treeBO.getTreeByTreeNumber(data.getTreeNumber());
         data.setTree(tree);
+
+        // 当前持有人信息
         User user = userBO.getUser(data.getCurrentHolder());
         data.setUser(user);
+
+        // 是否使用保护罩
+        List<ToolUseRecord> shelterList = toolUseRecordBO
+            .queryTreeToolRecordList(data.getCode(),
+                EToolType.SHIELD.getCode());
+        if (CollectionUtils.isNotEmpty(shelterList)) {
+            data.setIsShelter(EBoolean.YES.getCode());
+        } else {
+            data.setIsShelter(EBoolean.NO.getCode());
+        }
+
     }
 
     public void doDailyAdoptOrderTree() {
         logger.info("***************开始生成碳泡泡***************");
         Map<String, String> configMap = sysConfigBO
             .getConfigsMap(ESysConfigType.CREATE_TPP.getCode());
-        Double rate = Double.valueOf(configMap
-            .get(SysConstants.CREATE_TPP_RATE));
-        Integer expireHours = Integer.valueOf(configMap
-            .get(SysConstants.TPP_EXPIRE_HOUR));
+        Double rate = Double
+            .valueOf(configMap.get(SysConstants.CREATE_TPP_RATE));
+        Integer expireHours = Integer
+            .valueOf(configMap.get(SysConstants.TPP_EXPIRE_HOUR));
 
         Date createDatetime = DateUtil.getTodayStart();// 创建时间
         Date invalidDatetime = DateUtil.getRelativeDateOfHour(createDatetime,
@@ -151,14 +173,14 @@ public class AdoptOrderTreeAOImpl implements IAdoptOrderTreeAO {
         Integer limit = 10;
 
         while (true) {
-            Paginable<AdoptOrderTree> page = adoptOrderTreeBO.getPaginable(
-                start, limit, condition);
+            Paginable<AdoptOrderTree> page = adoptOrderTreeBO
+                .getPaginable(start, limit, condition);
 
             if (null != page && CollectionUtils.isNotEmpty(page.getList())) {
                 // 按订单比例产生碳泡泡
                 for (AdoptOrderTree adoptOrderTree : page.getList()) {
-                    BigDecimal quantity = AmountUtil.mul(
-                        adoptOrderTree.getAmount(), rate);
+                    BigDecimal quantity = AmountUtil
+                        .mul(adoptOrderTree.getAmount(), rate);
                     carbonBubbleOrderBO.saveCarbonBubbleOrder(
                         adoptOrderTree.getCode(), createDatetime,
                         invalidDatetime, adoptOrderTree.getCurrentHolder(),

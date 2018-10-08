@@ -7,12 +7,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.ogc.standard.bo.IToolBO;
 import com.ogc.standard.bo.IToolUseRecordBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.IToolUseRecordDAO;
 import com.ogc.standard.domain.AdoptOrderTree;
+import com.ogc.standard.domain.Tool;
 import com.ogc.standard.domain.ToolOrder;
 import com.ogc.standard.domain.ToolUseRecord;
 import com.ogc.standard.domain.User;
@@ -27,17 +29,22 @@ public class ToolUseRecordBOImpl extends PaginableBOImpl<ToolUseRecord>
     @Autowired
     private IToolUseRecordDAO toolUseRecordDAO;
 
+    @Autowired
+    private IToolBO toolBO;
+
     @Override
     public String saveToolUseRecord(ToolOrder toolOrder,
             AdoptOrderTree adoptOrderTree, User user) {
 
         ToolUseRecord toolUseRecord = new ToolUseRecord();
+        Tool tool = toolBO.getTool(toolOrder.getToolCode());
 
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.TOOL_USE_RECORD.getCode());
         toolUseRecord.setCode(code);
         toolUseRecord.setToolOrderCode(toolOrder.getCode());
         toolUseRecord.setAdoptTreeCode(adoptOrderTree.getCode());
+        toolUseRecord.setToolType(tool.getType());
         toolUseRecord.setStatus(EToolUseRecordStatus.ACTIVE.getCode());
         toolUseRecord.setUserId(user.getUserId());
 
@@ -48,6 +55,16 @@ public class ToolUseRecordBOImpl extends PaginableBOImpl<ToolUseRecord>
 
         toolUseRecordDAO.insert(toolUseRecord);
         return code;
+    }
+
+    @Override
+    public List<ToolUseRecord> queryTreeToolRecordList(String adoptTreeCode,
+            String toolType) {
+        ToolUseRecord condition = new ToolUseRecord();
+        condition.setAdoptTreeCode(adoptTreeCode);
+        condition.setToolType(toolType);
+        condition.setStatus(EToolUseRecordStatus.ACTIVE.getCode());
+        return toolUseRecordDAO.selectList(condition);
     }
 
     @Override

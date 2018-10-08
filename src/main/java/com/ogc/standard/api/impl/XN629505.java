@@ -30,15 +30,18 @@ public class XN629505 extends AProcessor {
         condition.setNameForQuery(req.getName());
         condition.setType(req.getType());
         condition.setStatus(req.getStatus());
+        condition.setUserId(req.getUserId());
         condition.setUpdater(req.getUpdater());
 
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
             column = IToolAO.DEFAULT_ORDER_COLUMN;
         }
+
         condition.setOrder(column, req.getOrderDir());
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
+
         return toolAO.queryToolPage(start, limit, condition);
     }
 
