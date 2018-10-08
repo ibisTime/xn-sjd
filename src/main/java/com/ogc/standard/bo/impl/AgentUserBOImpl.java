@@ -273,4 +273,15 @@ public class AgentUserBOImpl extends PaginableBOImpl<AgentUser>
         }
         return data;
     }
+
+    @Override
+    public AgentUser getAgentUserUnCheck(String userId) {
+        AgentUser data = null;
+        if (StringUtils.isNotBlank(userId)) {
+            AgentUser condition = new AgentUser();
+            condition.setUserId(userId);
+            data = agentUserDAO.select(condition);
+        }
+        return data;
+    }
 }

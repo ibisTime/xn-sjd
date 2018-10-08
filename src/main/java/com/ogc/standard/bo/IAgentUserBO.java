@@ -66,5 +66,7 @@ public interface IAgentUserBO extends IPaginableBO<AgentUser> {
 
     public AgentUser getAgentUser(String userId);
 
+    public AgentUser getAgentUserUnCheck(String userId);
+
     public AgentUser getAgentUserByMobile(String parentUserId);
 }
