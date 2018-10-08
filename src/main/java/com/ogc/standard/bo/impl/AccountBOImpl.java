@@ -243,7 +243,8 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
                 throw new BizException(EBizErrorCode.DEFAULT.getCode(), "用户["
                         + userId + ";" + currency + "]无此类型账户");
             }
-            if (ESysUser.SYS_USER.getCode().equals(userId)) {
+            if (ESysUser.SYS_USER.getCode().equals(userId)
+                    && ECurrency.CNY.getCode().equals(currency)) {
                 for (Account account : accountList) {
                     if (ESystemAccount.SYS_ACOUNT_CNY.getCode().equals(
                         account.getAccountNumber())) {
