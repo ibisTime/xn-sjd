@@ -79,6 +79,13 @@
 			<if test="settleStatus != null and settleStatus != '' ">
 				AND t.settle_status = #{settleStatus}
 			</if>
+			<if test="payGroup != null and payGroup != '' ">
+				AND t.pay_group = #{payGroup}
+			</if>
+			<if test="payCode != null and payCode != '' ">
+				AND t.pay_code = #{payCode}
+			</if>
+			
 		</trim>
 	</sql>
 	<select id="select_adoptOrder" parameterType="adoptOrder" resultMap="adoptOrder_DB_Result">

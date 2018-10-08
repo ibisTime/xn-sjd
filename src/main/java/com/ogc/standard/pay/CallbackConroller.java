@@ -41,6 +41,7 @@ public class CallbackConroller {
             HttpServletResponse response) {
         try {
             logger.info("******************支付宝回调开始******************");
+            System.out.println("******************支付宝回调开始******************");
             // 获取支付宝回调的参数
             PrintWriter out = response.getWriter();
             InputStream inStream = request.getInputStream();
@@ -54,6 +55,10 @@ public class CallbackConroller {
             inStream.close();
             String result = new String(outSteam.toByteArray(), "utf-8");
             PaySuccessRes paySuccess = alipayAO.doCallback(result);
+            System.out.println("******************isSuccess:"
+                    + paySuccess.isSuccess() + ",biz_code:"
+                    + paySuccess.getBizCode() + ",biz_type:"
+                    + paySuccess.getBizType() + "******************");
             if (paySuccess.isSuccess()
                     && !EJourBizTypeUser.CHARGE.getCode().equals(
                         paySuccess.getBizCode())) {
@@ -62,12 +67,12 @@ public class CallbackConroller {
             // 通知支付宝我已收到请求，不用再继续回调我了
             out.print("success");
         } catch (Exception e) {
-            logger.error("APP支付回调异常,原因：" + e.getMessage());
+            logger.error("支付回调异常,原因：" + e.getMessage());
         }
     }
 
-    private void doPayOrder(String bizType, String bizCode) {
-        if (EJourBizTypeUser.ADOPT.getCode().equals(bizType)) {
+    public void doPayOrder(String bizType, String bizCode) {
+        if (EJourBizTypeUser.ADOPT.getCode().equals(bizCode)) {
             adoptOrderAO.paySuccess(bizCode);
         } else {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(), "业务类型订单不存在");

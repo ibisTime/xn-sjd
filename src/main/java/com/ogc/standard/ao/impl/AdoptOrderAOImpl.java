@@ -41,6 +41,7 @@ import com.ogc.standard.domain.Settle;
 import com.ogc.standard.domain.Tree;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.dto.res.BooleanRes;
+import com.ogc.standard.dto.res.PayOrderRes;
 import com.ogc.standard.dto.res.XN629048Res;
 import com.ogc.standard.enums.EAdoptOrderStatus;
 import com.ogc.standard.enums.EAdoptOrderTreeStatus;
@@ -207,10 +208,11 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
             result = toPayAdoptOrderYue(data, deductRes);
         } else if (EPayType.ALIPAY.getCode().equals(payType)) {// 支付宝支付
             adoptOrderBO.refreshPayGroup(data, payType, deductRes);
-            result = alipayBO.getSignedOrder(data.getApplyUser(),
+            String signOrder = alipayBO.getSignedOrder(data.getApplyUser(),
                 ESysUser.SYS_USER.getCode(), data.getPayGroup(),
                 EJourBizTypeUser.ADOPT.getCode(),
                 EJourBizTypeUser.ADOPT.getValue(), data.getAmount());
+            result = new PayOrderRes(signOrder);
         } else if (EPayType.WEIXIN_H5.getCode().equals(payType)) {// 微信支付
             throw new BizException(EBizErrorCode.DEFAULT.getCode(), "暂不支持微信支付");
         }
