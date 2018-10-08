@@ -41,6 +41,11 @@ public class CompanyAOImpl implements ICompanyAO {
     }
 
     @Override
+    public Company getCompanyByUser(String userId) {
+        return companyBO.getCompanyByUserId(userId);
+    }
+
+    @Override
     public void completeCompanyOwner(String userId, String certificateTemplate,
             String contractTemplate) {
         SYSUser sysUser = sysUserBO.getSYSUser(userId);
@@ -53,4 +58,5 @@ public class CompanyAOImpl implements ICompanyAO {
             contractTemplate);
 
     }
+
 }

@@ -1,5 +1,6 @@
 package com.ogc.standard.ao.impl;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -12,11 +13,13 @@ import com.ogc.standard.ao.ISYSUserAO;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IApplyBindMaintainBO;
 import com.ogc.standard.bo.ICompanyBO;
+import com.ogc.standard.bo.IJourBO;
 import com.ogc.standard.bo.ISYSRoleBO;
 import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.ISmsOutBO;
 import com.ogc.standard.bo.ITreeBO;
 import com.ogc.standard.bo.base.Paginable;
+import com.ogc.standard.common.AmountUtil;
 import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.common.MD5Util;
 import com.ogc.standard.common.PhoneUtil;
@@ -24,6 +27,7 @@ import com.ogc.standard.common.PwdUtil;
 import com.ogc.standard.common.RandomUtil;
 import com.ogc.standard.common.SysConstants;
 import com.ogc.standard.core.OrderNoGenerater;
+import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.ApplyBindMaintain;
 import com.ogc.standard.domain.SYSRole;
 import com.ogc.standard.domain.SYSUser;
@@ -32,7 +36,9 @@ import com.ogc.standard.dto.req.XN630063Req;
 import com.ogc.standard.enums.EAccountType;
 import com.ogc.standard.enums.EApplyBindMaintainStatus;
 import com.ogc.standard.enums.ECaptchaType;
+import com.ogc.standard.enums.EChannelType;
 import com.ogc.standard.enums.ECurrency;
+import com.ogc.standard.enums.EJourBizTypeMaintain;
 import com.ogc.standard.enums.ESYSUserKind;
 import com.ogc.standard.enums.ESYSUserStatus;
 import com.ogc.standard.enums.EUser;
@@ -62,6 +68,9 @@ public class SYSUserAOImpl implements ISYSUserAO {
 
     @Autowired
     private ICompanyBO companyBO;
+
+    @Autowired
+    private IJourBO jourBO;
 
     // 新增用户（平台）
     @Override
@@ -399,10 +408,15 @@ public class SYSUserAOImpl implements ISYSUserAO {
     }
 
     public void init(SYSUser data) {
-        if (ESYSUserKind.OWNER.getCode().equals(data.getKind())) { // 产权方
+        if (ESYSUserKind.OWNER.getCode().equals(data.getKind())) {
+
+            // 产权方
             long count = treeBO.getTotalCountByOwnerId(data.getUserId());
             data.setTreeQuantity(String.valueOf(count));
-        } else if (ESYSUserKind.MAINTAIN.getCode().equals(data.getKind())) {// 养护方
+
+        } else if (ESYSUserKind.MAINTAIN.getCode().equals(data.getKind())) {
+
+            // 养护方
             ApplyBindMaintain abmCondition = new ApplyBindMaintain();
             abmCondition.setStatus(EApplyBindMaintainStatus.BIND.getCode());
             abmCondition.setMaintainId(data.getUserId());
@@ -413,7 +427,15 @@ public class SYSUserAOImpl implements ISYSUserAO {
                     .getSYSUser(abmList.get(0).getOwnerId());
                 data.setOwner(sysUser2.getRealName());
             }
-            data.setTotalIncome("0");// TODO 总收入
+
+            // 总收入
+            Account cnyAccount = accountBO.getAccountByUser(data.getUserId(),
+                ECurrency.CNY.getCode());
+            BigDecimal totalIncome = jourBO.getTotalAmount(
+                EJourBizTypeMaintain.MAINTAIN_DEDECT.getCode(),
+                EChannelType.NBZ.getCode(), cnyAccount.getAccountNumber());
+            data.setTotalIncome(AmountUtil.div(totalIncome, 1000L));
+
         }
     }
 

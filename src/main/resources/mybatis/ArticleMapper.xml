@@ -8,20 +8,25 @@
 		<result column="tree_no" property="treeNo" />
 		<result column="type" property="type" />
 		<result column="open_level" property="openLevel" />
+		
 		<result column="title" property="title" />
 		<result column="content" property="content" />
 		<result column="photo" property="photo" />
 		<result column="collect_count" property="collectCount" />
 		<result column="point_count" property="pointCount" />
+		
 		<result column="read_count" property="readCount" />
 		<result column="status" property="status" />
 		<result column="location" property="location" />
 		<result column="order_no" property="orderNo" />
+		<result column="publish_user_id" property="publishUserId" />
+		
 		<result column="publish_datetime" property="publishDatetime" />
 		<result column="updater" property="updater" />
 		<result column="update_datatime" property="updateDatatime" />
 		<result column="remark" property="remark" />
 	</resultMap>
+	
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != '' ">
@@ -35,6 +40,9 @@
 			</if>
 			<if test="type != null and type != '' ">
 				AND t.type = #{type}
+			</if>
+			<if test="publishUserId != null and publishUserId != '' ">
+				AND t.publish_user_id = #{publishUserId}
 			</if>
 			<if test="openLevel != null and openLevel != '' ">
 				AND t.open_level = #{openLevel}
@@ -50,6 +58,7 @@
 			</if>
 		</trim>
 	</sql>
+	
 	<select id="select_article" parameterType="article" resultMap="article_DB_Result">
 		SELECT
 		t.code
@@ -57,15 +66,19 @@
 		,t.tree_no
 		,t.type
 		,t.open_level
+		
 		,t.title
 		,t.content
 		,t.photo
 		,t.collect_count
 		,t.point_count
+		
 		,t.read_count
 		,t.status
 		,t.location
 		,t.order_no
+		,t.publish_user_id
+		
 		,t.publish_datetime
 		,t.updater
 		,t.update_datatime
@@ -94,15 +107,19 @@
 		,tree_no
 		,type
 		,open_level
+		
 		,title
 		,content
 		,photo
 		,collect_count
 		,point_count
+		
 		,read_count
 		,status
 		,location
 		,order_no
+		,publish_user_id
+		
 		,publish_datetime
 		,updater
 		,update_datatime
@@ -114,15 +131,19 @@
 		,#{treeNo}
 		,#{type}
 		,#{openLevel}
+		
 		,#{title}
 		,#{content}
 		,#{photo}
 		,#{collectCount}
 		,#{pointCount}
+		
 		,#{readCount}
 		,#{status}
 		,#{location}
 		,#{orderNo}
+		,#{publishUserId}
+		
 		,#{publishDatetime}
 		,#{updater}
 		,#{updateDatatime}

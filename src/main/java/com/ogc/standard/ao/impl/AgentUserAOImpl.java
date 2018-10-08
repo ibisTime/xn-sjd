@@ -178,7 +178,7 @@ public class AgentUserAOImpl implements IAgentUserAO {
 
         // 更新资料
         agentUserBO.refreshToApprove(agentUser, userReferee, parentUserId,
-            req.getUserId(), "资料提交待审核");
+            req.getUserId());
         companyBO.refreshCompany(req);
     }
 

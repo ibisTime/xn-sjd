@@ -13,6 +13,9 @@ public class XN630007Req {
     // 角色名称(选填)
     private String name;
 
+    // 类型
+    private String type;
+
     // 角色等级(选填)
     private String level;
 
@@ -54,4 +57,13 @@ public class XN630007Req {
     public void setUpdater(String updater) {
         this.updater = updater;
     }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
 }

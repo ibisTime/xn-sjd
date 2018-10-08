@@ -15,6 +15,9 @@ public class XN630005Req extends APageReq {
      */
     private static final long serialVersionUID = 1L;
 
+    // 类型
+    private String type;
+
     // 角色名称(选填)
     private String name;
 
@@ -48,4 +51,13 @@ public class XN630005Req extends APageReq {
     public void setUpdater(String updater) {
         this.updater = updater;
     }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
 }

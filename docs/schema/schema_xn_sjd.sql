@@ -170,6 +170,7 @@ CREATE TABLE `tsj_article` (
   `status` varchar(4) DEFAULT NULL COMMENT '状态（0保存/1发布/2下架/3审核）',
   `location` varchar(32) DEFAULT NULL COMMENT 'UI位置',
   `order_no` int(11) DEFAULT NULL COMMENT 'UI次序',
+  `publish_user_id` varchar(32) DEFAULT NULL COMMENT '发布人',
   `publish_datetime` datetime DEFAULT NULL COMMENT '发布时间',
   `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
   `update_datatime` datetime DEFAULT NULL COMMENT '更新时间',
@@ -748,6 +749,7 @@ DROP TABLE IF EXISTS `tsys_role`;
 CREATE TABLE `tsys_role` (
   `code` varchar(32) NOT NULL DEFAULT '' COMMENT '编号',
   `name` varchar(255) DEFAULT NULL COMMENT '名称',
+  `type` varchar(4) DEFAULT NULL COMMENT '类型(C:C端用户/O:产权方/M:养护方/A:代理商/P:平台方)',
   `updater` varchar(32) DEFAULT NULL COMMENT '最近修改人',
   `update_datetime` datetime DEFAULT NULL COMMENT '最近修改人',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',

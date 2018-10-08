@@ -49,7 +49,7 @@ public interface IAgentUserBO extends IPaginableBO<AgentUser> {
 
     // 提交信息
     public void refreshToApprove(AgentUser agentUser, String userReferee,
-            String parentUserId, String updater, String remark);
+            String parentUserId, String updater);
 
     // 审核通过
     public void refreshPass(AgentUser agentUser, String level,

@@ -14,6 +14,10 @@ public class XN630000Req {
     @NotBlank
     private String name;
 
+    // 类型
+    @NotBlank
+    private String type;
+
     // 更新人(必填)
     @NotBlank
     private String updater;
@@ -55,6 +59,14 @@ public class XN630000Req {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
 }

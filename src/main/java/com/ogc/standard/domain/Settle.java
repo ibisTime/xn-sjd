@@ -66,6 +66,9 @@ public class Settle extends ABaseDO {
 
     private AgentUser agentUser;
 
+    // 认养订单
+    private AdoptOrder adoptOrder;
+
     public AgentUser getAgentUser() {
         return agentUser;
     }
@@ -200,6 +203,14 @@ public class Settle extends ABaseDO {
 
     public void setCreateEndDatetime(Date createEndDatetime) {
         this.createEndDatetime = createEndDatetime;
+    }
+
+    public AdoptOrder getAdoptOrder() {
+        return adoptOrder;
+    }
+
+    public void setAdoptOrder(AdoptOrder adoptOrder) {
+        this.adoptOrder = adoptOrder;
     }
 
 }

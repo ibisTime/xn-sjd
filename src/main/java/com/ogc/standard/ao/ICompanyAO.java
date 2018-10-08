@@ -15,6 +15,8 @@ public interface ICompanyAO {
 
     public Company getCompany(String code);
 
+    public Company getCompanyByUser(String userId);
+
     public void completeCompanyOwner(String userId, String certificateTemplate,
             String contractTemplate);
 

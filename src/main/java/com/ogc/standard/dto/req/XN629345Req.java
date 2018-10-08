@@ -31,6 +31,9 @@ public class XN629345Req extends APageReq {
     // 发布时间止
     private String publishDatetimeEnd;
 
+    // 发布人
+    private String publishUserId;
+
     public String getAdoptTreeCode() {
         return adoptTreeCode;
     }
@@ -85,6 +88,14 @@ public class XN629345Req extends APageReq {
 
     public void setPublishDatetimeEnd(String publishDatetimeEnd) {
         this.publishDatetimeEnd = publishDatetimeEnd;
+    }
+
+    public String getPublishUserId() {
+        return publishUserId;
+    }
+
+    public void setPublishUserId(String publishUserId) {
+        this.publishUserId = publishUserId;
     }
 
 }
