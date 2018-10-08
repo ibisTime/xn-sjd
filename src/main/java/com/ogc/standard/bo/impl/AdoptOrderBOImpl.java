@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -32,6 +33,7 @@ import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.enums.EPayType;
 import com.ogc.standard.enums.ESysConfigType;
 import com.ogc.standard.exception.BizException;
+import com.ogc.standard.exception.EBizErrorCode;
 
 @Component
 public class AdoptOrderBOImpl extends PaginableBOImpl<AdoptOrder> implements
@@ -169,6 +171,22 @@ public class AdoptOrderBOImpl extends PaginableBOImpl<AdoptOrder> implements
             if (data == null) {
                 throw new BizException("xn0000", "订单编号不存在");
             }
+        }
+        return data;
+    }
+
+    @Override
+    public AdoptOrder getAdoptOrderByPayGroup(String payGroup) {
+        AdoptOrder data = null;
+        if (StringUtils.isNotBlank(payGroup)) {
+            AdoptOrder condition = new AdoptOrder();
+            condition.setPayGroup(payGroup);
+            List<AdoptOrder> list = adoptOrderDAO.selectList(condition);
+            if (CollectionUtils.isEmpty(list)) {
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(), "根据"
+                        + payGroup + "查询订单不存在");
+            }
+            data = list.get(0);
         }
         return data;
     }

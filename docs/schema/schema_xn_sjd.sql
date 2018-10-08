@@ -481,6 +481,7 @@ CREATE TABLE `tstd_user_ext` (
   `gender` char(1) DEFAULT NULL COMMENT '性别(1 男 0 女)',
   `introduce` varchar(255) DEFAULT NULL COMMENT '自我介绍',
   `birthday` varchar(16) DEFAULT NULL COMMENT '生日',
+  `age` int(11) DEFAULT NULL COMMENT '年龄',
   `email` varchar(255) DEFAULT NULL COMMENT '邮箱',
   `driver_li` varchar(255) DEFAULT NULL COMMENT '驾驶照',
   `passport` varchar(255) DEFAULT NULL COMMENT '护照',

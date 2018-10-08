@@ -25,6 +25,7 @@ import com.ogc.standard.common.AmountUtil;
 import com.ogc.standard.common.PropertiesUtil;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.Charge;
+import com.ogc.standard.dto.res.PaySuccessRes;
 import com.ogc.standard.enums.EChannelType;
 import com.ogc.standard.enums.EChargeStatus;
 import com.ogc.standard.enums.EJourBizTypeUser;
@@ -50,8 +51,9 @@ public class AlipayAOImpl implements IAlipayAO {
     IAccountBO accountBO;
 
     @Override
-    public boolean doCallback(String result) {
+    public PaySuccessRes doCallback(String result) {
         boolean isSuccess = false;
+        Charge charge = null;
         // 解析回调结果
         logger.info("**** 支付宝支付回调结果： ****：" + result);
         // 将异步通知中收到的待验证所有参数都存放到map中
@@ -73,14 +75,15 @@ public class AlipayAOImpl implements IAlipayAO {
                 String appId = paramsMap.get("app_id");
                 String alipayOrderNo = paramsMap.get("trade_no");
                 String tradeStatus = paramsMap.get("trade_status");
+
                 // 取到订单信息
-                Charge order = chargeBO.getCharge(outTradeNo);
-                if (!EChargeStatus.toPay.getCode().equals(order.getStatus())) {
+                charge = chargeBO.getCharge(outTradeNo);
+                if (!EChargeStatus.toPay.getCode().equals(charge.getStatus())) {
                     throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                         "充值订单不处于待支付状态，重复回调");
                 }
                 // 数据正确性校验
-                BigDecimal orderAmount = order.getAmount().divide(
+                BigDecimal orderAmount = charge.getAmount().divide(
                     BigDecimal.TEN);
                 if (orderAmount.compareTo(AmountUtil.mul(totalAmount, 100L)) == 0
                         && sellerId
@@ -90,32 +93,30 @@ public class AlipayAOImpl implements IAlipayAO {
                             || "TRADE_FINISHED".equals(tradeStatus)) {// 支付成功
                         isSuccess = true;
                         // 更新充值订单状态
-                        chargeBO.callBackChange(order, true);
+                        chargeBO.callBackChange(charge, true);
                         // 收款方账户加钱
-                        Account account = accountBO.getAccount(order
+                        Account account = accountBO.getAccount(charge
                             .getAccountNumber());
-                        accountBO
-                            .changeAmount(account, order.getAmount(),
-                                EChannelType.getEChannelType(order
-                                    .getChannelType()), alipayOrderNo, order
-                                    .getPayGroup(), EJourBizTypeUser
-                                    .getBizType(order.getBizType()).getCode(),
-                                order.getBizNote());
+                        accountBO.changeAmount(account, charge.getAmount(),
+                            EChannelType.getEChannelType(charge
+                                .getChannelType()), alipayOrderNo, charge
+                                .getPayGroup(),
+                            EJourBizTypeUser.getBizType(charge.getBizType())
+                                .getCode(), charge.getBizNote());
                         // 托管账户加钱
                         Account sysAccount = accountBO
                             .getAccount(ESystemAccount.SYS_ACOUNT_ALIPAY
                                 .getCode());
-                        accountBO
-                            .changeAmount(sysAccount, order.getAmount(),
-                                EChannelType.getEChannelType(order
-                                    .getChannelType()), alipayOrderNo, order
-                                    .getPayGroup(), EJourBizTypeUser
-                                    .getBizType(order.getBizType()).getCode(),
-                                order.getBizNote());
+                        accountBO.changeAmount(sysAccount, charge.getAmount(),
+                            EChannelType.getEChannelType(charge
+                                .getChannelType()), alipayOrderNo, charge
+                                .getPayGroup(),
+                            EJourBizTypeUser.getBizType(charge.getBizType())
+                                .getCode(), charge.getBizNote());
 
                     } else {// 支付失败
                         // 更新充值订单状态
-                        chargeBO.callBackChange(order, false);
+                        chargeBO.callBackChange(charge, false);
                     }
                 } else {
                     throw new BizException(EBizErrorCode.DEFAULT.getCode(),
@@ -129,7 +130,8 @@ public class AlipayAOImpl implements IAlipayAO {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "支付结果通知验签异常");
         }
-        return isSuccess;
+        return new PaySuccessRes(isSuccess, charge.getBizType(),
+            charge.getBizNo());
     }
 
     private Map<String, String> split(String urlparam) {

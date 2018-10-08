@@ -37,8 +37,8 @@ import com.ogc.standard.exception.EBizErrorCode;
  * @history:
  */
 @Component
-public class AccountBOImpl extends PaginableBOImpl<Account>
-        implements IAccountBO {
+public class AccountBOImpl extends PaginableBOImpl<Account> implements
+        IAccountBO {
     @Autowired
     private IAccountDAO accountDAO;
 
@@ -54,8 +54,8 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
         String accountNumber = null;
         if (StringUtils.isNotBlank(userId)) {
 
-            accountNumber = OrderNoGenerater
-                .generate(EGeneratePrefix.Account.getCode());
+            accountNumber = OrderNoGenerater.generate(EGeneratePrefix.Account
+                .getCode());
             Account data = new Account();
             data.setAccountNumber(accountNumber);
             data.setUserId(userId);
@@ -102,8 +102,8 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
         // 更改余额
         dbAccount.setAmount(nowAmount);
         if (transAmount.longValue() > 0) {
-            dbAccount
-                .setTotalAmount(dbAccount.getTotalAmount().add(transAmount));// 增加累计值
+            dbAccount.setTotalAmount(dbAccount.getTotalAmount()
+                .add(transAmount));// 增加累计值
         }
         dbAccount.setMd5(AccountUtil.md5(dbAccount.getMd5(),
             dbAccount.getAmount(), nowAmount));
@@ -153,8 +153,8 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
         // 记录冻结流水
         String lastOrder = jourBO.addFrozenJour(dbAccount, EChannelType.NBZ,
             null, refNo, bizType, bizNote, freezeAmount);
-        BigDecimal nowFrozenAmount = dbAccount.getFrozenAmount()
-            .add(freezeAmount);
+        BigDecimal nowFrozenAmount = dbAccount.getFrozenAmount().add(
+            freezeAmount);
         dbAccount.setAccountNumber(dbAccount.getAccountNumber());
         dbAccount.setFrozenAmount(nowFrozenAmount);
         dbAccount.setLastOrder(lastOrder);
@@ -168,8 +168,8 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
         if (unfreezeAmount.compareTo(BigDecimal.ZERO) <= 0) {
             return dbAccount;
         }
-        BigDecimal nowFrozenAmount = dbAccount.getFrozenAmount()
-            .subtract(unfreezeAmount);
+        BigDecimal nowFrozenAmount = dbAccount.getFrozenAmount().subtract(
+            unfreezeAmount);
         if (nowFrozenAmount.compareTo(BigDecimal.ZERO) == -1) {
             throw new BizException("xn000000", "本次解冻会使账户冻结金额小于0");
         }
@@ -234,20 +234,19 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
     @Override
     public Account getAccountByUser(String userId, String currency) {
         Account data = null;
-        if (StringUtils.isNotBlank(userId)
-                && StringUtils.isNotBlank(currency)) {
+        if (StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(currency)) {
             Account condition = new Account();
             condition.setUserId(userId);
             condition.setCurrency(currency);
             List<Account> accountList = accountDAO.selectList(condition);
             if (CollectionUtils.isEmpty(accountList)) {
-                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                    "用户[" + userId + ";" + currency + "]无此类型账户");
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(), "用户["
+                        + userId + ";" + currency + "]无此类型账户");
             }
             if (ESysUser.SYS_USER.getCode().equals(userId)) {
                 for (Account account : accountList) {
-                    if (ESystemAccount.SYS_ACOUNT_CNY.getCode()
-                        .equals(account.getAccountNumber())) {
+                    if (ESystemAccount.SYS_ACOUNT_CNY.getCode().equals(
+                        account.getAccountNumber())) {
                         data = account;
                     }
                 }
@@ -272,21 +271,21 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
         }
         Account fromAccount = this.getAccountByUser(fromUserId, fromCurrency);
         Account toAccount = this.getAccountByUser(toUserId, toCurrency);
-        transAmount(fromAccount, toAccount, transAmount, fromBizType, toBizType,
-            fromBizNote, toBizNote, refNo);
+        transAmount(fromAccount, toAccount, transAmount, fromBizType,
+            toBizType, fromBizNote, toBizNote, refNo);
     }
 
     @Override
-    public void transAmount(String fromUserId, String toUserId, String currency,
-            BigDecimal transAmount, String fromBizType, String toBizType,
-            String fromBizNote, String toBizNote, String refNo) {
+    public void transAmount(String fromUserId, String toUserId,
+            String currency, BigDecimal transAmount, String fromBizType,
+            String toBizType, String fromBizNote, String toBizNote, String refNo) {
         if (transAmount.compareTo(BigDecimal.ZERO) == 0) {
             return;
         }
         Account fromAccount = getAccountByUser(fromUserId, currency);
         Account toAccount = getAccountByUser(toUserId, currency);
-        transAmount(fromAccount, toAccount, transAmount, fromBizType, toBizType,
-            fromBizNote, toBizNote, refNo);
+        transAmount(fromAccount, toAccount, transAmount, fromBizType,
+            toBizType, fromBizNote, toBizNote, refNo);
     }
 
     @Override
@@ -334,58 +333,10 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
 
             amount = transAmount.multiply(rate);
 
+        } else {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "暂不支持币种兑换");
         }
 
         return amount;
     }
-
-    @Override
-    public boolean isAccountExist(String userId, String currency) {
-        boolean flag = false;
-        Account condition = new Account();
-        condition.setUserId(userId);
-        condition.setCurrency(currency);
-        if (this.getTotalCount(condition) > 0) {
-            flag = true;
-        }
-        return flag;
-    }
-
-    @Override
-    public void distributePlatAccount(String symbol) {
-        if (StringUtils.isNotBlank(symbol)) {
-
-            savePlatAccount("SYS_ACOUNT_" + symbol, ESysUser.SYS_USER,
-                "平台" + symbol + "盈亏账户", symbol);
-
-            savePlatAccount("SYS_ACOUNT_COLD_" + symbol + "", ESysUser.SYS_USER,
-                "平台" + symbol + "冷钱包", symbol);
-
-        }
-    }
-
-    @Override
-    public Account savePlatAccount(String accountNumber, ESysUser sysUser,
-            String accountName, String currency) {
-        Account data = new Account();
-
-        data.setAccountNumber(accountNumber);
-        data.setUserId(sysUser.getCode());
-        data.setType(EAccountType.PLAT.getCode());
-        data.setStatus(EAccountStatus.NORMAL.getCode());
-        data.setCurrency(currency);
-
-        data.setAmount(BigDecimal.ZERO);
-        data.setFrozenAmount(BigDecimal.ZERO);
-        data.setMd5(AccountUtil.md5(data.getAmount()));
-        data.setInAmount(BigDecimal.ZERO);
-
-        data.setTotalAmount(BigDecimal.ZERO);
-        data.setOutAmount(BigDecimal.ZERO);
-        data.setCreateDatetime(new Date());
-
-        accountDAO.insert(data);
-        return data;
-    }
-
 }

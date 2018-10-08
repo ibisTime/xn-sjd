@@ -29,6 +29,8 @@ public enum EJourBizTypeUser {
 
     ADOPT("adopt", "认养"),
 
+    ADOPT_COLLECT("adopt_collect", "集体认养"),
+
     // 碳泡泡账户
     ADOPT_DAY_BACK("adopt_day_back", "认养消费每日收取碳泡泡"),
 

@@ -8,6 +8,8 @@
  */
 package com.ogc.standard.ao.impl;
 
+import com.ogc.standard.dto.res.PaySuccessRes;
+
 /** 
  * @author: haiqingzheng 
  * @since: 2017年1月11日 下午8:55:34 
@@ -15,6 +17,6 @@ package com.ogc.standard.ao.impl;
  */
 public interface IAlipayAO {
 
-    public boolean doCallback(String result);
+    public PaySuccessRes doCallback(String result);
 
 }

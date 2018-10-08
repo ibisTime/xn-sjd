@@ -8,7 +8,6 @@ import com.ogc.standard.domain.Account;
 import com.ogc.standard.enums.EAccountStatus;
 import com.ogc.standard.enums.EAccountType;
 import com.ogc.standard.enums.EChannelType;
-import com.ogc.standard.enums.ESysUser;
 
 /**
  * @author: xieyj
@@ -66,14 +65,7 @@ public interface IAccountBO extends IPaginableBO<Account> {
     // 获取账户列表
     public List<Account> queryAccountList(Account data);
 
-    public boolean isAccountExist(String userId, String currency);
-
     public List<Account> queryAccountList(String userId);
 
     public List<Account> queryAccountList(String userId, String currency);
-
-    public void distributePlatAccount(String symbol);
-
-    public Account savePlatAccount(String accountNumber, ESysUser sysUser,
-            String accountName, String currency);
 }

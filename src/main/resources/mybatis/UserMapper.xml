@@ -260,6 +260,17 @@
 		)
 	</insert>
 	
+	<update id="update_userInfo" parameterType="user">
+		UPDATE tstd_user
+		SET
+		nickname = #{nickname}
+		,real_name= #{realName}
+		,id_kind = #{idKind}
+		,id_no = #{idNo}
+		WHERE
+		user_id = #{userId}	
+	</update>
+	
 	<update id="update_identity" parameterType="user">
 		UPDATE tstd_user
 		SET
@@ -418,10 +429,20 @@
 	<update id="approve_user" parameterType="user">
 		UPDATE tstd_user
 		SET
-		,status = #{status}
+		status = #{status}
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
 		,remark = #{remark}
+		WHERE
+		user_id = #{userId}		
+	</update>
+	
+	<update id="full_user" parameterType="user">
+		UPDATE tstd_user
+		SET
+		realName = #{realName}
+		,id_kind = #{idKind}
+		,id_no = #{idNo}
 		WHERE
 		user_id = #{userId}		
 	</update>

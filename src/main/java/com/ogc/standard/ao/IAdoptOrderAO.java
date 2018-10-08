@@ -25,6 +25,9 @@ public interface IAdoptOrderAO {
     // 支付订单
     public Object toPayAdoptOrder(String code, String payType, String isJfDeduct);
 
+    // 支付成功订单回调处理
+    public void paySuccess(String payGroup);
+
     public Paginable<AdoptOrder> queryAdoptOrderPage(int start, int limit,
             AdoptOrder condition);
 

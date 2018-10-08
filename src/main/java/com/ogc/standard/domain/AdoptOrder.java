@@ -61,6 +61,9 @@ public class AdoptOrder extends ABaseDO {
     // 支付渠道编号
     private String payCode;
 
+    // 是否积分抵扣
+    private String isDk;
+
     // 抵扣人民币
     private BigDecimal cnyDeductAmount;
 

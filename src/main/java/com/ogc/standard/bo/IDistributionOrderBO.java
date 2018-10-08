@@ -8,6 +8,8 @@
  */
 package com.ogc.standard.bo;
 
+import java.math.BigDecimal;
+
 import com.ogc.standard.domain.AdoptOrder;
 
 /** 
@@ -17,5 +19,5 @@ import com.ogc.standard.domain.AdoptOrder;
  */
 public interface IDistributionOrderBO {
 
-    void distribution(AdoptOrder data);
+    BigDecimal distribution(AdoptOrder data);
 }

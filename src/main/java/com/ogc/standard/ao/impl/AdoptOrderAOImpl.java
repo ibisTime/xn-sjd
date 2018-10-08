@@ -213,7 +213,6 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
                 EJourBizTypeUser.ADOPT.getValue(), data.getAmount());
         } else if (EPayType.WEIXIN_H5.getCode().equals(payType)) {// 微信支付
             throw new BizException(EBizErrorCode.DEFAULT.getCode(), "暂不支持微信支付");
-
         }
         return result;
     }
@@ -246,10 +245,10 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
             EJourBizTypePlat.ADOPT.getValue(), data.getCode());
 
         // 进行分销
-        distributionOrderBO.distribution(data);
+        BigDecimal backJfAmount = distributionOrderBO.distribution(data);
 
         // 业务订单更改
-        adoptOrderBO.payYueSuccess(data, resultRes, BigDecimal.ZERO);
+        adoptOrderBO.payYueSuccess(data, resultRes, backJfAmount);
         List<Tree> treeList = treeBO.queryTreeListByOrderCode(data.getCode());
         if (CollectionUtils.isNotEmpty(treeList)) {
             Product product = productBO.getProduct(data.getProductCode());
@@ -262,6 +261,41 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
             }
         }
         return new BooleanRes(true);
+    }
+
+    @Override
+    public void paySuccess(String payGroup) {
+        AdoptOrder data = adoptOrderBO.getAdoptOrderByPayGroup(payGroup);
+        if (EAdoptOrderStatus.TO_PAY.getCode().equals(data.getStatus())) {
+            // 积分抵扣
+            accountBO.transAmount(data.getApplyUser(),
+                ESysUser.SYS_USER.getCode(), ECurrency.JF.getCode(),
+                data.getJfDeductAmount(), EJourBizTypeUser.ADOPT.getCode(),
+                EJourBizTypePlat.ADOPT.getCode(),
+                EJourBizTypeUser.ADOPT.getValue(),
+                EJourBizTypePlat.ADOPT.getValue(), data.getCode());
+
+            // 进行分销
+            BigDecimal backJfAmount = distributionOrderBO.distribution(data);
+
+            adoptOrderBO.paySuccess(data, data.getAmount(), backJfAmount);
+            // 业务订单更改
+            List<Tree> treeList = treeBO.queryTreeListByOrderCode(data
+                .getCode());
+            if (CollectionUtils.isNotEmpty(treeList)) {
+                Product product = productBO.getProduct(data.getProductCode());
+                for (Tree tree : treeList) {
+                    // 更新树状态
+                    treeBO.refreshPayTree(tree);
+                    // 分配认养权
+                    adoptOrderTreeBO.saveAdoptOrderTree(product, data,
+                        tree.getTreeNumber());
+                }
+            }
+        } else {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "订单号["
+                    + data.getCode() + "]支付重复回调");
+        }
     }
 
     public void doCancelAdoptOrder() {

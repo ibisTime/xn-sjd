@@ -7,6 +7,7 @@
 		<result column="gender" property="gender" />
 		<result column="introduce" property="introduce" />
 		<result column="birthday" property="birthday" />
+		<result column="age" property="age" />
 		<result column="driver_li" property="driverLi" />
 		<result column="passport" property="passport" />
 		<result column="diploma" property="diploma" />
@@ -27,7 +28,6 @@
 	<insert id="insert_userExt" parameterType="userExt">
 		INSERT INTO tstd_user_ext(
 		user_id
-		
 		)
 		VALUES(
 		#{userId}
@@ -45,6 +45,7 @@
 		,t.gender
 		,t.introduce
 		,t.birthday
+		,t.age
 		,t.driver_li
 		,t.passport
 		,t.diploma
@@ -74,6 +75,9 @@
 		</if>
 		<if test="birthday != null and birthday != '' ">
 			,birthday=#{birthday}
+		</if>
+		<if test="age != null and age != '' ">
+			,age=#{age}
 		</if>
 		<if test="driverLi != null and driverLi != '' ">
 			,driver_li=#{driverLi}

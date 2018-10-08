@@ -61,9 +61,9 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
     }
 
     @Override
-    public String applyOrderOnline(Account account, String payGroup,
-            String bizType, String bizNote, BigDecimal transAmount,
-            EChannelType channelType, String applyUser) {
+    public String applyOrderOnline(Account account, String refNo,
+            String payGroup, String bizType, String bizNote,
+            BigDecimal transAmount, EChannelType channelType, String applyUser) {
         if (transAmount.compareTo(BigDecimal.ZERO) == 0) {
             throw new BizException("xn000000", "充值金额不能为0");
         }
@@ -72,9 +72,11 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
         Charge data = new Charge();
         data.setCode(code);
         if (EJourBizTypeUser.CHARGE.getCode().equals(bizType)) {
+            data.setBizNo(code);
             data.setPayGroup(code);
         } else {
             data.setPayGroup(payGroup);
+            data.setBizNo(refNo);
         }
         data.setAccountNumber(account.getAccountNumber());
         data.setAmount(transAmount);
@@ -140,27 +142,5 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
             }
         }
         return order;
-    }
-
-    @Override
-    public boolean isExistOfChannelOrder(String orderNo) {
-        boolean result = false;
-        Charge condition = new Charge();
-        condition.setChannelOrder(orderNo);
-        if (getTotalCount(condition) > 0) {
-            result = true;
-        }
-        return result;
-    }
-
-    @Override
-    public boolean isExistOfRefNo(String refNo) {
-        boolean result = false;
-        Charge condition = new Charge();
-        condition.setBizNo(refNo);
-        if (getTotalCount(condition) > 0) {
-            result = true;
-        }
-        return result;
     }
 }

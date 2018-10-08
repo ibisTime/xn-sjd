@@ -151,6 +151,9 @@ public class User extends ABaseDO {
     // 性别(1 男 0 女)
     private String gender;
 
+    // 年龄
+    private String age;
+
     // 生日
     private String birthday;
 
@@ -188,6 +191,14 @@ public class User extends ABaseDO {
 
     public void setUserRefereeLevel(String userRefereeLevel) {
         this.userRefereeLevel = userRefereeLevel;
+    }
+
+    public String getAge() {
+        return age;
+    }
+
+    public void setAge(String age) {
+        this.age = age;
     }
 
     public String getUserId() {

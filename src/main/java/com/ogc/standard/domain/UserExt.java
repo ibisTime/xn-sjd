@@ -32,6 +32,9 @@ public class UserExt extends ABaseDO {
     // 生日
     private String birthday;
 
+    // 年龄
+    private String age;
+
     // 邮箱
     private String email;
 
@@ -58,10 +61,19 @@ public class UserExt extends ABaseDO {
 
     // 自我介绍
     private String introduce;
+
     // ***********db properties***********
 
     public String getUserId() {
         return userId;
+    }
+
+    public String getAge() {
+        return age;
+    }
+
+    public void setAge(String age) {
+        this.age = age;
     }
 
     public void setUserId(String userId) {

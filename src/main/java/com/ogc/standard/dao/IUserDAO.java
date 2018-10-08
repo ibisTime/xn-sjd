@@ -23,6 +23,9 @@ public interface IUserDAO extends IBaseDAO<User> {
     // 更改姓名
     public int updateRealName(User data);
 
+    // 完善用户信息
+    public int updateUserInfo(User data);
+
     // 实名认证
     public int updateIdentity(User data);
 

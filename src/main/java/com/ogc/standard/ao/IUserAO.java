@@ -6,6 +6,7 @@ import com.ogc.standard.dto.req.XN802399Req;
 import com.ogc.standard.dto.req.XN802400Req;
 import com.ogc.standard.dto.req.XN805041Req;
 import com.ogc.standard.dto.req.XN805042Req;
+import com.ogc.standard.dto.req.XN805070Req;
 import com.ogc.standard.dto.req.XN805081Req;
 
 /**
@@ -29,8 +30,8 @@ public interface IUserAO {
     public String doAddUser(XN805042Req req);
 
     // 绑定手机号
-    public void doBindMobile(String isSendSms, String mobile, String smsCaptcha,
-            String userId);
+    public void doBindMobile(String isSendSms, String mobile,
+            String smsCaptcha, String userId);
 
     // 用户登录
     public String doLogin(String loginName, String loginPwd, String client,
@@ -60,12 +61,10 @@ public interface IUserAO {
             String adminUserId, String adminPwd);
 
     // 管理员重置推荐人
-    public void doResetReferee(String userId, String userReferee,
-            String updater);
+    public void doResetReferee(String userId, String userReferee, String updater);
 
     // 设置支付密码
-    public void doSetTradePwd(String userId, String tradePwd,
-            String smsCaptcha);
+    public void doSetTradePwd(String userId, String tradePwd, String smsCaptcha);
 
     // 重置支付密码
     public void doResetTradePwd(String userId, String newTradePwd,
@@ -145,6 +144,8 @@ public interface IUserAO {
     //
     // // 芝麻认证查询（芝麻信用渠道）
     // public Object doZhimaQuery(String userId, String bizNo);
+
+    public void doModifyUserInfo(XN805070Req req);
 
     public Paginable<User> queryUserPage(int start, int limit, User condition);
 

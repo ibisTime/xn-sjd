@@ -67,6 +67,9 @@ public interface IUserBO extends IPaginableBO<User> {
     // 判断推荐人是否存在(手机号)
     public void checkUserReferee(String userReferee, String systemCode);
 
+    public int refreshUserInfo(String userId, String nickname, String realName,
+            String idKind, String idNo);
+
     public int refreshIdentity(String userId, String realName, String idKind,
             String idNo);
 

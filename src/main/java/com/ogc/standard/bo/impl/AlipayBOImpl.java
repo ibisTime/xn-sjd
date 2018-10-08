@@ -57,9 +57,8 @@ public class AlipayBOImpl implements IAlipayBO {
     ISYSConfigBO sysConfigBO;
 
     @Override
-    public String getSignedOrder(String applyUser, String toUser,
-            String payGroup, String bizType, String bizNote,
-            BigDecimal transAmount) {
+    public String getSignedOrder(String applyUser, String toUser, String refNo,
+            String bizType, String bizNote, BigDecimal transAmount) {
         if (transAmount.compareTo(BigDecimal.ZERO) == 0) {
             throw new BizException("xn000000", "发生金额为零，不能使用支付宝支付");
         }
@@ -68,7 +67,7 @@ public class AlipayBOImpl implements IAlipayBO {
             ECurrency.CNY.getCode());
 
         // 落地此次付款的订单信息
-        String orderCode = chargeBO.applyOrderOnline(toAccount, payGroup,
+        String orderCode = chargeBO.applyOrderOnline(toAccount, refNo, refNo,
             bizType, bizNote, transAmount, EChannelType.Alipay, applyUser);
 
         // 商户订单号，商户网站订单系统中唯一订单号
