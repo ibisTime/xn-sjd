@@ -1,5 +1,6 @@
 package com.ogc.standard.domain;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import com.ogc.standard.dao.base.ABaseDO;
@@ -92,7 +93,7 @@ public class SYSUser extends ABaseDO {
     private String treeValue;
 
     // 总收入
-    private String totalIncome;
+    private BigDecimal totalIncome;
 
     // 所属产权方
     private String owner;
@@ -278,11 +279,11 @@ public class SYSUser extends ABaseDO {
         this.treeValue = treeValue;
     }
 
-    public String getTotalIncome() {
+    public BigDecimal getTotalIncome() {
         return totalIncome;
     }
 
-    public void setTotalIncome(String totalIncome) {
+    public void setTotalIncome(BigDecimal totalIncome) {
         this.totalIncome = totalIncome;
     }
 

@@ -78,7 +78,7 @@ public class AdoptOrderTreeAOImpl implements IAdoptOrderTreeAO {
 
         // 终止现有认养权，产生新的认养权，更改认养权持有人
         AdoptOrderTree data = adoptOrderTreeBO.getAdoptOrderTree(code);
-        if (EAdoptOrderTreeStatus.ADOPT.getCode().equals(data.getStatus())) {
+        if (!EAdoptOrderTreeStatus.ADOPT.getCode().equals(data.getStatus())) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(), "认养权不在认养中");
         }
         adoptOrderTreeBO.giveTree(data, user, toUser);

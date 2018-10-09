@@ -2,6 +2,7 @@ package com.ogc.standard.ao.impl;
 
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,8 +42,8 @@ public class SettleAOImpl implements ISettleAO {
             String approveResult, String handler, String handleNote) {
         if (!ESellType.COLLECTIVE.getCode().equals(refType)) {
             AdoptOrder data = adoptOrderBO.getAdoptOrder(refCode);
-            if (!EAdoptOrderSettleStatus.TO_SETTLE.getCode().equals(
-                data.getSettleStatus())) {
+            if (!EAdoptOrderSettleStatus.TO_SETTLE.getCode()
+                .equals(data.getSettleStatus())) {
                 throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                     "订单不是待结算状态");
             }
@@ -70,7 +71,15 @@ public class SettleAOImpl implements ISettleAO {
     @Override
     public Paginable<Settle> querySettlePage(int start, int limit,
             Settle condition) {
-        return settleBO.getPaginable(start, limit, condition);
+        Paginable<Settle> page = settleBO.getPaginable(start, limit, condition);
+
+        if (null != page && CollectionUtils.isNotEmpty(page.getList())) {
+            for (Settle settle : page.getList()) {
+                initSettle(settle);
+            }
+        }
+
+        return page;
     }
 
     @Override
@@ -80,7 +89,16 @@ public class SettleAOImpl implements ISettleAO {
 
     @Override
     public Settle getSettle(String code) {
-        return settleBO.getSettle(code);
+        Settle settle = settleBO.getSettle(code);
+
+        initSettle(settle);
+
+        return settle;
+    }
+
+    private void initSettle(Settle settle) {
+        AdoptOrder adoptOrder = adoptOrderBO.getAdoptOrder(settle.getRefCode());
+        settle.setAdoptOrder(adoptOrder);
     }
 
 }

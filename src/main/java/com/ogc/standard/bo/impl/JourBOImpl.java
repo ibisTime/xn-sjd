@@ -76,8 +76,8 @@ public class JourBOImpl extends PaginableBOImpl<Jour> implements IJourBO {
 
         data.setRemark("记得对账哦");
         data.setCreateDatetime(new Date());
-        data.setWorkDate(DateUtil.dateToStr(new Date(),
-            DateUtil.DB_DATE_FORMAT_STRING));
+        data.setWorkDate(
+            DateUtil.dateToStr(new Date(), DateUtil.DB_DATE_FORMAT_STRING));
 
         jourDAO.insert(data);
         return code;
@@ -119,8 +119,8 @@ public class JourBOImpl extends PaginableBOImpl<Jour> implements IJourBO {
 
         data.setRemark("记得对账哦");
         data.setCreateDatetime(new Date());
-        data.setWorkDate(DateUtil.dateToStr(new Date(),
-            DateUtil.DB_DATE_FORMAT_STRING));
+        data.setWorkDate(
+            DateUtil.dateToStr(new Date(), DateUtil.DB_DATE_FORMAT_STRING));
 
         jourDAO.insert(data);
         return code;
@@ -237,8 +237,21 @@ public class JourBOImpl extends PaginableBOImpl<Jour> implements IJourBO {
     }
 
     @Override
+    public BigDecimal getTotalAmount(String bizType, String channelType,
+            String accountNumber) {
+        Jour jour = new Jour();
+        jour.setType(EJourType.BALANCE.getCode());
+        jour.setBizType(bizType);
+        jour.setChannelType(channelType);
+        jour.setAccountNumber(accountNumber);
+        BigDecimal a = jourDAO.selectTotalAmount(jour);
+        return a;
+    }
+
+    @Override
     public BigDecimal getTotalAmount(Jour condition) {
 
         return jourDAO.selectTotalAmount(condition);
     }
+
 }

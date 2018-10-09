@@ -1,6 +1,7 @@
 package com.ogc.standard.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import com.ogc.standard.dao.base.ABaseDO;
 
@@ -56,6 +57,9 @@ public class Article extends ABaseDO {
     // UI次序
     private String orderNo;
 
+    // 发布人
+    private String publishUserId;
+
     // 发布时间
     private Date publishDatetime;
 
@@ -77,6 +81,9 @@ public class Article extends ABaseDO {
 
     // 发布时间止
     private Date publishDatetimeEnd;
+
+    // 照片列表
+    private List<String> photoList;
 
     public void setCode(String code) {
         this.code = code;
@@ -236,6 +243,22 @@ public class Article extends ABaseDO {
 
     public void setPublishDatetimeEnd(Date publishDatetimeEnd) {
         this.publishDatetimeEnd = publishDatetimeEnd;
+    }
+
+    public List<String> getPhotoList() {
+        return photoList;
+    }
+
+    public void setPhotoList(List<String> photoList) {
+        this.photoList = photoList;
+    }
+
+    public String getPublishUserId() {
+        return publishUserId;
+    }
+
+    public void setPublishUserId(String publishUserId) {
+        this.publishUserId = publishUserId;
     }
 
 }

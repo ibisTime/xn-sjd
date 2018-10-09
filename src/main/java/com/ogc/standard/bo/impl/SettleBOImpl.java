@@ -8,8 +8,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.ogc.standard.bo.IAdoptOrderBO;
-import com.ogc.standard.bo.IGroupAdoptOrderBO;
 import com.ogc.standard.bo.ISettleBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.core.OrderNoGenerater;
@@ -27,19 +25,13 @@ public class SettleBOImpl extends PaginableBOImpl<Settle> implements ISettleBO {
     @Autowired
     private ISettleDAO settleDAO;
 
-    @Autowired
-    private IAdoptOrderBO adoptOrderBO;
-
-    @Autowired
-    private IGroupAdoptOrderBO groupAdoptOrderBO;
-
     @Override
     public String saveSettle(AgentUser user, BigDecimal settleAmount,
             BigDecimal settleRate, String refCode, String refType,
             String refNote) {
         Settle settle = new Settle();
-        String code = OrderNoGenerater.generate(EGeneratePrefix.Settle
-            .getCode());
+        String code = OrderNoGenerater
+            .generate(EGeneratePrefix.Settle.getCode());
         settle.setCode(code);
         settle.setUserId(user.getUserId());
         settle.setUserKind(user.getLevel());

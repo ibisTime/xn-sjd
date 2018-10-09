@@ -34,6 +34,8 @@ public class XN629347 extends AProcessor {
         condition.setType(req.getType());
         condition.setOpenLevel(req.getOpenLevel());
         condition.setStatus(req.getStatus());
+        condition.setPublishUserId(req.getPublishUserId());
+
         condition.setPublishDatetimeStart(DateUtil.strToDate(
             req.getPublishDatetimeStart(), DateUtil.DATA_TIME_PATTERN_1));
         condition.setPublishDatetimeEnd(DateUtil.strToDate(

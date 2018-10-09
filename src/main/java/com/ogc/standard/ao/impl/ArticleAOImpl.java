@@ -1,8 +1,11 @@
 package com.ogc.standard.ao.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -47,13 +50,15 @@ public class ArticleAOImpl implements IArticleAO {
             } else {// 用户
 
                 status = EArticleStatus.TO_APPROVE;
+
             }
 
         }
 
         return articleBO.saveArticle(req.getAdoptTreeCode(), treeNo,
             req.getType(), openLevel, req.getTitle(), req.getContent(),
-            req.getPhoto(), status, req.getUpdater());
+            req.getPhotoList(), status, req.getPublishUserId(),
+            req.getUpdater());
     }
 
     @Override
@@ -84,10 +89,19 @@ public class ArticleAOImpl implements IArticleAO {
         data.setOpenLevel(openLevel);
         data.setTitle(req.getTitle());
         data.setContent(req.getContent());
-        data.setPhoto(req.getPhoto());
+
         data.setStatus(status.getCode());
         data.setUpdater(req.getUpdater());
         data.setUpdateDatatime(new Date());
+
+        StringBuffer stringBuffer = new StringBuffer();
+        if (CollectionUtils.isNotEmpty(req.getPhotoList())) {
+            for (String contentPic : req.getPhotoList()) {
+                stringBuffer.append(",").append(contentPic);
+            }
+        }
+        data.setPhoto(stringBuffer.toString());
+
         return articleBO.refreshArticle(data);
     }
 
@@ -134,7 +148,16 @@ public class ArticleAOImpl implements IArticleAO {
     @Override
     public Paginable<Article> queryArticlePage(int start, int limit,
             Article condition) {
-        return articleBO.getPaginable(start, limit, condition);
+        Paginable<Article> page = articleBO.getPaginable(start, limit,
+            condition);
+
+        if (null != page && CollectionUtils.isNotEmpty(page.getList())) {
+            for (Article article : page.getList()) {
+                initArticle(article);
+            }
+        }
+
+        return page;
     }
 
     @Override
@@ -144,13 +167,26 @@ public class ArticleAOImpl implements IArticleAO {
 
     @Override
     public Article getArticle(String code) {
-        return articleBO.getArticle(code);
+        Article article = articleBO.getArticle(code);
+
+        initArticle(article);
+
+        return article;
     }
 
-    public void init(Article data) {
-        // if (StringUtils.isNotBlank()) {
-        //
-        // }
+    private void initArticle(Article article) {
+        if (StringUtils.isNotBlank(article.getPhoto())) {
+
+            List<String> photoList = new ArrayList<String>();
+            String[] photoArray = article.getPhoto().split(",");
+            for (String photo : photoArray) {
+                if (StringUtils.isNotBlank(photo)) {
+                    photoList.add(photo);
+                }
+            }
+            article.setPhotoList(photoList);
+
+        }
     }
 
 }

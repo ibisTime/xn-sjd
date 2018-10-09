@@ -170,7 +170,6 @@
 		,parent_user_id = #{parentUserId}
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
-		,remark = #{remark}
 		WHERE user_id = #{userId}
 	</update>
 	

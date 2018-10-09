@@ -45,6 +45,9 @@ public interface IJourBO extends IPaginableBO<Jour> {
     public Jour getJourNotException(String code);
 
     public BigDecimal getTotalAmount(String bizType, String channelType,
+            String accountNumber);
+
+    public BigDecimal getTotalAmount(String bizType, String channelType,
             String accountNumber, String dateStart, String dateEnd);
 
     public BigDecimal getTotalAmount(Jour condition);

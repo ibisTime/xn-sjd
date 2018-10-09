@@ -40,7 +40,7 @@ public class AdoptOrder extends ABaseDO {
     // 数量
     private Integer quantity;
 
-    // 金额
+    // 金额(产品金额：价格*数量)
     private BigDecimal amount;
 
     // 下单人编号
@@ -61,16 +61,13 @@ public class AdoptOrder extends ABaseDO {
     // 支付渠道编号
     private String payCode;
 
-    // 是否积分抵扣
-    private String isDk;
-
     // 抵扣人民币
     private BigDecimal cnyDeductAmount;
 
     // 积分抵扣金额
     private BigDecimal jfDeductAmount;
 
-    // 支付金额
+    // 支付金额(抵扣之后)
     private BigDecimal payAmount;
 
     // 支付时间

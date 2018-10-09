@@ -198,13 +198,12 @@ public class AgentUserBOImpl extends PaginableBOImpl<AgentUser>
 
     @Override
     public void refreshToApprove(AgentUser data, String userReferee,
-            String parentUserId, String updater, String remark) {
+            String parentUserId, String updater) {
         data.setStatus(EAgentUserStatus.TO_APPROVE.getCode());
         data.setUserReferee(userReferee);
         data.setParentUserId(parentUserId);
         data.setUpdater(updater);
         data.setUpdateDatetime(new Date());
-        data.setRemark(remark);
         agentUserDAO.updateToApprove(data);
     }
 

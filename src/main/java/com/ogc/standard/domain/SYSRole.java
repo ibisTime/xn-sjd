@@ -21,6 +21,9 @@ public class SYSRole extends ABaseDO {
     // 角色名称
     private String name;
 
+    // 类型(C:C端用户/O:产权方/M:养护方/A:代理商/P:平台方)
+    private String type;
+
     // 更新人
     private String updater;
 
@@ -82,4 +85,13 @@ public class SYSRole extends ABaseDO {
     public void setRemark(String remark) {
         this.remark = remark;
     }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
 }

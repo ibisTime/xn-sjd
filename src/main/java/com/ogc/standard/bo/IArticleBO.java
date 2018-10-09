@@ -11,8 +11,9 @@ public interface IArticleBO extends IPaginableBO<Article> {
     public boolean isArticleExist(String code);
 
     public String saveArticle(String adoptTreeCode, String treeNo, String type,
-            String openLevel, String title, String content, String photo,
-            EArticleStatus status, String updater);
+            String openLevel, String title, String content,
+            List<String> photoList, EArticleStatus status, String publishUserId,
+            String updater);
 
     public int removeArticle(String code);
 
@@ -23,7 +24,8 @@ public interface IArticleBO extends IPaginableBO<Article> {
     public Article getArticle(String code);
 
     // 更新状态
-    public void refreshStatus(String code, EArticleStatus status, String updater);
+    public void refreshStatus(String code, EArticleStatus status,
+            String updater);
 
     // 上架文章
     public void putOn(String code, String location, String orderNo,

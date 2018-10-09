@@ -1,5 +1,7 @@
 package com.ogc.standard.dto.req;
 
+import java.util.List;
+
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
@@ -34,7 +36,7 @@ public class XN629341Req {
     private String content;
 
     // 照片
-    private String photo;
+    private List<String> photoList;
 
     // 更新人
     @NotBlank
@@ -88,12 +90,12 @@ public class XN629341Req {
         this.content = content;
     }
 
-    public String getPhoto() {
-        return photo;
+    public List<String> getPhotoList() {
+        return photoList;
     }
 
-    public void setPhoto(String photo) {
-        this.photo = photo;
+    public void setPhotoList(List<String> photoList) {
+        this.photoList = photoList;
     }
 
     public String getUpdater() {
