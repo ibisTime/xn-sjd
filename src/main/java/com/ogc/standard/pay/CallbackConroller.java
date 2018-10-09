@@ -62,7 +62,7 @@ public class CallbackConroller {
             if (paySuccess.isSuccess()
                     && !EJourBizTypeUser.CHARGE.getCode().equals(
                         paySuccess.getBizCode())) {
-                doPayOrder(paySuccess.getBizCode(), paySuccess.getBizType());
+                doPayOrder(paySuccess.getBizType(), paySuccess.getBizCode());
             }
             // 通知支付宝我已收到请求，不用再继续回调我了
             out.print("success");
@@ -72,7 +72,7 @@ public class CallbackConroller {
     }
 
     public void doPayOrder(String bizType, String bizCode) {
-        if (EJourBizTypeUser.ADOPT.getCode().equals(bizCode)) {
+        if (EJourBizTypeUser.ADOPT.getCode().equals(bizType)) {
             adoptOrderAO.paySuccess(bizCode);
         } else {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(), "业务类型订单不存在");
