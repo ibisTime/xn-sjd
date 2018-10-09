@@ -98,7 +98,8 @@ public class UserRelationAOImpl implements IUserRelationAO {
     }
 
     @Override
-    public boolean isExistUserRelation(String userId, String toUser, String type) {
+    public boolean isExistUserRelation(String userId, String toUser,
+            String type) {
         List<UserRelation> userRelationList = userRelationBO
             .queryUserRelationList(userId, toUser, type);
         boolean flag = false;
@@ -109,18 +110,20 @@ public class UserRelationAOImpl implements IUserRelationAO {
     }
 
     @Override
-    public Paginable<UserRelation> queryMyUserRelationPage(int start,
-            int limit, UserRelation condition) {
+    public Paginable<UserRelation> queryMyUserRelationPage(int start, int limit,
+            UserRelation condition) {
         Map<String, String> map = sysConfigBO
             .getConfigsMap(ESysConfigType.WEIGHT.getCode());
         BigDecimal weightRate1 = new BigDecimal(
             map.get(SysConstants.WEIGHT_RATE1));
         BigDecimal weightRate2 = new BigDecimal(
             map.get(SysConstants.WEIGHT_RATE2));
+
         condition.setWeightRate1(weightRate1);
         condition.setWeightRate2(weightRate2);
         Paginable<UserRelation> page = userRelationBO.queryMyPaginable(start,
             limit, condition);
+
         List<UserRelation> list = page.getList();
         for (UserRelation userRelation : list) {
             if (condition.getUserId().equals(userRelation.getToUser())) {

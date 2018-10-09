@@ -54,7 +54,7 @@ public class SysConstants {
     public static String DO_BIND_MOBILE_CN = "尊敬的%s用户，您于%s提交的绑定手机号码服务已完成，现绑定手机号码为%s，请妥善保管您的账户相关信息。";
 
     // 抵扣积分
-    public static String JF_DK_MAX_RATE = "JF_DK_MAX_RATE"; // 积分抵扣最大比例
+    public static String JF_DK_MAX_RATE = "JF_DK_MAX_RATE"; // 订单可用积分抵扣比例
 
     public static final String CNY2JF_RATE = "CNY2JF_RATE"; // 积分兑换人民币比例
 
@@ -82,17 +82,16 @@ public class SysConstants {
 
     public static final String WEIGHT_RATE2 = "WEIGHT_RATE2"; // 好友权重比例2
 
-    // 产生碳泡泡
-    public static final String CREATE_TPP_RATE = "CREATE_TPP_RATE";// 碳泡泡产生比例
-
-    public static final String TPP_EXPIRE_HOUR = "TPP_EXPIRE_HOUR";// 碳泡泡过期时间
-
     // 碳泡泡规则
     public static final String PRESENT_TPP = "PRESENT_TPP_QUANTITY";// 赠送碳泡泡记录
 
     public static final String SIGN_TPP = "SIGN_TPP";// 签到
 
     public static final String SHARE = "SHARE";// 分享
+
+    public static final String CREATE_TPP_RATE = "CREATE_TPP_RATE";// 碳泡泡产生比例
+
+    public static final String TPP_EXPIRE_HOUR = "TPP_EXPIRE_HOUR";// 碳泡泡过期时间
 
     // 积分规则
     public static final String REGISTER = "REGISTER";// 注册送积分

@@ -7,12 +7,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.ogc.standard.bo.ICategoryBO;
 import com.ogc.standard.bo.IProductBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.dao.IProductDAO;
+import com.ogc.standard.domain.Category;
 import com.ogc.standard.domain.Product;
 import com.ogc.standard.dto.req.XN629010Req;
 import com.ogc.standard.dto.req.XN629011Req;
@@ -23,17 +25,30 @@ import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
 
 @Component
-public class ProductBOImpl extends PaginableBOImpl<Product> implements
-        IProductBO {
+public class ProductBOImpl extends PaginableBOImpl<Product>
+        implements IProductBO {
 
     @Autowired
     private IProductDAO productDAO;
 
+    @Autowired
+    private ICategoryBO categoryBO;
+
     @Override
     public Product saveProduct(XN629010Req req) {
         Product data = new Product();
-        String code = OrderNoGenerater.generate(EGeneratePrefix.Product
-            .getCode());
+
+        Category category = categoryBO.getCategory(req.getCategoryCode());
+        if (StringUtils.isNotBlank(category.getParentCode())) {
+            Category parentCategory = categoryBO
+                .getCategory(category.getParentCode());
+            data.setParentCategoryCode(parentCategory.getCode());
+        } else {
+            data.setParentCategoryCode(req.getCategoryCode());
+        }
+
+        String code = OrderNoGenerater
+            .generate(EGeneratePrefix.Product.getCode());
         data.setCode(code);
         data.setName(req.getName());
         data.setSellType(req.getSellType());
@@ -75,6 +90,7 @@ public class ProductBOImpl extends PaginableBOImpl<Product> implements
         data.setStatus(EProductStatus.DRAFT.getCode());
         data.setUpdater(req.getUpdater());
         data.setUpdateDatetime(new Date());
+
         productDAO.insert(data);
         return data;
     }
@@ -117,13 +133,18 @@ public class ProductBOImpl extends PaginableBOImpl<Product> implements
         data.setRaiseEndDatetime(DateUtil.strToDate(req.getRaiseEndDatetime(),
             DateUtil.FRONT_DATE_FORMAT_STRING));
         data.setRaiseCount(StringValidater.toInteger(req.getRaiseCount()));
+
+        if (EProductStatus.APPROVE_NO.getCode().equals(data.getStatus())) {
+            data.setStatus(EProductStatus.DRAFT.getCode());
+        }
         data.setUpdater(req.getUpdater());
         data.setUpdateDatetime(new Date());
         productDAO.updateProduct(data);
     }
 
     @Override
-    public void refreshSubmitProduct(String code, String updater, String remark) {
+    public void refreshSubmitProduct(String code, String updater,
+            String remark) {
         Product product = new Product();
 
         product.setCode(code);

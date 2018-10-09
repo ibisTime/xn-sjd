@@ -16,6 +16,9 @@ public class XN629007Req extends AListReq {
     // 名称
     private String name;
 
+    // 级别
+    private String level;
+
     // 顺序
     private String orderNo;
 
@@ -52,6 +55,14 @@ public class XN629007Req extends AListReq {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
     }
 
 }

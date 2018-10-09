@@ -24,14 +24,15 @@ public interface IUserAO {
     public String doRegisterByMobile(XN805041Req req);
 
     // 分配注册积分
-    public void doAssignRegistJf(String userId, String userReferee);
+    public void doAssignRegistJf(String userId, String userReferee,
+            String userRefereeType);
 
     // 代注册
     public String doAddUser(XN805042Req req);
 
     // 绑定手机号
-    public void doBindMobile(String isSendSms, String mobile,
-            String smsCaptcha, String userId);
+    public void doBindMobile(String isSendSms, String mobile, String smsCaptcha,
+            String userId);
 
     // 用户登录
     public String doLogin(String loginName, String loginPwd, String client,
@@ -61,10 +62,12 @@ public interface IUserAO {
             String adminUserId, String adminPwd);
 
     // 管理员重置推荐人
-    public void doResetReferee(String userId, String userReferee, String updater);
+    public void doResetReferee(String userId, String userReferee,
+            String updater);
 
     // 设置支付密码
-    public void doSetTradePwd(String userId, String tradePwd, String smsCaptcha);
+    public void doSetTradePwd(String userId, String tradePwd,
+            String smsCaptcha);
 
     // 重置支付密码
     public void doResetTradePwd(String userId, String newTradePwd,

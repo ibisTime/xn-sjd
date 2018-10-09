@@ -23,7 +23,8 @@ public interface IAdoptOrderAO {
     public void cancelAdoptOrder(String code, String userId, String remark);
 
     // 支付订单
-    public Object toPayAdoptOrder(String code, String payType, String isJfDeduct);
+    public Object toPayAdoptOrder(String code, String payType,
+            String isJfDeduct, String tradePwd);
 
     // 支付成功订单回调处理
     public void paySuccess(String payGroup);

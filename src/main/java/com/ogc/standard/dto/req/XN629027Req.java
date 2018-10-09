@@ -22,6 +22,9 @@ public class XN629027Req extends AListReq {
     // UI位置
     private String location;
 
+    // 产品大类
+    private String parentCategoryCode;
+
     // 产品分类
     private String categoryCode;
 
@@ -74,6 +77,14 @@ public class XN629027Req extends AListReq {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public String getParentCategoryCode() {
+        return parentCategoryCode;
+    }
+
+    public void setParentCategoryCode(String parentCategoryCode) {
+        this.parentCategoryCode = parentCategoryCode;
     }
 
 }

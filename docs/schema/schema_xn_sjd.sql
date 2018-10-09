@@ -833,6 +833,7 @@ CREATE TABLE `tzb_product` (
   `direct_type` varchar(32) DEFAULT NULL COMMENT '定向类型(1=等级 2=个人)',
   `direct_object` varchar(255) DEFAULT NULL COMMENT '定向对象',
   `owner_id` varchar(32) DEFAULT NULL COMMENT '产权方编号',
+  `parent_category_code` varchar(32) DEFAULT NULL COMMENT '产品大类',
   `category_code` varchar(32) DEFAULT NULL COMMENT '产品分类',
   `list_pic` text COMMENT '列表图片',
   `banner_pic` text COMMENT '详情banner图',

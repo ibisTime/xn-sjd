@@ -8,6 +8,8 @@
  */
 package com.ogc.standard.dao;
 
+import java.util.List;
+
 import com.ogc.standard.dao.base.IBaseDAO;
 import com.ogc.standard.domain.Account;
 
@@ -49,4 +51,13 @@ public interface IAccountDAO extends IBaseDAO<Account> {
     public int frozenAmount(Account data);
 
     public int unfrozenAmount(Account data);
+
+    /**
+     * 查询各个端人民币账户总余额
+     * @param data
+     * @return 
+     * @create: Oct 9, 2018 8:32:45 PM silver
+     * @history:
+     */
+    public List<Account> selectAmountSumList();
 }

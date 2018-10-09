@@ -40,6 +40,7 @@ public class AdoptOrderTreeBOImpl extends PaginableBOImpl<AdoptOrderTree>
             .generate(EGeneratePrefix.ADOPT_ORDER_TREE.getCode());
         data.setCode(code);
         data.setOrderCode(adoptOrder.getCode());
+        data.setParentCategoryCode(product.getParentCategoryCode());
         data.setCategoryCode(product.getCategoryCode());
         data.setProductCode(product.getCode());
         data.setTreeNumber(treeNumber);
@@ -47,7 +48,8 @@ public class AdoptOrderTreeBOImpl extends PaginableBOImpl<AdoptOrderTree>
         data.setStartDatetime(adoptOrder.getStartDatetime());
         data.setEndDatetime(adoptOrder.getEndDatetime());
         data.setAmount(adoptOrder.getPrice());
-        if (EAdoptOrderStatus.TO_ADOPT.getCode().equals(adoptOrder.getStatus())) {
+        if (EAdoptOrderStatus.TO_ADOPT.getCode()
+            .equals(adoptOrder.getStatus())) {
             data.setStatus(EAdoptOrderTreeStatus.TO_ADOPT.getCode());
         } else {
             data.setStatus(EAdoptOrderTreeStatus.ADOPT.getCode());
@@ -61,7 +63,8 @@ public class AdoptOrderTreeBOImpl extends PaginableBOImpl<AdoptOrderTree>
     }
 
     @Override
-    public List<AdoptOrderTree> queryAdoptOrderTreeList(AdoptOrderTree condition) {
+    public List<AdoptOrderTree> queryAdoptOrderTreeList(
+            AdoptOrderTree condition) {
         return adoptOrderTreeDAO.selectList(condition);
     }
 

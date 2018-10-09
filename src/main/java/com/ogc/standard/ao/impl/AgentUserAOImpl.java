@@ -337,7 +337,7 @@ public class AgentUserAOImpl implements IAgentUserAO {
         AgentUser agentUser = agentUserBO.getAgentUser(userId);
 
         // 短信验证码是否正确
-        // smsOutBO.checkCaptcha(agentUser.getMobile(), smsCaptcha, "730082");
+        smsOutBO.checkCaptcha(agentUser.getMobile(), smsCaptcha, "730082");
 
         // 修改支付密码
         agentUserBO.refreshTradePwd(userId, tradePwd);
@@ -377,7 +377,7 @@ public class AgentUserAOImpl implements IAgentUserAO {
         AgentUser agentUser = agentUserBO.getAgentUser(userId);
 
         // 短信验证码是否正确
-        // smsOutBO.checkCaptcha(agentUser.getMobile(), smsCaptcha, "730084");
+        smsOutBO.checkCaptcha(agentUser.getMobile(), smsCaptcha, "730084");
 
         // 修改支付密码
         agentUserBO.refreshTradePwd(userId, newTradePwd);

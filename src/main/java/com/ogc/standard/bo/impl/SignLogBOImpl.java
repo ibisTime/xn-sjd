@@ -50,9 +50,10 @@ public class SignLogBOImpl extends PaginableBOImpl<SignLog>
     }
 
     @Override
-    public boolean isCheckIn(String userId) {
+    public boolean isCheckIn(String userId, String type) {
         SignLog condition = new SignLog();
         condition.setUserId(userId);
+        condition.setType(type);
         List<SignLog> signLogList = querySignLogList(condition);
         ListSort(signLogList);
 

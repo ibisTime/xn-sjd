@@ -156,7 +156,7 @@ public class AdoptOrderTreeAOImpl implements IAdoptOrderTreeAO {
     public void doDailyAdoptOrderTree() {
         logger.info("***************开始生成碳泡泡***************");
         Map<String, String> configMap = sysConfigBO
-            .getConfigsMap(ESysConfigType.CREATE_TPP.getCode());
+            .getConfigsMap(ESysConfigType.TPP_RULE.getCode());
         Double rate = Double
             .valueOf(configMap.get(SysConstants.CREATE_TPP_RATE));
         Integer expireHours = Integer

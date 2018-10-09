@@ -35,8 +35,8 @@ public class DateUtil {
     public static final String TIME_END = " 23:59:59";
 
     public static Date getStartDatetime(String startDate) {
-        Date repayDatetime = DateUtil.strToDate(
-            startDate + DateUtil.TIME_BEGIN, DateUtil.DATA_TIME_PATTERN_1);
+        Date repayDatetime = DateUtil.strToDate(startDate + DateUtil.TIME_BEGIN,
+            DateUtil.DATA_TIME_PATTERN_1);
         return repayDatetime;
     }
 
@@ -243,7 +243,8 @@ public class DateUtil {
      * @param format 时间格式
      * @return
      */
-    public static int daysBetween(String beginStr, String endStr, String format) {
+    public static int daysBetween(String beginStr, String endStr,
+            String format) {
         Date end = strToDate(endStr, format);
         Date begin = strToDate(beginStr, format);
         long times = end.getTime() - begin.getTime();
@@ -261,6 +262,19 @@ public class DateUtil {
     public static int daysBetween(Date beginDate, Date endDate) {
         long times = endDate.getTime() - beginDate.getTime();
         return (int) (times / 60 / 60 / 1000 / 24);
+    }
+
+    /**
+     * 统计两个时间差，返回年数
+     * @param beginDate
+     * @param endDate
+     * @return 
+     * @create: Oct 9, 2018 9:49:02 PM silver
+     * @history:
+     */
+    public static int yearsBetween(Date beginDate, Date endDate) {
+        long times = endDate.getTime() - beginDate.getTime();
+        return (int) (times / 60 / 60 / 1000 / 24 / 365) + 1;
     }
 
     /**
@@ -365,7 +379,8 @@ public class DateUtil {
     }
 
     public static void main(String[] args) {
-        System.out.println(getHourStart());
+        System.out.println(yearsBetween(
+            strToDate("2016-09-01", FRONT_DATE_FORMAT_STRING), new Date()));
     }
 
     /**

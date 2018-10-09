@@ -87,13 +87,16 @@ public class UserExtAOImpl implements IUserExtAO {
         Account sysJfAccount = accountBO
             .getAccount(ESystemAccount.SYS_ACOUNT_JF_POOL.getCode());
 
-        if (quantity.compareTo(sysJfAccount.getAmount()) != 1) {
-            accountBO.transAmount(sysJfAccount, userJfAccount, quantity,
-                EJourBizTypeUser.COMPLETE_INFO.getCode(),
-                EJourBizTypePlat.COMPLETE_INFO.getCode(),
-                EJourBizTypeUser.COMPLETE_INFO.getValue(),
-                EJourBizTypePlat.COMPLETE_INFO.getValue(), req.getUserId());
+        // 积分池不足时将剩余积分转给用户
+        if (quantity.compareTo(sysJfAccount.getAmount()) == 1) {
+            quantity = sysJfAccount.getAmount();
         }
+
+        accountBO.transAmount(sysJfAccount, userJfAccount, quantity,
+            EJourBizTypeUser.COMPLETE_INFO.getCode(),
+            EJourBizTypePlat.COMPLETE_INFO.getCode(),
+            EJourBizTypeUser.COMPLETE_INFO.getValue(),
+            EJourBizTypePlat.COMPLETE_INFO.getValue(), req.getUserId());
 
         return req.getUserId();
     }

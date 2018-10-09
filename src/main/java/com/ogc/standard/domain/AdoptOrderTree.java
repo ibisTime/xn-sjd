@@ -21,7 +21,10 @@ public class AdoptOrderTree extends ABaseDO {
     // 认养订单编号
     private String orderCode;
 
-    // 分类
+    // 产品大类
+    private String parentCategoryCode;
+
+    // 产品小类
     private String categoryCode;
 
     // 产品编号
@@ -177,6 +180,14 @@ public class AdoptOrderTree extends ABaseDO {
 
     public void setIsShelter(String isShelter) {
         this.isShelter = isShelter;
+    }
+
+    public String getParentCategoryCode() {
+        return parentCategoryCode;
+    }
+
+    public void setParentCategoryCode(String parentCategoryCode) {
+        this.parentCategoryCode = parentCategoryCode;
     }
 
 }

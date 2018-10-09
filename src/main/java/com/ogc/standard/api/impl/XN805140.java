@@ -31,7 +31,6 @@ public class XN805140 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-
         return signLogAO.addSignLog(req);
     }
 

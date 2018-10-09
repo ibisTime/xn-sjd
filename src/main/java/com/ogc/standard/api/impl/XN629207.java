@@ -28,6 +28,7 @@ public class XN629207 extends AProcessor {
     public Object doBusiness() throws BizException {
         AdoptOrderTree condition = new AdoptOrderTree();
         condition.setOrderCode(req.getOrderCode());
+        condition.setParentCategoryCode(req.getParentCategoryCode());
         condition.setCategoryCode(req.getCategoryCode());
         condition.setStatus(req.getStatus());
         condition.setCurrentHolder(req.getCurrentHolder());

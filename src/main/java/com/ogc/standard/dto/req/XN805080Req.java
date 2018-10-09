@@ -9,7 +9,6 @@ public class XN805080Req {
     private String userId;
 
     // 头像（必填）
-    @NotBlank
     private String photo;
 
     public String getUserId() {

@@ -9,7 +9,7 @@ public interface ISignLogBO extends IPaginableBO<SignLog> {
 
     public boolean isSignLogExist(Integer id);
 
-    public boolean isCheckIn(String userId);
+    public boolean isCheckIn(String userId, String type);
 
     public int saveSignLog(SignLog data);
 

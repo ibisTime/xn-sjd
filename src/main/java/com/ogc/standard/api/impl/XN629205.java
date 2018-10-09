@@ -30,6 +30,7 @@ public class XN629205 extends AProcessor {
     public Object doBusiness() throws BizException {
         AdoptOrderTree condition = new AdoptOrderTree();
         condition.setOrderCode(req.getOrderCode());
+        condition.setParentCategoryCode(req.getParentCategoryCode());
         condition.setCategoryCode(req.getCategoryCode());
         condition.setProductCode(req.getProductCode());
         condition.setTreeNumber(req.getTreeNumber());
@@ -44,8 +45,8 @@ public class XN629205 extends AProcessor {
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
 
-        return adoptOrderTreeAO
-            .queryAdoptOrderTreePage(start, limit, condition);
+        return adoptOrderTreeAO.queryAdoptOrderTreePage(start, limit,
+            condition);
     }
 
     @Override

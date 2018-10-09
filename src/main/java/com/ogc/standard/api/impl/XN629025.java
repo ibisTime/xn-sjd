@@ -31,8 +31,11 @@ public class XN629025 extends AProcessor {
     public Object doBusiness() throws BizException {
         Product condition = new Product();
         condition.setName(req.getName());
+        condition.setCode(req.getCode());
+        condition.setParentCategoryCode(req.getParentCategoryCode());
         condition.setCategoryCode(req.getCategoryCode());
         condition.setOwnerId(req.getOwnerId());
+
         condition.setSellType(req.getSellType());
         condition.setLocation(req.getLocation());
         condition.setStatus(req.getStatus());

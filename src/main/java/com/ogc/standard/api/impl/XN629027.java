@@ -29,13 +29,14 @@ public class XN629027 extends AProcessor {
     public Object doBusiness() throws BizException {
         Product condition = new Product();
         condition.setName(req.getName());
+        condition.setParentCategoryCode(req.getParentCategoryCode());
         condition.setCategoryCode(req.getCategoryCode());
         condition.setOwnerId(req.getOwnerId());
         condition.setSellType(req.getSellType());
         condition.setLocation(req.getLocation());
         condition.setStatus(req.getStatus());
-        String column = req.getOrderColumn();
 
+        String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
             column = IProductAO.DEFAULT_ORDER_COLUMN;
         }

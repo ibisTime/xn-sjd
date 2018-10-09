@@ -16,6 +16,9 @@ public class XN629005Req extends APageReq {
     // 名称
     private String name;
 
+    // 等级
+    private String level;
+
     // 顺序
     private String orderNo;
 
@@ -28,6 +31,14 @@ public class XN629005Req extends APageReq {
 
     public void setParentCode(String parentCode) {
         this.parentCode = parentCode;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
     }
 
     public String getName() {

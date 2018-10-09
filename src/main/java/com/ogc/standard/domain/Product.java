@@ -34,7 +34,10 @@ public class Product extends ABaseDO {
     // 产权方编号
     private String ownerId;
 
-    // 产品分类
+    // 产品大类
+    private String parentCategoryCode;
+
+    // 产品小类
     private String categoryCode;
 
     // 列表图片
@@ -125,7 +128,10 @@ public class Product extends ABaseDO {
     // 剩余数量
     private Integer treeRemainCount;
 
-    // 产品类型名称
+    // 产品大类名称
+    private String parentCategoryName;
+
+    // 产品小类名称
     private String categoryName;
 
     // 产品最小价格
@@ -444,6 +450,22 @@ public class Product extends ABaseDO {
 
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
+    }
+
+    public String getParentCategoryCode() {
+        return parentCategoryCode;
+    }
+
+    public void setParentCategoryCode(String parentCategoryCode) {
+        this.parentCategoryCode = parentCategoryCode;
+    }
+
+    public String getParentCategoryName() {
+        return parentCategoryName;
+    }
+
+    public void setParentCategoryName(String parentCategoryName) {
+        this.parentCategoryName = parentCategoryName;
     }
 
 }

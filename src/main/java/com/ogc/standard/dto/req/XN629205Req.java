@@ -13,6 +13,9 @@ public class XN629205Req extends APageReq {
     // 认养订单编号
     private String orderCode;
 
+    // 产品大类
+    private String parentCategoryCode;
+
     private String categoryCode;
 
     private String productCode;
@@ -71,6 +74,14 @@ public class XN629205Req extends APageReq {
 
     public void setCurrentHolder(String currentHolder) {
         this.currentHolder = currentHolder;
+    }
+
+    public String getParentCategoryCode() {
+        return parentCategoryCode;
+    }
+
+    public void setParentCategoryCode(String parentCategoryCode) {
+        this.parentCategoryCode = parentCategoryCode;
     }
 
 }

@@ -67,6 +67,15 @@ public class AccountDAOImpl extends AMybatisTemplate implements IAccountDAO {
             Account.class);
     }
 
+    /**
+     * @see com.ogc.standard.dao.IAccountDAO#selectAmountSumList()
+     */
+    @Override
+    public List<Account> selectAmountSumList() {
+        return super.selectList(NAMESPACE.concat("select_accountAmountSum"),
+            null, Account.class);
+    }
+
     /** 
      * @see com.ibis.account.dao.base.IBaseDAO#selectList(java.lang.Object, int, int)
      */
@@ -109,4 +118,5 @@ public class AccountDAOImpl extends AMybatisTemplate implements IAccountDAO {
     public int unfrozenAmount(Account data) {
         return super.update(NAMESPACE.concat("update_unfrozenAmount"), data);
     }
+
 }

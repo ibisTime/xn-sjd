@@ -10,6 +10,9 @@ public class XN629025Req extends APageReq {
 
     private static final long serialVersionUID = 3564125020784062589L;
 
+    // 编号
+    private String code;
+
     // 名称
     private String name;
 
@@ -21,6 +24,9 @@ public class XN629025Req extends APageReq {
 
     // UI位置
     private String location;
+
+    // 产品大类
+    private String parentCategoryCode;
 
     // 产品分类
     private String categoryCode;
@@ -118,6 +124,22 @@ public class XN629025Req extends APageReq {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public String getParentCategoryCode() {
+        return parentCategoryCode;
+    }
+
+    public void setParentCategoryCode(String parentCategoryCode) {
+        this.parentCategoryCode = parentCategoryCode;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
 }

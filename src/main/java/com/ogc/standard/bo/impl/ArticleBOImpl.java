@@ -3,7 +3,6 @@ package com.ogc.standard.bo.impl;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -36,7 +35,7 @@ public class ArticleBOImpl extends PaginableBOImpl<Article>
 
     @Override
     public String saveArticle(String adoptTreeCode, String treeNo, String type,
-            String right, String title, String content, List<String> photoList,
+            String right, String title, String content, String photo,
             EArticleStatus status, String publishUserId, String updater) {
         Article data = new Article();
         String code = OrderNoGenerater
@@ -49,6 +48,7 @@ public class ArticleBOImpl extends PaginableBOImpl<Article>
         data.setOpenLevel(right);
         data.setTitle(title);
         data.setContent(content);
+        data.setPhoto(photo);
         data.setStatus(status.getCode());
         data.setPublishDatetime(new Date());
 
@@ -56,15 +56,6 @@ public class ArticleBOImpl extends PaginableBOImpl<Article>
         data.setUpdater(updater);
         data.setUpdateDatatime(new Date());
         data.setAdoptTreeCode(adoptTreeCode);
-
-        StringBuffer stringBuffer = new StringBuffer();
-        if (CollectionUtils.isNotEmpty(photoList)) {
-            for (String contentPic : photoList) {
-                stringBuffer.append(",").append(contentPic);
-            }
-        }
-        data.setPhoto(stringBuffer.toString());
-
         articleDAO.insert(data);
         return code;
     }

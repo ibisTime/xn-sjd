@@ -32,6 +32,7 @@ import com.ogc.standard.domain.AdoptOrder;
 import com.ogc.standard.domain.AgentUser;
 import com.ogc.standard.domain.Product;
 import com.ogc.standard.domain.User;
+import com.ogc.standard.dto.res.XN629048Res;
 import com.ogc.standard.enums.EAgentUserLevel;
 import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EJourBizTypeMaintain;
@@ -80,13 +81,15 @@ public class DistributionOrderBOImpl implements IDistributionOrderBO {
     private ISettleBO settleBO;
 
     @Override
-    public BigDecimal distribution(AdoptOrder data) {
+    public BigDecimal distribution(AdoptOrder data, XN629048Res resultRes) {
         Map<String, String> mapList = sysConfigBO.getConfigsMap();
         Product product = productBO.getProduct(data.getProductCode());
+        BigDecimal payAmount = data.getAmount()
+            .subtract(resultRes.getCnyAmount());// 订单支付金额（抵扣积分后）
 
         // 产权方分销
-        BigDecimal ownerDeductAmount = data.getAmount().multiply(
-            new BigDecimal(mapList.get(SysConstants.DIST_OWENER_RATE)));
+        BigDecimal ownerDeductAmount = payAmount.multiply(
+            new BigDecimal(mapList.get(SysConstants.DIST_OWENER_RATE)));// 产权方分销金额
         accountBO.transAmount(ESysUser.SYS_USER.getCode(), product.getOwnerId(),
             ECurrency.CNY.getCode(), ownerDeductAmount,
             EJourBizTypePlat.ADOPT_DIST.getCode(),
@@ -98,7 +101,7 @@ public class DistributionOrderBOImpl implements IDistributionOrderBO {
         String maintainId = applyBindMaintainBO
             .getMaintainId(product.getOwnerId());
         if (StringUtils.isNotBlank(maintainId)) {
-            BigDecimal maintainDeductAmount = data.getPayAmount().multiply(
+            BigDecimal maintainDeductAmount = payAmount.multiply(
                 new BigDecimal(mapList.get(SysConstants.DIST_MAINTAIN_RATE)));
             accountBO.transAmount(ESysUser.SYS_USER.getCode(), maintainId,
                 ECurrency.CNY.getCode(), maintainDeductAmount,
@@ -110,13 +113,13 @@ public class DistributionOrderBOImpl implements IDistributionOrderBO {
         }
 
         // 代理方分销
-        distributionAgent(data, mapList);
+        distributionAgent(data, mapList, payAmount);
 
         // 用户同等金额积分奖励
-        BigDecimal cnyAwardAmount = data.getAmount().multiply(
+        BigDecimal cnyAwardAmount = payAmount.multiply(
             new BigDecimal(mapList.get(SysConstants.DIST_USER_BACK_JF_RATE)));// 人民币比例金额
 
-        // 人民币转积分
+        // C端用户返积分
         Map<String, String> configMap = sysConfigBO
             .getConfigsMap(ESysConfigType.PAY_RULE.getCode());
         BigDecimal rate = new BigDecimal(
@@ -141,18 +144,16 @@ public class DistributionOrderBOImpl implements IDistributionOrderBO {
     }
 
     // 代理等级分销
-    private void distributionAgent(AdoptOrder data,
-            Map<String, String> mapList) {
-        // 拿到下单用户的代理商(下单用户一定有代理商)
+    private void distributionAgent(AdoptOrder data, Map<String, String> mapList,
+            BigDecimal payAmount) {
+        // 拿到下单用户的代理商
         User applyUser = userBO.getUser(data.getApplyUser());
         if (StringUtils.isBlank(applyUser.getAgentId())) {
             return;
-            // throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-            // "代理用户不存在");
         }
 
         // 分成总金额
-        BigDecimal agentTotalAmount = data.getPayAmount().multiply(
+        BigDecimal agentTotalAmount = payAmount.multiply(
             new BigDecimal(mapList.get(SysConstants.DIST_AGENT_RATE)));
         AgentUser agentUser = agentUserBO.getAgentUser(applyUser.getAgentId());
         if (EAgentUserLevel.FOUR.getCode().equals(agentUser.getLevel())) {
@@ -175,7 +176,7 @@ public class DistributionOrderBOImpl implements IDistributionOrderBO {
             AgentUser agentUser, BigDecimal agentTotalAmount,
             Map<String, String> mapList) {
         String preNote = applyUser.getMobile() + "消费"
-                + AmountUtil.div(data.getPayAmount(), 1000L);
+                + AmountUtil.div(data.getAmount(), 1000L);
         // 四级代理
         BigDecimal level4Rate = new BigDecimal(
             mapList.get(SysConstants.DIST_AGENT4_RATE));
@@ -228,7 +229,7 @@ public class DistributionOrderBOImpl implements IDistributionOrderBO {
             AgentUser agentUser, BigDecimal agentTotalAmount,
             Map<String, String> mapList) {
         String preNote = applyUser.getMobile() + "消费"
-                + AmountUtil.div(data.getPayAmount(), 1000L);
+                + AmountUtil.div(data.getAmount(), 1000L);
 
         // 三级代理
         BigDecimal level3Rate = new BigDecimal(
@@ -268,7 +269,7 @@ public class DistributionOrderBOImpl implements IDistributionOrderBO {
             AgentUser agentUser, BigDecimal agentTotalAmount,
             Map<String, String> mapList) {
         String preNote = applyUser.getMobile() + "消费"
-                + AmountUtil.div(data.getPayAmount(), 1000L);
+                + AmountUtil.div(data.getAmount(), 1000L);
 
         // 二级代理
         BigDecimal level2Rate = new BigDecimal(
@@ -295,7 +296,7 @@ public class DistributionOrderBOImpl implements IDistributionOrderBO {
             AgentUser agentUser, BigDecimal agentTotalAmount,
             Map<String, String> mapList) {
         String preNote = applyUser.getMobile() + "消费"
-                + AmountUtil.div(data.getPayAmount(), 1000L);
+                + AmountUtil.div(data.getAmount(), 1000L);
 
         // 一级代理
         BigDecimal level1Rate = new BigDecimal(

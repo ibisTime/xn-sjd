@@ -10,6 +10,7 @@
 		<result column="direct_object" property="directObject" />
 		
 		<result column="owner_id" property="ownerId" />
+		<result column="parent_category_code" property="parentCategoryCode" />
 		<result column="category_code" property="categoryCode" />
 		
 		<result column="list_pic" property="listPic" />
@@ -54,6 +55,9 @@
 			<if test="ownerId != null and ownerId != '' ">
 				AND t.owner_id = #{ownerId}
 			</if>
+			<if test="parentCategoryCode != null and parentCategoryCode != '' ">
+				AND t.parent_category_code = #{parentCategoryCode}
+			</if>
 			<if test="categoryCode != null and categoryCode != '' ">
 				AND t.category_code = #{categoryCode}
 			</if>
@@ -86,7 +90,9 @@
 		,t.sell_type
 		,t.direct_type
 		,t.direct_object
+		
 		,t.owner_id
+		,t.parent_category_code
 		,t.category_code
 		
 		,t.list_pic
@@ -137,7 +143,9 @@
 		,sell_type
 		,direct_type
 		,direct_object
+		
 		,owner_id
+		,parent_category_code
 		,category_code
 		
 		,list_pic
@@ -171,7 +179,9 @@
 		,#{sellType}
 		,#{directType}
 		,#{directObject}
+		
 		,#{ownerId}
+		,#{parentCategoryCode}
 		,#{categoryCode}
 		
 		,#{listPic}
@@ -208,6 +218,7 @@
 		,sell_type = #{sellType}
 		,direct_type = #{directType}
 		,direct_object =#{directObject}
+		,parent_category_code = #{parentCategoryCode}
 		,category_code = #{categoryCode}
 		,list_pic = #{listPic}
 		,banner_pic = #{bannerPic}
@@ -223,6 +234,7 @@
 		,raise_start_datetime = #{raiseStartDatetime}
 		,raise_end_datetime = #{raiseEndDatetime}
 		,raise_count = #{raiseCount}
+		,status = #{status}
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
 		,remark = #{remark}

@@ -11,6 +11,7 @@ package com.ogc.standard.bo;
 import java.math.BigDecimal;
 
 import com.ogc.standard.domain.AdoptOrder;
+import com.ogc.standard.dto.res.XN629048Res;
 
 /** 
  * @author: xieyj 
@@ -19,5 +20,5 @@ import com.ogc.standard.domain.AdoptOrder;
  */
 public interface IDistributionOrderBO {
 
-    BigDecimal distribution(AdoptOrder data);
+    BigDecimal distribution(AdoptOrder data, XN629048Res resultRes);
 }

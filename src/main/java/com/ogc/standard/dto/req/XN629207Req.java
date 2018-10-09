@@ -13,6 +13,9 @@ public class XN629207Req extends AListReq {
     // 认养订单编号
     private String orderCode;
 
+    // 产品大类
+    private String parentCategoryCode;
+
     // 分类编号
     private String categoryCode;
 
@@ -52,6 +55,14 @@ public class XN629207Req extends AListReq {
 
     public void setCurrentHolder(String currentHolder) {
         this.currentHolder = currentHolder;
+    }
+
+    public String getParentCategoryCode() {
+        return parentCategoryCode;
+    }
+
+    public void setParentCategoryCode(String parentCategoryCode) {
+        this.parentCategoryCode = parentCategoryCode;
     }
 
 }

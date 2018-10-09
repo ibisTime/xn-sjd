@@ -36,8 +36,8 @@ import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
 
 @Component
-public class AdoptOrderBOImpl extends PaginableBOImpl<AdoptOrder> implements
-        IAdoptOrderBO {
+public class AdoptOrderBOImpl extends PaginableBOImpl<AdoptOrder>
+        implements IAdoptOrderBO {
 
     @Autowired
     private IAdoptOrderDAO adoptOrderDAO;
@@ -57,8 +57,8 @@ public class AdoptOrderBOImpl extends PaginableBOImpl<AdoptOrder> implements
         String code = null;
         if (user != null) {
             AdoptOrder data = new AdoptOrder();
-            code = OrderNoGenerater.generate(EGeneratePrefix.ADOPT_ORDER
-                .getCode());
+            code = OrderNoGenerater
+                .generate(EGeneratePrefix.ADOPT_ORDER.getCode());
             data.setCode(code);
             data.setType(product.getSellType());
             data.setProductCode(product.getCode());
@@ -92,8 +92,9 @@ public class AdoptOrderBOImpl extends PaginableBOImpl<AdoptOrder> implements
         data.setPayType(EPayType.YE.getCode());
         data.setCnyDeductAmount(resultRes.getCnyAmount());
         data.setJfDeductAmount(resultRes.getJfAmount());
-        data.setPayAmount(data.getAmount());
+        data.setPayAmount(data.getAmount().subtract(resultRes.getCnyAmount()));
         data.setPayDatetime(nowDate);
+
         data.setBackJfAmount(backjfAmount);
         data.setSettleStatus(EAdoptOrderSettleStatus.TO_SETTLE.getCode());
         data.setRemark("余额支付成功");
@@ -183,8 +184,8 @@ public class AdoptOrderBOImpl extends PaginableBOImpl<AdoptOrder> implements
             condition.setPayGroup(payGroup);
             List<AdoptOrder> list = adoptOrderDAO.selectList(condition);
             if (CollectionUtils.isEmpty(list)) {
-                throw new BizException(EBizErrorCode.DEFAULT.getCode(), "根据"
-                        + payGroup + "查询订单不存在");
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                    "根据" + payGroup + "查询订单不存在");
             }
             data = list.get(0);
         }
@@ -205,19 +206,24 @@ public class AdoptOrderBOImpl extends PaginableBOImpl<AdoptOrder> implements
 
     @Override
     public XN629048Res getOrderDeductAmount(AdoptOrder data, String isDk) {
-        BigDecimal cnyAmount = BigDecimal.ZERO;// 抵扣多少人民币
-        BigDecimal jfAmount = BigDecimal.ZERO;// 抵扣积分
+        BigDecimal cnyAmount = BigDecimal.ZERO;// 可抵扣多少人民币
+        BigDecimal jfAmount = BigDecimal.ZERO;// 需要用多少积分来抵扣
+
         if (data.getAmount().longValue() > 0
                 && EBoolean.YES.getCode().equals(isDk)) {
             Map<String, String> configMap = sysConfigBO
                 .getConfigsMap(ESysConfigType.PAY_RULE.getCode());
-            Double rate = Double.valueOf(configMap
-                .get(SysConstants.JF_DK_MAX_RATE));
-            Double cny2jfRate = Double.valueOf(configMap
-                .get(SysConstants.CNY2JF_RATE));
+
+            Double rate = Double
+                .valueOf(configMap.get(SysConstants.JF_DK_MAX_RATE));// 订单可用积分抵扣比例
+
+            Double cny2jfRate = Double
+                .valueOf(configMap.get(SysConstants.CNY2JF_RATE));// 1人民币兑换多少积分
+
             cnyAmount = AmountUtil.mul(data.getAmount(), rate);
             jfAmount = AmountUtil.mul(cnyAmount, cny2jfRate);
 
+            // 积分余额不够时用剩余积分抵扣
             Account jfAccount = accountBO.getAccountByUser(data.getApplyUser(),
                 ECurrency.JF.getCode());
             if (jfAmount.compareTo(jfAccount.getAmount()) == 1) {
@@ -225,6 +231,7 @@ public class AdoptOrderBOImpl extends PaginableBOImpl<AdoptOrder> implements
                 cnyAmount = AmountUtil.mul(jfAccount.getAmount(),
                     1.0 / cny2jfRate);
             }
+
         }
         return new XN629048Res(cnyAmount, jfAmount);
     }

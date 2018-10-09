@@ -116,6 +116,9 @@ public class AdoptOrder extends ABaseDO {
 
     private List<Settle> settleList;
 
+    // 认养年限
+    private Integer adoptYear;
+
     public List<Settle> getSettleList() {
         return settleList;
     }
@@ -402,6 +405,14 @@ public class AdoptOrder extends ABaseDO {
 
     public BigDecimal getPayAmount() {
         return payAmount;
+    }
+
+    public Integer getAdoptYear() {
+        return adoptYear;
+    }
+
+    public void setAdoptYear(Integer adoptYear) {
+        this.adoptYear = adoptYear;
     }
 
 }

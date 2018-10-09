@@ -17,7 +17,6 @@ public class XN629001Req extends BaseReq {
     private String code;
 
     // 上级编号
-    @NotBlank
     private String parentCode;
 
     // 名称

@@ -330,14 +330,13 @@ public class SYSUserAOImpl implements ISYSUserAO {
     @Override
     public void editPwd(String userId, String oldPwd, String newPwd) {
         SYSUser user = sysUserBO.getSYSUser(userId);
-        if (null == user) {
-            throw new BizException("xn000000", "用户不存在！");
+        if (oldPwd.equals(newPwd)) {
+            throw new BizException("li01006", "新登录密码不能与原有密码重复");
         }
-        if (!user.getLoginPwd().equals(oldPwd)) {
-            throw new BizException("xn000000", "原密码不正确");
-        }
-        sysUserBO.resetSelfPwd(user, newPwd);
 
+        sysUserBO.checkLoginPwd(userId, oldPwd);
+
+        sysUserBO.resetSelfPwd(user, newPwd);
     }
 
     // 修改照片

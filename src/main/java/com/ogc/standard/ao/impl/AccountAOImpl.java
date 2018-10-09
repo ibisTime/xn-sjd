@@ -91,4 +91,9 @@ public class AccountAOImpl implements IAccountAO {
             }
         }
     }
+
+    @Override
+    public List<Account> getAccountAmountSumList() {
+        return accountBO.queryAccountAmountSumList();
+    }
 }

@@ -28,7 +28,8 @@ public class XN805041 extends AProcessor {
         // 注册用户
         synchronized (IUserAO.class) {
             userId = userAO.doRegisterByMobile(req);
-            userAO.doAssignRegistJf(userId, req.getUserReferee());
+            userAO.doAssignRegistJf(userId, req.getUserReferee(),
+                req.getUserRefereeType());
         }
 
         return new PKCodeRes(userId);

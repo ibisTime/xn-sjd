@@ -13,7 +13,6 @@ public class XN629000Req extends BaseReq {
     private static final long serialVersionUID = -6308551102694787370L;
 
     // 上级编号
-    @NotBlank
     private String parentCode;
 
     // 名称

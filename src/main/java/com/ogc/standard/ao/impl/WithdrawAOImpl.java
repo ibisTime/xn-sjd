@@ -27,8 +27,11 @@ import com.ogc.standard.domain.Withdraw;
 import com.ogc.standard.enums.EAccountType;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.EChannelType;
+import com.ogc.standard.enums.ECurrency;
+import com.ogc.standard.enums.EJourBizTypeMaintain;
 import com.ogc.standard.enums.EJourBizTypePlat;
 import com.ogc.standard.enums.EJourBizTypeUser;
+import com.ogc.standard.enums.ESysUser;
 import com.ogc.standard.enums.ESystemAccount;
 import com.ogc.standard.enums.EWithdrawStatus;
 import com.ogc.standard.exception.BizException;
@@ -102,6 +105,14 @@ public class WithdrawAOImpl implements IWithdrawAO {
             EJourBizTypeUser.WITHDRAW_FROZEN.getCode(),
             EJourBizTypeUser.WITHDRAW_FROZEN.getValue(), withdrawCode);
 
+        // 用户账户扣减
+        accountBO.transAmount(applyUser, ESysUser.SYS_USER.getCode(),
+            ECurrency.CNY.getCode(), amount,
+            EJourBizTypeMaintain.WITHDRAW_FROZEN.getCode(),
+            EJourBizTypeMaintain.WITHDRAW_FROZEN.getCode(),
+            EJourBizTypeMaintain.WITHDRAW_FROZEN.getCode(),
+            EJourBizTypeMaintain.WITHDRAW_FROZEN.getCode(), withdrawCode);
+
         return withdrawCode;
     }
 
@@ -111,7 +122,8 @@ public class WithdrawAOImpl implements IWithdrawAO {
             String approveResult, String approveNote) {
         Withdraw data = withdrawBO.getWithdraw(code);
         if (null == data) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "取现订单编号不存在");
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "取现订单编号不存在");
         }
         if (!EWithdrawStatus.toApprove.getCode().equals(data.getStatus())) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
@@ -126,8 +138,8 @@ public class WithdrawAOImpl implements IWithdrawAO {
 
     private void approveOrderYES(Withdraw data, String approveUser,
             String approveNote) {
-        withdrawBO.approveOrder(data, EWithdrawStatus.Approved_YES,
-            approveUser, approveNote);
+        withdrawBO.approveOrder(data, EWithdrawStatus.Approved_YES, approveUser,
+            approveNote);
     }
 
     private void approveOrderNO(Withdraw data, String approveUser,
@@ -139,6 +151,14 @@ public class WithdrawAOImpl implements IWithdrawAO {
         accountBO.unfrozenAmount(dbAccount, data.getAmount(),
             EJourBizTypeUser.WITHDRAW_UNFROZEN.getCode(), "取现失败退回",
             data.getCode());
+
+        // 账户还原
+        accountBO.transAmount(ESysUser.SYS_USER.getCode(), data.getApplyUser(),
+            ECurrency.CNY.getCode(), data.getAmount(),
+            EJourBizTypeMaintain.WITHDRAW_FROZEN.getCode(),
+            EJourBizTypeMaintain.WITHDRAW_FROZEN.getCode(),
+            EJourBizTypeMaintain.WITHDRAW_FROZEN.getCode(),
+            EJourBizTypeMaintain.WITHDRAW_FROZEN.getCode(), data.getCode());
     }
 
     @Override
@@ -191,8 +211,8 @@ public class WithdrawAOImpl implements IWithdrawAO {
             EJourBizTypeUser.WITHDRAW.getCode(), "取现成功");
 
         // 取现扣钱
-        Account sysAccount = accountBO.getAccount(ESystemAccount.SYS_ACOUNT_CNY
-            .getCode());
+        Account sysAccount = accountBO
+            .getAccount(ESystemAccount.SYS_ACOUNT_CNY.getCode());
         accountBO.changeAmount(sysAccount, data.getFee(), EChannelType.Offline,
             payCode, data.getCode(), EJourBizTypePlat.WITHDRAW_FEE.getCode(),
             "取现手续费");
@@ -208,11 +228,12 @@ public class WithdrawAOImpl implements IWithdrawAO {
             String withDate, String channelOrder, String withNote,
             String updater) {
         if (!ESystemAccount.SYS_ACOUNT_OFFLINE.getCode().equals(accountNumber)
-                && !ESystemAccount.SYS_ACOUNT_ALIPAY.getCode().equals(
-                    accountNumber)
-                && !ESystemAccount.SYS_ACOUNT_WEIXIN.getCode().equals(
-                    accountNumber)) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "只支持系统托管账户");
+                && !ESystemAccount.SYS_ACOUNT_ALIPAY.getCode()
+                    .equals(accountNumber)
+                && !ESystemAccount.SYS_ACOUNT_WEIXIN.getCode()
+                    .equals(accountNumber)) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "只支持系统托管账户");
         }
 
         Account account = accountBO.getAccount(accountNumber);
@@ -272,18 +293,19 @@ public class WithdrawAOImpl implements IWithdrawAO {
     }
 
     private void initWithdraw(Withdraw withdraw) {
-        if (EAccountType.CUSTOMER.getCode().equals(withdraw.getApplyUserType())) {
+        if (EAccountType.CUSTOMER.getCode()
+            .equals(withdraw.getApplyUserType())) {
 
             // C端用户
             User user = userBO.getUser(withdraw.getApplyUser());
             withdraw.setUser(user);
 
-        } else if (EAccountType.AGENT.getCode().equals(
-            withdraw.getApplyUserType())) {
+        } else if (EAccountType.AGENT.getCode()
+            .equals(withdraw.getApplyUserType())) {
 
             // 代理用户
-            AgentUser agentUser = agentUserBO.getAgentUser(withdraw
-                .getApplyUser());
+            AgentUser agentUser = agentUserBO
+                .getAgentUser(withdraw.getApplyUser());
             User user = new User();
             user.setMobile(agentUser.getMobile());
             withdraw.setUser(user);
