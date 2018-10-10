@@ -71,9 +71,9 @@ public class AccountDAOImpl extends AMybatisTemplate implements IAccountDAO {
      * @see com.ogc.standard.dao.IAccountDAO#selectAmountSumList()
      */
     @Override
-    public List<Account> selectAmountSumList() {
+    public List<Account> selectAmountSumList(Account data) {
         return super.selectList(NAMESPACE.concat("select_accountAmountSum"),
-            null, Account.class);
+            data, Account.class);
     }
 
     /** 

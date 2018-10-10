@@ -197,6 +197,16 @@ public class ProductBOImpl extends PaginableBOImpl<Product>
     }
 
     @Override
+    public void refreshRaiseCount(String code, Integer raiseCount) {
+        Product product = new Product();
+
+        product.setCode(code);
+        product.setRaiseCount(raiseCount);
+
+        productDAO.updateRaiseCount(product);
+    }
+
+    @Override
     public void refreshNowCount(String code, Integer nowCount) {
         Product product = new Product();
 

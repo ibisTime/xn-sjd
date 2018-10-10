@@ -1,5 +1,6 @@
 package com.ogc.standard.ao.impl;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -95,11 +96,16 @@ public class CarbonBubbleOrderAOImpl implements ICarbonBubbleOrderAO {
 
         // 收取人碳泡泡账户加上碳泡泡
         Account sysTppAccount = accountBO
-            .getAccount(ESystemAccount.SYS_ACOUNT_TPP.getCode());
+            .getAccount(ESystemAccount.SYS_ACOUNT_TPP_POOL.getCode());
         Account userTppAccount = accountBO.getAccountByUser(collector,
             ECurrency.TPP.getCode());
 
-        accountBO.transAmount(sysTppAccount, userTppAccount, data.getQuantity(),
+        BigDecimal quantity = data.getQuantity();
+        if (quantity.compareTo(sysTppAccount.getAmount()) == 1) {
+            quantity = sysTppAccount.getAmount();
+        }
+
+        accountBO.transAmount(sysTppAccount, userTppAccount, quantity,
             EJourBizTypeUser.PRESENT.getCode(),
             EJourBizTypePlat.ADOPT_DAY_BACK.getCode(),
             EJourBizTypeUser.ADOPT_DAY_BACK.getValue(),

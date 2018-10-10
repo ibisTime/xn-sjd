@@ -79,10 +79,10 @@ public class Product extends ABaseDO {
     // 募集结束时间(集体售卖结束时间/捐赠结束时间)
     private Date raiseEndDatetime;
 
-    // 募集总量(集体/捐赠)
+    // 募集总量
     private Integer raiseCount;
 
-    // 已募集数量(集体/捐赠)
+    // 已募集数量
     private Integer nowCount;
 
     // UI位置

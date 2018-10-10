@@ -343,7 +343,7 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
     }
 
     @Override
-    public List<Account> queryAccountAmountSumList() {
-        return accountDAO.selectAmountSumList();
+    public List<Account> queryAccountAmountSumList(Account condition) {
+        return accountDAO.selectAmountSumList(condition);
     }
 }

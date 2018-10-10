@@ -30,7 +30,8 @@ public class XN802342 extends AProcessor {
     public Object doBusiness() throws BizException {
         synchronized (XN802342.class) {
             BigDecimal amount = new BigDecimal(req.getAmount());
-            chargeAO.addSysJf(amount, req.getBizNote(), req.getUpdater());
+            chargeAO.addSysAccount(amount, req.getCurrency(), req.getBizNote(),
+                req.getUpdater());
             return new BooleanRes(true);
         }
     }

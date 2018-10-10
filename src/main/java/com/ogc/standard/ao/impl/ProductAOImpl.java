@@ -93,6 +93,10 @@ public class ProductAOImpl implements IProductAO {
             treeBO.saveTree(product, tree);
         }
 
+        // 更新募集数量
+        productBO.refreshRaiseCount(product.getCode(),
+            req.getTreeList().size());
+
         return product.getCode();
     }
 
@@ -142,6 +146,9 @@ public class ProductAOImpl implements IProductAO {
 
             treeBO.saveTree(data, tree);
         }
+
+        // 更新募集数量
+        productBO.refreshRaiseCount(req.getCode(), req.getTreeList().size());
     }
 
     @Override

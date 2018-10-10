@@ -65,7 +65,11 @@ public class SignLogAOImpl implements ISignLogAO {
         Account userTppAccount = accountBO.getAccountByUser(req.getUserId(),
             ECurrency.TPP.getCode());
         Account sysTppAccount = accountBO
-            .getAccount(ESystemAccount.SYS_ACOUNT_TPP.getCode());
+            .getAccount(ESystemAccount.SYS_ACOUNT_TPP_POOL.getCode());
+
+        if (quantity.compareTo(sysTppAccount.getAmount()) == 1) {
+            quantity = sysTppAccount.getAmount();
+        }
 
         accountBO.transAmount(sysTppAccount, userTppAccount, quantity,
             EJourBizTypeUser.SIGN.getCode(), EJourBizTypePlat.SIGN.getCode(),

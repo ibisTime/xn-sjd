@@ -12,7 +12,7 @@ public enum ESystemAccount {
 
     SYS_ACOUNT_CNY("SYS_ACOUNT_CNY", "平台人民币盈亏账户")
 
-    , SYS_ACOUNT_TPP("SYS_ACOUNT_TPP", "平台碳泡泡盈亏账户")
+    , SYS_ACOUNT_TPP_POOL("SYS_ACOUNT_TPP", "平台碳泡泡池账户")
 
     , SYS_ACOUNT_JF_POOL("SYS_ACOUNT_JF_POOL", "平台积分池账户")
 

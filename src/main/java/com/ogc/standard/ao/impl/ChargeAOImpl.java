@@ -63,8 +63,8 @@ public class ChargeAOImpl implements IChargeAO {
         User user = userBO.getUser(userId);
         String result = null;
         if (EPayType.ALIPAY.getCode().equals(payType)) {
-            result = alipayBO.getSignedOrder(user.getUserId(),
-                user.getUserId(), EJourBizTypeUser.CHARGE.getCode(),
+            result = alipayBO.getSignedOrder(user.getUserId(), user.getUserId(),
+                EJourBizTypeUser.CHARGE.getCode(),
                 EJourBizTypeUser.CHARGE.getCode(),
                 EJourBizTypeUser.CHARGE.getValue(), transAmount);
         } else {
@@ -131,13 +131,24 @@ public class ChargeAOImpl implements IChargeAO {
     // 手动增发
     @Override
     @Transactional
-    public void addSysJf(BigDecimal amount, String bizNote, String updater) {
-        Account account = accountBO
-            .getAccount(ESystemAccount.SYS_ACOUNT_JF_POOL.getCode());
-        accountBO.changeAmount(account, amount, EChannelType.Offline,
-            EJourBizTypePlat.HAND_CHARGE.getCode(),
-            EJourBizTypePlat.HAND_CHARGE.getCode(),
-            EJourBizTypePlat.HAND_CHARGE.getCode(), bizNote);
+    public void addSysAccount(BigDecimal amount, String currency,
+            String bizNote, String updater) {
+        if (ECurrency.JF.getCode().equals(currency)) {
+            Account account = accountBO
+                .getAccount(ESystemAccount.SYS_ACOUNT_JF_POOL.getCode());
+            accountBO.changeAmount(account, amount, EChannelType.Offline,
+                EJourBizTypePlat.HAND_CHARGE.getCode(),
+                EJourBizTypePlat.HAND_CHARGE.getCode(),
+                EJourBizTypePlat.HAND_CHARGE.getCode(), bizNote);
+        } else if (ECurrency.TPP.getCode().equals(currency)) {
+            Account account = accountBO
+                .getAccount(ESystemAccount.SYS_ACOUNT_TPP_POOL.getCode());
+            accountBO.changeAmount(account, amount, EChannelType.Offline,
+                EJourBizTypePlat.HAND_CHARGE.getCode(),
+                EJourBizTypePlat.HAND_CHARGE.getCode(),
+                EJourBizTypePlat.HAND_CHARGE.getCode(), bizNote);
+        }
+
     }
 
     @Override
@@ -174,12 +185,12 @@ public class ChargeAOImpl implements IChargeAO {
             User user = userBO.getUser(charge.getApplyUser());
             charge.setPayer(user);
 
-        } else if (EAccountType.AGENT.getCode().equals(
-            charge.getApplyUserType())) {
+        } else if (EAccountType.AGENT.getCode()
+            .equals(charge.getApplyUserType())) {
 
             // 代理用户
-            AgentUser agentUser = agentUserBO.getAgentUser(charge
-                .getApplyUser());
+            AgentUser agentUser = agentUserBO
+                .getAgentUser(charge.getApplyUser());
             User user = new User();
             user.setMobile(agentUser.getMobile());
             charge.setPayer(user);

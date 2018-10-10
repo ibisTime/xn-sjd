@@ -38,7 +38,7 @@ public class Bankcard extends ABaseDO {
     // 真实姓名
     private String realName;
 
-    // 类型
+    // 类型（1储蓄卡）
     private String type;
 
     // 状态

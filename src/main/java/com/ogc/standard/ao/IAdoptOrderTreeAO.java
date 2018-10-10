@@ -17,10 +17,14 @@ public interface IAdoptOrderTreeAO {
     // 留言
     public long leaveMessage(String code, String note, String userId);
 
+    // 定时产生碳泡泡
+    public void doDailyAdoptOrderTree();
+
     public Paginable<AdoptOrderTree> queryAdoptOrderTreePage(int start,
             int limit, AdoptOrderTree condition);
 
-    public List<AdoptOrderTree> queryAdoptOrderTreeList(AdoptOrderTree condition);
+    public List<AdoptOrderTree> queryAdoptOrderTreeList(
+            AdoptOrderTree condition);
 
     public AdoptOrderTree getAdoptOrderTree(String code);
 }

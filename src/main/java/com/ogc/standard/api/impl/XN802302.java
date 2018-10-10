@@ -27,7 +27,8 @@ public class XN802302 extends AProcessor {
     */
     @Override
     public Object doBusiness() throws BizException {
-        return accountAO.getAccountAmountSumList();
+        return accountAO.getAccountAmountSumList(req.getCurrency(),
+            req.getStatus());
     }
 
     /** 

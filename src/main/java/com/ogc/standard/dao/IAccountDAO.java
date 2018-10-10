@@ -59,5 +59,5 @@ public interface IAccountDAO extends IBaseDAO<Account> {
      * @create: Oct 9, 2018 8:32:45 PM silver
      * @history:
      */
-    public List<Account> selectAmountSumList();
+    public List<Account> selectAmountSumList(Account data);
 }

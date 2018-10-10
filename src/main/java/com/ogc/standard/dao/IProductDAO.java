@@ -27,6 +27,9 @@ public interface IProductDAO extends IBaseDAO<Product> {
     // 锁定产品
     public int updateLockProduct(Product data);
 
+    // 更新募集数量
+    public int updateRaiseCount(Product data);
+
     // 更新现募集数量
     public int updateNowCount(Product data);
 

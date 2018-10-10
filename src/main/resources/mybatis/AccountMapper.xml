@@ -99,7 +99,8 @@
 		,IFNULL(SUM(t.amount), 0) as amount
 		FROM
 		tstd_account t 
-		WHERE t.currency = 'CNY' group by t.currency, t.type
+		<include refid="where_condition"/>
+		group by t.currency, t.type
 	</select>
 
 	<select id="select_account_count" parameterType="account" resultType="java.lang.Long">

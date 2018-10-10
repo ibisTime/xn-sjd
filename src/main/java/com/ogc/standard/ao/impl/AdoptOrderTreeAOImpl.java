@@ -138,7 +138,7 @@ public class AdoptOrderTreeAOImpl implements IAdoptOrderTreeAO {
         data.setTree(tree);
 
         // 当前持有人信息
-        User user = userBO.getUser(data.getCurrentHolder());
+        User user = userBO.getUserUnCheck(data.getCurrentHolder());
         data.setUser(user);
 
         // 是否使用保护罩

@@ -22,7 +22,8 @@ public interface IProductBO extends IPaginableBO<Product> {
     public void refreshProduct(Product data, XN629011Req req);
 
     // 提交产品
-    public void refreshSubmitProduct(String code, String updater, String remark);
+    public void refreshSubmitProduct(String code, String updater,
+            String remark);
 
     // 审核产品
     public void refreshApproveProduct(String code, String status,
@@ -34,6 +35,9 @@ public interface IProductBO extends IPaginableBO<Product> {
 
     // 锁定产品
     public void refreshLoakProduct(String code);
+
+    // 更新募集总量
+    public void refreshRaiseCount(String code, Integer raiseCount);
 
     // 更新现募集数量
     public void refreshNowCount(String code, Integer nowCount);

@@ -93,7 +93,11 @@ public class AccountAOImpl implements IAccountAO {
     }
 
     @Override
-    public List<Account> getAccountAmountSumList() {
-        return accountBO.queryAccountAmountSumList();
+    public List<Account> getAccountAmountSumList(String currency,
+            String status) {
+        Account condition = new Account();
+        condition.setCurrency(currency);
+        condition.setStatus(status);
+        return accountBO.queryAccountAmountSumList(condition);
     }
 }

@@ -19,6 +19,9 @@ public class XN802342Req {
     @NotBlank
     private String updater;
 
+    @NotBlank
+    private String currency;
+
     public String getAmount() {
         return amount;
     }
@@ -41,6 +44,14 @@ public class XN802342Req {
 
     public void setUpdater(String updater) {
         this.updater = updater;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 
 }

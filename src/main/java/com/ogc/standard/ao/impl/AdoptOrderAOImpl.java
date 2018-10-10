@@ -162,6 +162,11 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
             treeBO.refreshToPayTree(tree, orderCode);
             count++;
         }
+
+        // 更新产品已募集数量
+        productBO.refreshNowCount(product.getCode(),
+            product.getNowCount() + quantity);
+
         return orderCode;
     }
 
@@ -189,6 +194,11 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
                 treeBO.refreshCancelTree(tree);
             }
         }
+
+        // 更新产品已募集数量
+        Product product = productBO.getProduct(data.getProductCode());
+        productBO.refreshNowCount(data.getProductCode(),
+            product.getNowCount() - data.getQuantity());
     }
 
     @Override
@@ -334,12 +344,18 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
         adoptOrderBO.cancelAdoptOrder(data, "超15分钟未支付系统自动取消");
         if (ESellType.PERSON.getCode().equals(data.getType())
                 || ESellType.DIRECT.getCode().equals(data.getType())) {
+
             // 树的状态变更
             List<Tree> treeList = treeBO
                 .queryTreeListByOrderCode(data.getCode());
             for (Tree tree : treeList) {
                 treeBO.refreshCancelTree(tree);
             }
+
+            // 更新产品已募集数量
+            Product product = productBO.getProduct(data.getProductCode());
+            productBO.refreshNowCount(data.getProductCode(),
+                product.getNowCount() - data.getQuantity());
         }
     }
 
@@ -401,6 +417,11 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
             for (Tree tree : treeList) {
                 treeBO.refreshCancelTree(tree);
             }
+
+            // 更新产品已募集数量
+            Product product = productBO.getProduct(adoptOrder.getProductCode());
+            productBO.refreshNowCount(adoptOrder.getProductCode(),
+                product.getNowCount() - adoptOrder.getQuantity());
         }
     }
 

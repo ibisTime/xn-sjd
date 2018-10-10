@@ -280,6 +280,13 @@
 		WHERE code = #{code}
 	</update>
 	
+	<update id="update_raiseCount" parameterType="product">
+		UPDATE tzb_product
+		SET
+		raise_count = #{raiseCount}
+		WHERE code = #{code}
+	</update>
+	
 	<update id="update_nowCount" parameterType="product">
 		UPDATE tzb_product
 		SET
