@@ -51,6 +51,9 @@ public class Sms extends ABaseDO {
     private String remark;
     // ***********db properties***********
 
+    // 更新人
+    private String updaterName;
+
     public String getCode() {
         return code;
     }
@@ -121,6 +124,14 @@ public class Sms extends ABaseDO {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getUpdaterName() {
+        return updaterName;
+    }
+
+    public void setUpdaterName(String updaterName) {
+        this.updaterName = updaterName;
     }
 
 }

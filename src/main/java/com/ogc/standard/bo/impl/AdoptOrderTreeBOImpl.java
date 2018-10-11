@@ -42,11 +42,13 @@ public class AdoptOrderTreeBOImpl extends PaginableBOImpl<AdoptOrderTree>
         data.setOrderCode(adoptOrder.getCode());
         data.setParentCategoryCode(product.getParentCategoryCode());
         data.setCategoryCode(product.getCategoryCode());
+
+        data.setOwnerId(product.getOwnerId());
         data.setProductCode(product.getCode());
         data.setTreeNumber(treeNumber);
-
         data.setStartDatetime(adoptOrder.getStartDatetime());
         data.setEndDatetime(adoptOrder.getEndDatetime());
+
         data.setAmount(adoptOrder.getPrice());
         if (EAdoptOrderStatus.TO_ADOPT.getCode()
             .equals(adoptOrder.getStatus())) {

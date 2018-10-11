@@ -25,8 +25,8 @@ public class XN629320 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         return new PKCodeRes(giftOrderAO.addGiftOrder(req.getAdoptTreeCode(),
-            req.getName(), req.getPrice(), req.getDescription(),
-            req.getInvalidDatetime()));
+            req.getName(), req.getPrice(), req.getListPic(),
+            req.getDescription(), req.getInvalidDatetime()));
     }
 
     @Override

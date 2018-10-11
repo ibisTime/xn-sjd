@@ -52,6 +52,7 @@ public class ToolAOImpl implements IToolAO {
                 "当前道具不是可上架状态");
         }
 
+        tool.setStatus(EToolStatus.UP.getCode());
         toolBO.refreshUp(tool, orderNo, updater, remark);
     }
 
@@ -65,6 +66,7 @@ public class ToolAOImpl implements IToolAO {
                 "当前道具不是可下架状态");
         }
 
+        tool.setStatus(EToolStatus.DOWN.getCode());
         toolBO.refreshDown(tool, updater, remark);
     }
 

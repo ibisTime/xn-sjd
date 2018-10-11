@@ -21,6 +21,9 @@ public class XN805120Req extends APageReq {
     // 推荐人(选填)
     private String userReferee;
 
+    // 代理商
+    private String agentId;
+
     // 证件类型(选填)
     private String idKind;
 
@@ -199,6 +202,14 @@ public class XN805120Req extends APageReq {
 
     public void setKind(String kind) {
         this.kind = kind;
+    }
+
+    public String getAgentId() {
+        return agentId;
+    }
+
+    public void setAgentId(String agentId) {
+        this.agentId = agentId;
     }
 
 }

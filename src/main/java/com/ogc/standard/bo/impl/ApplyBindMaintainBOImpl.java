@@ -14,7 +14,6 @@ import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.IApplyBindMaintainDAO;
 import com.ogc.standard.domain.ApplyBindMaintain;
-import com.ogc.standard.dto.req.XN629600Req;
 import com.ogc.standard.enums.EApplyBindMaintainStatus;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.exception.BizException;
@@ -28,21 +27,20 @@ public class ApplyBindMaintainBOImpl extends PaginableBOImpl<ApplyBindMaintain>
     private IApplyBindMaintainDAO applyBindMaintainDAO;
 
     @Override
-    public String saveApplyBindMaintain(XN629600Req req) {
+    public String saveApplyBindMaintain(String ownerId, String maintainId,
+            String updater, String remark) {
         String code = null;
-        if (req != null) {
-            ApplyBindMaintain data = new ApplyBindMaintain();
-            code = OrderNoGenerater
-                .generate(EGeneratePrefix.APPLY_BIND_MAINTAIN.getCode());
-            data.setCode(code);
-            data.setOwnerId(req.getOwnerId());
-            data.setMaintainId(req.getMaintainId());
-            data.setStatus(EApplyBindMaintainStatus.TO_APPROVE.getCode());
-            data.setUpdater(req.getUpdater());
-            data.setUpdateDatetime(new Date());
-            data.setRemark(req.getRemark());
-            applyBindMaintainDAO.insert(data);
-        }
+        ApplyBindMaintain data = new ApplyBindMaintain();
+        code = OrderNoGenerater
+            .generate(EGeneratePrefix.APPLY_BIND_MAINTAIN.getCode());
+        data.setCode(code);
+        data.setOwnerId(ownerId);
+        data.setMaintainId(maintainId);
+        data.setStatus(EApplyBindMaintainStatus.TO_APPROVE.getCode());
+        data.setUpdater(updater);
+        data.setUpdateDatetime(new Date());
+        data.setRemark(remark);
+        applyBindMaintainDAO.insert(data);
         return code;
     }
 
@@ -51,6 +49,29 @@ public class ApplyBindMaintainBOImpl extends PaginableBOImpl<ApplyBindMaintain>
         if (StringUtils.isNotBlank(data.getCode())) {
             applyBindMaintainDAO.approveApplyBindMaintain(data);
         }
+    }
+
+    @Override
+    public void reBindMaintain(String code, String maintainId, String updater,
+            String remark) {
+        ApplyBindMaintain applyBindMaintain = new ApplyBindMaintain();
+        applyBindMaintain.setCode(code);
+        applyBindMaintain.setMaintainId(maintainId);
+        applyBindMaintain
+            .setStatus(EApplyBindMaintainStatus.TO_APPROVE.getCode());
+        applyBindMaintain.setUpdateDatetime(new Date());
+        applyBindMaintain.setUpdater(updater);
+        applyBindMaintain.setRemark(remark);
+        applyBindMaintainDAO.updateReBindMaintain(applyBindMaintain);
+    }
+
+    @Override
+    public void unBindMaintain(String code) {
+        ApplyBindMaintain data = new ApplyBindMaintain();
+        data.setCode(code);
+        data.setStatus(EApplyBindMaintainStatus.UNBIND.getCode());
+        data.setUpdateDatetime(new Date());
+        applyBindMaintainDAO.updateUnBindMaintain(data);
     }
 
     @Override
@@ -112,4 +133,5 @@ public class ApplyBindMaintainBOImpl extends PaginableBOImpl<ApplyBindMaintain>
         }
         return maintainId;
     }
+
 }

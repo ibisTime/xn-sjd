@@ -32,9 +32,12 @@ public class XN629205 extends AProcessor {
         condition.setOrderCode(req.getOrderCode());
         condition.setParentCategoryCode(req.getParentCategoryCode());
         condition.setCategoryCode(req.getCategoryCode());
+        condition.setOwnerId(req.getOwnerId());
         condition.setProductCode(req.getProductCode());
+
         condition.setTreeNumber(req.getTreeNumber());
         condition.setStatus(req.getStatus());
+        condition.setStatusList(req.getStatusList());
         condition.setCurrentHolder(req.getCurrentHolder());
 
         String column = req.getOrderColumn();

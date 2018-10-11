@@ -111,6 +111,9 @@ public class Withdraw extends ABaseDO {
     // 币种列表
     private List<String> currencyList;
 
+    // 户名
+    private String realName;
+
     public String getCode() {
         return code;
     }
@@ -373,6 +376,14 @@ public class Withdraw extends ABaseDO {
 
     public void setApplyUserType(String applyUserType) {
         this.applyUserType = applyUserType;
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
     }
 
 }

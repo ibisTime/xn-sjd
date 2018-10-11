@@ -74,15 +74,22 @@
 		)
 	</insert>
 
-	<update id="update_applyBindMaintain" parameterType="applyBindMaintain">
+	<update id="update_reBindMaintain" parameterType="applyBindMaintain">
 		UPDATE tsys_apply_bind_maintain
 		SET
-		owner_id = #{ownerId}
-		,maintain_id = #{maintainId}
+		maintain_id = #{maintainId}
 		,status = #{status}
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
 		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_unBindMaintain" parameterType="applyBindMaintain">
+		UPDATE tsys_apply_bind_maintain
+		SET
+		status = #{status}
+		,update_datetime = #{updateDatetime}
 		WHERE code = #{code}
 	</update>
 	

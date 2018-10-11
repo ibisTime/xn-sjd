@@ -209,6 +209,7 @@
 		UPDATE tzb_tree
 		SET
 		status = #{status}
+		,adopt_count = #{adoptCount}
 		WHERE code = #{code}
 	</update>
 	

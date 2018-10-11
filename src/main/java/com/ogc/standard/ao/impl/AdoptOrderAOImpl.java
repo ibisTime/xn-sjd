@@ -215,6 +215,11 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "订单不是待支付状态，不能支付");
         }
+
+        if (EPayType.YE.getCode().equals(payType)) {
+            userBO.checkTradePwd(data.getApplyUser(), tradePwd);
+        }
+
         // 积分抵扣处理
         XN629048Res deductRes = adoptOrderBO.getOrderDeductAmount(data,
             isJfDeduct);
@@ -498,6 +503,11 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
         Integer adoptYear = DateUtil.yearsBetween(data.getStartDatetime(),
             data.getEndDatetime());
         data.setAdoptYear(adoptYear);
+
+        User user = userBO.getUserUnCheck(data.getApplyUser());
+        if (null != user) {
+            data.setApplyUserName(user.getMobile());
+        }
     }
 
 }

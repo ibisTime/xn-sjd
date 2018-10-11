@@ -108,9 +108,13 @@ public class AdoptOrderTreeAOImpl implements IAdoptOrderTreeAO {
             int limit, AdoptOrderTree condition) {
         Paginable<AdoptOrderTree> page = adoptOrderTreeBO.getPaginable(start,
             limit, condition);
-        for (AdoptOrderTree adoptOrderTree : page.getList()) {
-            initAdoptOrderTree(adoptOrderTree);
+
+        if (null != page && CollectionUtils.isNotEmpty(page.getList())) {
+            for (AdoptOrderTree adoptOrderTree : page.getList()) {
+                initAdoptOrderTree(adoptOrderTree);
+            }
         }
+
         return page;
     }
 
@@ -119,9 +123,13 @@ public class AdoptOrderTreeAOImpl implements IAdoptOrderTreeAO {
             AdoptOrderTree condition) {
         List<AdoptOrderTree> list = adoptOrderTreeBO
             .queryAdoptOrderTreeList(condition);
-        for (AdoptOrderTree adoptOrderTree : list) {
-            initAdoptOrderTree(adoptOrderTree);
+
+        if (CollectionUtils.isNotEmpty(list)) {
+            for (AdoptOrderTree adoptOrderTree : list) {
+                initAdoptOrderTree(adoptOrderTree);
+            }
         }
+
         return list;
     }
 
@@ -139,7 +147,9 @@ public class AdoptOrderTreeAOImpl implements IAdoptOrderTreeAO {
 
         // 当前持有人信息
         User user = userBO.getUserUnCheck(data.getCurrentHolder());
-        data.setUser(user);
+        if (null != user) {
+            data.setUser(user);
+        }
 
         // 是否使用保护罩
         List<ToolUseRecord> shelterList = toolUseRecordBO

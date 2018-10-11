@@ -40,6 +40,9 @@ public class XN802300 extends AProcessor {
         condition.setType(req.getType());
         condition.setStatus(req.getStatus());
         condition.setLastOrder(req.getLastOrder());
+        condition.setMobileForQuery(req.getMobileForQuery());
+
+        condition.setAccountNumber(req.getAccountNumber());
         if (CollectionUtils.isNotEmpty(req.getCurrencyList())) {
             condition.setCurrencyList(req.getCurrencyList());
         }

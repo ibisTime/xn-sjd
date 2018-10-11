@@ -7,14 +7,15 @@
 		<result column="order_code" property="orderCode" />
 		<result column="parent_category_code" property="parentCategoryCode" />
 		<result column="category_code" property="categoryCode" />
-		<result column="product_code" property="productCode" />
+		<result column="owner_id" property="ownerId" />
 		
+		<result column="product_code" property="productCode" />
 		<result column="tree_number" property="treeNumber" />
 		<result column="start_datetime" property="startDatetime" />
 		<result column="end_datetime" property="endDatetime" />
 		<result column="amount" property="amount" />
-		<result column="status" property="status" />
 		
+		<result column="status" property="status" />
 		<result column="current_holder" property="currentHolder" />
 		<result column="certificate_template" property="certificateTemplate" />
 		<result column="remark" property="remark" />
@@ -37,12 +38,21 @@
 			<if test="productCode != null and productCode != '' ">
 				AND t.product_code = #{productCode}
 			</if>
+			<if test="ownerId != null and ownerId != '' ">
+				AND t.owner_id = #{ownerId}
+			</if>
 			
 			<if test="treeNumber != null and treeNumber != '' ">
 				AND t.tree_number = #{treeNumber}
 			</if>
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
+			</if>
+			<if test="statusList != null and statusList != '' ">
+				AND t.status in 
+                <foreach item="item" index="index" collection="statusList" open="(" separator="," close=")">
+	            	#{item}
+                </foreach> 
 			</if>
 			<if test="currentHolder != null and currentHolder != '' ">
 				AND t.current_holder = #{currentHolder}
@@ -55,15 +65,16 @@
 		,t.order_code
 		,t.parent_category_code
 		,t.category_code
+		,t.owner_id
+		
 		,t.product_code
 		,t.tree_number
-		
 		,t.start_datetime
 		,t.end_datetime
 		,t.amount
+		
 		,t.status
 		,t.current_holder
-		
 		,t.certificate_template
 		,t.remark
 		FROM
@@ -89,15 +100,16 @@
 		,order_code
 		,parent_category_code
 		,category_code
+		,owner_id
+		
 		,product_code
 		,tree_number
-		
 		,start_datetime
 		,end_datetime
 		,amount
+		
 		,status
 		,current_holder
-		
 		,certificate_template
 		,remark
 		)
@@ -106,15 +118,16 @@
 		,#{orderCode}
 		,#{parentCategoryCode}
 		,#{categoryCode}
+		,#{ownerId}
+		
 		,#{productCode}
 		,#{treeNumber}
-		
 		,#{startDatetime}
 		,#{endDatetime}
 		,#{amount}
+		
 		,#{status}
 		,#{currentHolder}
-		
 		,#{certificateTemplate}
 		,#{remark}
 		)

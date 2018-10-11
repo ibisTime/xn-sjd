@@ -26,6 +26,9 @@ public class GiftOrder extends ABaseDO {
     // 礼物价格
     private Long price;
 
+    // 列表图片
+    private String listPic;
+
     // 礼物描述
     private String description;
 
@@ -199,6 +202,14 @@ public class GiftOrder extends ABaseDO {
 
     public void setInvalidEndDatetime(Date invalidEndDatetime) {
         this.invalidEndDatetime = invalidEndDatetime;
+    }
+
+    public String getListPic() {
+        return listPic;
+    }
+
+    public void setListPic(String listPic) {
+        this.listPic = listPic;
     }
 
 }

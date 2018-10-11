@@ -10,10 +10,14 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ogc.standard.ao.ISettleAO;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IAdoptOrderBO;
+import com.ogc.standard.bo.IProductBO;
 import com.ogc.standard.bo.ISettleBO;
+import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.AdoptOrder;
+import com.ogc.standard.domain.Product;
 import com.ogc.standard.domain.Settle;
+import com.ogc.standard.domain.User;
 import com.ogc.standard.enums.EAdoptOrderSettleStatus;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECurrency;
@@ -35,6 +39,12 @@ public class SettleAOImpl implements ISettleAO {
 
     @Autowired
     private IAccountBO accountBO;
+
+    @Autowired
+    private IUserBO userBO;
+
+    @Autowired
+    private IProductBO productBO;
 
     @Override
     @Transactional
@@ -97,8 +107,19 @@ public class SettleAOImpl implements ISettleAO {
     }
 
     private void initSettle(Settle settle) {
+        // 订单
         AdoptOrder adoptOrder = adoptOrderBO.getAdoptOrder(settle.getRefCode());
         settle.setAdoptOrder(adoptOrder);
+
+        // 产品名称
+        Product product = productBO.getProduct(adoptOrder.getProductCode());
+        settle.setProductName(product.getName());
+
+        // 认养人
+        User user = userBO.getUserUnCheck(adoptOrder.getApplyUser());
+        if (null != user) {
+            settle.setApplyUserName(user.getMobile());
+        }
     }
 
 }

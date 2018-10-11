@@ -24,8 +24,8 @@ public class XN730081 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return new PKCodeRes(
-            agentUserAO.doAddSalesman(req.getMobile(), req.getLoginPwd()));
+        return new PKCodeRes(agentUserAO.doAddSalesman(req.getParentUserId(),
+            req.getMobile(), req.getLoginPwd()));
     }
 
     @Override

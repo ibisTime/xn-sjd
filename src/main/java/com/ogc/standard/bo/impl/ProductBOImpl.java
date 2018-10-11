@@ -90,6 +90,7 @@ public class ProductBOImpl extends PaginableBOImpl<Product>
         data.setStatus(EProductStatus.DRAFT.getCode());
         data.setUpdater(req.getUpdater());
         data.setUpdateDatetime(new Date());
+        data.setRemark(req.getRemark());
 
         productDAO.insert(data);
         return data;

@@ -119,6 +119,9 @@ public class AdoptOrder extends ABaseDO {
     // 认养年限
     private Integer adoptYear;
 
+    // 下单人姓名
+    private String applyUserName;
+
     public List<Settle> getSettleList() {
         return settleList;
     }
@@ -413,6 +416,14 @@ public class AdoptOrder extends ABaseDO {
 
     public void setAdoptYear(Integer adoptYear) {
         this.adoptYear = adoptYear;
+    }
+
+    public String getApplyUserName() {
+        return applyUserName;
+    }
+
+    public void setApplyUserName(String applyUserName) {
+        this.applyUserName = applyUserName;
     }
 
 }

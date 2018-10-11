@@ -37,6 +37,8 @@ public class SYSRole extends ABaseDO {
     private String systemCode;
 
     // ***********db properties***********
+    // 更新人
+    private String updaterName;
 
     public String getSystemCode() {
         return systemCode;
@@ -92,6 +94,14 @@ public class SYSRole extends ABaseDO {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getUpdaterName() {
+        return updaterName;
+    }
+
+    public void setUpdaterName(String updaterName) {
+        this.updaterName = updaterName;
     }
 
 }

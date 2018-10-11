@@ -107,7 +107,9 @@ DROP TABLE IF EXISTS `try_adopt_order_tree`;
 CREATE TABLE `try_adopt_order_tree` (
   `code` varchar(32) NOT NULL COMMENT '编号',
   `order_code` varchar(32) DEFAULT NULL COMMENT '认养订单编号',
+  `parent_category_code` varchar(32) DEFAULT NULL COMMENT '产品大类' 
   `category_code` varchar(32) DEFAULT NULL COMMENT '分类编号',
+  `owner_id` varchar(32) DEFAULT NULL COMMENT '产权方编号',
   `product_code` varchar(32) DEFAULT NULL COMMENT '产品编号',
   `tree_number` varchar(32) DEFAULT NULL COMMENT '古树编号',
   `start_datetime` datetime DEFAULT NULL COMMENT '认养开始时间',
@@ -204,6 +206,7 @@ CREATE TABLE `tsj_gift_order` (
   `adopt_tree_code` varchar(32) DEFAULT NULL COMMENT '认养权编号',
   `name` varchar(255) DEFAULT NULL COMMENT '礼物名称',
   `price` decimal(64,0) DEFAULT NULL COMMENT '礼物价格',
+  `list_pic` varchar(255) DEFAULT NULL COMMENT '列表图片',
   `description` varchar(255) DEFAULT NULL COMMENT '礼物描述',
   `receiver` varchar(255) DEFAULT NULL COMMENT '收货人',
   `re_address` varchar(255) DEFAULT NULL COMMENT '收货地址',

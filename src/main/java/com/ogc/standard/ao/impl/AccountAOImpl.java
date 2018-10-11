@@ -3,6 +3,7 @@ package com.ogc.standard.ao.impl;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +20,7 @@ import com.ogc.standard.domain.SYSUser;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.enums.EAccountType;
 import com.ogc.standard.enums.ECurrency;
+import com.ogc.standard.enums.EUser;
 
 @Service
 public class AccountAOImpl implements IAccountAO {
@@ -74,22 +76,55 @@ public class AccountAOImpl implements IAccountAO {
     }
 
     private void initAccount(Account account) {
-        if (EAccountType.OWNER.getCode().equals(account.getType())
-                || EAccountType.MAINTAIN.getCode().equals(account.getType())) {
-            SYSUser sysUser = sysUserBO.getSYSUser(account.getUserId());
-            account.setRealName(sysUser.getRealName());
-            account.setMobile(sysUser.getMobile());
-        } else if (EAccountType.AGENT.getCode().equals(account.getType())) {
-            AgentUser agentUser = agentUserBO.getAgentUser(account.getUserId());
-            account.setRealName(agentUser.getRealName());
-            account.setMobile(agentUser.getMobile());
-        } else if (EAccountType.CUSTOMER.getCode().equals(account.getType())) {
+
+        // 户名
+        String realName = null;
+        if (EAccountType.CUSTOMER.getCode().equals(account.getType())) {
+
+            // C端用户
             User user = userBO.getUserUnCheck(account.getUserId());
             if (null != user) {
-                account.setRealName(user.getRealName());
-                account.setMobile(user.getMobile());
+                realName = user.getMobile();
+                account.setMobile(realName);
+                if (StringUtils.isNotBlank(user.getRealName())) {
+                    realName = user.getRealName().concat("-").concat(realName);
+                }
             }
+
+        } else if (EAccountType.AGENT.getCode().equals(account.getType())) {
+
+            // 代理用户
+            AgentUser agentUser = agentUserBO
+                .getAgentUserUnCheck(account.getUserId());
+            if (null != agentUser) {
+                realName = agentUser.getMobile();
+                account.setMobile(realName);
+                if (StringUtils.isNotBlank(agentUser.getRealName())) {
+                    realName = agentUser.getRealName().concat("-")
+                        .concat(realName);
+                }
+            }
+
+        } else if (EAccountType.PLAT.getCode().equals(account.getType())) {
+
+            // 系统用户
+            realName = EUser.ADMIN.getValue();
+        } else {
+
+            // 其他用户
+            SYSUser sysUser = sysUserBO.getSYSUserUnCheck(account.getUserId());
+            if (null != sysUser) {
+                realName = sysUser.getMobile();
+                account.setMobile(realName);
+                if (StringUtils.isNotBlank(sysUser.getRealName())) {
+                    realName = sysUser.getRealName().concat("-")
+                        .concat(realName);
+                }
+            }
+
         }
+
+        account.setRealName(realName);
     }
 
     @Override

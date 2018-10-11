@@ -71,6 +71,9 @@ public class Account extends ABaseDO {
     // 手机号
     private String mobile;
 
+    // 手机号模糊查
+    private String mobileForQuery;
+
     public BigDecimal getTotalAmount() {
         return totalAmount;
     }
@@ -213,6 +216,14 @@ public class Account extends ABaseDO {
 
     public void setMobile(String mobile) {
         this.mobile = mobile;
+    }
+
+    public String getMobileForQuery() {
+        return mobileForQuery;
+    }
+
+    public void setMobileForQuery(String mobileForQuery) {
+        this.mobileForQuery = mobileForQuery;
     }
 
 }

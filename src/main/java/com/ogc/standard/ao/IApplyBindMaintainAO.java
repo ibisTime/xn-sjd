@@ -18,6 +18,13 @@ public interface IApplyBindMaintainAO {
 
     public String applyBindMaintain(XN629600Req req);
 
+    // 审核
+    public void approveApplyBindMaintain(XN629602Req req);
+
+    // 重新绑定
+    public void reBingMaintain(String code, String maintainId, String updater,
+            String remark);
+
     public Paginable<ApplyBindMaintain> queryApplyBindMaintainPage(int start,
             int limit, ApplyBindMaintain condition);
 
@@ -25,8 +32,5 @@ public interface IApplyBindMaintainAO {
             ApplyBindMaintain condition);
 
     public ApplyBindMaintain getApplyBindMaintain(String code);
-
-    // 审核
-    public void approveApplyBindMaintain(XN629602Req req);
 
 }

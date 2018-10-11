@@ -7,7 +7,9 @@ import com.ogc.standard.domain.ApplyBindMaintain;
 public interface IApplyBindMaintainDAO extends IBaseDAO<ApplyBindMaintain> {
     String NAMESPACE = IApplyBindMaintainDAO.class.getName().concat(".");
 
-    int update(ApplyBindMaintain data);
+    public int updateUnBindMaintain(ApplyBindMaintain data);
+
+    public int updateReBindMaintain(ApplyBindMaintain data);
 
     void approveApplyBindMaintain(ApplyBindMaintain data);
 }

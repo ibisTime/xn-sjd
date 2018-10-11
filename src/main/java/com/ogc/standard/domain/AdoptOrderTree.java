@@ -1,7 +1,9 @@
+
 package com.ogc.standard.domain;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 import com.ogc.standard.dao.base.ABaseDO;
 
@@ -26,6 +28,9 @@ public class AdoptOrderTree extends ABaseDO {
 
     // 产品小类
     private String categoryCode;
+
+    // 产权方编号
+    private String ownerId;
 
     // 产品编号
     private String productCode;
@@ -61,6 +66,9 @@ public class AdoptOrderTree extends ABaseDO {
 
     // 是否使用保护罩(0未使用/1使用)
     private String isShelter;
+
+    // 状态列表
+    private List<String> statusList;
 
     public User getUser() {
         return user;
@@ -188,6 +196,22 @@ public class AdoptOrderTree extends ABaseDO {
 
     public void setParentCategoryCode(String parentCategoryCode) {
         this.parentCategoryCode = parentCategoryCode;
+    }
+
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    public List<String> getStatusList() {
+        return statusList;
+    }
+
+    public void setStatusList(List<String> statusList) {
+        this.statusList = statusList;
     }
 
 }

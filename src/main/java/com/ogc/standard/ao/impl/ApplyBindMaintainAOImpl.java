@@ -41,15 +41,16 @@ public class ApplyBindMaintainAOImpl implements IApplyBindMaintainAO {
         if (StringUtils.isNotBlank(maintainId)) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(), "您已绑定养护方");
         }
-        return applyBindMaintainBO.saveApplyBindMaintain(req);
+        return applyBindMaintainBO.saveApplyBindMaintain(req.getOwnerId(),
+            req.getMaintainId(), req.getUpdater(), req.getRemark());
     }
 
     @Override
     public void approveApplyBindMaintain(XN629602Req req) {
-        ApplyBindMaintain data = applyBindMaintainBO.getApplyBindMaintain(req
-            .getCode());
-        if (!EApplyBindMaintainStatus.TO_APPROVE.getCode().equals(
-            data.getStatus())) {
+        ApplyBindMaintain data = applyBindMaintainBO
+            .getApplyBindMaintain(req.getCode());
+        if (!EApplyBindMaintainStatus.TO_APPROVE.getCode()
+            .equals(data.getStatus())) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "当前申请记录不是待审核");
         }
@@ -63,6 +64,12 @@ public class ApplyBindMaintainAOImpl implements IApplyBindMaintainAO {
         data.setUpdateDatetime(new Date());
         data.setRemark(req.getRemark());
         applyBindMaintainBO.approveApplyBindMaintain(data);
+    }
+
+    @Override
+    public void reBingMaintain(String code, String maintainId, String updater,
+            String remark) {
+        applyBindMaintainBO.reBindMaintain(code, maintainId, updater, remark);
     }
 
     @Override
@@ -100,17 +107,18 @@ public class ApplyBindMaintainAOImpl implements IApplyBindMaintainAO {
         SYSUser ownerUser = sysUserBO.getSYSUser(data.getOwnerId());
         data.setOwnerUser(ownerUser);
         if (StringUtils.isNotBlank(ownerUser.getCompanyCode())) {
-            Company ownerCompany = companyBO.getCompany(ownerUser
-                .getCompanyCode());
+            Company ownerCompany = companyBO
+                .getCompany(ownerUser.getCompanyCode());
             ownerUser.setCompany(ownerCompany);
         }
         // 养护方用户
         SYSUser maintainUser = sysUserBO.getSYSUser(data.getMaintainId());
         data.setMaintainUser(maintainUser);
         if (StringUtils.isNotBlank(maintainUser.getCompanyCode())) {
-            Company maintainCompany = companyBO.getCompany(maintainUser
-                .getCompanyCode());
+            Company maintainCompany = companyBO
+                .getCompany(maintainUser.getCompanyCode());
             maintainUser.setCompany(maintainCompany);
         }
     }
+
 }

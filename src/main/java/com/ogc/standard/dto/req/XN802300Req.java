@@ -11,6 +11,9 @@ public class XN802300Req extends APageReq {
 
     private static final long serialVersionUID = 5582592396364166469L;
 
+    // 账户编号
+    private String accountNumber;
+
     // 用户编号
     private String userId;
 
@@ -28,6 +31,9 @@ public class XN802300Req extends APageReq {
 
     // 最近一次变动对应的流水编号
     private String lastOrder;
+
+    // 手机号模糊查
+    private String mobileForQuery;
 
     public String getUserId() {
         return userId;
@@ -75,6 +81,22 @@ public class XN802300Req extends APageReq {
 
     public void setLastOrder(String lastOrder) {
         this.lastOrder = lastOrder;
+    }
+
+    public String getMobileForQuery() {
+        return mobileForQuery;
+    }
+
+    public void setMobileForQuery(String mobileForQuery) {
+        this.mobileForQuery = mobileForQuery;
+    }
+
+    public String getAccountNumber() {
+        return accountNumber;
+    }
+
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
     }
 
 }

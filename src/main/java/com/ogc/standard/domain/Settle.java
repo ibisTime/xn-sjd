@@ -69,6 +69,12 @@ public class Settle extends ABaseDO {
     // 认养订单
     private AdoptOrder adoptOrder;
 
+    // 产品名称
+    private String productName;
+
+    // 认养人
+    private String applyUserName;
+
     public AgentUser getAgentUser() {
         return agentUser;
     }
@@ -211,6 +217,22 @@ public class Settle extends ABaseDO {
 
     public void setAdoptOrder(AdoptOrder adoptOrder) {
         this.adoptOrder = adoptOrder;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public String getApplyUserName() {
+        return applyUserName;
+    }
+
+    public void setApplyUserName(String applyUserName) {
+        this.applyUserName = applyUserName;
     }
 
 }

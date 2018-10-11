@@ -2,6 +2,7 @@ package com.ogc.standard.ao.impl;
 
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,8 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ogc.standard.ao.ISYSRoleAO;
 import com.ogc.standard.bo.ISYSMenuRoleBO;
 import com.ogc.standard.bo.ISYSRoleBO;
+import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.SYSRole;
+import com.ogc.standard.domain.SYSUser;
 import com.ogc.standard.dto.req.XN630000Req;
 import com.ogc.standard.dto.req.XN630002Req;
 import com.ogc.standard.exception.BizException;
@@ -23,6 +26,9 @@ public class SYSRoleAOImpl implements ISYSRoleAO {
 
     @Autowired
     ISYSMenuRoleBO sysMenuRoleBO;
+
+    @Autowired
+    private ISYSUserBO sysUserBO;
 
     @Override
     public String addSYSRole(XN630000Req req) {
@@ -77,7 +83,16 @@ public class SYSRoleAOImpl implements ISYSRoleAO {
     @Override
     public Paginable<SYSRole> querySYSRolePage(int start, int limit,
             SYSRole condition) {
-        return sysRoleBO.getPaginable(start, limit, condition);
+        Paginable<SYSRole> page = sysRoleBO.getPaginable(start, limit,
+            condition);
+
+        if (null != page && CollectionUtils.isNotEmpty(page.getList())) {
+            for (SYSRole sysRole : page.getList()) {
+                initRole(sysRole);
+            }
+        }
+
+        return page;
     }
 
     /** 
@@ -85,6 +100,17 @@ public class SYSRoleAOImpl implements ISYSRoleAO {
      */
     @Override
     public SYSRole getSYSRole(String code) {
-        return sysRoleBO.getSYSRole(code);
+        SYSRole sysRole = sysRoleBO.getSYSRole(code);
+
+        initRole(sysRole);
+
+        return sysRole;
+    }
+
+    private void initRole(SYSRole sysRole) {
+        SYSUser sysUser = sysUserBO.getSYSUserUnCheck(sysRole.getUpdater());
+        if (null != sysUser) {
+            sysRole.setUpdaterName(sysUser.getLoginName());
+        }
     }
 }

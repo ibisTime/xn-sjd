@@ -10,7 +10,7 @@ public interface IGiftOrderAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
     public String addGiftOrder(String adoptTreeCode, String name, String price,
-            String description, String invalidDatetime);
+            String listPic, String description, String invalidDatetime);
 
     public int dropGiftOrder(String code);
 

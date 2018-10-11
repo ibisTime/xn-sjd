@@ -1,5 +1,7 @@
 package com.ogc.standard.dto.req;
 
+import java.util.List;
+
 /**
  * 分页查询认养权
  * @author: jiafr 
@@ -27,6 +29,12 @@ public class XN629205Req extends APageReq {
 
     // 当前持有人
     private String currentHolder;
+
+    // 养护方
+    private String ownerId;
+
+    // 状态列表
+    private List<String> statusList;
 
     public String getTreeNumber() {
         return treeNumber;
@@ -82,6 +90,22 @@ public class XN629205Req extends APageReq {
 
     public void setParentCategoryCode(String parentCategoryCode) {
         this.parentCategoryCode = parentCategoryCode;
+    }
+
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    public List<String> getStatusList() {
+        return statusList;
+    }
+
+    public void setStatusList(List<String> statusList) {
+        this.statusList = statusList;
     }
 
 }

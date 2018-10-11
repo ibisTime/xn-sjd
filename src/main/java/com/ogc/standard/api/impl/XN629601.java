@@ -5,6 +5,7 @@ import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.ObjValidater;
 import com.ogc.standard.dto.req.XN629601Req;
+import com.ogc.standard.dto.res.BooleanRes;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
@@ -26,8 +27,10 @@ public class XN629601 extends AProcessor {
      */
     @Override
     public Object doBusiness() throws BizException {
-        // TODO Auto-generated method stub
-        return null;
+        applyBindMaintainAO.reBingMaintain(req.getCode(), req.getMaintainId(),
+            req.getUpdater(), req.getRemark());
+
+        return new BooleanRes(true);
     }
 
     @Override

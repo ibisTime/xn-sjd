@@ -28,7 +28,7 @@ public class Jour extends ABaseDO {
     // 流水所属账号---核心字段4
     private String accountNumber;
 
-    // 类型(B B端账号，C C端账号，P 平台账号)
+    // 类型（C端账号O产权方账号M养护方账号A代理商账号P平台账号）
     private String accountType;
 
     // 币种
@@ -106,6 +106,9 @@ public class Jour extends ABaseDO {
 
     // 币种列表
     private List<String> currencyList;
+
+    // 户名
+    private String realName;
 
     public String getCode() {
         return code;
@@ -356,6 +359,14 @@ public class Jour extends ABaseDO {
 
     public void setPostAmountString(String postAmountString) {
         this.postAmountString = postAmountString;
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
     }
 
 }

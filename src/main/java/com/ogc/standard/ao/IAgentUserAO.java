@@ -60,7 +60,8 @@ public interface IAgentUserAO {
     public void doLogInOut(String userId, String updater, String remark);
 
     // 新增业务员
-    public String doAddSalesman(String mobile, String loginPwd);
+    public String doAddSalesman(String parentUserId, String mobile,
+            String loginPwd);
 
     public Paginable<AgentUser> queryAgentUserPage(int start, int limit,
             AgentUser condition);

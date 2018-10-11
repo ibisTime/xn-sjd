@@ -31,16 +31,15 @@ public class XN630065 extends AProcessor {
         SYSUser condition = new SYSUser();
         condition.setCompanyCode(req.getCompanyCode());
         condition.setMobileForQuery(req.getKeyword());
-        condition.setRealNameForQuery(req.getKeyword());
         condition.setRoleCode(req.getRoleCode());
         condition.setStatus(req.getStatus());
         condition.setUpdater(req.getUpdater());
         condition.setKind(req.getKind());
         String column = req.getOrderColumn();
-        condition.setCreateDatetimeStart(DateUtil.getFrontDate(
-            req.getDateStart(), false));
-        condition.setCreateDatetimeEnd(DateUtil.getFrontDate(req.getDateEnd(),
-            true));
+        condition.setCreateDatetimeStart(
+            DateUtil.getFrontDate(req.getDateStart(), false));
+        condition.setCreateDatetimeEnd(
+            DateUtil.getFrontDate(req.getDateEnd(), true));
         if (StringUtils.isBlank(column)) {
             column = ISYSUserAO.DEFAULT_ORDER_COLUMN;
         }

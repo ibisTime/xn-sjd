@@ -3,6 +3,7 @@ package com.ogc.standard.ao.impl;
 import java.math.BigDecimal;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +31,7 @@ import com.ogc.standard.enums.EJourBizTypePlat;
 import com.ogc.standard.enums.EJourBizTypeUser;
 import com.ogc.standard.enums.EPayType;
 import com.ogc.standard.enums.ESystemAccount;
+import com.ogc.standard.enums.EUser;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
 
@@ -179,12 +181,19 @@ public class ChargeAOImpl implements IChargeAO {
     }
 
     private void initCharge(Charge charge) {
+        // 户名
+        String realName = null;
+
         if (EAccountType.CUSTOMER.getCode().equals(charge.getApplyUserType())) {
 
             // C端用户
             User user = userBO.getUser(charge.getApplyUser());
             charge.setPayer(user);
 
+            realName = user.getMobile();
+            if (StringUtils.isNotBlank(user.getRealName())) {
+                realName = user.getRealName().concat("-").concat(realName);
+            }
         } else if (EAccountType.AGENT.getCode()
             .equals(charge.getApplyUserType())) {
 
@@ -195,6 +204,16 @@ public class ChargeAOImpl implements IChargeAO {
             user.setMobile(agentUser.getMobile());
             charge.setPayer(user);
 
+            realName = agentUser.getMobile();
+            if (StringUtils.isNotBlank(agentUser.getRealName())) {
+                realName = agentUser.getRealName().concat("-").concat(realName);
+            }
+
+        } else if (EAccountType.PLAT.getCode()
+            .equals(charge.getApplyUserType())) {
+
+            // 系统用户
+            realName = EUser.ADMIN.getValue();
         } else {
 
             // 其他用户
@@ -204,5 +223,7 @@ public class ChargeAOImpl implements IChargeAO {
             charge.setPayer(user);
 
         }
+
+        charge.setRealName(realName);
     }
 }

@@ -27,12 +27,10 @@ import com.ogc.standard.domain.Withdraw;
 import com.ogc.standard.enums.EAccountType;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.EChannelType;
-import com.ogc.standard.enums.ECurrency;
-import com.ogc.standard.enums.EJourBizTypeMaintain;
 import com.ogc.standard.enums.EJourBizTypePlat;
 import com.ogc.standard.enums.EJourBizTypeUser;
-import com.ogc.standard.enums.ESysUser;
 import com.ogc.standard.enums.ESystemAccount;
+import com.ogc.standard.enums.EUser;
 import com.ogc.standard.enums.EWithdrawStatus;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
@@ -105,14 +103,6 @@ public class WithdrawAOImpl implements IWithdrawAO {
             EJourBizTypeUser.WITHDRAW_FROZEN.getCode(),
             EJourBizTypeUser.WITHDRAW_FROZEN.getValue(), withdrawCode);
 
-        // 用户账户扣减
-        accountBO.transAmount(applyUser, ESysUser.SYS_USER.getCode(),
-            ECurrency.CNY.getCode(), amount,
-            EJourBizTypeMaintain.WITHDRAW_FROZEN.getCode(),
-            EJourBizTypeMaintain.WITHDRAW_FROZEN.getCode(),
-            EJourBizTypeMaintain.WITHDRAW_FROZEN.getCode(),
-            EJourBizTypeMaintain.WITHDRAW_FROZEN.getCode(), withdrawCode);
-
         return withdrawCode;
     }
 
@@ -151,14 +141,6 @@ public class WithdrawAOImpl implements IWithdrawAO {
         accountBO.unfrozenAmount(dbAccount, data.getAmount(),
             EJourBizTypeUser.WITHDRAW_UNFROZEN.getCode(), "取现失败退回",
             data.getCode());
-
-        // 账户还原
-        accountBO.transAmount(ESysUser.SYS_USER.getCode(), data.getApplyUser(),
-            ECurrency.CNY.getCode(), data.getAmount(),
-            EJourBizTypeMaintain.WITHDRAW_FROZEN.getCode(),
-            EJourBizTypeMaintain.WITHDRAW_FROZEN.getCode(),
-            EJourBizTypeMaintain.WITHDRAW_FROZEN.getCode(),
-            EJourBizTypeMaintain.WITHDRAW_FROZEN.getCode(), data.getCode());
     }
 
     @Override
@@ -169,7 +151,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
         if (!EWithdrawStatus.Approved_YES.getCode().equals(data.getStatus())) {
             throw new BizException("xn000000", "申请记录状态不是待支付状态，无法支付");
         }
-        if (EWithdrawStatus.Approved_YES.getCode().equals(data.getStatus())) {
+        if (EBoolean.YES.getCode().equals(payResult)) {
             if (StringUtils.isBlank(channelOrder) || null == payFee) {
                 throw new BizException("xn000000", "请填写渠道单号和转账费");
             }
@@ -293,12 +275,21 @@ public class WithdrawAOImpl implements IWithdrawAO {
     }
 
     private void initWithdraw(Withdraw withdraw) {
+
+        // 户名
+        String realName = null;
+
         if (EAccountType.CUSTOMER.getCode()
             .equals(withdraw.getApplyUserType())) {
 
             // C端用户
-            User user = userBO.getUser(withdraw.getApplyUser());
+            User user = userBO.getUserUnCheck(withdraw.getApplyUser());
             withdraw.setUser(user);
+
+            realName = user.getMobile();
+            if (StringUtils.isNotBlank(user.getRealName())) {
+                realName = user.getRealName().concat("-").concat(realName);
+            }
 
         } else if (EAccountType.AGENT.getCode()
             .equals(withdraw.getApplyUserType())) {
@@ -310,13 +301,30 @@ public class WithdrawAOImpl implements IWithdrawAO {
             user.setMobile(agentUser.getMobile());
             withdraw.setUser(user);
 
+            realName = agentUser.getMobile();
+            if (StringUtils.isNotBlank(agentUser.getRealName())) {
+                realName = agentUser.getRealName().concat("-").concat(realName);
+            }
+
+        } else if (EAccountType.PLAT.getCode()
+            .equals(withdraw.getApplyUserType())) {
+
+            // 系统用户
+            realName = EUser.ADMIN.getValue();
         } else {
+
             // 其他用户
             SYSUser sysUser = sysUserBO.getSYSUser(withdraw.getApplyUser());
             User user = new User();
             user.setMobile(sysUser.getMobile());
             withdraw.setUser(user);
 
+            realName = sysUser.getMobile();
+            if (StringUtils.isNotBlank(sysUser.getRealName())) {
+                realName = sysUser.getRealName().concat("-").concat(realName);
+            }
         }
+
+        withdraw.setRealName(realName);
     }
 }

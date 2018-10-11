@@ -60,15 +60,18 @@
 			<if test="kind != null and kind != '' ">
 				AND t.kind = #{kind}
 			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
 					
 			<if test="roleCode != null and roleCode != '' ">
 				AND t.role_code = #{roleCode}
 			</if>
 			<if test="mobileForQuery != null and mobileForQuery != '' ">
-				AND t.mobile like "%"#{mobileForQuery}"%"
+				AND (t.mobile like "%"#{mobileForQuery}"%" or t.login_name like "%"#{mobileForQuery}"%")
 			</if>
 			<if test="realNameForQuery != null and realNameForQuery != '' ">
-				AND t.real_name like "%"#{realNameForQuery}"%"
+				AND t.real_name like "%"#{realNameForQuery}"%" 
 			</if>		
 		</trim>
 	</sql>

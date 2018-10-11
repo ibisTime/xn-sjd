@@ -15,7 +15,6 @@ public class XN630000Req {
     private String name;
 
     // 类型
-    @NotBlank
     private String type;
 
     // 更新人(必填)

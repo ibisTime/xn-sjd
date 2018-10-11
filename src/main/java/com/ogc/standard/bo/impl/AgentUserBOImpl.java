@@ -65,10 +65,12 @@ public class AgentUserBOImpl extends PaginableBOImpl<AgentUser>
     }
 
     @Override
-    public String doAddSalesman(String mobile, String loginPwd) {
+    public String doAddSalesman(String parentUserId, String mobile,
+            String loginPwd) {
         AgentUser agentUser = new AgentUser();
         String userId = OrderNoGenerater
             .generate(EGeneratePrefix.AgentUser.getCode());
+        agentUser.setParentUserId(parentUserId);
         agentUser.setUserId(userId);
         agentUser.setType(EAgentUserType.Salesman.getCode());
         agentUser.setMobile(mobile);

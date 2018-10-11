@@ -1,5 +1,7 @@
 package com.ogc.standard.dto.req;
 
+import java.util.List;
+
 /**
  * 列表查询认养权
  * @author: silver 
@@ -24,6 +26,12 @@ public class XN629207Req extends AListReq {
 
     // 当前持有人
     private String currentHolder;
+
+    // 产权方
+    private String ownerId;
+
+    // 状态列表
+    private List<String> statusList;
 
     public String getCategoryCode() {
         return categoryCode;
@@ -63,6 +71,22 @@ public class XN629207Req extends AListReq {
 
     public void setParentCategoryCode(String parentCategoryCode) {
         this.parentCategoryCode = parentCategoryCode;
+    }
+
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    public List<String> getStatusList() {
+        return statusList;
+    }
+
+    public void setStatusList(List<String> statusList) {
+        this.statusList = statusList;
     }
 
 }

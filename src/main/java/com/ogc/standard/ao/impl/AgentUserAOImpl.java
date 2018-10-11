@@ -400,12 +400,13 @@ public class AgentUserAOImpl implements IAgentUserAO {
     }
 
     @Override
-    public String doAddSalesman(String mobile, String loginPwd) {
+    public String doAddSalesman(String parentUserId, String mobile,
+            String loginPwd) {
         // 验证手机号是否存在
         agentUserBO.isMobileExist(mobile);
 
         // 注册用户
-        return agentUserBO.doAddSalesman(mobile, loginPwd);
+        return agentUserBO.doAddSalesman(parentUserId, mobile, loginPwd);
     }
 
     @Override

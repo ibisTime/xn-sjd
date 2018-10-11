@@ -48,10 +48,10 @@ public class XN802320 extends AProcessor {
             condition.setCurrencyList(req.getCurrencyList());
         }
 
-        condition.setCreateDatetimeStart(
-            DateUtil.getFrontDate(req.getDateStart(), false));
-        condition.setCreateDatetimeEnd(
-            DateUtil.getFrontDate(req.getDateEnd(), true));
+        condition.setCreateDatetimeStart(DateUtil.strToDate(
+            req.getCreateDatetimeStart(), DateUtil.FRONT_DATE_FORMAT_STRING));
+        condition.setCreateDatetimeEnd(DateUtil.strToDate(
+            req.getCreateDatetimeEnd(), DateUtil.FRONT_DATE_FORMAT_STRING));
 
         condition.setWorkDate(req.getWorkDate());
         condition.setCheckUser(req.getCheckUser());

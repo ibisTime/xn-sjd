@@ -12,17 +12,20 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ogc.standard.ao.ISmsAO;
 import com.ogc.standard.bo.IReadBO;
+import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.ISmsBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.domain.Read;
+import com.ogc.standard.domain.SYSUser;
 import com.ogc.standard.domain.Sms;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.dto.req.XN805300Req;
@@ -48,6 +51,9 @@ public class SmsAOImpl implements ISmsAO {
 
     @Autowired
     private IReadBO readBO;
+
+    @Autowired
+    private ISYSUserBO sysUserBO;
 
     @Override
     public String addSms(XN805300Req req) {
@@ -111,7 +117,14 @@ public class SmsAOImpl implements ISmsAO {
 
     @Override
     public Paginable<Sms> querySmsPage(int start, int limit, Sms condition) {
-        return smsBO.getPaginable(start, limit, condition);
+        Paginable<Sms> page = smsBO.getPaginable(start, limit, condition);
+
+        if (null != page && CollectionUtils.isNotEmpty(page.getList())) {
+            for (Sms sms : page.getList()) {
+                initSms(sms);
+            }
+        }
+        return page;
     }
 
     @Override
@@ -124,7 +137,19 @@ public class SmsAOImpl implements ISmsAO {
         if (!smsBO.isSmsExit(code)) {
             throw new BizException("lh4000", "消息不存在！");
         }
-        return smsBO.getSms(code);
+
+        Sms sms = smsBO.getSms(code);
+
+        initSms(sms);
+
+        return sms;
+    }
+
+    private void initSms(Sms sms) {
+        SYSUser sysUser = sysUserBO.getSYSUserUnCheck(sms.getUpdater());
+        if (null != sysUser) {
+            sms.setUpdaterName(sysUser.getLoginName());
+        }
     }
 
 }

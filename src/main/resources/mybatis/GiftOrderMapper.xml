@@ -7,6 +7,7 @@
 		<result column="adopt_tree_code" property="adoptTreeCode" />
 		<result column="name" property="name" />
 		<result column="price" property="price" />
+		<result column="list_pic" property="listPic" />
 		<result column="description" property="description" />
 		
 		<result column="receiver" property="receiver" />
@@ -53,12 +54,15 @@
 		,t.adopt_tree_code
 		,t.name
 		,t.price
+		,t.list_pic
 		,t.description
+		
 		,t.receiver
 		,t.re_address
 		,t.re_mobile
 		,t.status
 		,t.create_datetime
+		
 		,t.claimer
 		,t.claim_datetime
 		,t.invalid_datetime
@@ -85,12 +89,15 @@
 		,adopt_tree_code
 		,name
 		,price
+		,list_pic
 		,description
+		
 		,receiver
 		,re_address
 		,re_mobile
 		,status
 		,create_datetime
+		
 		,claimer
 		,claim_datetime
 		,invalid_datetime
@@ -100,12 +107,15 @@
 		,#{adoptTreeCode}
 		,#{name}
 		,#{price}
+		,#{listPic}
 		,#{description}
+		
 		,#{receiver}
 		,#{reAddress}
 		,#{reMobile}
 		,#{status}
 		,#{createDatetime}
+		
 		,#{claimer}
 		,#{claimDatetime}
 		,#{invalidDatetime}
@@ -118,6 +128,7 @@
 		adopt_tree_code = #{adoptTreeCode}
 		,name = #{name}
 		,price = #{price}
+		,list_pic = #{listPic}
 		,description = #{description}
 		,receiver = #{receiver}
 		,re_address = #{reAddress}

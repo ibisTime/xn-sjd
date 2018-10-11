@@ -38,16 +38,17 @@ public class XN805120 extends AProcessor {
         condition.setIdNo(req.getIdNo());
         condition.setRealName(req.getRealName());
         condition.setStatus(req.getStatus());
+        condition.setAgentId(req.getAgentId());
 
         condition.setProvince(req.getProvince());
         condition.setCity(req.getCity());
         condition.setArea(req.getArea());
         condition.setLongitude(req.getLongitude());
         condition.setLatitude(req.getLatitude());
-        condition.setCreateDatetimeStart(DateUtil.getFrontDate(
-            req.getCreateDatetimeStart(), false));
-        condition.setCreateDatetimeEnd(DateUtil.getFrontDate(
-            req.getCreateDatetimeEnd(), true));
+        condition.setCreateDatetimeStart(
+            DateUtil.getFrontDate(req.getCreateDatetimeStart(), false));
+        condition.setCreateDatetimeEnd(
+            DateUtil.getFrontDate(req.getCreateDatetimeEnd(), true));
 
         condition.setUpdater(req.getUpdater());
         String column = req.getOrderColumn();

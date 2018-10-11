@@ -12,11 +12,15 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ogc.standard.ao.ITreeAO;
 import com.ogc.standard.bo.IApplyBindMaintainBO;
 import com.ogc.standard.bo.IInteractBO;
+import com.ogc.standard.bo.IProductBO;
+import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.ITreeBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.domain.Interact;
+import com.ogc.standard.domain.Product;
+import com.ogc.standard.domain.SYSUser;
 import com.ogc.standard.domain.Tree;
 import com.ogc.standard.dto.req.XN629030Req;
 import com.ogc.standard.dto.req.XN629031Req;
@@ -37,6 +41,12 @@ public class TreeAOImpl implements ITreeAO {
 
     @Autowired
     private IApplyBindMaintainBO applyBindMaintainBO;
+
+    @Autowired
+    private IProductBO productBO;
+
+    @Autowired
+    private ISYSUserBO sysUserBO;
 
     @Override
     public String addTree(XN629030Req req) {
@@ -146,7 +156,15 @@ public class TreeAOImpl implements ITreeAO {
             }
         }
 
-        return treeBO.getPaginable(start, limit, condition);
+        Paginable<Tree> page = treeBO.getPaginable(start, limit, condition);
+
+        if (null != page && CollectionUtils.isNotEmpty(page.getList())) {
+            for (Tree tree : page.getList()) {
+                initTree(tree);
+            }
+        }
+
+        return page;
     }
 
     @Override
@@ -156,7 +174,28 @@ public class TreeAOImpl implements ITreeAO {
 
     @Override
     public Tree getTree(String code) {
-        return treeBO.getTree(code);
+        Tree tree = treeBO.getTree(code);
+
+        initTree(tree);
+
+        return tree;
     }
 
+    private void initTree(Tree tree) {
+        // 产品名称
+        Product product = productBO.getProduct(tree.getProductCode());
+        tree.setProductName(product.getName());
+
+        // 产权方
+        String ownerName = null;
+        SYSUser sysUser = sysUserBO.getSYSUserUnCheck(tree.getOwnerId());
+        if (null != sysUser) {
+            ownerName = sysUser.getMobile();
+            if (StringUtils.isNotBlank(sysUser.getRealName())) {
+                ownerName = sysUser.getRealName().concat("-").concat(ownerName);
+            }
+        }
+        tree.setOwnerName(ownerName);
+
+    }
 }

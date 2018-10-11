@@ -101,6 +101,12 @@ public class Tree extends ABaseDO {
     // 养护方
     private SYSUser maintainer;
 
+    // 产品名称
+    private String productName;
+
+    // 产权方
+    private String ownerName;
+
     public String getMaintainId() {
         return maintainId;
     }
@@ -323,6 +329,22 @@ public class Tree extends ABaseDO {
 
     public void setMaintainer(SYSUser maintainer) {
         this.maintainer = maintainer;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
     }
 
 }

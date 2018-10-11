@@ -20,7 +20,8 @@ public interface IAgentUserBO extends IPaginableBO<AgentUser> {
     public String doRegister(String mobile, String loginPwd);
 
     // 添加业务员
-    public String doAddSalesman(String mobile, String loginPwd);
+    public String doAddSalesman(String parentUserId, String mobile,
+            String loginPwd);
 
     // 添加用户
     public String doAddAgentUser(String mobile, String loginPwd, String level,

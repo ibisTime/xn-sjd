@@ -2,6 +2,8 @@ package com.ogc.standard.api.impl;
 
 import java.math.BigDecimal;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.ogc.standard.ao.IWithdrawAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
@@ -28,7 +30,11 @@ public class XN802353 extends AProcessor {
     public Object doBusiness() throws BizException {
         synchronized (XN802353.class) {
             for (String code : req.getCodeList()) {
-                BigDecimal payFee = new BigDecimal(req.getPayFee());
+                BigDecimal payFee = BigDecimal.ZERO;
+                if (StringUtils.isNotBlank(req.getPayFee())) {
+                    payFee = new BigDecimal(req.getPayFee());
+                }
+
                 withdrawAO.payOrder(code, req.getPayUser(), req.getPayResult(),
                     req.getPayNote(), req.getChannelOrder(), payFee);
             }

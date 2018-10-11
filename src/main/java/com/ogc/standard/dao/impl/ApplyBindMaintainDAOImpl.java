@@ -9,8 +9,8 @@ import com.ogc.standard.dao.base.support.AMybatisTemplate;
 import com.ogc.standard.domain.ApplyBindMaintain;
 
 @Repository("applyBindMaintainDAOImpl")
-public class ApplyBindMaintainDAOImpl extends AMybatisTemplate implements
-        IApplyBindMaintainDAO {
+public class ApplyBindMaintainDAOImpl extends AMybatisTemplate
+        implements IApplyBindMaintainDAO {
 
     @Override
     public int insert(ApplyBindMaintain data) {
@@ -48,8 +48,13 @@ public class ApplyBindMaintainDAOImpl extends AMybatisTemplate implements
     }
 
     @Override
-    public int update(ApplyBindMaintain data) {
-        return super.update(NAMESPACE.concat("update_applyBindMaintain"), data);
+    public int updateReBindMaintain(ApplyBindMaintain data) {
+        return super.update(NAMESPACE.concat("update_reBindMaintain"), data);
+    }
+
+    @Override
+    public int updateUnBindMaintain(ApplyBindMaintain data) {
+        return super.update(NAMESPACE.concat("update_unBindMaintain"), data);
     }
 
     @Override

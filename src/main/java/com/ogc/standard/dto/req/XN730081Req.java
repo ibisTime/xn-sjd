@@ -12,6 +12,10 @@ public class XN730081Req extends BaseReq {
 
     private static final long serialVersionUID = -6308551102694787370L;
 
+    // 代理商编号
+    @NotBlank
+    private String parentUserId;
+
     // 手机号
     @NotBlank
     private String mobile;
@@ -34,6 +38,14 @@ public class XN730081Req extends BaseReq {
 
     public void setLoginPwd(String loginPwd) {
         this.loginPwd = loginPwd;
+    }
+
+    public String getParentUserId() {
+        return parentUserId;
+    }
+
+    public void setParentUserId(String parentUserId) {
+        this.parentUserId = parentUserId;
     }
 
 }

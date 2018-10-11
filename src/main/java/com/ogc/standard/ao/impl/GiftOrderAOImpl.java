@@ -29,11 +29,12 @@ public class GiftOrderAOImpl implements IGiftOrderAO {
 
     @Override
     public String addGiftOrder(String adoptTreeCode, String name, String price,
-            String description, String invalidDatetime) {
+            String listPic, String description, String invalidDatetime) {
         GiftOrder data = new GiftOrder();
         data.setAdoptTreeCode(adoptTreeCode);
         data.setName(name);
         data.setPrice(StringValidater.toLong(price));
+        data.setListPic(listPic);
         data.setDescription(description);
         data.setStatus(EGiftOrderStatus.TO_CLAIM.getCode());
         data.setCreateDatetime(new Date());

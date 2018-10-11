@@ -22,6 +22,10 @@ public class XN629320Req extends BaseReq {
     // 礼物价格
     private String price;
 
+    // 列表图片
+    @NotBlank
+    private String listPic;
+
     // 礼物描述
     @NotBlank
     private String description;
@@ -67,6 +71,14 @@ public class XN629320Req extends BaseReq {
 
     public void setInvalidDatetime(String invalidDatetime) {
         this.invalidDatetime = invalidDatetime;
+    }
+
+    public String getListPic() {
+        return listPic;
+    }
+
+    public void setListPic(String listPic) {
+        this.listPic = listPic;
     }
 
 }
