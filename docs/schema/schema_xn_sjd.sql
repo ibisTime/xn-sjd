@@ -107,7 +107,7 @@ DROP TABLE IF EXISTS `try_adopt_order_tree`;
 CREATE TABLE `try_adopt_order_tree` (
   `code` varchar(32) NOT NULL COMMENT '编号',
   `order_code` varchar(32) DEFAULT NULL COMMENT '认养订单编号',
-  `parent_category_code` varchar(32) DEFAULT NULL COMMENT '产品大类' 
+  `parent_category_code` varchar(32) DEFAULT NULL COMMENT '产品大类',
   `category_code` varchar(32) DEFAULT NULL COMMENT '分类编号',
   `owner_id` varchar(32) DEFAULT NULL COMMENT '产权方编号',
   `product_code` varchar(32) DEFAULT NULL COMMENT '产品编号',
@@ -209,6 +209,9 @@ CREATE TABLE `tsj_gift_order` (
   `list_pic` varchar(255) DEFAULT NULL COMMENT '列表图片',
   `description` varchar(255) DEFAULT NULL COMMENT '礼物描述',
   `receiver` varchar(255) DEFAULT NULL COMMENT '收货人',
+  `province` varchar(32) DEFAULT NULL COMMENT '省',
+  `city` varchar(32) DEFAULT NULL COMMENT '市',
+  `area` varchar(32) DEFAULT NULL COMMENT '区' ,
   `re_address` varchar(255) DEFAULT NULL COMMENT '收货地址',
   `re_mobile` varchar(32) DEFAULT NULL COMMENT '收货人手机号',
   `status` varchar(4) DEFAULT NULL COMMENT '状态（0待认领/1已认领）',
@@ -684,6 +687,7 @@ CREATE TABLE `tsys_maintain_project` (
 DROP TABLE IF EXISTS `tsys_maintain_record`;
 CREATE TABLE `tsys_maintain_record` (
   `code` varchar(32) NOT NULL COMMENT '编号',
+  `maintain` varchar(32) DEFAULT NULL COMMENT '养护方',
   `tree_number` varchar(32) DEFAULT NULL COMMENT '古树编号',
   `project_code` varchar(32) DEFAULT NULL COMMENT '养护项目编号',
   `project_name` varchar(255) DEFAULT NULL COMMENT '养护项目名称',

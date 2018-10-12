@@ -71,7 +71,6 @@ public class BizLogBOImpl extends PaginableBOImpl<BizLog> implements IBizLogBO {
 
         List<String> typeList = new ArrayList<String>();
         typeList.add(EBizLogType.GATHER.getCode());
-        typeList.add(EBizLogType.GIVE.getCode());
         condition.setTypeList(typeList);
 
         return bizLogDAO.selectQuantitySum(condition);

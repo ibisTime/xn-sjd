@@ -37,11 +37,12 @@ public class ApplyBindMaintain extends ABaseDO {
 
     /****************DB properties********/
 
-    /*************辅助字段**********/
-
     private SYSUser ownerUser; // 产权方用户
 
     private SYSUser maintainUser;// 养护方用户
+
+    // 更新热
+    private String updaterName;
 
     public void setCode(String code) {
         this.code = code;
@@ -113,6 +114,14 @@ public class ApplyBindMaintain extends ABaseDO {
 
     public void setMaintainUser(SYSUser maintainUser) {
         this.maintainUser = maintainUser;
+    }
+
+    public String getUpdaterName() {
+        return updaterName;
+    }
+
+    public void setUpdaterName(String updaterName) {
+        this.updaterName = updaterName;
     }
 
 }

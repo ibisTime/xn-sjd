@@ -38,6 +38,8 @@ public enum EJourBizTypeUser {
 
     PRESENT("present", "赠送"),
 
+    SIGN("sign", "签到"),
+
     // 积分账户
     REGIST("reg", "注册送积分"),
 
@@ -51,7 +53,7 @@ public enum EJourBizTypeUser {
 
     REAL_AUTH("real_auth", "实名认证"),
 
-    SIGN("sign", "签到"),
+    LOGIN("login", "登录"),
 
     ONE_ADOPT_BACK("one_adopt_back", "直推认养消费返积分"),
 

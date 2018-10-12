@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,11 +15,13 @@ import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IBizLogBO;
 import com.ogc.standard.bo.IGiveCarbonBubbleRecordBO;
 import com.ogc.standard.bo.ISYSConfigBO;
+import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.AmountUtil;
 import com.ogc.standard.common.SysConstants;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.GiveCarbonBubbleRecord;
+import com.ogc.standard.domain.User;
 import com.ogc.standard.enums.EBizLogType;
 import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EJourBizTypePlat;
@@ -39,6 +43,9 @@ public class GiveCarbonBubbleRecordAOImpl implements IGiveCarbonBubbleRecordAO {
 
     @Autowired
     private ISYSConfigBO sysConfigBO;
+
+    @Autowired
+    private IUserBO userBO;
 
     @Override
     @Transactional
@@ -78,7 +85,17 @@ public class GiveCarbonBubbleRecordAOImpl implements IGiveCarbonBubbleRecordAO {
     @Override
     public Paginable<GiveCarbonBubbleRecord> queryGiveCarbonBubbleRecordPage(
             int start, int limit, GiveCarbonBubbleRecord condition) {
-        return giveCarbonBubbleRecordBO.getPaginable(start, limit, condition);
+        Paginable<GiveCarbonBubbleRecord> page = giveCarbonBubbleRecordBO
+            .getPaginable(start, limit, condition);
+
+        if (null != page && CollectionUtils.isNotEmpty(page.getList())) {
+            for (GiveCarbonBubbleRecord giveCarbonBubbleRecord : page
+                .getList()) {
+                init(giveCarbonBubbleRecord);
+            }
+        }
+
+        return page;
     }
 
     @Override
@@ -90,6 +107,38 @@ public class GiveCarbonBubbleRecordAOImpl implements IGiveCarbonBubbleRecordAO {
 
     @Override
     public GiveCarbonBubbleRecord getGiveCarbonBubbleRecord(String code) {
-        return giveCarbonBubbleRecordBO.getGiveCarbonBubbleRecord(code);
+        GiveCarbonBubbleRecord giveCarbonBubbleRecord = giveCarbonBubbleRecordBO
+            .getGiveCarbonBubbleRecord(code);
+
+        init(giveCarbonBubbleRecord);
+
+        return giveCarbonBubbleRecord;
+    }
+
+    private void init(GiveCarbonBubbleRecord giveCarbonBubbleRecord) {
+        // 赠送人
+        String userName = null;
+        User user = userBO.getUserUnCheck(giveCarbonBubbleRecord.getUserId());
+        if (null != user) {
+            userName = user.getMobile();
+            if (StringUtils.isNotBlank(user.getRealName())) {
+                userName = user.getRealName().concat("-").concat(userName);
+            }
+        }
+
+        // 被赠送人
+        String toUserName = null;
+        User toUser = userBO
+            .getUserUnCheck(giveCarbonBubbleRecord.getToUserId());
+        if (null != toUser) {
+            toUserName = user.getMobile();
+            if (StringUtils.isNotBlank(toUser.getRealName())) {
+                toUserName = toUser.getRealName().concat("-")
+                    .concat(toUserName);
+            }
+        }
+
+        giveCarbonBubbleRecord.setUserName(userName);
+        giveCarbonBubbleRecord.setToUserName(toUserName);
     }
 }

@@ -140,6 +140,9 @@ public class Product extends ABaseDO {
     // 产品最大价格
     private BigDecimal maxPrice;
 
+    // 产权方信息
+    private SYSUser ownerInfo;
+
     public String getDirectType() {
         return directType;
     }
@@ -466,6 +469,14 @@ public class Product extends ABaseDO {
 
     public void setParentCategoryName(String parentCategoryName) {
         this.parentCategoryName = parentCategoryName;
+    }
+
+    public SYSUser getOwnerInfo() {
+        return ownerInfo;
+    }
+
+    public void setOwnerInfo(SYSUser ownerInfo) {
+        this.ownerInfo = ownerInfo;
     }
 
 }

@@ -3,6 +3,7 @@ package com.ogc.standard.ao.impl;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,10 +11,12 @@ import com.ogc.standard.ao.IMaintainRecordAO;
 import com.ogc.standard.bo.IMaintainProjectBO;
 import com.ogc.standard.bo.IMaintainRecordBO;
 import com.ogc.standard.bo.IMaintainerBO;
+import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.MaintainProject;
 import com.ogc.standard.domain.MaintainRecord;
 import com.ogc.standard.domain.Maintainer;
+import com.ogc.standard.domain.SYSUser;
 import com.ogc.standard.dto.req.XN629630Req;
 import com.ogc.standard.exception.BizException;
 
@@ -29,6 +32,9 @@ public class MaintainRecordAOImpl implements IMaintainRecordAO {
     @Autowired
     private IMaintainProjectBO maintainProjectBO;
 
+    @Autowired
+    private ISYSUserBO sysUserBO;
+
     @Override
     public String addMaintainRecord(XN629630Req req) {
         Maintainer maintainer = maintainerBO
@@ -39,6 +45,7 @@ public class MaintainRecordAOImpl implements IMaintainRecordAO {
         MaintainRecord data = new MaintainRecord();
 
         data.setTreeNumber(req.getTreeNumber());
+        data.setMaintain(req.getUpdater());
         data.setProjectCode(req.getProjectCode());
         data.setProjectName(maintainProject.getProjectName());
         data.setMaintainerCode(req.getMaintainerCode());
@@ -75,7 +82,15 @@ public class MaintainRecordAOImpl implements IMaintainRecordAO {
     @Override
     public Paginable<MaintainRecord> queryMaintainRecordPage(int start,
             int limit, MaintainRecord condition) {
-        return maintainRecordBO.getPaginable(start, limit, condition);
+        Paginable<MaintainRecord> page = maintainRecordBO.getPaginable(start,
+            limit, condition);
+
+        if (null != page && CollectionUtils.isNotEmpty(page.getList())) {
+            for (MaintainRecord maintainRecord : page.getList()) {
+                initMaintainRecord(maintainRecord);
+            }
+        }
+        return page;
     }
 
     @Override
@@ -86,6 +101,18 @@ public class MaintainRecordAOImpl implements IMaintainRecordAO {
 
     @Override
     public MaintainRecord getMaintainRecord(String code) {
-        return maintainRecordBO.getMaintainRecord(code);
+        MaintainRecord maintainRecord = maintainRecordBO
+            .getMaintainRecord(code);
+
+        initMaintainRecord(maintainRecord);
+
+        return maintainRecord;
+    }
+
+    private void initMaintainRecord(MaintainRecord maintainRecord) {
+        // 养护方信息
+        SYSUser maintainInfo = sysUserBO
+            .getSYSUserUnCheck(maintainRecord.getMaintain());
+        maintainRecord.setMaintainInfo(maintainInfo);
     }
 }

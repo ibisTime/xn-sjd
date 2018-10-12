@@ -46,14 +46,18 @@ public class GiftOrderAOImpl implements IGiftOrderAO {
     @Override
     public void claimGift(XN629323Req req) {
         GiftOrder data = giftOrderBO.getGiftOrder(req.getCode());
-        if (EGiftOrderStatus.TO_CLAIM.getCode().equals(data.getStatus())) {
+        if (!EGiftOrderStatus.TO_CLAIM.getCode().equals(data.getStatus())) {
             throw new BizException("xn0000", "礼物不是待认领状态");
         }
         if (new Date().getTime() > data.getInvalidDatetime().getTime()) {
             throw new BizException("xn0000", "礼物已失效");
         }
         data.setReceiver(req.getReceiver());
+        data.setProvince(req.getProvince());
+        data.setCity(req.getCity());
+        data.setArea(req.getArea());
         data.setReAddress(req.getReAddress());
+
         data.setReMobile(req.getReMobile());
         data.setClaimer(req.getClaimer());
         data.setStatus(EGiftOrderStatus.CLAIMED.getCode());

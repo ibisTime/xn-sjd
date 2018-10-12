@@ -11,11 +11,14 @@
 		<result column="description" property="description" />
 		
 		<result column="receiver" property="receiver" />
+		<result column="province" property="province" />
+		<result column="city" property="city" />
+		<result column="area" property="area" />
 		<result column="re_address" property="reAddress" />
+		
 		<result column="re_mobile" property="reMobile" />
 		<result column="status" property="status" />
 		<result column="create_datetime" property="createDatetime" />
-		
 		<result column="claimer" property="claimer" />
 		<result column="claim_datetime" property="claimDatetime" />
 		<result column="invalid_datetime" property="invalidDatetime" />
@@ -58,13 +61,17 @@
 		,t.description
 		
 		,t.receiver
+		,t.province
+		,t.city
+		,t.area
 		,t.re_address
+		
 		,t.re_mobile
 		,t.status
 		,t.create_datetime
-		
 		,t.claimer
 		,t.claim_datetime
+		
 		,t.invalid_datetime
 		FROM
 		tsj_gift_order t
@@ -131,6 +138,9 @@
 		,list_pic = #{listPic}
 		,description = #{description}
 		,receiver = #{receiver}
+		,province = #{province}
+		,city = #{city}
+		,area = #{area}
 		,re_address = #{reAddress}
 		,re_mobile = #{reMobile}
 		,status = #{status}

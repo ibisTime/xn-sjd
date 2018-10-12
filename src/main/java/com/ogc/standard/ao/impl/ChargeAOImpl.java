@@ -138,6 +138,12 @@ public class ChargeAOImpl implements IChargeAO {
         if (ECurrency.JF.getCode().equals(currency)) {
             Account account = accountBO
                 .getAccount(ESystemAccount.SYS_ACOUNT_JF_POOL.getCode());
+            if (amount.add(account.getAmount())
+                .compareTo(BigDecimal.ZERO) == -1) {
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                    "余额不能小于0，请重新输入");
+            }
+
             accountBO.changeAmount(account, amount, EChannelType.Offline,
                 EJourBizTypePlat.HAND_CHARGE.getCode(),
                 EJourBizTypePlat.HAND_CHARGE.getCode(),
@@ -145,6 +151,12 @@ public class ChargeAOImpl implements IChargeAO {
         } else if (ECurrency.TPP.getCode().equals(currency)) {
             Account account = accountBO
                 .getAccount(ESystemAccount.SYS_ACOUNT_TPP_POOL.getCode());
+            if (amount.add(account.getAmount())
+                .compareTo(BigDecimal.ZERO) == -1) {
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                    "余额不能小于0，请重新输入");
+            }
+
             accountBO.changeAmount(account, amount, EChannelType.Offline,
                 EJourBizTypePlat.HAND_CHARGE.getCode(),
                 EJourBizTypePlat.HAND_CHARGE.getCode(),
@@ -184,25 +196,25 @@ public class ChargeAOImpl implements IChargeAO {
         // 户名
         String realName = null;
 
+        // 审核人
+        String payUserName = null;
+
         if (EAccountType.CUSTOMER.getCode().equals(charge.getApplyUserType())) {
 
             // C端用户
             User user = userBO.getUser(charge.getApplyUser());
-            charge.setPayer(user);
 
             realName = user.getMobile();
             if (StringUtils.isNotBlank(user.getRealName())) {
                 realName = user.getRealName().concat("-").concat(realName);
             }
+
         } else if (EAccountType.AGENT.getCode()
             .equals(charge.getApplyUserType())) {
 
             // 代理用户
             AgentUser agentUser = agentUserBO
                 .getAgentUser(charge.getApplyUser());
-            User user = new User();
-            user.setMobile(agentUser.getMobile());
-            charge.setPayer(user);
 
             realName = agentUser.getMobile();
             if (StringUtils.isNotBlank(agentUser.getRealName())) {
@@ -218,12 +230,26 @@ public class ChargeAOImpl implements IChargeAO {
 
             // 其他用户
             SYSUser sysUser = sysUserBO.getSYSUser(charge.getApplyUser());
-            User user = new User();
-            user.setMobile(sysUser.getMobile());
-            charge.setPayer(user);
 
+            realName = sysUser.getMobile();
+            if (StringUtils.isNotBlank(sysUser.getRealName())) {
+                realName = sysUser.getRealName().concat("-").concat(realName);
+            }
+        }
+
+        SYSUser payUser = sysUserBO.getSYSUserUnCheck(charge.getPayUser());
+        if (null != payUser) {
+            payUserName = payUser.getLoginName();
+            if (StringUtils.isNotBlank(payUser.getMobile())) {
+                payUserName = payUserName.concat("-")
+                    .concat(payUser.getMobile());
+            }
         }
 
         charge.setRealName(realName);
+
+        charge.setApplyUserName(realName);
+
+        charge.setPayUserName(payUserName);
     }
 }

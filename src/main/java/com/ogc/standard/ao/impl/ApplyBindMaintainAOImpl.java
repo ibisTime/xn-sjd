@@ -104,21 +104,39 @@ public class ApplyBindMaintainAOImpl implements IApplyBindMaintainAO {
 
     private void init(ApplyBindMaintain data) {
         // 产权方用户
-        SYSUser ownerUser = sysUserBO.getSYSUser(data.getOwnerId());
+        SYSUser ownerUser = sysUserBO.getSYSUserUnCheck(data.getOwnerId());
         data.setOwnerUser(ownerUser);
-        if (StringUtils.isNotBlank(ownerUser.getCompanyCode())) {
-            Company ownerCompany = companyBO
-                .getCompany(ownerUser.getCompanyCode());
-            ownerUser.setCompany(ownerCompany);
+        if (null != ownerUser) {
+            if (StringUtils.isNotBlank(ownerUser.getCompanyCode())) {
+                Company ownerCompany = companyBO
+                    .getCompany(ownerUser.getCompanyCode());
+                ownerUser.setCompany(ownerCompany);
+            }
         }
+
         // 养护方用户
-        SYSUser maintainUser = sysUserBO.getSYSUser(data.getMaintainId());
+        SYSUser maintainUser = sysUserBO
+            .getSYSUserUnCheck(data.getMaintainId());
         data.setMaintainUser(maintainUser);
-        if (StringUtils.isNotBlank(maintainUser.getCompanyCode())) {
-            Company maintainCompany = companyBO
-                .getCompany(maintainUser.getCompanyCode());
-            maintainUser.setCompany(maintainCompany);
+        if (null != maintainUser) {
+            if (StringUtils.isNotBlank(maintainUser.getCompanyCode())) {
+                Company maintainCompany = companyBO
+                    .getCompany(maintainUser.getCompanyCode());
+                maintainUser.setCompany(maintainCompany);
+            }
         }
+
+        // 更新人
+        String updaterName = null;
+        SYSUser updater = sysUserBO.getSYSUserUnCheck(data.getUpdater());
+        if (null != updater) {
+            updaterName = updater.getLoginName();
+            if (StringUtils.isNotBlank(updater.getRealName())) {
+                updaterName = updaterName.concat("-").concat(updaterName);
+            }
+        }
+        data.setUpdaterName(updaterName);
+
     }
 
 }

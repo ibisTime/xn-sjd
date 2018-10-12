@@ -324,10 +324,10 @@ public class UserAOImpl implements IUserAO {
             }
 
             accountBO.transAmount(sysJfAccount, userJfAccount, quantity,
-                EJourBizTypeUser.SIGN.getCode(),
-                EJourBizTypePlat.SIGN.getCode(),
-                EJourBizTypeUser.SIGN.getValue(),
-                EJourBizTypePlat.SIGN.getValue(), userId);
+                EJourBizTypeUser.LOGIN.getCode(),
+                EJourBizTypePlat.LOGIN.getCode(),
+                EJourBizTypeUser.LOGIN.getValue(),
+                EJourBizTypePlat.LOGIN.getValue(), userId);
 
         }
 
@@ -813,6 +813,30 @@ public class UserAOImpl implements IUserAO {
         data.setGender(req.getGender());
         data.setAge(req.getAge());
         userExtBO.refreshUserExt(data);
+
+        // 添加积分
+        Map<String, String> configMap = sysConfigBO
+            .getConfigsMap(ESysConfigType.JF_RULE.getCode());
+        BigDecimal quantity = new BigDecimal(
+            configMap.get(SysConstants.COMPLETE_INFO));
+        quantity = AmountUtil.mul(quantity, 1000L);
+
+        Account userJfAccount = accountBO.getAccountByUser(req.getUserId(),
+            ECurrency.JF.getCode());
+        Account sysJfAccount = accountBO
+            .getAccount(ESystemAccount.SYS_ACOUNT_JF_POOL.getCode());
+
+        // 积分池不足时将剩余积分转给用户
+        if (quantity.compareTo(sysJfAccount.getAmount()) == 1) {
+            quantity = sysJfAccount.getAmount();
+        }
+
+        accountBO.transAmount(sysJfAccount, userJfAccount, quantity,
+            EJourBizTypeUser.COMPLETE_INFO.getCode(),
+            EJourBizTypePlat.COMPLETE_INFO.getCode(),
+            EJourBizTypeUser.COMPLETE_INFO.getValue(),
+            EJourBizTypePlat.COMPLETE_INFO.getValue(), req.getUserId());
+
     }
 
     @Override

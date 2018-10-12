@@ -17,6 +17,9 @@ public class MaintainRecord extends ABaseDO {
     // 编号
     private String code;
 
+    // 养护方
+    private String maintain;
+
     // 古树编号
     private String treeNumber;
 
@@ -46,6 +49,10 @@ public class MaintainRecord extends ABaseDO {
 
     // 备注
     private String remark;
+
+    /**************DB Properties**************/
+    // 养护方信息
+    private SYSUser maintainInfo;
 
     public void setCode(String code) {
         this.code = code;
@@ -133,6 +140,22 @@ public class MaintainRecord extends ABaseDO {
 
     public void setProjectName(String projectName) {
         this.projectName = projectName;
+    }
+
+    public String getMaintain() {
+        return maintain;
+    }
+
+    public void setMaintain(String maintain) {
+        this.maintain = maintain;
+    }
+
+    public SYSUser getMaintainInfo() {
+        return maintainInfo;
+    }
+
+    public void setMaintainInfo(SYSUser maintainInfo) {
+        this.maintainInfo = maintainInfo;
     }
 
 }

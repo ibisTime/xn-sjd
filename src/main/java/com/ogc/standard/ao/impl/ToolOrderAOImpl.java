@@ -64,18 +64,23 @@ public class ToolOrderAOImpl implements IToolOrderAO {
         // 验证用户
         User user = userBO.getUser(userId);
 
-        // 落地订单
-        String toolOrderCode = toolOrderBO.saveToolOrder(tool, user);
-
-        // 划转积分
+        // 积分验证
         BigDecimal quantity = tool.getPrice();
         Account userJfAccount = accountBO.getAccountByUser(userId,
             ECurrency.JF.getCode());
+        if (quantity.compareTo(userJfAccount.getAmount()) == 1) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "积分余额不足，无法购买！");
+        }
+
+        // 落地订单
+        String toolOrderCode = toolOrderBO.saveToolOrder(tool, user);
+
+        // 积分划转
         Account sysJfAccount = accountBO
             .getAccount(ESystemAccount.SYS_ACOUNT_JF_POOL.getCode());
-
         if (quantity.compareTo(sysJfAccount.getAmount()) != 1) {
-            accountBO.transAmount(sysJfAccount, userJfAccount, quantity,
+            accountBO.transAmount(userJfAccount, sysJfAccount, quantity,
                 EJourBizTypeUser.TOOL_BUY.getCode(),
                 EJourBizTypePlat.TOOL_BUY.getCode(),
                 EJourBizTypeUser.TOOL_BUY.getValue(),

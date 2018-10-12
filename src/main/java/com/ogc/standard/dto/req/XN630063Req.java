@@ -19,7 +19,6 @@ public class XN630063Req {
     private String mobile;
 
     // 营业执照
-    @NotBlank
     private String bussinessLicense;
 
     // 证书模板

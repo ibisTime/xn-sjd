@@ -76,7 +76,10 @@ public class Charge extends ABaseDO {
 
     // *******************************
     // 申请人
-    private User payer;
+    private String applyUserName;
+
+    // 支付人
+    private String payUserName;
 
     private String mobile;
 
@@ -107,14 +110,6 @@ public class Charge extends ABaseDO {
 
     public void setMobile(String mobile) {
         this.mobile = mobile;
-    }
-
-    public User getPayer() {
-        return payer;
-    }
-
-    public void setPayer(User payer) {
-        this.payer = payer;
     }
 
     public String getCode() {
@@ -339,6 +334,22 @@ public class Charge extends ABaseDO {
 
     public void setRealName(String realName) {
         this.realName = realName;
+    }
+
+    public String getApplyUserName() {
+        return applyUserName;
+    }
+
+    public void setApplyUserName(String applyUserName) {
+        this.applyUserName = applyUserName;
+    }
+
+    public String getPayUserName() {
+        return payUserName;
+    }
+
+    public void setPayUserName(String payUserName) {
+        this.payUserName = payUserName;
     }
 
 }

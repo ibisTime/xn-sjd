@@ -302,5 +302,9 @@ public class ProductAOImpl implements IProductAO {
         // 类型
         Category category = categoryBO.getCategory(product.getCategoryCode());
         product.setCategoryName(category.getName());
+
+        // 产权方信息
+        SYSUser ownerInfo = sysUserBO.getSYSUserUnCheck(product.getOwnerId());
+        product.setOwnerInfo(ownerInfo);
     }
 }

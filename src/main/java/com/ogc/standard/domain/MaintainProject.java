@@ -35,6 +35,14 @@ public class MaintainProject extends ABaseDO {
     // 备注
     private String remark;
 
+    /*************DB Properties*************/
+
+    // 养护方信息
+    private SYSUser maintainInfo;
+
+    // 更新人
+    private String updaterName;
+
     public void setCode(String code) {
         this.code = code;
     }
@@ -89,6 +97,22 @@ public class MaintainProject extends ABaseDO {
 
     public String getRemark() {
         return remark;
+    }
+
+    public SYSUser getMaintainInfo() {
+        return maintainInfo;
+    }
+
+    public void setMaintainInfo(SYSUser maintainInfo) {
+        this.maintainInfo = maintainInfo;
+    }
+
+    public String getUpdaterName() {
+        return updaterName;
+    }
+
+    public void setUpdaterName(String updaterName) {
+        this.updaterName = updaterName;
     }
 
 }

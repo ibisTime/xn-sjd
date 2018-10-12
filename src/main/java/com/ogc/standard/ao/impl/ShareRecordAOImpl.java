@@ -56,9 +56,9 @@ public class ShareRecordAOImpl implements IShareRecordAO {
         }
 
         accountBO.transAmount(sysTppAccount, userTppAccount, quantity,
-            EJourBizTypeUser.SIGN.getCode(), EJourBizTypePlat.SIGN.getCode(),
-            EJourBizTypeUser.SIGN.getValue(), EJourBizTypePlat.SIGN.getValue(),
-            userId);
+            EJourBizTypeUser.SHARE.getCode(), EJourBizTypePlat.SHARE.getCode(),
+            EJourBizTypeUser.SHARE.getValue(),
+            EJourBizTypePlat.SHARE.getValue(), userId);
 
         return code;
 
