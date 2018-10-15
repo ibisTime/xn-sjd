@@ -5,8 +5,10 @@
 	<resultMap id="sms_DB_Result" type="sms">
 		<result column="code" property="code" />
 		<result column="type" property="type" />
+		<result column="object" property="object" />
 		<result column="title" property="title" />
 		<result column="content" property="content" />
+		
 		<result column="status" property="status" />
 		<result column="create_datetime" property="createDatetime" />
 		<result column="updater" property="updater" />
@@ -21,6 +23,9 @@
 			</if>
 			<if test="type != null and type != '' ">
 				AND t.type = #{type}
+			</if>
+			<if test="object != null and object != '' ">
+				AND t.object = #{object}
 			</if>
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
@@ -38,8 +43,10 @@
 		INSERT INTO tstd_sms(
 		code
 		,type
+		,object
 		,title
 		,content
+		
 		,status
 		,create_datetime
 		,updater
@@ -49,8 +56,10 @@
 		VALUES(
 		#{code}
 		,#{type}
+		,#{object}
 		,#{title}
 		,#{content}
+		
 		,#{status}
 		,#{createDatetime}
 		,#{updater}
@@ -88,8 +97,10 @@
 		SELECT
 		t.code
 		,t.type
+		,t.object
 		,t.title
 		,t.content
+		
 		,t.status
 		,t.create_datetime
 		,t.updater

@@ -31,7 +31,6 @@ public class XN805300 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-
         return smsAO.addSms(req);
     }
 

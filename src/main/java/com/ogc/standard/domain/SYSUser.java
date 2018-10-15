@@ -73,7 +73,6 @@ public class SYSUser extends ABaseDO {
 
     // ***********db properties***********
 
-    /************辅助字段***************/
     // 注册时间起
     private Date createDatetimeStart;
 
@@ -101,7 +100,11 @@ public class SYSUser extends ABaseDO {
     // 公司
     private Company company;
 
-    /************辅助字段***************/
+    // 古树最大市值
+    private BigDecimal maxPrice;
+
+    // 古树最小市值
+    private BigDecimal minPrice;
 
     public String getUserId() {
         return userId;
@@ -317,6 +320,22 @@ public class SYSUser extends ABaseDO {
 
     public void setTradePwdStrength(String tradePwdStrength) {
         this.tradePwdStrength = tradePwdStrength;
+    }
+
+    public BigDecimal getMaxPrice() {
+        return maxPrice;
+    }
+
+    public void setMaxPrice(BigDecimal maxPrice) {
+        this.maxPrice = maxPrice;
+    }
+
+    public BigDecimal getMinPrice() {
+        return minPrice;
+    }
+
+    public void setMinPrice(BigDecimal minPrice) {
+        this.minPrice = minPrice;
     }
 
 }

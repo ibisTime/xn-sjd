@@ -22,12 +22,14 @@ public class Sms extends ABaseDO {
 
     private static final long serialVersionUID = -3821903316597198985L;
 
-    // ***********db properties***********
     // 消息编号
     private String code;
 
     // 消息类型
     private String type;
+
+    // 消息对象(C:C端用户/O:产权方/M:养护方/A:代理商/P:平台方)
+    private String object;
 
     // 消息标题
     private String title;
@@ -132,6 +134,14 @@ public class Sms extends ABaseDO {
 
     public void setUpdaterName(String updaterName) {
         this.updaterName = updaterName;
+    }
+
+    public String getObject() {
+        return object;
+    }
+
+    public void setObject(String object) {
+        this.object = object;
     }
 
 }

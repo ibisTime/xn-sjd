@@ -110,6 +110,9 @@ public class Jour extends ABaseDO {
     // 户名
     private String realName;
 
+    // 户名模糊查
+    private String relaNameForQuery;
+
     public String getCode() {
         return code;
     }
@@ -367,6 +370,14 @@ public class Jour extends ABaseDO {
 
     public void setRealName(String realName) {
         this.realName = realName;
+    }
+
+    public String getRelaNameForQuery() {
+        return relaNameForQuery;
+    }
+
+    public void setRelaNameForQuery(String relaNameForQuery) {
+        this.relaNameForQuery = relaNameForQuery;
     }
 
 }

@@ -33,11 +33,6 @@ public class SignLogBOImpl extends PaginableBOImpl<SignLog>
 
     @Override
     public int saveSignLog(SignLog data) {
-        // 获取用户ip
-        // HttpServletRequest request = ((ServletRequestAttributes)
-        // RequestContextHolder
-        // .getRequestAttributes()).getRequest();
-        // data.setIp(request.getRemoteAddr());
         data.setLocation("location");
         data.setCreateDatetime(new Date());
 

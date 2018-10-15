@@ -36,6 +36,7 @@ public class XN805306 extends AProcessor {
         condition.setType(req.getType());
         condition.setUpdater(req.getUpdater());
         condition.setStatus(req.getStatus());
+        condition.setObject(req.getObject());
         return smsAO.querySmsList(condition);
     }
 

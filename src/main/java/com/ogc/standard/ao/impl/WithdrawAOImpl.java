@@ -12,8 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ogc.standard.ao.IWithdrawAO;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IAgentUserBO;
-import com.ogc.standard.bo.IJourBO;
-import com.ogc.standard.bo.ISYSConfigBO;
 import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.IWithdrawBO;
@@ -42,9 +40,6 @@ public class WithdrawAOImpl implements IWithdrawAO {
     private IAccountBO accountBO;
 
     @Autowired
-    private ISYSConfigBO sysConfigBO;
-
-    @Autowired
     private IUserBO userBO;
 
     @Autowired
@@ -55,9 +50,6 @@ public class WithdrawAOImpl implements IWithdrawAO {
 
     @Autowired
     private IWithdrawBO withdrawBO;
-
-    @Autowired
-    private IJourBO jourBO;
 
     @Override
     @Transactional
@@ -187,18 +179,18 @@ public class WithdrawAOImpl implements IWithdrawAO {
             EJourBizTypeUser.WITHDRAW_UNFROZEN.getCode(),
             EJourBizTypeUser.WITHDRAW_UNFROZEN.getValue(), data.getCode());
 
-        // 取现扣钱
+        // 用户账户取现扣钱
         accountBO.changeAmount(dbAccount, data.getAmount().negate(),
             EChannelType.Offline, payCode, data.getCode(),
             EJourBizTypeUser.WITHDRAW.getCode(), "取现成功");
 
-        // 取现扣钱
-        Account sysAccount = accountBO
-            .getAccount(ESystemAccount.SYS_ACOUNT_CNY.getCode());
-        accountBO.changeAmount(sysAccount, data.getFee(), EChannelType.Offline,
+        accountBO.changeAmount(dbAccount, data.getFee(), EChannelType.Offline,
             payCode, data.getCode(), EJourBizTypePlat.WITHDRAW_FEE.getCode(),
             "取现手续费");
 
+        // 系统账户取现扣钱
+        Account sysAccount = accountBO
+            .getAccount(ESystemAccount.SYS_ACOUNT_CNY.getCode());
         accountBO.changeAmount(sysAccount, payFee.negate(),
             EChannelType.Offline, payCode, data.getCode(),
             EJourBizTypePlat.WITHDRAW_TRANS_FEE.getCode(), "取现转账手续费");

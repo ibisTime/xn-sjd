@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.ogc.standard.bo.IApplyBindMaintainBO;
+import com.ogc.standard.bo.IProductBO;
 import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.ITreeBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
@@ -33,6 +34,9 @@ public class TreeBOImpl extends PaginableBOImpl<Tree> implements ITreeBO {
 
     @Autowired
     private ISYSUserBO sysUserBO;
+
+    @Autowired
+    private IProductBO productBO;
 
     @Override
     public boolean isTreeNumberExist(String treeNumber) {
@@ -234,6 +238,11 @@ public class TreeBOImpl extends PaginableBOImpl<Tree> implements ITreeBO {
         SYSUser maintainer = sysUserBO
             .getSYSUser(applyBindMaintainBO.getMaintainId(tree.getOwnerId()));
         tree.setMaintainer(maintainer);
+
+        // 产品名称
+        Product product = productBO.getProduct(tree.getProductCode());
+        tree.setProductName(product.getName());
+        tree.setSellType(product.getSellType());
     }
 
 }

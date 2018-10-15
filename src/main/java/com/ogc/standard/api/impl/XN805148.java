@@ -13,6 +13,7 @@ import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.ObjValidater;
 import com.ogc.standard.dto.req.XN805148Req;
+import com.ogc.standard.enums.ESignLogType;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
@@ -32,7 +33,8 @@ public class XN805148 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return signLogAO.keepCheckIn(req.getUserId());
+        return signLogAO.keepCheckIn(req.getUserId(),
+            ESignLogType.SIGN_IN.getCode());
     }
 
     @Override

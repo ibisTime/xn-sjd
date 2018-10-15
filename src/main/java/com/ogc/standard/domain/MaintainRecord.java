@@ -54,6 +54,9 @@ public class MaintainRecord extends ABaseDO {
     // 养护方信息
     private SYSUser maintainInfo;
 
+    // 认养权
+    private AdoptOrderTree adoptOrderTree;
+
     public void setCode(String code) {
         this.code = code;
     }
@@ -156,6 +159,14 @@ public class MaintainRecord extends ABaseDO {
 
     public void setMaintainInfo(SYSUser maintainInfo) {
         this.maintainInfo = maintainInfo;
+    }
+
+    public AdoptOrderTree getAdoptOrderTree() {
+        return adoptOrderTree;
+    }
+
+    public void setAdoptOrderTree(AdoptOrderTree adoptOrderTree) {
+        this.adoptOrderTree = adoptOrderTree;
     }
 
 }

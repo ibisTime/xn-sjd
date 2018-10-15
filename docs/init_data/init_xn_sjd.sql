@@ -581,10 +581,10 @@ INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`r
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('qiniu','qiniu_secret_key','3NP-tpZP9-5fH-R-FhvKTfYpPPVFNvjFF3JXmrcq','admin',now(),'七牛云key1');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('qiniu','qiniu_bucket','test','admin',now(),'存储空间');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('qiniu','qiniu_domain','ounm8iw2d.bkt.clouddn.com','admin',now(),'访问域名');
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('PAY_RULE','JF_DK_MAX_RATE','0.3','admin',now(),'订单可用积分抵扣比例');
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('PAY_RULE','CNY2JF_RATE','10','admin',now(),'1人民币兑换多少积分');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('PAY_RULE','JF_DK_MAX_RATE','0.1','admin',now(),'订单可用积分抵扣比例');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('PAY_RULE','CNY2JF_RATE','100','admin',now(),'1人民币兑换多少积分');
 
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('SYSTEM_URL','REGISTER_URL','http://sjd.front.hichengdai.com/#/login?me=1','admin',now(),'C端注册地址');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('SYSTEM_URL','REGISTER_URL','http://sjd.front.hichengdai.com/#/register?','admin',now(),'C端注册地址');
 
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('USER_LEVEL','USER_LEVEL_0','0','admin',now(),'初探翠林');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('USER_LEVEL','USER_LEVEL_1','100','admin',now(),'护树新秀');
@@ -597,7 +597,7 @@ INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`r
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('DIST_RATE','DIST_MAINTAIN_RATE','0.05','admin',now(),'养护方的总额');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('DIST_RATE','DIST_PLAT_RATE','0.1','admin',now(),'平台方的总额');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('DIST_RATE','DIST_AGENT_RATE','0.1','admin',now(),'代理方的总额');
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('DIST_RATE','DIST_USER_BACK_JF_RATE','0.05','admin',now(),'用户返积分的人民币总额');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('DIST_RATE','DIST_USER_BACK_JF_RATE','1','admin',now(),'认养返积分比例');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('DIST_AGENT_RATE','DIST_AGENT1_RATE','1','admin',now(),'一级代理分成比例');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('DIST_AGENT_RATE','DIST_AGENT2_RATE','0.9','admin',now(),'二级代理分成比例');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('DIST_AGENT_RATE','DIST_AGENT3_RATE','0.8','admin',now(),'三级代理分成比例');
@@ -617,6 +617,7 @@ INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`r
 
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('TPP_RULE','PRESENT_TPP_QUANTITY','10','',now(),'好友赠送碳泡泡数量');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('TPP_RULE','SIGN_TPP','50','',now(),'签到赠送碳泡泡数量');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('TPP_RULE','CONTINUE_SIGN_RATE','1','',now(),'连续签到返碳泡泡比例');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('TPP_RULE','SHARE','10','',now(),'分享');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('TPP_RULE','TPP_EXPIRE_HOUR','72','admin',now(),'收取碳泡泡过期时间(小时)');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('TPP_RULE','CREATE_TPP_RATE','0.01','admin',now(),'碳泡泡产生比例');
@@ -628,13 +629,16 @@ INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`r
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('JF_RULE','COMPLETE_INFO','10','',now(),'完善用户信息');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('JF_RULE','REAL_AUTH','50','',now(),'实名认证');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('JF_RULE','SIGN_JF','1','',now(),'登录');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('JF_RULE','CONTINUE_LOGIN_RATE','1','',now(),'连续登录返积分比例');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('JF_RULE','ONE_ADOPT_BACK','10','',now(),'直推认养消费返积分');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('JF_RULE','TWO_ADOPT_BACK','50','',now(),'间推认养消费返积分');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('JF_RULE','INVITE_USER','50','',now(),'邀请好友注册');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('JF_RULE','ADOPT_BUY_DEDUCT','50','',now(),'认养抵扣');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('JF_RULE','ADOPT_PAY_BACK','10','',now(),'认养消费返利');
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('JF_RULE','TOOL_BUY','50','',now(),'购买道具');
     
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('wx_h5','wx_h5_access_key','wxcc167aa0ba8adb20','admin',now(),NULL);
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('wx_h5','wx_h5_secret_key','33005a35e5e19b08b07e9d52c74400ff','admin',now(),NULL);
+
 /*
 -- Query: SELECT bank_code,bank_name,channel_type,status,channel_bank,max_order,order_amount,day_amount,month_amount,remark FROM tsys_channel_bank
 -- Date: 2017-08-24 12:26

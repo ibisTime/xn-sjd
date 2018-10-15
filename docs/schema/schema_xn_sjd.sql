@@ -433,6 +433,7 @@ DROP TABLE IF EXISTS `tstd_sms`;
 CREATE TABLE `tstd_sms` (
   `code` varchar(32) NOT NULL COMMENT '消息编号',
   `type` varchar(4) DEFAULT NULL COMMENT '消息类型（系统公告，短信内容）',
+  `object` varchar(4) DEFAULT NULL COMMENT '对象类型(C:C端用户/O:产权方/M:养护方/A:代理商/P:平台方)',
   `title` varchar(255) DEFAULT NULL COMMENT '标题',
   `content` varchar(255) DEFAULT NULL COMMENT '内容',
   `status` varchar(4) DEFAULT NULL COMMENT '状态 0-草稿 1-已发送 2-已回撤',

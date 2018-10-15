@@ -14,12 +14,12 @@ import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IApplyBindMaintainBO;
 import com.ogc.standard.bo.ICompanyBO;
 import com.ogc.standard.bo.IJourBO;
+import com.ogc.standard.bo.IProductBO;
 import com.ogc.standard.bo.ISYSRoleBO;
 import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.ISmsOutBO;
 import com.ogc.standard.bo.ITreeBO;
 import com.ogc.standard.bo.base.Paginable;
-import com.ogc.standard.common.AmountUtil;
 import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.common.MD5Util;
 import com.ogc.standard.common.PhoneUtil;
@@ -29,10 +29,12 @@ import com.ogc.standard.common.SysConstants;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.ApplyBindMaintain;
+import com.ogc.standard.domain.Company;
 import com.ogc.standard.domain.SYSRole;
 import com.ogc.standard.domain.SYSUser;
 import com.ogc.standard.dto.req.XN630061Req;
 import com.ogc.standard.dto.req.XN630063Req;
+import com.ogc.standard.dto.res.XN630065PriceRes;
 import com.ogc.standard.enums.EAccountType;
 import com.ogc.standard.enums.EApplyBindMaintainStatus;
 import com.ogc.standard.enums.ECaptchaType;
@@ -71,6 +73,9 @@ public class SYSUserAOImpl implements ISYSUserAO {
 
     @Autowired
     private IJourBO jourBO;
+
+    @Autowired
+    private IProductBO productBO;
 
     // 新增用户（平台）
     @Override
@@ -133,7 +138,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
 
         companyBO.refreshCompany(req);
         sysUserBO.refreshStatus(req.getUserId(), ESYSUserStatus.TO_APPROVE,
-            req.getUserId(), "用户重新提交");
+            req.getUserId(), null);
     }
 
     // 代申请
@@ -386,6 +391,14 @@ public class SYSUserAOImpl implements ISYSUserAO {
         List<SYSUser> list = page.getList();
         for (SYSUser sysUser : list) {
             init(sysUser);
+
+            if (ESYSUserKind.OWNER.getCode().equals(sysUser.getKind())
+                    || ESYSUserKind.MAINTAIN.getCode()
+                        .equals(sysUser.getKind())) {
+                Company company = companyBO
+                    .getCompanyByUserId(sysUser.getUserId());
+                sysUser.setCompany(company);
+            }
         }
         return page;
     }
@@ -413,6 +426,12 @@ public class SYSUserAOImpl implements ISYSUserAO {
             long count = treeBO.getTotalCountByOwnerId(data.getUserId());
             data.setTreeQuantity(String.valueOf(count));
 
+            // 古树市值
+            XN630065PriceRes priceRes = productBO
+                .getOwnerProductPrice(data.getUserId());
+            data.setMaxPrice(priceRes.getMaxPrice());
+            data.setMinPrice(priceRes.getMinPrice());
+
         } else if (ESYSUserKind.MAINTAIN.getCode().equals(data.getKind())) {
 
             // 养护方
@@ -433,7 +452,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
             BigDecimal totalIncome = jourBO.getTotalAmount(
                 EJourBizTypeMaintain.MAINTAIN_DEDECT.getCode(),
                 EChannelType.NBZ.getCode(), cnyAccount.getAccountNumber());
-            data.setTotalIncome(AmountUtil.div(totalIncome, 1000L));
+            data.setTotalIncome(totalIncome);
 
         }
     }

@@ -56,11 +56,18 @@ public class SignLogAOImpl implements ISignLogAO {
         data.setClient(ESignLogClient.ANDROID.getCode());
 
         // 添加碳泡泡
+        long continueSignDay = keepCheckIn(req.getUserId(),
+            ESignLogType.SIGN_IN.getCode()) + 1L;// 连续签到天数
+
         Map<String, String> configMap = sysConfigBO
             .getConfigsMap(ESysConfigType.TPP_RULE.getCode());
         BigDecimal quantity = new BigDecimal(
             configMap.get(SysConstants.SIGN_TPP));
+        BigDecimal continueSignRate = new BigDecimal(
+            configMap.get(SysConstants.CONTINUE_SIGN_RATE));
         quantity = AmountUtil.mul(quantity, 1000L);
+        quantity = AmountUtil.mul(quantity, continueSignDay);// 连续签到天数
+        quantity = AmountUtil.mul(quantity, continueSignRate);// 连续签到比例
 
         Account userTppAccount = accountBO.getAccountByUser(req.getUserId(),
             ECurrency.TPP.getCode());
@@ -92,9 +99,10 @@ public class SignLogAOImpl implements ISignLogAO {
     }
 
     @Override
-    public long keepCheckIn(String userId) {
+    public long keepCheckIn(String userId, String logType) {
         SignLog condition = new SignLog();
         condition.setUserId(userId);
+        condition.setType(logType);
         List<SignLog> signLogList = signLogBO.querySignLogList(condition);
         // 排序
         signLogBO.ListSort(signLogList);
@@ -103,7 +111,7 @@ public class SignLogAOImpl implements ISignLogAO {
             return 0;
         }
         // 今天没签到返回0
-        if (!signLogBO.isCheckIn(userId, ESignLogType.SIGN_IN.getCode())) {
+        if (!signLogBO.isCheckIn(userId, logType)) {
             return 0;
         } else {
             long count = 1;

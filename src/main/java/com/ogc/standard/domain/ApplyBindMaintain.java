@@ -41,8 +41,11 @@ public class ApplyBindMaintain extends ABaseDO {
 
     private SYSUser maintainUser;// 养护方用户
 
-    // 更新热
+    // 更新人
     private String updaterName;
+
+    // 产权方古树数量
+    private long ownerTreeCount;
 
     public void setCode(String code) {
         this.code = code;
@@ -122,6 +125,14 @@ public class ApplyBindMaintain extends ABaseDO {
 
     public void setUpdaterName(String updaterName) {
         this.updaterName = updaterName;
+    }
+
+    public long getOwnerTreeCount() {
+        return ownerTreeCount;
+    }
+
+    public void setOwnerTreeCount(long ownerTreeCount) {
+        this.ownerTreeCount = ownerTreeCount;
     }
 
 }

@@ -54,6 +54,9 @@ public class XN802320Req extends APageReq {
     // 调账人
     private String adjustUser;
 
+    // 户名模糊查
+    private String relaNameForQuery;
+
     public String getType() {
         return type;
     }
@@ -180,6 +183,14 @@ public class XN802320Req extends APageReq {
 
     public void setAdjustUser(String adjustUser) {
         this.adjustUser = adjustUser;
+    }
+
+    public String getRelaNameForQuery() {
+        return relaNameForQuery;
+    }
+
+    public void setRelaNameForQuery(String relaNameForQuery) {
+        this.relaNameForQuery = relaNameForQuery;
     }
 
 }

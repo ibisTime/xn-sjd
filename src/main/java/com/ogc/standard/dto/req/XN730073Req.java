@@ -51,11 +51,9 @@ public class XN730073Req extends BaseReq {
     private String description;
 
     // 营业执照
-    @NotBlank
     private String bussinessLicense;
 
     // 组织机构代码
-    @NotBlank
     private String organizationCode;
 
     // 更新人

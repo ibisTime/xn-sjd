@@ -17,7 +17,6 @@ public class XN629500Req extends BaseReq {
     private String code;
 
     // 必填，序号
-    @NotBlank
     private String orderNo;
 
     // 必填，操作人

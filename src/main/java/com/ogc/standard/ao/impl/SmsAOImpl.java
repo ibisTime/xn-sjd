@@ -62,6 +62,8 @@ public class SmsAOImpl implements ISmsAO {
         data.setRemark(req.getRemark());
         data.setTitle(req.getTitle());
         data.setType(req.getType());
+        data.setObject(req.getObject());
+
         data.setUpdater(req.getUpdater());
         data.setStatus(ESmsStauts.DRAFT.getCode());
         data.setCode(OrderNoGenerater.generate(EGeneratePrefix.XX.getCode()));
@@ -76,6 +78,8 @@ public class SmsAOImpl implements ISmsAO {
         data.setRemark(req.getRemark());
         data.setTitle(req.getTitle());
         data.setType(req.getType());
+        data.setObject(req.getObject());
+
         data.setUpdater(req.getUpdater());
         data.setStatus(ESmsStauts.SENDED.getCode());
         // code是否为空

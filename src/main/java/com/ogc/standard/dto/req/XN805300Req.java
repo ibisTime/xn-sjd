@@ -30,6 +30,10 @@ public class XN805300Req {
     @NotBlank
     private String type;
 
+    // 对象类型
+    @NotBlank
+    private String object;
+
     // 更新人
     @NotBlank
     private String updater;
@@ -76,4 +80,13 @@ public class XN805300Req {
     public void setType(String type) {
         this.type = type;
     }
+
+    public String getObject() {
+        return object;
+    }
+
+    public void setObject(String object) {
+        this.object = object;
+    }
+
 }

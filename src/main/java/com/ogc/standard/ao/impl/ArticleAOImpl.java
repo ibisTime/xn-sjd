@@ -3,22 +3,27 @@ package com.ogc.standard.ao.impl;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ogc.standard.ao.IArticleAO;
+import com.ogc.standard.bo.IAdoptOrderTreeBO;
 import com.ogc.standard.bo.IArticleBO;
 import com.ogc.standard.bo.base.Paginable;
+import com.ogc.standard.domain.AdoptOrderTree;
 import com.ogc.standard.domain.Article;
 import com.ogc.standard.dto.req.XN629340Req;
 import com.ogc.standard.dto.req.XN629341Req;
 import com.ogc.standard.dto.req.XN629342Req;
 import com.ogc.standard.dto.req.XN629343Req;
 import com.ogc.standard.dto.req.XN629344Req;
+import com.ogc.standard.enums.EAdoptOrderTreeStatus;
 import com.ogc.standard.enums.EArticleOpenLevel;
 import com.ogc.standard.enums.EArticleStatus;
 import com.ogc.standard.enums.EArticleType;
 import com.ogc.standard.enums.EBoolean;
+import com.ogc.standard.enums.EDealType;
 import com.ogc.standard.exception.BizException;
 
 @Service
@@ -27,23 +32,35 @@ public class ArticleAOImpl implements IArticleAO {
     @Autowired
     private IArticleBO articleBO;
 
+    @Autowired
+    private IAdoptOrderTreeBO adoptOrderTreeBO;
+
     @Override
     public String addArticle(XN629340Req req) {
+        if (StringUtils.isNotBlank(req.getAdoptTreeCode())) {
+            AdoptOrderTree adoptOrderTree = adoptOrderTreeBO
+                .getAdoptOrderTree(req.getAdoptTreeCode());
+            if (!EAdoptOrderTreeStatus.ADOPT.getCode()
+                .equals(adoptOrderTree.getStatus())) {
+                throw new BizException("xn0000", "认养权不是可发表文章状态！");
+            }
+        }
+
         EArticleStatus status = null;
-        String treeNo = req.getTreeNo();
         String openLevel = req.getOpenLevel();
 
-        if (EBoolean.NO.getCode().equals(req.getDealType())) {// 保存
-
+        // 保存
+        if (EDealType.SAVE.getCode().equals(req.getDealType())) {
             status = EArticleStatus.DRAFT;
+        }
 
-        } else {// 提交
+        // 提交
+        if (EDealType.SUBMIT.getCode().equals(req.getDealType())) {
 
-            if (EArticleType.PLAT.getCode().equals(req.getType())) {// 平台
-
+            // 平台
+            if (EArticleType.PLAT.getCode().equals(req.getType())) {
                 status = EArticleStatus.TO_PUT_ON;
                 openLevel = EArticleOpenLevel.OPEN.getCode();
-
             } else {// 用户
 
                 status = EArticleStatus.TO_APPROVE;
@@ -52,7 +69,7 @@ public class ArticleAOImpl implements IArticleAO {
 
         }
 
-        return articleBO.saveArticle(req.getAdoptTreeCode(), treeNo,
+        return articleBO.saveArticle(req.getAdoptTreeCode(), req.getTreeNo(),
             req.getType(), openLevel, req.getTitle(), req.getContent(),
             req.getPhoto(), status, req.getPublishUserId(), req.getUpdater());
     }
@@ -70,9 +87,13 @@ public class ArticleAOImpl implements IArticleAO {
         String treeNo = req.getTreeNo();
         String openLevel = req.getOpenLevel();
 
-        if (EBoolean.NO.getCode().equals(req.getDealType())) {// 保存
+        // 保存
+        if (EDealType.SAVE.getCode().equals(req.getDealType())) {
             status = EArticleStatus.DRAFT;
-        } else {// 提交
+        }
+
+        // 提交
+        if (EDealType.SUBMIT.getCode().equals(req.getDealType())) {
             if (EArticleType.PLAT.getCode().equals(data.getType())) {// 平台
                 status = EArticleStatus.TO_PUT_ON;
                 openLevel = EArticleOpenLevel.OPEN.getCode();

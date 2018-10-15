@@ -1,5 +1,6 @@
 package com.ogc.standard.bo.impl;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -26,9 +27,9 @@ public class ToolBOImpl extends PaginableBOImpl<Tool> implements IToolBO {
         if (StringUtils.isNotBlank(data.getCode())) {
             data.setName(req.getName());
             data.setPic(req.getPic());
-            data.setPrice(req.getPrice());
+            data.setPrice(new BigDecimal(req.getPrice()));
             data.setDescription(req.getDescription());
-            data.setValidityTerm(req.getValidityTerm());
+            data.setValidityTerm(Integer.valueOf(req.getValidityTerm()));
 
             data.setUpdater(req.getUpdater());
             data.setUpdateDatetime(new Date());

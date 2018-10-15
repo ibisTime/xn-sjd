@@ -6,6 +6,7 @@ import com.ogc.standard.bo.base.IPaginableBO;
 import com.ogc.standard.domain.Product;
 import com.ogc.standard.dto.req.XN629010Req;
 import com.ogc.standard.dto.req.XN629011Req;
+import com.ogc.standard.dto.res.XN630065PriceRes;
 
 /**
  * 产品
@@ -47,6 +48,9 @@ public interface IProductBO extends IPaginableBO<Product> {
 
     // 下架产品
     public void refreshPutOffProduct(String code, String updater);
+
+    // 统计产权方的产品市值
+    public XN630065PriceRes getOwnerProductPrice(String ownerId);
 
     public List<Product> queryProductList(Product condition);
 

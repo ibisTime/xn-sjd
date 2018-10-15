@@ -107,6 +107,12 @@ public class Tree extends ABaseDO {
     // 产权方
     private String ownerName;
 
+    // 销售类型
+    private String sellType;
+
+    // 当前订单
+    private AdoptOrder curOrder;
+
     public String getMaintainId() {
         return maintainId;
     }
@@ -345,6 +351,22 @@ public class Tree extends ABaseDO {
 
     public void setOwnerName(String ownerName) {
         this.ownerName = ownerName;
+    }
+
+    public String getSellType() {
+        return sellType;
+    }
+
+    public void setSellType(String sellType) {
+        this.sellType = sellType;
+    }
+
+    public AdoptOrder getCurOrder() {
+        return curOrder;
+    }
+
+    public void setCurOrder(AdoptOrder curOrder) {
+        this.curOrder = curOrder;
     }
 
 }

@@ -128,11 +128,12 @@ public class AccountAOImpl implements IAccountAO {
     }
 
     @Override
-    public List<Account> getAccountAmountSumList(String currency,
-            String status) {
+    public List<Account> getAccountAmountSumList(String currency, String status,
+            String type) {
         Account condition = new Account();
         condition.setCurrency(currency);
         condition.setStatus(status);
+        condition.setType(type);
         return accountBO.queryAccountAmountSumList(condition);
     }
 }

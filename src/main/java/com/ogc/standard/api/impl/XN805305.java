@@ -40,6 +40,8 @@ public class XN805305 extends AProcessor {
         condition.setType(req.getType());
         condition.setUpdater(req.getUpdater());
         condition.setStatus(req.getStatus());
+        condition.setObject(req.getObject());
+
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
             column = ISignLogAO.DEFAULT_ORDER_COLUMN;

@@ -47,9 +47,6 @@ public class AdoptOrderTreeAOImpl implements IAdoptOrderTreeAO {
     private IAdoptOrderTreeBO adoptOrderTreeBO;
 
     @Autowired
-    private ITreeBO treeBO;
-
-    @Autowired
     private IUserBO userBO;
 
     @Autowired
@@ -70,6 +67,9 @@ public class AdoptOrderTreeAOImpl implements IAdoptOrderTreeAO {
     @Autowired
     private IToolUseRecordBO toolUseRecordBO;
 
+    @Autowired
+    private ITreeBO treeBO;
+
     @Override
     @Transactional
     public void giveTree(String code, String userId, String toMobile) {
@@ -82,6 +82,7 @@ public class AdoptOrderTreeAOImpl implements IAdoptOrderTreeAO {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(), "认养权不在认养中");
         }
         adoptOrderTreeBO.giveTree(data, user, toUser);
+
         // 新增赠送树记录
         giveTreeRecordBO.saveGiveTreeRecord(userId, toUser.getUserId(),
             data.getCode());

@@ -11,6 +11,7 @@ import com.ogc.standard.ao.IApplyBindMaintainAO;
 import com.ogc.standard.bo.IApplyBindMaintainBO;
 import com.ogc.standard.bo.ICompanyBO;
 import com.ogc.standard.bo.ISYSUserBO;
+import com.ogc.standard.bo.ITreeBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.ApplyBindMaintain;
 import com.ogc.standard.domain.Company;
@@ -33,6 +34,9 @@ public class ApplyBindMaintainAOImpl implements IApplyBindMaintainAO {
 
     @Autowired
     private ICompanyBO companyBO;
+
+    @Autowired
+    private ITreeBO treeBO;
 
     @Override
     public String applyBindMaintain(XN629600Req req) {
@@ -106,6 +110,9 @@ public class ApplyBindMaintainAOImpl implements IApplyBindMaintainAO {
         // 产权方用户
         SYSUser ownerUser = sysUserBO.getSYSUserUnCheck(data.getOwnerId());
         data.setOwnerUser(ownerUser);
+        data.setOwnerTreeCount(
+            treeBO.getTotalCountByOwnerId(data.getOwnerId()));
+
         if (null != ownerUser) {
             if (StringUtils.isNotBlank(ownerUser.getCompanyCode())) {
                 Company ownerCompany = companyBO

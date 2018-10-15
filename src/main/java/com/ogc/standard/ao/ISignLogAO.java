@@ -19,6 +19,6 @@ public interface ISignLogAO {
     public List<SignLog> querySignLogList(SignLog condition);
 
     // 连续签到天数
-    public long keepCheckIn(String userId);
+    public long keepCheckIn(String userId, String logType);
 
 }

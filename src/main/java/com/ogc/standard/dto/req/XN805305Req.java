@@ -29,6 +29,9 @@ public class XN805305Req extends APageReq {
     // 标题
     private String title;
 
+    // 对象类型
+    private String object;
+
     public String getStatus() {
         return status;
     }
@@ -59,6 +62,14 @@ public class XN805305Req extends APageReq {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getObject() {
+        return object;
+    }
+
+    public void setObject(String object) {
+        this.object = object;
     }
 
 }

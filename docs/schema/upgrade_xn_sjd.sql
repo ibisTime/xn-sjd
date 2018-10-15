@@ -23,3 +23,6 @@ ADD COLUMN `area` VARCHAR(32) NULL COMMENT '区' AFTER `city`;
 
 ALTER TABLE `tsys_maintain_record` 
 ADD COLUMN `maintain` VARCHAR(32) NULL COMMENT '养护方' AFTER `code`;
+
+ALTER TABLE `tstd_sms` 
+ADD COLUMN `object` VARCHAR(4) NULL COMMENT '对象类型(C:C端用户/O:产权方/M:养护方/A:代理商/P:平台方)' AFTER `type`;

@@ -73,8 +73,6 @@ public class Article extends ABaseDO {
 
     /*************DB properties**********/
 
-    /**************辅助字段************/
-
     // 发布时间起
     private Date publishDatetimeStart;
 

@@ -38,7 +38,15 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
 
     @Override
     public List<SYSUser> queryUserList(SYSUser data) {
-        return sysUserDAO.selectList(data);
+        List<SYSUser> list = sysUserDAO.selectList(data);
+
+        if (CollectionUtils.isNotEmpty(list)) {
+            for (SYSUser sysUser : list) {
+                initUser(sysUser);
+            }
+        }
+
+        return list;
     }
 
     @Override

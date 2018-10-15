@@ -44,6 +44,8 @@ public class XN802320 extends AProcessor {
         condition.setChannelOrder(req.getChannelOrder());
         condition.setRefNo(req.getRefNo());
 
+        condition.setRelaNameForQuery(req.getRelaNameForQuery());
+
         if (CollectionUtils.isNotEmpty(req.getCurrencyList())) {
             condition.setCurrencyList(req.getCurrencyList());
         }

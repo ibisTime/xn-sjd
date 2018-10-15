@@ -40,6 +40,10 @@ public class XN805301Req {
     @NotBlank
     private String type;
 
+    // 对象类型
+    @NotBlank
+    private String object;
+
     public String getContent() {
         return content;
     }
@@ -87,4 +91,13 @@ public class XN805301Req {
     public void setCode(String code) {
         this.code = code;
     }
+
+    public String getObject() {
+        return object;
+    }
+
+    public void setObject(String object) {
+        this.object = object;
+    }
+
 }

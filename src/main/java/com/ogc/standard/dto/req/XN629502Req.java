@@ -1,7 +1,5 @@
 package com.ogc.standard.dto.req;
 
-import java.math.BigDecimal;
-
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
@@ -26,15 +24,14 @@ public class XN629502Req extends BaseReq {
 
     // 必填，价格
     @NotBlank
-    private BigDecimal price;
+    private String price;
 
     // 必填，描述
-    @NotBlank
     private String description;
 
     // 必填，有效时长(单位小时)
     @NotBlank
-    private Integer validityTerm;
+    private String validityTerm;
 
     // 必填，更新人
     @NotBlank
@@ -67,11 +64,11 @@ public class XN629502Req extends BaseReq {
         this.pic = pic;
     }
 
-    public BigDecimal getPrice() {
+    public String getPrice() {
         return price;
     }
 
-    public void setPrice(BigDecimal price) {
+    public void setPrice(String price) {
         this.price = price;
     }
 
@@ -83,11 +80,11 @@ public class XN629502Req extends BaseReq {
         this.description = description;
     }
 
-    public Integer getValidityTerm() {
+    public String getValidityTerm() {
         return validityTerm;
     }
 
-    public void setValidityTerm(Integer validityTerm) {
+    public void setValidityTerm(String validityTerm) {
         this.validityTerm = validityTerm;
     }
 

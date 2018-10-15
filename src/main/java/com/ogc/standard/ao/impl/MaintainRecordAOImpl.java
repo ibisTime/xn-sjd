@@ -8,11 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ogc.standard.ao.IMaintainRecordAO;
+import com.ogc.standard.bo.IAdoptOrderTreeBO;
 import com.ogc.standard.bo.IMaintainProjectBO;
 import com.ogc.standard.bo.IMaintainRecordBO;
 import com.ogc.standard.bo.IMaintainerBO;
 import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.base.Paginable;
+import com.ogc.standard.domain.AdoptOrderTree;
 import com.ogc.standard.domain.MaintainProject;
 import com.ogc.standard.domain.MaintainRecord;
 import com.ogc.standard.domain.Maintainer;
@@ -34,6 +36,9 @@ public class MaintainRecordAOImpl implements IMaintainRecordAO {
 
     @Autowired
     private ISYSUserBO sysUserBO;
+
+    @Autowired
+    private IAdoptOrderTreeBO adoptOrderTreeBO;
 
     @Override
     public String addMaintainRecord(XN629630Req req) {
@@ -114,5 +119,10 @@ public class MaintainRecordAOImpl implements IMaintainRecordAO {
         SYSUser maintainInfo = sysUserBO
             .getSYSUserUnCheck(maintainRecord.getMaintain());
         maintainRecord.setMaintainInfo(maintainInfo);
+
+        // 认养权
+        AdoptOrderTree adoptOrderTree = adoptOrderTreeBO
+            .getAdoptOrderTreeByNum(maintainRecord.getTreeNumber());
+        maintainRecord.setAdoptOrderTree(adoptOrderTree);
     }
 }

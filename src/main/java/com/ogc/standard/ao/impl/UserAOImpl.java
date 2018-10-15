@@ -11,22 +11,27 @@ package com.ogc.standard.ao.impl;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.ogc.standard.ao.IAccountAO;
+import com.ogc.standard.ao.ISignLogAO;
 import com.ogc.standard.ao.IUserAO;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IAgentUserBO;
 import com.ogc.standard.bo.ISYSConfigBO;
 import com.ogc.standard.bo.ISYSUserBO;
-import com.ogc.standard.bo.ISettleBO;
 import com.ogc.standard.bo.ISignLogBO;
 import com.ogc.standard.bo.ISmsOutBO;
 import com.ogc.standard.bo.IUserBO;
@@ -39,6 +44,7 @@ import com.ogc.standard.common.MD5Util;
 import com.ogc.standard.common.PhoneUtil;
 import com.ogc.standard.common.PwdUtil;
 import com.ogc.standard.common.SysConstants;
+import com.ogc.standard.common.WechatConstant;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.AgentUser;
 import com.ogc.standard.domain.SignLog;
@@ -48,14 +54,17 @@ import com.ogc.standard.dto.req.XN802399Req;
 import com.ogc.standard.dto.req.XN802400Req;
 import com.ogc.standard.dto.req.XN805041Req;
 import com.ogc.standard.dto.req.XN805042Req;
+import com.ogc.standard.dto.req.XN805051Req;
 import com.ogc.standard.dto.req.XN805070Req;
 import com.ogc.standard.dto.req.XN805081Req;
+import com.ogc.standard.dto.res.XN805051Res;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECaptchaType;
 import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EIDKind;
 import com.ogc.standard.enums.EJourBizTypePlat;
 import com.ogc.standard.enums.EJourBizTypeUser;
+import com.ogc.standard.enums.ESex;
 import com.ogc.standard.enums.ESignLogType;
 import com.ogc.standard.enums.ESysConfigType;
 import com.ogc.standard.enums.ESystemAccount;
@@ -68,6 +77,7 @@ import com.ogc.standard.enums.EUserReleationType;
 import com.ogc.standard.enums.EUserStatus;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
+import com.ogc.standard.http.PostSimulater;
 
 /** 
  * @author: dl 
@@ -76,6 +86,9 @@ import com.ogc.standard.exception.EBizErrorCode;
  */
 @Service
 public class UserAOImpl implements IUserAO {
+
+    private static Logger logger = Logger.getLogger(UserAOImpl.class);
+
     @Autowired
     private ISmsOutBO smsOutBO;
 
@@ -86,6 +99,9 @@ public class UserAOImpl implements IUserAO {
     private ISignLogBO signLogBO;
 
     @Autowired
+    private ISignLogAO signLogAO;
+
+    @Autowired
     private IUserExtBO userExtBO;
 
     @Autowired
@@ -93,9 +109,6 @@ public class UserAOImpl implements IUserAO {
 
     @Autowired
     private IAccountAO accountAO;
-
-    @Autowired
-    private ISettleBO settleBO;
 
     @Autowired
     private IAgentUserBO agentUserBO;
@@ -121,8 +134,8 @@ public class UserAOImpl implements IUserAO {
         userBO.isMobileExist(req.getMobile());
 
         // 验证短信验证码
-        smsOutBO.checkCaptcha(req.getMobile(), req.getSmsCaptcha(),
-            ECaptchaType.C_REG.getCode());
+        // smsOutBO.checkCaptcha(req.getMobile(), req.getSmsCaptcha(),
+        // ECaptchaType.C_REG.getCode());
 
         // 获取推荐用户相对应的代理信息
         String agentId = null;
@@ -307,11 +320,18 @@ public class UserAOImpl implements IUserAO {
 
         if (!signLogBO.isCheckIn(userId, ESignLogType.LOGIN.getCode())) {
             // 添加积分
+            long continueLoginDay = signLogAO.keepCheckIn(userId,
+                ESignLogType.LOGIN.getCode()) + 1L;// 连续登录天数
+
             Map<String, String> configMap = sysConfigBO
                 .getConfigsMap(ESysConfigType.JF_RULE.getCode());
             BigDecimal quantity = new BigDecimal(
                 configMap.get(SysConstants.SIGN_JF));
+            BigDecimal continueLoginRate = new BigDecimal(
+                configMap.get(SysConstants.CONTINUE_LOGIN_RATE));
             quantity = AmountUtil.mul(quantity, 1000L);
+            quantity = AmountUtil.mul(quantity, continueLoginDay);// 连续签到天数
+            quantity = AmountUtil.mul(quantity, continueLoginRate);// 连续签到比例
 
             Account userJfAccount = accountBO.getAccountByUser(userId,
                 ECurrency.JF.getCode());
@@ -328,7 +348,6 @@ public class UserAOImpl implements IUserAO {
                 EJourBizTypePlat.LOGIN.getCode(),
                 EJourBizTypeUser.LOGIN.getValue(),
                 EJourBizTypePlat.LOGIN.getValue(), userId);
-
         }
 
         // 增加登陆日志
@@ -533,30 +552,35 @@ public class UserAOImpl implements IUserAO {
     @Override
     @Transactional
     public void modifyPhoto(String userId, String photo) {
-        userBO.refreshPhoto(userId, photo);
 
         // 添加积分
-        Map<String, String> configMap = sysConfigBO
-            .getConfigsMap(ESysConfigType.JF_RULE.getCode());
-        BigDecimal quantity = new BigDecimal(
-            configMap.get(SysConstants.UPLOAD_PHOTO));
-        quantity = AmountUtil.mul(quantity, 1000L);
+        User user = userBO.getUser(userId);
+        if (null == user.getPhoto()) {
+            Map<String, String> configMap = sysConfigBO
+                .getConfigsMap(ESysConfigType.JF_RULE.getCode());
+            BigDecimal quantity = new BigDecimal(
+                configMap.get(SysConstants.UPLOAD_PHOTO));
+            quantity = AmountUtil.mul(quantity, 1000L);
 
-        Account userJfAccount = accountBO.getAccountByUser(userId,
-            ECurrency.JF.getCode());
-        Account sysJfAccount = accountBO
-            .getAccount(ESystemAccount.SYS_ACOUNT_JF_POOL.getCode());
+            Account userJfAccount = accountBO.getAccountByUser(userId,
+                ECurrency.JF.getCode());
+            Account sysJfAccount = accountBO
+                .getAccount(ESystemAccount.SYS_ACOUNT_JF_POOL.getCode());
 
-        // 积分池不足时将剩余积分转给用户
-        if (quantity.compareTo(sysJfAccount.getAmount()) == 1) {
-            quantity = sysJfAccount.getAmount();
+            // 积分池不足时将剩余积分转给用户
+            if (quantity.compareTo(sysJfAccount.getAmount()) == 1) {
+                quantity = sysJfAccount.getAmount();
+            }
+
+            accountBO.transAmount(sysJfAccount, userJfAccount, quantity,
+                EJourBizTypeUser.UPLOAD_PHOTO.getCode(),
+                EJourBizTypePlat.UPLOAD_PHOTO.getCode(),
+                EJourBizTypeUser.UPLOAD_PHOTO.getValue(),
+                EJourBizTypePlat.UPLOAD_PHOTO.getValue(), userId);
         }
 
-        accountBO.transAmount(sysJfAccount, userJfAccount, quantity,
-            EJourBizTypeUser.UPLOAD_PHOTO.getCode(),
-            EJourBizTypePlat.UPLOAD_PHOTO.getCode(),
-            EJourBizTypeUser.UPLOAD_PHOTO.getValue(),
-            EJourBizTypePlat.UPLOAD_PHOTO.getValue(), userId);
+        userBO.refreshPhoto(userId, photo);
+
     }
 
     @Override
@@ -639,6 +663,10 @@ public class UserAOImpl implements IUserAO {
             user.setWorkTime(data.getWorkTime());
             user.setGradDatetime(data.getGradDatetime());
         }
+
+        // 推荐人转义
+        initUserRef(user);
+
         return user;
     }
 
@@ -807,36 +835,156 @@ public class UserAOImpl implements IUserAO {
     @Override
     @Transactional
     public void doModifyUserInfo(XN805070Req req) {
+
+        // 添加积分
+        User user = userBO.getUser(req.getUserId());
+        if (null != user.getRealName()) {
+            Map<String, String> configMap = sysConfigBO
+                .getConfigsMap(ESysConfigType.JF_RULE.getCode());
+            BigDecimal quantity = new BigDecimal(
+                configMap.get(SysConstants.COMPLETE_INFO));
+            quantity = AmountUtil.mul(quantity, 1000L);
+
+            Account userJfAccount = accountBO.getAccountByUser(req.getUserId(),
+                ECurrency.JF.getCode());
+            Account sysJfAccount = accountBO
+                .getAccount(ESystemAccount.SYS_ACOUNT_JF_POOL.getCode());
+
+            // 积分池不足时将剩余积分转给用户
+            if (quantity.compareTo(sysJfAccount.getAmount()) == 1) {
+                quantity = sysJfAccount.getAmount();
+            }
+
+            accountBO.transAmount(sysJfAccount, userJfAccount, quantity,
+                EJourBizTypeUser.COMPLETE_INFO.getCode(),
+                EJourBizTypePlat.COMPLETE_INFO.getCode(),
+                EJourBizTypeUser.COMPLETE_INFO.getValue(),
+                EJourBizTypePlat.COMPLETE_INFO.getValue(), req.getUserId());
+
+        }
+
         userBO.refreshUserInfo(req.getUserId(), req.getNickname(),
             req.getRealName(), EIDKind.IDCard.getCode(), req.getIdNo());
+
         UserExt data = userExtBO.getUserExt(req.getUserId());
         data.setGender(req.getGender());
         data.setAge(req.getAge());
         userExtBO.refreshUserExt(data);
 
-        // 添加积分
+    }
+
+    @Override
+    public XN805051Res doLoginWeChat(XN805051Req req) {
+
+        // Step1：获取密码参数信息
         Map<String, String> configMap = sysConfigBO
-            .getConfigsMap(ESysConfigType.JF_RULE.getCode());
-        BigDecimal quantity = new BigDecimal(
-            configMap.get(SysConstants.COMPLETE_INFO));
-        quantity = AmountUtil.mul(quantity, 1000L);
+            .getConfigsMap(ESysConfigType.WEIXIN_H5.getCode());
 
-        Account userJfAccount = accountBO.getAccountByUser(req.getUserId(),
-            ECurrency.JF.getCode());
-        Account sysJfAccount = accountBO
-            .getAccount(ESystemAccount.SYS_ACOUNT_JF_POOL.getCode());
-
-        // 积分池不足时将剩余积分转给用户
-        if (quantity.compareTo(sysJfAccount.getAmount()) == 1) {
-            quantity = sysJfAccount.getAmount();
+        String appId = null;
+        String appSecret = null;
+        if (ESysConfigType.WEIXIN_H5.getCode().equals(req.getType())) {
+            appId = configMap.get(SysConstants.WX_H5_ACCESS_KEY);
+            appSecret = configMap.get(SysConstants.WX_H5_SECRET_KEY);
+        } else {
+            throw new BizException("XN000000", "登录类型不支持");
         }
 
-        accountBO.transAmount(sysJfAccount, userJfAccount, quantity,
-            EJourBizTypeUser.COMPLETE_INFO.getCode(),
-            EJourBizTypePlat.COMPLETE_INFO.getCode(),
-            EJourBizTypeUser.COMPLETE_INFO.getValue(),
-            EJourBizTypePlat.COMPLETE_INFO.getValue(), req.getUserId());
+        if (StringUtils.isBlank(appId)) {
+            throw new BizException("XN000000", "参数appId配置获取失败，请检查配置");
+        }
+        if (StringUtils.isBlank(appSecret)) {
+            throw new BizException("XN000000", "参数appSecret配置获取失败，请检查配置");
+        }
 
+        // Step2：通过Authorization Code获取Access Token
+        String accessToken = "";
+        Map<String, String> res = new HashMap<>();
+        Properties fromProperties = new Properties();
+        fromProperties.put("grant_type", "authorization_code");
+        fromProperties.put("appid", appId);
+        fromProperties.put("secret", appSecret);
+        fromProperties.put("code", req.getCode());
+        logger.info("appId:" + appId + ",appSecret:" + appSecret + ",code:"
+                + req.getCode());
+        XN805051Res result = null;
+
+        try {
+            String response = PostSimulater
+                .requestPostForm(WechatConstant.WX_TOKEN_URL, fromProperties);
+            res = getMapFromResponse(response);
+            accessToken = (String) res.get("access_token");
+            if (res.get("error") != null) {
+                throw new BizException("XN000000",
+                    "微信登录失败原因：" + res.get("error"));
+            }
+            if (StringUtils.isBlank(accessToken)) {
+                throw new BizException("XN000000", "accessToken不能为空");
+            }
+
+            // Step3：使用Access Token来获取用户的OpenID
+            String openId = (String) res.get("openid");
+            // 获取unionid
+            Map<String, String> wxRes = new HashMap<>();
+            Properties queryParas = new Properties();
+            queryParas.put("access_token", accessToken);
+            queryParas.put("openid", openId);
+            queryParas.put("lang", "zh_CN");
+            wxRes = getMapFromResponse(PostSimulater
+                .requestPostForm(WechatConstant.WX_USER_INFO_URL, queryParas));
+            String unionId = (String) wxRes.get("unionid");
+            String appOpenId = null;
+            String h5OpenId = null;
+            if (ESysConfigType.WEIXIN_H5.getCode().equals(req.getType())) {
+                h5OpenId = (String) wxRes.get("openid");
+            }
+
+            // Step4：根据openId，unionId从数据库中查询用户信息
+            User dbUser = userBO.doGetUserByOpenId(appOpenId, h5OpenId);
+            if (null != dbUser) {// 如果user存在，说明用户授权登录过，直接登录
+                addLoginAmount(dbUser);// 每天登录送积分
+                result = new XN805051Res(dbUser.getUserId());
+            } else {
+                String nickname = (String) wxRes.get("nickname");
+                String photo = (String) wxRes.get("headimgurl");
+                String gender = ESex.UNKNOWN.getCode();
+                if (String.valueOf(wxRes.get("sex")).equals("1.0")) {
+                    gender = ESex.MEN.getCode();
+                } else if (String.valueOf(wxRes.get("sex")).equals("2.0")) {
+                    gender = ESex.WOMEN.getCode();
+                }
+
+                // Step5：判断注册是否传手机号，有则注册，无则反馈
+                if (EBoolean.YES.getCode().equals(req.getIsNeedMobile())) {
+                    result = doWxLoginRegMobile(req, unionId, appOpenId,
+                        h5OpenId, nickname, photo, gender);
+                } else {
+                    result = doWxLoginReg(req, unionId, appOpenId, h5OpenId,
+                        nickname, photo, gender);
+                }
+            }
+        } catch (Exception e) {
+            throw new BizException("xn000000", e.getMessage());
+        }
+        return result;
+    }
+
+    private XN805051Res doWxLoginReg(XN805051Req req, String unionId,
+            String appOpenId, String h5OpenId, String nickname, String photo,
+            String gender) {
+        XN805051Res result;
+
+        // 验证推荐人,将userReferee手机号转为用户编号
+        String userRefereeId = userBO.getUserId(req.getUserReferee(),
+            req.getUserRefereeKind());
+        userBO.doCheckOpenId(unionId, h5OpenId, appOpenId);
+
+        // 插入用户信息
+        String userId = userBO.doRegister(unionId, h5OpenId, appOpenId, null,
+            req.getKind(), EUserPwd.InitPwd.getCode(), nickname, photo, gender,
+            userRefereeId, companyCode, systemCode);
+
+        result = new XN805051Res(userId, EBoolean.NO.getCode());
+        return result;
     }
 
     @Override
@@ -846,19 +994,6 @@ public class UserAOImpl implements IUserAO {
         User condition = new User();
         condition.setUserReferee(user.getMobile());
         Paginable<User> page = userBO.getPaginable(start, limit, condition);
-        // 落地数据
-        for (User refUser : page.getList()) {
-            // Award regCondition = new Award();
-            // regCondition.setUserId(user.getUserId());
-            // regCondition.setRefType(ERefType.REGIST.getCode());
-            // regCondition.setRefCode(refUser.getUserId());
-            // refUser.setRegAwardCount(awardBO.count(regCondition));
-            // TradeOrder tradeCondition = new TradeOrder();
-            // tradeCondition.setBuyUser(refUser.getUserId());
-            // tradeCondition.setTradeCoin(ECoin.X.getCode());
-            // refUser.setTradeCount(tradeOrderBO.count(tradeCondition));
-            // refUser.setTradeAwardCount(awardBO.tradeCount(tradeCondition));
-        }
         return page;
     }
 
@@ -877,20 +1012,35 @@ public class UserAOImpl implements IUserAO {
         User refCondition = new User();
         refCondition.setUserRefereeList(userRefereeList);
         Paginable<User> page = userBO.getPaginable(start, limit, refCondition);
-        // 落地数据
-        for (User refUser : page.getList()) {
-            // Award regCondition = new Award();
-            // regCondition.setUserId(user.getUserId());
-            // regCondition.setRefType(ERefType.REGIST.getCode());
-            // regCondition.setRefCode(refUser.getUserId());
-            // refUser.setRegAwardCount(awardBO.count(regCondition));
-            // TradeOrder tradeCondition = new TradeOrder();
-            // tradeCondition.setBuyUser(refUser.getUserId());
-            // tradeCondition.setTradeCoin(ECoin.X.getCode());
-            // refUser.setTradeCount(tradeOrderBO.count(tradeCondition));
-            // refUser.setTradeAwardCount(awardBO.tradeCount(tradeCondition));
-        }
         return page;
+    }
+
+    /**
+     * @param response  可能是Json & Jsonp字符串 & urlParas
+     *          eg：urlParas：access_token=xxx&expires_in=7776000&refresh_token=xxx
+     * @return
+     */
+    public Map<String, String> getMapFromResponse(String response) {
+        if (StringUtils.isBlank(response)) {
+            return new HashMap<>();
+        }
+
+        Map<String, String> result = new HashMap<>();
+        int begin = response.indexOf("{");
+        int end = response.lastIndexOf("}") + 1;
+
+        if (begin >= 0 && end > 0) {
+            result = new Gson().fromJson(response.substring(begin, end),
+                new TypeToken<Map<String, Object>>() {
+                }.getType());
+        } else {
+            String[] paras = response.split("&");
+            for (String para : paras) {
+                result.put(para.split("=")[0], para.split("=")[1]);
+            }
+        }
+
+        return result;
     }
 
 }

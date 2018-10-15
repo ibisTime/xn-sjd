@@ -34,9 +34,9 @@ public class XN629305 extends AProcessor {
         condition.setUserId(req.getUserId());
         condition.setAdoptUserId(req.getAdoptUserId());
         condition.setCreateDatetimeStart(DateUtil.strToDate(
-            req.getCreateDatetimeStart(), DateUtil.DATA_TIME_PATTERN_1));
+            req.getCreateDatetimeStart(), DateUtil.FRONT_DATE_FORMAT_STRING));
         condition.setCreateDatetimeEnd(DateUtil.strToDate(
-            req.getCreateDatetimeEnd(), DateUtil.DATA_TIME_PATTERN_1));
+            req.getCreateDatetimeEnd(), DateUtil.FRONT_DATE_FORMAT_STRING));
 
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {

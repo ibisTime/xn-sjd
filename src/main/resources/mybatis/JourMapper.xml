@@ -32,8 +32,26 @@
 		<result column="adjust_note" property="adjustNote" />
 		<result column="adjust_datetime" property="adjustDatetime" />
 	</resultMap>
+	
+	<sql id="join_condition">
+		<if test="relaNameForQuery != null and relaNameForQuery != '' ">
+			left join tstd_user tu on t.user_id = tu.user_id
+			left join tsys_agent_user tau on t.user_id = tau.user_id
+			left join tsys_user ts on t.user_id = ts.user_id
+		</if>
+	</sql>
+	
+	<sql id="relaNameForQuery_condition">
+		<if test="relaNameForQuery != null and relaNameForQuery != '' ">
+			AND (concat_ws('-', tu.real_name, tu.mobile) like "%"#{relaNameForQuery}"%" or 
+				concat_ws('-', tau.real_name, tau.mobile) like "%"#{relaNameForQuery}"%" or 
+				concat_ws('-', tau.real_name, tau.mobile) like "%"#{relaNameForQuery}"%")
+		</if>
+	</sql>
+	
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			AND 1 = 1
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
 			</if>
@@ -111,6 +129,7 @@
 			</if>
 		</trim>
 	</sql>
+	
 	<select id="select_jour" parameterType="jour" resultMap="jour_DB_Result">
 		SELECT
 		t.code
@@ -143,7 +162,9 @@
 		,t.adjust_datetime
 		FROM
 		tstd_jour t
+		<include refid="join_condition" />
 		<include refid="where_condition" />
+		<include refid="relaNameForQuery_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
 				t.${order}

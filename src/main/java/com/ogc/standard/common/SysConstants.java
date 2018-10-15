@@ -11,6 +11,11 @@ public class SysConstants {
 
     public static String QINIU_DOMAIN = "qiniu_domain";
 
+    // 微信公众号配置
+    public static String WX_H5_ACCESS_KEY = "wx_h5_access_key";
+
+    public static String WX_H5_SECRET_KEY = "wx_h5_secret_key";
+
     // 取现规则配置
     public static String USERQXBS = "USERQXBS"; // C端用户取现倍数
 
@@ -87,6 +92,8 @@ public class SysConstants {
 
     public static final String SIGN_TPP = "SIGN_TPP";// 签到
 
+    public static final String CONTINUE_SIGN_RATE = "CONTINUE_SIGN_RATE";// 连续签到返碳泡泡比例
+
     public static final String SHARE = "SHARE";// 分享
 
     public static final String CREATE_TPP_RATE = "CREATE_TPP_RATE";// 碳泡泡产生比例
@@ -107,6 +114,8 @@ public class SysConstants {
     public static final String REAL_AUTH = "REAL_AUTH";// 实名认证
 
     public static final String SIGN_JF = "SIGN_JF";// 签到
+
+    public static final String CONTINUE_LOGIN_RATE = "CONTINUE_LOGIN_RATE";// 连续登录返积分比例
 
     public static final String ONE_ADOPT_BACK = "ONE_ADOPT_BACK";// 直推认养消费返积分
 

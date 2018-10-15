@@ -33,7 +33,7 @@ public class ToolAOImpl implements IToolAO {
 
         Tool data = toolBO.getTool(req.getCode());
 
-        if (!EToolStatus.UP.getCode().equals(data.getStatus())) {
+        if (EToolStatus.UP.getCode().equals(data.getStatus())) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "当前道具不是可修改状态");
         }
@@ -47,7 +47,7 @@ public class ToolAOImpl implements IToolAO {
 
         // 是否可上架
         Tool tool = toolBO.getTool(code);
-        if (!EToolStatus.DOWN.getCode().equals(tool.getStatus())) {
+        if (EToolStatus.UP.getCode().equals(tool.getStatus())) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "当前道具不是可上架状态");
         }
@@ -61,7 +61,7 @@ public class ToolAOImpl implements IToolAO {
 
         // 是否可上架
         Tool tool = toolBO.getTool(code);
-        if (!EToolStatus.UP.getCode().equals(tool.getStatus())) {
+        if (EToolStatus.DOWN.getCode().equals(tool.getStatus())) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "当前道具不是可下架状态");
         }

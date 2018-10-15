@@ -19,13 +19,10 @@ import com.ogc.standard.bo.IAdoptOrderBO;
 import com.ogc.standard.bo.IAdoptOrderTreeBO;
 import com.ogc.standard.bo.IAgentUserBO;
 import com.ogc.standard.bo.IAlipayBO;
-import com.ogc.standard.bo.IApplyBindMaintainBO;
 import com.ogc.standard.bo.ICompanyBO;
 import com.ogc.standard.bo.IDistributionOrderBO;
 import com.ogc.standard.bo.IProductBO;
 import com.ogc.standard.bo.IProductSpecsBO;
-import com.ogc.standard.bo.ISYSConfigBO;
-import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.ISettleBO;
 import com.ogc.standard.bo.ITreeBO;
 import com.ogc.standard.bo.IUserBO;
@@ -85,19 +82,10 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
     private IUserBO userBO;
 
     @Autowired
-    private ISYSUserBO sysUserBO;
-
-    @Autowired
     private ICompanyBO companyBO;
 
     @Autowired
     private IAccountBO accountBO;
-
-    @Autowired
-    private ISYSConfigBO sysConfigBO;
-
-    @Autowired
-    private IApplyBindMaintainBO applyBindMaintainBO;
 
     @Autowired
     private IAgentUserBO agentUserBO;

@@ -1,23 +1,29 @@
 package com.ogc.standard.bo.impl;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.ogc.standard.bo.ICategoryBO;
 import com.ogc.standard.bo.IProductBO;
+import com.ogc.standard.bo.IProductSpecsBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
+import com.ogc.standard.common.AmountUtil;
 import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.dao.IProductDAO;
 import com.ogc.standard.domain.Category;
 import com.ogc.standard.domain.Product;
+import com.ogc.standard.domain.ProductSpecs;
 import com.ogc.standard.dto.req.XN629010Req;
 import com.ogc.standard.dto.req.XN629011Req;
+import com.ogc.standard.dto.res.XN630065PriceRes;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.enums.EProductStatus;
 import com.ogc.standard.enums.ESellType;
@@ -33,6 +39,9 @@ public class ProductBOImpl extends PaginableBOImpl<Product>
 
     @Autowired
     private ICategoryBO categoryBO;
+
+    @Autowired
+    private IProductSpecsBO productSpecsBO;
 
     @Override
     public Product saveProduct(XN629010Req req) {
@@ -140,6 +149,8 @@ public class ProductBOImpl extends PaginableBOImpl<Product>
         }
         data.setUpdater(req.getUpdater());
         data.setUpdateDatetime(new Date());
+        data.setRemark(req.getRemark());
+
         productDAO.updateProduct(data);
     }
 
@@ -237,6 +248,45 @@ public class ProductBOImpl extends PaginableBOImpl<Product>
         product.setUpdateDatetime(new Date());
 
         productDAO.updatePutOffProduct(product);
+    }
+
+    @Override
+    public XN630065PriceRes getOwnerProductPrice(String ownerId) {
+        Product productCondition = new Product();
+        productCondition.setOwnerId(ownerId);
+        List<Product> productList = queryProductList(productCondition);
+
+        // 初始化最小价格和最大价格
+        BigDecimal minPrice = BigDecimal.ZERO;
+        BigDecimal maxPrice = minPrice;
+
+        if (CollectionUtils.isNotEmpty(productList)) {
+            for (Product product : productList) {
+                List<ProductSpecs> specsList = productSpecsBO
+                    .queryProductSpecsListByProduct(product.getCode());
+
+                BigDecimal minPriceTmp = BigDecimal.ZERO;
+                BigDecimal maxPriceTmp = minPriceTmp;
+                for (ProductSpecs productSpecs : specsList) {
+                    if (minPriceTmp.compareTo(BigDecimal.ZERO) == 0) {
+                        minPriceTmp = productSpecs.getPrice();
+                    }
+                    if (productSpecs.getPrice().compareTo(minPriceTmp) < 0) {
+                        minPriceTmp = productSpecs.getPrice();
+                    }
+                    if (productSpecs.getPrice().compareTo(maxPriceTmp) > 0) {
+                        maxPriceTmp = productSpecs.getPrice();
+                    }
+                }
+
+                minPrice = minPrice
+                    .add(AmountUtil.mul(minPriceTmp, product.getRaiseCount()));
+                maxPrice = maxPrice
+                    .add(AmountUtil.mul(maxPriceTmp, product.getRaiseCount()));
+            }
+        }
+
+        return new XN630065PriceRes(maxPrice, minPrice);
     }
 
     @Override

@@ -13,6 +13,9 @@ public class XN802302Req {
     // 状态
     private String status;
 
+    // 类型
+    private String type;
+
     public String getCurrency() {
         return currency;
     }
@@ -27,6 +30,14 @@ public class XN802302Req {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
 }

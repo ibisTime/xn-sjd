@@ -29,6 +29,13 @@ public class GiveTreeRecord extends ABaseDO {
     // 赠送时间
     private Date createDatetime;
 
+    /***************DB Properties****************/
+    // 赠送人
+    private String userName;
+
+    // 被赠送人
+    private String toUserName;
+
     public void setCode(String code) {
         this.code = code;
     }
@@ -67,6 +74,22 @@ public class GiveTreeRecord extends ABaseDO {
 
     public void setCreateDatetime(Date createDatetime) {
         this.createDatetime = createDatetime;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getToUserName() {
+        return toUserName;
+    }
+
+    public void setToUserName(String toUserName) {
+        this.toUserName = toUserName;
     }
 
 }

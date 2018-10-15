@@ -12,14 +12,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ogc.standard.ao.ITreeAO;
 import com.ogc.standard.bo.IApplyBindMaintainBO;
 import com.ogc.standard.bo.IInteractBO;
-import com.ogc.standard.bo.IProductBO;
 import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.ITreeBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.domain.Interact;
-import com.ogc.standard.domain.Product;
 import com.ogc.standard.domain.SYSUser;
 import com.ogc.standard.domain.Tree;
 import com.ogc.standard.dto.req.XN629030Req;
@@ -41,9 +39,6 @@ public class TreeAOImpl implements ITreeAO {
 
     @Autowired
     private IApplyBindMaintainBO applyBindMaintainBO;
-
-    @Autowired
-    private IProductBO productBO;
 
     @Autowired
     private ISYSUserBO sysUserBO;
@@ -182,10 +177,6 @@ public class TreeAOImpl implements ITreeAO {
     }
 
     private void initTree(Tree tree) {
-        // 产品名称
-        Product product = productBO.getProduct(tree.getProductCode());
-        tree.setProductName(product.getName());
-
         // 产权方
         String ownerName = null;
         SYSUser sysUser = sysUserBO.getSYSUserUnCheck(tree.getOwnerId());

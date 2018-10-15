@@ -13,7 +13,6 @@ import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IAgentUserBO;
 import com.ogc.standard.bo.IAlipayBO;
 import com.ogc.standard.bo.IChargeBO;
-import com.ogc.standard.bo.IJourBO;
 import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
@@ -43,9 +42,6 @@ public class ChargeAOImpl implements IChargeAO {
 
     @Autowired
     private IChargeBO chargeBO;
-
-    @Autowired
-    private IJourBO jourBO;
 
     @Autowired
     private IUserBO userBO;
@@ -199,10 +195,13 @@ public class ChargeAOImpl implements IChargeAO {
         // 审核人
         String payUserName = null;
 
-        if (EAccountType.CUSTOMER.getCode().equals(charge.getApplyUserType())) {
+        // 账户
+        Account account = accountBO.getAccount(charge.getAccountNumber());
+
+        if (EAccountType.CUSTOMER.getCode().equals(charge.getAccountType())) {
 
             // C端用户
-            User user = userBO.getUser(charge.getApplyUser());
+            User user = userBO.getUser(account.getUserId());
 
             realName = user.getMobile();
             if (StringUtils.isNotBlank(user.getRealName())) {
@@ -210,11 +209,10 @@ public class ChargeAOImpl implements IChargeAO {
             }
 
         } else if (EAccountType.AGENT.getCode()
-            .equals(charge.getApplyUserType())) {
+            .equals(charge.getAccountType())) {
 
             // 代理用户
-            AgentUser agentUser = agentUserBO
-                .getAgentUser(charge.getApplyUser());
+            AgentUser agentUser = agentUserBO.getAgentUser(account.getUserId());
 
             realName = agentUser.getMobile();
             if (StringUtils.isNotBlank(agentUser.getRealName())) {
@@ -222,14 +220,14 @@ public class ChargeAOImpl implements IChargeAO {
             }
 
         } else if (EAccountType.PLAT.getCode()
-            .equals(charge.getApplyUserType())) {
+            .equals(charge.getAccountType())) {
 
             // 系统用户
             realName = EUser.ADMIN.getValue();
         } else {
 
             // 其他用户
-            SYSUser sysUser = sysUserBO.getSYSUser(charge.getApplyUser());
+            SYSUser sysUser = sysUserBO.getSYSUser(account.getUserId());
 
             realName = sysUser.getMobile();
             if (StringUtils.isNotBlank(sysUser.getRealName())) {

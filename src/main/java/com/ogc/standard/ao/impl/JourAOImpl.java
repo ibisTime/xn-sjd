@@ -24,7 +24,6 @@ import com.ogc.standard.domain.User;
 import com.ogc.standard.enums.EAccountType;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.EJourStatus;
-import com.ogc.standard.enums.ESysUser;
 import com.ogc.standard.enums.EUser;
 import com.ogc.standard.exception.BizException;
 
@@ -158,7 +157,7 @@ public class JourAOImpl implements IJourAO {
                 }
             }
 
-        } else if (ESysUser.SYS_USER.getCode().equals(jour.getUserId())) {
+        } else if (EAccountType.PLAT.getCode().equals(jour.getAccountType())) {
 
             // 系统用户
             realName = EUser.ADMIN.getValue();
