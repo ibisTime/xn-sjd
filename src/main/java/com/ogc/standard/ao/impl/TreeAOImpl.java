@@ -11,13 +11,17 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.ITreeAO;
 import com.ogc.standard.bo.IApplyBindMaintainBO;
+import com.ogc.standard.bo.ICategoryBO;
 import com.ogc.standard.bo.IInteractBO;
+import com.ogc.standard.bo.IProductBO;
 import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.ITreeBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.core.StringValidater;
+import com.ogc.standard.domain.Category;
 import com.ogc.standard.domain.Interact;
+import com.ogc.standard.domain.Product;
 import com.ogc.standard.domain.SYSUser;
 import com.ogc.standard.domain.Tree;
 import com.ogc.standard.dto.req.XN629030Req;
@@ -42,6 +46,12 @@ public class TreeAOImpl implements ITreeAO {
 
     @Autowired
     private ISYSUserBO sysUserBO;
+
+    @Autowired
+    private IProductBO productBO;
+
+    @Autowired
+    private ICategoryBO categoryBO;
 
     @Override
     public String addTree(XN629030Req req) {
@@ -187,6 +197,15 @@ public class TreeAOImpl implements ITreeAO {
             }
         }
         tree.setOwnerName(ownerName);
+
+        // 产品信息
+        Product product = productBO.getProduct(tree.getProductCode());
+        tree.setProductName(product.getName());
+        tree.setSellType(product.getSellType());
+
+        // 类型
+        Category category = categoryBO.getCategory(product.getCategoryCode());
+        tree.setCategory(category.getName());
 
     }
 }

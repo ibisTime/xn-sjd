@@ -64,6 +64,7 @@ import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EIDKind;
 import com.ogc.standard.enums.EJourBizTypePlat;
 import com.ogc.standard.enums.EJourBizTypeUser;
+import com.ogc.standard.enums.EPayType;
 import com.ogc.standard.enums.ESex;
 import com.ogc.standard.enums.ESignLogType;
 import com.ogc.standard.enums.ESysConfigType;
@@ -134,8 +135,8 @@ public class UserAOImpl implements IUserAO {
         userBO.isMobileExist(req.getMobile());
 
         // 验证短信验证码
-        // smsOutBO.checkCaptcha(req.getMobile(), req.getSmsCaptcha(),
-        // ECaptchaType.C_REG.getCode());
+        smsOutBO.checkCaptcha(req.getMobile(), req.getSmsCaptcha(),
+            ECaptchaType.C_REG.getCode());
 
         // 获取推荐用户相对应的代理信息
         String agentId = null;
@@ -359,6 +360,32 @@ public class UserAOImpl implements IUserAO {
         signLogBO.saveSignLog(data);
 
         return userId;
+    }
+
+    // 每天登录送积分
+    private BigDecimal addLoginAmount(User user) {
+        Map<String, String> configMap = sysConfigBO
+            .getConfigsMap(ESysConfigType.JF_RULE.getCode());
+        BigDecimal quantity = new BigDecimal(
+            configMap.get(SysConstants.SIGN_JF));
+        quantity = AmountUtil.mul(quantity, 1000L);
+
+        Account userJfAccount = accountBO.getAccountByUser(user.getUserId(),
+            ECurrency.JF.getCode());
+        Account sysJfAccount = accountBO
+            .getAccount(ESystemAccount.SYS_ACOUNT_JF_POOL.getCode());
+
+        // 积分池不足时将剩余积分转给用户
+        if (quantity.compareTo(sysJfAccount.getAmount()) == 1) {
+            quantity = sysJfAccount.getAmount();
+        }
+
+        accountBO.transAmount(sysJfAccount, userJfAccount, quantity,
+            EJourBizTypeUser.LOGIN.getCode(), EJourBizTypePlat.LOGIN.getCode(),
+            EJourBizTypeUser.LOGIN.getValue(),
+            EJourBizTypePlat.LOGIN.getValue(), user.getUserId());
+
+        return quantity;
     }
 
     @Override
@@ -655,7 +682,6 @@ public class UserAOImpl implements IUserAO {
             user.setGender(data.getGender());
             user.setAge(data.getAge());
             user.setBirthday(data.getBirthday());
-            user.setEmail(data.getEmail());
             user.setDiploma(data.getDiploma());
             user.setIntroduce(data.getIntroduce());
             user.setOccupation(data.getOccupation());
@@ -763,7 +789,6 @@ public class UserAOImpl implements IUserAO {
     @Override
     public void doResetReferee(String userId, String userReferee,
             String updater) {
-        User data = userBO.getUser(userId);
         userBO.refreshReferee(userId, userReferee, updater);
     }
 
@@ -778,7 +803,6 @@ public class UserAOImpl implements IUserAO {
     @Override
     public void doTwoIdentify(String userId, String idKind, String idNo,
             String realName) {
-        User user = userBO.getUser(userId);
         // 更新用户表
         userBO.refreshIdentity(userId, realName, EIDKind.IDCard.getCode(),
             idNo);
@@ -838,7 +862,7 @@ public class UserAOImpl implements IUserAO {
 
         // 添加积分
         User user = userBO.getUser(req.getUserId());
-        if (null != user.getRealName()) {
+        if (null == user.getRealName()) {
             Map<String, String> configMap = sysConfigBO
                 .getConfigsMap(ESysConfigType.JF_RULE.getCode());
             BigDecimal quantity = new BigDecimal(
@@ -882,7 +906,7 @@ public class UserAOImpl implements IUserAO {
 
         String appId = null;
         String appSecret = null;
-        if (ESysConfigType.WEIXIN_H5.getCode().equals(req.getType())) {
+        if (EPayType.WEIXIN_H5.getCode().equals(req.getType())) {
             appId = configMap.get(SysConstants.WX_H5_ACCESS_KEY);
             appSecret = configMap.get(SysConstants.WX_H5_SECRET_KEY);
         } else {
@@ -932,14 +956,13 @@ public class UserAOImpl implements IUserAO {
             wxRes = getMapFromResponse(PostSimulater
                 .requestPostForm(WechatConstant.WX_USER_INFO_URL, queryParas));
             String unionId = (String) wxRes.get("unionid");
-            String appOpenId = null;
             String h5OpenId = null;
-            if (ESysConfigType.WEIXIN_H5.getCode().equals(req.getType())) {
+            if (EPayType.WEIXIN_H5.getCode().equals(req.getType())) {
                 h5OpenId = (String) wxRes.get("openid");
             }
 
             // Step4：根据openId，unionId从数据库中查询用户信息
-            User dbUser = userBO.doGetUserByOpenId(appOpenId, h5OpenId);
+            User dbUser = userBO.doGetUserByOpenId(h5OpenId);
             if (null != dbUser) {// 如果user存在，说明用户授权登录过，直接登录
                 addLoginAmount(dbUser);// 每天登录送积分
                 result = new XN805051Res(dbUser.getUserId());
@@ -955,11 +978,11 @@ public class UserAOImpl implements IUserAO {
 
                 // Step5：判断注册是否传手机号，有则注册，无则反馈
                 if (EBoolean.YES.getCode().equals(req.getIsNeedMobile())) {
-                    result = doWxLoginRegMobile(req, unionId, appOpenId,
-                        h5OpenId, nickname, photo, gender);
-                } else {
-                    result = doWxLoginReg(req, unionId, appOpenId, h5OpenId,
+                    result = doWxLoginRegMobile(req, unionId, h5OpenId,
                         nickname, photo, gender);
+                } else {
+                    result = doWxLoginReg(req, unionId, h5OpenId, nickname,
+                        photo, gender);
                 }
             }
         } catch (Exception e) {
@@ -969,21 +992,118 @@ public class UserAOImpl implements IUserAO {
     }
 
     private XN805051Res doWxLoginReg(XN805051Req req, String unionId,
-            String appOpenId, String h5OpenId, String nickname, String photo,
-            String gender) {
+            String h5OpenId, String nickname, String photo, String gender) {
         XN805051Res result;
 
-        // 验证推荐人,将userReferee手机号转为用户编号
-        String userRefereeId = userBO.getUserId(req.getUserReferee(),
-            req.getUserRefereeKind());
-        userBO.doCheckOpenId(unionId, h5OpenId, appOpenId);
+        userBO.doCheckOpenId(unionId, h5OpenId);
+
+        // 获取推荐用户相对应的代理信息
+        String agentId = null;
+        String userReferee = null;
+        if (StringUtils.isNotBlank(req.getUserRefereeKind())) {
+            if (EUserRefereeType.USER.getCode()
+                .equals(req.getUserRefereeKind())) {
+                User refereeUser = userBO.getUserByMobile(req.getUserReferee());
+                userReferee = refereeUser.getUserId();
+                agentId = refereeUser.getAgentId();
+            } else if (EUserRefereeType.AGENT.getCode()
+                .equals(req.getUserRefereeKind())) {
+                AgentUser agentUser = agentUserBO
+                    .getAgentUserByMobile(req.getUserReferee());
+                userReferee = agentUser.getUserId();
+                agentId = agentUser.getUserId();
+            } else if (EUserRefereeType.SALEMANS.getCode()
+                .equals(req.getUserRefereeKind())) {
+                AgentUser agentUser = agentUserBO
+                    .getAgentUserByMobile(req.getUserReferee());
+                userReferee = agentUser.getUserId();
+                agentId = agentUser.getParentUserId();
+            } else {
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                    "推荐类型不支持");
+            }
+        }
 
         // 插入用户信息
-        String userId = userBO.doRegister(unionId, h5OpenId, appOpenId, null,
-            req.getKind(), EUserPwd.InitPwd.getCode(), nickname, photo, gender,
-            userRefereeId, companyCode, systemCode);
+        String userId = userBO.doRegister(unionId, h5OpenId, null,
+            EUserPwd.InitPwd8.getCode(), userReferee, req.getUserRefereeKind(),
+            agentId, req.getKind(), nickname, photo, gender);
+
+        // C端自行添加自己为好友
+        userRelationBO.saveUserRelation(userId, userId,
+            EUserReleationType.FRIEND.getCode());
+
+        // ext中添加数据
+        userExtBO.addUserExt(userId);
+
+        // 分配账户
+        accountAO.distributeAccount(userId);
 
         result = new XN805051Res(userId, EBoolean.NO.getCode());
+        return result;
+    }
+
+    private XN805051Res doWxLoginRegMobile(XN805051Req req, String unionId,
+            String h5OpenId, String nickname, String photo, String gender) {
+        XN805051Res result = null;
+        if (StringUtils.isNotBlank(req.getMobile())) {
+            // 判断是否需要验证码验证码,登录前一定要验证
+            if (StringUtils.isBlank(req.getSmsCaptcha())) {
+                throw new BizException("xn702002", "请输入短信验证码");
+            }
+            // 短信验证码是否正确
+            smsOutBO.checkCaptcha(req.getMobile(), req.getSmsCaptcha(),
+                "805051");
+
+            String mobileUserId = userBO.getUserId(req.getMobile(),
+                req.getKind());
+            if (StringUtils.isBlank(mobileUserId)) {
+                userBO.doCheckOpenId(unionId, h5OpenId);
+
+                // 获取推荐用户相对应的代理信息
+                String agentId = null;
+                String userReferee = null;
+                if (StringUtils.isNotBlank(req.getUserRefereeKind())) {
+                    if (EUserRefereeType.USER.getCode()
+                        .equals(req.getUserRefereeKind())) {
+                        User refereeUser = userBO
+                            .getUserByMobile(req.getUserReferee());
+                        userReferee = refereeUser.getUserId();
+                        agentId = refereeUser.getAgentId();
+                    } else if (EUserRefereeType.AGENT.getCode()
+                        .equals(req.getUserRefereeKind())) {
+                        AgentUser agentUser = agentUserBO
+                            .getAgentUserByMobile(req.getUserReferee());
+                        userReferee = agentUser.getUserId();
+                        agentId = agentUser.getUserId();
+                    } else if (EUserRefereeType.SALEMANS.getCode()
+                        .equals(req.getUserRefereeKind())) {
+                        AgentUser agentUser = agentUserBO
+                            .getAgentUserByMobile(req.getUserReferee());
+                        userReferee = agentUser.getUserId();
+                        agentId = agentUser.getParentUserId();
+                    } else {
+                        throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                            "推荐类型不支持");
+                    }
+                }
+
+                // 插入用户信息
+                String userId = userBO.doRegister(unionId, h5OpenId,
+                    req.getMobile(), EUserPwd.InitPwd8.getCode(), userReferee,
+                    req.getUserRefereeKind(), agentId, req.getKind(), nickname,
+                    photo, gender);
+
+                // 分配账户
+                accountAO.distributeAccount(userId);
+            } else {
+                userBO.refreshWxInfo(mobileUserId, unionId, h5OpenId, nickname,
+                    photo, gender);
+                result = new XN805051Res(mobileUserId);
+            }
+        } else {
+            result = new XN805051Res(null, EBoolean.YES.getCode());
+        }
         return result;
     }
 

@@ -50,19 +50,9 @@ public enum EJourBizTypePlat {
 
     COMPLETE_INFO("complete_info", "完善用户信息"),
 
-    REAL_AUTH("real_auth", "实名认证"),
-
     LOGIN("login", "登录"),
 
-    ONE_ADOPT_BACK("one_adopt_back", "直推认养消费返积分"),
-
-    TWO_ADOPT_BACK("two_adopt_back", "间推认养消费返积分"),
-
     INVITE_USER("invite_user", "邀请好友注册"),
-
-    ADOPT_BUY_DEDUCT("adopt_buy_deduct", "认养抵扣"),
-
-    ADOPT_PAY_BACK("adopt_pay_back", "认养消费返利"),
 
     TOOL_BUY("tool_buy", "购买道具");
 

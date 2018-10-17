@@ -113,6 +113,9 @@ public class Tree extends ABaseDO {
     // 当前订单
     private AdoptOrder curOrder;
 
+    // 分类
+    private String category;
+
     public String getMaintainId() {
         return maintainId;
     }
@@ -367,6 +370,14 @@ public class Tree extends ABaseDO {
 
     public void setCurOrder(AdoptOrder curOrder) {
         this.curOrder = curOrder;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
 }

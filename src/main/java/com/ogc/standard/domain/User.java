@@ -71,6 +71,12 @@ public class User extends ABaseDO {
     // 状态
     private String status;
 
+    // 开放平台和公众平台唯一号
+    private String unionId;
+
+    // 微信h5第三方登录开放编号
+    private String h5OpenId;
+
     // 省
     private String province;
 
@@ -607,6 +613,22 @@ public class User extends ABaseDO {
 
     public void setIntroduce(String introduce) {
         this.introduce = introduce;
+    }
+
+    public String getUnionId() {
+        return unionId;
+    }
+
+    public void setUnionId(String unionId) {
+        this.unionId = unionId;
+    }
+
+    public String getH5OpenId() {
+        return h5OpenId;
+    }
+
+    public void setH5OpenId(String h5OpenId) {
+        this.h5OpenId = h5OpenId;
     }
 
 }

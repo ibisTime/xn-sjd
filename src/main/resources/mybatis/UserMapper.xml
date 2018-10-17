@@ -23,16 +23,18 @@
 		
 		<result column="trade_pwd_strength" property="tradePwdStrength" />
 		<result column="status" property="status" />
+		<result column="union_id" property="unionId" />
+		<result column="h5_open_id" property="h5OpenId" />
 		<result column="province" property="province" />
+		
 		<result column="city" property="city" />
 		<result column="area" property="area" />
-		
 		<result column="address" property="address" />
 		<result column="longitude" property="longitude" />
 		<result column="latitude" property="latitude" />
+		
 		<result column="create_datetime" property="createDatetime" />
 		<result column="updater" property="updater" />
-		
 		<result column="update_datetime" property="updateDatetime" />
 		<result column="remark" property="remark" />
 	</resultMap>
@@ -91,6 +93,12 @@
 			</if>
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
+			</if>
+			<if test="unionId != null and unionId != '' ">
+				AND t.union_id = #{unionId}
+			</if>
+			<if test="h5OpenId != null and h5OpenId != '' ">
+				AND t.h5_open_id = #{h5OpenId}
 			</if>
 			<if test="updater != null and updater != '' ">
 				AND t.updater = #{updater}
@@ -157,16 +165,18 @@
 		
 		,t.trade_pwd_strength
 		,t.status
+		,t.union_id
+		,t.h5_open_id
 		,t.province
+		
 		,t.city
 		,t.area
-		
 		,t.address
 		,t.longitude
 		,t.latitude
+		
 		,t.create_datetime
 		,t.updater
-		
 		,t.update_datetime
 		,t.remark
 		FROM
@@ -183,7 +193,6 @@
 		SELECT count(1) FROM tstd_user t 
 		<include refid="where_condition"/>
 	</select>
-	
 
 	<insert id="insert_user" parameterType="user">
 		INSERT INTO tstd_user(
@@ -209,17 +218,20 @@
 		,trade_pwd
 		,trade_pwd_strength
 		,status
-		,province
+		,union_id
 		
+		,h5_open_id
+		,province
 		,city
 		,area
 		,address
+		
 		,longitude
 		,latitude
-		
 		,create_datetime
 		,updater
 		,update_datetime
+		
 		,remark
 		)
 		VALUES(
@@ -245,17 +257,20 @@
 		,#{tradePwd}
 		,#{tradePwdStrength}
 		,#{status}
-		,#{province}
+		,#{unionId}
 		
+		,#{h5OpenId}
+		,#{province}
 		,#{city}
 		,#{area}
 		,#{address}
+		
 		,#{longitude}
 		,#{latitude}
-		
 		,#{createDatetime}
 		,#{updater}
 		,#{updateDatetime}
+		
 		,#{remark}
 		)
 	</insert>
@@ -443,6 +458,16 @@
 		realName = #{realName}
 		,id_kind = #{idKind}
 		,id_no = #{idNo}
+		WHERE
+		user_id = #{userId}		
+	</update>
+	
+	<update id="update_wx_info" parameterType="user">
+		UPDATE tstd_user
+		SET
+		union_id =#{unionId}
+		,h5_open_id =#{h5OpenId}
+		,nickname = #{nickname}
 		WHERE
 		user_id = #{userId}		
 	</update>

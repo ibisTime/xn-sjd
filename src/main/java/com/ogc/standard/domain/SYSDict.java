@@ -40,6 +40,9 @@ public class SYSDict extends ABaseDO {
 
     // ***********db properties***********
 
+    // 更新人
+    private String updaterName;
+
     public Long getId() {
         return id;
     }
@@ -102,6 +105,14 @@ public class SYSDict extends ABaseDO {
 
     public void setUpdateDatetime(Date updateDatetime) {
         this.updateDatetime = updateDatetime;
+    }
+
+    public String getUpdaterName() {
+        return updaterName;
+    }
+
+    public void setUpdaterName(String updaterName) {
+        this.updaterName = updaterName;
     }
 
 }

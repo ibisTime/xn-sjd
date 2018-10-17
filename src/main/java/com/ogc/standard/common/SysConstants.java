@@ -111,22 +111,10 @@ public class SysConstants {
 
     public static final String COMPLETE_INFO = "COMPLETE_INFO";// 完善用户信息
 
-    public static final String REAL_AUTH = "REAL_AUTH";// 实名认证
-
     public static final String SIGN_JF = "SIGN_JF";// 签到
 
     public static final String CONTINUE_LOGIN_RATE = "CONTINUE_LOGIN_RATE";// 连续登录返积分比例
 
-    public static final String ONE_ADOPT_BACK = "ONE_ADOPT_BACK";// 直推认养消费返积分
-
-    public static final String TWO_ADOPT_BACK = "TWO_ADOPT_BACK";// 间推认养消费返积分
-
     public static final String INVITE_USER = "INVITE_USER";// 邀请好友注册
-
-    public static final String ADOPT_BUY_DEDUCT = "ADOPT_BUY_DEDUCT";// 认养抵扣
-
-    public static final String ADOPT_PAY_BACK = "ADOPT_PAY_BACK";// 认养消费返利
-
-    public static final String TOOL_BUY = "TOOL_BUY";// 购买道具
 
 }

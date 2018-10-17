@@ -43,6 +43,16 @@ public interface IUserBO extends IPaginableBO<User> {
             String agentId, String userReferee, String userRefereeType,
             String province, String city, String area);
 
+    // 微信用户注册
+    public String doRegister(String unionId, String h5OpenId, String mobile,
+            String loginPwd, String userReferee, String userRefereeType,
+            String agentId, String kind, String nickname, String photo,
+            String gender);
+
+    // 更新微信登录信息
+    public void refreshWxInfo(String userId, String unionId, String h5OpenId,
+            String nickname, String photo, String gender);
+
     public String doAddUser(User data);
 
     public String saveUser(String mobile, String kind, String companyCode,
@@ -66,6 +76,9 @@ public interface IUserBO extends IPaginableBO<User> {
 
     // 判断推荐人是否存在(手机号)
     public void checkUserReferee(String userReferee, String systemCode);
+
+    // 查询openId
+    public void doCheckOpenId(String unionId, String h5OpenId);
 
     public int refreshUserInfo(String userId, String nickname, String realName,
             String idKind, String idNo);
@@ -94,8 +107,8 @@ public interface IUserBO extends IPaginableBO<User> {
 
     public List<User> queryUserList(User condition);
 
-    public void refreshStatus(String userId, EUserStatus normal,
-            String updater, String remark);
+    public void refreshStatus(String userId, EUserStatus normal, String updater,
+            String remark);
 
     public void refreshNickname(String userId, String nickname);
 
@@ -112,6 +125,11 @@ public interface IUserBO extends IPaginableBO<User> {
     public void refreshLocation(User data);
 
     // 修改推荐人
-    public void refreshReferee(String userId, String userReferee, String updater);
+    public void refreshReferee(String userId, String userReferee,
+            String updater);
 
+    public User doGetUserByOpenId(String h5OpenId);
+
+    // 通过手机号和类型获取用户编号
+    public String getUserId(String mobile, String kind);
 }

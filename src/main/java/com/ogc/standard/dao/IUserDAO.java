@@ -62,4 +62,7 @@ public interface IUserDAO extends IBaseDAO<User> {
     // 更新用户手机号和真实信息
     public int updateSupple(User data);
 
+    // 更新微信登录信息
+    public int updateWxInfo(User data);
+
 }

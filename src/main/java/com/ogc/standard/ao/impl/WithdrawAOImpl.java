@@ -103,14 +103,11 @@ public class WithdrawAOImpl implements IWithdrawAO {
     public void approveOrder(String code, String approveUser,
             String approveResult, String approveNote) {
         Withdraw data = withdrawBO.getWithdraw(code);
-        if (null == data) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "取现订单编号不存在");
-        }
         if (!EWithdrawStatus.toApprove.getCode().equals(data.getStatus())) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "申请记录状态不是待审批状态，无法审批");
         }
+
         if (EBoolean.YES.getCode().equals(approveResult)) {
             approveOrderYES(data, approveUser, approveNote);
         } else {
@@ -179,16 +176,16 @@ public class WithdrawAOImpl implements IWithdrawAO {
             EJourBizTypeUser.WITHDRAW_UNFROZEN.getCode(),
             EJourBizTypeUser.WITHDRAW_UNFROZEN.getValue(), data.getCode());
 
-        // 用户账户取现扣钱
+        // 用户账户取现并扣除手续费
         accountBO.changeAmount(dbAccount, data.getAmount().negate(),
             EChannelType.Offline, payCode, data.getCode(),
             EJourBizTypeUser.WITHDRAW.getCode(), "取现成功");
 
-        accountBO.changeAmount(dbAccount, data.getFee(), EChannelType.Offline,
-            payCode, data.getCode(), EJourBizTypePlat.WITHDRAW_FEE.getCode(),
-            "取现手续费");
+        accountBO.changeAmount(dbAccount, data.getFee().negate(),
+            EChannelType.Offline, payCode, data.getCode(),
+            EJourBizTypePlat.WITHDRAW_FEE.getCode(), "取现手续费");
 
-        // 系统账户取现扣钱
+        // 系统账户扣除转账费
         Account sysAccount = accountBO
             .getAccount(ESystemAccount.SYS_ACOUNT_CNY.getCode());
         accountBO.changeAmount(sysAccount, payFee.negate(),

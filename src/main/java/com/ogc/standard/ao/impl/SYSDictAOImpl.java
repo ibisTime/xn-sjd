@@ -10,15 +10,19 @@ package com.ogc.standard.ao.impl;
 
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ogc.standard.ao.ISYSDictAO;
 import com.ogc.standard.bo.ISYSDictBO;
+import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.SYSDict;
+import com.ogc.standard.domain.SYSUser;
 import com.ogc.standard.enums.EDictType;
+import com.ogc.standard.enums.EUser;
 import com.ogc.standard.exception.BizException;
 
 /** 
@@ -30,6 +34,9 @@ import com.ogc.standard.exception.BizException;
 public class SYSDictAOImpl implements ISYSDictAO {
     @Autowired
     ISYSDictBO sysDictBO;
+
+    @Autowired
+    private ISYSUserBO sysUserBO;
 
     /** 
      * @see com.xnjr.base.ao.ISYSDictAO#addSYSDict(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
@@ -107,12 +114,29 @@ public class SYSDictAOImpl implements ISYSDictAO {
     @Override
     public Paginable<SYSDict> querySYSDictPage(int start, int limit,
             SYSDict condition) {
-        return sysDictBO.getPaginable(start, limit, condition);
+        Paginable<SYSDict> page = sysDictBO.getPaginable(start, limit,
+            condition);
+
+        if (null != page && CollectionUtils.isNotEmpty(page.getList())) {
+            for (SYSDict sysDict : page.getList()) {
+                initDict(sysDict);
+            }
+        }
+
+        return page;
     }
 
     @Override
     public List<SYSDict> querySysDictList(SYSDict condition) {
-        return sysDictBO.querySYSDictList(condition);
+        List<SYSDict> list = sysDictBO.querySYSDictList(condition);
+
+        if (CollectionUtils.isNotEmpty(list)) {
+            for (SYSDict sysDict : list) {
+                initDict(sysDict);
+            }
+        }
+
+        return list;
     }
 
     @Override
@@ -125,7 +149,25 @@ public class SYSDictAOImpl implements ISYSDictAO {
                 throw new BizException("xn000000", "id记录不存在");
             }
             sysDict = sysDictBO.getSYSDict(id);
+
+            initDict(sysDict);
         }
         return sysDict;
+    }
+
+    private void initDict(SYSDict sysDict) {
+        if (EUser.ADMIN.getCode().equals(sysDict.getUpdater())) {
+            sysDict.setUpdaterName(EUser.ADMIN.getValue());
+        }
+
+        if (!EUser.ADMIN.getCode().equals(sysDict.getUpdater())) {
+            SYSUser user = sysUserBO.getSYSUserUnCheck(sysDict.getUpdater());
+            if (EUser.ADMIN.getCode().equals(user.getLoginName())) {
+                sysDict.setUpdaterName(EUser.ADMIN.getValue());
+            } else {
+                sysDict.setUpdaterName(user.getLoginName());
+            }
+        }
+
     }
 }
