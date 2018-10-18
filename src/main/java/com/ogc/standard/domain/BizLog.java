@@ -59,6 +59,9 @@ public class BizLog extends ABaseDO {
     // 认养人信息
     private User adoptUserInfo;
 
+    // 查询人(adoptUserId + userId)
+    private String queryUserId;
+
     public Integer getId() {
         return id;
     }
@@ -169,6 +172,14 @@ public class BizLog extends ABaseDO {
 
     public void setAdoptUserInfo(User adoptUserInfo) {
         this.adoptUserInfo = adoptUserInfo;
+    }
+
+    public String getQueryUserId() {
+        return queryUserId;
+    }
+
+    public void setQueryUserId(String queryUserId) {
+        this.queryUserId = queryUserId;
     }
 
 }

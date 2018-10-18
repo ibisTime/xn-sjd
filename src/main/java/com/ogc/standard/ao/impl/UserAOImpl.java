@@ -64,7 +64,6 @@ import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EIDKind;
 import com.ogc.standard.enums.EJourBizTypePlat;
 import com.ogc.standard.enums.EJourBizTypeUser;
-import com.ogc.standard.enums.EPayType;
 import com.ogc.standard.enums.ESex;
 import com.ogc.standard.enums.ESignLogType;
 import com.ogc.standard.enums.ESysConfigType;
@@ -319,10 +318,23 @@ public class UserAOImpl implements IUserAO {
                         + "，请联系工作人员");
         }
 
-        if (!signLogBO.isCheckIn(userId, ESignLogType.LOGIN.getCode())) {
+        // 增加登陆日志
+        SignLog data = new SignLog();
+        data.setUserId(user.getUserId());
+        data.setType(ESignLogType.LOGIN.getCode());
+        data.setClient(client);
+        data.setLocation(location);
+        signLogBO.saveSignLog(data);
+
+        return userId;
+    }
+
+    @Override
+    public void doAssignLoginJF(String userId) {
+        if (signLogBO.isFirstCheckIn(userId, ESignLogType.LOGIN.getCode())) {
             // 添加积分
             long continueLoginDay = signLogAO.keepCheckIn(userId,
-                ESignLogType.LOGIN.getCode()) + 1L;// 连续登录天数
+                ESignLogType.LOGIN.getCode());// 连续登录天数
 
             Map<String, String> configMap = sysConfigBO
                 .getConfigsMap(ESysConfigType.JF_RULE.getCode());
@@ -350,19 +362,9 @@ public class UserAOImpl implements IUserAO {
                 EJourBizTypeUser.LOGIN.getValue(),
                 EJourBizTypePlat.LOGIN.getValue(), userId);
         }
-
-        // 增加登陆日志
-        SignLog data = new SignLog();
-        data.setUserId(user.getUserId());
-        data.setType(ESignLogType.LOGIN.getCode());
-        data.setClient(client);
-        data.setLocation(location);
-        signLogBO.saveSignLog(data);
-
-        return userId;
     }
 
-    // 每天登录送积分
+    // 微信登录送积分
     private BigDecimal addLoginAmount(User user) {
         Map<String, String> configMap = sysConfigBO
             .getConfigsMap(ESysConfigType.JF_RULE.getCode());
@@ -400,12 +402,12 @@ public class UserAOImpl implements IUserAO {
         }
         // 验证手机号
         userBO.isMobileExist(newMobile);
+
         // 短信验证码是否正确（往新手机号发送）
         smsOutBO.checkCaptcha(newMobile, smsCaptcha, "805061");
         userBO.refreshMobile(userId, newMobile);
 
         // 发送短信
-
         smsOutBO.sendSmsOut(oldMobile,
             String.format(SysConstants.DO_CHANGE_MOBILE_CN,
                 PhoneUtil.hideMobile(oldMobile),
@@ -906,7 +908,7 @@ public class UserAOImpl implements IUserAO {
 
         String appId = null;
         String appSecret = null;
-        if (EPayType.WEIXIN_H5.getCode().equals(req.getType())) {
+        if (ESysConfigType.WEIXIN_H5.getCode().equals(req.getType())) {
             appId = configMap.get(SysConstants.WX_H5_ACCESS_KEY);
             appSecret = configMap.get(SysConstants.WX_H5_SECRET_KEY);
         } else {
@@ -957,16 +959,20 @@ public class UserAOImpl implements IUserAO {
                 .requestPostForm(WechatConstant.WX_USER_INFO_URL, queryParas));
             String unionId = (String) wxRes.get("unionid");
             String h5OpenId = null;
-            if (EPayType.WEIXIN_H5.getCode().equals(req.getType())) {
+            if (ESysConfigType.WEIXIN_H5.getCode().equals(req.getType())) {
                 h5OpenId = (String) wxRes.get("openid");
             }
 
             // Step4：根据openId，unionId从数据库中查询用户信息
             User dbUser = userBO.doGetUserByOpenId(h5OpenId);
             if (null != dbUser) {// 如果user存在，说明用户授权登录过，直接登录
-                addLoginAmount(dbUser);// 每天登录送积分
-                result = new XN805051Res(dbUser.getUserId());
+
+                BigDecimal jfAmount = addLoginAmount(dbUser);// 每天登录送积分
+                result = new XN805051Res(dbUser.getUserId(),
+                    EBoolean.NO.getCode(), jfAmount);
+
             } else {
+
                 String nickname = (String) wxRes.get("nickname");
                 String photo = (String) wxRes.get("headimgurl");
                 String gender = ESex.UNKNOWN.getCode();

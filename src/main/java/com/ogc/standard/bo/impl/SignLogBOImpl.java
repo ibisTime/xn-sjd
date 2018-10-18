@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import com.ogc.standard.bo.ISignLogBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
+import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.dao.ISignLogDAO;
 import com.ogc.standard.domain.SignLog;
 
@@ -64,6 +65,23 @@ public class SignLogBOImpl extends PaginableBOImpl<SignLog>
             return true;
         }
         return false;
+    }
+
+    @Override
+    public boolean isFirstCheckIn(String userId, String type) {
+        Boolean isTodayCheckIn = false;
+        SignLog condition = new SignLog();
+        condition.setUserId(userId);
+        condition.setType(type);
+        condition.setCreateStartDatetime(DateUtil.getTodayStart());
+        condition.setCreateEndDatetime(DateUtil.getTodayEnd());
+        List<SignLog> signLogList = querySignLogList(condition);
+
+        if (signLogList.size() == 1) {
+            isTodayCheckIn = true;
+        }
+
+        return isTodayCheckIn;
     }
 
     // 将List按照日期排序

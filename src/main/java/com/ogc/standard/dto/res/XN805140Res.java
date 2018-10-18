@@ -8,7 +8,7 @@ package com.ogc.standard.dto.res;
  */
 public class XN805140Res {
 
-    public XN805140Res(Integer tppAmount, Integer signDays) {
+    public XN805140Res(Integer tppAmount, long signDays) {
         super();
         this.tppAmount = tppAmount;
         this.signDays = signDays;
@@ -18,7 +18,7 @@ public class XN805140Res {
     private Integer tppAmount;
 
     // 连续签到天数
-    private Integer signDays;
+    private long signDays;
 
     public Integer getTppAmount() {
         return tppAmount;
@@ -28,11 +28,11 @@ public class XN805140Res {
         this.tppAmount = tppAmount;
     }
 
-    public Integer getSignDays() {
+    public long getSignDays() {
         return signDays;
     }
 
-    public void setSignDays(Integer signDays) {
+    public void setSignDays(long signDays) {
         this.signDays = signDays;
     }
 

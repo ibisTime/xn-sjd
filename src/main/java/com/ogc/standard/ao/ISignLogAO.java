@@ -11,7 +11,9 @@ public interface ISignLogAO {
 
     static final String DEFAULT_ORDER_COLUMN = "id";
 
-    public XN805140Res addSignLog(XN805140Req req);
+    public void addSignLog(XN805140Req req);
+
+    public XN805140Res doAssignSignTPP(String userId);
 
     public Paginable<SignLog> querySignLogPage(int start, int limit,
             SignLog condition);

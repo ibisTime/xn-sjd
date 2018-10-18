@@ -13,6 +13,7 @@ import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.ObjValidater;
 import com.ogc.standard.dto.req.XN805140Req;
+import com.ogc.standard.dto.res.XN805140Res;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
@@ -31,7 +32,11 @@ public class XN805140 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return signLogAO.addSignLog(req);
+        signLogAO.addSignLog(req);
+
+        XN805140Res res = signLogAO.doAssignSignTPP(req.getUserId());
+
+        return res;
     }
 
     @Override

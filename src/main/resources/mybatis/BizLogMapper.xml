@@ -34,6 +34,10 @@
 			<if test="userId != null and userId != '' ">
 				AND t.user_id = #{userId}
 			</if>
+			<if test="queryUserId != null and queryUserId != '' ">
+				AND (t.user_id = #{queryUserId} or t.adopt_user_id = #{queryUserId})
+			</if>
+			
 			<if test="createDatetimeStart != null and createDatetimeStart != '' ">
 				<![CDATA[AND t.create_datetime >= #{createDatetimeStart}]]>
 			</if>

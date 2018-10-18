@@ -1,5 +1,7 @@
 package com.ogc.standard.dto.res;
 
+import java.math.BigDecimal;
+
 public class XN805051Res {
     // 用户编号
     private String userId;
@@ -8,13 +10,13 @@ public class XN805051Res {
     private String isNeedMobile;
 
     // 送积分
-    private Long jfAmount;
+    private BigDecimal jfAmount;
 
-    public Long getJfAmount() {
+    public BigDecimal getJfAmount() {
         return jfAmount;
     }
 
-    public void setJfAmount(Long jfAmount) {
+    public void setJfAmount(BigDecimal jfAmount) {
         this.jfAmount = jfAmount;
     }
 
@@ -25,7 +27,7 @@ public class XN805051Res {
         this.userId = userId;
     }
 
-    public XN805051Res(String userId, Long jfAmount) {
+    public XN805051Res(String userId, BigDecimal jfAmount) {
         this.userId = userId;
         this.jfAmount = jfAmount;
     }
@@ -33,6 +35,14 @@ public class XN805051Res {
     public XN805051Res(String userId, String isNeedMobile) {
         this.userId = userId;
         this.isNeedMobile = isNeedMobile;
+    }
+
+    public XN805051Res(String userId, String isNeedMobile,
+            BigDecimal jfAmount) {
+        super();
+        this.userId = userId;
+        this.isNeedMobile = isNeedMobile;
+        this.jfAmount = jfAmount;
     }
 
     public String getUserId() {

@@ -42,7 +42,7 @@ public class SignLogAOImpl implements ISignLogAO {
 
     @Override
     @Transactional
-    public XN805140Res addSignLog(XN805140Req req) {
+    public void addSignLog(XN805140Req req) {
         if (signLogBO.isCheckIn(req.getUserId(),
             ESignLogType.SIGN_IN.getCode())) {
             throw new BizException("3", "今日已签到");
@@ -55,36 +55,48 @@ public class SignLogAOImpl implements ISignLogAO {
         data.setType(ESignLogType.SIGN_IN.getCode());
         data.setClient(ESignLogClient.ANDROID.getCode());
 
-        // 添加碳泡泡
-        long continueSignDay = keepCheckIn(req.getUserId(),
-            ESignLogType.SIGN_IN.getCode()) + 1L;// 连续签到天数
+        signLogBO.saveSignLog(data);
 
-        Map<String, String> configMap = sysConfigBO
-            .getConfigsMap(ESysConfigType.TPP_RULE.getCode());
-        BigDecimal quantity = new BigDecimal(
-            configMap.get(SysConstants.SIGN_TPP));
-        BigDecimal continueSignRate = new BigDecimal(
-            configMap.get(SysConstants.CONTINUE_SIGN_RATE));
-        quantity = AmountUtil.mul(quantity, 1000L);
-        quantity = AmountUtil.mul(quantity, continueSignDay);// 连续签到天数
-        quantity = AmountUtil.mul(quantity, continueSignRate);// 连续签到比例
+    }
 
-        Account userTppAccount = accountBO.getAccountByUser(req.getUserId(),
-            ECurrency.TPP.getCode());
-        Account sysTppAccount = accountBO
-            .getAccount(ESystemAccount.SYS_ACOUNT_TPP_POOL.getCode());
+    @Override
+    public XN805140Res doAssignSignTPP(String userId) {
+        BigDecimal quantity = BigDecimal.ZERO;
+        long continueSignDay = 1L;
 
-        if (quantity.compareTo(sysTppAccount.getAmount()) == 1) {
-            quantity = sysTppAccount.getAmount();
+        if (signLogBO.isFirstCheckIn(userId, ESignLogType.SIGN_IN.getCode())) {
+
+            // 添加碳泡泡
+            continueSignDay = keepCheckIn(userId,
+                ESignLogType.SIGN_IN.getCode());// 连续签到天数
+
+            Map<String, String> configMap = sysConfigBO
+                .getConfigsMap(ESysConfigType.TPP_RULE.getCode());
+            quantity = new BigDecimal(configMap.get(SysConstants.SIGN_TPP));
+            BigDecimal continueSignRate = new BigDecimal(
+                configMap.get(SysConstants.CONTINUE_SIGN_RATE));
+            quantity = AmountUtil.mul(quantity, 1000L);
+            quantity = AmountUtil.mul(quantity, continueSignDay);// 连续签到天数
+            quantity = AmountUtil.mul(quantity, continueSignRate);// 连续签到比例
+
+            Account userTppAccount = accountBO.getAccountByUser(userId,
+                ECurrency.TPP.getCode());
+            Account sysTppAccount = accountBO
+                .getAccount(ESystemAccount.SYS_ACOUNT_TPP_POOL.getCode());
+
+            if (quantity.compareTo(sysTppAccount.getAmount()) == 1) {
+                quantity = sysTppAccount.getAmount();
+            }
+
+            accountBO.transAmount(sysTppAccount, userTppAccount, quantity,
+                EJourBizTypeUser.SIGN.getCode(),
+                EJourBizTypePlat.SIGN.getCode(),
+                EJourBizTypeUser.SIGN.getValue(),
+                EJourBizTypePlat.SIGN.getValue(), userId);
+
         }
 
-        accountBO.transAmount(sysTppAccount, userTppAccount, quantity,
-            EJourBizTypeUser.SIGN.getCode(), EJourBizTypePlat.SIGN.getCode(),
-            EJourBizTypeUser.SIGN.getValue(), EJourBizTypePlat.SIGN.getValue(),
-            req.getUserId());
-
-        signLogBO.saveSignLog(data);
-        return new XN805140Res(quantity.intValue(), null);
+        return new XN805140Res(quantity.intValue(), continueSignDay);
     }
 
     @Override

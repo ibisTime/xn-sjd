@@ -27,8 +27,21 @@
 		<result column="remark" property="remark" />
 	</resultMap>
 	
+	<sql id="join_condition">
+		<if test="queryUserId != null and queryUserId != '' ">
+			join tstd_user_relation tur on t.publish_user_id = tur.to_user
+		</if>
+	</sql>
+	
+	<sql id="friendlyQuery_condition">
+		<if test="queryUserId != null and queryUserId != '' ">
+			AND tur.type = #{relationType} AND tur.status = #{relationStatus} AND tur.user_id = #{queryUserId}
+		</if>
+	</sql>
+	
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
+				AND 1 = 1
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
 			</if>
@@ -85,7 +98,9 @@
 		,t.remark
 		FROM
 		tsj_article t
+		<include refid="join_condition" />
 		<include refid="where_condition" />
+		<include refid="friendlyQuery_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
 				t.${order}

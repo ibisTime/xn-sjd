@@ -28,6 +28,9 @@ public class XN629305Req extends APageReq {
     // 产生时间止
     private String createDatetimeEnd;
 
+    // 查询人(adoptUserId + userId)
+    private String queryUserId;
+
     public String getAdoptTreeCode() {
         return adoptTreeCode;
     }
@@ -74,6 +77,14 @@ public class XN629305Req extends APageReq {
 
     public void setAdoptUserId(String adoptUserId) {
         this.adoptUserId = adoptUserId;
+    }
+
+    public String getQueryUserId() {
+        return queryUserId;
+    }
+
+    public void setQueryUserId(String queryUserId) {
+        this.queryUserId = queryUserId;
     }
 
 }

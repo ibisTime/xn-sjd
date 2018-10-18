@@ -27,6 +27,8 @@ public class XN805050 extends AProcessor {
             req.getLoginPwd(), req.getClient(), req.getLocation()));
 
         if (null != res.getUserId()) {
+            userAO.doAssignLoginJF(res.getUserId());
+
             userAO.upgradeUserLevel(res.getUserId());
         }
 

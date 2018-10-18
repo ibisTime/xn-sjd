@@ -23,6 +23,13 @@
 			<if test="type != null and type != '' ">
 				AND t.type = #{type}
 			</if>
+			
+			<if test="createStartDatetime != null and createStartDatetime != '' ">
+				<![CDATA[AND t.create_datetime >= #{createStartDatetime}]]>
+			</if>
+			<if test="createEndDatetime != null and createEndDatetime != '' ">
+				<![CDATA[AND t.create_datetime <= #{createEndDatetime}]]>
+			</if>
 		</trim>
 	</sql>
 	<select id="select_signLog" parameterType="signLog" resultMap="signLog_DB_Result">

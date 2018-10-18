@@ -25,6 +25,9 @@ public class XN629307Req extends AListReq {
     // 产生时间止
     private String createDatetimeEnd;
 
+    // 查询人(adoptUserId + userId)
+    private String queryUserId;
+
     public String getAdoptTreeCode() {
         return adoptTreeCode;
     }
@@ -63,6 +66,14 @@ public class XN629307Req extends AListReq {
 
     public void setCreateDatetimeEnd(String createDatetimeEnd) {
         this.createDatetimeEnd = createDatetimeEnd;
+    }
+
+    public String getQueryUserId() {
+        return queryUserId;
+    }
+
+    public void setQueryUserId(String queryUserId) {
+        this.queryUserId = queryUserId;
     }
 
 }

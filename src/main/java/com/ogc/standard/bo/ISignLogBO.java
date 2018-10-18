@@ -11,6 +11,9 @@ public interface ISignLogBO extends IPaginableBO<SignLog> {
 
     public boolean isCheckIn(String userId, String type);
 
+    // 今天是否签到
+    public boolean isFirstCheckIn(String userId, String type);
+
     public int saveSignLog(SignLog data);
 
     public List<SignLog> querySignLogList(SignLog condition);

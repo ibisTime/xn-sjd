@@ -34,6 +34,9 @@ public class XN629345Req extends APageReq {
     // 发布人
     private String publishUserId;
 
+    // 查询人
+    private String queryUserId;
+
     public String getAdoptTreeCode() {
         return adoptTreeCode;
     }
@@ -96,6 +99,14 @@ public class XN629345Req extends APageReq {
 
     public void setPublishUserId(String publishUserId) {
         this.publishUserId = publishUserId;
+    }
+
+    public String getQueryUserId() {
+        return queryUserId;
+    }
+
+    public void setQueryUserId(String queryUserId) {
+        this.queryUserId = queryUserId;
     }
 
 }

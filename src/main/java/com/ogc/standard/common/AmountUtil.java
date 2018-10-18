@@ -62,4 +62,8 @@ public class AmountUtil {
     public static String toDisplayAmount(BigDecimal amount) {
         return amount.setScale(2, RoundingMode.DOWN).toPlainString();
     }
+
+    public static void main(String[] args) {
+        System.out.println(div(new BigDecimal(836), 1000L));
+    }
 }

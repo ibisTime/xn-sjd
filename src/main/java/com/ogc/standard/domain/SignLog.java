@@ -39,6 +39,16 @@ public class SignLog extends ABaseDO {
     // 登录时定位
     private String location;
 
+    // 签到时间
+    private Date createDatetime;
+
+    /***********DB Properties***************/
+    // 创建开始时间
+    private Date createStartDatetime;
+
+    // 创建结束时间
+    private Date createEndDatetime;
+
     public long getId() {
         return id;
     }
@@ -95,6 +105,20 @@ public class SignLog extends ABaseDO {
         this.createDatetime = createDatetime;
     }
 
-    // 签到时间
-    private Date createDatetime;
+    public Date getCreateStartDatetime() {
+        return createStartDatetime;
+    }
+
+    public void setCreateStartDatetime(Date createStartDatetime) {
+        this.createStartDatetime = createStartDatetime;
+    }
+
+    public Date getCreateEndDatetime() {
+        return createEndDatetime;
+    }
+
+    public void setCreateEndDatetime(Date createEndDatetime) {
+        this.createEndDatetime = createEndDatetime;
+    }
+
 }

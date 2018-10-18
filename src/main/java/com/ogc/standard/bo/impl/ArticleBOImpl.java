@@ -12,8 +12,11 @@ import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.IArticleDAO;
 import com.ogc.standard.domain.Article;
+import com.ogc.standard.enums.EArticleOpenLevel;
 import com.ogc.standard.enums.EArticleStatus;
 import com.ogc.standard.enums.EGeneratePrefix;
+import com.ogc.standard.enums.EUserReleationStatus;
+import com.ogc.standard.enums.EUserReleationType;
 import com.ogc.standard.exception.BizException;
 
 @Component
@@ -81,25 +84,6 @@ public class ArticleBOImpl extends PaginableBOImpl<Article>
     }
 
     @Override
-    public List<Article> queryArticleList(Article condition) {
-        return articleDAO.selectList(condition);
-    }
-
-    @Override
-    public Article getArticle(String code) {
-        Article data = null;
-        if (StringUtils.isNotBlank(code)) {
-            Article condition = new Article();
-            condition.setCode(code);
-            data = articleDAO.select(condition);
-            if (data == null) {
-                throw new BizException("xn0000", "文章不存在");
-            }
-        }
-        return data;
-    }
-
-    @Override
     public void refreshStatus(String code, EArticleStatus status,
             String updater) {
         Article data = getArticle(code);
@@ -120,6 +104,35 @@ public class ArticleBOImpl extends PaginableBOImpl<Article>
         data.setUpdateDatatime(new Date());
         data.setRemark(remark);
         articleDAO.updatePutOn(data);
+    }
+
+    @Override
+    public List<Article> queryPrivateArticleList(String userId) {
+        Article condition = new Article();
+        condition.setQueryUserId(userId);
+        condition.setRelationType(EUserReleationType.FRIEND.getCode());
+        condition.setOpenLevel(EArticleOpenLevel.ONLY_FRIEND.getCode());
+        condition.setRelationStatus(EUserReleationStatus.NORMAL.getCode());
+        return articleDAO.selectList(condition);
+    }
+
+    @Override
+    public List<Article> queryArticleList(Article condition) {
+        return articleDAO.selectList(condition);
+    }
+
+    @Override
+    public Article getArticle(String code) {
+        Article data = null;
+        if (StringUtils.isNotBlank(code)) {
+            Article condition = new Article();
+            condition.setCode(code);
+            data = articleDAO.select(condition);
+            if (data == null) {
+                throw new BizException("xn0000", "文章不存在");
+            }
+        }
+        return data;
     }
 
 }

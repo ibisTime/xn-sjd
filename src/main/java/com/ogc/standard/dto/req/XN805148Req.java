@@ -21,12 +21,24 @@ public class XN805148Req {
     @NotBlank
     private String userId;
 
+    // 类型
+    @NotBlank
+    private String logType;
+
     public String getUserId() {
         return userId;
     }
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getLogType() {
+        return logType;
+    }
+
+    public void setLogType(String logType) {
+        this.logType = logType;
     }
 
 }

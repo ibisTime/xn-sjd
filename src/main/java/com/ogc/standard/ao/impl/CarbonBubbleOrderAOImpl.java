@@ -119,7 +119,7 @@ public class CarbonBubbleOrderAOImpl implements ICarbonBubbleOrderAO {
         }
 
         accountBO.transAmount(sysTppAccount, userTppAccount, quantity,
-            EJourBizTypeUser.PRESENT.getCode(),
+            EJourBizTypeUser.ADOPT_DAY_BACK.getCode(),
             EJourBizTypePlat.ADOPT_DAY_BACK.getCode(),
             EJourBizTypeUser.ADOPT_DAY_BACK.getValue(),
             EJourBizTypePlat.ADOPT_DAY_BACK.getValue(), data.getCode());

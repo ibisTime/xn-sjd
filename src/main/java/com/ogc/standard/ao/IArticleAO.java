@@ -9,6 +9,7 @@ import com.ogc.standard.dto.req.XN629341Req;
 import com.ogc.standard.dto.req.XN629342Req;
 import com.ogc.standard.dto.req.XN629343Req;
 import com.ogc.standard.dto.req.XN629344Req;
+import com.ogc.standard.dto.req.XN629345Req;
 
 public interface IArticleAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
@@ -22,7 +23,7 @@ public interface IArticleAO {
     public int editArticle(XN629341Req req);
 
     public Paginable<Article> queryArticlePage(int start, int limit,
-            Article condition);
+            Article condition, XN629345Req req);
 
     public List<Article> queryArticleList(Article condition);
 

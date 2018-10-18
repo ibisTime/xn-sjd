@@ -18,6 +18,7 @@ import com.ogc.standard.dto.req.XN629341Req;
 import com.ogc.standard.dto.req.XN629342Req;
 import com.ogc.standard.dto.req.XN629343Req;
 import com.ogc.standard.dto.req.XN629344Req;
+import com.ogc.standard.dto.req.XN629345Req;
 import com.ogc.standard.enums.EAdoptOrderTreeStatus;
 import com.ogc.standard.enums.EArticleOpenLevel;
 import com.ogc.standard.enums.EArticleStatus;
@@ -156,8 +157,20 @@ public class ArticleAOImpl implements IArticleAO {
 
     @Override
     public Paginable<Article> queryArticlePage(int start, int limit,
-            Article condition) {
-        return articleBO.getPaginable(start, limit, condition);
+            Article condition, XN629345Req req) {
+        Paginable<Article> page = articleBO.getPaginable(start, limit,
+            condition);
+
+        // 查询好友的好友可见文章
+        if (StringUtils.isNotBlank(req.getQueryUserId())) {
+            List<Article> privateArticle = articleBO
+                .queryPrivateArticleList(req.getQueryUserId());
+            List<Article> list = page.getList();
+            list.addAll(privateArticle);
+            page.setList(list);
+        }
+
+        return page;
     }
 
     @Override

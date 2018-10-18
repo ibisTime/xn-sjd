@@ -126,6 +126,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
         withdrawBO.approveOrder(data, EWithdrawStatus.Approved_NO, approveUser,
             approveNote);
         Account dbAccount = accountBO.getAccount(data.getAccountNumber());
+
         // 释放冻结流水
         accountBO.unfrozenAmount(dbAccount, data.getAmount(),
             EJourBizTypeUser.WITHDRAW_UNFROZEN.getCode(), "取现失败退回",

@@ -152,7 +152,7 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
         }
         // 记录冻结流水
         String lastOrder = jourBO.addFrozenJour(dbAccount, EChannelType.NBZ,
-            null, refNo, bizType, bizNote, freezeAmount);
+            null, refNo, bizType, bizNote, freezeAmount.negate());
         BigDecimal nowFrozenAmount = dbAccount.getFrozenAmount()
             .add(freezeAmount);
         dbAccount.setAccountNumber(dbAccount.getAccountNumber());
@@ -176,7 +176,7 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
 
         // 记录流水
         String lastOrder = jourBO.addFrozenJour(dbAccount, EChannelType.NBZ,
-            null, refNo, bizType, bizNote, unfreezeAmount.negate());
+            null, refNo, bizType, bizNote, unfreezeAmount);
         dbAccount.setFrozenAmount(nowFrozenAmount);
         dbAccount.setLastOrder(lastOrder);
         accountDAO.unfrozenAmount(dbAccount);

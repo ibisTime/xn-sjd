@@ -40,6 +40,9 @@ public interface IUserAO {
     public String doLogin(String loginName, String loginPwd, String client,
             String location);
 
+    // 分类登录积分
+    public void doAssignLoginJF(String userId);
+
     // 修改定位信息
     public void doChangeLocation(XN805081Req req);
 

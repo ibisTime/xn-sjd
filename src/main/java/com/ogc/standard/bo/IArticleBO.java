@@ -18,10 +18,6 @@ public interface IArticleBO extends IPaginableBO<Article> {
 
     public int refreshArticle(Article data);
 
-    public List<Article> queryArticleList(Article condition);
-
-    public Article getArticle(String code);
-
     // 更新状态
     public void refreshStatus(String code, EArticleStatus status,
             String updater);
@@ -29,5 +25,12 @@ public interface IArticleBO extends IPaginableBO<Article> {
     // 上架文章
     public void putOn(String code, String location, String orderNo,
             String remark, String updater);
+
+    // 查询好友私密文章列表
+    public List<Article> queryPrivateArticleList(String userId);
+
+    public List<Article> queryArticleList(Article condition);
+
+    public Article getArticle(String code);
 
 }

@@ -79,6 +79,15 @@ public class Article extends ABaseDO {
     // 发布时间止
     private Date publishDatetimeEnd;
 
+    // 好友关系类型(1信任/2好友)
+    private String relationType;
+
+    // 好友关系状态(1 正常 0 假删除定时器删除 预留)
+    private String relationStatus;
+
+    // 查询人
+    private String queryUserId;
+
     public void setCode(String code) {
         this.code = code;
     }
@@ -245,6 +254,30 @@ public class Article extends ABaseDO {
 
     public void setPublishUserId(String publishUserId) {
         this.publishUserId = publishUserId;
+    }
+
+    public String getRelationType() {
+        return relationType;
+    }
+
+    public void setRelationType(String relationType) {
+        this.relationType = relationType;
+    }
+
+    public String getRelationStatus() {
+        return relationStatus;
+    }
+
+    public void setRelationStatus(String relationStatus) {
+        this.relationStatus = relationStatus;
+    }
+
+    public String getQueryUserId() {
+        return queryUserId;
+    }
+
+    public void setQueryUserId(String queryUserId) {
+        this.queryUserId = queryUserId;
     }
 
 }

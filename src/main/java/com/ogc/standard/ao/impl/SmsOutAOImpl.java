@@ -21,7 +21,8 @@ public class SmsOutAOImpl implements ISmsOutAO {
 
     @Override
     public void sendSmsCaptcha(String mobile, String bizType) {
-        if (ECaptchaType.C_REG.getCode().equals(bizType)) {
+        if (ECaptchaType.C_REG.getCode().equals(bizType)
+                || ECaptchaType.C_WX_RED.getCode().equals(bizType)) {
             userBO.isMobileExist(mobile);
         }
         smsOutBO.sendSmsCaptcha(mobile, bizType);

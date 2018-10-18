@@ -33,6 +33,8 @@ public class XN629305 extends AProcessor {
         condition.setType(req.getType());
         condition.setUserId(req.getUserId());
         condition.setAdoptUserId(req.getAdoptUserId());
+        condition.setQueryUserId(req.getQueryUserId());
+
         condition.setCreateDatetimeStart(DateUtil.strToDate(
             req.getCreateDatetimeStart(), DateUtil.FRONT_DATE_FORMAT_STRING));
         condition.setCreateDatetimeEnd(DateUtil.strToDate(
