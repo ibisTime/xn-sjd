@@ -20,6 +20,10 @@ public class XN629360Req extends BaseReq {
     @NotBlank
     private String toUserId;
 
+    // 认养权
+    @NotBlank
+    private String adoptTreeCode;
+
     public String getUserId() {
         return userId;
     }
@@ -34,6 +38,14 @@ public class XN629360Req extends BaseReq {
 
     public void setToUserId(String toUserId) {
         this.toUserId = toUserId;
+    }
+
+    public String getAdoptTreeCode() {
+        return adoptTreeCode;
+    }
+
+    public void setAdoptTreeCode(String adoptTreeCode) {
+        this.adoptTreeCode = adoptTreeCode;
     }
 
 }

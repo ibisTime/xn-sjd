@@ -3,6 +3,7 @@ package com.ogc.standard.ao.impl;
 import java.math.BigDecimal;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -103,6 +104,11 @@ public class ToolOrderAOImpl implements IToolOrderAO {
         if (toolOrder.getStatus().equals(EToolOrderStatus.USED.getCode())) { // （0未使用/1已使用）
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "当前道具已被使用！");
+        }
+        if (CollectionUtils.isNotEmpty(
+            toolUseRecordBO.queryTreeToolRecordList(toolOrder.getToolCode()))) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "已有相同道具正在生效中！");
         }
 
         // 验证用户

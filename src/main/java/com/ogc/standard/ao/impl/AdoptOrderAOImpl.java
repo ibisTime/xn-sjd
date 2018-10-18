@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.IAdoptOrderAO;
+import com.ogc.standard.ao.IUserAO;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IAdoptOrderBO;
 import com.ogc.standard.bo.IAdoptOrderTreeBO;
@@ -82,6 +83,9 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
     private IUserBO userBO;
 
     @Autowired
+    private IUserAO userAO;
+
+    @Autowired
     private ICompanyBO companyBO;
 
     @Autowired
@@ -111,11 +115,24 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
                 "认养产品不是已上架待认养状态，不能下单");
         }
 
-        int treeRemainCount = treeBO.getTreeCount(product.getCode(),
-            ETreeStatus.TO_ADOPT.getCode());
-        if (quantity > treeRemainCount) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "库存数量不足，不能下单");
+        // 专属和定向产品判断库存数量
+        if (ESellType.PERSON.getCode().equals(product.getSellType())
+                || ESellType.DIRECT.getCode().equals(product.getSellType())) {
+            int treeRemainCount = treeBO.getTreeCount(product.getCode(),
+                ETreeStatus.TO_ADOPT.getCode());
+            if (quantity > treeRemainCount) {
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                    "库存数量不足，不能下单");
+            }
+        }
+
+        // 捐赠产品判断募集时间
+        if (ESellType.DONATE.getCode().equals(product.getSellType())) {
+            if (!DateUtil.isNowBetween(product.getRaiseStartDatetime(),
+                product.getRaiseEndDatetime())) {
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                    "捐赠产品不在募集期，不能下单");
+            }
         }
 
         // 判断用户是否是定向用户
@@ -260,6 +277,9 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
         // 进行分销
         BigDecimal backJfAmount = distributionOrderBO.distribution(data,
             resultRes);
+
+        // 用户升级
+        userAO.upgradeUserLevel(data.getApplyUser());
 
         // 业务订单更改
         adoptOrderBO.payYueSuccess(data, resultRes, backJfAmount);

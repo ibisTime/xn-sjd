@@ -15,7 +15,8 @@ public interface IGiveCarbonBubbleRecordAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
     // 赠送碳泡泡
-    public String addGiveCarbonBubbleRecord(String userId, String toUserId);
+    public String addGiveCarbonBubbleRecord(String adoptTreeCode, String userId,
+            String toUserId);
 
     public Paginable<GiveCarbonBubbleRecord> queryGiveCarbonBubbleRecordPage(
             int start, int limit, GiveCarbonBubbleRecord condition);

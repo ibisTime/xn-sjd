@@ -527,7 +527,10 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     }
 
     @Override
-    public void refreshLevel(User data) {
+    public void refreshLevel(String userId, String level) {
+        User data = new User();
+        data.setUserId(userId);
+        data.setLevel(level);
         userDAO.updateLevel(data);
     }
 

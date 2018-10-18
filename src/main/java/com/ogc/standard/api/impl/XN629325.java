@@ -32,6 +32,7 @@ public class XN629325 extends AProcessor {
         condition.setAdoptTreeCode(req.getAdoptTreeCode());
         condition.setStatus(req.getStatus());
         condition.setClaimer(req.getClaimer());
+        condition.setToUser(req.getToUser());
         condition.setClaimDatetimeStart(DateUtil.strToDate(
             req.getClaimDatetimeStart(), DateUtil.DATA_TIME_PATTERN_1));
         condition.setClaimDatetimeEnd(DateUtil.strToDate(

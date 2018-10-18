@@ -114,7 +114,7 @@ public interface IUserBO extends IPaginableBO<User> {
 
     public void refreshPhoto(String userId, String photo);
 
-    public void refreshLevel(User data);
+    public void refreshLevel(String userId, String level);
 
     public List<User> queryUserList(String mobile, String kind,
             String systemCode);

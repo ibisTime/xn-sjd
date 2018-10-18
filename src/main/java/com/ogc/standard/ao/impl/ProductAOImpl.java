@@ -68,6 +68,8 @@ public class ProductAOImpl implements IProductAO {
         if (ECategoryStatus.PUT_OFF.getCode().equals(category.getStatus())) {
             throw new BizException("xn0000", "产品分类已下架，请重新选择！");
         }
+
+        // 定向产品
         if (ESellType.DIRECT.getCode().equals(req.getSellType())) {
             if (StringUtils.isBlank(req.getDirectType())
                     || StringUtils.isBlank(req.getDirectObject())) {
@@ -75,6 +77,21 @@ public class ProductAOImpl implements IProductAO {
                     "定向产品方向和针对对象不能为空");
             }
         }
+
+        // 捐赠产品
+        if (ESellType.DONATE.getCode().equals(req.getSellType())) {
+            if (null == req.getRaiseStartDatetime()
+                    && null == req.getRaiseEndDatetime()) {
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                    "捐赠产品募集开始和募集结束时间不能为空");
+            }
+
+            if (req.getTreeList().size() > 1) {
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                    "捐赠产品只能有一棵树");
+            }
+        }
+
         Product product = productBO.saveProduct(req);
 
         // 添加产品规格

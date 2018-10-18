@@ -10,10 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ogc.standard.ao.IGiftOrderAO;
+import com.ogc.standard.bo.IAdoptOrderTreeBO;
 import com.ogc.standard.bo.IGiftOrderBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.core.StringValidater;
+import com.ogc.standard.domain.AdoptOrderTree;
 import com.ogc.standard.domain.GiftOrder;
 import com.ogc.standard.dto.req.XN629323Req;
 import com.ogc.standard.enums.EGiftOrderStatus;
@@ -27,10 +29,17 @@ public class GiftOrderAOImpl implements IGiftOrderAO {
     @Autowired
     private IGiftOrderBO giftOrderBO;
 
+    @Autowired
+    private IAdoptOrderTreeBO adoptOrderTreeBO;
+
     @Override
     public String addGiftOrder(String adoptTreeCode, String name, String price,
             String listPic, String description, String invalidDatetime) {
+        AdoptOrderTree adoptOrderTree = adoptOrderTreeBO
+            .getAdoptOrderTree(adoptTreeCode);
+
         GiftOrder data = new GiftOrder();
+        data.setToUser(adoptOrderTree.getCurrentHolder());
         data.setAdoptTreeCode(adoptTreeCode);
         data.setName(name);
         data.setPrice(StringValidater.toLong(price));

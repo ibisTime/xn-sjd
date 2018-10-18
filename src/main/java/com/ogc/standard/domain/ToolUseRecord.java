@@ -17,6 +17,9 @@ public class ToolUseRecord extends ABaseDO {
     // 编号
     private String code;
 
+    // 道具编号
+    private String toolCode;
+
     // 道具订单编号
     private String toolOrderCode;
 
@@ -135,6 +138,14 @@ public class ToolUseRecord extends ABaseDO {
 
     public void setToolType(String toolType) {
         this.toolType = toolType;
+    }
+
+    public String getToolCode() {
+        return toolCode;
+    }
+
+    public void setToolCode(String toolCode) {
+        this.toolCode = toolCode;
     }
 
 }

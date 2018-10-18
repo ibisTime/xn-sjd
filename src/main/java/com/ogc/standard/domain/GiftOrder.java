@@ -17,6 +17,9 @@ public class GiftOrder extends ABaseDO {
     // 编号
     private String code;
 
+    // 被赠送人
+    private String toUser;
+
     // 认养权编号
     private String adoptTreeCode;
 
@@ -243,6 +246,14 @@ public class GiftOrder extends ABaseDO {
 
     public void setArea(String area) {
         this.area = area;
+    }
+
+    public String getToUser() {
+        return toUser;
+    }
+
+    public void setToUser(String toUser) {
+        this.toUser = toUser;
     }
 
 }

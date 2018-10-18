@@ -117,4 +117,17 @@ public class SysConstants {
 
     public static final String INVITE_USER = "INVITE_USER";// 邀请好友注册
 
+    // 用户等级
+    public static final String USER_LEVEL_0 = "USER_LEVEL_0";// 初探翠林
+
+    public static final String USER_LEVEL_1 = "USER_LEVEL_1";// 护树新秀
+
+    public static final String USER_LEVEL_2 = "USER_LEVEL_2";// 护树高手
+
+    public static final String USER_LEVEL_3 = "USER_LEVEL_3";// 育树林丰
+
+    public static final String USER_LEVEL_4 = "USER_LEVEL_4";// 愈林诗人
+
+    public static final String USER_LEVEL_5 = "USER_LEVEL_5";// 爱林天使
+
 }

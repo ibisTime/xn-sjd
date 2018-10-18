@@ -1108,6 +1108,54 @@ public class UserAOImpl implements IUserAO {
     }
 
     @Override
+    public void upgradeUserLevel(String userId) {
+
+        // 获取用户等级配置
+        Map<String, String> configMap = sysConfigBO
+            .getConfigsMap(ESysConfigType.USER_LEVEL.getCode());
+        BigDecimal userLevel0 = new BigDecimal(
+            configMap.get(SysConstants.USER_LEVEL_0));
+        BigDecimal userLevel1 = new BigDecimal(
+            configMap.get(SysConstants.USER_LEVEL_1));
+        BigDecimal userLevel2 = new BigDecimal(
+            configMap.get(SysConstants.USER_LEVEL_2));
+        BigDecimal userLevel3 = new BigDecimal(
+            configMap.get(SysConstants.USER_LEVEL_3));
+        BigDecimal userLevel4 = new BigDecimal(
+            configMap.get(SysConstants.USER_LEVEL_4));
+        BigDecimal userLevel5 = new BigDecimal(
+            configMap.get(SysConstants.USER_LEVEL_5));
+
+        // 判断用户等级
+        String userLevel = null;
+        Account userJFAccount = accountBO.getAccountByUser(userId,
+            ECurrency.JF.getCode());
+        BigDecimal jfAmount = userJFAccount.getTotalAmount();
+        jfAmount = AmountUtil.div(jfAmount, 1000L);
+
+        if (jfAmount.compareTo(userLevel5) != -1) {
+            userLevel = EUserLevel.FIVE.getCode();
+        } else if (jfAmount.compareTo(userLevel4) != -1) {
+            userLevel = EUserLevel.FOUR.getCode();
+        } else if (jfAmount.compareTo(userLevel3) != -1) {
+            userLevel = EUserLevel.THREE.getCode();
+        } else if (jfAmount.compareTo(userLevel2) != -1) {
+            userLevel = EUserLevel.TWO.getCode();
+        } else if (jfAmount.compareTo(userLevel1) != -1) {
+            userLevel = EUserLevel.ONE.getCode();
+        } else if (jfAmount.compareTo(userLevel0) != -1) {
+            userLevel = EUserLevel.ZERO.getCode();
+        }
+
+        userBO.refreshLevel(userId, userLevel);
+    }
+
+    @Override
+    public User getUserByMobile(String mobile) {
+        return userBO.getUserByMobile(mobile);
+    }
+
+    @Override
     public Paginable<User> queryFirstRefPage(XN802399Req req, int start,
             int limit) {
         User user = userBO.getUser(req.getUserId());

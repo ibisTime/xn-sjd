@@ -256,7 +256,6 @@
 		status = #{status}
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
-		,remark = #{remark}
 		WHERE code = #{code}
 	</update>
 	
@@ -268,7 +267,6 @@
 		,order_no = #{orderNo}
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
-		,remark = #{remark}
 		WHERE code = #{code}
 	</update>
 	

@@ -378,9 +378,21 @@ public class DateUtil {
         return (Date) currentDate.getTime().clone();
     }
 
+    public static Boolean isNowBetween(Date startDate, Date endDate) {
+        Boolean isBetween = false;
+        Date now = new Date();
+
+        if (startDate.before(now) && now.before(endDate)) {
+            isBetween = true;
+        }
+
+        return isBetween;
+    }
+
     public static void main(String[] args) {
-        System.out.println(yearsBetween(
-            strToDate("2016-09-01", FRONT_DATE_FORMAT_STRING), new Date()));
+        System.out.println(
+            isNowBetween(strToDate("2016-09-01", FRONT_DATE_FORMAT_STRING),
+                strToDate("2018-01-01", FRONT_DATE_FORMAT_STRING)));
     }
 
     /**

@@ -42,16 +42,16 @@ public class ToolUseRecordBOImpl extends PaginableBOImpl<ToolUseRecord>
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.TOOL_USE_RECORD.getCode());
         toolUseRecord.setCode(code);
+        toolUseRecord.setToolCode(toolOrder.getToolCode());
         toolUseRecord.setToolOrderCode(toolOrder.getCode());
         toolUseRecord.setAdoptTreeCode(adoptOrderTree.getCode());
         toolUseRecord.setToolType(tool.getType());
+
         toolUseRecord.setStatus(EToolUseRecordStatus.ACTIVE.getCode());
         toolUseRecord.setUserId(user.getUserId());
-
-        Date date = new Date();
-        toolUseRecord.setCreateDatetime(date);
-        toolUseRecord.setInvalidDatetime(
-            DateUtil.getRelativeDateOfHour(date, toolOrder.getValidityTerm()));
+        toolUseRecord.setCreateDatetime(new Date());
+        toolUseRecord.setInvalidDatetime(DateUtil
+            .getRelativeDateOfHour(new Date(), toolOrder.getValidityTerm()));
 
         toolUseRecordDAO.insert(toolUseRecord);
         return code;
@@ -63,6 +63,14 @@ public class ToolUseRecordBOImpl extends PaginableBOImpl<ToolUseRecord>
         ToolUseRecord condition = new ToolUseRecord();
         condition.setAdoptTreeCode(adoptTreeCode);
         condition.setToolType(toolType);
+        condition.setStatus(EToolUseRecordStatus.ACTIVE.getCode());
+        return toolUseRecordDAO.selectList(condition);
+    }
+
+    @Override
+    public List<ToolUseRecord> queryTreeToolRecordList(String toolCode) {
+        ToolUseRecord condition = new ToolUseRecord();
+        condition.setToolCode(toolCode);
         condition.setStatus(EToolUseRecordStatus.ACTIVE.getCode());
         return toolUseRecordDAO.selectList(condition);
     }

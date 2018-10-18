@@ -32,6 +32,9 @@ public class XN805086 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         userAO.bindEmail(req.getCaptcha(), req.getEmail(), req.getUserId());
+
+        userAO.upgradeUserLevel(req.getUserId());
+
         return new BooleanRes(true);
     }
 

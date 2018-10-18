@@ -85,8 +85,13 @@ public class BizLogAOImpl implements IBizLogAO {
     }
 
     private void initBizLog(BizLog bizLog) {
-        User user = userBO.getUser(bizLog.getUserId());
+        // 操作人
+        User user = userBO.getUserUnCheck(bizLog.getUserId());
         bizLog.setUserInfo(user);
+
+        // 认养人
+        User adoptUser = userBO.getUserUnCheck(bizLog.getAdoptUserId());
+        bizLog.setAdoptUserInfo(adoptUser);
     }
 
 }

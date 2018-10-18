@@ -56,6 +56,9 @@ public class BizLog extends ABaseDO {
     // 操作人信息
     private User userInfo;
 
+    // 认养人信息
+    private User adoptUserInfo;
+
     public Integer getId() {
         return id;
     }
@@ -158,6 +161,14 @@ public class BizLog extends ABaseDO {
 
     public void setUserInfo(User userInfo) {
         this.userInfo = userInfo;
+    }
+
+    public User getAdoptUserInfo() {
+        return adoptUserInfo;
+    }
+
+    public void setAdoptUserInfo(User adoptUserInfo) {
+        this.adoptUserInfo = adoptUserInfo;
     }
 
 }

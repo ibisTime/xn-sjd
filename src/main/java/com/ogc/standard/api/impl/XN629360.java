@@ -24,8 +24,8 @@ public class XN629360 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return new PKCodeRes(giveCarbonBubbleRecordAO
-            .addGiveCarbonBubbleRecord(req.getUserId(), req.getToUserId()));
+        return new PKCodeRes(giveCarbonBubbleRecordAO.addGiveCarbonBubbleRecord(
+            req.getAdoptTreeCode(), req.getUserId(), req.getToUserId()));
     }
 
     @Override

@@ -24,6 +24,9 @@ public class XN805070 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         userAO.doModifyUserInfo(req);
+
+        userAO.upgradeUserLevel(req.getUserId());
+
         return new BooleanRes(true);
     }
 

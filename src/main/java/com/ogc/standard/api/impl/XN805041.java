@@ -1,11 +1,15 @@
 package com.ogc.standard.api.impl;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.ogc.standard.ao.IUserAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.ObjValidater;
+import com.ogc.standard.domain.User;
 import com.ogc.standard.dto.req.XN805041Req;
 import com.ogc.standard.dto.res.PKCodeRes;
+import com.ogc.standard.enums.EUserRefereeType;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
@@ -30,6 +34,18 @@ public class XN805041 extends AProcessor {
             userId = userAO.doRegisterByMobile(req);
             userAO.doAssignRegistJf(userId, req.getUserReferee(),
                 req.getUserRefereeType());
+
+            // 注册用户升级
+            userAO.upgradeUserLevel(userId);
+
+            // 推荐用户升级
+            if (StringUtils.isNotBlank(req.getUserReferee())
+                    && EUserRefereeType.USER.getCode()
+                        .equals(req.getUserRefereeType())) {
+                User refereeUser = userAO.getUserByMobile(req.getUserReferee());
+
+                userAO.upgradeUserLevel(refereeUser.getUserId());
+            }
         }
 
         return new PKCodeRes(userId);

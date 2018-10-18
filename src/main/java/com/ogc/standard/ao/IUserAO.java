@@ -116,6 +116,11 @@ public interface IUserAO {
     // 绑定邮箱
     public void bindEmail(String captcha, String email, String userId);
 
+    // 更新用户等级
+    public void upgradeUserLevel(String userId);
+
+    public User getUserByMobile(String mobile);
+
     // 直退用户查询
     public Paginable<User> queryFirstRefPage(XN802399Req req, int start,
             int limit);

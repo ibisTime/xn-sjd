@@ -4,6 +4,7 @@
 <mapper namespace="com.ogc.standard.dao.IGiftOrderDAO">
 	<resultMap id="giftOrder_DB_Result" type="giftOrder">
 		<result column="code" property="code" />
+		<result column="to_user" property="toUser" />
 		<result column="adopt_tree_code" property="adoptTreeCode" />
 		<result column="name" property="name" />
 		<result column="price" property="price" />
@@ -28,6 +29,9 @@
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
+			</if>
+			<if test="toUser != null and toUser != '' ">
+				AND t.to_user = #{toUser}
 			</if>
 			<if test="adoptTreeCode != null and adoptTreeCode != '' ">
 				AND t.adopt_tree_code = #{adoptTreeCode}
@@ -54,6 +58,7 @@
 	<select id="select_giftOrder" parameterType="giftOrder" resultMap="giftOrder_DB_Result">
 		SELECT
 		t.code
+		,t.to_user
 		,t.adopt_tree_code
 		,t.name
 		,t.price
@@ -93,6 +98,7 @@
 		INSERT INTO
 		tsj_gift_order(
 		code
+		,to_user
 		,adopt_tree_code
 		,name
 		,price
@@ -111,6 +117,7 @@
 		)
 		VALUES(
 		#{code}
+		,#{toUser}
 		,#{adoptTreeCode}
 		,#{name}
 		,#{price}

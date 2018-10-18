@@ -11,7 +11,7 @@ public class XN805051Req {
     // 开放编号（必填）
     private String code;
 
-    // 类型(必填 微信h5=3 微信APP=4)
+    // 类型(必填 微信h5=5)
     private String type;
 
     // 是否强制绑定手机号

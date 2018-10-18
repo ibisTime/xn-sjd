@@ -602,8 +602,8 @@ INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`r
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('DIST_AGENT_RATE','DIST_AGENT3_RATE','0.8','admin',now(),'三级代理分成比例');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('DIST_AGENT_RATE','DIST_AGENT4_RATE','0.7','admin',now(),'四级代理分成比例');
 
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('weight','WEIGHT_RATE1','0.5','admin',now(),'好友排行权重1');
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('weight','WEIGHT_RATE2','0.4','admin',now(),'好友排行权重2');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('weight','WEIGHT_RATE1','0.9','admin',now(),'碳泡泡历史总额权重');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('weight','WEIGHT_RATE2','0.1','admin',now(),'认养历史总额权重');
 
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('WITH','USERMONTIMES','5','',now(),'每月取现次数');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('WITH','USERQXBS','5','',now(),'取现金额倍数');
@@ -630,8 +630,8 @@ INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`r
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('JF_RULE','CONTINUE_LOGIN_RATE','1','',now(),'连续登录返积分比例');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('JF_RULE','INVITE_USER','50','',now(),'邀请好友注册');
 
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('wx_h5','wx_h5_access_key','wxcc167aa0ba8adb20','admin',now(),NULL);
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('wx_h5','wx_h5_secret_key','33005a35e5e19b08b07e9d52c74400ff','admin',now(),NULL);
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('wx_h5','wx_h5_access_key','wxb0df94ba24824c3e','admin',now(),NULL);
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('wx_h5','wx_h5_secret_key','3a9f4e501a7d8d43981a68d0978c58d8','admin',now(),NULL);
 
 /*
 -- Query: SELECT bank_code,bank_name,channel_type,status,channel_bank,max_order,order_amount,day_amount,month_amount,remark FROM tsys_channel_bank
@@ -661,7 +661,7 @@ INSERT INTO `tstd_account` (`account_number`,`user_id`,`currency`,`type`,`status
 INSERT INTO `tstd_account` (`account_number`,`user_id`,`currency`,`type`,`status`,`amount`,`total_amount`,`frozen_amount`,`md5`,`in_amount`,`out_amount`,`create_datetime`,`last_order`) VALUES ('SYS_ACOUNT_TPP','SYS_USER','TPP','P','0',0,0,0,'b99e0407fedc3d160f73fec8d1fa9a0c',0,0,'2018-10-05 15:30:35',NULL);
 INSERT INTO `tstd_account` (`account_number`,`user_id`,`currency`,`type`,`status`,`amount`,`total_amount`,`frozen_amount`,`md5`,`in_amount`,`out_amount`,`create_datetime`,`last_order`) VALUES ('SYS_ACOUNT_WEIXIN_TG','SYS_USER','CNY','P','0',0,0,0,'811a1aeb3577b3108caa1ff46244f333',0,0,'2018-10-05 15:30:35',NULL);
 
-INSERT INTO `tb_tool` (`code`,`name`,`type`,`pic`,`price`,`description`,`validity_term`,`status`,`order_no`,`updater`,`update_datetime`,`remark`) VALUES ('T1538479526','砖石罩','0','',1000.00,'砖石保护罩',12,'1','1','admin',now(),NULL);
+INSERT INTO `tb_tool` (`code`,`name`,`type`,`pic`,`price`,`description`,`validity_term`,`status`,`order_no`,`updater`,`update_datetime`,`remark`) VALUES ('T1538479526','钻石罩','0','',1000.00,'钻石保护罩',12,'1','1','admin',now(),NULL);
 INSERT INTO `tb_tool` (`code`,`name`,`type`,`pic`,`price`,`description`,`validity_term`,`status`,`order_no`,`updater`,`update_datetime`,`remark`) VALUES ('T1538479527','黄金罩','0','',5000.00,'黄金保护罩',12,'1','2','admin',now(),NULL);
 INSERT INTO `tb_tool` (`code`,`name`,`type`,`pic`,`price`,`description`,`validity_term`,`status`,`order_no`,`updater`,`update_datetime`,`remark`) VALUES ('T1538479528','一键收取','1','',100.00,'一键全收取',12,'1','3','admin',now(),NULL);
 

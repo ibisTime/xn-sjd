@@ -25,6 +25,9 @@ public class XN629327Req extends AListReq {
     // 认领时间止
     private String claimDatetimeEnd;
 
+    // 被赠送人
+    private String toUser;
+
     public String getAdoptTreeCode() {
         return adoptTreeCode;
     }
@@ -63,6 +66,14 @@ public class XN629327Req extends AListReq {
 
     public void setClaimDatetimeEnd(String claimDatetimeEnd) {
         this.claimDatetimeEnd = claimDatetimeEnd;
+    }
+
+    public String getToUser() {
+        return toUser;
+    }
+
+    public void setToUser(String toUser) {
+        this.toUser = toUser;
     }
 
 }

@@ -16,6 +16,7 @@ import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IAdoptOrderTreeBO;
 import com.ogc.standard.bo.IBizLogBO;
 import com.ogc.standard.bo.ICarbonBubbleOrderBO;
+import com.ogc.standard.bo.IToolUseRecordBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.DateUtil;
@@ -29,6 +30,7 @@ import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EJourBizTypePlat;
 import com.ogc.standard.enums.EJourBizTypeUser;
 import com.ogc.standard.enums.ESystemAccount;
+import com.ogc.standard.enums.EToolType;
 import com.ogc.standard.exception.BizException;
 
 @Service
@@ -50,6 +52,9 @@ public class CarbonBubbleOrderAOImpl implements ICarbonBubbleOrderAO {
 
     @Autowired
     private IAdoptOrderTreeBO adoptOrderTreeBO;
+
+    @Autowired
+    private IToolUseRecordBO toolUseRecordBO;
 
     public void expireCarbonBubble() {
         logger.info("***************开始扫描已过期碳泡泡***************");
@@ -89,6 +94,14 @@ public class CarbonBubbleOrderAOImpl implements ICarbonBubbleOrderAO {
         if (ECarbonBubbleOrderStatus.INVALID.getCode()
             .equals(data.getStatus())) {
             throw new BizException("xn0000", "碳泡泡已过期，不能收取");
+        }
+
+        // 正在使用的道具
+        if (CollectionUtils.isNotEmpty(toolUseRecordBO.queryTreeToolRecordList(
+            data.getAdoptTreeCode(), EToolType.SHIELD.getCode()))) {
+            if (!data.getAdoptUserId().equals(collector)) {
+                throw new BizException("xn0000", "正在使用保护罩，碳泡泡不能收取");
+            }
         }
 
         // 更改碳泡泡产生订单状态

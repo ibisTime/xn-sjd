@@ -49,7 +49,8 @@ public class GiveCarbonBubbleRecordAOImpl implements IGiveCarbonBubbleRecordAO {
 
     @Override
     @Transactional
-    public String addGiveCarbonBubbleRecord(String userId, String toUserId) {
+    public String addGiveCarbonBubbleRecord(String adoptTreeCode, String userId,
+            String toUserId) {
         Map<String, String> configMap = sysConfigBO
             .getConfigsMap(ESysConfigType.TPP_RULE.getCode());
         BigDecimal quantity = new BigDecimal(
@@ -76,7 +77,7 @@ public class GiveCarbonBubbleRecordAOImpl implements IGiveCarbonBubbleRecordAO {
             EJourBizTypePlat.PRESENT.getValue(), recordCode);
 
         // 添加日志
-        bizLogBO.gatherCarbonBubble(null, toUserId, quantity, userId,
+        bizLogBO.gatherCarbonBubble(adoptTreeCode, toUserId, quantity, userId,
             EBizLogType.GIVE.getCode());
 
         return recordCode;

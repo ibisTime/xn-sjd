@@ -34,6 +34,9 @@ public class XN805060 extends AProcessor {
     public Object doBusiness() throws BizException {
         userAO.doBindMobile(req.getIsSendSms(), req.getMobile(),
             req.getSmsCaptcha(), req.getUserId());
+
+        userAO.upgradeUserLevel(req.getUserId());
+
         return new BooleanRes(true);
     }
 

@@ -58,6 +58,7 @@ CREATE TABLE `tb_tool_order` (
 DROP TABLE IF EXISTS `tb_tool_use_record`;
 CREATE TABLE `tb_tool_use_record` (
   `code` varchar(32) NOT NULL COMMENT '编号',
+  `tool_code` varchar(32) DEFAULT NULL COMMENT '道具编号',
   `tool_order_code` varchar(32) DEFAULT NULL COMMENT '道具订单编号',
   `adopt_tree_code` varchar(32) DEFAULT NULL COMMENT '认养权编号',
   `tool_type` varchar(4) DEFAULT NULL COMMENT '道具类型（0保护罩/1一件收取）',
@@ -203,6 +204,7 @@ CREATE TABLE `tsj_carbon_bubble_order` (
 DROP TABLE IF EXISTS `tsj_gift_order`;
 CREATE TABLE `tsj_gift_order` (
   `code` varchar(32) NOT NULL COMMENT '编号',
+  `to_user` varchar(32) DEFAULT NULL COMMENT '被赠送人' ,
   `adopt_tree_code` varchar(32) DEFAULT NULL COMMENT '认养权编号',
   `name` varchar(255) DEFAULT NULL COMMENT '礼物名称',
   `price` decimal(64,0) DEFAULT NULL COMMENT '礼物价格',

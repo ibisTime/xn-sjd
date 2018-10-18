@@ -11,7 +11,7 @@ import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
 
 /**
- * 普通登录
+ * 微信登录
  * @author: dl 
  * @since: 2018年8月20日 下午5:44:39 
  * @history:
