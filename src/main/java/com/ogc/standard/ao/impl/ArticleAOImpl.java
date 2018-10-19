@@ -6,13 +6,16 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.IArticleAO;
 import com.ogc.standard.bo.IAdoptOrderTreeBO;
 import com.ogc.standard.bo.IArticleBO;
+import com.ogc.standard.bo.ITreeBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.AdoptOrderTree;
 import com.ogc.standard.domain.Article;
+import com.ogc.standard.domain.Tree;
 import com.ogc.standard.dto.req.XN629340Req;
 import com.ogc.standard.dto.req.XN629341Req;
 import com.ogc.standard.dto.req.XN629342Req;
@@ -36,7 +39,11 @@ public class ArticleAOImpl implements IArticleAO {
     @Autowired
     private IAdoptOrderTreeBO adoptOrderTreeBO;
 
+    @Autowired
+    private ITreeBO treeBO;
+
     @Override
+    @Transactional
     public String addArticle(XN629340Req req) {
         if (StringUtils.isNotBlank(req.getAdoptTreeCode())) {
             AdoptOrderTree adoptOrderTree = adoptOrderTreeBO
@@ -70,7 +77,20 @@ public class ArticleAOImpl implements IArticleAO {
 
         }
 
-        return articleBO.saveArticle(req.getAdoptTreeCode(), req.getTreeNo(),
+        // 更新树木文章数量
+        String treeNumber = null;
+        if (StringUtils.isNotBlank(req.getTreeNo())) {
+            treeNumber = req.getTreeNo();
+        }
+        if (StringUtils.isNotBlank(req.getAdoptTreeCode())) {
+            AdoptOrderTree adoptOrderTree = adoptOrderTreeBO
+                .getAdoptOrderTree(req.getAdoptTreeCode());
+            treeNumber = adoptOrderTree.getTreeNumber();
+        }
+        Tree tree = treeBO.getTreeByTreeNumber(treeNumber);
+        treeBO.refreshArticleCount(req.getTreeNo(), tree.getArticleCount() + 1);
+
+        return articleBO.saveArticle(req.getAdoptTreeCode(), treeNumber,
             req.getType(), openLevel, req.getTitle(), req.getContent(),
             req.getPhoto(), status, req.getPublishUserId(), req.getUpdater());
     }
@@ -148,10 +168,17 @@ public class ArticleAOImpl implements IArticleAO {
     }
 
     @Override
+    @Transactional
     public int dropArticle(String code) {
-        if (!articleBO.isArticleExist(code)) {
-            throw new BizException("xn0000", "记录编号不存在");
+        Article article = articleBO.getArticle(code);
+
+        // 更新树木文章数量
+        if (null != article.getTreeNo()) {
+            Tree tree = treeBO.getTreeByTreeNumber(article.getTreeNo());
+            treeBO.refreshArticleCount(article.getTreeNo(),
+                tree.getArticleCount() - 1);
         }
+
         return articleBO.removeArticle(code);
     }
 

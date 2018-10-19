@@ -121,9 +121,10 @@ public class DistributionOrderBOImpl implements IDistributionOrderBO {
         // C端用户返积分
         accountBO.transAmount(ESysUser.SYS_USER.getCode(),
             ECurrency.JF.getCode(), data.getApplyUser(), ECurrency.JF.getCode(),
-            jfAwardAmount, EJourBizTypeUser.ADOPT.getCode(),
-            EJourBizTypePlat.ADOPT.getCode(), EJourBizTypeUser.ADOPT.getValue(),
-            EJourBizTypePlat.ADOPT.getValue(), data.getCode());
+            jfAwardAmount, EJourBizTypeUser.ADOPT_PAY_BACK.getCode(),
+            EJourBizTypePlat.ADOPT_PAY_BACK.getCode(),
+            EJourBizTypeUser.ADOPT_PAY_BACK.getValue(),
+            EJourBizTypePlat.ADOPT_PAY_BACK.getValue(), data.getCode());
 
         return jfAwardAmount;
     }

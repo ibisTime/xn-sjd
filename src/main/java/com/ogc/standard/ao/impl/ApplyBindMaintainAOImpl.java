@@ -8,11 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ogc.standard.ao.IApplyBindMaintainAO;
+import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IApplyBindMaintainBO;
 import com.ogc.standard.bo.ICompanyBO;
 import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.ITreeBO;
 import com.ogc.standard.bo.base.Paginable;
+import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.ApplyBindMaintain;
 import com.ogc.standard.domain.Company;
 import com.ogc.standard.domain.SYSUser;
@@ -20,6 +22,7 @@ import com.ogc.standard.dto.req.XN629600Req;
 import com.ogc.standard.dto.req.XN629602Req;
 import com.ogc.standard.enums.EApplyBindMaintainStatus;
 import com.ogc.standard.enums.EBoolean;
+import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
 
@@ -37,6 +40,9 @@ public class ApplyBindMaintainAOImpl implements IApplyBindMaintainAO {
 
     @Autowired
     private ITreeBO treeBO;
+
+    @Autowired
+    private IAccountBO accountBO;
 
     @Override
     public String applyBindMaintain(XN629600Req req) {
@@ -139,11 +145,16 @@ public class ApplyBindMaintainAOImpl implements IApplyBindMaintainAO {
         if (null != updater) {
             updaterName = updater.getLoginName();
             if (StringUtils.isNotBlank(updater.getRealName())) {
-                updaterName = updaterName.concat("-").concat(updaterName);
+                updaterName = updater.getRealName().concat("-")
+                    .concat(updaterName);
             }
         }
         data.setUpdaterName(updaterName);
 
+        // 养护方人民币账户
+        Account maintainCnyAccount = accountBO
+            .getAccountByUser(data.getMaintainId(), ECurrency.CNY.getCode());
+        data.setMaintainCnyAccount(maintainCnyAccount);
     }
 
 }

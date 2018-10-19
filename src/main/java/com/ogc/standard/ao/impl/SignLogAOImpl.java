@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,11 +14,13 @@ import com.ogc.standard.ao.ISignLogAO;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.ISYSConfigBO;
 import com.ogc.standard.bo.ISignLogBO;
+import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.AmountUtil;
 import com.ogc.standard.common.SysConstants;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.SignLog;
+import com.ogc.standard.domain.User;
 import com.ogc.standard.dto.req.XN805140Req;
 import com.ogc.standard.dto.res.XN805140Res;
 import com.ogc.standard.enums.ECurrency;
@@ -39,6 +43,9 @@ public class SignLogAOImpl implements ISignLogAO {
 
     @Autowired
     private ISYSConfigBO sysConfigBO;
+
+    @Autowired
+    private IUserBO userBO;
 
     @Override
     @Transactional
@@ -102,7 +109,18 @@ public class SignLogAOImpl implements ISignLogAO {
     @Override
     public Paginable<SignLog> querySignLogPage(int start, int limit,
             SignLog condition) {
-        return signLogBO.getPaginable(start, limit, condition);
+        Paginable<SignLog> page = signLogBO.getPaginable(start, limit,
+            condition);
+
+        if (null != page && CollectionUtils.isNotEmpty(page.getList())) {
+            for (SignLog signLog : page.getList()) {
+
+                init(signLog);
+
+            }
+        }
+
+        return page;
     }
 
     @Override
@@ -145,4 +163,17 @@ public class SignLogAOImpl implements ISignLogAO {
         }
     }
 
+    private void init(SignLog signLog) {
+        // 签到人
+        String userName = null;
+        User user = userBO.getUserUnCheck(signLog.getUserId());
+        if (null != user) {
+            userName = user.getMobile();
+            if (StringUtils.isNotBlank(user.getRealName())) {
+                userName = user.getRealName().concat("-").concat(userName);
+            }
+        }
+
+        signLog.setUserName(userName);
+    }
 }

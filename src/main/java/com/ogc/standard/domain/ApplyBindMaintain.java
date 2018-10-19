@@ -47,6 +47,9 @@ public class ApplyBindMaintain extends ABaseDO {
     // 产权方古树数量
     private long ownerTreeCount;
 
+    // 养护方人民币账户
+    private Account maintainCnyAccount;
+
     public void setCode(String code) {
         this.code = code;
     }
@@ -133,6 +136,14 @@ public class ApplyBindMaintain extends ABaseDO {
 
     public void setOwnerTreeCount(long ownerTreeCount) {
         this.ownerTreeCount = ownerTreeCount;
+    }
+
+    public Account getMaintainCnyAccount() {
+        return maintainCnyAccount;
+    }
+
+    public void setMaintainCnyAccount(Account maintainCnyAccount) {
+        this.maintainCnyAccount = maintainCnyAccount;
     }
 
 }

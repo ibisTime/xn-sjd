@@ -51,4 +51,7 @@ public interface IJourBO extends IPaginableBO<Jour> {
             String accountNumber, String dateStart, String dateEnd);
 
     public BigDecimal getTotalAmount(Jour condition);
+
+    // 统计碳泡泡/积分历史发放/回收总额
+    public BigDecimal getHistoryAmount(String accountNumber, String direction);
 }

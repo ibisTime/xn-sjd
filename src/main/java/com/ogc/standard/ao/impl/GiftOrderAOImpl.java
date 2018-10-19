@@ -12,11 +12,13 @@ import org.springframework.stereotype.Service;
 import com.ogc.standard.ao.IGiftOrderAO;
 import com.ogc.standard.bo.IAdoptOrderTreeBO;
 import com.ogc.standard.bo.IGiftOrderBO;
+import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.domain.AdoptOrderTree;
 import com.ogc.standard.domain.GiftOrder;
+import com.ogc.standard.domain.User;
 import com.ogc.standard.dto.req.XN629323Req;
 import com.ogc.standard.enums.EGiftOrderStatus;
 import com.ogc.standard.exception.BizException;
@@ -31,6 +33,9 @@ public class GiftOrderAOImpl implements IGiftOrderAO {
 
     @Autowired
     private IAdoptOrderTreeBO adoptOrderTreeBO;
+
+    @Autowired
+    private IUserBO userBO;
 
     @Override
     public String addGiftOrder(String adoptTreeCode, String name, String price,
@@ -119,7 +124,19 @@ public class GiftOrderAOImpl implements IGiftOrderAO {
     @Override
     public Paginable<GiftOrder> queryGiftOrderPage(int start, int limit,
             GiftOrder condition) {
-        return giftOrderBO.getPaginable(start, limit, condition);
+        Paginable<GiftOrder> page = giftOrderBO.getPaginable(start, limit,
+            condition);
+
+        if (null != page && CollectionUtils.isNotEmpty(page.getList())) {
+            for (GiftOrder giftOrder : page.getList()) {
+
+                init(giftOrder);
+
+            }
+
+        }
+
+        return page;
     }
 
     @Override
@@ -129,7 +146,25 @@ public class GiftOrderAOImpl implements IGiftOrderAO {
 
     @Override
     public GiftOrder getGiftOrder(String code) {
-        return giftOrderBO.getGiftOrder(code);
+        GiftOrder giftOrder = giftOrderBO.getGiftOrder(code);
+
+        init(giftOrder);
+
+        return giftOrder;
+    }
+
+    private void init(GiftOrder giftOrder) {
+        // 认领人
+        String claimerName = null;
+        User user = userBO.getUserUnCheck(giftOrder.getClaimer());
+        if (null != user) {
+            claimerName = user.getMobile();
+            if (null != user.getRealName()) {
+                claimerName = user.getRealName().concat("-")
+                    .concat(claimerName);
+            }
+        }
+        giftOrder.setClaimerName(claimerName);
     }
 
 }

@@ -74,6 +74,15 @@ public class Account extends ABaseDO {
     // 手机号模糊查
     private String mobileForQuery;
 
+    // 历史总发放额(积分/碳泡泡)
+    private BigDecimal historyOutAmount;
+
+    // 历史总回收额(积分/碳泡泡)
+    private BigDecimal historyInAmount;
+
+    // 真实姓名模糊查
+    private String relaNameForQuery;
+
     public BigDecimal getTotalAmount() {
         return totalAmount;
     }
@@ -224,6 +233,30 @@ public class Account extends ABaseDO {
 
     public void setMobileForQuery(String mobileForQuery) {
         this.mobileForQuery = mobileForQuery;
+    }
+
+    public BigDecimal getHistoryOutAmount() {
+        return historyOutAmount;
+    }
+
+    public void setHistoryOutAmount(BigDecimal historyOutAmount) {
+        this.historyOutAmount = historyOutAmount;
+    }
+
+    public BigDecimal getHistoryInAmount() {
+        return historyInAmount;
+    }
+
+    public void setHistoryInAmount(BigDecimal historyInAmount) {
+        this.historyInAmount = historyInAmount;
+    }
+
+    public String getRelaNameForQuery() {
+        return relaNameForQuery;
+    }
+
+    public void setRelaNameForQuery(String relaNameForQuery) {
+        this.relaNameForQuery = relaNameForQuery;
     }
 
 }

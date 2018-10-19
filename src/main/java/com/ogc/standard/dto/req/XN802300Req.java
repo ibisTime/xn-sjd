@@ -35,6 +35,9 @@ public class XN802300Req extends APageReq {
     // 手机号模糊查
     private String mobileForQuery;
 
+    // 真实姓名模糊查
+    private String relaNameForQuery;
+
     public String getUserId() {
         return userId;
     }
@@ -97,6 +100,14 @@ public class XN802300Req extends APageReq {
 
     public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
+    }
+
+    public String getRelaNameForQuery() {
+        return relaNameForQuery;
+    }
+
+    public void setRelaNameForQuery(String relaNameForQuery) {
+        this.relaNameForQuery = relaNameForQuery;
     }
 
 }

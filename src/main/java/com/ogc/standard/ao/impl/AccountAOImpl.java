@@ -1,8 +1,10 @@
 package com.ogc.standard.ao.impl;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ogc.standard.ao.IAccountAO;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IAgentUserBO;
+import com.ogc.standard.bo.IJourBO;
 import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
@@ -20,6 +23,8 @@ import com.ogc.standard.domain.SYSUser;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.enums.EAccountType;
 import com.ogc.standard.enums.ECurrency;
+import com.ogc.standard.enums.EJourDirection;
+import com.ogc.standard.enums.ESystemAccount;
 import com.ogc.standard.enums.EUser;
 
 @Service
@@ -36,6 +41,9 @@ public class AccountAOImpl implements IAccountAO {
 
     @Autowired
     private IAgentUserBO agentUserBO;
+
+    @Autowired
+    private IJourBO jourBO;
 
     @Override
     @Transactional
@@ -72,7 +80,30 @@ public class AccountAOImpl implements IAccountAO {
     @Override
     @Transactional
     public List<Account> getAccountByUserId(String userId, String currency) {
-        return accountBO.queryAccountList(userId, currency);
+        List<Account> list = accountBO.queryAccountList(userId, currency);
+
+        if (CollectionUtils.isNotEmpty(list)) {
+            for (Account account : list) {
+                // 历史总发放/回收额(积分/碳泡泡)
+                if (ESystemAccount.SYS_ACOUNT_JF_POOL.getCode()
+                    .equals(account.getAccountNumber())
+                        || ESystemAccount.SYS_ACOUNT_TPP_POOL.getCode()
+                            .equals(account.getAccountNumber())) {
+
+                    BigDecimal historyInAmount = jourBO.getHistoryAmount(
+                        account.getAccountNumber(),
+                        EJourDirection.IN.getCode());
+                    BigDecimal historyOutAmount = jourBO.getHistoryAmount(
+                        account.getAccountNumber(),
+                        EJourDirection.OUT.getCode());
+
+                    account.setHistoryInAmount(historyInAmount);
+                    account.setHistoryOutAmount(historyOutAmount);
+                }
+            }
+        }
+
+        return list;
     }
 
     private void initAccount(Account account) {
@@ -125,6 +156,7 @@ public class AccountAOImpl implements IAccountAO {
         }
 
         account.setRealName(realName);
+
     }
 
     @Override

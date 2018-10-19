@@ -36,8 +36,8 @@ public class XN629645 extends AProcessor {
 
         condition.setCreateStartDatetime(DateUtil.strToDate(
             req.getCreateStartDatetime(), DateUtil.FRONT_DATE_FORMAT_STRING));
-        condition.setCreateEndDatetime(DateUtil.strToDate(
-            req.getCreateEndDatetime(), DateUtil.FRONT_DATE_FORMAT_STRING));
+        condition.setCreateEndDatetime(
+            DateUtil.getEndDatetime(req.getCreateEndDatetime()));
 
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {

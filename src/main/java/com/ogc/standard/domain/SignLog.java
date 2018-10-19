@@ -49,6 +49,9 @@ public class SignLog extends ABaseDO {
     // 创建结束时间
     private Date createEndDatetime;
 
+    // 签到人
+    private String userName;
+
     public long getId() {
         return id;
     }
@@ -119,6 +122,14 @@ public class SignLog extends ABaseDO {
 
     public void setCreateEndDatetime(Date createEndDatetime) {
         this.createEndDatetime = createEndDatetime;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
 }

@@ -115,6 +115,11 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
                 "认养产品不是已上架待认养状态，不能下单");
         }
 
+        if (productSpecs.getEndDatetime().before(new Date())) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "产品认养时间已到期，不能下单");
+        }
+
         // 专属和定向产品判断库存数量
         if (ESellType.PERSON.getCode().equals(product.getSellType())
                 || ESellType.DIRECT.getCode().equals(product.getSellType())) {
@@ -270,9 +275,10 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
         // 积分抵扣
         accountBO.transAmount(data.getApplyUser(), ESysUser.SYS_USER.getCode(),
             ECurrency.JF.getCode(), resultRes.getJfAmount(),
-            EJourBizTypeUser.ADOPT.getCode(), EJourBizTypePlat.ADOPT.getCode(),
-            EJourBizTypeUser.ADOPT.getValue(),
-            EJourBizTypePlat.ADOPT.getValue(), data.getCode());
+            EJourBizTypeUser.ADOPT_BUY_DEDUCT.getCode(),
+            EJourBizTypePlat.ADOPT_BUY_DEDUCT.getCode(),
+            EJourBizTypeUser.ADOPT_BUY_DEDUCT.getValue(),
+            EJourBizTypePlat.ADOPT_BUY_DEDUCT.getValue(), data.getCode());
 
         // 进行分销
         BigDecimal backJfAmount = distributionOrderBO.distribution(data,
@@ -297,6 +303,7 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
         return new BooleanRes(true);
     }
 
+    // 支付宝回调
     @Override
     public void paySuccess(String payGroup) {
         AdoptOrder data = adoptOrderBO.getAdoptOrderByPayGroup(payGroup);
@@ -304,10 +311,11 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
             // 积分抵扣
             accountBO.transAmount(data.getApplyUser(),
                 ESysUser.SYS_USER.getCode(), ECurrency.JF.getCode(),
-                data.getJfDeductAmount(), EJourBizTypeUser.ADOPT.getCode(),
-                EJourBizTypePlat.ADOPT.getCode(),
-                EJourBizTypeUser.ADOPT.getValue(),
-                EJourBizTypePlat.ADOPT.getValue(), data.getCode());
+                data.getJfDeductAmount(),
+                EJourBizTypeUser.ADOPT_BUY_DEDUCT.getCode(),
+                EJourBizTypePlat.ADOPT_BUY_DEDUCT.getCode(),
+                EJourBizTypeUser.ADOPT_BUY_DEDUCT.getValue(),
+                EJourBizTypePlat.ADOPT_BUY_DEDUCT.getValue(), data.getCode());
 
             // 进行分销
             XN629048Res resultRes = new XN629048Res(data.getCnyDeductAmount(),
@@ -500,11 +508,14 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
             .queryAdoptOrderTreeList(data.getCode());
         data.setAdoptOrderTreeList(adoptOrderTreeList);
 
+        StringBuilder treeNumbers = new StringBuilder();
         List<Tree> treeList = new ArrayList<Tree>();
         for (AdoptOrderTree adoptOrderTree : adoptOrderTreeList) {
             Tree tree = treeBO
                 .getTreeByTreeNumber(adoptOrderTree.getTreeNumber());
             treeList.add(tree);
+
+            treeNumbers.append(adoptOrderTree.getTreeNumber()).append(". ");
         }
         data.setTreeList(treeList);
 
@@ -516,6 +527,8 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
         if (null != user) {
             data.setApplyUserName(user.getMobile());
         }
+
+        data.setTreeNumbers(treeNumbers.toString());
     }
 
 }

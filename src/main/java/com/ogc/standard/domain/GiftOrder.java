@@ -80,6 +80,9 @@ public class GiftOrder extends ABaseDO {
     // 失效结束时间
     private Date invalidEndDatetime;
 
+    // 认领人姓名
+    private String claimerName;
+
     public void setCode(String code) {
         this.code = code;
     }
@@ -254,6 +257,14 @@ public class GiftOrder extends ABaseDO {
 
     public void setToUser(String toUser) {
         this.toUser = toUser;
+    }
+
+    public String getClaimerName() {
+        return claimerName;
+    }
+
+    public void setClaimerName(String claimerName) {
+        this.claimerName = claimerName;
     }
 
 }

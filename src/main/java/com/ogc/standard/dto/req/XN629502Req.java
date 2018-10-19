@@ -26,9 +26,6 @@ public class XN629502Req extends BaseReq {
     @NotBlank
     private String price;
 
-    // 必填，描述
-    private String description;
-
     // 必填，有效时长(单位小时)
     @NotBlank
     private String validityTerm;
@@ -70,14 +67,6 @@ public class XN629502Req extends BaseReq {
 
     public void setPrice(String price) {
         this.price = price;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public String getValidityTerm() {

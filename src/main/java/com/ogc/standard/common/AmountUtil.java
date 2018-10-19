@@ -44,7 +44,7 @@ public class AmountUtil {
 
     public static BigDecimal div(BigDecimal amount, Long number) {
         BigDecimal b = new BigDecimal(Double.toString(number));
-        return amount.divide(b, 2, BigDecimal.ROUND_HALF_UP);
+        return amount.divide(b, 2, BigDecimal.ROUND_DOWN);
     }
 
     // 保留两位小数，末尾数不管是几，前一位都加1
@@ -64,6 +64,6 @@ public class AmountUtil {
     }
 
     public static void main(String[] args) {
-        System.out.println(div(new BigDecimal(836), 1000L));
+        System.out.println(div(new BigDecimal(839), 1000L));
     }
 }

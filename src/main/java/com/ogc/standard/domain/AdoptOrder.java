@@ -90,8 +90,6 @@ public class AdoptOrder extends ABaseDO {
 
     /*********DB properties*********/
 
-    /*********辅助字段**********/
-
     private Date applyDatetimeStart;// 下单时间起
 
     private Date applyDatetimeEnd;// 下单时间止
@@ -121,6 +119,9 @@ public class AdoptOrder extends ABaseDO {
 
     // 下单人姓名
     private String applyUserName;
+
+    // 树木编号列表
+    private String treeNumbers;
 
     public List<Settle> getSettleList() {
         return settleList;
@@ -424,6 +425,14 @@ public class AdoptOrder extends ABaseDO {
 
     public void setApplyUserName(String applyUserName) {
         this.applyUserName = applyUserName;
+    }
+
+    public String getTreeNumbers() {
+        return treeNumbers;
+    }
+
+    public void setTreeNumbers(String treeNumbers) {
+        this.treeNumbers = treeNumbers;
     }
 
 }

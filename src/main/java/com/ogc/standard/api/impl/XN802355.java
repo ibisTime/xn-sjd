@@ -53,13 +53,14 @@ public class XN802355 extends AProcessor {
             DateUtil.getFrontDate(req.getApplyDateStart(), false));
         condition.setApplyDatetimeEnd(
             DateUtil.getFrontDate(req.getApplyDateEnd(), true));
+
         condition.setApproveDatetimeStart(
             DateUtil.getFrontDate(req.getApproveDateStart(), false));
         condition.setApproveDatetimeEnd(
             DateUtil.getFrontDate(req.getApproveDateEnd(), true));
+
         condition.setPayDatetimeStart(
             DateUtil.getFrontDate(req.getPayDateStart(), false));
-
         condition.setPayDatetimeEnd(
             DateUtil.getFrontDate(req.getPayDateEnd(), true));
 

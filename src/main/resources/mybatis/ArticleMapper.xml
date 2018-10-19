@@ -67,7 +67,7 @@
 				<![CDATA[AND t.publish_datetime >= #{publishDatetimeStart}]]>
 			</if>
 			<if test="publishDatetimeEnd != null and publishDatetimeEnd != '' ">
-				<![CDATA[AND t.publish_datetime >= #{publishDatetimeEnd}]]>
+				<![CDATA[AND t.publish_datetime <= #{publishDatetimeEnd}]]>
 			</if>
 		</trim>
 	</sql>

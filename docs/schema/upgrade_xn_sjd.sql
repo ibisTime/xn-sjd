@@ -32,7 +32,7 @@ ALTER TABLE `tstd_user`
 ADD COLUMN `union_id` VARCHAR(255) NULL COMMENT '联合编号' AFTER `status`,
 ADD COLUMN `h5_open_id` VARCHAR(255) NULL COMMENT '公众号开放编号' AFTER `union_id`;
 
-#V1.0.0 6-2
+#V1.0.0 6-3
 ALTER TABLE `tsj_gift_order` 
 ADD COLUMN `to_user` VARCHAR(32) NULL COMMENT '被赠送人' AFTER `code`;
 

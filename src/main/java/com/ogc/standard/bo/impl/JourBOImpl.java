@@ -9,6 +9,7 @@
 package com.ogc.standard.bo.impl;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -26,8 +27,11 @@ import com.ogc.standard.domain.Jour;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.EChannelType;
 import com.ogc.standard.enums.EGeneratePrefix;
+import com.ogc.standard.enums.EJourBizTypePlat;
+import com.ogc.standard.enums.EJourDirection;
 import com.ogc.standard.enums.EJourStatus;
 import com.ogc.standard.enums.EJourType;
+import com.ogc.standard.enums.ESystemAccount;
 import com.ogc.standard.exception.BizException;
 
 /** 
@@ -251,7 +255,56 @@ public class JourBOImpl extends PaginableBOImpl<Jour> implements IJourBO {
 
     @Override
     public BigDecimal getTotalAmount(Jour condition) {
+        return jourDAO.selectTotalAmount(condition);
+    }
 
+    @Override
+    public BigDecimal getHistoryAmount(String accountNumber, String direction) {
+        Jour condition = new Jour();
+        condition.setAccountNumber(accountNumber);
+        List<String> bizTypeList = new ArrayList<String>();
+
+        // 积分池
+        if (ESystemAccount.SYS_ACOUNT_JF_POOL.getCode().equals(accountNumber)) {
+
+            // 发放
+            if (EJourDirection.OUT.getCode().equals(direction)) {
+                bizTypeList.add(EJourBizTypePlat.REGIST.getCode());
+                bizTypeList.add(EJourBizTypePlat.BIND_MOBILE.getCode());
+                bizTypeList.add(EJourBizTypePlat.BIND_email.getCode());
+                bizTypeList.add(EJourBizTypePlat.UPLOAD_PHOTO.getCode());
+                bizTypeList.add(EJourBizTypePlat.COMPLETE_INFO.getCode());
+                bizTypeList.add(EJourBizTypePlat.LOGIN.getCode());
+                bizTypeList.add(EJourBizTypePlat.INVITE_USER.getCode());
+                bizTypeList.add(EJourBizTypePlat.ADOPT_PAY_BACK.getCode());
+            }
+
+            // 回收
+            if (EJourDirection.IN.getCode().equals(direction)) {
+                bizTypeList.add(EJourBizTypePlat.ADOPT_BUY_DEDUCT.getCode());
+                bizTypeList.add(EJourBizTypePlat.TOOL_BUY.getCode());
+            }
+        }
+
+        // 碳泡泡
+        if (ESystemAccount.SYS_ACOUNT_TPP_POOL.getCode()
+            .equals(accountNumber)) {
+
+            // 发放
+            if (EJourDirection.OUT.getCode().equals(direction)) {
+                bizTypeList.add(EJourBizTypePlat.SIGN.getCode());
+                bizTypeList.add(EJourBizTypePlat.ADOPT_DAY_BACK.getCode());
+                bizTypeList.add(EJourBizTypePlat.SHARE.getCode());
+            }
+
+            // 回收
+            if (EJourDirection.IN.getCode().equals(direction)) {
+                bizTypeList.add("");
+            }
+
+        }
+
+        condition.setBizTypeList(bizTypeList);
         return jourDAO.selectTotalAmount(condition);
     }
 

@@ -75,7 +75,6 @@
 		name = #{name}
 		,pic = #{pic}
 		,price = #{price}
-		,description = #{description}
 		,validity_term = #{validityTerm}
 		
 		,updater = #{updater}
