@@ -37,13 +37,14 @@ public class SettleBOImpl extends PaginableBOImpl<Settle> implements ISettleBO {
         settle.setUserKind(user.getLevel());
         settle.setAmount(settleAmount);
         settle.setRate(settleRate);
+
         settle.setStatus(ESettleStatus.TO_SETTLE.getCode());
         settle.setRefCode(refCode);
         settle.setRefType(refType);
-
         settle.setRefNote(refNote);
         settle.setCreateDatetime(new Date());
         settleDAO.insert(settle);
+
         return code;
     }
 
@@ -58,6 +59,7 @@ public class SettleBOImpl extends PaginableBOImpl<Settle> implements ISettleBO {
         } else {
             status = ESettleStatus.SETTLE_NO.getCode();
         }
+
         settle.setStatus(status);
         settle.setHandleDatetime(new Date());
         settle.setHandleNote(handleNote);
@@ -88,6 +90,17 @@ public class SettleBOImpl extends PaginableBOImpl<Settle> implements ISettleBO {
             }
         }
         return data;
+    }
+
+    @Override
+    public BigDecimal getTotalAmount(String userId, String status,
+            Date createStartDatetime, Date createEndDatetime) {
+        Settle condition = new Settle();
+        condition.setUserId(userId);
+        condition.setStatus(status);
+        condition.setCreateStartDatetime(createStartDatetime);
+        condition.setCreateEndDatetime(createEndDatetime);
+        return settleDAO.selectTotalAmount(condition);
     }
 
 }

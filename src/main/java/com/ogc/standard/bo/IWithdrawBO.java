@@ -29,4 +29,7 @@ public interface IWithdrawBO extends IPaginableBO<Withdraw> {
     public Withdraw getWithdrawByChannelOrder(String hash);
 
     public BigDecimal getTotalWithdraw(String currency);
+
+    public BigDecimal getTotalWithdraw(String applyUser,
+            List<String> statusList);
 }

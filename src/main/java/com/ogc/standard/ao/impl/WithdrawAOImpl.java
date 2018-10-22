@@ -22,6 +22,7 @@ import com.ogc.standard.domain.AgentUser;
 import com.ogc.standard.domain.SYSUser;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.domain.Withdraw;
+import com.ogc.standard.dto.res.XN629903Res;
 import com.ogc.standard.enums.EAccountType;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.EChannelType;
@@ -264,6 +265,13 @@ public class WithdrawAOImpl implements IWithdrawAO {
         return withdrawBO.getTotalWithdraw(currency);
     }
 
+    @Override
+    public XN629903Res getTotalWithdraw(String applyUser,
+            List<String> statusList) {
+        return new XN629903Res(
+            withdrawBO.getTotalWithdraw(applyUser, statusList));
+    }
+
     private void initWithdraw(Withdraw withdraw) {
 
         // 户名
@@ -317,4 +325,5 @@ public class WithdrawAOImpl implements IWithdrawAO {
 
         withdraw.setRealName(realName);
     }
+
 }

@@ -18,6 +18,7 @@
 		<result column="status" property="status" />
 		<result column="current_holder" property="currentHolder" />
 		<result column="certificate_template" property="certificateTemplate" />
+		<result column="create_datetime" property="createDatetime" />
 		<result column="remark" property="remark" />
 	</resultMap>
 	
@@ -57,8 +58,16 @@
 			<if test="currentHolder != null and currentHolder != '' ">
 				AND t.current_holder = #{currentHolder}
 			</if>
+			
+			<if test="createDatetimeStart != null and createDatetimeStart != '' ">
+				<![CDATA[AND t.create_datetime >= #{createDatetimeStart}]]>
+			</if>
+			<if test="createDatetimeEnd != null and createDatetimeEnd != '' ">
+				<![CDATA[AND t.create_datetime <= #{createDatetimeEnd}]]>
+			</if>
 		</trim>
 	</sql>
+	
 	<select id="select_adoptOrderTree" parameterType="adoptOrderTree" resultMap="adoptOrderTree_DB_Result">
 		SELECT
 		t.code
@@ -76,6 +85,7 @@
 		,t.status
 		,t.current_holder
 		,t.certificate_template
+		,t.create_datetime
 		,t.remark
 		FROM
 		try_adopt_order_tree t
@@ -90,6 +100,12 @@
 	<select id="select_adoptOrderTree_count" parameterType="adoptOrderTree"
 		resultType="java.lang.Long">
 		SELECT count(1) FROM try_adopt_order_tree t
+		<include refid="where_condition" />
+	</select>
+	
+	<select id="select_adoptOrderTree_amountSum" parameterType="adoptOrderTree"
+		resultType="java.math.BigDecimal">
+		SELECT IFNULL(SUM(t.amount), 0) FROM try_adopt_order_tree t
 		<include refid="where_condition" />
 	</select>
 
@@ -111,6 +127,7 @@
 		,status
 		,current_holder
 		,certificate_template
+		,create_datetime
 		,remark
 		)
 		VALUES(
@@ -129,6 +146,7 @@
 		,#{status}
 		,#{currentHolder}
 		,#{certificateTemplate}
+		,#{createDatetime}
 		,#{remark}
 		)
 	</insert>

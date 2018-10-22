@@ -1,9 +1,11 @@
 package com.ogc.standard.ao;
 
+import java.util.Date;
 import java.util.List;
 
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Settle;
+import com.ogc.standard.dto.res.XN629902Res;
 
 /**
  * 结算订单
@@ -24,4 +26,6 @@ public interface ISettleAO {
 
     public Settle getSettle(String code);
 
+    public XN629902Res getSettleTotalAmount(String userId, String status,
+            Date createStartDatetime, Date createEndDatetime);
 }

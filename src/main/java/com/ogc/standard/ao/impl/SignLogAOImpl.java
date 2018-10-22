@@ -95,11 +95,11 @@ public class SignLogAOImpl implements ISignLogAO {
                 quantity = sysTppAccount.getAmount();
             }
 
+            String note = "获得" + AmountUtil.div(quantity, 1000L).intValue()
+                    + "碳泡泡，已连续签到" + continueSignDay + "天";
             accountBO.transAmount(sysTppAccount, userTppAccount, quantity,
                 EJourBizTypeUser.SIGN.getCode(),
-                EJourBizTypePlat.SIGN.getCode(),
-                EJourBizTypeUser.SIGN.getValue(),
-                EJourBizTypePlat.SIGN.getValue(), userId);
+                EJourBizTypePlat.SIGN.getCode(), note, note, userId);
 
         }
 

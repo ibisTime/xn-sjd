@@ -25,6 +25,9 @@ public class XN802020Req {
     // 绑定手机号（必填）
     private String bindMobile;
 
+    // 验证码（必填）
+    private String smsCaptcha;
+
     // 用户编号（必填）
     private String userId;
 
@@ -126,6 +129,14 @@ public class XN802020Req {
 
     public void setBankcardNumber(String bankcardNumber) {
         this.bankcardNumber = bankcardNumber;
+    }
+
+    public String getSmsCaptcha() {
+        return smsCaptcha;
+    }
+
+    public void setSmsCaptcha(String smsCaptcha) {
+        this.smsCaptcha = smsCaptcha;
     }
 
 }

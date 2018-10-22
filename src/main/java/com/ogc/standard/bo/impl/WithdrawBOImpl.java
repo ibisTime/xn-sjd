@@ -103,8 +103,8 @@ public class WithdrawBOImpl extends PaginableBOImpl<Withdraw>
             condition.setCode(code);
             data = withdrawDAO.select(condition);
             if (data == null) {
-                throw new BizException(EBizErrorCode.DEFAULT.getCode(), "取现订单"
-                        + code + "不存在");
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                    "取现订单" + code + "不存在");
             }
         }
         return data;
@@ -190,6 +190,15 @@ public class WithdrawBOImpl extends PaginableBOImpl<Withdraw>
         Withdraw condition = new Withdraw();
         condition.setCurrency(currency);
         condition.setStatus(EWithdrawStatus.Pay_YES.getCode());
+        return withdrawDAO.selectTotalAmount(condition);
+    }
+
+    @Override
+    public BigDecimal getTotalWithdraw(String applyUser,
+            List<String> statusList) {
+        Withdraw condition = new Withdraw();
+        condition.setApplyUser(applyUser);
+        condition.setStatusList(statusList);
         return withdrawDAO.selectTotalAmount(condition);
     }
 }

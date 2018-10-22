@@ -11,6 +11,7 @@
 		<result column="update_datetime" property="updateDatetime" />
 		<result column="remark" property="remark" />
 	</resultMap>
+	
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != '' ">
@@ -25,8 +26,16 @@
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
 			</if>
+			
+			<if test="updateDatetimeStart != null and updateDatetimeStart != '' ">
+				<![CDATA[AND t.update_datetime >= #{updateDatetimeStart}]]>
+			</if>
+			<if test="updateDatetimeEnd != null and updateDatetimeEnd != '' ">
+				<![CDATA[AND t.update_datetime <= #{updateDatetimeEnd}]]>
+			</if>
 		</trim>
 	</sql>
+	
 	<select id="select_applyBindMaintain" parameterType="applyBindMaintain" resultMap="applyBindMaintain_DB_Result">
 		SELECT
 		t.code

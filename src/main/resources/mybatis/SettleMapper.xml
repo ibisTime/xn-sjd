@@ -83,6 +83,12 @@
 		SELECT count(1) FROM tsys_settle t
 		<include refid="where_condition" />
 	</select>
+	
+	<select id="select_settle_amountSum" parameterType="settle"
+		resultType="java.math.BigDecimal">
+		SELECT IFNULL(SUM(t.amount), 0) FROM tsys_settle t
+		<include refid="where_condition" />
+	</select>
 
 	<insert id="insert_settle" parameterType="settle">
 		INSERT INTO

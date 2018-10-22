@@ -5,7 +5,6 @@ import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.ObjValidater;
 import com.ogc.standard.dto.req.XN629350Req;
-import com.ogc.standard.dto.res.BooleanRes;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
@@ -24,8 +23,8 @@ public class XN629350 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        carbonBubbleOrderAO.takeCarbonBubble(req.getCode(), req.getUserId());
-        return new BooleanRes(true);
+        return carbonBubbleOrderAO.takeCarbonBubble(req.getCode(),
+            req.getUserId());
     }
 
     @Override

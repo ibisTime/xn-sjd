@@ -1,5 +1,6 @@
 package com.ogc.standard.ao.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -18,6 +19,7 @@ import com.ogc.standard.domain.AdoptOrder;
 import com.ogc.standard.domain.Product;
 import com.ogc.standard.domain.Settle;
 import com.ogc.standard.domain.User;
+import com.ogc.standard.dto.res.XN629902Res;
 import com.ogc.standard.enums.EAdoptOrderSettleStatus;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECurrency;
@@ -120,6 +122,13 @@ public class SettleAOImpl implements ISettleAO {
         if (null != user) {
             settle.setApplyUserName(user.getMobile());
         }
+    }
+
+    @Override
+    public XN629902Res getSettleTotalAmount(String userId, String status,
+            Date createStartDatetime, Date createEndDatetime) {
+        return new XN629902Res(settleBO.getTotalAmount(userId, status,
+            createStartDatetime, createEndDatetime));
     }
 
 }

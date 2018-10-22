@@ -14,23 +14,9 @@ public class XN629323Req {
     @NotBlank
     private String code;
 
-    // 收货人
-    private String receiver;
-
-    // 省
-    private String province;
-
-    // 市
-    private String city;
-
-    // 区
-    private String area;
-
-    // 收货地址
-    private String reAddress;
-
-    // 收货人手机号
-    private String reMobile;
+    // 收货地址编号
+    @NotBlank
+    private String addressCode;
 
     // 认领人
     @NotBlank
@@ -44,28 +30,12 @@ public class XN629323Req {
         this.code = code;
     }
 
-    public String getReceiver() {
-        return receiver;
+    public String getAddressCode() {
+        return addressCode;
     }
 
-    public void setReceiver(String receiver) {
-        this.receiver = receiver;
-    }
-
-    public String getReAddress() {
-        return reAddress;
-    }
-
-    public void setReAddress(String reAddress) {
-        this.reAddress = reAddress;
-    }
-
-    public String getReMobile() {
-        return reMobile;
-    }
-
-    public void setReMobile(String reMobile) {
-        this.reMobile = reMobile;
+    public void setAddressCode(String addressCode) {
+        this.addressCode = addressCode;
     }
 
     public String getClaimer() {
@@ -74,30 +44,6 @@ public class XN629323Req {
 
     public void setClaimer(String claimer) {
         this.claimer = claimer;
-    }
-
-    public String getProvince() {
-        return province;
-    }
-
-    public void setProvince(String province) {
-        this.province = province;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getArea() {
-        return area;
-    }
-
-    public void setArea(String area) {
-        this.area = area;
     }
 
 }

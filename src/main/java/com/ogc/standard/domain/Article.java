@@ -1,6 +1,7 @@
 package com.ogc.standard.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import com.ogc.standard.dao.base.ABaseDO;
 
@@ -87,6 +88,9 @@ public class Article extends ABaseDO {
 
     // 查询人
     private String queryUserId;
+
+    // 状态列表
+    private List<String> statusList;
 
     public void setCode(String code) {
         this.code = code;
@@ -278,6 +282,14 @@ public class Article extends ABaseDO {
 
     public void setQueryUserId(String queryUserId) {
         this.queryUserId = queryUserId;
+    }
+
+    public List<String> getStatusList() {
+        return statusList;
+    }
+
+    public void setStatusList(List<String> statusList) {
+        this.statusList = statusList;
     }
 
 }

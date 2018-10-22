@@ -8,6 +8,7 @@
  */
 package com.ogc.standard.bo;
 
+import java.util.Date;
 import java.util.List;
 
 import com.ogc.standard.bo.base.IPaginableBO;
@@ -132,4 +133,8 @@ public interface IUserBO extends IPaginableBO<User> {
 
     // 通过手机号和类型获取用户编号
     public String getUserId(String mobile, String kind);
+
+    // 统计代理商下的用户总数
+    public long getTotalCount(String agentId, Date createDatetimeStart,
+            Date createDatetimeEnd);
 }

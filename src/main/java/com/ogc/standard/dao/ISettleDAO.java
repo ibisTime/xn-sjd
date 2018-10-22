@@ -1,5 +1,7 @@
 package com.ogc.standard.dao;
 
+import java.math.BigDecimal;
+
 import com.ogc.standard.dao.base.IBaseDAO;
 import com.ogc.standard.domain.Settle;
 
@@ -14,4 +16,7 @@ public interface ISettleDAO extends IBaseDAO<Settle> {
 
     // 修改参考订单状态
     public int updateStatusByRefCode(Settle data);
+
+    // 查询结算总额
+    public BigDecimal selectTotalAmount(Settle data);
 }

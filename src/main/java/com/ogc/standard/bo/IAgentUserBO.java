@@ -1,5 +1,6 @@
 package com.ogc.standard.bo;
 
+import java.util.Date;
 import java.util.List;
 
 import com.ogc.standard.bo.base.IPaginableBO;
@@ -70,4 +71,8 @@ public interface IAgentUserBO extends IPaginableBO<AgentUser> {
     public AgentUser getAgentUserUnCheck(String userId);
 
     public AgentUser getAgentUserByMobile(String parentUserId);
+
+    // 统计parentUserId下的用户总数
+    public long getTotalCount(String parentUserId, Date createDatetimeStart,
+            Date createDatetimeEnd);
 }

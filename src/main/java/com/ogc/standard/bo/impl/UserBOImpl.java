@@ -611,4 +611,14 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         return userId;
     }
 
+    @Override
+    public long getTotalCount(String agentId, Date createDatetimeStart,
+            Date createDatetimeEnd) {
+        User condition = new User();
+        condition.setAgentId(agentId);
+        condition.setCreateDatetimeStart(createDatetimeStart);
+        condition.setCreateDatetimeEnd(createDatetimeEnd);
+        return userDAO.selectTotalCount(condition);
+    }
+
 }

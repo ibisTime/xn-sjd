@@ -1,5 +1,6 @@
 package com.ogc.standard.dao.impl;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
@@ -40,6 +41,12 @@ public class SettleDAOImpl extends AMybatisTemplate implements ISettleDAO {
     }
 
     @Override
+    public BigDecimal selectTotalAmount(Settle data) {
+        return super.select(NAMESPACE.concat("select_settle_amountSum"), data,
+            BigDecimal.class);
+    }
+
+    @Override
     public List<Settle> selectList(Settle condition) {
         return super.selectList(NAMESPACE.concat("select_settle"), condition,
             Settle.class);
@@ -47,8 +54,8 @@ public class SettleDAOImpl extends AMybatisTemplate implements ISettleDAO {
 
     @Override
     public List<Settle> selectList(Settle condition, int start, int count) {
-        return super.selectList(NAMESPACE.concat("select_settle"), start,
-            count, condition, Settle.class);
+        return super.selectList(NAMESPACE.concat("select_settle"), start, count,
+            condition, Settle.class);
     }
 
 }

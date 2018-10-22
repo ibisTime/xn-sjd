@@ -1,11 +1,13 @@
 package com.ogc.standard.ao;
 
+import java.util.Date;
 import java.util.List;
 
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.SYSUser;
 import com.ogc.standard.dto.req.XN630061Req;
 import com.ogc.standard.dto.req.XN630063Req;
+import com.ogc.standard.dto.res.XN629901Res;
 
 /**
  * 系统用户
@@ -82,4 +84,8 @@ public interface ISYSUserAO {
 
     // 代申请
     public String platApplySYSUser(XN630063Req req);
+
+    // 统计新增用户数
+    public XN629901Res getTotalCreateCount(String userId, String type,
+            Date createDatetimeStart, Date createDatetimeEnd);
 }

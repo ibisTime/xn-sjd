@@ -75,6 +75,14 @@
 					</if>
 				 </otherwise>
 			</choose>
+			
+			<if test="statusList != null and statusList != '' ">
+                AND t.status in
+                <foreach item="item" index="index" collection="statusList" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            
 			<if test="applyUser != null and applyUser != '' ">
 				AND t.apply_user = #{applyUser}
 			</if>
@@ -158,6 +166,12 @@
 		<include refid="where_condition" />
 	</select>
 
+	<select id="select_totalAmount" parameterType="withdraw"
+		resultType="java.math.BigDecimal">
+		SELECT COALESCE(sum(t.amount)-sum(t.fee),0) FROM tstd_withdraw t
+		<include refid="where_condition" />
+	</select>
+	
 	<insert id="insert_withdraw" parameterType="withdraw">
 		INSERT INTO
 		tstd_withdraw(
@@ -243,11 +257,5 @@
 		,pay_datetime = #{payDatetime}
 		WHERE code = #{code}
 	</update>
-	
-	<select id="select_totalAmount" parameterType="withdraw"
-		resultType="java.math.BigDecimal">
-		SELECT COALESCE(sum(amount)-sum(fee),0) FROM tstd_withdraw t
-		<include refid="where_condition" />
-	</select>
 	
 </mapper>

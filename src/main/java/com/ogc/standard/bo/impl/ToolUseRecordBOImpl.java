@@ -68,9 +68,9 @@ public class ToolUseRecordBOImpl extends PaginableBOImpl<ToolUseRecord>
     }
 
     @Override
-    public List<ToolUseRecord> queryTreeToolRecordList(String toolCode) {
+    public List<ToolUseRecord> queryTreeToolRecordList(String code) {
         ToolUseRecord condition = new ToolUseRecord();
-        condition.setToolCode(toolCode);
+        condition.setCode(code);
         condition.setStatus(EToolUseRecordStatus.ACTIVE.getCode());
         return toolUseRecordDAO.selectList(condition);
     }

@@ -4,9 +4,13 @@ import java.util.List;
 
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.CarbonBubbleOrder;
+import com.ogc.standard.dto.res.XN629350Res;
 
 public interface ICarbonBubbleOrderAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
+
+    // 收取碳泡泡
+    public XN629350Res takeCarbonBubble(String code, String userId);
 
     public Paginable<CarbonBubbleOrder> queryCarbonBubbleOrderPage(int start,
             int limit, CarbonBubbleOrder condition);
@@ -15,8 +19,5 @@ public interface ICarbonBubbleOrderAO {
             CarbonBubbleOrder condition);
 
     public CarbonBubbleOrder getCarbonBubbleOrder(String code);
-
-    // 收取碳泡泡
-    public void takeCarbonBubble(String code, String userId);
 
 }

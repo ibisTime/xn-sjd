@@ -356,11 +356,11 @@ public class UserAOImpl implements IUserAO {
                 quantity = sysJfAccount.getAmount();
             }
 
+            String note = "获得" + AmountUtil.div(quantity, 1000L).intValue()
+                    + "积分，已连续登录" + continueLoginDay + "天";
             accountBO.transAmount(sysJfAccount, userJfAccount, quantity,
                 EJourBizTypeUser.LOGIN.getCode(),
-                EJourBizTypePlat.LOGIN.getCode(),
-                EJourBizTypeUser.LOGIN.getValue(),
-                EJourBizTypePlat.LOGIN.getValue(), userId);
+                EJourBizTypePlat.LOGIN.getCode(), note, note, userId);
         }
     }
 

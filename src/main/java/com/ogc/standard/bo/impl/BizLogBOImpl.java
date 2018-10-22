@@ -62,6 +62,23 @@ public class BizLogBOImpl extends PaginableBOImpl<BizLog> implements IBizLogBO {
     }
 
     @Override
+    public long gatherNoCarbonBubble(String adoptTreeCode, String adoptUserId,
+            String userId) {
+        BizLog data = new BizLog();
+
+        data.setAdoptTreeCode(adoptTreeCode);
+        data.setAdoptUserId(adoptUserId);
+        data.setType(EBizLogType.GATHER_NO.getCode());
+        data.setQuantity(BigDecimal.ZERO);
+        data.setUserId(userId);
+
+        data.setCreateDatetime(new Date());
+        bizLogDAO.insert(data);
+
+        return bizLogDAO.selectMaxId();
+    }
+
+    @Override
     public BigDecimal getWeekQuantitySum(String adoptUserId, String userId) {
         BizLog condition = new BizLog();
         condition.setAdoptUserId(adoptUserId);

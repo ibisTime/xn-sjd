@@ -115,7 +115,9 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
                 "认养产品不是已上架待认养状态，不能下单");
         }
 
-        if (productSpecs.getEndDatetime().before(new Date())) {
+        Date specEndDatetime = DateUtil
+            .getRelativeDateOfDays(productSpecs.getEndDatetime(), 1);
+        if (specEndDatetime.before(new Date())) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "产品认养时间已到期，不能下单");
         }

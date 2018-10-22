@@ -10,12 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ogc.standard.ao.IGiftOrderAO;
+import com.ogc.standard.bo.IAddressBO;
 import com.ogc.standard.bo.IAdoptOrderTreeBO;
 import com.ogc.standard.bo.IGiftOrderBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.core.StringValidater;
+import com.ogc.standard.domain.Address;
 import com.ogc.standard.domain.AdoptOrderTree;
 import com.ogc.standard.domain.GiftOrder;
 import com.ogc.standard.domain.User;
@@ -37,6 +39,9 @@ public class GiftOrderAOImpl implements IGiftOrderAO {
     @Autowired
     private IUserBO userBO;
 
+    @Autowired
+    private IAddressBO addressBO;
+
     @Override
     public String addGiftOrder(String adoptTreeCode, String name, String price,
             String listPic, String description, String invalidDatetime) {
@@ -52,8 +57,8 @@ public class GiftOrderAOImpl implements IGiftOrderAO {
         data.setDescription(description);
         data.setStatus(EGiftOrderStatus.TO_CLAIM.getCode());
         data.setCreateDatetime(new Date());
-        data.setInvalidDatetime(
-            DateUtil.strToDate(invalidDatetime, DateUtil.DATA_TIME_PATTERN_1));
+        data.setInvalidDatetime(DateUtil.strToDate(invalidDatetime,
+            DateUtil.FRONT_DATE_FORMAT_STRING));
         return giftOrderBO.saveGiftOrder(data);
     }
 
@@ -66,13 +71,15 @@ public class GiftOrderAOImpl implements IGiftOrderAO {
         if (new Date().getTime() > data.getInvalidDatetime().getTime()) {
             throw new BizException("xn0000", "礼物已失效");
         }
-        data.setReceiver(req.getReceiver());
-        data.setProvince(req.getProvince());
-        data.setCity(req.getCity());
-        data.setArea(req.getArea());
-        data.setReAddress(req.getReAddress());
+        Address address = addressBO.getAddress(req.getAddressCode());
 
-        data.setReMobile(req.getReMobile());
+        data.setReceiver(address.getAddressee());
+        data.setProvince(address.getProvince());
+        data.setCity(address.getCity());
+        data.setArea(address.getDistrict());
+        data.setReAddress(address.getDetailAddress());
+
+        data.setReMobile(address.getMobile());
         data.setClaimer(req.getClaimer());
         data.setStatus(EGiftOrderStatus.CLAIMED.getCode());
         data.setClaimDatetime(new Date());

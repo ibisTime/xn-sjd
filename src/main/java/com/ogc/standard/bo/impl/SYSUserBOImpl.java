@@ -346,4 +346,13 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
             data.setCompany(company);
         }
     }
+
+    @Override
+    public long getTotalCount(Date createDatetimeStart,
+            Date createDatetimeEnd) {
+        SYSUser condition = new SYSUser();
+        condition.setCreateDatetimeStart(createDatetimeStart);
+        condition.setCreateDatetimeEnd(createDatetimeEnd);
+        return sysUserDAO.selectTotalCount(condition);
+    }
 }

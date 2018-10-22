@@ -17,7 +17,7 @@ public interface IToolUseRecordBO extends IPaginableBO<ToolUseRecord> {
     public List<ToolUseRecord> queryTreeToolRecordList(String adoptTreeCode,
             String toolType);
 
-    public List<ToolUseRecord> queryTreeToolRecordList(String toolCode);
+    public List<ToolUseRecord> queryTreeToolRecordList(String code);
 
     public List<ToolUseRecord> queryToolUseRecordList(ToolUseRecord condition);
 

@@ -25,7 +25,7 @@ public class BizLog extends ABaseDO {
     // 认养人编号
     private String adoptUserId;
 
-    // 类型（1赠送碳泡泡/2留言/3收取碳泡泡）
+    // 类型（1赠送碳泡泡/2留言/3收取碳泡泡/4收取碳泡泡被阻挡）
     private String type;
 
     // 说明

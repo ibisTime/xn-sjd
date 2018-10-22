@@ -38,3 +38,7 @@ ADD COLUMN `to_user` VARCHAR(32) NULL COMMENT '被赠送人' AFTER `code`;
 
 ALTER TABLE `tb_tool_use_record` 
 ADD COLUMN `tool_code` VARCHAR(32) NULL COMMENT '道具编号' AFTER `code`;
+
+#V1.0.0 6-4
+ALTER TABLE `try_adopt_order_tree` 
+ADD COLUMN `create_datetime` DATETIME NULL COMMENT '创建时间' AFTER `certificate_template`;

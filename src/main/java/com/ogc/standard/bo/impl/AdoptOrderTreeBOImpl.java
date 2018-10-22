@@ -1,5 +1,6 @@
 package com.ogc.standard.bo.impl;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -59,6 +60,7 @@ public class AdoptOrderTreeBOImpl extends PaginableBOImpl<AdoptOrderTree>
         data.setEndDatetime(adoptOrder.getEndDatetime());
 
         data.setAmount(adoptOrder.getPrice());
+        data.setCreateDatetime(new Date());
         if (EAdoptOrderStatus.TO_ADOPT.getCode()
             .equals(adoptOrder.getStatus())) {
             data.setStatus(EAdoptOrderTreeStatus.TO_ADOPT.getCode());
@@ -99,6 +101,7 @@ public class AdoptOrderTreeBOImpl extends PaginableBOImpl<AdoptOrderTree>
         newData.setStatus(EAdoptOrderTreeStatus.ADOPT.getCode());
         newData.setCertificateTemplate(data.getCertificateTemplate());
         newData.setCurrentHolder(toUser.getUserId());
+        newData.setCreateDatetime(new Date());
         newData.setRemark(user.getMobile() + "赠送");
 
         adoptOrderTreeDAO.insert(newData);
@@ -180,5 +183,23 @@ public class AdoptOrderTreeBOImpl extends PaginableBOImpl<AdoptOrderTree>
         if (null != user) {
             data.setUser(user);
         }
+    }
+
+    @Override
+    public long getCountByOwner(String ownerId, Date createDatetimeStart,
+            Date createDatetimeEnd) {
+        AdoptOrderTree condition = new AdoptOrderTree();
+        condition.setOwnerId(ownerId);
+        condition.setCreateDatetimeStart(createDatetimeStart);
+        condition.setCreateDatetimeEnd(createDatetimeEnd);
+        return adoptOrderTreeDAO.selectTotalCount(condition);
+    }
+
+    @Override
+    public BigDecimal getTotalAmount(String ownerId, List<String> statusList) {
+        AdoptOrderTree condition = new AdoptOrderTree();
+        condition.setOwnerId(ownerId);
+        condition.setStatusList(statusList);
+        return adoptOrderTreeDAO.selectTotalAmount(condition);
     }
 }

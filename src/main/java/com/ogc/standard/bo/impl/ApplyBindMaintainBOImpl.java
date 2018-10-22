@@ -134,4 +134,14 @@ public class ApplyBindMaintainBOImpl extends PaginableBOImpl<ApplyBindMaintain>
         return maintainId;
     }
 
+    @Override
+    public long getOwnerCountByMaintain(String maintainId,
+            Date createDatetimeStart, Date createDatetimeEnd) {
+        ApplyBindMaintain condition = new ApplyBindMaintain();
+        condition.setMaintainId(maintainId);
+        condition.setUpdateDatetimeStart(createDatetimeStart);
+        condition.setUpdateDatetimeEnd(createDatetimeEnd);
+        return applyBindMaintainDAO.selectTotalCount(condition);
+    }
+
 }

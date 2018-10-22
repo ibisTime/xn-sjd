@@ -24,6 +24,7 @@ import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.AdoptOrderTree;
 import com.ogc.standard.domain.CarbonBubbleOrder;
 import com.ogc.standard.domain.User;
+import com.ogc.standard.dto.res.XN629350Res;
 import com.ogc.standard.enums.EBizLogType;
 import com.ogc.standard.enums.ECarbonBubbleOrderStatus;
 import com.ogc.standard.enums.ECurrency;
@@ -86,7 +87,7 @@ public class CarbonBubbleOrderAOImpl implements ICarbonBubbleOrderAO {
 
     @Override
     @Transactional
-    public void takeCarbonBubble(String code, String collector) {
+    public XN629350Res takeCarbonBubble(String code, String collector) {
         CarbonBubbleOrder data = carbonBubbleOrderBO.getCarbonBubbleOrder(code);
         if (ECarbonBubbleOrderStatus.TAKED.getCode().equals(data.getStatus())) {
             throw new BizException("xn0000", "碳泡泡已被收取，不能重复收取");
@@ -100,7 +101,11 @@ public class CarbonBubbleOrderAOImpl implements ICarbonBubbleOrderAO {
         if (CollectionUtils.isNotEmpty(toolUseRecordBO.queryTreeToolRecordList(
             data.getAdoptTreeCode(), EToolType.SHIELD.getCode()))) {
             if (!data.getAdoptUserId().equals(collector)) {
-                throw new BizException("xn0000", "正在使用保护罩，碳泡泡不能收取");
+                // 添加日志
+                bizLogBO.gatherNoCarbonBubble(data.getAdoptTreeCode(),
+                    data.getAdoptUserId(), collector);
+
+                return new XN629350Res("1", "正在使用保护罩，碳泡泡不能收取");
             }
         }
 
@@ -130,6 +135,8 @@ public class CarbonBubbleOrderAOImpl implements ICarbonBubbleOrderAO {
         bizLogBO.gatherCarbonBubble(adoptOrderTree.getCode(),
             adoptOrderTree.getCurrentHolder(), data.getQuantity(), collector,
             EBizLogType.GATHER.getCode());
+
+        return new XN629350Res("0", "收取成功");
     }
 
     @Override

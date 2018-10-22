@@ -285,4 +285,14 @@ public class AgentUserBOImpl extends PaginableBOImpl<AgentUser>
         }
         return data;
     }
+
+    @Override
+    public long getTotalCount(String parentUserId, Date createDatetimeStart,
+            Date createDatetimeEnd) {
+        AgentUser condition = new AgentUser();
+        condition.setParentUserId(parentUserId);
+        condition.setCreateDatetimeStart(createDatetimeStart);
+        condition.setCreateDatetimeEnd(createDatetimeEnd);
+        return agentUserDAO.selectTotalCount(condition);
+    }
 }

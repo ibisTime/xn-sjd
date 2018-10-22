@@ -11,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.ISYSUserAO;
 import com.ogc.standard.bo.IAccountBO;
+import com.ogc.standard.bo.IAdoptOrderTreeBO;
+import com.ogc.standard.bo.IAgentUserBO;
 import com.ogc.standard.bo.IApplyBindMaintainBO;
 import com.ogc.standard.bo.ICompanyBO;
 import com.ogc.standard.bo.IJourBO;
@@ -19,6 +21,7 @@ import com.ogc.standard.bo.ISYSRoleBO;
 import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.ISmsOutBO;
 import com.ogc.standard.bo.ITreeBO;
+import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.common.MD5Util;
@@ -34,6 +37,7 @@ import com.ogc.standard.domain.SYSRole;
 import com.ogc.standard.domain.SYSUser;
 import com.ogc.standard.dto.req.XN630061Req;
 import com.ogc.standard.dto.req.XN630063Req;
+import com.ogc.standard.dto.res.XN629901Res;
 import com.ogc.standard.dto.res.XN630065PriceRes;
 import com.ogc.standard.enums.EAccountType;
 import com.ogc.standard.enums.EApplyBindMaintainStatus;
@@ -76,6 +80,15 @@ public class SYSUserAOImpl implements ISYSUserAO {
 
     @Autowired
     private IProductBO productBO;
+
+    @Autowired
+    private IUserBO userBO;
+
+    @Autowired
+    private IAgentUserBO agentUserBO;
+
+    @Autowired
+    private IAdoptOrderTreeBO adoptOrderTreeBO;
 
     // 新增用户（平台）
     @Override
@@ -455,6 +468,68 @@ public class SYSUserAOImpl implements ISYSUserAO {
             data.setTotalIncome(totalIncome);
 
         }
+    }
+
+    @Override
+    public XN629901Res getTotalCreateCount(String userId, String type,
+            Date createDatetimeStart, Date createDatetimeEnd) {
+
+        long userTotalCount = 0L;// 用户总数
+        XN629901Res res = null;
+
+        // 平台端查询全部用户
+        if (EAccountType.PLAT.getCode().equals(type)) {
+            long userCount = 0L;// C端用户
+            long agentUserCount = 0L;// 代理用户
+            long sysUserCount = 0L;// 系统用户
+
+            userCount = userBO.getTotalCount(null, createDatetimeStart,
+                createDatetimeEnd);
+
+            agentUserCount = agentUserBO.getTotalCount(null,
+                createDatetimeStart, createDatetimeEnd);
+
+            sysUserCount = sysUserBO.getTotalCount(createDatetimeStart,
+                createDatetimeEnd);
+
+            userTotalCount = userCount + agentUserCount + sysUserCount;
+
+            res = new XN629901Res(userTotalCount);
+        }
+
+        // 产权端查询新增的认养用户
+        if (EAccountType.OWNER.getCode().equals(type)) {
+            userTotalCount = adoptOrderTreeBO.getCountByOwner(userId,
+                createDatetimeStart, createDatetimeEnd);
+
+            res = new XN629901Res(userTotalCount);
+        }
+
+        // 养护端查询绑定的产权方
+        if (EAccountType.MAINTAIN.getCode().equals(type)) {
+            userTotalCount = applyBindMaintainBO.getOwnerCountByMaintain(userId,
+                createDatetimeStart, createDatetimeEnd);
+
+            res = new XN629901Res(userTotalCount);
+        }
+
+        // 代理商查询新增的业务员和用户
+        if (EAccountType.AGENT.getCode().equals(type)) {
+            long userCount = 0L;// C端用户
+            long agentUserCount = 0L;// 代理用户
+
+            userCount = userBO.getTotalCount(userId, createDatetimeStart,
+                createDatetimeEnd);
+
+            agentUserCount = agentUserBO.getTotalCount(userId,
+                createDatetimeStart, createDatetimeEnd);
+
+            userTotalCount = userCount + agentUserCount;
+
+            res = new XN629901Res(userTotalCount, userCount, agentUserCount);
+        }
+
+        return res;
     }
 
 }

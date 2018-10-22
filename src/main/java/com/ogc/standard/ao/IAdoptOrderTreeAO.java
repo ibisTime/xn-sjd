@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.AdoptOrderTree;
+import com.ogc.standard.dto.res.XN629904Res;
 
 public interface IAdoptOrderTreeAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
@@ -27,4 +28,7 @@ public interface IAdoptOrderTreeAO {
             AdoptOrderTree condition);
 
     public AdoptOrderTree getAdoptOrderTree(String code);
+
+    // 查询产权方认养总额
+    public XN629904Res getTotalAmount(String ownerId, List<String> statusList);
 }

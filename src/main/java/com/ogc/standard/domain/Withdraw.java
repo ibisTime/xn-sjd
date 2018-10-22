@@ -114,6 +114,9 @@ public class Withdraw extends ABaseDO {
     // 户名
     private String realName;
 
+    // 状态列表
+    private List<String> statusList;
+
     public String getCode() {
         return code;
     }
@@ -384,6 +387,14 @@ public class Withdraw extends ABaseDO {
 
     public void setRealName(String realName) {
         this.realName = realName;
+    }
+
+    public List<String> getStatusList() {
+        return statusList;
+    }
+
+    public void setStatusList(List<String> statusList) {
+        this.statusList = statusList;
     }
 
 }

@@ -31,6 +31,7 @@ import com.ogc.standard.domain.ToolUseRecord;
 import com.ogc.standard.domain.Tree;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.domain.Visitor;
+import com.ogc.standard.dto.res.XN629904Res;
 import com.ogc.standard.enums.EAdoptOrderTreeStatus;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ESysConfigType;
@@ -139,6 +140,18 @@ public class AdoptOrderTreeAOImpl implements IAdoptOrderTreeAO {
         AdoptOrderTree data = adoptOrderTreeBO.getAdoptOrderTree(code);
         initAdoptOrderTree(data);
         return data;
+    }
+
+    @Override
+    public XN629904Res getTotalAmount(String ownerId, List<String> statusList) {
+        // 已认养的总值
+        BigDecimal totalAmount = adoptOrderTreeBO.getTotalAmount(ownerId,
+            statusList);
+
+        // 已认养的树木数量
+        long treeCount = adoptOrderTreeBO.getCountByOwner(ownerId, null, null);
+
+        return new XN629904Res(totalAmount, treeCount);
     }
 
     private void initAdoptOrderTree(AdoptOrderTree data) {

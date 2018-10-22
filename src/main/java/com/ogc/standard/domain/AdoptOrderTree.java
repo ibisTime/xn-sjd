@@ -56,6 +56,9 @@ public class AdoptOrderTree extends ABaseDO {
     // 证书模板
     private String certificateTemplate;
 
+    // 创建时间
+    private Date createDatetime;
+
     // 备注
     private String remark;
 
@@ -69,6 +72,12 @@ public class AdoptOrderTree extends ABaseDO {
 
     // 状态列表
     private List<String> statusList;
+
+    // 添加时间起
+    private Date createDatetimeStart;
+
+    // 添加时间止
+    private Date createDatetimeEnd;
 
     public User getUser() {
         return user;
@@ -212,6 +221,30 @@ public class AdoptOrderTree extends ABaseDO {
 
     public void setStatusList(List<String> statusList) {
         this.statusList = statusList;
+    }
+
+    public Date getCreateDatetime() {
+        return createDatetime;
+    }
+
+    public void setCreateDatetime(Date createDatetime) {
+        this.createDatetime = createDatetime;
+    }
+
+    public Date getCreateDatetimeStart() {
+        return createDatetimeStart;
+    }
+
+    public void setCreateDatetimeStart(Date createDatetimeStart) {
+        this.createDatetimeStart = createDatetimeStart;
+    }
+
+    public Date getCreateDatetimeEnd() {
+        return createDatetimeEnd;
+    }
+
+    public void setCreateDatetimeEnd(Date createDatetimeEnd) {
+        this.createDatetimeEnd = createDatetimeEnd;
     }
 
 }

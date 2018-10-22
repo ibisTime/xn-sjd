@@ -1,6 +1,7 @@
 package com.ogc.standard.bo;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 import com.ogc.standard.bo.base.IPaginableBO;
@@ -29,5 +30,9 @@ public interface ISettleBO extends IPaginableBO<Settle> {
     public List<Settle> querySettleList(String refCode);
 
     public Settle getSettle(String code);
+
+    // 查询结算总额
+    public BigDecimal getTotalAmount(String userId, String status,
+            Date createStartDatetime, Date createEndDatetime);
 
 }

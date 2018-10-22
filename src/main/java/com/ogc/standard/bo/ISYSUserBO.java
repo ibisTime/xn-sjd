@@ -1,5 +1,6 @@
 package com.ogc.standard.bo;
 
+import java.util.Date;
 import java.util.List;
 
 import com.ogc.standard.bo.base.IPaginableBO;
@@ -52,16 +53,6 @@ public interface ISYSUserBO extends IPaginableBO<SYSUser> {
 
     public void checkLoginPwd(String userId, String loginPwd);
 
-    // 判断登录名是否存在
-    public void isLoginNameExist(String loginName);
-
-    // 查询详情
-    public SYSUser getSYSUser(String userId);
-
-    public SYSUser getSYSUserUnCheck(String userId);
-
-    public void refreshLoginName(String userId, String loginName);
-
     // 判断用户编号是否存在
     public boolean isUserExist(String userId);
 
@@ -71,5 +62,19 @@ public interface ISYSUserBO extends IPaginableBO<SYSUser> {
     // 审核注册用户
     public void approveSYSUser(SYSUser data, String approveResult,
             String updater, String remark);
+
+    public void refreshLoginName(String userId, String loginName);
+
+    // 判断登录名是否存在
+    public void isLoginNameExist(String loginName);
+
+    // 查询详情
+    public SYSUser getSYSUser(String userId);
+
+    public SYSUser getSYSUserUnCheck(String userId);
+
+    // 统计创建时间区间的总数
+    public long getTotalCount(Date createDatetimeStart,
+            Date createDatetimeEnd);
 
 }

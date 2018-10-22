@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Withdraw;
+import com.ogc.standard.dto.res.XN629903Res;
 import com.ogc.standard.spring.ServiceModule;
 
 @ServiceModule
@@ -37,4 +38,6 @@ public interface IWithdrawAO {
 
     public BigDecimal getTotalWithdraw(String currency);
 
+    public XN629903Res getTotalWithdraw(String applyUser,
+            List<String> statusList);
 }

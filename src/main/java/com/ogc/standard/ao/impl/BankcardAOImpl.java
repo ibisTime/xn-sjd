@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.ogc.standard.ao.IBankcardAO;
 import com.ogc.standard.bo.IBankcardBO;
+import com.ogc.standard.bo.ISmsOutBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Bankcard;
@@ -31,25 +32,27 @@ public class BankcardAOImpl implements IBankcardAO {
     @Autowired
     private IUserBO userBO;
 
+    @Autowired
+    private ISmsOutBO smsOutBO;
+
     @Override
     public String addBankcard(XN802020Req req) {
-        // 判断卡号是否重复
-        // List<Bankcard> list = bankcardBO.queryBankcardList(req.getUserId(),
-        // req.getSystemCode());
-        // if (CollectionUtils.isNotEmpty(list)) {
-        // throw new BizException("xn0000", "您已绑定银行卡,无需绑定多张");
-        // }
+        // 验证短信验证码
+        smsOutBO.checkCaptcha(req.getBindMobile(), req.getSmsCaptcha(),
+            "802020");
 
         Bankcard data = new Bankcard();
         data.setSystemCode(req.getSystemCode());
         data.setBankcardNumber(req.getBankcardNumber());
         data.setBankCode(req.getBankCode());
         data.setBankName(req.getBankName());
+
         data.setSubbranch(req.getSubbranch());
         data.setBindMobile(req.getBindMobile());
         data.setUserId(req.getUserId());
         data.setRealName(req.getRealName());
         data.setType(req.getType());
+
         data.setCurrency(req.getCurrency());
         data.setRemark(req.getRemark());
         return bankcardBO.saveBankcard(data);

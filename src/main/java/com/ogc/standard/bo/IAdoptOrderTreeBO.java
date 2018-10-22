@@ -1,5 +1,7 @@
 package com.ogc.standard.bo;
 
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 import com.ogc.standard.bo.base.IPaginableBO;
@@ -14,6 +16,11 @@ public interface IAdoptOrderTreeBO extends IPaginableBO<AdoptOrderTree> {
     public String saveAdoptOrderTree(Product product, AdoptOrder adoptOrder,
             String treeNumber);
 
+    public void giveTree(AdoptOrderTree data, User user, User toUser);
+
+    public void refreshAdoptOrderTree(AdoptOrderTree data,
+            EAdoptOrderTreeStatus adoptOrderTreeStatus);
+
     public List<AdoptOrderTree> queryAdoptOrderTreeList(
             AdoptOrderTree condition);
 
@@ -23,12 +30,13 @@ public interface IAdoptOrderTreeBO extends IPaginableBO<AdoptOrderTree> {
 
     public AdoptOrderTree getAdoptOrderTree(String code);
 
-    public void giveTree(AdoptOrderTree data, User user, User toUser);
-
-    public void refreshAdoptOrderTree(AdoptOrderTree data,
-            EAdoptOrderTreeStatus adoptOrderTreeStatus);
-
     // 用户的认养权数量
     public long getCountByCurrentHolder(String currentHolder);
 
+    // 产权方的认养权数量
+    public long getCountByOwner(String ownerId, Date createDatetimeStart,
+            Date createDatetimeEnd);
+
+    // 产权方认养总额
+    public BigDecimal getTotalAmount(String ownerId, List<String> statusList);
 }

@@ -1,5 +1,6 @@
 package com.ogc.standard.bo;
 
+import java.util.Date;
 import java.util.List;
 
 import com.ogc.standard.bo.base.IPaginableBO;
@@ -30,4 +31,7 @@ public interface IApplyBindMaintainBO extends IPaginableBO<ApplyBindMaintain> {
 
     public String getMaintainId(String userId);
 
+    // 查询养护方绑定的产权方总数
+    public long getOwnerCountByMaintain(String maintainId,
+            Date createDatetimeStart, Date createDatetimeEnd);
 }

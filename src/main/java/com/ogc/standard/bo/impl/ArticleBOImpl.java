@@ -113,6 +113,7 @@ public class ArticleBOImpl extends PaginableBOImpl<Article>
         condition.setRelationType(EUserReleationType.FRIEND.getCode());
         condition.setOpenLevel(EArticleOpenLevel.ONLY_FRIEND.getCode());
         condition.setRelationStatus(EUserReleationStatus.NORMAL.getCode());
+        condition.setStatus(EArticleStatus.PUT_ON.getCode());
         return articleDAO.selectList(condition);
     }
 

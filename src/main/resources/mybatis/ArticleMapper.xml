@@ -63,6 +63,13 @@
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
 			</if>
+			<if test="statusList != null and statusList != '' ">
+                AND t.status in
+                <foreach item="item" index="index" collection="statusList" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            
 			<if test="publishDatetimeStart != null and publishDatetimeStart != '' ">
 				<![CDATA[AND t.publish_datetime >= #{publishDatetimeStart}]]>
 			</if>

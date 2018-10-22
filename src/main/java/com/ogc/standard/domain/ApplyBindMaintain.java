@@ -50,6 +50,12 @@ public class ApplyBindMaintain extends ABaseDO {
     // 养护方人民币账户
     private Account maintainCnyAccount;
 
+    // 更新开始时间
+    private Date updateDatetimeStart;
+
+    // 更新结束时间
+    private Date updateDatetimeEnd;
+
     public void setCode(String code) {
         this.code = code;
     }
@@ -144,6 +150,22 @@ public class ApplyBindMaintain extends ABaseDO {
 
     public void setMaintainCnyAccount(Account maintainCnyAccount) {
         this.maintainCnyAccount = maintainCnyAccount;
+    }
+
+    public Date getUpdateDatetimeStart() {
+        return updateDatetimeStart;
+    }
+
+    public void setUpdateDatetimeStart(Date updateDatetimeStart) {
+        this.updateDatetimeStart = updateDatetimeStart;
+    }
+
+    public Date getUpdateDatetimeEnd() {
+        return updateDatetimeEnd;
+    }
+
+    public void setUpdateDatetimeEnd(Date updateDatetimeEnd) {
+        this.updateDatetimeEnd = updateDatetimeEnd;
     }
 
 }
