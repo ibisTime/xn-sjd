@@ -13,8 +13,8 @@ public class XN629057Req extends AListReq {
     // 认养产品编号
     private String productCode;
 
-    // 规格名称
-    private String productSpecsName;
+    // 规格编号
+    private String productSpecsCode;
 
     // 状态
     private String status;
@@ -39,12 +39,12 @@ public class XN629057Req extends AListReq {
         this.productCode = productCode;
     }
 
-    public String getProductSpecsName() {
-        return productSpecsName;
+    public String getProductSpecsCode() {
+        return productSpecsCode;
     }
 
-    public void setProductSpecsName(String productSpecsName) {
-        this.productSpecsName = productSpecsName;
+    public void setProductSpecsCode(String productSpecsCode) {
+        this.productSpecsCode = productSpecsCode;
     }
 
     public String getStatus() {

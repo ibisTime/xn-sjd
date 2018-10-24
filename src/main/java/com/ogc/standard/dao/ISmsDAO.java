@@ -24,4 +24,7 @@ public interface ISmsDAO extends IBaseDAO<Sms> {
 
     // 修改信息
     public int updateSms(Sms data);
+
+    // 阅读快报
+    public int updateReadBulletin(Sms data);
 }

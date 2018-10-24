@@ -30,10 +30,13 @@
 		<result column="raise_end_datetime" property="raiseEndDatetime" />
 		<result column="raise_count" property="raiseCount" />
 		<result column="now_count" property="nowCount" />
-		<result column="location" property="location" />
 		
+		<result column="identify_code" property="identifyCode" />
+		<result column="id_invalid_datetime" property="idInvalidDatetime" />
+		<result column="location" property="location" />
 		<result column="order_no" property="orderNo" />
 		<result column="status" property="status" />
+		
 		<result column="updater" property="updater" />
 		<result column="update_datetime" property="updateDatetime" />
 		<result column="remark" property="remark" />
@@ -60,6 +63,9 @@
 			</if>
 			<if test="categoryCode != null and categoryCode != '' ">
 				AND t.category_code = #{categoryCode}
+			</if>
+			<if test="identifyCode != null and identifyCode != '' ">
+				AND t.identify_code = #{identifyCode}
 			</if>
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
@@ -112,11 +118,14 @@
 		,t.raise_end_datetime
 		,t.raise_count
 		,t.now_count
-		,t.location
+		,t.identify_code
 		
+		,t.id_invalid_datetime
+		,t.location
 		,t.order_no
 		,t.status
 		,t.updater
+		
 		,t.update_datetime
 		,t.remark
 		FROM
@@ -147,21 +156,21 @@
 		,owner_id
 		,parent_category_code
 		,category_code
-		
 		,list_pic
 		,banner_pic
+		
 		,origin_place
 		,scientific_name
 		,variety
-		
 		,rank
 		,description
+		
 		,province
 		,city
 		,area
 		,town
-		
 		,raise_start_datetime
+		
 		,raise_end_datetime
 		,raise_count
 		,now_count
@@ -183,21 +192,21 @@
 		,#{ownerId}
 		,#{parentCategoryCode}
 		,#{categoryCode}
-		
 		,#{listPic}
 		,#{bannerPic}
+		
 		,#{originPlace}
 		,#{scientificName}
 		,#{variety}
-		
 		,#{rank}
 		,#{description}
+		
 		,#{province}
 		,#{city}
 		,#{area}
 		,#{town}
-		
 		,#{raiseStartDatetime}
+		
 		,#{raiseEndDatetime}
 		,#{raiseCount}
 		,#{nowCount}
@@ -305,6 +314,14 @@
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
 		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_currentIdentify" parameterType="product">
+		UPDATE tzb_product
+		SET
+		identify_code = #{identifyCode}
+		,id_invalid_datetime = #{idInvalidDatetime}
 		WHERE code = #{code}
 	</update>
 	

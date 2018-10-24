@@ -189,11 +189,10 @@
 		WHERE code = #{code}
 	</update>
 
-	<update id="update_adoptTree">
+	<update id="update_toPayTree">
 		UPDATE tzb_tree
 		SET
 		cur_order_code = #{curOrderCode}
-		,status = #{status}
 		WHERE code = #{code}
 	</update>
 	
@@ -231,13 +230,6 @@
 		UPDATE tzb_tree
 		SET
 		collection_count = #{collectionCount}
-		WHERE tree_number = #{treeNumber}
-	</update>
-	
-	<update id="update_adoptCount">
-		UPDATE tzb_tree
-		SET
-		adopt_count = #{adoptCount}
 		WHERE tree_number = #{treeNumber}
 	</update>
 	

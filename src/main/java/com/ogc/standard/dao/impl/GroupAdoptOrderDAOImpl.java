@@ -9,12 +9,12 @@ import com.ogc.standard.dao.base.support.AMybatisTemplate;
 import com.ogc.standard.domain.GroupAdoptOrder;
 
 @Repository("groupAdoptOrderDAOImpl")
-public class GroupAdoptOrderDAOImpl extends AMybatisTemplate implements
-        IGroupAdoptOrderDAO {
+public class GroupAdoptOrderDAOImpl extends AMybatisTemplate
+        implements IGroupAdoptOrderDAO {
 
     @Override
     public int insert(GroupAdoptOrder data) {
-        return super.insert(NAMESPACE.concat("insert_groupAdoptOrder"), data);
+        return 0;
     }
 
     @Override
@@ -61,7 +61,7 @@ public class GroupAdoptOrderDAOImpl extends AMybatisTemplate implements
 
     @Override
     public int update(GroupAdoptOrder data) {
-        return super.update(NAMESPACE.concat("update_groupAdoptOrder"), data);
+        return 0;
     }
 
     @Override

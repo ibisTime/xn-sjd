@@ -73,6 +73,12 @@
 		SELECT count(1) FROM tsj_carbon_bubble_order t
 		<include refid="where_condition" />
 	</select>
+	
+	<select id="select_carbonBubbleOrder_quantitySum" parameterType="carbonBubbleOrder"
+		resultType="java.math.BigDecimal">
+		SELECT IFNULL(SUM(t.quantity), 0) FROM tsj_carbon_bubble_order t
+		<include refid="where_condition" />
+	</select>
 
 	<insert id="insert_carbonBubbleOrder" parameterType="carbonBubbleOrder">
 		INSERT INTO

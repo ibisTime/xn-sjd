@@ -25,6 +25,7 @@ import com.ogc.standard.bo.IDistributionOrderBO;
 import com.ogc.standard.bo.IProductBO;
 import com.ogc.standard.bo.IProductSpecsBO;
 import com.ogc.standard.bo.ISettleBO;
+import com.ogc.standard.bo.ISmsBO;
 import com.ogc.standard.bo.ITreeBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
@@ -102,6 +103,9 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
 
     @Autowired
     private IAlipayBO alipayBO;
+
+    @Autowired
+    private ISmsBO smsBO;
 
     @Override
     @Transactional
@@ -291,17 +295,46 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
 
         // 业务订单更改
         adoptOrderBO.payYueSuccess(data, resultRes, backJfAmount);
-        List<Tree> treeList = treeBO.queryTreeListByOrderCode(data.getCode());
-        if (CollectionUtils.isNotEmpty(treeList)) {
-            Product product = productBO.getProduct(data.getProductCode());
-            for (Tree tree : treeList) {
-                // 更新树状态
-                treeBO.refreshPayTree(tree);
-                // 分配认养权
-                adoptOrderTreeBO.saveAdoptOrderTree(product, data,
-                    tree.getTreeNumber());
+
+        List<Tree> treeList = new ArrayList<Tree>();
+        // 专属/定向产品分配认养权、更新树状态
+        if (ESellType.PERSON.getCode().equals(data.getType())
+                || ESellType.DIRECT.getCode().equals(data.getType())) {//
+            treeList = treeBO.queryTreeListByOrderCode(data.getCode());
+
+            if (CollectionUtils.isNotEmpty(treeList)) {
+                Product product = productBO.getProduct(data.getProductCode());
+                for (Tree tree : treeList) {
+
+                    treeBO.refreshPayTree(tree, tree.getAdoptCount() + 1);
+
+                    adoptOrderTreeBO.saveAdoptOrderTree(product, data,
+                        tree.getTreeNumber());
+                }
             }
         }
+
+        // 专属/定向产品分配认养权、更新树状态
+        if (ESellType.DONATE.getCode().equals(data.getType())) {// 捐赠产品
+            treeList = treeBO.queryTreeListByProduct(data.getProductCode());
+            Product product = productBO.getProduct(data.getProductCode());
+            if (CollectionUtils.isNotEmpty(treeList)) {
+                for (Tree tree : treeList) {
+                    treeBO.refreshPayTree(tree,
+                        tree.getAdoptCount() + data.getQuantity());
+                }
+            }
+
+            for (int i = 0; i < data.getQuantity(); i++) {
+                adoptOrderTreeBO.saveAdoptOrderTree(product, data,
+                    treeList.get(0).getTreeNumber());
+            }
+        }
+
+        // 添加快报
+        smsBO.saveBulletin(data.getApplyUser(), data.getQuantity().toString(),
+            data.getProductCode());
+
         return new BooleanRes(true);
     }
 
@@ -325,20 +358,51 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
             BigDecimal backJfAmount = distributionOrderBO.distribution(data,
                 resultRes);
 
+            // 用户升级
+            userAO.upgradeUserLevel(data.getApplyUser());
+
             adoptOrderBO.paySuccess(data, data.getAmount(), backJfAmount);
-            // 业务订单更改
-            List<Tree> treeList = treeBO
-                .queryTreeListByOrderCode(data.getCode());
-            if (CollectionUtils.isNotEmpty(treeList)) {
-                Product product = productBO.getProduct(data.getProductCode());
-                for (Tree tree : treeList) {
-                    // 更新树状态
-                    treeBO.refreshPayTree(tree);
-                    // 分配认养权
-                    adoptOrderTreeBO.saveAdoptOrderTree(product, data,
-                        tree.getTreeNumber());
+
+            List<Tree> treeList = new ArrayList<Tree>();
+            // 专属/定向产品分配认养权、更新树状态
+            if (ESellType.PERSON.getCode().equals(data.getType())
+                    || ESellType.DIRECT.getCode().equals(data.getType())) {//
+                treeList = treeBO.queryTreeListByOrderCode(data.getCode());
+
+                if (CollectionUtils.isNotEmpty(treeList)) {
+                    Product product = productBO
+                        .getProduct(data.getProductCode());
+                    for (Tree tree : treeList) {
+
+                        treeBO.refreshPayTree(tree, tree.getAdoptCount() + 1);
+
+                        adoptOrderTreeBO.saveAdoptOrderTree(product, data,
+                            tree.getTreeNumber());
+                    }
                 }
             }
+
+            // 专属/定向产品分配认养权、更新树状态
+            if (ESellType.DONATE.getCode().equals(data.getType())) {// 捐赠产品
+                treeList = treeBO.queryTreeListByProduct(data.getProductCode());
+                Product product = productBO.getProduct(data.getProductCode());
+                if (CollectionUtils.isNotEmpty(treeList)) {
+                    for (Tree tree : treeList) {
+                        treeBO.refreshPayTree(tree,
+                            tree.getAdoptCount() + data.getQuantity());
+                    }
+                }
+
+                for (int i = 0; i < data.getQuantity(); i++) {
+                    adoptOrderTreeBO.saveAdoptOrderTree(product, data,
+                        treeList.get(0).getTreeNumber());
+                }
+            }
+
+            // 添加快报
+            smsBO.saveBulletin(data.getApplyUser(),
+                data.getQuantity().toString(), data.getProductCode());
+
         } else {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "订单号[" + data.getCode() + "]支付重复回调");
@@ -512,6 +576,31 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
 
         StringBuilder treeNumbers = new StringBuilder();
         List<Tree> treeList = new ArrayList<Tree>();
+
+        // // 专属、定向产品查询所有的树
+        // if (ESellType.PERSON.getCode().equals(data.getType())
+        // || ESellType.DIRECT.getCode().equals(data.getType())) {
+        // for (AdoptOrderTree adoptOrderTree : adoptOrderTreeList) {
+        // Tree tree = treeBO
+        // .getTreeByTreeNumber(adoptOrderTree.getTreeNumber());
+        // treeList.add(tree);
+        //
+        // treeNumbers.append(adoptOrderTree.getTreeNumber()).append(". ");
+        // }
+        // }
+        //
+        // // 捐赠产品只查询一棵树
+        // if (ESellType.DONATE.getCode().equals(data.getType())) {
+        // if (CollectionUtils.isNotEmpty(adoptOrderTreeList)) {
+        // Tree tree = treeBO.getTreeByTreeNumber(
+        // adoptOrderTreeList.get(0).getTreeNumber());
+        // treeList.add(tree);
+        //
+        // treeNumbers.append(adoptOrderTreeList.get(0).getTreeNumber())
+        // .append(". ");
+        // }
+        // }
+
         for (AdoptOrderTree adoptOrderTree : adoptOrderTreeList) {
             Tree tree = treeBO
                 .getTreeByTreeNumber(adoptOrderTree.getTreeNumber());
@@ -519,6 +608,7 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
 
             treeNumbers.append(adoptOrderTree.getTreeNumber()).append(". ");
         }
+
         data.setTreeList(treeList);
 
         Integer adoptYear = DateUtil.yearsBetween(data.getStartDatetime(),

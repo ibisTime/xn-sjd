@@ -19,6 +19,10 @@ public interface IBizLogBO extends IPaginableBO<BizLog> {
     public long gatherNoCarbonBubble(String adoptTreeCode, String adoptUserId,
             String userId);
 
+    // 使用保护罩
+    public long useShelter(String adoptTreeCode, String adoptUserId,
+            String userId);
+
     // 本周用户碳泡泡总量
     public BigDecimal getWeekQuantitySum(String adoptUserId, String userId);
 

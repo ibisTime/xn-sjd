@@ -10,7 +10,7 @@ public interface ITreeDAO extends IBaseDAO<Tree> {
     public int updateTree(Tree data);
 
     // 认养树
-    public int updateAdoptTree(Tree data);
+    public int updateToPayTree(Tree data);
 
     // 取消认养
     public int updateCancelTree(Tree data);
@@ -29,8 +29,5 @@ public interface ITreeDAO extends IBaseDAO<Tree> {
 
     // 更新收藏数
     public int updateCollectionCount(Tree data);
-
-    // 更新认养数
-    public int updateAdoptCount(Tree data);
 
 }

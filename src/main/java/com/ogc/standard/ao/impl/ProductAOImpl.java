@@ -80,10 +80,16 @@ public class ProductAOImpl implements IProductAO {
 
         // 捐赠产品
         if (ESellType.DONATE.getCode().equals(req.getSellType())) {
-            if (null == req.getRaiseStartDatetime()
-                    && null == req.getRaiseEndDatetime()) {
+            if (StringUtils.isBlank(req.getRaiseStartDatetime())
+                    && StringUtils.isBlank(req.getRaiseEndDatetime())) {
                 throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                     "捐赠产品募集开始和募集结束时间不能为空");
+            }
+
+            if (StringUtils.isBlank(req.getStartDatetime())
+                    && StringUtils.isBlank(req.getEndDatetime())) {
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                    "捐赠产品认养开始和认养结束时间不能为空");
             }
 
             if (req.getTreeList().size() > 1) {
@@ -92,10 +98,29 @@ public class ProductAOImpl implements IProductAO {
             }
         }
 
+        // 集体产品
+        if (ESellType.COLLECTIVE.getCode().equals(req.getSellType())) {
+            if (StringUtils.isBlank(req.getRaiseCount())) {
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                    "集体产品认养份数不能为空");
+            }
+
+            if (req.getTreeList().size() > 1) {
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                    "集体产品只能有一棵树");
+            }
+        }
+
         Product product = productBO.saveProduct(req);
 
         // 添加产品规格
         for (XN629010ReqSpecs productSpecs : req.getProductSpecsList()) {
+            // 捐赠产品规格只有一个年限
+            if (ESellType.DONATE.getCode().equals(req.getSellType())) {
+                productSpecs.setStartDatetime(req.getStartDatetime());
+                productSpecs.setEndDatetime(req.getEndDatetime());
+            }
+
             productSpecsBO.saveProductSpecs(product.getCode(), productSpecs);
         }
 
@@ -124,6 +149,8 @@ public class ProductAOImpl implements IProductAO {
         if (ECategoryStatus.PUT_OFF.getCode().equals(category.getStatus())) {
             throw new BizException("xn0000", "产品分类已下架，请重新选择！");
         }
+
+        // 定向产品
         if (ESellType.DIRECT.getCode().equals(req.getSellType())) {
             if (StringUtils.isBlank(req.getDirectType())
                     || StringUtils.isBlank(req.getDirectObject())) {
@@ -131,6 +158,40 @@ public class ProductAOImpl implements IProductAO {
                     "定向产品方向和针对对象不能为空");
             }
         }
+
+        // 捐赠产品
+        if (ESellType.DONATE.getCode().equals(req.getSellType())) {
+            if (StringUtils.isBlank(req.getRaiseStartDatetime())
+                    && StringUtils.isBlank(req.getRaiseEndDatetime())) {
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                    "捐赠产品募集开始和募集结束时间不能为空");
+            }
+
+            if (StringUtils.isBlank(req.getStartDatetime())
+                    && StringUtils.isBlank(req.getEndDatetime())) {
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                    "捐赠产品认养开始和认养结束时间不能为空");
+            }
+
+            if (req.getTreeList().size() > 1) {
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                    "捐赠产品只能有一棵树");
+            }
+        }
+
+        // 集体产品
+        if (ESellType.COLLECTIVE.getCode().equals(req.getSellType())) {
+            if (StringUtils.isBlank(req.getRaiseCount())) {
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                    "集体产品认养份数不能为空");
+            }
+
+            if (req.getTreeList().size() > 1) {
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                    "集体产品只能有一棵树");
+            }
+        }
+
         Product data = productBO.getProduct(req.getCode());
         // 未提交和已下架后可修改
         if (!EProductStatus.DRAFT.getCode().equals(data.getStatus())
@@ -140,6 +201,7 @@ public class ProductAOImpl implements IProductAO {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "产品不处于可修改状态！");
         }
+
         productBO.refreshProduct(data, req);
 
         // 删除旧产品规格
@@ -147,6 +209,12 @@ public class ProductAOImpl implements IProductAO {
 
         // 添加新产品规格
         for (XN629010ReqSpecs productSpecs : req.getProductSpecsList()) {
+            // 捐赠产品规格只有一个年限
+            if (ESellType.DONATE.getCode().equals(req.getSellType())) {
+                productSpecs.setStartDatetime(req.getStartDatetime());
+                productSpecs.setEndDatetime(req.getEndDatetime());
+            }
+
             productSpecsBO.saveProductSpecs(req.getCode(), productSpecs);
         }
 

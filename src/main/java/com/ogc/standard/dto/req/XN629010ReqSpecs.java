@@ -20,11 +20,9 @@ public class XN629010ReqSpecs extends BaseReq {
     private String price;
 
     // 认养开始时间
-    @NotBlank
     private String startDatetime;
 
     // 认养结束时间
-    @NotBlank
     private String endDatetime;
 
     public String getName() {

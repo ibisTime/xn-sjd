@@ -214,7 +214,7 @@ public class AdoptOrderTreeAOImpl implements IAdoptOrderTreeAO {
                 break;
             }
 
-            start = start + limit;
+            start = start + 1;
         }
 
         logger.info("***************结束生成碳泡泡***************");

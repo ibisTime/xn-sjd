@@ -46,6 +46,7 @@ public class BizLogAOImpl implements IBizLogAO {
         BigDecimal toUserWeekQuantity = bizLogBO.getWeekQuantitySum(userId,
             toUserId);
         res.setToUserWeekQuantity(toUserWeekQuantity);
+
         return res;
     }
 

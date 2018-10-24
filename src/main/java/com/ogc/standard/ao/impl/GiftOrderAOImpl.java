@@ -123,7 +123,7 @@ public class GiftOrderAOImpl implements IGiftOrderAO {
                 break;
             }
 
-            start = start + limit;
+            start = start + 1;
         }
         logger.info("***************开始扫描已过期礼物***************");
     }

@@ -15,7 +15,8 @@ package com.ogc.standard.enums;
  */
 public enum ESmsStauts {
 
-    DRAFT("0", "草稿"), SENDED("1", "已发送"), WITHDRAW("2", "已撤回");
+    DRAFT("0", "草稿"), SENDED("1", "已发送"), WITHDRAW("2", "已撤回"), READED("3",
+            "已读");
 
     ESmsStauts(String code, String value) {
         this.code = code;

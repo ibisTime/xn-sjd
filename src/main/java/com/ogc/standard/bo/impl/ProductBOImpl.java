@@ -3,6 +3,7 @@ package com.ogc.standard.bo.impl;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -12,9 +13,11 @@ import org.springframework.stereotype.Component;
 import com.ogc.standard.bo.ICategoryBO;
 import com.ogc.standard.bo.IProductBO;
 import com.ogc.standard.bo.IProductSpecsBO;
+import com.ogc.standard.bo.ISYSConfigBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.common.AmountUtil;
 import com.ogc.standard.common.DateUtil;
+import com.ogc.standard.common.SysConstants;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.dao.IProductDAO;
@@ -42,6 +45,9 @@ public class ProductBOImpl extends PaginableBOImpl<Product>
 
     @Autowired
     private IProductSpecsBO productSpecsBO;
+
+    @Autowired
+    private ISYSConfigBO sysConfigBO;
 
     @Override
     public Product saveProduct(XN629010Req req) {
@@ -253,6 +259,23 @@ public class ProductBOImpl extends PaginableBOImpl<Product>
         product.setUpdateDatetime(new Date());
 
         productDAO.updatePutOffProduct(product);
+    }
+
+    @Override
+    public void refreshCurrentIdentify(String code, String identifyCode) {
+        Map<String, String> mapList = sysConfigBO.getConfigsMap();
+        Integer idInvalidHours = Integer
+            .valueOf(mapList.get(SysConstants.ID_INVALID_HOURS));// 识别码失效时间
+        Date idInvalidDatetime = DateUtil.getRelativeDateOfHour(new Date(),
+            idInvalidHours);
+
+        Product product = new Product();
+        product.setCode(code);
+        product.setIdentifyCode(identifyCode);
+        product.setIdInvalidDatetime(idInvalidDatetime);
+
+        productDAO.updateCurrentIdentify(product);
+
     }
 
     @Override

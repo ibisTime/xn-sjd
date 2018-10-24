@@ -85,6 +85,12 @@ public class Product extends ABaseDO {
     // 已募集数量
     private Integer nowCount;
 
+    // 当前识别码
+    private String identifyCode;
+
+    // 识别码失效时间
+    private Date idInvalidDatetime;
+
     // UI位置
     private String location;
 
@@ -477,6 +483,22 @@ public class Product extends ABaseDO {
 
     public void setOwnerInfo(SYSUser ownerInfo) {
         this.ownerInfo = ownerInfo;
+    }
+
+    public String getIdentifyCode() {
+        return identifyCode;
+    }
+
+    public void setIdentifyCode(String identifyCode) {
+        this.identifyCode = identifyCode;
+    }
+
+    public Date getIdInvalidDatetime() {
+        return idInvalidDatetime;
+    }
+
+    public void setIdInvalidDatetime(Date idInvalidDatetime) {
+        this.idInvalidDatetime = idInvalidDatetime;
     }
 
 }

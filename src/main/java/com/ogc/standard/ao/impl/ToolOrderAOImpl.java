@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ogc.standard.ao.IToolOrderAO;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IAdoptOrderTreeBO;
+import com.ogc.standard.bo.IBizLogBO;
 import com.ogc.standard.bo.IToolBO;
 import com.ogc.standard.bo.IToolOrderBO;
 import com.ogc.standard.bo.IToolUseRecordBO;
@@ -51,6 +52,9 @@ public class ToolOrderAOImpl implements IToolOrderAO {
 
     @Autowired
     private IToolUseRecordBO toolUseRecordBO;
+
+    @Autowired
+    private IBizLogBO bizLogBO;
 
     @Override
     @Transactional
@@ -128,6 +132,13 @@ public class ToolOrderAOImpl implements IToolOrderAO {
 
         // 刷新订单状态
         toolOrderBO.refreshStatus(toolOrder);
+
+        // 添加使用保护罩日志
+        if (toolOrder.getToolName().contains("罩")) {
+            bizLogBO.useShelter(adoptTreeCode,
+                adoptOrderTree.getCurrentHolder(), userId);
+        }
+
     }
 
     @Override

@@ -4,21 +4,25 @@ import java.util.List;
 
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.GroupAdoptOrder;
-import com.ogc.standard.dto.req.XN629050Req;
-import com.ogc.standard.dto.req.XN629051Req;
 
 public interface IGroupAdoptOrderAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
     // 第一人下单
-    public String firstAddGroupAdoptOrder(XN629050Req req);
+    public String firstAddGroupAdoptOrder(String userId, String specsCode,
+            Integer quantity);
 
     // 非第一人下单
-    public String unFirstAddGroupAdoptOrder(XN629051Req req);
+    public String unFirstAddGroupAdoptOrder(String identifyCode, String userId,
+            Integer quantity);
 
-    public int dropGroupAdoptOrder(String code);
+    // 取消订单
+    public void cancelGroupAdoptOrder(String code, String userId,
+            String remark);
 
-    public int editGroupAdoptOrder(GroupAdoptOrder data);
+    // 支付订单
+    public Object toPayAdoptOrder(String code, String payType,
+            String isJfDeduct, String tradePwd);
 
     public Paginable<GroupAdoptOrder> queryGroupAdoptOrderPage(int start,
             int limit, GroupAdoptOrder condition);
@@ -27,11 +31,5 @@ public interface IGroupAdoptOrderAO {
             GroupAdoptOrder condition);
 
     public GroupAdoptOrder getGroupAdoptOrder(String code);
-
-    // 取消订单
-    public void cancelGroupAdoptOrder(String code);
-
-    // 支付订单
-    public String payGroupAdoptOrder(String code, String type);
 
 }

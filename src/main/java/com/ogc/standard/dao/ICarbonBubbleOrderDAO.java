@@ -1,5 +1,7 @@
 package com.ogc.standard.dao;
 
+import java.math.BigDecimal;
+
 import com.ogc.standard.dao.base.IBaseDAO;
 import com.ogc.standard.domain.CarbonBubbleOrder;
 
@@ -13,4 +15,6 @@ public interface ICarbonBubbleOrderDAO extends IBaseDAO<CarbonBubbleOrder> {
     // 过期
     public int updateExpireCarbonBubble(CarbonBubbleOrder data);
 
+    // 碳泡泡数量总额
+    public BigDecimal selectTotalQuantity(CarbonBubbleOrder data);
 }

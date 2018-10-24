@@ -84,13 +84,19 @@ public class XN629011Req extends BaseReq {
     @NotBlank
     private String town;
 
-    // 募集开始时间
+    // 募集开始时间(捐赠)
     private String raiseStartDatetime;
 
-    // 募集结束时间
+    // 募集结束时间(捐赠)
     private String raiseEndDatetime;
 
-    // 募集总量
+    // 认养开始时间(捐赠)
+    private String startDatetime;
+
+    // 认养结束时间(捐赠)
+    private String endDatetime;
+
+    // 募集总数量(集体)
     private String raiseCount;
 
     // 产品规格列表
@@ -306,6 +312,22 @@ public class XN629011Req extends BaseReq {
 
     public void setDirectObject(String directObject) {
         this.directObject = directObject;
+    }
+
+    public String getStartDatetime() {
+        return startDatetime;
+    }
+
+    public void setStartDatetime(String startDatetime) {
+        this.startDatetime = startDatetime;
+    }
+
+    public String getEndDatetime() {
+        return endDatetime;
+    }
+
+    public void setEndDatetime(String endDatetime) {
+        this.endDatetime = endDatetime;
     }
 
 }

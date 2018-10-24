@@ -189,7 +189,8 @@ public class ArticleAOImpl implements IArticleAO {
             condition);
 
         // 查询好友的好友可见文章
-        if (StringUtils.isNotBlank(req.getQueryUserId())) {
+        if (StringUtils.isNotBlank(req.getQueryUserId())
+                && StringUtils.isBlank(req.getTreeNo())) {
             List<Article> privateArticle = articleBO
                 .queryPrivateArticleList(req.getQueryUserId());
             List<Article> list = page.getList();

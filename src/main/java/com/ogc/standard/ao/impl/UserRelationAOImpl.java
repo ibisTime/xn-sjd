@@ -18,8 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.IUserRelationAO;
-import com.ogc.standard.bo.IAccountBO;
-import com.ogc.standard.bo.IAdoptOrderTreeBO;
+import com.ogc.standard.bo.ICarbonBubbleOrderBO;
 import com.ogc.standard.bo.ISYSConfigBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.IUserRelationBO;
@@ -46,10 +45,7 @@ public class UserRelationAOImpl implements IUserRelationAO {
     IUserBO userBO;
 
     @Autowired
-    private IAdoptOrderTreeBO adoptOrderTreeBO;
-
-    @Autowired
-    private IAccountBO accountBO;
+    private ICarbonBubbleOrderBO carbonBubbleOrderBO;
 
     @Autowired
     private ISYSConfigBO sysConfigBO;
@@ -133,6 +129,11 @@ public class UserRelationAOImpl implements IUserRelationAO {
             }
             User toUserInfo = userBO.getUser(userRelation.getToUser());
             userRelation.setToUserInfo(toUserInfo);
+
+            // 好友碳泡泡数量
+            BigDecimal takeableTppAmount = carbonBubbleOrderBO
+                .takeableTppAmount(userRelation.getToUser());
+            userRelation.setTakeableTppAmount(takeableTppAmount);
         }
         return page;
     }
@@ -149,6 +150,7 @@ public class UserRelationAOImpl implements IUserRelationAO {
         condition.setWeightRate2(weightRate2);
         List<UserRelation> list = userRelationBO
             .queryMyUserRelationList(condition);
+
         UserRelation result = null;
         for (UserRelation userRelation : list) {
             if (condition.getUserId().equals(userRelation.getToUser())) {

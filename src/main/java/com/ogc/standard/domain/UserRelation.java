@@ -62,6 +62,9 @@ public class UserRelation extends ABaseDO {
 
     public BigDecimal weightRate2;
 
+    // 可收取的碳泡泡
+    public BigDecimal takeableTppAmount;
+
     public String getMySelf() {
         return mySelf;
     }
@@ -172,6 +175,14 @@ public class UserRelation extends ABaseDO {
 
     public void setRowNo(int rowNo) {
         this.rowNo = rowNo;
+    }
+
+    public BigDecimal getTakeableTppAmount() {
+        return takeableTppAmount;
+    }
+
+    public void setTakeableTppAmount(BigDecimal takeableTppAmount) {
+        this.takeableTppAmount = takeableTppAmount;
     }
 
 }

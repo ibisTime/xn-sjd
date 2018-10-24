@@ -130,4 +130,6 @@ public class SysConstants {
 
     public static final String USER_LEVEL_5 = "USER_LEVEL_5";// 爱林天使
 
+    // 识别码
+    public static final String ID_INVALID_HOURS = "ID_INVALID_HOURS";// 识别码失效时间
 }

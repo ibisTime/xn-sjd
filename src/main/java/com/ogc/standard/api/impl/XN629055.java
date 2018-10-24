@@ -31,16 +31,16 @@ public class XN629055 extends AProcessor {
     public Object doBusiness() throws BizException {
         GroupAdoptOrder condition = new GroupAdoptOrder();
         condition.setProductCode(req.getProductCode());
-        condition.setProductSpecsName(req.getProductSpecsName());
+        condition.setProductSpecsCode(req.getProductSpecsCode());
         condition.setStatus(req.getStatus());
         condition.setStartDatetimeStart(DateUtil.strToDate(
-            req.getStartDatetimeStart(), DateUtil.DATA_TIME_PATTERN_1));
+            req.getStartDatetimeStart(), DateUtil.FRONT_DATE_FORMAT_STRING));
         condition.setStartDatetimeStart(DateUtil.strToDate(
-            req.getStartDatetimeEnd(), DateUtil.DATA_TIME_PATTERN_1));
+            req.getStartDatetimeEnd(), DateUtil.FRONT_DATE_FORMAT_STRING));
         condition.setEndDatetimeStart(DateUtil.strToDate(
-            req.getEndDatetimeStart(), DateUtil.DATA_TIME_PATTERN_1));
+            req.getEndDatetimeStart(), DateUtil.FRONT_DATE_FORMAT_STRING));
         condition.setEndDatetimeStart(DateUtil.strToDate(
-            req.getEndDatetimeEnd(), DateUtil.DATA_TIME_PATTERN_1));
+            req.getEndDatetimeEnd(), DateUtil.FRONT_DATE_FORMAT_STRING));
 
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {

@@ -21,6 +21,7 @@ import com.ogc.standard.dto.req.XN805301Req;
  * @history:
  */
 public interface ISmsAO {
+    static final String DEFAULT_ORDER_COLUMN = "id";
 
     // 保存消息（草稿）
     public String addSms(XN805300Req req);

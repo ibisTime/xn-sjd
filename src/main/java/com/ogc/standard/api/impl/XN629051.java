@@ -23,7 +23,9 @@ public class XN629051 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return groupAdoptOrderAO.unFirstAddGroupAdoptOrder(req);
+        Integer quantity = Integer.valueOf(req.getQuantity());
+        return groupAdoptOrderAO.unFirstAddGroupAdoptOrder(
+            req.getIdentifyCode(), req.getUserId(), quantity);
     }
 
     @Override

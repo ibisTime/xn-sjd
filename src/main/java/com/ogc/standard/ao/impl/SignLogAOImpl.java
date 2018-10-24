@@ -154,7 +154,8 @@ public class SignLogAOImpl implements ISignLogAO {
                                 / 86400000;
                 if (dayNum == 1) {
                     count++;
-                } else {
+                }
+                if (dayNum > 1) {
                     break;
                 }
             }

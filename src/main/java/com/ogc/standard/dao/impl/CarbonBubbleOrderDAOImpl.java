@@ -1,5 +1,6 @@
 package com.ogc.standard.dao.impl;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
@@ -43,6 +44,13 @@ public class CarbonBubbleOrderDAOImpl extends AMybatisTemplate
     public long selectTotalCount(CarbonBubbleOrder condition) {
         return super.selectTotalCount(
             NAMESPACE.concat("select_carbonBubbleOrder_count"), condition);
+    }
+
+    @Override
+    public BigDecimal selectTotalQuantity(CarbonBubbleOrder data) {
+        return super.select(
+            NAMESPACE.concat("select_carbonBubbleOrder_quantitySum"), data,
+            BigDecimal.class);
     }
 
     @Override

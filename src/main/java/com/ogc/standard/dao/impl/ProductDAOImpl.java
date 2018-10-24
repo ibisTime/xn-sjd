@@ -67,6 +67,11 @@ public class ProductDAOImpl extends AMybatisTemplate implements IProductDAO {
     }
 
     @Override
+    public int updateCurrentIdentify(Product data) {
+        return super.update(NAMESPACE.concat("update_currentIdentify"), data);
+    }
+
+    @Override
     public Product select(Product condition) {
         return super.select(NAMESPACE.concat("select_product"), condition,
             Product.class);

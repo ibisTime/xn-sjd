@@ -49,6 +49,9 @@ public interface IProductBO extends IPaginableBO<Product> {
     // 下架产品
     public void refreshPutOffProduct(String code, String updater);
 
+    // 更新当前识别码
+    public void refreshCurrentIdentify(String code, String identifyCode);
+
     // 统计产权方的产品市值
     public XN630065PriceRes getOwnerProductPrice(String ownerId);
 

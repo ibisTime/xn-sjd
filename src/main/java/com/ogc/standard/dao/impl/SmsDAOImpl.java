@@ -69,4 +69,9 @@ public class SmsDAOImpl extends AMybatisTemplate implements ISmsDAO {
         return super.update(NAMESPACE.concat("update_sms"), data);
     }
 
+    @Override
+    public int updateReadBulletin(Sms data) {
+        return super.update(NAMESPACE.concat("update_readBulletin"), data);
+    }
+
 }

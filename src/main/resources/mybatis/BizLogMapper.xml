@@ -36,6 +36,8 @@
 			</if>
 			<if test="queryUserId != null and queryUserId != '' ">
 				AND (t.user_id = #{queryUserId} or t.adopt_user_id = #{queryUserId})
+				AND t.id not in (select id from tsys_biz_log where type = 4 and user_id = #{queryUserId})
+				<![CDATA[ AND t.user_id <> t.adopt_user_id ]]> 
 			</if>
 			
 			<if test="createDatetimeStart != null and createDatetimeStart != '' ">

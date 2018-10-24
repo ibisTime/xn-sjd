@@ -39,6 +39,35 @@
 		</trim>
 	</sql>
 	
+	<select id="select_sms" parameterType="sms" resultMap="sms_DB_Result">
+		SELECT
+		t.code
+		,t.type
+		,t.object
+		,t.title
+		,t.content
+		
+		,t.status
+		,t.create_datetime
+		,t.updater
+		,t.update_datetime
+		,t.remark
+		FROM
+		tstd_sms t 
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+	
+	<select id="select_sms_count" parameterType="sms"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tstd_sms t
+		<include refid="where_condition" />
+	</select>
+	
 	<insert id="insert_sms" parameterType="sms">
 		INSERT INTO tstd_sms(
 		code
@@ -93,27 +122,13 @@
 		code=#{code}
 	</update>
 	
-	<select id="select_sms" parameterType="sms" resultMap="sms_DB_Result">
-		SELECT
-		t.code
-		,t.type
-		,t.object
-		,t.title
-		,t.content
-		
-		,t.status
-		,t.create_datetime
-		,t.updater
-		,t.update_datetime
-		,t.remark
-		FROM
-		tstd_sms t 
-		<include refid="where_condition" />
-	</select>
-
-	<select id="select_sms_count" parameterType="sms"
-		resultType="java.lang.Long">
-		SELECT count(1) FROM tstd_sms t
-		<include refid="where_condition" />
-	</select>
+	<update id="update_readBulletin" parameterType="sms">
+		UPDATE tstd_sms
+		SET
+		status=#{status}
+		,update_datetime=#{updateDatetime}
+		WHERE
+		code=#{code}
+	</update>
+	
 </mapper>

@@ -10,7 +10,6 @@ package com.ogc.standard.api.impl;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.ogc.standard.ao.ISignLogAO;
 import com.ogc.standard.ao.ISmsAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
@@ -44,7 +43,7 @@ public class XN805305 extends AProcessor {
 
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
-            column = ISignLogAO.DEFAULT_ORDER_COLUMN;
+            column = ISmsAO.DEFAULT_ORDER_COLUMN;
         }
         condition.setOrder(column, req.getOrderDir());
         int start = StringValidater.toInteger(req.getStart());

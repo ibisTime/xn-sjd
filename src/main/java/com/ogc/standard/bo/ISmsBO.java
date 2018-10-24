@@ -28,6 +28,12 @@ public interface ISmsBO extends IPaginableBO<Sms> {
 
     public int revokeSms(String code, String updater, String remark);
 
+    // 添加快报
+    public void saveBulletin(String userId, String count, String productId);
+
+    // 阅读快报
+    public void readBulletin(String code);
+
     public List<Sms> querySmsList(Sms data);
 
     public Sms getSms(String code);

@@ -14,9 +14,16 @@ public class XN629053Req {
     @NotBlank
     private String code;
 
-    // 支付方式
+    // 支付方式(1余额/3支付宝/5微信)
     @NotBlank
     private String payType;
+
+    // 是否积分抵扣0否1是
+    @NotBlank
+    private String isJfDeduct;
+
+    // 支付密码
+    private String tradePwd;
 
     public String getCode() {
         return code;
@@ -32,6 +39,22 @@ public class XN629053Req {
 
     public void setPayType(String payType) {
         this.payType = payType;
+    }
+
+    public String getIsJfDeduct() {
+        return isJfDeduct;
+    }
+
+    public void setIsJfDeduct(String isJfDeduct) {
+        this.isJfDeduct = isJfDeduct;
+    }
+
+    public String getTradePwd() {
+        return tradePwd;
+    }
+
+    public void setTradePwd(String tradePwd) {
+        this.tradePwd = tradePwd;
     }
 
 }

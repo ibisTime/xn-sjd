@@ -38,4 +38,7 @@ public interface IProductDAO extends IBaseDAO<Product> {
 
     // 下架产品
     public int updatePutOffProduct(Product data);
+
+    // 更新当前识别码
+    public int updateCurrentIdentify(Product data);
 }

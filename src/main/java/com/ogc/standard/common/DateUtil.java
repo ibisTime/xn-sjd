@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.UUID;
 
 public class DateUtil {
 
@@ -25,6 +26,8 @@ public class DateUtil {
     public static final String DATA_TIME_PATTERN_6 = "yyyy年MM月dd日";
 
     public static final String DATA_TIME_PATTERN_7 = "yyyy年MM月dd日 ahh:mm:ss";
+
+    public static final String DATA_TIME_PATTERN_8 = "yyyy-MM-dd HH:mm";
 
     public static final String UTC_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
 
@@ -382,6 +385,8 @@ public class DateUtil {
         Boolean isBetween = false;
         Date now = new Date();
 
+        endDate = getDayEndTime(endDate);
+
         if (startDate.before(now) && now.before(endDate)) {
             isBetween = true;
         }
@@ -390,9 +395,7 @@ public class DateUtil {
     }
 
     public static void main(String[] args) {
-        System.out.println(
-            isNowBetween(strToDate("2016-09-01", FRONT_DATE_FORMAT_STRING),
-                strToDate("2018-01-01", FRONT_DATE_FORMAT_STRING)));
+        System.out.println(UUID.randomUUID().toString().hashCode() + "");
     }
 
     /**

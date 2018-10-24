@@ -79,7 +79,7 @@ public class CarbonBubbleOrderAOImpl implements ICarbonBubbleOrderAO {
                 break;
             }
 
-            start = start + limit;
+            start = start + 1;
         }
 
         logger.info("***************结束扫描已过期碳泡泡***************");

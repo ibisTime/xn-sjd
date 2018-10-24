@@ -24,7 +24,8 @@ public class XN629052 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        groupAdoptOrderAO.cancelGroupAdoptOrder(req.getCode());
+        groupAdoptOrderAO.cancelGroupAdoptOrder(req.getCode(), req.getUserId(),
+            req.getRemark());
         return new BooleanRes(true);
     }
 

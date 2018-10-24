@@ -1,11 +1,3 @@
-/**
- * @Title SmsBOImpl.java 
- * @Package com.ogc.standard.bo.impl 
- * @Description 
- * @author dl  
- * @date 2018年8月22日 下午2:14:47 
- * @version V1.0   
- */
 package com.ogc.standard.bo.impl;
 
 import java.util.Date;
@@ -15,11 +7,21 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.ogc.standard.bo.IProductBO;
 import com.ogc.standard.bo.ISmsBO;
+import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
+import com.ogc.standard.common.DateUtil;
+import com.ogc.standard.common.PhoneUtil;
+import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.ISmsDAO;
+import com.ogc.standard.domain.Product;
 import com.ogc.standard.domain.Sms;
+import com.ogc.standard.domain.User;
+import com.ogc.standard.enums.EAccountType;
+import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.enums.ESmsStauts;
+import com.ogc.standard.enums.ESmsType;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
 
@@ -33,6 +35,12 @@ public class SmsBOImpl extends PaginableBOImpl<Sms> implements ISmsBO {
 
     @Autowired
     private ISmsDAO smsDAO;
+
+    @Autowired
+    private IUserBO userBO;
+
+    @Autowired
+    private IProductBO productBO;
 
     @Override
     public boolean isSmsExit(String code) {
@@ -73,6 +81,43 @@ public class SmsBOImpl extends PaginableBOImpl<Sms> implements ISmsBO {
         data.setUpdateDatetime(new Date());
         data.setStatus(ESmsStauts.WITHDRAW.getCode());
         return smsDAO.updateStatus(data);
+    }
+
+    @Override
+    public void saveBulletin(String userId, String count, String productCode) {
+        Sms sms = new Sms();
+        String code = OrderNoGenerater.generate(EGeneratePrefix.XX.getCode());
+        String hours = DateUtil.dateToStr(new Date(),
+            DateUtil.DATA_TIME_PATTERN_8);
+        User user = userBO.getUserUnCheck(userId);
+        Product product = productBO.getProduct(productCode);
+
+        String userName = user.getNickname();
+        if (StringUtils.isEmpty(userName)) {
+            userName = PhoneUtil.hideMobile(user.getMobile());
+        }
+
+        String content = userName + "在" + hours + "认养" + count + "棵"
+                + product.getName();
+
+        sms.setCode(code);
+        sms.setType(ESmsType.BULLETIN.getCode());
+        sms.setObject(EAccountType.CUSTOMER.getCode());
+        sms.setTitle(ESmsType.BULLETIN.getValue());
+        sms.setContent(content);
+
+        sms.setStatus(ESmsStauts.DRAFT.getCode());
+        sms.setCreateDatetime(new Date());
+        smsDAO.insert(sms);
+    }
+
+    @Override
+    public void readBulletin(String code) {
+        Sms sms = new Sms();
+        sms.setCode(code);
+        sms.setStatus(ESmsStauts.READED.getCode());
+        sms.setUpdateDatetime(new Date());
+        smsDAO.updateReadBulletin(sms);
     }
 
     @Override
