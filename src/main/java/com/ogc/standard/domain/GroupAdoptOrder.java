@@ -2,6 +2,7 @@ package com.ogc.standard.domain;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 import com.ogc.standard.dao.base.ABaseDO;
 
@@ -26,6 +27,9 @@ public class GroupAdoptOrder extends ABaseDO {
 
     // 规格编号
     private String productSpecsCode;
+
+    // 规格名称
+    private String productSpecsName;
 
     // 认养价格
     private BigDecimal price;
@@ -60,17 +64,23 @@ public class GroupAdoptOrder extends ABaseDO {
     // 支付渠道编号
     private String payCode;
 
-    // 支付金额
-    private BigDecimal payAmount;
+    // 抵扣人民币
+    private BigDecimal cnyDeductAmount;
 
     // 积分抵扣金额
     private BigDecimal jfDeductAmount;
+
+    // 支付金额
+    private BigDecimal payAmount;
 
     // 支付时间
     private Date payDatetime;
 
     // 积分返点金额
     private BigDecimal backJfAmount;
+
+    // 结算状态
+    private String settleStatus;
 
     // 更新人
     private String updater;
@@ -82,6 +92,9 @@ public class GroupAdoptOrder extends ABaseDO {
     private String remark;
 
     /**************DB properties*********/
+    private Date applyDatetimeStart;// 下单时间起
+
+    private Date applyDatetimeEnd;// 下单时间止
 
     private Date startDatetimeStart;// 认养开始时间起
 
@@ -90,6 +103,27 @@ public class GroupAdoptOrder extends ABaseDO {
     private Date endDatetimeStart;// 认养结束时间起
 
     private Date endDatetimeEnd;// 认养结束时间止
+
+    // 产品信息
+    private Product product;
+
+    // 认养权
+    private List<AdoptOrderTree> adoptOrderTreeList;
+
+    // 树木列表
+    private List<Tree> treeList;
+
+    // 状态列表
+    private List<String> statusList;
+
+    // 认养年限
+    private Integer adoptYear;
+
+    // 下单人姓名
+    private String applyUserName;
+
+    // 树木编号列表
+    private String treeNumbers;
 
     public String getCode() {
         return code;
@@ -297,6 +331,102 @@ public class GroupAdoptOrder extends ABaseDO {
 
     public void setEndDatetimeEnd(Date endDatetimeEnd) {
         this.endDatetimeEnd = endDatetimeEnd;
+    }
+
+    public BigDecimal getCnyDeductAmount() {
+        return cnyDeductAmount;
+    }
+
+    public void setCnyDeductAmount(BigDecimal cnyDeductAmount) {
+        this.cnyDeductAmount = cnyDeductAmount;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public List<AdoptOrderTree> getAdoptOrderTreeList() {
+        return adoptOrderTreeList;
+    }
+
+    public void setAdoptOrderTreeList(List<AdoptOrderTree> adoptOrderTreeList) {
+        this.adoptOrderTreeList = adoptOrderTreeList;
+    }
+
+    public List<Tree> getTreeList() {
+        return treeList;
+    }
+
+    public void setTreeList(List<Tree> treeList) {
+        this.treeList = treeList;
+    }
+
+    public List<String> getStatusList() {
+        return statusList;
+    }
+
+    public void setStatusList(List<String> statusList) {
+        this.statusList = statusList;
+    }
+
+    public Integer getAdoptYear() {
+        return adoptYear;
+    }
+
+    public void setAdoptYear(Integer adoptYear) {
+        this.adoptYear = adoptYear;
+    }
+
+    public String getApplyUserName() {
+        return applyUserName;
+    }
+
+    public void setApplyUserName(String applyUserName) {
+        this.applyUserName = applyUserName;
+    }
+
+    public String getTreeNumbers() {
+        return treeNumbers;
+    }
+
+    public void setTreeNumbers(String treeNumbers) {
+        this.treeNumbers = treeNumbers;
+    }
+
+    public Date getApplyDatetimeStart() {
+        return applyDatetimeStart;
+    }
+
+    public void setApplyDatetimeStart(Date applyDatetimeStart) {
+        this.applyDatetimeStart = applyDatetimeStart;
+    }
+
+    public Date getApplyDatetimeEnd() {
+        return applyDatetimeEnd;
+    }
+
+    public void setApplyDatetimeEnd(Date applyDatetimeEnd) {
+        this.applyDatetimeEnd = applyDatetimeEnd;
+    }
+
+    public String getProductSpecsName() {
+        return productSpecsName;
+    }
+
+    public void setProductSpecsName(String productSpecsName) {
+        this.productSpecsName = productSpecsName;
+    }
+
+    public String getSettleStatus() {
+        return settleStatus;
+    }
+
+    public void setSettleStatus(String settleStatus) {
+        this.settleStatus = settleStatus;
     }
 
 }

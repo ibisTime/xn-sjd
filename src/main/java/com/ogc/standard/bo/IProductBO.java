@@ -34,9 +34,6 @@ public interface IProductBO extends IPaginableBO<Product> {
     public void refreshPutOnProduct(String code, String location,
             Integer orderNo, String updater, String remark);
 
-    // 锁定产品
-    public void refreshLoakProduct(String code);
-
     // 更新募集总量
     public void refreshRaiseCount(String code, Integer raiseCount);
 
@@ -49,11 +46,18 @@ public interface IProductBO extends IPaginableBO<Product> {
     // 下架产品
     public void refreshPutOffProduct(String code, String updater);
 
-    // 更新当前识别码
-    public void refreshCurrentIdentify(String code, String identifyCode);
+    // 锁定产品
+    public void refreshLockProduct(String code, String identifyCode,
+            String specsCode);
+
+    // 解锁产品
+    public void refreshUnLockProduct(String code);
 
     // 统计产权方的产品市值
     public XN630065PriceRes getOwnerProductPrice(String ownerId);
+
+    // 查询是否满标的锁定产品
+    public List<Product> queryLockedProductList(String isAdopting);
 
     public List<Product> queryProductList(Product condition);
 

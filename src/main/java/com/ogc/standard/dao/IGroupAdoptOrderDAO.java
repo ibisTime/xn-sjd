@@ -7,13 +7,37 @@ import com.ogc.standard.domain.GroupAdoptOrder;
 public interface IGroupAdoptOrderDAO extends IBaseDAO<GroupAdoptOrder> {
     String NAMESPACE = IGroupAdoptOrderDAO.class.getName().concat(".");
 
-    int update(GroupAdoptOrder data);
-
+    // 第一人下单
     int insertFirst(GroupAdoptOrder data);
 
+    // 非第一人下单
     int insertUnFirst(GroupAdoptOrder data);
 
+    // 取消订单
     void updateCancelGroupAdoptOrder(GroupAdoptOrder data);
 
-    void updatePayGroupAdoptOrder(GroupAdoptOrder data);
+    // 余额支付订单
+    void updatePayYueSuccess(GroupAdoptOrder data);
+
+    // 更新支付组号
+    public int updatePayGroup(GroupAdoptOrder data);
+
+    // 更新已满标订单
+    public int updateFullOrderp(GroupAdoptOrder data);
+
+    // 更新未满标订单
+    public int updateUnFullOrderp(GroupAdoptOrder data);
+
+    // 开始认养
+    public int updateStartAdopt(GroupAdoptOrder data);
+
+    // 结束认养
+    public int updateEndAdopt(GroupAdoptOrder data);
+
+    // 更新结算状态
+    public int updateSettleStatus(GroupAdoptOrder data);
+
+    // 三方支付成功
+    public int updatePaySuccess(GroupAdoptOrder data);
+
 }

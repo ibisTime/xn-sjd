@@ -45,8 +45,17 @@ ADD COLUMN `create_datetime` DATETIME NULL COMMENT '创建时间' AFTER `certifi
 
 #V1.0.0 6-5
 ALTER TABLE `try_group_adopt_order` 
-CHANGE COLUMN `product_specs_name` `product_specs_code` VARCHAR(255) NULL DEFAULT NULL COMMENT '规格编号' ;
+ADD COLUMN `product_specs_code` VARCHAR(32) NULL COMMENT '规格编号' AFTER `product_code`;
 
 ALTER TABLE `tzb_product` 
 ADD COLUMN `identify_code` VARCHAR(32) NULL COMMENT '当前识别码' AFTER `now_count`,
 ADD COLUMN `id_invalid_datetime` DATETIME NULL COMMENT '识别码失效时间' AFTER `identify_code`;
+
+ALTER TABLE `try_group_adopt_order` 
+ADD COLUMN `cny_deduct_amount` DECIMAL(64,0) NULL COMMENT '抵扣人民币金额' AFTER `jf_deduct_amount`;
+
+ALTER TABLE `tzb_product` 
+ADD COLUMN `specs_code` VARCHAR(32) NULL COMMENT '当前集体订单规格' AFTER `id_invalid_datetime`;
+
+ALTER TABLE `try_group_adopt_order` 
+ADD COLUMN `settle_status` VARCHAR(4) NULL COMMENT '结算状态(0 不结算 1 待结算 2 已结算)' AFTER `back_jf_amount`;

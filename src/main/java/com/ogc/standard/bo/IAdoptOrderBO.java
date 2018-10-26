@@ -36,15 +36,13 @@ public interface IAdoptOrderBO extends IPaginableBO<AdoptOrder> {
     // 结束订单
     public void endAdoptOrder(AdoptOrder data);
 
-    public void refreshSettleStatus(AdoptOrder data, String updater,
-            String remark);
+    public void refreshSettleStatus(AdoptOrder data, String approveResult,
+            String updater, String remark);
 
     public List<AdoptOrder> queryAdoptOrderList(AdoptOrder condition);
 
     public AdoptOrder getAdoptOrder(String code);
 
     public AdoptOrder getAdoptOrderByPayGroup(String payGroup);
-
-    public XN629048Res getOrderDeductAmount(AdoptOrder data, String isDk);
 
 }

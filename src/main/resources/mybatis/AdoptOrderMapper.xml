@@ -64,6 +64,7 @@
 	            	#{item}
                 </foreach> 
 			</if>
+			
 			<if test="startDatetimeStart != null and startDatetimeStart != '' ">
 				<![CDATA[AND t.start_datetime >= #{startDatetimeStart}]]>
 			</if>
@@ -182,6 +183,7 @@
 		,cny_deduct_amount = #{cnyDeductAmount}
 		,jf_deduct_amount = #{jfDeductAmount}
 		,pay_amount = #{payAmount}
+		
 		,pay_datetime = #{payDatetime}
 		,back_jf_amount = #{backJfAmount}
 		,settle_status = #{settleStatus}

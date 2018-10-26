@@ -154,29 +154,6 @@ public class AdoptOrderTreeAOImpl implements IAdoptOrderTreeAO {
         return new XN629904Res(totalAmount, treeCount);
     }
 
-    private void initAdoptOrderTree(AdoptOrderTree data) {
-        // 树木信息
-        Tree tree = treeBO.getTreeByTreeNumber(data.getTreeNumber());
-        data.setTree(tree);
-
-        // 当前持有人信息
-        User user = userBO.getUserUnCheck(data.getCurrentHolder());
-        if (null != user) {
-            data.setUser(user);
-        }
-
-        // 是否使用保护罩
-        List<ToolUseRecord> shelterList = toolUseRecordBO
-            .queryTreeToolRecordList(data.getCode(),
-                EToolType.SHIELD.getCode());
-        if (CollectionUtils.isNotEmpty(shelterList)) {
-            data.setIsShelter(EBoolean.YES.getCode());
-        } else {
-            data.setIsShelter(EBoolean.NO.getCode());
-        }
-
-    }
-
     public void doDailyAdoptOrderTree() {
         logger.info("***************开始生成碳泡泡***************");
         Map<String, String> configMap = sysConfigBO
@@ -218,6 +195,29 @@ public class AdoptOrderTreeAOImpl implements IAdoptOrderTreeAO {
         }
 
         logger.info("***************结束生成碳泡泡***************");
+
+    }
+
+    private void initAdoptOrderTree(AdoptOrderTree data) {
+        // 树木信息
+        Tree tree = treeBO.getTreeByTreeNumber(data.getTreeNumber());
+        data.setTree(tree);
+
+        // 当前持有人信息
+        User user = userBO.getUserUnCheck(data.getCurrentHolder());
+        if (null != user) {
+            data.setUser(user);
+        }
+
+        // 是否使用保护罩
+        List<ToolUseRecord> shelterList = toolUseRecordBO
+            .queryTreeToolRecordList(data.getCode(),
+                EToolType.SHIELD.getCode());
+        if (CollectionUtils.isNotEmpty(shelterList)) {
+            data.setIsShelter(EBoolean.YES.getCode());
+        } else {
+            data.setIsShelter(EBoolean.NO.getCode());
+        }
 
     }
 

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.GroupAdoptOrder;
+import com.ogc.standard.dto.res.XN629048Res;
 
 public interface IGroupAdoptOrderAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
@@ -23,6 +24,15 @@ public interface IGroupAdoptOrderAO {
     // 支付订单
     public Object toPayAdoptOrder(String code, String payType,
             String isJfDeduct, String tradePwd);
+
+    // 更新已满标的订单
+    public void toFullAdopt();
+
+    // 获取订单抵扣金额
+    public XN629048Res getOrderDkAmount(String code);
+
+    // 支付成功订单回调处理
+    public void paySuccess(String payGroup);
 
     public Paginable<GroupAdoptOrder> queryGroupAdoptOrderPage(int start,
             int limit, GroupAdoptOrder condition);

@@ -11,11 +11,13 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ogc.standard.ao.ISettleAO;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IAdoptOrderBO;
+import com.ogc.standard.bo.IGroupAdoptOrderBO;
 import com.ogc.standard.bo.IProductBO;
 import com.ogc.standard.bo.ISettleBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.AdoptOrder;
+import com.ogc.standard.domain.GroupAdoptOrder;
 import com.ogc.standard.domain.Product;
 import com.ogc.standard.domain.Settle;
 import com.ogc.standard.domain.User;
@@ -23,6 +25,7 @@ import com.ogc.standard.dto.res.XN629902Res;
 import com.ogc.standard.enums.EAdoptOrderSettleStatus;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECurrency;
+import com.ogc.standard.enums.EGroupAdoptOrderSettleStatus;
 import com.ogc.standard.enums.EJourBizTypeAgent;
 import com.ogc.standard.enums.EJourBizTypePlat;
 import com.ogc.standard.enums.ESellType;
@@ -40,6 +43,9 @@ public class SettleAOImpl implements ISettleAO {
     private IAdoptOrderBO adoptOrderBO;
 
     @Autowired
+    private IGroupAdoptOrderBO groupAdoptOrderBO;
+
+    @Autowired
     private IAccountBO accountBO;
 
     @Autowired
@@ -52,7 +58,18 @@ public class SettleAOImpl implements ISettleAO {
     @Transactional
     public void approveSettleByRefCode(String refCode, String refType,
             String approveResult, String handler, String handleNote) {
-        if (!ESellType.COLLECTIVE.getCode().equals(refType)) {
+        if (ESellType.COLLECTIVE.getCode().equals(refType)) {
+            GroupAdoptOrder data = groupAdoptOrderBO
+                .getGroupAdoptOrder(refCode);
+            if (!EGroupAdoptOrderSettleStatus.TO_SETTLE.getCode()
+                .equals(data.getSettleStatus())) {
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                    "订单不是待结算状态");
+            }
+
+            groupAdoptOrderBO.refreshSettle(data, approveResult, handler,
+                handleNote);
+        } else {
             AdoptOrder data = adoptOrderBO.getAdoptOrder(refCode);
             if (!EAdoptOrderSettleStatus.TO_SETTLE.getCode()
                 .equals(data.getSettleStatus())) {
@@ -60,9 +77,8 @@ public class SettleAOImpl implements ISettleAO {
                     "订单不是待结算状态");
             }
 
-            adoptOrderBO.refreshSettleStatus(data, handler, handleNote);
-        } else {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "暂不支持集体订单");
+            adoptOrderBO.refreshSettleStatus(data, approveResult, handler,
+                handleNote);
         }
 
         if (EBoolean.YES.getCode().equals(approveResult)) {
@@ -76,6 +92,7 @@ public class SettleAOImpl implements ISettleAO {
                     settle.getRefNote(), settle.getRefNote(), settle.getCode());
             }
         }
+
         settleBO.refreshStatusByRefCode(refCode, approveResult, handler,
             handleNote);
     }

@@ -210,16 +210,6 @@ public class ProductBOImpl extends PaginableBOImpl<Product>
     }
 
     @Override
-    public void refreshLoakProduct(String code) {
-        Product product = new Product();
-
-        product.setCode(code);
-        product.setStatus(EProductStatus.LOCKED.getCode());
-
-        productDAO.updateLockProduct(product);
-    }
-
-    @Override
     public void refreshRaiseCount(String code, Integer raiseCount) {
         Product product = new Product();
 
@@ -262,7 +252,8 @@ public class ProductBOImpl extends PaginableBOImpl<Product>
     }
 
     @Override
-    public void refreshCurrentIdentify(String code, String identifyCode) {
+    public void refreshLockProduct(String code, String identifyCode,
+            String specsCode) {
         Map<String, String> mapList = sysConfigBO.getConfigsMap();
         Integer idInvalidHours = Integer
             .valueOf(mapList.get(SysConstants.ID_INVALID_HOURS));// 识别码失效时间
@@ -271,11 +262,26 @@ public class ProductBOImpl extends PaginableBOImpl<Product>
 
         Product product = new Product();
         product.setCode(code);
+        product.setStatus(EProductStatus.LOCKED.getCode());
         product.setIdentifyCode(identifyCode);
         product.setIdInvalidDatetime(idInvalidDatetime);
+        product.setSpecsCode(specsCode);
 
-        productDAO.updateCurrentIdentify(product);
+        productDAO.updateLockProduct(product);
 
+    }
+
+    @Override
+    public void refreshUnLockProduct(String code) {
+        Product product = new Product();
+
+        product.setCode(code);
+        product.setStatus(EProductStatus.TO_ADOPT.getCode());
+        product.setIdentifyCode(null);
+        product.setIdInvalidDatetime(null);
+        product.setSpecsCode(null);
+
+        productDAO.updateUnLockProduct(product);
     }
 
     @Override
@@ -315,6 +321,14 @@ public class ProductBOImpl extends PaginableBOImpl<Product>
         }
 
         return new XN630065PriceRes(maxPrice, minPrice);
+    }
+
+    @Override
+    public List<Product> queryLockedProductList(String isAdopting) {
+        Product condition = new Product();
+        condition.setStatus(EProductStatus.LOCKED.getCode());
+        condition.setIsAdopting(isAdopting);
+        return productDAO.selectList(condition);
     }
 
     @Override

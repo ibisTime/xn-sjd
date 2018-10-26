@@ -22,6 +22,10 @@ public enum EJourBizTypePlat {
 
     ADOPT("adopt", "认养"),
 
+    ADOPT_COLLECT("adopt_collect", "集体认养"),
+
+    UN_FULL_CNY("un_full_cny", "集体认养未满标退款"),
+
     ADOPT_DIST("adopt_dist", "认养分成"),
 
     ADOPT_PROFIT("adopt_profit", "认养收益"),
@@ -58,7 +62,11 @@ public enum EJourBizTypePlat {
 
     ADOPT_BUY_DEDUCT("adopt_buy_deduct", "认养抵扣"),
 
-    ADOPT_PAY_BACK("adopt_pay_back", "认养消费返利");
+    ADOPT_PAY_BACK("adopt_pay_back", "认养消费返利"),
+
+    UN_FULL_DEDUCTJF("un_full_deductjf", "集体认养未满标退抵扣积分"),
+
+    UN_FULL_BACKJF("un_full_backjf", "集体认养未满标退返利积分");
 
     public static EJourBizTypePlat getBizType(String code) {
         Map<String, EJourBizTypePlat> map = getBizTypeMap();

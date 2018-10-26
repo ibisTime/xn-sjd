@@ -3,23 +3,17 @@ package com.ogc.standard.bo.impl;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IAdoptOrderBO;
-import com.ogc.standard.bo.ISYSConfigBO;
-import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.common.AmountUtil;
-import com.ogc.standard.common.SysConstants;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.IAdoptOrderDAO;
-import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.AdoptOrder;
 import com.ogc.standard.domain.Product;
 import com.ogc.standard.domain.ProductSpecs;
@@ -28,10 +22,8 @@ import com.ogc.standard.dto.res.XN629048Res;
 import com.ogc.standard.enums.EAdoptOrderSettleStatus;
 import com.ogc.standard.enums.EAdoptOrderStatus;
 import com.ogc.standard.enums.EBoolean;
-import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.enums.EPayType;
-import com.ogc.standard.enums.ESysConfigType;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
 
@@ -41,15 +33,6 @@ public class AdoptOrderBOImpl extends PaginableBOImpl<AdoptOrder>
 
     @Autowired
     private IAdoptOrderDAO adoptOrderDAO;
-
-    @Autowired
-    private ISYSConfigBO sysConfigBO;
-
-    @Autowired
-    private IUserBO userBO;
-
-    @Autowired
-    private IAccountBO accountBO;
 
     @Override
     public String saveAdoptOrder(User user, Product product,
@@ -148,9 +131,14 @@ public class AdoptOrderBOImpl extends PaginableBOImpl<AdoptOrder>
     }
 
     @Override
-    public void refreshSettleStatus(AdoptOrder data, String updater,
-            String remark) {
-        data.setSettleStatus(EAdoptOrderSettleStatus.SETTLE.getCode());
+    public void refreshSettleStatus(AdoptOrder data, String approveResult,
+            String updater, String remark) {
+        String status = EAdoptOrderSettleStatus.NO_SETTLE.getCode();
+        if (EBoolean.YES.getCode().equals(approveResult)) {
+            status = EAdoptOrderSettleStatus.SETTLE.getCode();
+        }
+
+        data.setSettleStatus(status);
         data.setUpdater(updater);
         data.setUpdateDatetime(new Date());
         data.setRemark("已完成结算处理");
@@ -202,37 +190,5 @@ public class AdoptOrderBOImpl extends PaginableBOImpl<AdoptOrder>
             data.setRemark(remark);
             adoptOrderDAO.updateCancelAdoptOrder(data);
         }
-    }
-
-    @Override
-    public XN629048Res getOrderDeductAmount(AdoptOrder data, String isDk) {
-        BigDecimal cnyAmount = BigDecimal.ZERO;// 可抵扣多少人民币
-        BigDecimal jfAmount = BigDecimal.ZERO;// 需要用多少积分来抵扣
-
-        if (data.getAmount().longValue() > 0
-                && EBoolean.YES.getCode().equals(isDk)) {
-            Map<String, String> configMap = sysConfigBO
-                .getConfigsMap(ESysConfigType.PAY_RULE.getCode());
-
-            Double rate = Double
-                .valueOf(configMap.get(SysConstants.JF_DK_MAX_RATE));// 订单可用积分抵扣比例
-
-            Double cny2jfRate = Double
-                .valueOf(configMap.get(SysConstants.CNY2JF_RATE));// 1人民币兑换多少积分
-
-            cnyAmount = AmountUtil.mul(data.getAmount(), rate);
-            jfAmount = AmountUtil.mul(cnyAmount, cny2jfRate);
-
-            // 积分余额不够时用剩余积分抵扣
-            Account jfAccount = accountBO.getAccountByUser(data.getApplyUser(),
-                ECurrency.JF.getCode());
-            if (jfAmount.compareTo(jfAccount.getAmount()) == 1) {
-                jfAmount = jfAccount.getAmount();
-                cnyAmount = AmountUtil.mul(jfAccount.getAmount(),
-                    1.0 / cny2jfRate);
-            }
-
-        }
-        return new XN629048Res(cnyAmount, jfAmount);
     }
 }

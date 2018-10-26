@@ -33,10 +33,11 @@
 		
 		<result column="identify_code" property="identifyCode" />
 		<result column="id_invalid_datetime" property="idInvalidDatetime" />
+		<result column="specs_code" property="specsCode" />
 		<result column="location" property="location" />
 		<result column="order_no" property="orderNo" />
-		<result column="status" property="status" />
 		
+		<result column="status" property="status" />
 		<result column="updater" property="updater" />
 		<result column="update_datetime" property="updateDatetime" />
 		<result column="remark" property="remark" />
@@ -70,8 +71,17 @@
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
 			</if>
+			<if test="specsCode != null and specsCode != '' ">
+				AND t.specs_code = #{specsCode}
+			</if>
 			<if test="location != null and location != '' ">
 				AND t.location = #{location}
+			</if>
+			<if test="isAdopting != null and isAdopting == 1 ">
+				<![CDATA[AND t.raise_count <> t.now_count]]>
+			</if>
+			<if test="isAdopting != null and isAdopting == 0 ">
+				AND t.raise_count = t.now_count
 			</if>
 			
 			<if test="raiseStartStartDatetime != null and raiseStartStartDatetime != '' ">
@@ -86,9 +96,16 @@
 			<if test="raiseEndEndDatetime != null and raiseEndEndDatetime != '' ">
 				<![CDATA[AND t.raise_end_datetime <= #{raiseEndEndDatetime}]]>
 			</if>
+			<if test="idInvalidDatetimeStart != null and idInvalidDatetimeStart != '' ">
+				<![CDATA[AND t.id_invalid_datetime >= #{idInvalidDatetimeStart}]]>
+			</if>
+			<if test="idInvalidDatetimeEnd != null and idInvalidDatetimeEnd != '' ">
+				<![CDATA[AND t.id_invalid_datetime <= #{idInvalidDatetimeEnd}]]>
+			</if>
 			
 		</trim>
 	</sql>
+	
 	<select id="select_product" parameterType="product" resultMap="product_DB_Result">
 		SELECT
 		t.code
@@ -121,11 +138,12 @@
 		,t.identify_code
 		
 		,t.id_invalid_datetime
+		,t.specs_code
 		,t.location
 		,t.order_no
 		,t.status
-		,t.updater
 		
+		,t.updater
 		,t.update_datetime
 		,t.remark
 		FROM
@@ -283,6 +301,19 @@
 		UPDATE tzb_product
 		SET
 		status = #{status}
+		,identify_code = #{identifyCode}
+		,id_invalid_datetime = #{idInvalidDatetime}
+		,specs_code = #{specsCode}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_unLockProduct" parameterType="product">
+		UPDATE tzb_product
+		SET
+		status = #{status}
+		,identify_code = #{identifyCode}
+		,id_invalid_datetime = #{idInvalidDatetime}
+		,specs_code = #{specsCode}
 		WHERE code = #{code}
 	</update>
 	
@@ -316,13 +347,5 @@
 		,remark = #{remark}
 		WHERE code = #{code}
 	</update>
-	
-	<update id="update_currentIdentify" parameterType="product">
-		UPDATE tzb_product
-		SET
-		identify_code = #{identifyCode}
-		,id_invalid_datetime = #{idInvalidDatetime}
-		WHERE code = #{code}
-	</update>
-	
+
 </mapper>

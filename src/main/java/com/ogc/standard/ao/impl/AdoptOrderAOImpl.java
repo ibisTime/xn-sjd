@@ -237,8 +237,8 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
         }
 
         // 积分抵扣处理
-        XN629048Res deductRes = adoptOrderBO.getOrderDeductAmount(data,
-            isJfDeduct);
+        XN629048Res deductRes = distributionOrderBO.getOrderDeductAmount(
+            data.getAmount(), data.getApplyUser(), isJfDeduct);
 
         // 支付订单
         Object result = null;
@@ -287,8 +287,9 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
             EJourBizTypePlat.ADOPT_BUY_DEDUCT.getValue(), data.getCode());
 
         // 进行分销
-        BigDecimal backJfAmount = distributionOrderBO.distribution(data,
-            resultRes);
+        BigDecimal backJfAmount = distributionOrderBO.distribution(
+            data.getCode(), data.getProductCode(), data.getAmount(),
+            data.getApplyUser(), data.getType(), resultRes);
 
         // 用户升级
         userAO.upgradeUserLevel(data.getApplyUser());
@@ -314,7 +315,7 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
             }
         }
 
-        // 专属/定向产品分配认养权、更新树状态
+        // 捐赠产品分配认养权、更新树状态
         if (ESellType.DONATE.getCode().equals(data.getType())) {// 捐赠产品
             treeList = treeBO.queryTreeListByProduct(data.getProductCode());
             Product product = productBO.getProduct(data.getProductCode());
@@ -355,8 +356,9 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
             // 进行分销
             XN629048Res resultRes = new XN629048Res(data.getCnyDeductAmount(),
                 data.getJfDeductAmount());
-            BigDecimal backJfAmount = distributionOrderBO.distribution(data,
-                resultRes);
+            BigDecimal backJfAmount = distributionOrderBO.distribution(
+                data.getCode(), data.getProductCode(), data.getAmount(),
+                data.getApplyUser(), data.getType(), resultRes);
 
             // 用户升级
             userAO.upgradeUserLevel(data.getApplyUser());
@@ -429,20 +431,20 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
     public void cancelOrder(AdoptOrder data) {
         // 订单状态变更
         adoptOrderBO.cancelAdoptOrder(data, "超15分钟未支付系统自动取消");
+
+        // 更新产品已募集数量
+        Product product = productBO.getProduct(data.getProductCode());
+        productBO.refreshNowCount(data.getProductCode(),
+            product.getNowCount() - data.getQuantity());
+
         if (ESellType.PERSON.getCode().equals(data.getType())
                 || ESellType.DIRECT.getCode().equals(data.getType())) {
-
             // 树的状态变更
             List<Tree> treeList = treeBO
                 .queryTreeListByOrderCode(data.getCode());
             for (Tree tree : treeList) {
                 treeBO.refreshCancelTree(tree);
             }
-
-            // 更新产品已募集数量
-            Product product = productBO.getProduct(data.getProductCode());
-            productBO.refreshNowCount(data.getProductCode(),
-                product.getNowCount() - data.getQuantity());
         }
     }
 
@@ -519,7 +521,8 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "当前订单不是待支付状态");
         }
-        return adoptOrderBO.getOrderDeductAmount(data, EBoolean.YES.getCode());
+        return distributionOrderBO.getOrderDeductAmount(data.getAmount(),
+            data.getApplyUser(), EBoolean.YES.getCode());
     }
 
     @Override

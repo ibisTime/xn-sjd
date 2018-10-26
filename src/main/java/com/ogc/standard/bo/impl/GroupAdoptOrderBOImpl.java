@@ -1,9 +1,11 @@
 package com.ogc.standard.bo.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -16,9 +18,16 @@ import com.ogc.standard.dao.IGroupAdoptOrderDAO;
 import com.ogc.standard.domain.GroupAdoptOrder;
 import com.ogc.standard.domain.Product;
 import com.ogc.standard.domain.ProductSpecs;
+import com.ogc.standard.dto.res.XN629048Res;
+import com.ogc.standard.enums.EAdoptOrderSettleStatus;
+import com.ogc.standard.enums.EAdoptOrderStatus;
+import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.EGeneratePrefix;
+import com.ogc.standard.enums.EGroupAdoptOrderSettleStatus;
 import com.ogc.standard.enums.EGroupAdoptOrderStatus;
+import com.ogc.standard.enums.EPayType;
 import com.ogc.standard.exception.BizException;
+import com.ogc.standard.exception.EBizErrorCode;
 
 @Component
 public class GroupAdoptOrderBOImpl extends PaginableBOImpl<GroupAdoptOrder>
@@ -38,6 +47,7 @@ public class GroupAdoptOrderBOImpl extends PaginableBOImpl<GroupAdoptOrder>
         data.setIdentifyCode(identifyCode);
         data.setProductCode(product.getCode());
         data.setProductSpecsCode(productSpecs.getCode());
+        data.setProductSpecsName(productSpecs.getName());
         data.setPrice(productSpecs.getPrice());
 
         data.setStartDatetime(productSpecs.getStartDatetime());
@@ -48,6 +58,7 @@ public class GroupAdoptOrderBOImpl extends PaginableBOImpl<GroupAdoptOrder>
 
         data.setApplyDatetime(new Date());
         data.setStatus(EGroupAdoptOrderStatus.TO_PAY.getCode());
+        data.setSettleStatus(EGroupAdoptOrderSettleStatus.NO_SETTLE.getCode());
         groupAdoptOrderDAO.insertFirst(data);
 
         return code;
@@ -64,6 +75,7 @@ public class GroupAdoptOrderBOImpl extends PaginableBOImpl<GroupAdoptOrder>
         data.setIdentifyCode(identifyCode);
         data.setProductCode(product.getCode());
         data.setProductSpecsCode(productSpecs.getCode());
+        data.setProductSpecsName(productSpecs.getName());
         data.setPrice(productSpecs.getPrice());
 
         data.setStartDatetime(productSpecs.getStartDatetime());
@@ -74,16 +86,17 @@ public class GroupAdoptOrderBOImpl extends PaginableBOImpl<GroupAdoptOrder>
 
         data.setApplyDatetime(new Date());
         data.setStatus(EGroupAdoptOrderStatus.TO_PAY.getCode());
+        data.setSettleStatus(EGroupAdoptOrderSettleStatus.NO_SETTLE.getCode());
         groupAdoptOrderDAO.insertFirst(data);
+
         return code;
     }
 
     @Override
-    public void refreshCancelOrder(String code, String remark) {
-        if (StringUtils.isNotBlank(code)) {
-            GroupAdoptOrder data = new GroupAdoptOrder();
-            data.setCode(code);
+    public void refreshCancelOrder(GroupAdoptOrder data, String remark) {
+        if (StringUtils.isNotBlank(data.getCode())) {
             data.setStatus(EGroupAdoptOrderStatus.CANCELED.getCode());
+            data.setUpdater(data.getApplyUser());
             data.setRemark(remark);
             data.setUpdateDatetime(new Date());
             groupAdoptOrderDAO.updateCancelGroupAdoptOrder(data);
@@ -91,14 +104,111 @@ public class GroupAdoptOrderBOImpl extends PaginableBOImpl<GroupAdoptOrder>
     }
 
     @Override
-    public void payGroupAdoptOrder(GroupAdoptOrder data) {
-        if (StringUtils.isNotBlank(data.getCode())) {
-            groupAdoptOrderDAO.updatePayGroupAdoptOrder(data);
-        }
+    public void refreshPayGroup(GroupAdoptOrder data, String payType,
+            XN629048Res resultRes) {
+        data.setPayType(payType);
+        data.setPayGroup(data.getCode());
+        data.setCnyDeductAmount(resultRes.getCnyAmount());
+        data.setJfDeductAmount(resultRes.getJfAmount());
+        data.setRemark("预支付发起中");
+        groupAdoptOrderDAO.updatePayGroup(data);
     }
 
     @Override
-    public List<GroupAdoptOrder> getGroupAdoptOrderById(String identifyCode) {
+    public void payYueSuccess(GroupAdoptOrder data, XN629048Res resultRes,
+            BigDecimal backjfAmount) {
+        Date nowDate = new Date();
+        if (nowDate.before(data.getStartDatetime())) {// 支付时间小于认养开始时间
+            data.setStatus(EAdoptOrderStatus.TO_ADOPT.getCode());
+        } else {
+            data.setStatus(EAdoptOrderStatus.ADOPT.getCode());
+        }
+
+        data.setPayType(EPayType.YE.getCode());
+        data.setCnyDeductAmount(resultRes.getCnyAmount());
+        data.setJfDeductAmount(resultRes.getJfAmount());
+        data.setPayAmount(data.getAmount().subtract(resultRes.getCnyAmount()));
+        data.setPayDatetime(nowDate);
+
+        data.setBackJfAmount(backjfAmount);
+        data.setSettleStatus(EGroupAdoptOrderSettleStatus.TO_SETTLE.getCode());
+        data.setUpdateDatetime(new Date());
+        data.setUpdater(data.getApplyUser());
+        data.setRemark("余额支付成功");
+        groupAdoptOrderDAO.updatePayYueSuccess(data);
+    }
+
+    @Override
+    public void paySuccess(GroupAdoptOrder data, BigDecimal payAmount,
+            BigDecimal backJfAmount) {
+        Date nowDate = new Date();
+        if (nowDate.before(data.getStartDatetime())) {// 支付时间小于认养开始时间
+            data.setStatus(EGroupAdoptOrderStatus.PAYED.getCode());
+        } else {
+            data.setStatus(EGroupAdoptOrderStatus.ADOPT.getCode());
+        }
+
+        data.setPayAmount(payAmount);
+        data.setPayDatetime(nowDate);
+        data.setBackJfAmount(backJfAmount);
+        data.setSettleStatus(EAdoptOrderSettleStatus.TO_SETTLE.getCode());
+        data.setRemark("第三方支付成功");
+        groupAdoptOrderDAO.updatePaySuccess(data);
+    }
+
+    @Override
+    public void refreshFullOrder(String identifyCode) {
+        GroupAdoptOrder data = new GroupAdoptOrder();
+        data.setIdentifyCode(identifyCode);
+        data.setStatus(EGroupAdoptOrderStatus.FULL.getCode());
+        groupAdoptOrderDAO.updateFullOrderp(data);
+    }
+
+    @Override
+    public void refreshUnFullOrder(String identifyCode) {
+        GroupAdoptOrder data = new GroupAdoptOrder();
+        data.setIdentifyCode(identifyCode);
+        data.setStatus(EGroupAdoptOrderStatus.UNFULL.getCode());
+        groupAdoptOrderDAO.updateUnFullOrderp(data);
+    }
+
+    @Override
+    public void refreshStartAdopt(String code) {
+        GroupAdoptOrder data = new GroupAdoptOrder();
+        data.setCode(code);
+        data.setStatus(EGroupAdoptOrderStatus.ADOPT.getCode());
+        data.setRemark("认养中");
+        data.setUpdateDatetime(new Date());
+        groupAdoptOrderDAO.updateStartAdopt(data);
+    }
+
+    @Override
+    public void refreshEndAdopt(String code) {
+        GroupAdoptOrder data = new GroupAdoptOrder();
+        data.setCode(code);
+        data.setStatus(EGroupAdoptOrderStatus.END.getCode());
+        data.setRemark("已到期");
+        data.setUpdateDatetime(new Date());
+        groupAdoptOrderDAO.updateEndAdopt(data);
+    }
+
+    @Override
+    public void refreshSettle(GroupAdoptOrder data, String approveResult,
+            String updater, String remark) {
+        String status = EGroupAdoptOrderSettleStatus.NO_SETTLE.getCode();
+        if (EBoolean.YES.getCode().equals(approveResult)) {
+            status = EGroupAdoptOrderSettleStatus.SETTLE.getCode();
+        }
+
+        data.setSettleStatus(status);
+        data.setUpdater(updater);
+        data.setUpdateDatetime(new Date());
+        data.setRemark("已完成结算处理");
+        groupAdoptOrderDAO.updateSettleStatus(data);
+    }
+
+    @Override
+    public List<GroupAdoptOrder> queryGroupAdoptOrderById(String identifyCode) {
         List<GroupAdoptOrder> list = new ArrayList<GroupAdoptOrder>();
         if (StringUtils.isNotBlank(identifyCode)) {
             GroupAdoptOrder condition = new GroupAdoptOrder();
@@ -139,6 +249,23 @@ public class GroupAdoptOrderBOImpl extends PaginableBOImpl<GroupAdoptOrder>
             if (data == null) {
                 throw new BizException("xn0000", "识别码不存在");
             }
+        }
+        return data;
+    }
+
+    @Override
+    public GroupAdoptOrder getGroupAdoptOrderByPayGroup(String payGroup) {
+        GroupAdoptOrder data = null;
+        if (StringUtils.isNotBlank(payGroup)) {
+            GroupAdoptOrder condition = new GroupAdoptOrder();
+            condition.setPayGroup(payGroup);
+            List<GroupAdoptOrder> list = groupAdoptOrderDAO
+                .selectList(condition);
+            if (CollectionUtils.isEmpty(list)) {
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                    "根据" + payGroup + "查询订单不存在");
+            }
+            data = list.get(0);
         }
         return data;
     }

@@ -31,6 +31,9 @@ public class XN629055Req extends APageReq {
     // 认养结束时间止
     private String endDatetimeEnd;
 
+    // 结算状态
+    private String settleStatus;
+
     public String getProductCode() {
         return productCode;
     }
@@ -85,6 +88,14 @@ public class XN629055Req extends APageReq {
 
     public void setEndDatetimeEnd(String endDatetimeEnd) {
         this.endDatetimeEnd = endDatetimeEnd;
+    }
+
+    public String getSettleStatus() {
+        return settleStatus;
+    }
+
+    public void setSettleStatus(String settleStatus) {
+        this.settleStatus = settleStatus;
     }
 
 }

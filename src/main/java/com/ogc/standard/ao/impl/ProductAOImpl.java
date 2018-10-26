@@ -1,6 +1,7 @@
 package com.ogc.standard.ao.impl;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -352,8 +353,20 @@ public class ProductAOImpl implements IProductAO {
 
     private void initProduct(Product product) {
         // 产品规格列表
-        List<ProductSpecs> specsList = productSpecsBO
-            .queryProductSpecsListByProduct(product.getCode());
+        List<ProductSpecs> specsList = new ArrayList<ProductSpecs>();
+        if (ESellType.COLLECTIVE.getCode().equals(product.getSellType())
+                && EProductStatus.LOCKED.getCode()
+                    .equals(product.getStatus())) {
+
+            // 集体认养中的产品只查询认养的规格
+            ProductSpecs productSpecs = productSpecsBO
+                .getProductSpecs(product.getSpecsCode());
+            specsList.add(productSpecs);
+
+        } else {
+            specsList = productSpecsBO
+                .queryProductSpecsListByProduct(product.getCode());
+        }
         product.setProductSpecsList(specsList);
 
         // 初始化最小价格和最大价格

@@ -24,8 +24,17 @@ public interface IProductDAO extends IBaseDAO<Product> {
     // 上架产品
     public int updatePutOnProduct(Product data);
 
+    // 下架产品
+    public int updatePutOffProduct(Product data);
+
+    // 认养产品
+    public int updateAdoptProduct(Product data);
+
     // 锁定产品
     public int updateLockProduct(Product data);
+
+    // 解锁产品
+    public int updateUnLockProduct(Product data);
 
     // 更新募集数量
     public int updateRaiseCount(Product data);
@@ -33,12 +42,4 @@ public interface IProductDAO extends IBaseDAO<Product> {
     // 更新现募集数量
     public int updateNowCount(Product data);
 
-    // 认养产品
-    public int updateAdoptProduct(Product data);
-
-    // 下架产品
-    public int updatePutOffProduct(Product data);
-
-    // 更新当前识别码
-    public int updateCurrentIdentify(Product data);
 }

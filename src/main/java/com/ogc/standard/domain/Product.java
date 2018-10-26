@@ -85,11 +85,14 @@ public class Product extends ABaseDO {
     // 已募集数量
     private Integer nowCount;
 
-    // 当前识别码
+    // 当前识别码（集体）
     private String identifyCode;
 
-    // 识别码失效时间
+    // 识别码失效时间（集体）
     private Date idInvalidDatetime;
+
+    // 当前集体订单规格（集体）
+    private String specsCode;
 
     // UI位置
     private String location;
@@ -148,6 +151,15 @@ public class Product extends ABaseDO {
 
     // 产权方信息
     private SYSUser ownerInfo;
+
+    // 识别码失效开始时间
+    private Date idInvalidDatetimeStart;
+
+    // 识别码失效结束时间
+    private Date idInvalidDatetimeEnd;
+
+    // 集体产品是否认养中
+    private String isAdopting;
 
     public String getDirectType() {
         return directType;
@@ -499,6 +511,38 @@ public class Product extends ABaseDO {
 
     public void setIdInvalidDatetime(Date idInvalidDatetime) {
         this.idInvalidDatetime = idInvalidDatetime;
+    }
+
+    public Date getIdInvalidDatetimeStart() {
+        return idInvalidDatetimeStart;
+    }
+
+    public void setIdInvalidDatetimeStart(Date idInvalidDatetimeStart) {
+        this.idInvalidDatetimeStart = idInvalidDatetimeStart;
+    }
+
+    public Date getIdInvalidDatetimeEnd() {
+        return idInvalidDatetimeEnd;
+    }
+
+    public void setIdInvalidDatetimeEnd(Date idInvalidDatetimeEnd) {
+        this.idInvalidDatetimeEnd = idInvalidDatetimeEnd;
+    }
+
+    public String getIsAdopting() {
+        return isAdopting;
+    }
+
+    public void setIsAdopting(String isAdopting) {
+        this.isAdopting = isAdopting;
+    }
+
+    public String getSpecsCode() {
+        return specsCode;
+    }
+
+    public void setSpecsCode(String specsCode) {
+        this.specsCode = specsCode;
     }
 
 }

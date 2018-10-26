@@ -30,8 +30,53 @@ public class GroupAdoptOrderDAOImpl extends AMybatisTemplate
     }
 
     @Override
+    public void updateCancelGroupAdoptOrder(GroupAdoptOrder data) {
+        super.update(NAMESPACE.concat("update_cancelGroupAdoptOrder"), data);
+    }
+
+    @Override
+    public void updatePayYueSuccess(GroupAdoptOrder data) {
+        super.update(NAMESPACE.concat("update_payYueSuccess"), data);
+    }
+
+    @Override
+    public int updatePayGroup(GroupAdoptOrder data) {
+        return super.update(NAMESPACE.concat("update_payGroup"), data);
+    }
+
+    @Override
+    public int updatePaySuccess(GroupAdoptOrder data) {
+        return super.update(NAMESPACE.concat("update_paySuccess"), data);
+    }
+
+    @Override
+    public int updateFullOrderp(GroupAdoptOrder data) {
+        return super.update(NAMESPACE.concat("update_fullOrder"), data);
+    }
+
+    @Override
+    public int updateUnFullOrderp(GroupAdoptOrder data) {
+        return super.update(NAMESPACE.concat("update_unFullOrder"), data);
+    }
+
+    @Override
+    public int updateStartAdopt(GroupAdoptOrder data) {
+        return super.update(NAMESPACE.concat("update_startAdopt"), data);
+    }
+
+    @Override
+    public int updateEndAdopt(GroupAdoptOrder data) {
+        return super.update(NAMESPACE.concat("update_endAdopt"), data);
+    }
+
+    @Override
+    public int updateSettleStatus(GroupAdoptOrder data) {
+        return super.update(NAMESPACE.concat("update_settleStatus"), data);
+    }
+
+    @Override
     public int delete(GroupAdoptOrder data) {
-        return super.delete(NAMESPACE.concat("delete_groupAdoptOrder"), data);
+        return 0;
     }
 
     @Override
@@ -57,21 +102,6 @@ public class GroupAdoptOrderDAOImpl extends AMybatisTemplate
             int start, int count) {
         return super.selectList(NAMESPACE.concat("select_groupAdoptOrder"),
             start, count, condition, GroupAdoptOrder.class);
-    }
-
-    @Override
-    public int update(GroupAdoptOrder data) {
-        return 0;
-    }
-
-    @Override
-    public void updateCancelGroupAdoptOrder(GroupAdoptOrder data) {
-        super.update(NAMESPACE.concat("update_cancelGroupAdoptOrder"), data);
-    }
-
-    @Override
-    public void updatePayGroupAdoptOrder(GroupAdoptOrder data) {
-        super.update(NAMESPACE.concat("update_payGroupAdoptOrder"), data);
     }
 
 }

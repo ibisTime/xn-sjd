@@ -42,8 +42,23 @@ public class ProductDAOImpl extends AMybatisTemplate implements IProductDAO {
     }
 
     @Override
+    public int updatePutOffProduct(Product data) {
+        return super.update(NAMESPACE.concat("update_putOffProduct"), data);
+    }
+
+    @Override
+    public int updateAdoptProduct(Product data) {
+        return super.update(NAMESPACE.concat("update_adoptProduct"), data);
+    }
+
+    @Override
     public int updateLockProduct(Product data) {
         return super.update(NAMESPACE.concat("update_lockProduct"), data);
+    }
+
+    @Override
+    public int updateUnLockProduct(Product data) {
+        return super.update(NAMESPACE.concat("update_unLockProduct"), data);
     }
 
     @Override
@@ -54,21 +69,6 @@ public class ProductDAOImpl extends AMybatisTemplate implements IProductDAO {
     @Override
     public int updateNowCount(Product data) {
         return super.update(NAMESPACE.concat("update_nowCount"), data);
-    }
-
-    @Override
-    public int updateAdoptProduct(Product data) {
-        return super.update(NAMESPACE.concat("update_adoptProduct"), data);
-    }
-
-    @Override
-    public int updatePutOffProduct(Product data) {
-        return super.update(NAMESPACE.concat("update_putOffProduct"), data);
-    }
-
-    @Override
-    public int updateCurrentIdentify(Product data) {
-        return super.update(NAMESPACE.concat("update_currentIdentify"), data);
     }
 
     @Override

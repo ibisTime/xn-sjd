@@ -24,6 +24,9 @@
 			    <ref bean="doDailyAdoptOrderTreeTrigger"/>
 			    <ref bean="doExpireCarbonBubbleTrigger"/>
 			    <ref bean="doDailyExpireGiftTrigger"/>
+			    <ref bean="doDailyGroupAdoptOrderTrigger"/>
+			    <ref bean="doCancelGroupAdoptOrderTrigger"/>
+			    <ref bean="doInvalidIdentifyCodeTrigger"/>
  			</list>
 		</property>
 		<property name="autoStartup" value="true" />
@@ -111,6 +114,48 @@
 		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject" ref="giftOrderAOImpl" />
 		<property name="targetMethod" value="doDailyExpireGift" />
+		<property name="concurrent" value="false" />
+	</bean> 
+	
+	<!-- 集体订单认养/认养已过期扫描 -->
+	<bean id="doDailyGroupAdoptOrderTrigger"
+		  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="doDailyGroupAdoptOrder" />
+		<property name="cronExpression" value="0 0 0 * * ?"/><!-- 每天零点执行 -->
+	</bean>
+	
+	<bean id="doDailyGroupAdoptOrder"
+		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="groupAdoptOrderAOImpl" />
+		<property name="targetMethod" value="doDailyGroupAdoptOrder" />
+		<property name="concurrent" value="false" />
+	</bean> 
+	
+	<!-- 集体订单下单未支付扫描 -->
+	<bean id="doCancelGroupAdoptOrderTrigger"
+		  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="doCancelGroupAdoptOrder" />
+		<property name="cronExpression" value="0 */15 * * * ?"/><!-- 每15分钟执行 -->
+	</bean>
+	
+	<bean id="doCancelGroupAdoptOrder"
+		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="groupAdoptOrderAOImpl" />
+		<property name="targetMethod" value="doCancelGroupAdoptOrder" />
+		<property name="concurrent" value="false" />
+	</bean> 
+	
+	<!-- 集体订单过期识别码扫描 -->
+	<bean id="doInvalidIdentifyCodeTrigger"
+		  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="doInvalidIdentifyCode" />
+		<property name="cronExpression" value="0 */15 * * * ?"/><!-- 每15分钟执行 -->
+	</bean>
+	
+	<bean id="doInvalidIdentifyCode"
+		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="groupAdoptOrderAOImpl" />
+		<property name="targetMethod" value="doInvalidIdentifyCode" />
 		<property name="concurrent" value="false" />
 	</bean> 
 

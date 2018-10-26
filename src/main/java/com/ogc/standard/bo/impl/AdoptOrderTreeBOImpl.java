@@ -18,6 +18,7 @@ import com.ogc.standard.dao.IAdoptOrderTreeDAO;
 import com.ogc.standard.domain.AdoptOrder;
 import com.ogc.standard.domain.AdoptOrderTree;
 import com.ogc.standard.domain.Company;
+import com.ogc.standard.domain.GroupAdoptOrder;
 import com.ogc.standard.domain.Product;
 import com.ogc.standard.domain.Tree;
 import com.ogc.standard.domain.User;
@@ -71,6 +72,39 @@ public class AdoptOrderTreeBOImpl extends PaginableBOImpl<AdoptOrderTree>
         Company company = companyBO.getCompanyByUserId(product.getOwnerId());
         data.setCertificateTemplate(company.getCertificateTemplate());
         data.setCurrentHolder(adoptOrder.getApplyUser());
+        adoptOrderTreeDAO.insert(data);
+        return code;
+    }
+
+    @Override
+    public String saveAdoptOrderTree(Product product,
+            GroupAdoptOrder groupAdoptOrder, String treeNumber) {
+        AdoptOrderTree data = new AdoptOrderTree();
+        String code = OrderNoGenerater
+            .generate(EGeneratePrefix.ADOPT_ORDER_TREE.getCode());
+        data.setCode(code);
+        data.setOrderCode(groupAdoptOrder.getCode());
+        data.setParentCategoryCode(product.getParentCategoryCode());
+        data.setCategoryCode(product.getCategoryCode());
+
+        data.setOwnerId(product.getOwnerId());
+        data.setProductCode(product.getCode());
+        data.setTreeNumber(treeNumber);
+        data.setStartDatetime(groupAdoptOrder.getStartDatetime());
+        data.setEndDatetime(groupAdoptOrder.getEndDatetime());
+
+        data.setAmount(groupAdoptOrder.getPrice());
+        data.setCreateDatetime(new Date());
+        if (EAdoptOrderStatus.TO_ADOPT.getCode()
+            .equals(groupAdoptOrder.getStatus())) {
+            data.setStatus(EAdoptOrderTreeStatus.TO_ADOPT.getCode());
+        } else {
+            data.setStatus(EAdoptOrderTreeStatus.ADOPT.getCode());
+        }
+
+        Company company = companyBO.getCompanyByUserId(product.getOwnerId());
+        data.setCertificateTemplate(company.getCertificateTemplate());
+        data.setCurrentHolder(groupAdoptOrder.getApplyUser());
         adoptOrderTreeDAO.insert(data);
         return code;
     }
@@ -202,4 +236,5 @@ public class AdoptOrderTreeBOImpl extends PaginableBOImpl<AdoptOrderTree>
         condition.setStatusList(statusList);
         return adoptOrderTreeDAO.selectTotalAmount(condition);
     }
+
 }
