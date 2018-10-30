@@ -1,5 +1,7 @@
 package com.ogc.standard.dto.req;
 
+import java.util.List;
+
 /**
  * 分页查询产品分类
  * @author: silver 
@@ -45,6 +47,9 @@ public class XN629025Req extends APageReq {
 
     // 状态（0草稿/1已提交待审核/2审核不通过/3审核通过待上架/4已上架待认养/5已锁定/6已认养可下架/7已下架）
     private String status;
+
+    // 状态列表
+    private List<String> statusList;
 
     public String getName() {
         return name;
@@ -140,6 +145,14 @@ public class XN629025Req extends APageReq {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public List<String> getStatusList() {
+        return statusList;
+    }
+
+    public void setStatusList(List<String> statusList) {
+        this.statusList = statusList;
     }
 
 }

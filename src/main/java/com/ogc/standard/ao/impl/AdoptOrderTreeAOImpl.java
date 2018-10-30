@@ -160,7 +160,7 @@ public class AdoptOrderTreeAOImpl implements IAdoptOrderTreeAO {
             .getConfigsMap(ESysConfigType.TPP_RULE.getCode());
         Double rate = Double
             .valueOf(configMap.get(SysConstants.CREATE_TPP_RATE));
-        Integer expireHours = Integer
+        Double expireHours = Double
             .valueOf(configMap.get(SysConstants.TPP_EXPIRE_HOUR));
 
         Date createDatetime = DateUtil.getTodayStart();// 创建时间

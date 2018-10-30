@@ -34,6 +34,12 @@ public interface IGroupAdoptOrderAO {
     // 支付成功订单回调处理
     public void paySuccess(String payGroup);
 
+    // 更新未支付订单状态
+    public void doCancelGroupAdoptOrder();
+
+    // 更新已失效的识别码
+    public void doInvalidIdentifyCode();
+
     public Paginable<GroupAdoptOrder> queryGroupAdoptOrderPage(int start,
             int limit, GroupAdoptOrder condition);
 

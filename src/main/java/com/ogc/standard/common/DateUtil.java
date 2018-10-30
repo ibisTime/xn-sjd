@@ -5,7 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.UUID;
 
 public class DateUtil {
 
@@ -71,11 +70,12 @@ public class DateUtil {
         }
     }
 
-    public static Date getRelativeDateOfHour(Date startDate, int hour) {
+    public static Date getRelativeDateOfHour(Date startDate, Double hour) {
         Calendar calendar = Calendar.getInstance();
         try {
+            Integer minute = (int) (hour * 60);
             calendar.setTime(startDate);
-            calendar.add(Calendar.HOUR, hour);
+            calendar.add(Calendar.MINUTE, minute);
             return calendar.getTime();
         } catch (Exception e) {
             return startDate;
@@ -395,9 +395,7 @@ public class DateUtil {
     }
 
     public static void main(String[] args) {
-        String identifyCode = UUID.randomUUID().toString().hashCode() + "";
-        identifyCode = identifyCode.replace("-", "");
-        System.out.println(identifyCode);
+        System.out.println(Double.valueOf("5"));
     }
 
     /**

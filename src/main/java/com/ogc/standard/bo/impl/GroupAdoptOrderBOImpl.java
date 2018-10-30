@@ -20,7 +20,6 @@ import com.ogc.standard.domain.Product;
 import com.ogc.standard.domain.ProductSpecs;
 import com.ogc.standard.dto.res.XN629048Res;
 import com.ogc.standard.enums.EAdoptOrderSettleStatus;
-import com.ogc.standard.enums.EAdoptOrderStatus;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.enums.EGroupAdoptOrderSettleStatus;
@@ -117,18 +116,13 @@ public class GroupAdoptOrderBOImpl extends PaginableBOImpl<GroupAdoptOrder>
     @Override
     public void payYueSuccess(GroupAdoptOrder data, XN629048Res resultRes,
             BigDecimal backjfAmount) {
-        Date nowDate = new Date();
-        if (nowDate.before(data.getStartDatetime())) {// 支付时间小于认养开始时间
-            data.setStatus(EAdoptOrderStatus.TO_ADOPT.getCode());
-        } else {
-            data.setStatus(EAdoptOrderStatus.ADOPT.getCode());
-        }
 
+        data.setStatus(EGroupAdoptOrderStatus.PAYED.getCode());
         data.setPayType(EPayType.YE.getCode());
         data.setCnyDeductAmount(resultRes.getCnyAmount());
         data.setJfDeductAmount(resultRes.getJfAmount());
         data.setPayAmount(data.getAmount().subtract(resultRes.getCnyAmount()));
-        data.setPayDatetime(nowDate);
+        data.setPayDatetime(new Date());
 
         data.setBackJfAmount(backjfAmount);
         data.setSettleStatus(EGroupAdoptOrderSettleStatus.TO_SETTLE.getCode());
@@ -141,15 +135,9 @@ public class GroupAdoptOrderBOImpl extends PaginableBOImpl<GroupAdoptOrder>
     @Override
     public void paySuccess(GroupAdoptOrder data, BigDecimal payAmount,
             BigDecimal backJfAmount) {
-        Date nowDate = new Date();
-        if (nowDate.before(data.getStartDatetime())) {// 支付时间小于认养开始时间
-            data.setStatus(EGroupAdoptOrderStatus.PAYED.getCode());
-        } else {
-            data.setStatus(EGroupAdoptOrderStatus.ADOPT.getCode());
-        }
-
+        data.setStatus(EGroupAdoptOrderStatus.PAYED.getCode());
         data.setPayAmount(payAmount);
-        data.setPayDatetime(nowDate);
+        data.setPayDatetime(new Date());
         data.setBackJfAmount(backJfAmount);
         data.setSettleStatus(EAdoptOrderSettleStatus.TO_SETTLE.getCode());
         data.setRemark("第三方支付成功");

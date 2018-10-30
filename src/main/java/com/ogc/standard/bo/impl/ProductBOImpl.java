@@ -255,7 +255,7 @@ public class ProductBOImpl extends PaginableBOImpl<Product>
     public void refreshLockProduct(String code, String identifyCode,
             String specsCode) {
         Map<String, String> mapList = sysConfigBO.getConfigsMap();
-        Integer idInvalidHours = Integer
+        Double idInvalidHours = Double
             .valueOf(mapList.get(SysConstants.ID_INVALID_HOURS));// 识别码失效时间
         Date idInvalidDatetime = DateUtil.getRelativeDateOfHour(new Date(),
             idInvalidHours);
@@ -277,6 +277,7 @@ public class ProductBOImpl extends PaginableBOImpl<Product>
 
         product.setCode(code);
         product.setStatus(EProductStatus.TO_ADOPT.getCode());
+        product.setNowCount(0);
         product.setIdentifyCode(null);
         product.setIdInvalidDatetime(null);
         product.setSpecsCode(null);

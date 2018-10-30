@@ -161,6 +161,9 @@ public class Product extends ABaseDO {
     // 集体产品是否认养中
     private String isAdopting;
 
+    // 状态列表
+    private List<String> statusList;
+
     public String getDirectType() {
         return directType;
     }
@@ -543,6 +546,14 @@ public class Product extends ABaseDO {
 
     public void setSpecsCode(String specsCode) {
         this.specsCode = specsCode;
+    }
+
+    public List<String> getStatusList() {
+        return statusList;
+    }
+
+    public void setStatusList(List<String> statusList) {
+        this.statusList = statusList;
     }
 
 }

@@ -234,8 +234,8 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
             groupAdoptOrderBO.refreshPayGroup(data, payType, deductRes);
             String signOrder = alipayBO.getSignedOrder(data.getApplyUser(),
                 ESysUser.SYS_USER.getCode(), data.getPayGroup(),
-                EJourBizTypeUser.ADOPT.getCode(),
-                EJourBizTypeUser.ADOPT.getValue(), data.getAmount());
+                EJourBizTypeUser.ADOPT_COLLECT.getCode(),
+                EJourBizTypeUser.ADOPT_COLLECT.getValue(), data.getAmount());
             result = new PayOrderRes(signOrder);
         } else if (EPayType.WEIXIN_H5.getCode().equals(payType)) {// 微信支付
             throw new BizException(EBizErrorCode.DEFAULT.getCode(), "暂不支持微信支付");
@@ -500,11 +500,10 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
         if (CollectionUtils.isNotEmpty(productList)) {
             for (Product product : productList) {
 
-                // 解锁产品
-                productBO.refreshUnLockProduct(product.getCode());
-
-                // 更新订单状态
-                groupAdoptOrderBO.refreshUnFullOrder(product.getIdentifyCode());
+                // 还没到失效时间则跳过
+                if ((new Date()).before(product.getIdInvalidDatetime())) {
+                    continue;
+                }
 
                 // 订单退款
                 List<GroupAdoptOrder> groupAdoptOrderList = groupAdoptOrderBO
@@ -555,6 +554,14 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
 
                         }
                     }
+
+                    // 更新订单状态
+                    groupAdoptOrderBO
+                        .refreshUnFullOrder(product.getIdentifyCode());
+
+                    // 解锁产品
+                    productBO.refreshUnLockProduct(product.getCode());
+
                 }
             }
         }

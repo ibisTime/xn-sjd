@@ -84,6 +84,13 @@
 				AND t.raise_count = t.now_count
 			</if>
 			
+			<if test="statusList != null and statusList != '' ">
+                AND t.status in
+                <foreach item="item" index="index" collection="statusList" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            
 			<if test="raiseStartStartDatetime != null and raiseStartStartDatetime != '' ">
 				<![CDATA[AND t.raise_start_datetime >= #{raiseStartStartDatetime}]]>
 			</if>
@@ -311,6 +318,7 @@
 		UPDATE tzb_product
 		SET
 		status = #{status}
+		,now_count = #{nowCount}
 		,identify_code = #{identifyCode}
 		,id_invalid_datetime = #{idInvalidDatetime}
 		,specs_code = #{specsCode}

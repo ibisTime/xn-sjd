@@ -19,6 +19,7 @@ import com.ogc.standard.bo.IProductSpecsBO;
 import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.ITreeBO;
 import com.ogc.standard.bo.base.Paginable;
+import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.domain.Category;
 import com.ogc.standard.domain.Company;
 import com.ogc.standard.domain.Product;
@@ -137,8 +138,13 @@ public class ProductAOImpl implements IProductAO {
         }
 
         // 更新募集数量
-        productBO.refreshRaiseCount(product.getCode(),
-            req.getTreeList().size());
+        if (ESellType.COLLECTIVE.getCode().equals(req.getSellType())) {
+            productBO.refreshRaiseCount(product.getCode(),
+                StringValidater.toInteger(req.getRaiseCount()));
+        } else {
+            productBO.refreshRaiseCount(product.getCode(),
+                req.getTreeList().size());
+        }
 
         return product.getCode();
     }

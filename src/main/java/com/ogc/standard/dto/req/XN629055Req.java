@@ -1,5 +1,7 @@
 package com.ogc.standard.dto.req;
 
+import java.util.List;
+
 /**
  * 分页查询集体认养订单
  * @author: jiafr 
@@ -33,6 +35,12 @@ public class XN629055Req extends APageReq {
 
     // 结算状态
     private String settleStatus;
+
+    // 用户编号
+    private String userId;
+
+    // 状态
+    private List<String> statusList;
 
     public String getProductCode() {
         return productCode;
@@ -96,6 +104,22 @@ public class XN629055Req extends APageReq {
 
     public void setSettleStatus(String settleStatus) {
         this.settleStatus = settleStatus;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public List<String> getStatusList() {
+        return statusList;
+    }
+
+    public void setStatusList(List<String> statusList) {
+        this.statusList = statusList;
     }
 
 }

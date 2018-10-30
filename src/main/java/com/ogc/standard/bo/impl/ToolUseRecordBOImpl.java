@@ -50,8 +50,8 @@ public class ToolUseRecordBOImpl extends PaginableBOImpl<ToolUseRecord>
         toolUseRecord.setStatus(EToolUseRecordStatus.ACTIVE.getCode());
         toolUseRecord.setUserId(user.getUserId());
         toolUseRecord.setCreateDatetime(new Date());
-        toolUseRecord.setInvalidDatetime(DateUtil
-            .getRelativeDateOfHour(new Date(), toolOrder.getValidityTerm()));
+        toolUseRecord.setInvalidDatetime(DateUtil.getRelativeDateOfHour(
+            new Date(), toolOrder.getValidityTerm().doubleValue()));
 
         toolUseRecordDAO.insert(toolUseRecord);
         return code;

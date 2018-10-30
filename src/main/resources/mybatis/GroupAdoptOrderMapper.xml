@@ -48,6 +48,9 @@
 			<if test="identifyCode != null and identifyCode != '' ">
 				AND t.identify_code = #{identifyCode}
 			</if>
+			<if test="applyUser != null and applyUser != '' ">
+				AND t.apply_user = #{applyUser}
+			</if>
 			<if test="payGroup != null and payGroup != '' ">
 				AND t.pay_group = #{payGroup}
 			</if>
