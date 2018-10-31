@@ -17,7 +17,6 @@ import com.ogc.standard.domain.AdoptOrderTree;
 import com.ogc.standard.domain.Tool;
 import com.ogc.standard.domain.ToolOrder;
 import com.ogc.standard.domain.ToolUseRecord;
-import com.ogc.standard.domain.User;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.enums.EToolUseRecordStatus;
 import com.ogc.standard.exception.BizException;
@@ -34,7 +33,7 @@ public class ToolUseRecordBOImpl extends PaginableBOImpl<ToolUseRecord>
 
     @Override
     public String saveToolUseRecord(ToolOrder toolOrder,
-            AdoptOrderTree adoptOrderTree, User user) {
+            AdoptOrderTree adoptOrderTree, String userId) {
 
         ToolUseRecord toolUseRecord = new ToolUseRecord();
         Tool tool = toolBO.getTool(toolOrder.getToolCode());
@@ -48,7 +47,7 @@ public class ToolUseRecordBOImpl extends PaginableBOImpl<ToolUseRecord>
         toolUseRecord.setToolType(tool.getType());
 
         toolUseRecord.setStatus(EToolUseRecordStatus.ACTIVE.getCode());
-        toolUseRecord.setUserId(user.getUserId());
+        toolUseRecord.setUserId(userId);
         toolUseRecord.setCreateDatetime(new Date());
         toolUseRecord.setInvalidDatetime(DateUtil.getRelativeDateOfHour(
             new Date(), toolOrder.getValidityTerm().doubleValue()));

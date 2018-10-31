@@ -36,6 +36,9 @@ public interface ITreeBO extends IPaginableBO<Tree> {
     // 取消认养
     public void refreshCancelTree(Tree tree);
 
+    // 取消认养
+    public void refreshCancelTreeByProduct(String productCode);
+
     // 支付认养
     public void refreshPayTree(Tree tree, Integer adoptCount);
 
@@ -48,6 +51,10 @@ public interface ITreeBO extends IPaginableBO<Tree> {
     // 更新收藏数
     public void refreshCollectionCount(String treeNumber,
             Integer collectionCount);
+
+    // 更新认养数量
+    public void refreshAdoptCountByProduct(String productCode,
+            Integer adoptCount);
 
     // 根据树木编号获取树
     public Tree getTreeByTreeNumber(String treeNumber);

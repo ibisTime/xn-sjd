@@ -25,12 +25,15 @@ public interface IAdoptOrderTreeBO extends IPaginableBO<AdoptOrderTree> {
     public void refreshAdoptOrderTree(AdoptOrderTree data,
             EAdoptOrderTreeStatus adoptOrderTreeStatus);
 
+    // 更新集体订单的失效认养权
+    public void refreshInvalidAdoptByOrder(String groupAdoptCode);
+
     public List<AdoptOrderTree> queryAdoptOrderTreeList(
             AdoptOrderTree condition);
 
     public List<AdoptOrderTree> queryAdoptOrderTreeList(String orderCode);
 
-    public AdoptOrderTree getAdoptOrderTreeByNum(String treeNumber);
+    public List<AdoptOrderTree> queryAdoptOrderTreeByNum(String treeNumber);
 
     public AdoptOrderTree getAdoptOrderTree(String code);
 

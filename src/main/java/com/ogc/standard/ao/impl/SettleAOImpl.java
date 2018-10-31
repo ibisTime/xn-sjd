@@ -126,16 +126,33 @@ public class SettleAOImpl implements ISettleAO {
     }
 
     private void initSettle(Settle settle) {
-        // 订单
-        AdoptOrder adoptOrder = adoptOrderBO.getAdoptOrder(settle.getRefCode());
-        settle.setAdoptOrder(adoptOrder);
+        String productCode = null;
+        String applyUser = null;
+
+        // 集体订单
+        if (ESellType.COLLECTIVE.getCode().equals(settle.getRefType())) {
+            GroupAdoptOrder groupAdoptOrder = groupAdoptOrderBO
+                .getGroupAdoptOrder(settle.getRefCode());
+            settle.setGroupAdoptOrder(groupAdoptOrder);
+
+            productCode = groupAdoptOrder.getProductCode();
+            applyUser = groupAdoptOrder.getApplyUser();
+        } else {
+            // 认养订单
+            AdoptOrder adoptOrder = adoptOrderBO
+                .getAdoptOrder(settle.getRefCode());
+            settle.setAdoptOrder(adoptOrder);
+
+            productCode = adoptOrder.getProductCode();
+            applyUser = adoptOrder.getApplyUser();
+        }
 
         // 产品名称
-        Product product = productBO.getProduct(adoptOrder.getProductCode());
+        Product product = productBO.getProduct(productCode);
         settle.setProductName(product.getName());
 
         // 认养人
-        User user = userBO.getUserUnCheck(adoptOrder.getApplyUser());
+        User user = userBO.getUserUnCheck(applyUser);
         if (null != user) {
             settle.setApplyUserName(user.getMobile());
         }

@@ -16,6 +16,7 @@ import com.ogc.standard.dto.req.XN629502Req;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.EToolOrderStatus;
 import com.ogc.standard.enums.EToolStatus;
+import com.ogc.standard.enums.EToolType;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
 
@@ -76,20 +77,8 @@ public class ToolAOImpl implements IToolAO {
 
         if (null != page && CollectionUtils.isNotEmpty(page.getList())) {
 
-            // 根据购买记录查询用户是否购买道具
-            if (StringUtils.isNotBlank(condition.getUserId())) {
-
-                for (Tool tool : page.getList()) {
-                    if (CollectionUtils
-                        .isNotEmpty(toolOrderBO.queryUserToolOrderList(
-                            condition.getUserId(), tool.getCode(),
-                            EToolOrderStatus.TO_USE.getCode()))) {
-                        tool.setIsBuy(EBoolean.YES.getCode());
-                    } else {
-                        tool.setIsBuy(EBoolean.NO.getCode());
-                    }
-                }
-
+            for (Tool tool : page.getList()) {
+                init(condition, tool);
             }
 
         }
@@ -102,21 +91,8 @@ public class ToolAOImpl implements IToolAO {
         List<Tool> list = toolBO.queryToolList(condition);
 
         if (CollectionUtils.isNotEmpty(list)) {
-
-            // 根据购买记录查询用户是否购买道具
-            if (StringUtils.isNotBlank(condition.getUserId())) {
-
-                for (Tool tool : list) {
-                    if (CollectionUtils
-                        .isNotEmpty(toolOrderBO.queryUserToolOrderList(
-                            condition.getUserId(), tool.getCode(),
-                            EToolOrderStatus.TO_USE.getCode()))) {
-                        tool.setIsBuy(EBoolean.YES.getCode());
-                    } else {
-                        tool.setIsBuy(EBoolean.NO.getCode());
-                    }
-                }
-
+            for (Tool tool : list) {
+                init(condition, tool);
             }
         }
 
@@ -125,7 +101,39 @@ public class ToolAOImpl implements IToolAO {
 
     @Override
     public Tool getTool(String code) {
-        return toolBO.getTool(code);
+        Tool tool = toolBO.getTool(code);
+
+        // 描述
+        if (EToolType.SHIELD.getCode().equals(tool.getType())) {
+            String description = tool.getDescription();
+            description = description.replace("*",
+                tool.getValidityTerm().toString());
+            tool.setDescription(description);
+        }
+
+        return tool;
+    }
+
+    private void init(Tool condition, Tool tool) {
+        // 根据购买记录查询用户是否购买道具
+        if (StringUtils.isNotBlank(condition.getUserId())) {
+
+            if (CollectionUtils.isNotEmpty(
+                toolOrderBO.queryUserToolOrderList(condition.getUserId(),
+                    tool.getCode(), EToolOrderStatus.TO_USE.getCode()))) {
+                tool.setIsBuy(EBoolean.YES.getCode());
+            } else {
+                tool.setIsBuy(EBoolean.NO.getCode());
+            }
+        }
+
+        // 描述
+        if (EToolType.SHIELD.getCode().equals(tool.getType())) {
+            String description = tool.getDescription();
+            description = description.replace("*",
+                tool.getValidityTerm().toString());
+            tool.setDescription(description);
+        }
     }
 
 }

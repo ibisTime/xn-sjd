@@ -4,6 +4,7 @@
 <mapper namespace="com.ogc.standard.dao.IAdoptOrderTreeDAO">
 	<resultMap id="adoptOrderTree_DB_Result" type="adoptOrderTree">
 		<result column="code" property="code" />
+		<result column="order_type" property="orderType" />
 		<result column="order_code" property="orderCode" />
 		<result column="parent_category_code" property="parentCategoryCode" />
 		<result column="category_code" property="categoryCode" />
@@ -26,6 +27,9 @@
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
+			</if>
+			<if test="orderType != null and orderType != '' ">
+				AND t.order_type = #{orderType}
 			</if>
 			<if test="orderCode != null and orderCode != '' ">
 				AND t.order_code = #{orderCode}
@@ -71,6 +75,7 @@
 	<select id="select_adoptOrderTree" parameterType="adoptOrderTree" resultMap="adoptOrderTree_DB_Result">
 		SELECT
 		t.code
+		,t.order_type
 		,t.order_code
 		,t.parent_category_code
 		,t.category_code
@@ -113,6 +118,7 @@
 		INSERT INTO
 		try_adopt_order_tree(
 		code
+		,order_type
 		,order_code
 		,parent_category_code
 		,category_code
@@ -132,6 +138,7 @@
 		)
 		VALUES(
 		#{code}
+		,#{orderType}
 		,#{orderCode}
 		,#{parentCategoryCode}
 		,#{categoryCode}
@@ -157,5 +164,13 @@
 		status = #{status}
 		,remark = #{remark}
 		WHERE code = #{code}
+	</update>
+	
+	<update id="update_invalidByOrder" parameterType="adoptOrderTree">
+		UPDATE try_adopt_order_tree
+		SET
+		status = #{status}
+		,remark = #{remark}
+		WHERE order_code = #{orderCode}
 	</update>
 </mapper>

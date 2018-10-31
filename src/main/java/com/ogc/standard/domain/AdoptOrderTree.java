@@ -20,6 +20,9 @@ public class AdoptOrderTree extends ABaseDO {
     // 编号
     private String code;
 
+    // 订单类型
+    private String orderType;
+
     // 认养订单编号
     private String orderCode;
 
@@ -78,6 +81,9 @@ public class AdoptOrderTree extends ABaseDO {
 
     // 添加时间止
     private Date createDatetimeEnd;
+
+    // 规格名称
+    private String specsName;
 
     public User getUser() {
         return user;
@@ -245,6 +251,22 @@ public class AdoptOrderTree extends ABaseDO {
 
     public void setCreateDatetimeEnd(Date createDatetimeEnd) {
         this.createDatetimeEnd = createDatetimeEnd;
+    }
+
+    public String getOrderType() {
+        return orderType;
+    }
+
+    public void setOrderType(String orderType) {
+        this.orderType = orderType;
+    }
+
+    public String getSpecsName() {
+        return specsName;
+    }
+
+    public void setSpecsName(String specsName) {
+        this.specsName = specsName;
     }
 
 }

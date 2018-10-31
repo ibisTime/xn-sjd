@@ -121,8 +121,13 @@ public class MaintainRecordAOImpl implements IMaintainRecordAO {
         maintainRecord.setMaintainInfo(maintainInfo);
 
         // 认养权
-        AdoptOrderTree adoptOrderTree = adoptOrderTreeBO
-            .getAdoptOrderTreeByNum(maintainRecord.getTreeNumber());
+        AdoptOrderTree adoptOrderTree = null;
+        List<AdoptOrderTree> adoptOrderTreeList = adoptOrderTreeBO
+            .queryAdoptOrderTreeByNum(maintainRecord.getTreeNumber());
+        if (CollectionUtils.isNotEmpty(adoptOrderTreeList)) {
+            adoptOrderTree = adoptOrderTreeList.get(0);
+        }
+
         maintainRecord.setAdoptOrderTree(adoptOrderTree);
     }
 }

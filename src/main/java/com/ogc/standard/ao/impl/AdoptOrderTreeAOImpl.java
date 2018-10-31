@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.IAdoptOrderTreeAO;
+import com.ogc.standard.bo.IAdoptOrderBO;
 import com.ogc.standard.bo.IAdoptOrderTreeBO;
 import com.ogc.standard.bo.IBizLogBO;
 import com.ogc.standard.bo.ICarbonBubbleOrderBO;
@@ -26,6 +27,7 @@ import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.AmountUtil;
 import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.common.SysConstants;
+import com.ogc.standard.domain.AdoptOrder;
 import com.ogc.standard.domain.AdoptOrderTree;
 import com.ogc.standard.domain.ToolUseRecord;
 import com.ogc.standard.domain.Tree;
@@ -34,6 +36,7 @@ import com.ogc.standard.domain.Visitor;
 import com.ogc.standard.dto.res.XN629904Res;
 import com.ogc.standard.enums.EAdoptOrderTreeStatus;
 import com.ogc.standard.enums.EBoolean;
+import com.ogc.standard.enums.ESellType;
 import com.ogc.standard.enums.ESysConfigType;
 import com.ogc.standard.enums.EToolType;
 import com.ogc.standard.exception.BizException;
@@ -70,6 +73,9 @@ public class AdoptOrderTreeAOImpl implements IAdoptOrderTreeAO {
 
     @Autowired
     private ITreeBO treeBO;
+
+    @Autowired
+    private IAdoptOrderBO adoptOrderBO;
 
     @Override
     @Transactional
@@ -217,6 +223,13 @@ public class AdoptOrderTreeAOImpl implements IAdoptOrderTreeAO {
             data.setIsShelter(EBoolean.YES.getCode());
         } else {
             data.setIsShelter(EBoolean.NO.getCode());
+        }
+
+        // 捐赠产品规格名称
+        if (ESellType.DONATE.getCode().equals(data.getOrderType())) {
+            AdoptOrder adoptOrder = adoptOrderBO
+                .getAdoptOrder(data.getOrderCode());
+            data.setSpecsName(adoptOrder.getProductSpecsName());
         }
 
     }

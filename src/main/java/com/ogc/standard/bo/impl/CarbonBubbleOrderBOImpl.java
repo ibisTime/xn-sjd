@@ -69,6 +69,15 @@ public class CarbonBubbleOrderBOImpl extends PaginableBOImpl<CarbonBubbleOrder>
     }
 
     @Override
+    public List<CarbonBubbleOrder> queryCarbonBubbleOrderListByAdopt(
+            String adoptTreeCode) {
+        CarbonBubbleOrder condition = new CarbonBubbleOrder();
+        condition.setAdoptTreeCode(adoptTreeCode);
+        condition.setStatus(ECarbonBubbleOrderStatus.TO_TAKE.getCode());
+        return carbonBubbleOrderDAO.selectList(condition);
+    }
+
+    @Override
     public List<CarbonBubbleOrder> queryCarbonBubbleOrderList(
             CarbonBubbleOrder condition) {
         return carbonBubbleOrderDAO.selectList(condition);

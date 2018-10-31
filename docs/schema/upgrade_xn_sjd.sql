@@ -59,3 +59,9 @@ ADD COLUMN `specs_code` VARCHAR(32) NULL COMMENT '当前集体订单规格' AFTE
 
 ALTER TABLE `try_group_adopt_order` 
 ADD COLUMN `settle_status` VARCHAR(4) NULL COMMENT '结算状态(0 不结算 1 待结算 2 已结算)' AFTER `back_jf_amount`;
+
+#V1.0.0 7-1
+ALTER TABLE `try_adopt_order_tree` 
+ADD COLUMN `order_type` VARCHAR(4) NULL COMMENT '订单类型' AFTER `code`;
+update try_adopt_order_tree set order_type = (select type from try_adopt_order where order_code = try_adopt_order.code) where left(order_code,2) = 'AO';
+update try_adopt_order_tree set order_type = 4 where left(order_code,3) = 'GAO';

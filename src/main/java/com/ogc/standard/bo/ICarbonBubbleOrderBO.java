@@ -23,6 +23,10 @@ public interface ICarbonBubbleOrderBO extends IPaginableBO<CarbonBubbleOrder> {
     // 可收取的碳泡泡
     public BigDecimal takeableTppAmount(String adoptUserId);
 
+    // 认养权下可收取的碳泡泡
+    public List<CarbonBubbleOrder> queryCarbonBubbleOrderListByAdopt(
+            String adoptTreeCode);
+
     public List<CarbonBubbleOrder> queryCarbonBubbleOrderList(
             CarbonBubbleOrder condition);
 

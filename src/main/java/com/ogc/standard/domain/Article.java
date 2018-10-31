@@ -92,6 +92,15 @@ public class Article extends ABaseDO {
     // 状态列表
     private List<String> statusList;
 
+    // 发布人
+    private String publishUserName;
+
+    // 古树名称
+    private String treeName;
+
+    // 认养权
+    private AdoptOrderTree adoptOrderTree;
+
     public void setCode(String code) {
         this.code = code;
     }
@@ -290,6 +299,30 @@ public class Article extends ABaseDO {
 
     public void setStatusList(List<String> statusList) {
         this.statusList = statusList;
+    }
+
+    public String getPublishUserName() {
+        return publishUserName;
+    }
+
+    public void setPublishUserName(String publishUserName) {
+        this.publishUserName = publishUserName;
+    }
+
+    public String getTreeName() {
+        return treeName;
+    }
+
+    public void setTreeName(String treeName) {
+        this.treeName = treeName;
+    }
+
+    public AdoptOrderTree getAdoptOrderTree() {
+        return adoptOrderTree;
+    }
+
+    public void setAdoptOrderTree(AdoptOrderTree adoptOrderTree) {
+        this.adoptOrderTree = adoptOrderTree;
     }
 
 }

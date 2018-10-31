@@ -552,12 +552,21 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
                                 EJourBizTypePlat.UN_FULL_BACKJF.getValue(),
                                 groupAdoptOrder.getCode());
 
+                            // 更新认养权状态
+                            adoptOrderTreeBO.refreshInvalidAdoptByOrder(
+                                groupAdoptOrder.getCode());
                         }
                     }
 
                     // 更新订单状态
                     groupAdoptOrderBO
                         .refreshUnFullOrder(product.getIdentifyCode());
+
+                    // 重置产品下树的认养数量
+                    treeBO.refreshAdoptCountByProduct(product.getCode(), 0);
+
+                    // 取消认养
+                    treeBO.refreshCancelTreeByProduct(product.getCode());
 
                     // 解锁产品
                     productBO.refreshUnLockProduct(product.getCode());

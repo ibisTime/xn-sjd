@@ -189,14 +189,14 @@
 		WHERE code = #{code}
 	</update>
 
-	<update id="update_toPayTree">
+	<update id="update_toPayTree" parameterType="tree">
 		UPDATE tzb_tree
 		SET
 		cur_order_code = #{curOrderCode}
 		WHERE code = #{code}
 	</update>
 	
-	<update id="update_cancelTree">
+	<update id="update_cancelTree" parameterType="tree">
 		UPDATE tzb_tree
 		SET
 		cur_order_code = #{curOrderCode}
@@ -204,7 +204,15 @@
 		WHERE code = #{code}
 	</update>
 	
-	<update id="update_payTree">
+	<update id="update_cancelTreeByProduct" parameterType="tree">
+		UPDATE tzb_tree
+		SET
+		cur_order_code = #{curOrderCode}
+		,status = #{status}
+		WHERE product_code = #{productCode}
+	</update>
+	
+	<update id="update_payTree" parameterType="tree">
 		UPDATE tzb_tree
 		SET
 		status = #{status}
@@ -212,28 +220,35 @@
 		WHERE code = #{code}
 	</update>
 	
-	<update id="update_articleCount">
+	<update id="update_articleCount" parameterType="tree">
 		UPDATE tzb_tree
 		SET
 		article_count = #{articleCount}
 		WHERE tree_number = #{treeNumber}
 	</update>
 	
-	<update id="update_pointCount">
+	<update id="update_pointCount" parameterType="tree">
 		UPDATE tzb_tree
 		SET
 		point_count = #{pointCount}
 		WHERE tree_number = #{treeNumber}
 	</update>
 	
-	<update id="update_collectionCount">
+	<update id="update_collectionCount" parameterType="tree">
 		UPDATE tzb_tree
 		SET
 		collection_count = #{collectionCount}
 		WHERE tree_number = #{treeNumber}
 	</update>
 	
-	<delete id="delete_treeByProduct">
+	<update id="update_adoptCount" parameterType="tree">
+		UPDATE tzb_tree
+		SET
+		adopt_count = #{adoptCount}
+		WHERE product_code = #{productCode}
+	</update>
+	
+	<delete id="delete_treeByProduct" parameterType="tree">
 		DELETE FROM tzb_tree WHERE product_code = #{productCode}
 	</delete>
 	

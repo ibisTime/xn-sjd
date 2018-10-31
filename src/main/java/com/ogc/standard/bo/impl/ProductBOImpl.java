@@ -118,6 +118,21 @@ public class ProductBOImpl extends PaginableBOImpl<Product>
 
     @Override
     public void refreshProduct(Product data, XN629011Req req) {
+        if (ESellType.DONATE.getCode().equals(req.getSellType())) {
+            if (req.getRaiseStartDatetime()
+                .compareTo(req.getRaiseEndDatetime()) >= 0) {
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                    "募集结束时间需大于募集开始时间");
+            }
+        }
+
+        if (ESellType.COLLECTIVE.getCode().equals(req.getSellType())) {
+            if (StringUtils.isBlank(req.getRaiseCount())) {
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                    "募集总数量不能为空");
+            }
+        }
+
         data.setName(req.getName());
         data.setSellType(req.getSellType());
         data.setDirectType(req.getDirectType());
@@ -138,17 +153,6 @@ public class ProductBOImpl extends PaginableBOImpl<Product>
         data.setArea(req.getArea());
         data.setTown(req.getTown());
 
-        if (ESellType.COLLECTIVE.getCode().equals(req.getSellType())) {
-            if (req.getRaiseStartDatetime()
-                .compareTo(req.getRaiseEndDatetime()) >= 0) {
-                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                    "募集结束时间需大于募集开始时间");
-            }
-            if (StringUtils.isBlank(req.getRaiseCount())) {
-                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                    "募集总数量不能为空");
-            }
-        }
         data.setRaiseStartDatetime(DateUtil.strToDate(
             req.getRaiseStartDatetime(), DateUtil.FRONT_DATE_FORMAT_STRING));
         data.setRaiseEndDatetime(DateUtil.strToDate(req.getRaiseEndDatetime(),

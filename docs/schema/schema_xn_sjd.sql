@@ -107,6 +107,7 @@ CREATE TABLE `try_adopt_order` (
 DROP TABLE IF EXISTS `try_adopt_order_tree`;
 CREATE TABLE `try_adopt_order_tree` (
   `code` varchar(32) NOT NULL COMMENT '编号',
+  `order_type` varchar(4) DEFAULT NULL COMMENT '订单类型',
   `order_code` varchar(32) DEFAULT NULL COMMENT '认养订单编号',
   `parent_category_code` varchar(32) DEFAULT NULL COMMENT '产品大类',
   `category_code` varchar(32) DEFAULT NULL COMMENT '分类编号',

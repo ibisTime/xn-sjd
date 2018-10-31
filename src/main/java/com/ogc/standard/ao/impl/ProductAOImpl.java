@@ -200,6 +200,7 @@ public class ProductAOImpl implements IProductAO {
         }
 
         Product data = productBO.getProduct(req.getCode());
+
         // 未提交和已下架后可修改
         if (!EProductStatus.DRAFT.getCode().equals(data.getStatus())
                 && !EProductStatus.PUTOFFED.getCode().equals(data.getStatus())
@@ -374,6 +375,12 @@ public class ProductAOImpl implements IProductAO {
                 .queryProductSpecsListByProduct(product.getCode());
         }
         product.setProductSpecsList(specsList);
+
+        // 捐赠产品认养年限
+        if (ESellType.DONATE.getCode().equals(product.getSellType())) {
+            product.setStartDatetime(specsList.get(0).getStartDatetime());
+            product.setEndDatetime(specsList.get(0).getEndDatetime());
+        }
 
         // 初始化最小价格和最大价格
         BigDecimal minPrice = BigDecimal.ZERO;

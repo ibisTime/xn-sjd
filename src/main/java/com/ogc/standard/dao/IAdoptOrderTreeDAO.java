@@ -11,6 +11,9 @@ public interface IAdoptOrderTreeDAO extends IBaseDAO<AdoptOrderTree> {
 
     int updateStatus(AdoptOrderTree data);
 
+    // 更新集体订单的失效认养权
+    public int updateInvalidAdoptByOrder(AdoptOrderTree data);
+
     // 查询认养总额
     public BigDecimal selectTotalAmount(AdoptOrderTree condition);
 }

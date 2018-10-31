@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ogc.standard.ao.ICarbonBubbleOrderAO;
 import com.ogc.standard.ao.IToolOrderAO;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IAdoptOrderTreeBO;
@@ -29,6 +30,7 @@ import com.ogc.standard.enums.EJourBizTypeUser;
 import com.ogc.standard.enums.ESystemAccount;
 import com.ogc.standard.enums.EToolOrderStatus;
 import com.ogc.standard.enums.EToolStatus;
+import com.ogc.standard.enums.EToolType;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
 
@@ -55,6 +57,9 @@ public class ToolOrderAOImpl implements IToolOrderAO {
 
     @Autowired
     private IBizLogBO bizLogBO;
+
+    @Autowired
+    private ICarbonBubbleOrderAO carbonBubbleOrderAO;
 
     @Override
     @Transactional
@@ -115,9 +120,6 @@ public class ToolOrderAOImpl implements IToolOrderAO {
                 "已有相同道具正在生效中！");
         }
 
-        // 验证用户
-        User user = userBO.getUser(toolOrder.getUserId());
-
         // 验证认养权
         AdoptOrderTree adoptOrderTree = adoptOrderTreeBO
             .getAdoptOrderTree(adoptTreeCode);
@@ -127,18 +129,24 @@ public class ToolOrderAOImpl implements IToolOrderAO {
                 "当前认养权不在认养中！");
         }
 
-        // 落地使用记录
-        toolUseRecordBO.saveToolUseRecord(toolOrder, adoptOrderTree, user);
+        Tool tool = toolBO.getTool(toolOrder.getToolCode());
 
-        // 刷新订单状态
-        toolOrderBO.refreshStatus(toolOrder);
+        // 一键收取
+        if (EToolType.GET_ALL.getCode().equals(tool.getType())) {
+            carbonBubbleOrderAO.takeCarbonBubbleByAdopt(adoptTreeCode, userId);
+        }
 
         // 添加使用保护罩日志
-        if (toolOrder.getToolName().contains("罩")) {
+        if (EToolType.SHIELD.getCode().equals(tool.getType())) {
             bizLogBO.useShelter(adoptTreeCode,
                 adoptOrderTree.getCurrentHolder(), userId);
         }
 
+        // 落地使用记录
+        toolUseRecordBO.saveToolUseRecord(toolOrder, adoptOrderTree, userId);
+
+        // 刷新订单状态
+        toolOrderBO.refreshStatus(toolOrder);
     }
 
     @Override

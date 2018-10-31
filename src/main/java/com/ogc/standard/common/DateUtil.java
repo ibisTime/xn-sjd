@@ -395,7 +395,7 @@ public class DateUtil {
     }
 
     public static void main(String[] args) {
-        System.out.println(Double.valueOf("5"));
+        System.out.println("使用后保护碳泡泡*小时内不被收取".replace("*", "12"));
     }
 
     /**

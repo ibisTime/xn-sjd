@@ -164,6 +164,12 @@ public class Product extends ABaseDO {
     // 状态列表
     private List<String> statusList;
 
+    // 捐赠认养开始时间
+    private Date startDatetime;
+
+    // 捐赠认养结束时间
+    private Date endDatetime;
+
     public String getDirectType() {
         return directType;
     }
@@ -554,6 +560,22 @@ public class Product extends ABaseDO {
 
     public void setStatusList(List<String> statusList) {
         this.statusList = statusList;
+    }
+
+    public Date getStartDatetime() {
+        return startDatetime;
+    }
+
+    public void setStartDatetime(Date startDatetime) {
+        this.startDatetime = startDatetime;
+    }
+
+    public Date getEndDatetime() {
+        return endDatetime;
+    }
+
+    public void setEndDatetime(Date endDatetime) {
+        this.endDatetime = endDatetime;
     }
 
 }

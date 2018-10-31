@@ -20,6 +20,7 @@ import com.ogc.standard.domain.Sms;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.enums.EAccountType;
 import com.ogc.standard.enums.EGeneratePrefix;
+import com.ogc.standard.enums.ESellType;
 import com.ogc.standard.enums.ESmsStauts;
 import com.ogc.standard.enums.ESmsType;
 import com.ogc.standard.exception.BizException;
@@ -97,7 +98,14 @@ public class SmsBOImpl extends PaginableBOImpl<Sms> implements ISmsBO {
             userName = PhoneUtil.hideMobile(user.getMobile());
         }
 
-        String content = userName + "在" + hours + "认养" + count + "棵"
+        String unit = "棵";
+        if (ESellType.DONATE.getCode().equals(product.getSellType())
+                || ESellType.COLLECTIVE.getCode()
+                    .equals(product.getSellType())) {
+            unit = "份";
+        }
+
+        String content = userName + "在" + hours + "认养" + count + unit
                 + product.getName();
 
         sms.setCode(code);

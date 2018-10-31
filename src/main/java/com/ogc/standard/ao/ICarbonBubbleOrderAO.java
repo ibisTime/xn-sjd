@@ -12,6 +12,10 @@ public interface ICarbonBubbleOrderAO {
     // 收取碳泡泡
     public XN629350Res takeCarbonBubble(String code, String userId);
 
+    // 收取认养权下的碳泡泡
+    public XN629350Res takeCarbonBubbleByAdopt(String adoptTreeCode,
+            String collector);
+
     public Paginable<CarbonBubbleOrder> queryCarbonBubbleOrderPage(int start,
             int limit, CarbonBubbleOrder condition);
 

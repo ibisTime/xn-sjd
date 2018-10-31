@@ -59,4 +59,9 @@ public class AdoptOrderTreeDAOImpl extends AMybatisTemplate
         return super.update(NAMESPACE.concat("update_status"), data);
     }
 
+    @Override
+    public int updateInvalidAdoptByOrder(AdoptOrderTree data) {
+        return super.update(NAMESPACE.concat("update_invalidByOrder"), data);
+    }
+
 }

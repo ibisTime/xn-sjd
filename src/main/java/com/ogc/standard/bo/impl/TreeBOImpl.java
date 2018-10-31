@@ -111,6 +111,14 @@ public class TreeBOImpl extends PaginableBOImpl<Tree> implements ITreeBO {
     }
 
     @Override
+    public void refreshCancelTreeByProduct(String productCode) {
+        Tree tree = new Tree();
+        tree.setProductCode(productCode);
+        tree.setCurOrderCode(null);
+        tree.setStatus(ETreeStatus.TO_ADOPT.getCode());
+    }
+
+    @Override
     public void refreshPayTree(Tree tree, Integer adoptCount) {
         tree.setStatus(ETreeStatus.ADOPTED.getCode());
         tree.setAdoptCount(adoptCount);
@@ -140,6 +148,15 @@ public class TreeBOImpl extends PaginableBOImpl<Tree> implements ITreeBO {
         tree.setTreeNumber(treeNumber);
         tree.setCollectionCount(collectionCount);
         treeDAO.updateCollectionCount(tree);
+    }
+
+    @Override
+    public void refreshAdoptCountByProduct(String productCode,
+            Integer adoptCount) {
+        Tree tree = new Tree();
+        tree.setProductCode(productCode);
+        tree.setAdoptCount(adoptCount);
+        treeDAO.updateAdoptCountByProduct(tree);
     }
 
     @Override
@@ -182,14 +199,12 @@ public class TreeBOImpl extends PaginableBOImpl<Tree> implements ITreeBO {
         return treeDAO.selectList(condition);
     }
 
-    // 获取树木总量
     public int getTreeCount(String productCode) {
         Tree condition = new Tree();
         condition.setProductCode(productCode);
         return (int) treeDAO.selectTotalCount(condition);
     }
 
-    // 获取树木各个状态总量
     public int getTreeCount(String productCode, String status) {
         Tree condition = new Tree();
         condition.setProductCode(productCode);

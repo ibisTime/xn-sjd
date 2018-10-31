@@ -8,7 +8,7 @@ package com.ogc.standard.enums;
  */
 public enum EAdoptOrderTreeStatus {
     TO_ADOPT("1", "待认养"), ADOPT("2", "认养中"), END("3", "已到期"), PRESENT("4",
-            "已赠送");
+            "已赠送"), INVALID("5", "已失效");
 
     EAdoptOrderTreeStatus(String code, String value) {
         this.code = code;

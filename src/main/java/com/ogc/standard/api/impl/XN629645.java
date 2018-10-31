@@ -15,7 +15,7 @@ import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
 
 /**
- * 分页查询养护记录
+ * 分页查询结算订单
  * @author: silver 
  * @since: 2018年9月29日 上午10:49:25 
  * @history:

@@ -3,6 +3,7 @@ package com.ogc.standard.ao.impl;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,11 +12,15 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ogc.standard.ao.IArticleAO;
 import com.ogc.standard.bo.IAdoptOrderTreeBO;
 import com.ogc.standard.bo.IArticleBO;
+import com.ogc.standard.bo.IGroupAdoptOrderBO;
 import com.ogc.standard.bo.ITreeBO;
+import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.AdoptOrderTree;
 import com.ogc.standard.domain.Article;
+import com.ogc.standard.domain.GroupAdoptOrder;
 import com.ogc.standard.domain.Tree;
+import com.ogc.standard.domain.User;
 import com.ogc.standard.dto.req.XN629340Req;
 import com.ogc.standard.dto.req.XN629341Req;
 import com.ogc.standard.dto.req.XN629342Req;
@@ -28,6 +33,9 @@ import com.ogc.standard.enums.EArticleStatus;
 import com.ogc.standard.enums.EArticleType;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.EDealType;
+import com.ogc.standard.enums.EGroupAdoptOrderStatus;
+import com.ogc.standard.enums.ESellType;
+import com.ogc.standard.enums.EUser;
 import com.ogc.standard.exception.BizException;
 
 @Service
@@ -42,16 +50,39 @@ public class ArticleAOImpl implements IArticleAO {
     @Autowired
     private ITreeBO treeBO;
 
+    @Autowired
+    private IUserBO userBO;
+
+    @Autowired
+    private IGroupAdoptOrderBO groupAdoptOrderBO;
+
     @Override
     @Transactional
     public String addArticle(XN629340Req req) {
         if (StringUtils.isNotBlank(req.getAdoptTreeCode())) {
             AdoptOrderTree adoptOrderTree = adoptOrderTreeBO
                 .getAdoptOrderTree(req.getAdoptTreeCode());
+
             if (!EAdoptOrderTreeStatus.ADOPT.getCode()
                 .equals(adoptOrderTree.getStatus())) {
                 throw new BizException("xn0000", "认养权不是可发表文章状态！");
             }
+
+            // 集体订单
+            if (ESellType.COLLECTIVE.getCode()
+                .equals(adoptOrderTree.getOrderType())) {
+                GroupAdoptOrder groupAdoptOrder = groupAdoptOrderBO
+                    .getGroupAdoptOrder(adoptOrderTree.getOrderCode());
+
+                // 满标和认养中才能发文章
+                if (!EGroupAdoptOrderStatus.FULL.getCode()
+                    .equals(groupAdoptOrder.getStatus())
+                        && !EGroupAdoptOrderStatus.ADOPT.getCode()
+                            .equals(groupAdoptOrder.getStatus())) {
+                    throw new BizException("xn0000", "集体订单不是可发表文章状态！");
+                }
+            }
+
         }
 
         EArticleStatus status = null;
@@ -198,17 +229,66 @@ public class ArticleAOImpl implements IArticleAO {
             page.setList(list);
         }
 
+        if (null != page && CollectionUtils.isNotEmpty(page.getList())) {
+            for (Article article : page.getList()) {
+
+                init(article);
+
+            }
+        }
+
         return page;
     }
 
     @Override
     public List<Article> queryArticleList(Article condition) {
-        return articleBO.queryArticleList(condition);
+        List<Article> list = articleBO.queryArticleList(condition);
+
+        if (CollectionUtils.isNotEmpty(list)) {
+            for (Article article : list) {
+
+                init(article);
+
+            }
+        }
+
+        return list;
     }
 
     @Override
     public Article getArticle(String code) {
-        return articleBO.getArticle(code);
+        Article article = articleBO.getArticle(code);
+
+        init(article);
+
+        return article;
+    }
+
+    private void init(Article article) {
+        // 作者
+        String publishUserName = null;
+        if (EArticleType.USER.getCode().equals(article.getType())) {
+            User user = userBO.getUserUnCheck(article.getPublishUserId());
+            if (null != user) {
+                publishUserName = user.getMobile();
+                if (StringUtils.isNotBlank(user.getNickname())) {
+                    publishUserName = user.getNickname();
+                }
+            }
+        } else {
+            publishUserName = EUser.ADMIN.getValue();
+        }
+
+        article.setPublishUserName(publishUserName);
+
+        Tree tree = treeBO.getTreeByTreeNumber(article.getTreeNo());
+        article.setTreeName(tree.getScientificName());
+
+        if (StringUtils.isNotBlank(article.getAdoptTreeCode())) {
+            AdoptOrderTree adoptOrderTree = adoptOrderTreeBO
+                .getAdoptOrderTree(article.getAdoptTreeCode());
+            article.setAdoptOrderTree(adoptOrderTree);
+        }
     }
 
 }

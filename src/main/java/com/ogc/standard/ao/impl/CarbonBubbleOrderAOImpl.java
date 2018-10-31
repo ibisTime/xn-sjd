@@ -140,6 +140,52 @@ public class CarbonBubbleOrderAOImpl implements ICarbonBubbleOrderAO {
     }
 
     @Override
+    @Transactional
+    public XN629350Res takeCarbonBubbleByAdopt(String adoptTreeCode,
+            String collector) {
+        // 正在使用的道具
+        if (CollectionUtils.isNotEmpty(toolUseRecordBO.queryTreeToolRecordList(
+            adoptTreeCode, EToolType.SHIELD.getCode()))) {
+            AdoptOrderTree adoptOrderTree = adoptOrderTreeBO
+                .getAdoptOrderTree(adoptTreeCode);
+
+            if (!adoptOrderTree.getCurrentHolder().equals(collector)) {
+                throw new BizException("xn0000", "正在使用保护罩，碳泡泡不能收取");
+            }
+        }
+
+        // 收取所有碳泡泡
+        List<CarbonBubbleOrder> carbonBubbleOrderList = carbonBubbleOrderBO
+            .queryCarbonBubbleOrderListByAdopt(adoptTreeCode);
+        if (CollectionUtils.isNotEmpty(carbonBubbleOrderList)) {
+            for (CarbonBubbleOrder carbonBubbleOrder : carbonBubbleOrderList) {
+                carbonBubbleOrderBO
+                    .takeCarbonBubble(carbonBubbleOrder.getCode(), collector);
+
+                // 收取人碳泡泡账户加上碳泡泡
+                Account sysTppAccount = accountBO
+                    .getAccount(ESystemAccount.SYS_ACOUNT_TPP_POOL.getCode());
+                Account userTppAccount = accountBO.getAccountByUser(collector,
+                    ECurrency.TPP.getCode());
+
+                BigDecimal quantity = carbonBubbleOrder.getQuantity();
+                if (quantity.compareTo(sysTppAccount.getAmount()) == 1) {
+                    quantity = sysTppAccount.getAmount();
+                }
+
+                accountBO.transAmount(sysTppAccount, userTppAccount, quantity,
+                    EJourBizTypeUser.ADOPT_DAY_BACK.getCode(),
+                    EJourBizTypePlat.ADOPT_DAY_BACK.getCode(),
+                    EJourBizTypeUser.ADOPT_DAY_BACK.getValue(),
+                    EJourBizTypePlat.ADOPT_DAY_BACK.getValue(),
+                    carbonBubbleOrder.getCode());
+            }
+        }
+
+        return null;
+    }
+
+    @Override
     public Paginable<CarbonBubbleOrder> queryCarbonBubbleOrderPage(int start,
             int limit, CarbonBubbleOrder condition) {
         Paginable<CarbonBubbleOrder> paginable = carbonBubbleOrderBO
@@ -175,4 +221,5 @@ public class CarbonBubbleOrderAOImpl implements ICarbonBubbleOrderAO {
             data.setTakeUser(takeUser);
         }
     }
+
 }
