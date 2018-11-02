@@ -133,7 +133,11 @@ public class ToolOrderAOImpl implements IToolOrderAO {
 
         // 一键收取
         if (EToolType.GET_ALL.getCode().equals(tool.getType())) {
-            carbonBubbleOrderAO.takeCarbonBubbleByAdopt(adoptTreeCode, userId);
+            BigDecimal quantity = carbonBubbleOrderAO
+                .takeCarbonBubbleByAdopt(adoptTreeCode, userId);
+
+            bizLogBO.useGetall(adoptTreeCode, adoptOrderTree.getCurrentHolder(),
+                userId, quantity);
         }
 
         // 添加使用保护罩日志

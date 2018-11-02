@@ -65,3 +65,7 @@ ALTER TABLE `try_adopt_order_tree`
 ADD COLUMN `order_type` VARCHAR(4) NULL COMMENT '订单类型' AFTER `code`;
 update try_adopt_order_tree set order_type = (select type from try_adopt_order where order_code = try_adopt_order.code) where left(order_code,2) = 'AO';
 update try_adopt_order_tree set order_type = 4 where left(order_code,3) = 'GAO';
+
+#V1.0.0 7-2
+ALTER TABLE `try_adopt_order` 
+ADD COLUMN `product_specs_name` VARCHAR(255) NULL COMMENT '规格名称' AFTER `product_specs_code`;

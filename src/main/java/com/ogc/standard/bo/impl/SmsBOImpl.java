@@ -114,7 +114,7 @@ public class SmsBOImpl extends PaginableBOImpl<Sms> implements ISmsBO {
         sms.setTitle(ESmsType.BULLETIN.getValue());
         sms.setContent(content);
 
-        sms.setStatus(ESmsStauts.DRAFT.getCode());
+        sms.setStatus(ESmsStauts.SENDED.getCode());
         sms.setCreateDatetime(new Date());
         smsDAO.insert(sms);
     }

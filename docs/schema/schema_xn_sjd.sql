@@ -77,7 +77,7 @@ CREATE TABLE `try_adopt_order` (
   `code` varchar(32) NOT NULL COMMENT '编号',
   `type` varchar(4) DEFAULT NULL COMMENT '订单类型（1个人/2定向/3捐赠）',
   `product_code` varchar(32) DEFAULT NULL COMMENT '认养产品编号',
-  `product_specs_code` varchar(255) DEFAULT NULL COMMENT '规格编号',
+  `product_specs_name` varchar(255) DEFAULT NULL COMMENT '规格名称',
   `price` decimal(64,0) DEFAULT NULL COMMENT '认养价格',
   `start_datetime` datetime DEFAULT NULL COMMENT '认养开始时间',
   `end_datetime` datetime DEFAULT NULL COMMENT '认养结束时间',
