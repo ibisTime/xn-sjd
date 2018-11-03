@@ -29,6 +29,7 @@ import com.ogc.standard.dto.req.XN629031Req;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.enums.EInteractType;
 import com.ogc.standard.enums.EObjectType;
+import com.ogc.standard.enums.EProductType;
 import com.ogc.standard.enums.ETreeStatus;
 import com.ogc.standard.exception.BizException;
 
@@ -199,12 +200,17 @@ public class TreeAOImpl implements ITreeAO {
         tree.setOwnerName(ownerName);
 
         // 产品信息
-        Product product = productBO.getProduct(tree.getProductCode());
-        tree.setProductName(product.getName());
-        tree.setSellType(product.getSellType());
+        String categoryCode = null;
+        if (EProductType.NORMAL.getCode().equals(tree.getProductType())) {
+            Product product = productBO.getProduct(tree.getProductCode());
+            tree.setProductName(product.getName());
+            tree.setSellType(product.getSellType());
+
+            categoryCode = product.getCategoryCode();
+        }
 
         // 类型
-        Category category = categoryBO.getCategory(product.getCategoryCode());
+        Category category = categoryBO.getCategory(categoryCode);
         tree.setCategory(category.getName());
 
     }

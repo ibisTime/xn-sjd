@@ -27,6 +27,7 @@
 			    <ref bean="doDailyGroupAdoptOrderTrigger"/>
 			    <ref bean="doCancelGroupAdoptOrderTrigger"/>
 			    <ref bean="doInvalidIdentifyCodeTrigger"/>
+			    <ref bean="doCancelPresellOrderTrigger"/>
  			</list>
 		</property>
 		<property name="autoStartup" value="true" />
@@ -156,6 +157,20 @@
 		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject" ref="groupAdoptOrderAOImpl" />
 		<property name="targetMethod" value="doInvalidIdentifyCode" />
+		<property name="concurrent" value="false" />
+	</bean> 
+	
+	<!-- 预售订单未支付扫描 -->
+	<bean id="doCancelPresellOrderTrigger"
+		  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="doCancelPresellOrder" />
+		<property name="cronExpression" value="0 */15 * * * ?"/><!-- 每15分钟执行 -->
+	</bean>
+	
+	<bean id="doCancelPresellOrder"
+		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="presellOrderAOImpl" />
+		<property name="targetMethod" value="doCancelPresellOrder" />
 		<property name="concurrent" value="false" />
 	</bean> 
 

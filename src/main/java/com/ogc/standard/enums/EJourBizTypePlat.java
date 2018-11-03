@@ -36,6 +36,7 @@ public enum EJourBizTypePlat {
 
     HAND_CHARGE("hand_charge", "手动增发"),
 
+    PRESELL("presell", "购买预售"),
     // 碳泡泡账户
     ADOPT_DAY_BACK("adopt_day_back", "认养消费每日收取碳泡泡"),
 

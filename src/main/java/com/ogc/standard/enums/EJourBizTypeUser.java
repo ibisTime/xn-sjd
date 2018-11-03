@@ -33,6 +33,7 @@ public enum EJourBizTypeUser {
 
     UN_FULL_CNY("un_full_cny", "集体认养未满标退款"),
 
+    PRESELL("presell", "购买预售"),
     // 碳泡泡账户
     ADOPT_DAY_BACK("adopt_day_back", "认养消费每日收取碳泡泡"),
 

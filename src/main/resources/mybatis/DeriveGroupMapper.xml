@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ogc.standard.dao.IDeriveGroupDAO">
+	<resultMap id="deriveGroup_DB_Result" type="deriveGroup">
+		<result column="code" property="code" />
+		<result column="original_code" property="originalCode" />
+		<result column="product_code" property="productCode" />
+		<result column="product_name" property="productName" />
+		<result column="type" property="type" />
+		
+		<result column="price" property="price" />
+		<result column="quantity" property="quantity" />
+		<result column="unit" property="unit" />
+		<result column="creater" property="creater" />
+		<result column="create_datetime" property="createDatetime" />
+		
+		<result column="status" property="status" />
+		<result column="claimant" property="claimant" />
+		<result column="claim_datetime" property="claimDatetime" />
+		<result column="range" property="range" />
+		<result column="url" property="url" />
+		
+		<result column="remark" property="remark" />
+	</resultMap>
+	
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="originalCode != null and originalCode != '' ">
+				AND t.original_code = #{originalCode}
+			</if>
+			<if test="productCode != null and productCode != '' ">
+				AND t.product_code = #{productCode}
+			</if>
+			<if test="type != null and type != '' ">
+				AND t.type = #{type}
+			</if>
+			<if test="creater != null and creater != '' ">
+				AND t.creater = #{creater}
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+			<if test="claimant != null and claimant != '' ">
+				AND t.claimant = #{claimant}
+			</if>
+			<if test="url != null and url != '' ">
+				AND t.url = #{url}
+			</if>
+		</trim>
+	</sql>
+	
+	<select id="select_deriveGroup" parameterType="deriveGroup" resultMap="deriveGroup_DB_Result">
+		SELECT
+		t.code
+		,t.original_code
+		,t.product_code
+		,t.product_name
+		,t.type
+		
+		,t.price
+		,t.quantity
+		,t.unit
+		,t.creater
+		,t.create_datetime
+		
+		,t.status
+		,t.claimant
+		,t.claim_datetime
+		,t.range
+		,t.url
+		
+		,t.remark
+		FROM
+		tys_derive_group t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_deriveGroup_count" parameterType="deriveGroup"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tys_derive_group t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_deriveGroup" parameterType="deriveGroup">
+		INSERT INTO
+		tys_derive_group(
+		code
+		,original_code
+		,product_code
+		,product_name
+		,type
+		
+		,price
+		,quantity
+		,unit
+		,creater
+		,create_datetime
+		
+		,status
+		,claimant
+		,range
+		,url
+		,remark
+		)
+		VALUES(
+		#{code}
+		,#{originalCode}
+		,#{productCode}
+		,#{productName}
+		,#{type}
+		
+		,#{price}
+		,#{quantity}
+		,#{unit}
+		,#{creater}
+		,#{createDatetime}
+		
+		,#{status}
+		,#{claimant}
+		,#{range}
+		,#{url}
+		,#{remark}
+		)
+	</insert>
+
+	<update id="update_claimDeriveGroup" parameterType="deriveGroup">
+		UPDATE tys_derive_group
+		SET
+		status = #{status}
+		,claimant = #{claimant}
+		,claim_datetime = #{claimDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+
+	
+</mapper>

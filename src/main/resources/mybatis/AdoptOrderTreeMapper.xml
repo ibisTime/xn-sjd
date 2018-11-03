@@ -105,7 +105,8 @@
 	<select id="select_productAdoptedOrderTree" parameterType="adoptOrderTree" resultMap="adoptOrderTree_DB_Result">
 		SELECT
 		DISTINCT
-		t.tree_number
+		count(t.code) as userAdoptTreeCount
+		,t.tree_number
 		,t.start_datetime
 		,t.current_holder
 		,IFNULL(SUM(amount),0) as amount

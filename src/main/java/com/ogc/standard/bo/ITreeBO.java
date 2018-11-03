@@ -3,9 +3,11 @@ package com.ogc.standard.bo;
 import java.util.List;
 
 import com.ogc.standard.bo.base.IPaginableBO;
+import com.ogc.standard.domain.PresellProduct;
 import com.ogc.standard.domain.Product;
 import com.ogc.standard.domain.Tree;
 import com.ogc.standard.dto.req.XN629010ReqTree;
+import com.ogc.standard.dto.req.XN629400ReqTree;
 
 /**
  * 古树
@@ -23,6 +25,9 @@ public interface ITreeBO extends IPaginableBO<Tree> {
 
     // 添加古树
     public String saveTree(Product product, XN629010ReqTree tree);
+
+    // 添加古树
+    public String saveTree(PresellProduct presellProduct, XN629400ReqTree tree);
 
     // 删除产品下的古树
     public void removeTreeByProduct(String productCode);

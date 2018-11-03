@@ -61,5 +61,13 @@
 		<typeAlias alias="carbonBubbleOrder" type="com.ogc.standard.domain.CarbonBubbleOrder"/>
 		
 		<typeAlias alias="address" type="com.ogc.standard.domain.Address"/>
+		<typeAlias alias="presellProduct" type="com.ogc.standard.domain.PresellProduct"/>
+		<typeAlias alias="presellSpecs" type="com.ogc.standard.domain.PresellSpecs"/>
+		<typeAlias alias="presellOrder" type="com.ogc.standard.domain.PresellOrder"/>
+		<typeAlias alias="originalGroup" type="com.ogc.standard.domain.OriginalGroup"/>
+		
+		<typeAlias alias="presellInventory" type="com.ogc.standard.domain.PresellInventory"/>
+		<typeAlias alias="deriveGroup" type="com.ogc.standard.domain.DeriveGroup"/>
+		
 	</typeAliases>
 </configuration>

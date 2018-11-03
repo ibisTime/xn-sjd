@@ -35,4 +35,8 @@ public interface ISYSUserDAO extends IBaseDAO<SYSUser> {
 
     // 更新交易密码
     public int updateTradePwd(SYSUser data);
+
+    // 更新公司
+    public int updateCompany(SYSUser data);
+
 }

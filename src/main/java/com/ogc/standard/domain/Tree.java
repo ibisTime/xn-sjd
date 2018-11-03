@@ -18,6 +18,9 @@ public class Tree extends ABaseDO {
     // 编号
     private String code;
 
+    // 产品类型
+    private String productType;
+
     // 产品编号
     private String productCode;
 
@@ -378,6 +381,14 @@ public class Tree extends ABaseDO {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public String getProductType() {
+        return productType;
+    }
+
+    public void setProductType(String productType) {
+        this.productType = productType;
     }
 
 }

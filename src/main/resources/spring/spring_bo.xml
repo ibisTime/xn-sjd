@@ -192,4 +192,29 @@
 	<bean id="giftOrderBO" class="com.ogc.standard.bo.impl.GiftOrderBOImpl">
 		<property name="paginableDAO" ref="giftOrderDAOImpl"/>
 	</bean>
+	
+	<bean id="presellProductBO" class="com.ogc.standard.bo.impl.PresellProductBOImpl">
+		<property name="paginableDAO" ref="presellProductDAOImpl"/>
+	</bean>
+	
+	<bean id="presellSpecsBO" class="com.ogc.standard.bo.impl.PresellSpecsBOImpl">
+		<property name="paginableDAO" ref="presellSpecsDAOImpl"/>
+	</bean>
+	
+	<bean id="presellOrderBO" class="com.ogc.standard.bo.impl.PresellOrderBOImpl">
+		<property name="paginableDAO" ref="presellOrderDAOImpl"/>
+	</bean>
+	
+	<bean id="originalGroupBO" class="com.ogc.standard.bo.impl.OriginalGroupBOImpl">
+		<property name="paginableDAO" ref="originalGroupDAOImpl"/>
+	</bean>
+	
+	<bean id="presellInventoryBO" class="com.ogc.standard.bo.impl.PresellInventoryBOImpl">
+		<property name="paginableDAO" ref="presellInventoryDAOImpl"/>
+	</bean>
+	
+	<bean id="deriveGroupBO" class="com.ogc.standard.bo.impl.DeriveGroupBOImpl">
+		<property name="paginableDAO" ref="deriveGroupDAOImpl"/>
+	</bean>
+	
 </beans>

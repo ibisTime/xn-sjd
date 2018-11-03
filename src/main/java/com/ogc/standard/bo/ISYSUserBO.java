@@ -65,6 +65,9 @@ public interface ISYSUserBO extends IPaginableBO<SYSUser> {
 
     public void refreshLoginName(String userId, String loginName);
 
+    // 更新公司
+    public void refreshCompany(String userId, String companyCode);
+
     // 判断登录名是否存在
     public void isLoginNameExist(String loginName);
 
@@ -74,7 +77,6 @@ public interface ISYSUserBO extends IPaginableBO<SYSUser> {
     public SYSUser getSYSUserUnCheck(String userId);
 
     // 统计创建时间区间的总数
-    public long getTotalCount(Date createDatetimeStart,
-            Date createDatetimeEnd);
+    public long getTotalCount(Date createDatetimeStart, Date createDatetimeEnd);
 
 }
