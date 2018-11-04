@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.OriginalGroup;
+import com.ogc.standard.dto.req.XN629433Req;
 
 @Component
 public interface IOriginalGroupAO {
@@ -21,6 +22,9 @@ public interface IOriginalGroupAO {
 
     // 挂单寄售
     public void publicSales(String code, BigDecimal price, Integer quantity);
+
+    // 填写收货地址
+    public void fillAddress(XN629433Req req);
 
     public Paginable<OriginalGroup> queryOriginalGroupPage(int start, int limit,
             OriginalGroup condition);

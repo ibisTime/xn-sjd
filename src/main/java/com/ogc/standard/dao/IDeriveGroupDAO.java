@@ -6,10 +6,22 @@ import com.ogc.standard.domain.DeriveGroup;
 public interface IDeriveGroupDAO extends IBaseDAO<DeriveGroup> {
     String NAMESPACE = IDeriveGroupDAO.class.getName().concat(".");
 
-    // 撤销寄售
+    // 撤销转让
+    public int updateRevock(DeriveGroup data);
 
-    // 认领寄售
+    // 认领定向转让
+    public int updateClaimDirect(DeriveGroup data);
 
-    // 拒绝寄售
+    // 拒绝定向转让
+    public int updateRejectDirect(DeriveGroup data);
+
+    // 认领二维码转让
+    public int updateClaimQr(DeriveGroup data);
+
+    // 认领挂单寄售
+    public int updateClaimPublic(DeriveGroup data);
+
+    // 更新状态
+    public int updateStatus(DeriveGroup data);
 
 }

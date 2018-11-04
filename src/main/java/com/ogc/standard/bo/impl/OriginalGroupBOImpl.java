@@ -1,5 +1,6 @@
 package com.ogc.standard.bo.impl;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -31,10 +32,10 @@ public class OriginalGroupBOImpl extends PaginableBOImpl<OriginalGroup>
 
     @Override
     public String saveOriginalGroup(PresellOrder data) {
-        String code = OrderNoGenerater
-            .generate(EGeneratePrefix.ORIGINAL_GROUP.getCode());
         PresellProduct presellProduct = presellProductBO
             .getPresellProduct(data.getProductCode());
+        String code = OrderNoGenerater
+            .generate(EGeneratePrefix.ORIGINAL_GROUP.getCode());
 
         OriginalGroup originalGroup = new OriginalGroup();
         originalGroup.setCode(code);
@@ -47,6 +48,33 @@ public class OriginalGroupBOImpl extends PaginableBOImpl<OriginalGroup>
         originalGroup.setQuantity(data.getQuantity());
         originalGroup.setUnit(presellProduct.getPackUnit());
         originalGroup.setStatus(EOriginalGroupStatus.TO_ADOPT.getCode());
+
+        originalGroup.setUpdateDatetime(new Date());
+        originalGroupDAO.insert(originalGroup);
+        return code;
+    }
+
+    @Override
+    public String saveOriginalGroup(String parentCode, String ownerId,
+            BigDecimal price, Integer quantity) {
+        OriginalGroup originalGroup = getOriginalGroup(parentCode);
+        PresellProduct presellProduct = presellProductBO
+            .getPresellProduct(originalGroup.getProductCode());
+        String code = OrderNoGenerater
+            .generate(EGeneratePrefix.ORIGINAL_GROUP.getCode());
+
+        OriginalGroup data = new OriginalGroup();
+        data.setCode(code);
+        data.setOrderCode(parentCode);
+        data.setProductCode(presellProduct.getCode());
+        data.setProductName(presellProduct.getName());
+        data.setOwnerId(ownerId);
+
+        data.setPrice(price);
+        data.setQuantity(quantity);
+        data.setPresellQuantity(0);
+        data.setUnit(presellProduct.getPackUnit());
+        data.setStatus(EOriginalGroupStatus.TO_ADOPT.getCode());
 
         originalGroup.setUpdateDatetime(new Date());
         originalGroupDAO.insert(originalGroup);

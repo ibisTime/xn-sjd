@@ -132,7 +132,7 @@
 		)
 	</insert>
 
-	<update id="update_claimDeriveGroup" parameterType="deriveGroup">
+	<update id="update_revockDeriveGroup" parameterType="deriveGroup">
 		UPDATE tys_derive_group
 		SET
 		status = #{status}
@@ -141,6 +141,50 @@
 		,remark = #{remark}
 		WHERE code = #{code}
 	</update>
-
+	
+	<update id="update_claimDirect" parameterType="deriveGroup">
+		UPDATE tys_derive_group
+		SET
+		status = #{status}
+		,claimant = #{claimant}
+		,claim_datetime = #{claimDatetime}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_rejectDirect" parameterType="deriveGroup">
+		UPDATE tys_derive_group
+		SET
+		status = #{status}
+		,claimant = #{claimant}
+		,claim_datetime = #{claimDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_claimQr" parameterType="deriveGroup">
+		UPDATE tys_derive_group
+		SET
+		status = #{status}
+		,claimant = #{claimant}
+		,claim_datetime = #{claimDatetime}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_claimPublic" parameterType="deriveGroup">
+		UPDATE tys_derive_group
+		SET
+		status = #{status}
+		,quantity = #{quantity}
+		,claimant = #{claimant}
+		,claim_datetime = #{claimDatetime}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_status" parameterType="deriveGroup">
+		UPDATE tys_derive_group
+		SET
+		status = #{status}
+		WHERE code = #{code}
+	</update>
 	
 </mapper>

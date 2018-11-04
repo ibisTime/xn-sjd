@@ -23,6 +23,36 @@ public class DeriveGroupDAOImpl extends AMybatisTemplate
     }
 
     @Override
+    public int updateRevock(DeriveGroup data) {
+        return super.update(NAMESPACE.concat("update_revockDeriveGroup"), data);
+    }
+
+    @Override
+    public int updateClaimDirect(DeriveGroup data) {
+        return super.update(NAMESPACE.concat("update_claimDirect"), data);
+    }
+
+    @Override
+    public int updateRejectDirect(DeriveGroup data) {
+        return super.update(NAMESPACE.concat("update_rejectDirect"), data);
+    }
+
+    @Override
+    public int updateClaimQr(DeriveGroup data) {
+        return super.update(NAMESPACE.concat("update_claimQr"), data);
+    }
+
+    @Override
+    public int updateClaimPublic(DeriveGroup data) {
+        return super.update(NAMESPACE.concat("update_claimPublic"), data);
+    }
+
+    @Override
+    public int updateStatus(DeriveGroup data) {
+        return super.update(NAMESPACE.concat("update_status"), data);
+    }
+
+    @Override
     public DeriveGroup select(DeriveGroup condition) {
         return super.select(NAMESPACE.concat("select_deriveGroup"), condition,
             DeriveGroup.class);

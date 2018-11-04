@@ -68,6 +68,7 @@
 		
 		<typeAlias alias="presellInventory" type="com.ogc.standard.domain.PresellInventory"/>
 		<typeAlias alias="deriveGroup" type="com.ogc.standard.domain.DeriveGroup"/>
+		<typeAlias alias="presellLogistics" type="com.ogc.standard.domain.PresellLogistics"/>
 		
 	</typeAliases>
 </configuration>

@@ -34,7 +34,9 @@ public enum EGeneratePrefix {
     
     PRESELL_PRODUCT("PP","预售产品"),PRESELL_SPECS("PS","预售规格"),PRESELL_ORDER("PS","预售订单"),
     
-    ORIGINAL_GROUP("OG","预售原生组"),PRESELL_INVENTORY("PI","预售权");
+    ORIGINAL_GROUP("OG","预售原生组"),PRESELL_INVENTORY("PI","预售权"),DERIVE_GROUP("DG","预售派生组"),
+    
+    PRESELL_LOGISTICS("PL","预售物流单");
 
     public static Map<String, EGeneratePrefix> getMap() {
         Map<String, EGeneratePrefix> map = new HashMap<String, EGeneratePrefix>();

@@ -18,7 +18,7 @@ public class OriginalGroup extends ABaseDO {
     // 编号
     private String code;
 
-    // 订单编号
+    // 订单/父级原生组编号
     private String orderCode;
 
     // 产品编号
