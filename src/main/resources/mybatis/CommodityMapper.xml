@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ogc.standard.dao.ICommodityDAO">
+	<resultMap id="commodity_DB_Result" type="commodity">
+		<result column="code" property="code" />
+		<result column="name" property="name" />
+		<result column="parent_category_code" property="parenyCategoryCode" />
+		<result column="category_code" property="categoryCode" />
+		<result column="deliver_place" property="deliverPlace" />
+		
+		<result column="weight" property="weight" />
+		<result column="logistics" property="logistics" />
+		<result column="montn_sell_count" property="monthSellCount" />
+		<result column="list_pic" property="listPic" />
+		<result column="banner_pic" property="bannerPic" />
+		
+		<result column="description" property="description" />
+		<result column="shop_code" property="shopCode" />
+		<result column="location" property="location" />
+		<result column="order_no" property="orderNo" />
+		<result column="status" property="status" />
+		<result column="updater" property="updater" />
+		<result column="update_datetime" property="updateDatetime" />
+		<result column="remark" property="remark" />
+	</resultMap>
+	
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="parenyCategoryCode != null and parenyCategoryCode != '' ">
+				AND t.parent_category_code = #{parenyCategoryCode}
+			</if>
+			<if test="categoryCode != null and categoryCode != '' ">
+				AND t.category_code = #{categoryCode}
+			</if>
+			<if test="deliverPlace != null and deliverPlace != '' ">
+				AND t.deliver_place = #{deliverPlace}
+			</if>
+			<if test="logistics != null and logistics != '' ">
+				AND t.logistics = #{logistics}
+			</if>
+			<if test="shopCode != null and shopCode != '' ">
+				AND t.shop_code = #{shopCode}
+			</if>
+			<if test="location != null and location != '' ">
+				AND t.location = #{location}
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+			<if test="name != null and name != '' ">
+				AND t.name like "%"#{name}"%"
+			</if>
+			
+		</trim>
+	</sql>
+	
+	<select id="select_commodity" parameterType="commodity" resultMap="commodity_DB_Result">
+		SELECT
+		t.code
+		,t.name
+		,t.parent_category_code
+		,t.category_code
+		,t.deliver_place
+		
+		,t.weight
+		,t.logistics
+		,t.montn_sell_count
+		,t.list_pic
+		,t.banner_pic
+		
+		,t.description
+		,t.shop_code
+		,t.location
+		,t.order_no
+		,t.status
+		,t.updater
+		,t.update_datetime
+		,t.remark
+		FROM
+		tsc_commodity t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_commodity_count" parameterType="commodity"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tsc_commodity t
+		<include refid="where_condition" />
+	</select>
+	
+
+	
+	<insert id="insert_commodity" parameterType="commodity">
+		INSERT INTO
+		tsc_commodity(
+		code
+		,name
+		,parent_category_code
+		,category_code
+		,deliver_place
+		
+		,weight
+		,logistics
+		,list_pic
+		,banner_pic
+		,description
+		,shop_code
+		,status
+		)
+		VALUES(
+		#{code}
+		,#{name}
+		,#{parentCategoryCode}
+		,#{categoryCode}
+		,#{deliverPlace}
+		
+		,#{weight}
+		,#{logistics}
+		,#{listPic}
+		,#{bannerPic}
+		,#{description}
+		,#{shopCode}
+		,#{status}
+		)
+	</insert>
+	
+	<update id="update_commodity" parameterType="commodity">
+		UPDATE tsc_commodity
+		SET
+		name=#{name}
+		,parent_category_code=#{parentCategoryCode}
+		,category_code=#{categoryCode}
+		,deliver_place=#{deliverPlace}
+		,weight=#{weight}
+		,logistics=#{logistics}
+		,list_pic=#{listPic}
+		,banner_pic=#{bannerPic}
+		,description=#{description}
+		,shop_code=#{shopCode}
+		,status=#{status}
+		,updater=#{updater}
+		,update_datetime=#{updateDatetime}
+		,remark=#{remark}
+		WHERE
+		code=#{code}
+	</update>
+	
+	<update id="update_status" parameterType="commodity">
+		UPDATE tsc_commodity
+		SET
+		status=#{status}
+		,updater=#{updater}
+		,update_datetime=#{updateDatetime}
+		,remark=#{remark}
+		WHERE
+		code=#{code}
+	</update>
+	
+	<update id="update_on" parameterType="commodity">
+		UPDATE tsc_commodity
+		SET
+		status=#{status}
+		,location=#{location}
+		,order_no=#{orderNO}
+		,updater=#{updater}
+		,update_datetime=#{updateDatetime}
+		,remark=#{remark}
+		WHERE
+		code=#{code}
+	</update>
+
+</mapper>

@@ -30,7 +30,9 @@ public enum EGeneratePrefix {
     Settle("S", "结算订单"), GiveCarbonBubbleRecord("GCBR", "赠送碳泡泡记录"), ShareRecord(
             "SR", "分享记录"), AgentUser("AG", "代理人"),
 
-    TOOL_ORDER("TO", "道具购买订单"), TOOL_USE_RECORD("TR", "道具使用记录");
+    TOOL_ORDER("TO", "道具购买订单"), TOOL_USE_RECORD("TR", "道具使用记录"),
+
+    Commodity("CO", "商品");
 
     public static Map<String, EGeneratePrefix> getMap() {
         Map<String, EGeneratePrefix> map = new HashMap<String, EGeneratePrefix>();

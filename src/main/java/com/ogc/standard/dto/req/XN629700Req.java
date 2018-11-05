@@ -1,0 +1,166 @@
+/**
+ * @Title XN629700Req.java 
+ * @Package com.ogc.standard.dto.req 
+ * @Description 
+ * @author taojian  
+ * @date 2018年11月2日 下午4:37:40 
+ * @version V1.0   
+ */
+package com.ogc.standard.dto.req;
+
+import java.util.List;
+
+import org.hibernate.validator.constraints.NotBlank;
+
+import com.ogc.standard.domain.CommoditySpecs;
+
+/** 
+ * @author: taojian 
+ * @since: 2018年11月2日 下午4:37:40 
+ * @history:
+ */
+public class XN629700Req {
+    // 商品名
+    @NotBlank
+    private String name;
+
+    // 大类编号
+    @NotBlank
+    private String parentCategoryCode;
+
+    // 小类编号
+    @NotBlank
+    private String categoryCode;
+
+    // 发货地
+    @NotBlank
+    private String deliverPlace;
+
+    // 重量
+    @NotBlank
+    private String weight;
+
+    // 物流方式
+    @NotBlank
+    private String logistics;
+
+    // 列表图
+    @NotBlank
+    private String listPic;
+
+    // banner 图
+    @NotBlank
+    private String bannerPic;
+
+    // 描述
+    @NotBlank
+    private String description;
+
+    // 店铺编号
+    @NotBlank
+    private String shopCode;
+
+    // 发布方式（0 存为草稿，1 直接发布）
+    @NotBlank
+    private String publishType;
+
+    // 规格列表
+    @NotBlank
+    private List<CommoditySpecs> specsList;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getParentCategoryCode() {
+        return parentCategoryCode;
+    }
+
+    public void setParentCategoryCode(String parentCategoryCode) {
+        this.parentCategoryCode = parentCategoryCode;
+    }
+
+    public String getCategoryCode() {
+        return categoryCode;
+    }
+
+    public void setCategoryCode(String categoryCode) {
+        this.categoryCode = categoryCode;
+    }
+
+    public String getDeliverPlace() {
+        return deliverPlace;
+    }
+
+    public void setDeliverPlace(String deliverPlace) {
+        this.deliverPlace = deliverPlace;
+    }
+
+    public String getWeight() {
+        return weight;
+    }
+
+    public void setWeight(String weight) {
+        this.weight = weight;
+    }
+
+    public String getLogistics() {
+        return logistics;
+    }
+
+    public void setLogistics(String logistics) {
+        this.logistics = logistics;
+    }
+
+    public String getListPic() {
+        return listPic;
+    }
+
+    public void setListPic(String listPic) {
+        this.listPic = listPic;
+    }
+
+    public String getBannerPic() {
+        return bannerPic;
+    }
+
+    public void setBannerPic(String bannerPic) {
+        this.bannerPic = bannerPic;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getShopCode() {
+        return shopCode;
+    }
+
+    public void setShopCode(String shopCode) {
+        this.shopCode = shopCode;
+    }
+
+    public String getPublishType() {
+        return publishType;
+    }
+
+    public void setPublishType(String publishType) {
+        this.publishType = publishType;
+    }
+
+    public List<CommoditySpecs> getSpecsList() {
+        return specsList;
+    }
+
+    public void setSpecsList(List<CommoditySpecs> specsList) {
+        this.specsList = specsList;
+    }
+}

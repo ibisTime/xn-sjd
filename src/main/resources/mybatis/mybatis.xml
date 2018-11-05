@@ -61,5 +61,7 @@
 		<typeAlias alias="carbonBubbleOrder" type="com.ogc.standard.domain.CarbonBubbleOrder"/>
 		
 		<typeAlias alias="address" type="com.ogc.standard.domain.Address"/>
+		<typeAlias alias="commodity" type="com.ogc.standard.domain.Commodity"/>
+		<typeAlias alias="commoditySpecs" type="com.ogc.standard.domain.CommoditySpecs"/>
 	</typeAliases>
 </configuration>

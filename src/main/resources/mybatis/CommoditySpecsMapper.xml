@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ogc.standard.dao.ICommoditySpecsDAO">
+	<resultMap id="commoditySpecs_DB_Result" type="commoditySpecs">
+		<result column="id" property="id" />
+		<result column="commodity_code" property="commodityCode" />
+		<result column="name" property="name" />
+		<result column="price" property="price" />
+		<result column="inventory" property="inventory" />
+		
+		<result column="remark" property="remark" />
+	</resultMap>
+	
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="id != null and id != '' ">
+				AND t.id = #{id}
+			</if>
+			<if test="commodityCode != null and commodityCode != '' ">
+				AND t.commodity_code = #{commodityCode}
+			</if>
+			<if test="name != null and name != '' ">
+				AND t.name like "%"#{name}"%"
+			</if>
+			
+		</trim>
+	</sql>
+	
+	<select id="select_commodity_specs" parameterType="commoditySpecs" resultMap="commoditySpecs_DB_Result">
+		SELECT
+		t.id
+		,t.commodity_code
+		,t.name
+		,t.price
+		,t.inventory
+		,t.remark
+		FROM
+		tsc_commodity_specs t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_commodity_specs_count" parameterType="commoditySpecs"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tsc_commodity_specs t
+		<include refid="where_condition" />
+	</select>
+	
+
+	
+	<insert id="insert_commodity_specs_list" parameterType="commoditySpecs">
+		INSERT INTO tsc_commodity_specs(
+		commodity_code
+		,name
+		,price
+		,inventory
+		,remark
+		)
+		VALUES
+		
+		<foreach collection="list" item="commoditySpecs" separator=",">
+		(
+		#{commoditySpecs.commodityCode}
+		,#{commoditySpecs.name}
+		,#{commoditySpecs.price}
+		,#{commoditySpecs.inventory}
+		,#{commoditySpecs.reamrk}
+		)
+		</foreach>
+	</insert>
+	
+	<delete id="delete_commodity_specs" parameterType="commoditySpecs">
+		DELETE FROM tsc_commodity_specs
+		<include refid="where_condition" />
+	</delete>
+
+</mapper>
