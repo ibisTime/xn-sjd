@@ -275,8 +275,9 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
             EJourBizTypePlat.ADOPT_BUY_DEDUCT.getValue(), data.getCode());
 
         // 进行分销
+        Product productInfo = productBO.getProduct(data.getProductCode());
         BigDecimal backJfAmount = distributionOrderBO.distribution(
-            data.getCode(), data.getProductCode(), data.getAmount(),
+            data.getCode(), productInfo.getOwnerId(), data.getAmount(),
             data.getApplyUser(), ESellType.COLLECTIVE.getCode(), resultRes);
 
         // 用户升级
@@ -303,7 +304,7 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
 
         // 添加快报
         smsBO.saveBulletin(data.getApplyUser(), data.getQuantity().toString(),
-            data.getProductCode());
+            ESellType.COLLECTIVE.getCode(), product.getName());
 
         return new BooleanRes(true);
     }
@@ -327,8 +328,9 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
                 EJourBizTypePlat.ADOPT_BUY_DEDUCT.getValue(), data.getCode());
 
             // 进行分销
+            Product productInfo = productBO.getProduct(data.getProductCode());
             BigDecimal backJfAmount = distributionOrderBO.distribution(
-                data.getCode(), data.getProductCode(), data.getAmount(),
+                data.getCode(), productInfo.getOwnerId(), data.getAmount(),
                 data.getApplyUser(), ESellType.COLLECTIVE.getCode(), resultRes);
 
             // 用户升级
@@ -355,7 +357,8 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
 
             // 添加快报
             smsBO.saveBulletin(data.getApplyUser(),
-                data.getQuantity().toString(), data.getProductCode());
+                data.getQuantity().toString(), ESellType.COLLECTIVE.getCode(),
+                productInfo.getName());
         } else {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "订单号[" + data.getCode() + "]支付重复回调");

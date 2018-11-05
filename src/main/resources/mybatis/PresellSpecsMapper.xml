@@ -69,5 +69,9 @@
 	<delete id="delete_byProduct">
 		DELETE FROM tys_presell_specs WHERE product_code = #{productCode}
 	</delete>
+	
+	<update id="update_packCount">
+		UPDATE tys_presell_specs set pack_count = #{packCount} where code = #{code}
+	</update>
 
 </mapper>

@@ -75,12 +75,11 @@ public class PresellOrderBOImpl extends PaginableBOImpl<PresellOrder>
             PresellOrder data = new PresellOrder();
             data.setCode(code);
             data.setPayType(EPayType.YE.getCode());
-            data.setCnyDeductAmount(resultRes.getCnyAmount());
-            data.setJfDeductAmount(resultRes.getJfAmount());
-            data.setPayAmount(
-                data.getAmount().subtract(resultRes.getCnyAmount()));
+            // data.setCnyDeductAmount(resultRes.getCnyAmount());
+            // data.setJfDeductAmount(resultRes.getJfAmount());
+            data.setPayAmount(data.getAmount());
 
-            data.setBackJfAmount(backjfAmount);
+            // data.setBackJfAmount(backjfAmount);
             data.setPayDatetime(new Date());
             data.setStatus(EPresellOrderStatus.PAYED.getCode());
             data.setSettleStatus(EAdoptOrderSettleStatus.TO_SETTLE.getCode());

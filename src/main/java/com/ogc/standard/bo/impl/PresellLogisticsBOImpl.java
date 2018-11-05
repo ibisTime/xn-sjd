@@ -1,5 +1,6 @@
 package com.ogc.standard.bo.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -50,6 +51,31 @@ public class PresellLogisticsBOImpl extends PaginableBOImpl<PresellLogistics>
     }
 
     @Override
+    public void refreshSend(String code, String deliver,
+            String logisticsCompany, String logisticsNumber) {
+        PresellLogistics data = new PresellLogistics();
+
+        data.setCode(code);
+        data.setDeliver(deliver);
+        data.setDeliverDatetime(new Date());
+        data.setLogisticsCompany(logisticsCompany);
+        data.setLogisticsNumber(logisticsNumber);
+        data.setStatus(EPresellLogisticsStatus.TO_RECEIVE.getCode());
+
+        presellLogisticsDAO.updateSendLogistisc(data);
+    }
+
+    @Override
+    public void refreshConfirmReceive(String code) {
+        PresellLogistics data = new PresellLogistics();
+
+        data.setCode(code);
+        data.setReceiverDatetime(new Date());
+
+        presellLogisticsDAO.updateRceiveLogistisc(data);
+    }
+
+    @Override
     public List<PresellLogistics> queryPresellLogisticsList(
             PresellLogistics condition) {
         return presellLogisticsDAO.selectList(condition);
@@ -68,4 +94,5 @@ public class PresellLogisticsBOImpl extends PaginableBOImpl<PresellLogistics>
         }
         return data;
     }
+
 }

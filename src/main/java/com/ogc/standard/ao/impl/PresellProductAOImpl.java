@@ -1,7 +1,9 @@
 package com.ogc.standard.ao.impl;
 
+import java.math.BigDecimal;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,7 +21,9 @@ import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Category;
 import com.ogc.standard.domain.Company;
 import com.ogc.standard.domain.PresellProduct;
+import com.ogc.standard.domain.PresellSpecs;
 import com.ogc.standard.domain.SYSUser;
+import com.ogc.standard.domain.Tree;
 import com.ogc.standard.dto.req.XN629400Req;
 import com.ogc.standard.dto.req.XN629400ReqSpecs;
 import com.ogc.standard.dto.req.XN629400ReqTree;
@@ -222,18 +226,71 @@ public class PresellProductAOImpl implements IPresellProductAO {
     @Override
     public Paginable<PresellProduct> queryPresellProductPage(int start,
             int limit, PresellProduct condition) {
-        return presellProductBO.getPaginable(start, limit, condition);
+        Paginable<PresellProduct> page = presellProductBO.getPaginable(start,
+            limit, condition);
+
+        if (null != page && CollectionUtils.isNotEmpty(page.getList())) {
+            for (PresellProduct presellProduct : page.getList()) {
+                init(presellProduct);
+            }
+        }
+
+        return page;
     }
 
     @Override
     public List<PresellProduct> queryPresellProductList(
             PresellProduct condition) {
-        return presellProductBO.queryPresellProductList(condition);
+        List<PresellProduct> list = presellProductBO
+            .queryPresellProductList(condition);
+
+        if (CollectionUtils.isNotEmpty(list)) {
+            for (PresellProduct presellProduct : list) {
+                init(presellProduct);
+            }
+        }
+
+        return list;
     }
 
     @Override
     public PresellProduct getPresellProduct(String code) {
-        return presellProductBO.getPresellProduct(code);
+        PresellProduct presellProduct = presellProductBO
+            .getPresellProduct(code);
+
+        init(presellProduct);
+
+        return presellProduct;
+    }
+
+    private void init(PresellProduct presellProduct) {
+        // 规格
+        List<PresellSpecs> specsList = presellSpecsBO
+            .queryPresellSpecsListByProduct(presellProduct.getCode());
+        presellProduct.setPresellSpecsList(specsList);
+
+        // 初始化最小价格和最大价格
+        BigDecimal minPrice = BigDecimal.ZERO;
+        BigDecimal maxPrice = minPrice;
+        for (PresellSpecs presellSpecs : specsList) {
+            if (minPrice.compareTo(BigDecimal.ZERO) == 0) {
+                minPrice = presellSpecs.getPrice();
+            }
+            if (presellSpecs.getPrice().compareTo(minPrice) < 0) {
+                minPrice = presellSpecs.getPrice();
+            }
+            if (presellSpecs.getPrice().compareTo(maxPrice) > 0) {
+                maxPrice = presellSpecs.getPrice();
+            }
+        }
+        presellProduct.setMinPrice(minPrice);
+        presellProduct.setMaxPrice(maxPrice);
+
+        // 树木列表
+        List<Tree> treeList = treeBO
+            .queryTreeListByProduct(presellProduct.getCode());
+        presellProduct.setTreeList(treeList);
+
     }
 
 }

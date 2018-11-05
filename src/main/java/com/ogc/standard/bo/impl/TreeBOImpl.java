@@ -189,6 +189,14 @@ public class TreeBOImpl extends PaginableBOImpl<Tree> implements ITreeBO {
     }
 
     @Override
+    public void refreshAdoptCount(String treeNumber, Integer adoptCount) {
+        Tree tree = new Tree();
+        tree.setTreeNumber(treeNumber);
+        tree.setAdoptCount(adoptCount);
+        treeDAO.updateAdoptCount(tree);
+    }
+
+    @Override
     public void refreshAdoptCountByProduct(String productCode,
             Integer adoptCount) {
         Tree tree = new Tree();
@@ -248,6 +256,17 @@ public class TreeBOImpl extends PaginableBOImpl<Tree> implements ITreeBO {
         condition.setProductCode(productCode);
         condition.setStatus(status);
         return (int) treeDAO.selectTotalCount(condition);
+    }
+
+    @Override
+    public List<Tree> queryTreeListRemainInventory(String productCode,
+            Integer maxAdoptCount) {
+        Tree condition = new Tree();
+        condition.setProductType(EProductType.YS.getCode());
+        condition.setProductCode(productCode);
+        condition.setMaxAdoptCount(maxAdoptCount);
+        condition.setOrder("adopt_count", "desc");
+        return treeDAO.selectList(condition);
     }
 
     @Override

@@ -129,8 +129,7 @@
 	<update id="update_receiveLogistics" parameterType="presellLogistics">
 		UPDATE tys_presell_logistics
 		SET
-		receiver_mobile = #{receiverMobile}
-		,status = #{status}
+		status = #{status}
 		WHERE code = #{code}
 	</update>
 

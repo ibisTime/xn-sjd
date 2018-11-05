@@ -52,4 +52,10 @@ public class PresellInventoryDAOImpl extends AMybatisTemplate
             start, count, condition, PresellInventory.class);
     }
 
+    @Override
+    public List<PresellInventory> selectTreeNumberList(PresellInventory data) {
+        return super.selectList(NAMESPACE.concat("select_treeNumber"), data,
+            PresellInventory.class);
+    }
+
 }

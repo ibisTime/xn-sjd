@@ -1,5 +1,7 @@
 package com.ogc.standard.dto.req;
 
+import java.util.List;
+
 /**
  * 分页查询寄售
  * @author: silver 
@@ -27,6 +29,9 @@ public class XN629455Req extends APageReq {
 
     // 成交人
     private String claimant;
+
+    // 状态列表
+    private List<String> statusList;
 
     public String getOriginalCode() {
         return originalCode;
@@ -74,6 +79,14 @@ public class XN629455Req extends APageReq {
 
     public void setClaimant(String claimant) {
         this.claimant = claimant;
+    }
+
+    public List<String> getStatusList() {
+        return statusList;
+    }
+
+    public void setStatusList(List<String> statusList) {
+        this.statusList = statusList;
     }
 
 }

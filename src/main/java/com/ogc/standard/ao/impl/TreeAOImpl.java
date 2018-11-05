@@ -211,7 +211,9 @@ public class TreeAOImpl implements ITreeAO {
 
         // 类型
         Category category = categoryBO.getCategory(categoryCode);
-        tree.setCategory(category.getName());
+        if (null != category) {
+            tree.setCategory(category.getName());
+        }
 
     }
 }

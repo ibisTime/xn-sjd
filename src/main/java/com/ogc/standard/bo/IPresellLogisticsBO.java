@@ -11,6 +11,13 @@ public interface IPresellLogisticsBO extends IPaginableBO<PresellLogistics> {
     public String savePresellLogistics(String originalGroupCode,
             XN629433ReqLogistics logistics);
 
+    // 发货
+    public void refreshSend(String code, String deliver,
+            String logisticsCompany, String logisticsNumber);
+
+    // 收货
+    public void refreshConfirmReceive(String code);
+
     public List<PresellLogistics> queryPresellLogisticsList(
             PresellLogistics condition);
 

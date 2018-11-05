@@ -23,19 +23,18 @@ public class OriginalGroupDAOImpl extends AMybatisTemplate
     }
 
     @Override
-    public int updateAdoptOrignalGroup(OriginalGroup data) {
-        return super.update(NAMESPACE.concat("update_adoptOriginalGroup"),
-            data);
+    public int updateStartAdopt(OriginalGroup data) {
+        return super.update(NAMESPACE.concat("update_startAdopt"), data);
+    }
+
+    @Override
+    public int updateEndAdopt(OriginalGroup data) {
+        return super.update(NAMESPACE.concat("update_EndAdopt"), data);
     }
 
     @Override
     public int updateQuantity(OriginalGroup data) {
         return super.update(NAMESPACE.concat("update_quantity"), data);
-    }
-
-    @Override
-    public int updateDeliverOrignalGroup(OriginalGroup data) {
-        return super.update(NAMESPACE.concat("update_deliver"), data);
     }
 
     @Override

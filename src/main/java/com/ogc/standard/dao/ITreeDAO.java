@@ -34,6 +34,9 @@ public interface ITreeDAO extends IBaseDAO<Tree> {
     public int updateCollectionCount(Tree data);
 
     // 更新认养数
+    public int updateAdoptCount(Tree data);
+
+    // 更新认养数
     public int updateAdoptCountByProduct(Tree data);
 
 }

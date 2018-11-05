@@ -108,7 +108,6 @@ public class PresellProductBOImpl extends PaginableBOImpl<PresellProduct>
 
         data.setLongitude(req.getLongitude());
         data.setLatitude(req.getLatitude());
-        data.setSingleOutput(StringValidater.toInteger(req.getSingleOutput()));
         data.setPackUnit(req.getPackUnit());
         data.setPackWeight(StringValidater.toDouble(req.getPackWeight()));
 
@@ -122,6 +121,14 @@ public class PresellProductBOImpl extends PaginableBOImpl<PresellProduct>
         data.setUpdater(req.getUpdater());
         data.setUpdateDatetime(new Date());
         data.setRemark(req.getRemark());
+
+        Integer treeCode = req.getTreeList().size();
+        Integer singOutput = StringValidater.toInteger(req.getSingleOutput());
+        Integer totalOutput = treeCode * singOutput;
+
+        data.setTreeCount(treeCode);
+        data.setSingleOutput(singOutput);
+        data.setTotalOutput(totalOutput);
 
         presellProductDAO.updateEditPresellProduct(data);
 

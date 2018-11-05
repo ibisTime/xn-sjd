@@ -52,8 +52,8 @@ public class DeriveGroupBOImpl extends PaginableBOImpl<DeriveGroup>
         deriveGroup.setProductName(originalGroup.getProductName());
         deriveGroup.setType(EPresellType.DIRECT.getCode());
 
-        deriveGroup.setPrice(originalGroup.getPrice());
-        deriveGroup.setQuantity(originalGroup.getQuantity());
+        deriveGroup.setPrice(price);
+        deriveGroup.setQuantity(quantity);
         deriveGroup.setUnit(presellProduct.getPackUnit());
         deriveGroup.setCreater(originalGroup.getOwnerId());
         deriveGroup.setCreateDatetime(new Date());

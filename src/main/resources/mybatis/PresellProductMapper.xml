@@ -215,7 +215,6 @@
 		UPDATE tys_presell_product
 		SET
 		name = #{name}
-		,owner_id = #{ownerId}
 		,category_code = #{categoryCode}
 		,list_pic = #{listPic}
 		,banner_pic = #{bannerPic}

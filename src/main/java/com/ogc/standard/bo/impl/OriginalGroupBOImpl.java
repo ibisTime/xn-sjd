@@ -49,6 +49,9 @@ public class OriginalGroupBOImpl extends PaginableBOImpl<OriginalGroup>
         originalGroup.setUnit(presellProduct.getPackUnit());
         originalGroup.setStatus(EOriginalGroupStatus.TO_ADOPT.getCode());
 
+        originalGroup
+            .setAdoptStartDatetime(presellProduct.getAdoptStartDatetime());
+        originalGroup.setAdoptEndDatetime(presellProduct.getAdoptEndDatetime());
         originalGroup.setUpdateDatetime(new Date());
         originalGroupDAO.insert(originalGroup);
         return code;
@@ -76,8 +79,10 @@ public class OriginalGroupBOImpl extends PaginableBOImpl<OriginalGroup>
         data.setUnit(presellProduct.getPackUnit());
         data.setStatus(EOriginalGroupStatus.TO_ADOPT.getCode());
 
-        originalGroup.setUpdateDatetime(new Date());
-        originalGroupDAO.insert(originalGroup);
+        data.setAdoptStartDatetime(presellProduct.getAdoptStartDatetime());
+        data.setAdoptEndDatetime(presellProduct.getAdoptEndDatetime());
+        data.setUpdateDatetime(new Date());
+        originalGroupDAO.insert(data);
         return code;
     }
 
@@ -87,6 +92,33 @@ public class OriginalGroupBOImpl extends PaginableBOImpl<OriginalGroup>
         originalGroup.setCode(code);
         originalGroup.setQuantity(quantity);
         originalGroupDAO.updateQuantity(originalGroup);
+    }
+
+    @Override
+    public void refreshStartAdopt(String code) {
+        OriginalGroup originalGroup = new OriginalGroup();
+        originalGroup.setCode(code);
+        originalGroup.setUpdateDatetime(new Date());
+        originalGroup.setStatus(EOriginalGroupStatus.ADOPTING.getCode());
+        originalGroupDAO.updateStartAdopt(originalGroup);
+    }
+
+    @Override
+    public void refreshEndAdopt(String code) {
+        OriginalGroup originalGroup = new OriginalGroup();
+        originalGroup.setCode(code);
+        originalGroup.setUpdateDatetime(new Date());
+        originalGroup.setStatus(EOriginalGroupStatus.TO_RECEIVE.getCode());
+        originalGroupDAO.updateEndAdopt(originalGroup);
+    }
+
+    @Override
+    public void refreshReceive(String code) {
+        OriginalGroup originalGroup = new OriginalGroup();
+        originalGroup.setCode(code);
+        originalGroup.setUpdateDatetime(new Date());
+        originalGroup.setStatus(EOriginalGroupStatus.RECEIVED.getCode());
+        originalGroupDAO.updateReceiveOrignalGroup(originalGroup);
     }
 
     @Override
@@ -104,6 +136,17 @@ public class OriginalGroupBOImpl extends PaginableBOImpl<OriginalGroup>
             if (data == null) {
                 throw new BizException("xn0000", "预售原生组不存在");
             }
+        }
+        return data;
+    }
+
+    @Override
+    public OriginalGroup getOriginalGroupByOrder(String orderCode) {
+        OriginalGroup data = null;
+        if (StringUtils.isNotBlank(orderCode)) {
+            OriginalGroup condition = new OriginalGroup();
+            condition.setOrderCode(orderCode);
+            data = originalGroupDAO.select(condition);
         }
         return data;
     }

@@ -90,6 +90,18 @@ public class PresellOrder extends ABaseDO {
 
     private Date applyDatetimeEnd;// 下单时间止
 
+    // 预售产品
+    private PresellProduct presellProduct;
+
+    // 卖家
+    private String sellerName;
+
+    // 流水编号
+    private String jourCode;
+
+    // 树木编号
+    private String treeNumbers;
+
     public String getCode() {
         return code;
     }
@@ -288,6 +300,38 @@ public class PresellOrder extends ABaseDO {
 
     public void setApplyDatetimeEnd(Date applyDatetimeEnd) {
         this.applyDatetimeEnd = applyDatetimeEnd;
+    }
+
+    public PresellProduct getPresellProduct() {
+        return presellProduct;
+    }
+
+    public void setPresellProduct(PresellProduct presellProduct) {
+        this.presellProduct = presellProduct;
+    }
+
+    public String getSellerName() {
+        return sellerName;
+    }
+
+    public void setSellerName(String sellerName) {
+        this.sellerName = sellerName;
+    }
+
+    public String getJourCode() {
+        return jourCode;
+    }
+
+    public void setJourCode(String jourCode) {
+        this.jourCode = jourCode;
+    }
+
+    public String getTreeNumbers() {
+        return treeNumbers;
+    }
+
+    public void setTreeNumbers(String treeNumbers) {
+        this.treeNumbers = treeNumbers;
     }
 
 }

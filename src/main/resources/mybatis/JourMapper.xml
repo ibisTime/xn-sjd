@@ -61,6 +61,9 @@
 			<if test="refNo != null and refNo != '' ">
 				AND t.ref_no = #{refNo}
 			</if>
+			<if test="accountType != null and accountType != '' ">
+				AND t.account_type = #{accountType}
+			</if>
 			<choose>
 			     <when test='channelType == "out"'>
 				 	AND t.channel_type not in(0)

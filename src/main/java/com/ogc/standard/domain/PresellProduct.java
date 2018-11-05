@@ -1,5 +1,6 @@
 package com.ogc.standard.domain;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -118,7 +119,16 @@ public class PresellProduct extends ABaseDO {
     private List<String> statusList;
 
     // 预售规格
-    private List<PresellSpecs> presellSpecList;
+    private List<PresellSpecs> presellSpecsList;
+
+    // 树木列表
+    private List<Tree> treeList;
+
+    // 产品最小价格
+    private BigDecimal minPrice;
+
+    // 产品最大价格
+    private BigDecimal maxPrice;
 
     public String getCode() {
         return code;
@@ -392,12 +402,36 @@ public class PresellProduct extends ABaseDO {
         this.statusList = statusList;
     }
 
-    public List<PresellSpecs> getPresellSpecList() {
-        return presellSpecList;
+    public List<PresellSpecs> getPresellSpecsList() {
+        return presellSpecsList;
     }
 
-    public void setPresellSpecList(List<PresellSpecs> presellSpecList) {
-        this.presellSpecList = presellSpecList;
+    public void setPresellSpecsList(List<PresellSpecs> presellSpecsList) {
+        this.presellSpecsList = presellSpecsList;
+    }
+
+    public List<Tree> getTreeList() {
+        return treeList;
+    }
+
+    public void setTreeList(List<Tree> treeList) {
+        this.treeList = treeList;
+    }
+
+    public BigDecimal getMinPrice() {
+        return minPrice;
+    }
+
+    public void setMinPrice(BigDecimal minPrice) {
+        this.minPrice = minPrice;
+    }
+
+    public BigDecimal getMaxPrice() {
+        return maxPrice;
+    }
+
+    public void setMaxPrice(BigDecimal maxPrice) {
+        this.maxPrice = maxPrice;
     }
 
 }
