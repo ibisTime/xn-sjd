@@ -31,12 +31,16 @@ public enum EGeneratePrefix {
             "SR", "分享记录"), AgentUser("AG", "代理人"),
 
     TOOL_ORDER("TO", "道具购买订单"), TOOL_USE_RECORD("TR", "道具使用记录"),
-    
-    PRESELL_PRODUCT("PP","预售产品"),PRESELL_SPECS("PS","预售规格"),PRESELL_ORDER("PS","预售订单"),
-    
-    ORIGINAL_GROUP("OG","预售原生组"),PRESELL_INVENTORY("PI","预售权"),DERIVE_GROUP("DG","预售派生组"),
-    
-    PRESELL_LOGISTICS("PL","预售物流单");
+
+    Commodity("CO", "商品"),
+
+    PRESELL_PRODUCT("PP", "预售产品"), PRESELL_SPECS("PS", "预售规格"), PRESELL_ORDER(
+            "PS", "预售订单"),
+
+    ORIGINAL_GROUP("OG", "预售原生组"), PRESELL_INVENTORY("PI", "预售权"), DERIVE_GROUP(
+            "DG", "预售派生组"),
+
+    PRESELL_LOGISTICS("PL", "预售物流单");
 
     public static Map<String, EGeneratePrefix> getMap() {
         Map<String, EGeneratePrefix> map = new HashMap<String, EGeneratePrefix>();
