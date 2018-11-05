@@ -1,5 +1,6 @@
 package com.ogc.standard.ao;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.ogc.standard.bo.base.Paginable;
@@ -13,7 +14,7 @@ public interface ICarbonBubbleOrderAO {
     public XN629350Res takeCarbonBubble(String code, String userId);
 
     // 收取认养权下的碳泡泡
-    public XN629350Res takeCarbonBubbleByAdopt(String adoptTreeCode,
+    public BigDecimal takeCarbonBubbleByAdopt(String adoptTreeCode,
             String collector);
 
     public Paginable<CarbonBubbleOrder> queryCarbonBubbleOrderPage(int start,

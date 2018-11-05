@@ -259,4 +259,11 @@
 		WHERE user_id = #{userId}
 	</update>
 	
+	<update id="update_company" parameterType="sysuser">
+		UPDATE tsys_user
+		SET
+		company_code=#{companyCode}
+		WHERE user_id = #{userId}
+	</update>
+	
 </mapper>

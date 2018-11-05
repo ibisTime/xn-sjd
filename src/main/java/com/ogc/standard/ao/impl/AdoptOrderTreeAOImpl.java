@@ -142,6 +142,30 @@ public class AdoptOrderTreeAOImpl implements IAdoptOrderTreeAO {
     }
 
     @Override
+    public List<AdoptOrderTree> queryProductAdoptedOrder(
+            AdoptOrderTree condition) {
+        List<AdoptOrderTree> list = adoptOrderTreeBO
+            .queryProductAdoptedOrder(condition);
+
+        if (CollectionUtils.isNotEmpty(list)) {
+            for (AdoptOrderTree adoptOrderTree : list) {
+                // 树木信息
+                Tree tree = treeBO
+                    .getTreeByTreeNumber(adoptOrderTree.getTreeNumber());
+                adoptOrderTree.setTree(tree);
+
+                // 当前持有人信息
+                User user = userBO
+                    .getUserUnCheck(adoptOrderTree.getCurrentHolder());
+                if (null != user) {
+                    adoptOrderTree.setUser(user);
+                }
+            }
+        }
+        return list;
+    }
+
+    @Override
     public AdoptOrderTree getAdoptOrderTree(String code) {
         AdoptOrderTree data = adoptOrderTreeBO.getAdoptOrderTree(code);
         initAdoptOrderTree(data);

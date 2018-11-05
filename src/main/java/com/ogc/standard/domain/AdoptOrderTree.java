@@ -85,6 +85,9 @@ public class AdoptOrderTree extends ABaseDO {
     // 规格名称
     private String specsName;
 
+    // 用户认养权数量
+    private Integer userAdoptTreeCount;
+
     public User getUser() {
         return user;
     }
@@ -267,6 +270,14 @@ public class AdoptOrderTree extends ABaseDO {
 
     public void setSpecsName(String specsName) {
         this.specsName = specsName;
+    }
+
+    public Integer getUserAdoptTreeCount() {
+        return userAdoptTreeCount;
+    }
+
+    public void setUserAdoptTreeCount(Integer userAdoptTreeCount) {
+        this.userAdoptTreeCount = userAdoptTreeCount;
     }
 
 }

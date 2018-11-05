@@ -310,16 +310,21 @@ public class ProductAOImpl implements IProductAO {
     public void putOffProduct(String code, String updater) {
         Product product = productBO.getProduct(code);
 
-        // 个人、定向、捐赠，集体产品
-        if (!EProductStatus.TO_ADOPT.getCode().equals(product.getStatus())) {
-            throw new BizException("xn0000", "产品未处于可下架状态！");
-        }
-
         // 集体产品
-        if (ESellType.COLLECTIVE.getCode().equals(product.getSellType())
-                && !EProductStatus.ADOPT.getCode()
-                    .equals(product.getStatus())) {
-            throw new BizException("xn0000", "产品未处于可下架状态！");
+        if (ESellType.COLLECTIVE.getCode().equals(product.getSellType())) {
+            if (!EProductStatus.TO_ADOPT.getCode().equals(product.getStatus())
+                    && !EProductStatus.ADOPT.getCode()
+                        .equals(product.getStatus())) {
+                throw new BizException("xn0000", "产品未处于可下架状态！");
+            }
+
+        } else {
+
+            // 个人、定向、捐赠
+            if (!EProductStatus.TO_ADOPT.getCode()
+                .equals(product.getStatus())) {
+                throw new BizException("xn0000", "产品未处于可下架状态！");
+            }
         }
 
         // 存在认养中的古树时不能下架

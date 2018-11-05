@@ -101,6 +101,24 @@
 			</if>
 		</trim>
 	</select>
+	
+	<select id="select_productAdoptedOrderTree" parameterType="adoptOrderTree" resultMap="adoptOrderTree_DB_Result">
+		SELECT
+		DISTINCT
+		count(t.code) as userAdoptTreeCount
+		,t.tree_number
+		,t.start_datetime
+		,t.current_holder
+		,IFNULL(SUM(amount),0) as amount
+ 		FROM
+		try_adopt_order_tree t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
 
 	<select id="select_adoptOrderTree_count" parameterType="adoptOrderTree"
 		resultType="java.lang.Long">

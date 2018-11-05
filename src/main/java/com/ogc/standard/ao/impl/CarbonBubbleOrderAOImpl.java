@@ -141,7 +141,7 @@ public class CarbonBubbleOrderAOImpl implements ICarbonBubbleOrderAO {
 
     @Override
     @Transactional
-    public XN629350Res takeCarbonBubbleByAdopt(String adoptTreeCode,
+    public BigDecimal takeCarbonBubbleByAdopt(String adoptTreeCode,
             String collector) {
         // 正在使用的道具
         if (CollectionUtils.isNotEmpty(toolUseRecordBO.queryTreeToolRecordList(
@@ -155,6 +155,7 @@ public class CarbonBubbleOrderAOImpl implements ICarbonBubbleOrderAO {
         }
 
         // 收取所有碳泡泡
+        BigDecimal allQuantity = BigDecimal.ZERO;
         List<CarbonBubbleOrder> carbonBubbleOrderList = carbonBubbleOrderBO
             .queryCarbonBubbleOrderListByAdopt(adoptTreeCode);
         if (CollectionUtils.isNotEmpty(carbonBubbleOrderList)) {
@@ -179,10 +180,12 @@ public class CarbonBubbleOrderAOImpl implements ICarbonBubbleOrderAO {
                     EJourBizTypeUser.ADOPT_DAY_BACK.getValue(),
                     EJourBizTypePlat.ADOPT_DAY_BACK.getValue(),
                     carbonBubbleOrder.getCode());
+
+                allQuantity = allQuantity.add(quantity);
             }
         }
 
-        return null;
+        return allQuantity;
     }
 
     @Override

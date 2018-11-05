@@ -339,6 +339,16 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
         }
     }
 
+    @Override
+    public void refreshCompany(String userId, String companyCode) {
+        if (StringUtils.isNotBlank(userId)) {
+            SYSUser data = new SYSUser();
+            data.setUserId(userId);
+            data.setCompanyCode(companyCode);
+            sysUserDAO.updateCompany(data);
+        }
+    }
+
     private void initUser(SYSUser data) {
         if (ESYSUserKind.OWNER.getCode().equals(data.getKind())
                 || ESYSUserKind.MAINTAIN.getCode().equals(data.getKind())) {
@@ -355,4 +365,5 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
         condition.setCreateDatetimeEnd(createDatetimeEnd);
         return sysUserDAO.selectTotalCount(condition);
     }
+
 }

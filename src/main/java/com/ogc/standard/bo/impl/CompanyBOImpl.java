@@ -7,8 +7,10 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.bo.ICompanyBO;
+import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.ICompanyDAO;
@@ -21,13 +23,17 @@ import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.exception.BizException;
 
 @Component
-public class CompanyBOImpl extends PaginableBOImpl<Company> implements
-        ICompanyBO {
+public class CompanyBOImpl extends PaginableBOImpl<Company>
+        implements ICompanyBO {
 
     @Autowired
     private ICompanyDAO companyDAO;
 
+    @Autowired
+    private ISYSUserBO sysUserBO;
+
     @Override
+    @Transactional
     public String saveCompany(XN730072Req req, String userId) {
         Company data = new Company();
         String code = OrderNoGenerater.generate(EGeneratePrefix.GS.getCode());
@@ -49,10 +55,15 @@ public class CompanyBOImpl extends PaginableBOImpl<Company> implements
 
         data.setUpdateDatetime(new Date());
         companyDAO.insert(data);
+
+        // 更新用户公司
+        sysUserBO.refreshCompany(userId, code);
+
         return code;
     }
 
     @Override
+    @Transactional
     public String saveCompany(XN630063Req req, String userId) {
         Company data = new Company();
         String code = OrderNoGenerater.generate(EGeneratePrefix.GS.getCode());
@@ -71,10 +82,15 @@ public class CompanyBOImpl extends PaginableBOImpl<Company> implements
         data.setUpdater(userId);
         data.setUpdateDatetime(date);
         companyDAO.insert(data);
+
+        // 更新用户公司
+        sysUserBO.refreshCompany(userId, code);
+
         return code;
     }
 
     @Override
+    @Transactional
     public String saveCompany(String userId) {
         String code = null;
         if (StringUtils.isNotBlank(userId)) {
@@ -84,6 +100,9 @@ public class CompanyBOImpl extends PaginableBOImpl<Company> implements
             data.setUserId(userId);
             data.setCreateDatetime(new Date());
             companyDAO.insert(data);
+
+            // 更新用户公司
+            sysUserBO.refreshCompany(userId, code);
         }
         return code;
     }

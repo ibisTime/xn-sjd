@@ -33,6 +33,10 @@ public interface IAdoptOrderTreeBO extends IPaginableBO<AdoptOrderTree> {
 
     public List<AdoptOrderTree> queryAdoptOrderTreeList(String orderCode);
 
+    // 产品已认养名单
+    public List<AdoptOrderTree> queryProductAdoptedOrder(
+            AdoptOrderTree condition);
+
     public List<AdoptOrderTree> queryAdoptOrderTreeByNum(String treeNumber);
 
     public AdoptOrderTree getAdoptOrderTree(String code);

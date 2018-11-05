@@ -1,0 +1,51 @@
+package com.ogc.standard.dto.req;
+
+import javax.validation.constraints.Min;
+
+import org.hibernate.validator.constraints.NotBlank;
+
+/**
+ * 下单预售产品
+ * @author: silver 
+ * @since: Nov 3, 2018 5:18:51 PM 
+ * @history:
+ */
+public class XN629420Req {
+
+    // 产品规格编号
+    @NotBlank
+    private String specsCode;
+
+    // 下单人编号
+    @NotBlank
+    private String userId;
+
+    // 数量
+    @Min(1)
+    private String quantity;
+
+    public String getSpecsCode() {
+        return specsCode;
+    }
+
+    public void setSpecsCode(String specsCode) {
+        this.specsCode = specsCode;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(String quantity) {
+        this.quantity = quantity;
+    }
+
+}

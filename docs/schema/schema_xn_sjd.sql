@@ -77,7 +77,7 @@ CREATE TABLE `try_adopt_order` (
   `code` varchar(32) NOT NULL COMMENT '编号',
   `type` varchar(4) DEFAULT NULL COMMENT '订单类型（1个人/2定向/3捐赠）',
   `product_code` varchar(32) DEFAULT NULL COMMENT '认养产品编号',
-  `product_specs_code` varchar(255) DEFAULT NULL COMMENT '规格编号',
+  `product_specs_name` varchar(255) DEFAULT NULL COMMENT '规格名称',
   `price` decimal(64,0) DEFAULT NULL COMMENT '认养价格',
   `start_datetime` datetime DEFAULT NULL COMMENT '认养开始时间',
   `end_datetime` datetime DEFAULT NULL COMMENT '认养结束时间',
@@ -899,6 +899,7 @@ CREATE TABLE `tzb_product_specs` (
 DROP TABLE IF EXISTS `tzb_tree`;
 CREATE TABLE `tzb_tree` (
   `code` varchar(32) NOT NULL COMMENT '编号',
+  `product_type` varchar(4) DEFAULT NULL COMMENT '产品类型',
   `product_code` varchar(32) DEFAULT NULL COMMENT '产品编号',
   `cur_order_code` varchar(32) DEFAULT NULL COMMENT '当前订单编号',
   `owner_id` varchar(32) DEFAULT NULL COMMENT '产权方编号',
@@ -972,5 +973,166 @@ CREATE TABLE `tstd_address` (
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `tys_presell_product`;
+CREATE TABLE `tys_presell_product` (
+  `code` varchar(32) NOT NULL COMMENT '编号',
+  `name` varchar(255) DEFAULT NULL COMMENT '名称',
+  `owner_id` varchar(32) DEFAULT NULL COMMENT '产权方编号',
+  `category_code` varchar(32) DEFAULT NULL COMMENT '产品分类',
+  `list_pic` text DEFAULT NULL COMMENT '列表图片',
+
+  `banner_pic` text DEFAULT NULL COMMENT '详情banner图',
+  `description` text DEFAULT NULL COMMENT '图文详情',
+  `origin_place` varchar(255) DEFAULT NULL COMMENT '产地',
+  `scientific_name` varchar(255) DEFAULT NULL COMMENT '学名',
+  `variety` varchar(255) DEFAULT NULL COMMENT '品种',
+
+  `rank` varchar(32) DEFAULT NULL COMMENT '级别',
+  `province` varchar(32) DEFAULT NULL COMMENT '省',
+  `city` varchar(32) DEFAULT NULL COMMENT '市',
+  `area` varchar(32) DEFAULT NULL COMMENT '区',
+  `town` varchar(32) DEFAULT NULL COMMENT '镇',
+
+  `longitude` varchar(32) DEFAULT NULL COMMENT '经度',
+  `latitude` varchar(32) DEFAULT NULL COMMENT '维度',
+  `single_output` int DEFAULT NULL COMMENT '单颗树产量',
+  `pack_unit` varchar(32) DEFAULT NULL COMMENT '包装单位',
+  `pack_weight` FLOAT DEFAULT NULL COMMENT '包装重量',
+
+  `tree_count` int DEFAULT NULL COMMENT '树木数量',
+  `total_output` int DEFAULT NULL COMMENT '产出总量',
+  `adopt_start_datetime` datetime DEFAULT NULL COMMENT '认养开始时间',
+  `adopt_end_datetime` datetime DEFAULT NULL COMMENT '认养结束时间',
+  `adopt_year` int DEFAULT 0 COMMENT '认养年限',
+
+  `harvest_datetime` datetime DEFAULT NULL COMMENT '收货时间',
+  `now_count` int DEFAULT 0 COMMENT '已预售数量',
+  `location` varchar(32) DEFAULT NULL COMMENT 'UI位置',
+  `order_no` int DEFAULT 0 COMMENT 'UI次序',
+  `status` varchar(4) DEFAULT NULL COMMENT '状态',
+
+  `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `remark` text COMMENT '备注',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `tys_presell_specs`;
+CREATE TABLE `tys_presell_specs` (
+  `code` varchar(32) NOT NULL COMMENT '编号',
+  `product_code` varchar(32) DEFAULT NULL COMMENT '产品编号',
+  `name` varchar(255) DEFAULT NULL COMMENT '规格名称',
+  `pack_count` int DEFAULT 0 COMMENT '包装数量',
+  `price` decimal(18,8) DEFAULT NULL COMMENT '价格',
+  `increase` FLOAT DEFAULT NULL COMMENT '每小时涨幅',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `tys_presell_order`;
+CREATE TABLE `tys_presell_order` (
+  `code` varchar(32) NOT NULL COMMENT '编号',
+  `product_code` varchar(32) DEFAULT NULL COMMENT '产品编号',
+  `product_name` varchar(255) DEFAULT NULL COMMENT '产品名称',
+  `specs_code` varchar(32) DEFAULT NULL COMMENT '规格编号',
+  `specs_name` varchar(255) DEFAULT NULL COMMENT '规格名称',
+
+  `price` decimal(18,8) DEFAULT NULL COMMENT '价格',
+  `quantity` int DEFAULT 0 COMMENT '数量',
+  `amount` decimal(18,8) DEFAULT NULL COMMENT '金额',
+  `apply_user` varchar(32) DEFAULT NULL COMMENT '下单人编号',
+  `apply_datetime` datetime DEFAULT NULL COMMENT '下单时间',
+  `status` varchar(4) DEFAULT NULL COMMENT '状态',
+
+  `pay_type` varchar(4) DEFAULT NULL COMMENT '支付方式',
+  `pay_group` varchar(32) DEFAULT NULL COMMENT '支付组号',
+  `pay_code` varchar(32) DEFAULT NULL COMMENT '支付渠道编号',
+  `cny_deduct_amount` decimal(18,8) DEFAULT NULL COMMENT '抵扣人民币',
+  `jf_deduct_amount` decimal(18,8) DEFAULT NULL COMMENT '积分抵扣金额',
+  `back_jf_amount` decimal(18,8) DEFAULT NULL COMMENT '积分返点金额',
+
+  `pay_amount` decimal(18,8) DEFAULT NULL COMMENT '支付金额',
+  `pay_datetime` datetime DEFAULT NULL COMMENT '支付时间',
+  `settle_status` varchar(4) DEFAULT NULL COMMENT '结算状态',
+  `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `remark` text COMMENT '备注',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `tys_original_group`;
+CREATE TABLE `tys_original_group` (
+  `code` varchar(32) NOT NULL COMMENT '编号',
+  `order_code` varchar(32) DEFAULT NULL COMMENT '订单编号',
+  `product_code` varchar(32) DEFAULT NULL COMMENT '产品编号',
+  `product_name` varchar(255) DEFAULT NULL COMMENT '产品名称',
+  `owner_id` varchar(32) DEFAULT NULL COMMENT '归属人',
+
+  `price` decimal(18,8) DEFAULT NULL COMMENT '单价', 
+  `quantity` int DEFAULT 0 COMMENT '数量',
+  `presell_quantity` int DEFAULT 0 COMMENT '挂单数量',
+  `unit` varchar(32) DEFAULT NULL COMMENT '单位',
+  `status` varchar(4) DEFAULT NULL COMMENT '状态',
+
+  `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `remark` text COMMENT '备注',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `tys_presell_inventory`;
+CREATE TABLE `tys_presell_inventory` (
+  `code` varchar(32) NOT NULL COMMENT '编号',
+  `group_type` varchar(4) DEFAULT NULL COMMENT '组类型',
+  `group_code` varchar(32) DEFAULT NULL COMMENT '组编号',
+  `tree_number` varchar(32) DEFAULT NULL COMMENT '树木编号',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `tys_derive_group`;
+CREATE TABLE `tys_derive_group` (
+  `code` varchar(32) NOT NULL COMMENT '编号',
+  `original_code` varchar(32) DEFAULT NULL COMMENT '原生组编号',
+  `product_code` varchar(32) DEFAULT NULL COMMENT '产品编号',
+  `product_name` varchar(255) DEFAULT NULL COMMENT '产品名称',
+  `type` varchar(4) DEFAULT NULL COMMENT '类型（定向/二维码/挂单）',
+
+  `price` decimal(18,8) DEFAULT NULL COMMENT '单价', 
+  `quantity` int DEFAULT 0 COMMENT '数量',
+  `unit` varchar(32) DEFAULT NULL COMMENT '单位',
+  `creater` varchar(32) DEFAULT NULL COMMENT '挂单人',
+  `create_datetime` datetime DEFAULT NULL COMMENT '挂单时间',
+
+  `status` varchar(4) DEFAULT NULL COMMENT '状态',
+  `claimant` varchar(32) DEFAULT NULL COMMENT '成交人',
+  `claim_datetime` datetime DEFAULT NULL COMMENT '成交时间',
+  `range` FLOAT DEFAULT NULL COMMENT '波动幅度',
+  `url` varchar(255) DEFAULT NULL COMMENT '分享链接',
+
+  `remark` text COMMENT '备注',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `tys_presell_logistics`;
+CREATE TABLE `tys_presell_logistics` (
+  `code` varchar(32) NOT NULL COMMENT '编号',
+  `original_group_code` varchar(32) DEFAULT NULL COMMENT '原生组编号',
+  `logistics_company` varchar(4) DEFAULT NULL COMMENT '物流公司',
+  `logistics_number` varchar(255) DEFAULT NULL COMMENT '物流单号',
+  `deliver` varchar(32) DEFAULT null COMMENT '发货人',
+
+  `deliver_count` int DEFAULT 0 COMMENT '发货数量',
+  `deliver_datetime` datetime DEFAULT NULL COMMENT '发货时间',
+  `receiver` varchar(32) DEFAULT NULL COMMENT '收货人',
+  `receiver_mobile` varchar(32) DEFAULT NULL COMMENT '收货人手机号',
+  `receiver_datetime` datetime DEFAULT NULL COMMENT '收货时间',
+
+  `province` varchar(32) DEFAULT NULL COMMENT '省',
+  `city` varchar(32) DEFAULT NULL COMMENT '市',
+  `area` varchar(32) DEFAULT NULL COMMENT '区',
+  `address` varchar(255) DEFAULT NULL COMMENT '详细地址',
+  `status` varchar(4) DEFAULT NULL COMMENT '状态',
+  `remark` text COMMENT '备注',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 SET FOREIGN_KEY_CHECKS = 1;

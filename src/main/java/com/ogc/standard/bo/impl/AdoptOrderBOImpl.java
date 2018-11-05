@@ -63,6 +63,17 @@ public class AdoptOrderBOImpl extends PaginableBOImpl<AdoptOrder>
     }
 
     @Override
+    public void cancelAdoptOrder(AdoptOrder data, String remark) {
+        if (StringUtils.isNotBlank(data.getCode())) {
+            data.setStatus(EAdoptOrderStatus.CANCELED.getCode());
+            data.setUpdater(data.getApplyUser());
+            data.setUpdateDatetime(new Date());
+            data.setRemark(remark);
+            adoptOrderDAO.updateCancelAdoptOrder(data);
+        }
+    }
+
+    @Override
     public void payYueSuccess(AdoptOrder data, XN629048Res resultRes,
             BigDecimal backjfAmount) {
         Date nowDate = new Date();
@@ -180,15 +191,4 @@ public class AdoptOrderBOImpl extends PaginableBOImpl<AdoptOrder>
         return data;
     }
 
-    // 取消订单
-    @Override
-    public void cancelAdoptOrder(AdoptOrder data, String remark) {
-        if (StringUtils.isNotBlank(data.getCode())) {
-            data.setStatus(EAdoptOrderStatus.CANCELED.getCode());
-            data.setUpdater(data.getApplyUser());
-            data.setUpdateDatetime(new Date());
-            data.setRemark(remark);
-            adoptOrderDAO.updateCancelAdoptOrder(data);
-        }
-    }
 }

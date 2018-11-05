@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ogc.standard.dao.IPresellProductDAO">
+	<resultMap id="presellProduct_DB_Result" type="presellProduct">
+		<result column="code" property="code" />
+		<result column="name" property="name" />
+		<result column="owner_id" property="ownerId" />
+		<result column="category_code" property="categoryCode" />
+		<result column="list_pic" property="listPic" />
+		
+		<result column="banner_pic" property="bannerPic" />
+		<result column="description" property="description" />
+		<result column="origin_place" property="originPlace" />
+		<result column="scientific_name" property="scientificName" />
+		<result column="variety" property="variety" />
+		
+		<result column="rank" property="rank" />
+		<result column="province" property="province" />
+		<result column="city" property="city" />
+		<result column="area" property="area" />
+		<result column="town" property="town" />
+		
+		<result column="longitude" property="longitude" />
+		<result column="latitude" property="latitude" />
+		<result column="single_output" property="singleOutput" />
+		<result column="pack_unit" property="packUnit" />
+		<result column="pack_weight" property="packWeight" />
+		
+		<result column="tree_count" property="treeCount" />
+		<result column="total_output" property="totalOutput" />
+		<result column="adopt_start_datetime" property="adoptStartDatetime" />
+		<result column="adopt_end_datetime" property="adoptEndDatetime" />
+		<result column="adopt_year" property="adoptYear" />
+		
+		<result column="harvest_datetime" property="harvestDatetime" />
+		<result column="now_count" property="nowCount" />
+		<result column="location" property="location" />
+		<result column="order_no" property="orderNo" />
+		<result column="status" property="status" />
+		
+		<result column="updater" property="updater" />
+		<result column="update_datetime" property="updateDatetime" />
+		<result column="remark" property="remark" />
+	</resultMap>
+	
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="ownerId != null and ownerId != '' ">
+				AND t.owner_id = #{ownerId}
+			</if>
+			<if test="categoryCode != null and categoryCode != '' ">
+				AND t.category_code = #{categoryCode}
+			</if>
+			<if test="location != null and location != '' ">
+				AND t.location = #{location}
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+			
+			<if test="statusList != null and statusList != '' ">
+                AND t.status in
+                <foreach item="item" index="index" collection="statusList" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            
+		</trim>
+	</sql>
+	
+	<select id="select_presellProduct" parameterType="presellProduct" resultMap="presellProduct_DB_Result">
+		SELECT
+		t.code
+		,t.name
+		,t.owner_id
+		,t.category_code
+		,t.list_pic
+		
+		,t.banner_pic
+		,t.description
+		,t.origin_place
+		,t.scientific_name
+		,t.variety
+		
+		,t.rank
+		,t.province
+		,t.city
+		,t.area
+		,t.town
+		
+		,t.longitude
+		,t.latitude
+		,t.single_output
+		,t.pack_unit
+		,t.pack_weight
+		
+		,t.tree_count
+		,t.total_output
+		,t.adopt_start_datetime
+		,t.adopt_end_datetime
+		,t.adopt_year
+		
+		,t.harvest_datetime
+		,t.now_count
+		,t.location
+		,t.order_no
+		,t.status
+		
+		,t.updater
+		,t.update_datetime
+		,t.remark
+		FROM
+		tys_presell_product t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_presellProduct_count" parameterType="presellProduct"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tys_presell_product t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_presellProduct" parameterType="presellProduct">
+		INSERT INTO
+		tys_presell_product(
+		code
+		,name
+		,owner_id
+		,category_code
+		,list_pic
+		
+		,banner_pic
+		,description
+		,origin_place
+		,scientific_name
+		,variety
+		
+		,rank
+		,province
+		,city
+		,area
+		,town
+		
+		,longitude
+		,latitude
+		,single_output
+		,pack_unit
+		,pack_weight
+		
+		,tree_count
+		,total_output
+		,adopt_start_datetime
+		,adopt_end_datetime
+		,adopt_year
+		
+		,harvest_datetime
+		,now_count
+		,status
+		,updater
+		,update_datetime
+		
+		,remark
+		)
+		VALUES(
+		#{code}
+		,#{name}
+		,#{ownerId}
+		,#{categoryCode}
+		,#{listPic}
+		
+		,#{bannerPic}
+		,#{description}
+		,#{originPlace}
+		,#{scientificName}
+		,#{variety}
+		
+		,#{rank}
+		,#{province}
+		,#{city}
+		,#{area}
+		,#{town}
+		
+		,#{longitude}
+		,#{latitude}
+		,#{singleOutput}
+		,#{packUnit}
+		,#{packWeight}
+		
+		,#{treeCount}
+		,#{totalOutput}
+		,#{adoptStartDatetime}
+		,#{adoptEndDatetime}
+		,#{adoptYear}
+		
+		,#{harvestDatetime}
+		,#{nowCount}
+		,#{status}
+		,#{updater}
+		,#{updateDatetime}
+		
+		,#{remark}
+		)
+	</insert>
+
+	<update id="update_editPresellProduct" parameterType="presellProduct">
+		UPDATE tys_presell_product
+		SET
+		name = #{name}
+		,owner_id = #{ownerId}
+		,category_code = #{categoryCode}
+		,list_pic = #{listPic}
+		,banner_pic = #{bannerPic}
+		
+		,description = #{description}
+		,origin_place = #{originPlace}
+		,scientific_name = #{scientificName}
+		,variety = #{variety}
+		,rank = #{rank}
+		
+		,province = #{province}
+		,city = #{city}
+		,area = #{area}
+		,town = #{town}
+		,longitude = #{longitude}
+		
+		,latitude = #{latitude}
+		,single_output = #{singleOutput}
+		,pack_unit = #{packUnit}
+		,pack_weight = #{packWeight}
+		,tree_count = #{treeCount}
+		
+		,total_output = #{totalOutput}
+		,adopt_start_datetime = #{adoptStartDatetime}
+		,adopt_end_datetime = #{adoptEndDatetime}
+		,adopt_year = #{adoptYear}
+		,harvest_datetime = #{harvestDatetime}
+		
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_submitPresellProduct" parameterType="presellProduct">
+		UPDATE tys_presell_product
+		SET
+		status = #{status}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_approvePresellProduct" parameterType="presellProduct">
+		UPDATE tys_presell_product
+		SET
+		status = #{status}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_putOnPresellProduct" parameterType="presellProduct">
+		UPDATE tys_presell_product
+		SET
+		status = #{status}
+		,location = #{location}
+		,order_no = #{orderNo}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_putOffPresellProduct" parameterType="presellProduct">
+		UPDATE tys_presell_product
+		SET
+		status = #{status}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_nowCount" parameterType="presellProduct">
+		UPDATE tys_presell_product
+		SET
+		now_count = #{nowCount}
+		WHERE code = #{code}
+	</update>
+
+</mapper>

@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ogc.standard.dao.IPresellOrderDAO">
+	<resultMap id="presellOrder_DB_Result" type="presellOrder">
+		<result column="code" property="code" />
+		<result column="product_code" property="productCode" />
+		<result column="product_name" property="productName" />
+		<result column="specs_code" property="specsCode" />
+		<result column="specs_name" property="specsName" />
+		
+		<result column="price" property="price" />
+		<result column="quantity" property="quantity" />
+		<result column="amount" property="amount" />
+		<result column="apply_user" property="applyUser" />
+		<result column="apply_datetime" property="applyDatetime" />
+		
+		<result column="status" property="status" />
+		<result column="pay_type" property="payType" />
+		<result column="pay_group" property="payGroup" />
+		<result column="pay_code" property="payCode" />
+		<result column="cny_deduct_amount" property="cnyDeductAmount" />
+		<result column="jf_deduct_amount" property="jfDeductAmount" />
+		
+		<result column="back_jf_amount" property="backJfAmount" />
+		<result column="pay_amount" property="payAmount" />
+		<result column="pay_datetime" property="payDatetime" />
+		<result column="settle_status" property="settleStatus" />
+		<result column="updater" property="updater" />
+		
+		<result column="update_datetime" property="updateDatetime" />
+		<result column="remark" property="remark" />
+	</resultMap>
+	
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="productCode != null and productCode != '' ">
+				AND t.product_code = #{productCode}
+			</if>
+			<if test="applyUser != null and applyUser != '' ">
+				AND t.apply_user = #{applyUser}
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+			<if test="settleStatus != null and settleStatus != '' ">
+				AND t.settle_status = #{settleStatus}
+			</if>
+			<if test="payGroup != null and payGroup != '' ">
+				AND t.pay_group = #{payGroup}
+			</if>
+			<if test="payCode != null and payCode != '' ">
+				AND t.pay_code = #{payCode}
+			</if>
+			
+			<if test="applyDatetimeStart != null and applyDatetimeStart != '' ">
+				<![CDATA[AND t.apply_datetime >= #{applyDatetimeStart}]]>
+			</if>
+			<if test="applyDatetimeEnd != null and applyDatetimeEnd != '' ">
+				<![CDATA[AND t.apply_datetime <= #{applyDatetimeEnd}]]>
+			</if>
+		</trim>
+	</sql>
+	
+	<select id="select_presellOrder" parameterType="presellOrder" resultMap="presellOrder_DB_Result">
+		SELECT
+		t.code
+		,t.product_code
+		,t.product_name
+		,t.specs_code
+		,t.specs_name
+		
+		,t.price
+		,t.quantity
+		,t.amount
+		,t.apply_user
+		,t.apply_datetime
+		
+		,t.status
+		,t.pay_type
+		,t.pay_group
+		,t.pay_code
+		,t.jf_deduct_amount
+		
+		,t.back_jf_amount
+		,t.pay_amount
+		,t.pay_datetime
+		,t.settle_status
+		,t.updater
+		
+		,t.update_datetime
+		,t.remark
+		FROM
+		tys_presell_order t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_presellOrder_count" parameterType="presellOrder"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tys_presell_order t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_presellOrder" parameterType="presellOrder">
+		INSERT INTO
+		tys_presell_order(
+		code
+		,product_code
+		,product_name
+		,specs_code
+		,specs_name
+		
+		,price
+		,quantity
+		,amount
+		,apply_user
+		,apply_datetime
+		
+		,status
+		,settle_status
+		,updater
+		,update_datetime
+		,remark
+		)
+		VALUES(
+		#{code}
+		,#{productCode}
+		,#{productName}
+		,#{specsCode}
+		,#{specsName}
+		
+		,#{price}
+		,#{quantity}
+		,#{amount}
+		,#{applyUser}
+		,#{applyDatetime}
+		
+		,#{status}
+		,#{settleStatus}
+		,#{updater}
+		,#{updateDatetime}
+		,#{remark}
+		)
+	</insert>
+
+	<update id="update_CalcelPresellOrder" parameterType="presellOrder">
+		UPDATE tys_presell_order
+		SET
+		status = #{status}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_payYueSuccess" parameterType="presellOrder">
+		UPDATE tys_presell_order
+		SET
+		status = #{status}
+		,pay_type = #{payType}
+		,cny_deduct_amount = #{cnyDeductAmount}
+		,jf_deduct_amount = #{jfDeductAmount}
+		,back_jf_amount = #{backJfAmount}
+		
+		,pay_amount = #{payAmount}
+		,pay_datetime = #{payDatetime}
+		,settle_status = #{settleStatus}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_payGroup" parameterType="presellOrder">
+		UPDATE tys_presell_order
+		SET
+		pay_type = #{payType}
+		,pay_group = #{payGroup}
+		,cny_deduct_amount = #{cnyDeductAmount}
+		,jf_deduct_amount = #{jfDeductAmount}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_paySuccess" parameterType="presellOrder">
+		UPDATE tys_presell_order
+		SET
+		status = #{status}
+		,pay_amount = #{payAmount}
+		,pay_datetime = #{payDatetime}
+		,settle_status = #{settleStatus}
+		,back_jf_amount = #{backJfAmount}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+
+</mapper>

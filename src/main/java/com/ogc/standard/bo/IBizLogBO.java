@@ -23,6 +23,10 @@ public interface IBizLogBO extends IPaginableBO<BizLog> {
     public long useShelter(String adoptTreeCode, String adoptUserId,
             String userId);
 
+    // 使用一键收取
+    public long useGetall(String adoptTreeCode, String adoptUserId,
+            String userId, BigDecimal quantity);
+
     // 本周用户碳泡泡总量
     public BigDecimal getWeekQuantitySum(String adoptUserId, String userId);
 

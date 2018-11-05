@@ -15,11 +15,14 @@ import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.dao.ITreeDAO;
+import com.ogc.standard.domain.PresellProduct;
 import com.ogc.standard.domain.Product;
 import com.ogc.standard.domain.SYSUser;
 import com.ogc.standard.domain.Tree;
 import com.ogc.standard.dto.req.XN629010ReqTree;
+import com.ogc.standard.dto.req.XN629400ReqTree;
 import com.ogc.standard.enums.EGeneratePrefix;
+import com.ogc.standard.enums.EProductType;
 import com.ogc.standard.enums.ETreeStatus;
 import com.ogc.standard.exception.BizException;
 
@@ -59,6 +62,7 @@ public class TreeBOImpl extends PaginableBOImpl<Tree> implements ITreeBO {
 
         String code = OrderNoGenerater.generate(EGeneratePrefix.Tree.getCode());
         data.setCode(code);
+        data.setProductType(EProductType.NORMAL.getCode());
         data.setProductCode(product.getCode());
         data.setOwnerId(product.getOwnerId());
         data.setTreeNumber(tree.getTreeNumber());
@@ -80,6 +84,40 @@ public class TreeBOImpl extends PaginableBOImpl<Tree> implements ITreeBO {
         data.setStatus(ETreeStatus.TO_ADOPT.getCode());
         data.setUpdater(product.getUpdater());
         data.setUpdateDatetime(product.getUpdateDatetime());
+        data.setRemark(tree.getRemark());
+        treeDAO.insert(data);
+        return code;
+    }
+
+    @Override
+    public String saveTree(PresellProduct presellProduct,
+            XN629400ReqTree tree) {
+        Tree data = new Tree();
+
+        String code = OrderNoGenerater.generate(EGeneratePrefix.Tree.getCode());
+        data.setCode(code);
+        data.setProductType(EProductType.YS.getCode());
+        data.setProductCode(presellProduct.getCode());
+        data.setOwnerId(presellProduct.getOwnerId());
+        data.setTreeNumber(tree.getTreeNumber());
+        data.setAge(StringValidater.toInteger(tree.getAge()));
+
+        data.setOriginPlace(presellProduct.getOriginPlace());
+        data.setScientificName(presellProduct.getScientificName());
+        data.setVariety(presellProduct.getVariety());
+        data.setRank(presellProduct.getRank());
+        data.setProvince(presellProduct.getProvince());
+
+        data.setCity(presellProduct.getCity());
+        data.setArea(presellProduct.getArea());
+        data.setTown(presellProduct.getTown());
+        data.setLongitude(tree.getLongitude());
+        data.setLatitude(tree.getLatitude());
+
+        data.setPic(tree.getPic());
+        data.setStatus(ETreeStatus.TO_ADOPT.getCode());
+        data.setUpdater(presellProduct.getUpdater());
+        data.setUpdateDatetime(presellProduct.getUpdateDatetime());
         data.setRemark(tree.getRemark());
         treeDAO.insert(data);
         return code;

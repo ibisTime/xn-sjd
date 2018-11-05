@@ -4,6 +4,7 @@
 <mapper namespace="com.ogc.standard.dao.ITreeDAO">
 	<resultMap id="tree_DB_Result" type="tree">
 		<result column="code" property="code" />
+		<result column="product_type" property="productType" />
 		<result column="product_code" property="productCode" />
 		<result column="cur_order_code" property="curOrderCode" />
 		<result column="owner_id" property="ownerId" />
@@ -39,6 +40,9 @@
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
 			</if>
+			<if test="productType != null and productType != '' ">
+				AND t.product_type = #{productType}
+			</if>
 			<if test="productCode != null and productCode != '' ">
 				AND t.product_code = #{productCode}
 			</if>
@@ -69,6 +73,7 @@
 	<select id="select_tree" parameterType="tree" resultMap="tree_DB_Result">
 		SELECT
 		t.code
+		,t.product_type
 		,t.product_code
 		,t.cur_order_code
 		,t.owner_id
@@ -117,6 +122,7 @@
 		INSERT INTO
 		tzb_tree(
 		code
+		,product_type
 		,product_code
 		,owner_id
 		,tree_number
@@ -142,6 +148,7 @@
 		)
 		VALUES(
 		#{code}
+		,#{productType}
 		,#{productCode}
 		,#{ownerId}
 		,#{treeNumber}

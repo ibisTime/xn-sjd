@@ -27,6 +27,10 @@ public interface IAdoptOrderTreeAO {
     public List<AdoptOrderTree> queryAdoptOrderTreeList(
             AdoptOrderTree condition);
 
+    // 产品已认养名单
+    public List<AdoptOrderTree> queryProductAdoptedOrder(
+            AdoptOrderTree condition);
+
     public AdoptOrderTree getAdoptOrderTree(String code);
 
     // 查询产权方认养总额

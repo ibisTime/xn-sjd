@@ -48,6 +48,14 @@ public class AdoptOrderTreeDAOImpl extends AMybatisTemplate
     }
 
     @Override
+    public List<AdoptOrderTree> selectProductAdoptedOrder(
+            AdoptOrderTree condition) {
+        return super.selectList(
+            NAMESPACE.concat("select_productAdoptedOrderTree"), condition,
+            AdoptOrderTree.class);
+    }
+
+    @Override
     public List<AdoptOrderTree> selectList(AdoptOrderTree condition, int start,
             int count) {
         return super.selectList(NAMESPACE.concat("select_adoptOrderTree"),

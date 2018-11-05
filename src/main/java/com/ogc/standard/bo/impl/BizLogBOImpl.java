@@ -96,6 +96,23 @@ public class BizLogBOImpl extends PaginableBOImpl<BizLog> implements IBizLogBO {
     }
 
     @Override
+    public long useGetall(String adoptTreeCode, String adoptUserId,
+            String userId, BigDecimal quantity) {
+        BizLog data = new BizLog();
+
+        data.setAdoptTreeCode(adoptTreeCode);
+        data.setAdoptUserId(adoptUserId);
+        data.setType(EBizLogType.GET_ALL.getCode());
+        data.setQuantity(quantity);
+        data.setUserId(userId);
+
+        data.setCreateDatetime(new Date());
+        bizLogDAO.insert(data);
+
+        return bizLogDAO.selectMaxId();
+    }
+
+    @Override
     public BigDecimal getWeekQuantitySum(String adoptUserId, String userId) {
         BizLog condition = new BizLog();
         condition.setAdoptUserId(adoptUserId);

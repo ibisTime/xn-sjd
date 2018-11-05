@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ogc.standard.dao.IPresellLogisticsDAO">
+	<resultMap id="presellLogistics_DB_Result" type="presellLogistics">
+		<result column="code" property="code" />
+		<result column="original_group_code" property="originalGroupCode" />
+		<result column="logistics_company" property="logisticsCompany" />
+		<result column="logistics_number" property="logisticsNumber" />
+		<result column="deliver" property="deliver" />
+		
+		<result column="deliver_count" property="deliverCount" />
+		<result column="deliver_datetime" property="deliverDatetime" />
+		<result column="receiver" property="receiver" />
+		<result column="receiver_mobile" property="receiverMobile" />
+		<result column="receiver_datetime" property="receiverDatetime" />
+		
+		<result column="province" property="province" />
+		<result column="city" property="city" />
+		<result column="area" property="area" />
+		<result column="address" property="address" />
+		<result column="status" property="status" />
+		
+		<result column="remark" property="remark" />
+	</resultMap>
+	
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="originalGroupCode != null and originalGroupCode != '' ">
+				AND t.original_group_code = #{originalGroupCode}
+			</if>
+			<if test="deliver != null and deliver != '' ">
+				AND t.deliver = #{deliver}
+			</if>
+			<if test="receiver != null and receiver != '' ">
+				AND t.receiver = #{receiver}
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+		</trim>
+	</sql>
+	
+	<select id="select_presellLogistics" parameterType="presellLogistics" resultMap="presellLogistics_DB_Result">
+		SELECT
+		t.code
+		,t.original_group_code
+		,t.logistics_company
+		,t.logistics_number
+		,t.deliver
+		
+		,t.deliver_count
+		,t.deliver_datetime
+		,t.receiver
+		,t.receiver_mobile
+		,t.receiver_datetime
+		
+		,t.province
+		,t.city
+		,t.area
+		,t.address
+		,t.status
+		
+		,t.remark
+		FROM
+		tys_presell_logistics t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_presellLogistics_count" parameterType="presellLogistics"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tys_presell_logistics t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_presellLogistics" parameterType="presellLogistics">
+		INSERT INTO
+		tys_presell_logistics(
+		code
+		,original_group_code
+		,deliver_count
+		,receiver
+		,receiver_mobile
+		
+		,province
+		,city
+		,area
+		,address
+		,status
+		
+		,remark
+		)
+		VALUES(
+		#{code}
+		,#{originalGroupCode}
+		,#{deliverCount}
+		,#{receiver}
+		,#{receiverMobile}
+		
+		,#{province}
+		,#{city}
+		,#{area}
+		,#{address}
+		,#{status}
+		
+		,#{remark}
+		)
+	</insert>
+
+	<update id="update_sendLogistics" parameterType="presellLogistics">
+		UPDATE tys_presell_logistics
+		SET
+		logistics_company = #{logisticsCompany}
+		,logistics_number = #{logisticsNumber}
+		,deliver = #{deliver}
+		,deliver_datetime = #{deliverDatetime}
+		,status = #{status}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_receiveLogistics" parameterType="presellLogistics">
+		UPDATE tys_presell_logistics
+		SET
+		receiver_mobile = #{receiverMobile}
+		,status = #{status}
+		WHERE code = #{code}
+	</update>
+
+</mapper>

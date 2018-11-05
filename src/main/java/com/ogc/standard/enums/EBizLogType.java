@@ -8,8 +8,8 @@ package com.ogc.standard.enums;
  */
 public enum EBizLogType {
 
-    GIVE("1", "赠送"), LEAVE_MESSAGE("2", "留言"), GATHER("3",
-            "收取碳泡泡"), GATHER_NO("4", "收取碳泡泡被阻挡"), USE_SHELTER("5", "使用保护罩");
+    GIVE("1", "赠送"), LEAVE_MESSAGE("2", "留言"), GATHER("3", "收取碳泡泡"), GATHER_NO(
+            "4", "收取碳泡泡被阻挡"), USE_SHELTER("5", "使用保护罩"), GET_ALL("6", "使用一键收取");
 
     EBizLogType(String code, String value) {
         this.code = code;
