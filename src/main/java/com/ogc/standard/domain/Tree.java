@@ -81,7 +81,7 @@ public class Tree extends ABaseDO {
     // 收藏数
     private Integer collectionCount;
 
-    // 认养次数
+    // 认养次数/销售产量
     private Integer adoptCount;
 
     // 更新人
@@ -118,6 +118,9 @@ public class Tree extends ABaseDO {
 
     // 分类
     private String category;
+
+    // 预售树销售产量
+    private Integer maxAdoptCount;
 
     public String getMaintainId() {
         return maintainId;
@@ -389,6 +392,14 @@ public class Tree extends ABaseDO {
 
     public void setProductType(String productType) {
         this.productType = productType;
+    }
+
+    public Integer getMaxAdoptCount() {
+        return maxAdoptCount;
+    }
+
+    public void setMaxAdoptCount(Integer maxAdoptCount) {
+        this.maxAdoptCount = maxAdoptCount;
     }
 
 }

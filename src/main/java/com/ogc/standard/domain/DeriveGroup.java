@@ -2,6 +2,7 @@ package com.ogc.standard.domain;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 import com.ogc.standard.dao.base.ABaseDO;
 
@@ -54,13 +55,20 @@ public class DeriveGroup extends ABaseDO {
     private Date claimDatetime;
 
     // 波动幅度
-    private Double range;
+    private Double wave;
 
     // 分享链接
     private String url;
 
     // 备注
     private String remark;
+
+    /***************DB Properties***************/
+    // 状态列表
+    private List<String> statusList;
+
+    // 预售产品
+    private PresellProduct presellProduct;
 
     public String getCode() {
         return code;
@@ -166,12 +174,12 @@ public class DeriveGroup extends ABaseDO {
         this.claimDatetime = claimDatetime;
     }
 
-    public Double getRange() {
-        return range;
+    public Double getWave() {
+        return wave;
     }
 
-    public void setRange(Double range) {
-        this.range = range;
+    public void setWave(Double wave) {
+        this.wave = wave;
     }
 
     public String getUrl() {
@@ -188,6 +196,22 @@ public class DeriveGroup extends ABaseDO {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public List<String> getStatusList() {
+        return statusList;
+    }
+
+    public void setStatusList(List<String> statusList) {
+        this.statusList = statusList;
+    }
+
+    public PresellProduct getPresellProduct() {
+        return presellProduct;
+    }
+
+    public void setPresellProduct(PresellProduct presellProduct) {
+        this.presellProduct = presellProduct;
     }
 
 }

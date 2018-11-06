@@ -12,6 +12,13 @@ public interface IPresellInventoryBO extends IPaginableBO<PresellInventory> {
     // 更新组
     public void refreshGroup(String code, String groupType, String groupCode);
 
+    // 查询组下的预售权
+    public List<PresellInventory> queryPresellInventoryListByGroup(
+            String groupCode);
+
+    // 查询组下的树木列表
+    public List<PresellInventory> queryTreeNumberListByGroup(String groupCode);
+
     public List<PresellInventory> queryPresellInventoryList(
             PresellInventory condition);
 

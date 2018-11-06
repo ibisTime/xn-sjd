@@ -67,6 +67,11 @@
 			<if test="curOrderCode != null and curOrderCode != '' ">
 				AND t.cur_order_code = #{curOrderCode}
 			</if>
+			
+			<if test="maxAdoptCount != null and maxAdoptCount != '' ">
+				<![CDATA[AND t.adopt_count < #{maxAdoptCount}]]>
+			</if>
+			
 		</trim>
 	</sql>
 	
@@ -248,11 +253,18 @@
 		WHERE tree_number = #{treeNumber}
 	</update>
 	
-	<update id="update_adoptCount" parameterType="tree">
+	<update id="update_adoptCountByProduct" parameterType="tree">
 		UPDATE tzb_tree
 		SET
 		adopt_count = #{adoptCount}
 		WHERE product_code = #{productCode}
+	</update>
+	
+	<update id="update_adoptCount" parameterType="tree">
+		UPDATE tzb_tree
+		SET
+		adopt_count = #{adoptCount}
+		WHERE tree_number = #{treeNumber}
 	</update>
 	
 	<delete id="delete_treeByProduct" parameterType="tree">

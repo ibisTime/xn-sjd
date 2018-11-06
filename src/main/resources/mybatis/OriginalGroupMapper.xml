@@ -15,6 +15,8 @@
 		<result column="unit" property="unit" />
 		<result column="status" property="status" />
 		
+		<result column="adopt_start_datetime" property="adoptStartDatetime" />
+		<result column="adopt_end_datetime" property="adoptEndDatetime" />
 		<result column="updater" property="updater" />
 		<result column="update_datetime" property="updateDatetime" />
 		<result column="remark" property="remark" />
@@ -37,6 +39,19 @@
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
 			</if>
+			
+			<if test="adoptStartStartDatetime != null and adoptStartStartDatetime != '' ">
+				<![CDATA[AND t.adopt_start_datetime >= #{adoptStartStartDatetime}]]>
+			</if>
+			<if test="adoptStartEndDatetime != null and adoptStartEndDatetime != '' ">
+				<![CDATA[AND t.adopt_start_datetime <= #{adoptStartEndDatetime}]]>
+			</if>
+			<if test="adoptEndStartDatetime != null and adoptEndStartDatetime != '' ">
+				<![CDATA[AND t.adopt_end_datetime >= #{adoptEndStartDatetime}]]>
+			</if>
+			<if test="adoptEndEndDatetime != null and adoptEndEndDatetime != '' ">
+				<![CDATA[AND t.adopt_end_datetime <= #{adoptEndEndDatetime}]]>
+			</if>
 		</trim>
 	</sql>
 	
@@ -54,6 +69,8 @@
 		,t.unit
 		,t.status
 		
+		,t.adopt_start_datetime
+		,t.adopt_end_datetime
 		,t.updater
 		,t.update_datetime
 		,t.remark
@@ -88,6 +105,8 @@
 		,status
 		,updater
 		
+		,adopt_start_datetime
+		,adopt_end_datetime
 		,update_datetime
 		,remark
 		)
@@ -104,12 +123,22 @@
 		,#{status}
 		,#{updater}
 		
+		,#{adoptStartDatetime}
+		,#{adoptEndDatetime}
 		,#{updateDatetime}
 		,#{remark}
 		)
 	</insert>
 
-	<update id="update_adoptOriginalGroup" parameterType="originalGroup">
+	<update id="update_startAdopt" parameterType="originalGroup">
+		UPDATE tys_original_group
+		SET
+		status = #{status}
+		,update_datetime = #{updateDatetime}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_EndAdopt" parameterType="originalGroup">
 		UPDATE tys_original_group
 		SET
 		status = #{status}
@@ -121,14 +150,6 @@
 		UPDATE tys_original_group
 		SET
 		quantity = #{quantity}
-		WHERE code = #{code}
-	</update>
-	
-	<update id="update_deliver" parameterType="originalGroup">
-		UPDATE tys_original_group
-		SET
-		status = #{status}
-		,update_datetime = #{updateDatetime}
 		WHERE code = #{code}
 	</update>
 	

@@ -5,4 +5,8 @@ import com.ogc.standard.domain.PresellSpecs;
 
 public interface IPresellSpecsDAO extends IBaseDAO<PresellSpecs> {
     String NAMESPACE = IPresellSpecsDAO.class.getName().concat(".");
+
+    // 更新库存
+    public int updatePackCount(PresellSpecs data);
+
 }

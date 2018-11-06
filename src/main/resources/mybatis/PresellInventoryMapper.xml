@@ -41,6 +41,22 @@
 			</if>
 		</trim>
 	</select>
+	
+	<select id="select_treeNumber" parameterType="presellInventory" resultMap="presellInventory_DB_Result">
+		SELECT
+		DISTINCT
+		t.group_type
+		,t.group_code
+		,t.tree_number
+		FROM
+		tys_presell_inventory t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
 
 	<select id="select_presellInventory_count" parameterType="presellInventory"
 		resultType="java.lang.Long">

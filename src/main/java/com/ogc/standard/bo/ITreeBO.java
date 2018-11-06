@@ -58,6 +58,9 @@ public interface ITreeBO extends IPaginableBO<Tree> {
             Integer collectionCount);
 
     // 更新认养数量
+    public void refreshAdoptCount(String treeNumber, Integer adoptCount);
+
+    // 更新认养数量
     public void refreshAdoptCountByProduct(String productCode,
             Integer adoptCount);
 
@@ -78,6 +81,10 @@ public interface ITreeBO extends IPaginableBO<Tree> {
 
     // 查询指定产权方的古树数量
     public long getTotalCountByOwnerId(String ownerId);
+
+    // 查询预售产品中还有剩余产量的树
+    public List<Tree> queryTreeListRemainInventory(String productCode,
+            Integer maxAdoptCount);
 
     public List<Tree> queryTreeListByOrderCode(String orderCode);
 

@@ -26,6 +26,9 @@ public interface IOriginalGroupAO {
     // 填写收货地址
     public void fillAddress(XN629433Req req);
 
+    // 定时器更新认养状态
+    public void doDailyOriginalGroup();
+
     public Paginable<OriginalGroup> queryOriginalGroupPage(int start, int limit,
             OriginalGroup condition);
 

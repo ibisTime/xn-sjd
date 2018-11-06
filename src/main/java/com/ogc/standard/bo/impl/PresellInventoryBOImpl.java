@@ -49,6 +49,21 @@ public class PresellInventoryBOImpl extends PaginableBOImpl<PresellInventory>
     }
 
     @Override
+    public List<PresellInventory> queryPresellInventoryListByGroup(
+            String groupCode) {
+        PresellInventory condition = new PresellInventory();
+        condition.setGroupCode(groupCode);
+        return presellInventoryDAO.selectList(condition);
+    }
+
+    @Override
+    public List<PresellInventory> queryTreeNumberListByGroup(String groupCode) {
+        PresellInventory condition = new PresellInventory();
+        condition.setGroupCode(groupCode);
+        return presellInventoryDAO.selectTreeNumberList(condition);
+    }
+
+    @Override
     public List<PresellInventory> queryPresellInventoryList(
             PresellInventory condition) {
         return presellInventoryDAO.selectList(condition);

@@ -42,6 +42,12 @@ public class OriginalGroup extends ABaseDO {
     // 单位
     private String unit;
 
+    // 认养开始时间
+    private Date adoptStartDatetime;
+
+    // 认养结束时间
+    private Date adoptEndDatetime;
+
     // 状态
     private String status;
 
@@ -53,6 +59,22 @@ public class OriginalGroup extends ABaseDO {
 
     // 备注
     private String remark;
+
+    /************DB Properties************/
+    // 认养开始开始时间
+    private Date adoptStartStartDatetime;
+
+    // 认养开始结束时间
+    private Date adoptStartEndDatetime;
+
+    // 认养结束开始时间
+    private Date adoptEndStartDatetime;
+
+    // 认养结束结束时间
+    private Date adoptEndEndDatetime;
+
+    // 预售产品
+    private PresellProduct presellProduct;
 
     public void setCode(String code) {
         this.code = code;
@@ -156,6 +178,62 @@ public class OriginalGroup extends ABaseDO {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public Date getAdoptStartDatetime() {
+        return adoptStartDatetime;
+    }
+
+    public void setAdoptStartDatetime(Date adoptStartDatetime) {
+        this.adoptStartDatetime = adoptStartDatetime;
+    }
+
+    public Date getAdoptEndDatetime() {
+        return adoptEndDatetime;
+    }
+
+    public void setAdoptEndDatetime(Date adoptEndDatetime) {
+        this.adoptEndDatetime = adoptEndDatetime;
+    }
+
+    public Date getAdoptStartStartDatetime() {
+        return adoptStartStartDatetime;
+    }
+
+    public void setAdoptStartStartDatetime(Date adoptStartStartDatetime) {
+        this.adoptStartStartDatetime = adoptStartStartDatetime;
+    }
+
+    public Date getAdoptStartEndDatetime() {
+        return adoptStartEndDatetime;
+    }
+
+    public void setAdoptStartEndDatetime(Date adoptStartEndDatetime) {
+        this.adoptStartEndDatetime = adoptStartEndDatetime;
+    }
+
+    public Date getAdoptEndStartDatetime() {
+        return adoptEndStartDatetime;
+    }
+
+    public void setAdoptEndStartDatetime(Date adoptEndStartDatetime) {
+        this.adoptEndStartDatetime = adoptEndStartDatetime;
+    }
+
+    public Date getAdoptEndEndDatetime() {
+        return adoptEndEndDatetime;
+    }
+
+    public void setAdoptEndEndDatetime(Date adoptEndEndDatetime) {
+        this.adoptEndEndDatetime = adoptEndEndDatetime;
+    }
+
+    public PresellProduct getPresellProduct() {
+        return presellProduct;
+    }
+
+    public void setPresellProduct(PresellProduct presellProduct) {
+        this.presellProduct = presellProduct;
     }
 
 }

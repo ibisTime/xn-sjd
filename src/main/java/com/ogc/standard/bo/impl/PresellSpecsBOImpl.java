@@ -49,6 +49,22 @@ public class PresellSpecsBOImpl extends PaginableBOImpl<PresellSpecs>
     }
 
     @Override
+    public void refreshPresellSpecsPackCount(String code, Integer packCount) {
+        PresellSpecs condition = new PresellSpecs();
+        condition.setCode(code);
+        condition.setPackCount(packCount);
+        presellSpecsDAO.updatePackCount(condition);
+    }
+
+    @Override
+    public List<PresellSpecs> queryPresellSpecsListByProduct(
+            String productCode) {
+        PresellSpecs condition = new PresellSpecs();
+        condition.setProductCode(productCode);
+        return presellSpecsDAO.selectList(condition);
+    }
+
+    @Override
     public List<PresellSpecs> queryPresellSpecsList(PresellSpecs condition) {
         return presellSpecsDAO.selectList(condition);
     }
@@ -66,4 +82,5 @@ public class PresellSpecsBOImpl extends PaginableBOImpl<PresellSpecs>
         }
         return data;
     }
+
 }

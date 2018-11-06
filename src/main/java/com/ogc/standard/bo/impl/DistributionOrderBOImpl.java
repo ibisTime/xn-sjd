@@ -27,7 +27,6 @@ import com.ogc.standard.common.AmountUtil;
 import com.ogc.standard.common.SysConstants;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.AgentUser;
-import com.ogc.standard.domain.Product;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.dto.res.XN629048Res;
 import com.ogc.standard.enums.EAgentUserLevel;
@@ -105,17 +104,16 @@ public class DistributionOrderBOImpl implements IDistributionOrderBO {
     }
 
     @Override
-    public BigDecimal distribution(String code, String productCode,
+    public BigDecimal distribution(String code, String ownerId,
             BigDecimal amount, String applyUser, String type,
             XN629048Res resultRes) {
         Map<String, String> mapList = sysConfigBO.getConfigsMap();
-        Product product = productBO.getProduct(productCode);
         BigDecimal payAmount = amount.subtract(resultRes.getCnyAmount());// 订单支付金额（抵扣积分后）
 
         // 产权方分销
         BigDecimal ownerDeductAmount = payAmount.multiply(
             new BigDecimal(mapList.get(SysConstants.DIST_OWENER_RATE)));// 产权方分销金额
-        accountBO.transAmount(ESysUser.SYS_USER.getCode(), product.getOwnerId(),
+        accountBO.transAmount(ESysUser.SYS_USER.getCode(), ownerId,
             ECurrency.CNY.getCode(), ownerDeductAmount,
             EJourBizTypePlat.ADOPT_DIST.getCode(),
             EJourBizTypeOwner.OWNER_PROFIT.getCode(),
@@ -123,8 +121,7 @@ public class DistributionOrderBOImpl implements IDistributionOrderBO {
             EJourBizTypeOwner.OWNER_PROFIT.getValue(), code);
 
         // 判断养护方是否存在，没有则平台回收
-        String maintainId = applyBindMaintainBO
-            .getMaintainId(product.getOwnerId());
+        String maintainId = applyBindMaintainBO.getMaintainId(ownerId);
         if (StringUtils.isNotBlank(maintainId)) {
             BigDecimal maintainDeductAmount = payAmount.multiply(
                 new BigDecimal(mapList.get(SysConstants.DIST_MAINTAIN_RATE)));

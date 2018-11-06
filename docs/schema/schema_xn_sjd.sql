@@ -1071,8 +1071,10 @@ CREATE TABLE `tys_original_group` (
   `quantity` int DEFAULT 0 COMMENT '数量',
   `presell_quantity` int DEFAULT 0 COMMENT '挂单数量',
   `unit` varchar(32) DEFAULT NULL COMMENT '单位',
+  `adopt_start_datetime` datetime DEFAULT NULL COMMENT '认养开始时间',
+  `adopt_end_datetime` datetime DEFAULT NULL COMMENT '认养结束时间',
+  
   `status` varchar(4) DEFAULT NULL COMMENT '状态',
-
   `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
   `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
   `remark` text COMMENT '备注',
@@ -1105,7 +1107,7 @@ CREATE TABLE `tys_derive_group` (
   `status` varchar(4) DEFAULT NULL COMMENT '状态',
   `claimant` varchar(32) DEFAULT NULL COMMENT '成交人',
   `claim_datetime` datetime DEFAULT NULL COMMENT '成交时间',
-  `range` FLOAT DEFAULT NULL COMMENT '波动幅度',
+  `wave` FLOAT DEFAULT NULL COMMENT '波动幅度',
   `url` varchar(255) DEFAULT NULL COMMENT '分享链接',
 
   `remark` text COMMENT '备注',

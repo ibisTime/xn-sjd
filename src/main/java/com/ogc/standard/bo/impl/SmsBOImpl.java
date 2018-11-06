@@ -15,7 +15,6 @@ import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.common.PhoneUtil;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.ISmsDAO;
-import com.ogc.standard.domain.Product;
 import com.ogc.standard.domain.Sms;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.enums.EAccountType;
@@ -85,13 +84,13 @@ public class SmsBOImpl extends PaginableBOImpl<Sms> implements ISmsBO {
     }
 
     @Override
-    public void saveBulletin(String userId, String count, String productCode) {
+    public void saveBulletin(String userId, String count, String sellType,
+            String productName) {
         Sms sms = new Sms();
         String code = OrderNoGenerater.generate(EGeneratePrefix.XX.getCode());
         String hours = DateUtil.dateToStr(new Date(),
             DateUtil.DATA_TIME_PATTERN_8);
         User user = userBO.getUserUnCheck(userId);
-        Product product = productBO.getProduct(productCode);
 
         String userName = user.getNickname();
         if (StringUtils.isEmpty(userName)) {
@@ -99,14 +98,13 @@ public class SmsBOImpl extends PaginableBOImpl<Sms> implements ISmsBO {
         }
 
         String unit = "棵";
-        if (ESellType.DONATE.getCode().equals(product.getSellType())
-                || ESellType.COLLECTIVE.getCode()
-                    .equals(product.getSellType())) {
+        if (ESellType.DONATE.getCode().equals(sellType)
+                || ESellType.COLLECTIVE.getCode().equals(sellType)) {
             unit = "份";
         }
 
         String content = userName + "在" + hours + "认养" + count + unit
-                + product.getName();
+                + productName;
 
         sms.setCode(code);
         sms.setType(ESmsType.BULLETIN.getCode());
