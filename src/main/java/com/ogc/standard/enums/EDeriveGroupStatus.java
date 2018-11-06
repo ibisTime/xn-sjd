@@ -11,8 +11,8 @@ import java.util.Map;
  */
 public enum EDeriveGroupStatus {
 
-    TO_CLAIM("0", "待认领"), CLAIMED("1", "已认领"), CANCELED("2", "已取消"),
-    REJECTED("3","已拒绝");
+    TO_CLAIM("0", "待认领"), CLAIMED("1", "已认领"), CANCELED("2",
+            "已撤销"), REJECTED("3", "已拒绝");
 
     EDeriveGroupStatus(String code, String value) {
         this.code = code;

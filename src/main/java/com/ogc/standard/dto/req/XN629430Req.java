@@ -14,9 +14,9 @@ public class XN629430Req {
     @NotBlank
     private String code;
 
-    // 用户编号
+    // 用户手机号
     @NotBlank
-    private String userId;
+    private String userMobile;
 
     // 价格
     @NotBlank
@@ -34,12 +34,12 @@ public class XN629430Req {
         this.code = code;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getUserMobile() {
+        return userMobile;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setUserMobile(String userMobile) {
+        this.userMobile = userMobile;
     }
 
     public String getPrice() {

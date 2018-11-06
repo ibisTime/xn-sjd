@@ -15,18 +15,22 @@ public interface IDeriveGroupAO {
     public void revock(String code, String claimant, String remark);
 
     // 认领定向转让
-    public void claimDirect(String code, String claimant);
+    public String claimDirect(String code, String claimant);
 
     // 拒绝定向转让
     public void rejectDirect(String code, String claimant, String remark);
 
     // 认领二维码转让
-    public void claimQr(String code, String claimant);
+    public String claimQr(String code, String claimant);
 
     // 认领挂单寄售
-    public void claimPublic(String code, String claimant, Integer quantity);
+    public String claimPublic(String code, String claimant, Integer quantity);
 
     public Paginable<DeriveGroup> queryDeriveGroupPage(int start, int limit,
+            DeriveGroup condition);
+
+    // 分页查询寄售中
+    public Paginable<DeriveGroup> queryToclaimDeriveGroupPage(
             DeriveGroup condition);
 
     public List<DeriveGroup> queryDeriveGroupList(DeriveGroup condition);

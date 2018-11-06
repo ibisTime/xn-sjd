@@ -33,6 +33,9 @@ public class XN629455Req extends APageReq {
     // 状态列表
     private List<String> statusList;
 
+    // 查询人
+    private String queryUserId;
+
     public String getOriginalCode() {
         return originalCode;
     }
@@ -87,6 +90,14 @@ public class XN629455Req extends APageReq {
 
     public void setStatusList(List<String> statusList) {
         this.statusList = statusList;
+    }
+
+    public String getQueryUserId() {
+        return queryUserId;
+    }
+
+    public void setQueryUserId(String queryUserId) {
+        this.queryUserId = queryUserId;
     }
 
 }

@@ -47,7 +47,13 @@ public class OriginalGroupBOImpl extends PaginableBOImpl<OriginalGroup>
         originalGroup.setPrice(data.getPrice());
         originalGroup.setQuantity(data.getQuantity());
         originalGroup.setUnit(presellProduct.getPackUnit());
-        originalGroup.setStatus(EOriginalGroupStatus.TO_ADOPT.getCode());
+
+        Date nowDate = new Date();
+        if (nowDate.before(presellProduct.getAdoptStartDatetime())) {
+            originalGroup.setStatus(EOriginalGroupStatus.TO_ADOPT.getCode());
+        } else {
+            originalGroup.setStatus(EOriginalGroupStatus.ADOPTING.getCode());
+        }
 
         originalGroup
             .setAdoptStartDatetime(presellProduct.getAdoptStartDatetime());
@@ -77,7 +83,13 @@ public class OriginalGroupBOImpl extends PaginableBOImpl<OriginalGroup>
         data.setQuantity(quantity);
         data.setPresellQuantity(0);
         data.setUnit(presellProduct.getPackUnit());
-        data.setStatus(EOriginalGroupStatus.TO_ADOPT.getCode());
+
+        Date nowDate = new Date();
+        if (nowDate.before(presellProduct.getAdoptStartDatetime())) {
+            data.setStatus(EOriginalGroupStatus.TO_ADOPT.getCode());
+        } else {
+            data.setStatus(EOriginalGroupStatus.ADOPTING.getCode());
+        }
 
         data.setAdoptStartDatetime(presellProduct.getAdoptStartDatetime());
         data.setAdoptEndDatetime(presellProduct.getAdoptEndDatetime());

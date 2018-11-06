@@ -113,7 +113,7 @@ public class DeriveGroupBOImpl extends PaginableBOImpl<DeriveGroup>
         deriveGroup.setType(EPresellType.PUBLIC.getCode());
 
         deriveGroup.setPrice(originalGroup.getPrice());
-        deriveGroup.setQuantity(originalGroup.getQuantity());
+        deriveGroup.setQuantity(quantity);
         deriveGroup.setUnit(presellProduct.getPackUnit());
         deriveGroup.setCreater(originalGroup.getOwnerId());
         deriveGroup.setCreateDatetime(new Date());
@@ -184,6 +184,35 @@ public class DeriveGroupBOImpl extends PaginableBOImpl<DeriveGroup>
         deriveGroup.setStatus(status);
 
         deriveGroupDAO.updateClaimQr(deriveGroup);
+    }
+
+    @Override
+    public void refreshQuantity(String code, Integer quantity) {
+        DeriveGroup deriveGroup = new DeriveGroup();
+
+        deriveGroup.setCode(code);
+        deriveGroup.setQuantity(quantity);
+
+        deriveGroupDAO.updateQuantity(deriveGroup);
+    }
+
+    @Override
+    public List<DeriveGroup> queryDeriveGroupListByCreater(String creater,
+            String status) {
+        DeriveGroup condition = new DeriveGroup();
+        condition.setCreater(creater);
+        condition.setStatus(status);
+        return deriveGroupDAO.selectList(condition);
+    }
+
+    @Override
+    public List<DeriveGroup> queryDeriveGroupListDirect(String claimant,
+            String status) {
+        DeriveGroup condition = new DeriveGroup();
+        condition.setType(EPresellType.DIRECT.getCode());
+        condition.setClaimant(claimant);
+        condition.setStatus(status);
+        return deriveGroupDAO.selectList(condition);
     }
 
     @Override

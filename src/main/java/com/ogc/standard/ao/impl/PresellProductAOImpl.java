@@ -75,7 +75,7 @@ public class PresellProductAOImpl implements IPresellProductAO {
         // 添加规格
         for (XN629400ReqSpecs presellSpecs : req.getPresellSpecsList()) {
             presellSpecsBO.savePresellSpecs(presellProduct.getCode(),
-                presellSpecs.getPackCount(), presellSpecs.getPackCount(),
+                presellSpecs.getName(), presellSpecs.getPackCount(),
                 presellSpecs.getPrice(), presellSpecs.getIncrease());
         }
 

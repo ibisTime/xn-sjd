@@ -48,8 +48,8 @@ public class DeriveGroupDAOImpl extends AMybatisTemplate
     }
 
     @Override
-    public int updateStatus(DeriveGroup data) {
-        return super.update(NAMESPACE.concat("update_status"), data);
+    public int updateQuantity(DeriveGroup data) {
+        return super.update(NAMESPACE.concat("update_quantity"), data);
     }
 
     @Override

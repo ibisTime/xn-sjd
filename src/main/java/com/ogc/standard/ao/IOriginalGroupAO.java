@@ -14,14 +14,14 @@ public interface IOriginalGroupAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
     // 定向转让
-    public void directSales(String code, String userId, BigDecimal price,
+    public String directSales(String code, String userMobile, BigDecimal price,
             Integer quantity);
 
     // 二维码转让
-    public void qrSales(String code, BigDecimal price, Integer quantity);
+    public String qrSales(String code, BigDecimal price, Integer quantity);
 
     // 挂单寄售
-    public void publicSales(String code, BigDecimal price, Integer quantity);
+    public String publicSales(String code, BigDecimal price, Integer quantity);
 
     // 填写收货地址
     public void fillAddress(XN629433Req req);

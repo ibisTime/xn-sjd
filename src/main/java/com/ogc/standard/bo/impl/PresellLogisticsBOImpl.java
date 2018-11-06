@@ -33,6 +33,7 @@ public class PresellLogisticsBOImpl extends PaginableBOImpl<PresellLogistics>
             .generate(EGeneratePrefix.PRESELL_LOGISTICS.getCode());
 
         data.setCode(code);
+        data.setOriginalGroupCode(originalGroupCode);
         data.setDeliverCount(
             StringValidater.toInteger(logistics.getDeliverCount()));
         data.setReceiver(logistics.getReceiver());

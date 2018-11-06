@@ -5,7 +5,7 @@ import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.ObjValidater;
 import com.ogc.standard.dto.req.XN629443Req;
-import com.ogc.standard.dto.res.BooleanRes;
+import com.ogc.standard.dto.res.PKCodeRes;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
@@ -24,8 +24,8 @@ public class XN629443 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        deriveGroupAO.claimQr(req.getCode(), req.getUserId());
-        return new BooleanRes(true);
+        return new PKCodeRes(
+            deriveGroupAO.claimQr(req.getCode(), req.getUserId()));
     }
 
     @Override

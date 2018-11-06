@@ -21,7 +21,7 @@ public interface IDeriveGroupDAO extends IBaseDAO<DeriveGroup> {
     // 认领挂单寄售
     public int updateClaimPublic(DeriveGroup data);
 
-    // 更新状态
-    public int updateStatus(DeriveGroup data);
+    // 更新数量
+    public int updateQuantity(DeriveGroup data);
 
 }

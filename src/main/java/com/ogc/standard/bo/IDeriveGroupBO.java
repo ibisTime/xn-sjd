@@ -36,6 +36,17 @@ public interface IDeriveGroupBO extends IPaginableBO<DeriveGroup> {
     public void refreshClaimPublic(String code, String claimant,
             Integer quantity, String status);
 
+    // 更新数量
+    public void refreshQuantity(String code, Integer quantity);
+
+    // 我发布的寄售
+    public List<DeriveGroup> queryDeriveGroupListByCreater(String creater,
+            String status);
+
+    // 别人转给我的定向
+    public List<DeriveGroup> queryDeriveGroupListDirect(String claimant,
+            String status);
+
     public List<DeriveGroup> queryDeriveGroupList(DeriveGroup condition);
 
     public DeriveGroup getDeriveGroup(String code);

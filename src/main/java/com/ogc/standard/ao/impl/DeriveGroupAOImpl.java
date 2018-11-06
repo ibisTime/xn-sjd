@@ -1,5 +1,6 @@
 package com.ogc.standard.ao.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -9,9 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.IDeriveGroupAO;
 import com.ogc.standard.bo.IDeriveGroupBO;
+import com.ogc.standard.bo.IGroupOrderBO;
 import com.ogc.standard.bo.IOriginalGroupBO;
 import com.ogc.standard.bo.IPresellInventoryBO;
 import com.ogc.standard.bo.IPresellProductBO;
+import com.ogc.standard.bo.base.Page;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.DeriveGroup;
 import com.ogc.standard.domain.OriginalGroup;
@@ -36,6 +39,9 @@ public class DeriveGroupAOImpl implements IDeriveGroupAO {
 
     @Autowired
     private IPresellProductBO presellProductBO;
+
+    @Autowired
+    private IGroupOrderBO groupOrderBO;
 
     @Override
     @Transactional
@@ -77,7 +83,7 @@ public class DeriveGroupAOImpl implements IDeriveGroupAO {
 
     @Override
     @Transactional
-    public void claimDirect(String code, String claimant) {
+    public String claimDirect(String code, String claimant) {
         DeriveGroup deriveGroup = deriveGroupBO.getDeriveGroup(code);
 
         if (!EDeriveGroupStatus.TO_CLAIM.getCode()
@@ -91,13 +97,10 @@ public class DeriveGroupAOImpl implements IDeriveGroupAO {
                 "您不是定向认领人，不能认领");
         }
 
-        // 认领寄售
-        deriveGroupBO.refreshClaimDirect(code);
+        // 落地订单
+        String orderCode = groupOrderBO.saveGroupOrder(deriveGroup, claimant);
 
-        // 生成新的资产
-        originalGroupBO.saveOriginalGroup(deriveGroup.getOriginalCode(),
-            claimant, deriveGroup.getPrice(), deriveGroup.getQuantity());
-
+        return orderCode;
     }
 
     @Override
@@ -136,7 +139,7 @@ public class DeriveGroupAOImpl implements IDeriveGroupAO {
 
     @Override
     @Transactional
-    public void claimQr(String code, String claimant) {
+    public String claimQr(String code, String claimant) {
         DeriveGroup deriveGroup = deriveGroupBO.getDeriveGroup(code);
 
         if (!EDeriveGroupStatus.TO_CLAIM.getCode()
@@ -145,36 +148,15 @@ public class DeriveGroupAOImpl implements IDeriveGroupAO {
                 "资产不是待认领状态，不能认领");
         }
 
-        // 认领寄售
-        deriveGroupBO.refreshClaimQr(code, claimant);
+        // 落地订单
+        String orderCode = groupOrderBO.saveGroupOrder(deriveGroup, claimant);
 
-        // 生成新的资产
-        String originalGroupCode = originalGroupBO.saveOriginalGroup(
-            deriveGroup.getOriginalCode(), claimant, deriveGroup.getPrice(),
-            deriveGroup.getQuantity());
-
-        // 分配预售权
-        int presellInventoryQuantity = 0;
-        OriginalGroup originalGroup = originalGroupBO
-            .getOriginalGroup(deriveGroup.getOriginalCode());
-        List<PresellInventory> presellInventorieList = presellInventoryBO
-            .queryPresellInventoryListByGroup(originalGroup.getCode());
-
-        if (CollectionUtils.isNotEmpty(presellInventorieList)) {
-            for (PresellInventory presellInventory : presellInventorieList) {
-                if (++presellInventoryQuantity > deriveGroup.getQuantity()) {
-                    break;
-                }
-
-                presellInventoryBO.refreshGroup(presellInventory.getCode(),
-                    EGroupType.ORIGINAL_GROUP.getCode(), originalGroupCode);
-            }
-        }
+        return orderCode;
     }
 
     @Override
     @Transactional
-    public void claimPublic(String code, String claimant, Integer quantity) {
+    public String claimPublic(String code, String claimant, Integer quantity) {
         DeriveGroup deriveGroup = deriveGroupBO.getDeriveGroup(code);
 
         if (!EDeriveGroupStatus.TO_CLAIM.getCode()
@@ -188,37 +170,15 @@ public class DeriveGroupAOImpl implements IDeriveGroupAO {
                 "认领数量大于剩余数量，不能认领");
         }
 
-        // 认领寄售
-        Integer remainQuantity = deriveGroup.getQuantity() - quantity;
-        String status = EDeriveGroupStatus.TO_CLAIM.getCode();
-        if (remainQuantity == 0) {
-            status = EDeriveGroupStatus.CLAIMED.getCode();
-        }
-        deriveGroupBO.refreshClaimPublic(code, claimant, remainQuantity,
-            status);
+        // 落地订单
+        String orderCode = groupOrderBO.saveGroupOrder(deriveGroup, quantity,
+            claimant);
 
-        // 生成新的资产
-        String originalGroupCode = originalGroupBO.saveOriginalGroup(
-            deriveGroup.getOriginalCode(), claimant, deriveGroup.getPrice(),
-            deriveGroup.getQuantity());
+        // 更新数量
+        deriveGroupBO.refreshQuantity(code,
+            deriveGroup.getQuantity() - quantity);
 
-        // 分配预售权
-        int presellInventoryQuantity = 0;
-        OriginalGroup originalGroup = originalGroupBO
-            .getOriginalGroup(deriveGroup.getOriginalCode());
-        List<PresellInventory> presellInventorieList = presellInventoryBO
-            .queryPresellInventoryListByGroup(originalGroup.getCode());
-
-        if (CollectionUtils.isNotEmpty(presellInventorieList)) {
-            for (PresellInventory presellInventory : presellInventorieList) {
-                if (++presellInventoryQuantity > deriveGroup.getQuantity()) {
-                    break;
-                }
-
-                presellInventoryBO.refreshGroup(presellInventory.getCode(),
-                    EGroupType.ORIGINAL_GROUP.getCode(), originalGroupCode);
-            }
-        }
+        return orderCode;
     }
 
     @Override
@@ -232,6 +192,36 @@ public class DeriveGroupAOImpl implements IDeriveGroupAO {
                 init(deriveGroup);
             }
         }
+
+        return page;
+    }
+
+    @Override
+    public Paginable<DeriveGroup> queryToclaimDeriveGroupPage(
+            DeriveGroup condition) {
+        List<DeriveGroup> list = new ArrayList<DeriveGroup>();
+
+        // 我发布的寄售
+        List<DeriveGroup> myDeriveGroupList = deriveGroupBO
+            .queryDeriveGroupListByCreater(condition.getCreater(),
+                EDeriveGroupStatus.TO_CLAIM.getCode());
+        list.addAll(myDeriveGroupList);
+
+        // 别人转给我的定向
+        List<DeriveGroup> myDirectDeriveGroupList = deriveGroupBO
+            .queryDeriveGroupListDirect(condition.getCreater(),
+                EDeriveGroupStatus.TO_CLAIM.getCode());
+        list.addAll(myDirectDeriveGroupList);
+
+        if (CollectionUtils.isNotEmpty(list)) {
+            for (DeriveGroup deriveGroup : list) {
+                init(deriveGroup);
+            }
+        }
+
+        Paginable<DeriveGroup> page = new Page<DeriveGroup>(1, list.size(),
+            list.size());
+        page.setList(list);
 
         return page;
     }
@@ -263,5 +253,11 @@ public class DeriveGroupAOImpl implements IDeriveGroupAO {
         PresellProduct presellProduct = presellProductBO
             .getPresellProduct(deriveGroup.getProductCode());
         deriveGroup.setPresellProduct(presellProduct);
+
+        // 树木列表
+        List<PresellInventory> treeNumberList = presellInventoryBO
+            .queryTreeNumberListByGroup(deriveGroup.getCode());
+        deriveGroup.setTreeNumberList(treeNumberList);
     }
+
 }

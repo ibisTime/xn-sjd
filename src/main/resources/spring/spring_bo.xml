@@ -200,6 +200,7 @@
 	<bean id="commoditySpecsBO" class="com.ogc.standard.bo.impl.CommoditySpecsBOImpl">
 		<property name="paginableDAO" ref="commoditySpecsDAOImpl"/>
 	</bean>
+	
 	<bean id="presellProductBO" class="com.ogc.standard.bo.impl.PresellProductBOImpl">
 		<property name="paginableDAO" ref="presellProductDAOImpl"/>
 	</bean>
@@ -222,6 +223,10 @@
 	
 	<bean id="deriveGroupBO" class="com.ogc.standard.bo.impl.DeriveGroupBOImpl">
 		<property name="paginableDAO" ref="deriveGroupDAOImpl"/>
+	</bean>
+	
+	<bean id="groupOrderBO" class="com.ogc.standard.bo.impl.GroupOrderBOImpl">
+		<property name="paginableDAO" ref="groupOrderDAOImpl"/>
 	</bean>
 	
 </beans>

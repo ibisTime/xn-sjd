@@ -1114,6 +1114,36 @@ CREATE TABLE `tys_derive_group` (
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `tys_group_order`;
+CREATE TABLE `tys_group_order` (
+  `code` varchar(32) NOT NULL COMMENT '编号',
+  `group_code` varchar(32) DEFAULT NULL COMMENT '组编号',
+  `product_code` varchar(32) DEFAULT NULL COMMENT '产品编号',
+  `product_name` varchar(255) DEFAULT NULL COMMENT '产品名称',
+
+  `price` decimal(18,8) DEFAULT NULL COMMENT '价格',
+  `quantity` int DEFAULT 0 COMMENT '数量',
+  `amount` decimal(18,8) DEFAULT NULL COMMENT '金额',
+  `apply_user` varchar(32) DEFAULT NULL COMMENT '下单人编号',
+  `apply_datetime` datetime DEFAULT NULL COMMENT '下单时间',
+  `status` varchar(4) DEFAULT NULL COMMENT '状态',
+
+  `pay_type` varchar(4) DEFAULT NULL COMMENT '支付方式',
+  `pay_group` varchar(32) DEFAULT NULL COMMENT '支付组号',
+  `pay_code` varchar(32) DEFAULT NULL COMMENT '支付渠道编号',
+  `cny_deduct_amount` decimal(18,8) DEFAULT NULL COMMENT '抵扣人民币',
+  `jf_deduct_amount` decimal(18,8) DEFAULT NULL COMMENT '积分抵扣金额',
+  `back_jf_amount` decimal(18,8) DEFAULT NULL COMMENT '积分返点金额',
+
+  `pay_amount` decimal(18,8) DEFAULT NULL COMMENT '支付金额',
+  `pay_datetime` datetime DEFAULT NULL COMMENT '支付时间',
+  `settle_status` varchar(4) DEFAULT NULL COMMENT '结算状态',
+  `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `remark` text COMMENT '备注',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 DROP TABLE IF EXISTS `tys_presell_logistics`;
 CREATE TABLE `tys_presell_logistics` (
   `code` varchar(32) NOT NULL COMMENT '编号',
