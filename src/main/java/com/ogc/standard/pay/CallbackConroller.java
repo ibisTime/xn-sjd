@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.ogc.standard.ao.IAdoptOrderAO;
+import com.ogc.standard.ao.ICommodityOrderAO;
 import com.ogc.standard.ao.IGroupAdoptOrderAO;
 import com.ogc.standard.ao.impl.IAlipayAO;
 import com.ogc.standard.dto.res.PaySuccessRes;
@@ -39,6 +40,9 @@ public class CallbackConroller {
     @Autowired
     IGroupAdoptOrderAO groupAdoptOrderAO;
 
+    @Autowired
+    ICommodityOrderAO commodityOrderAO;
+
     // 支付宝支付回调
     @RequestMapping("/alipay/callback")
     public synchronized void doCallbackAlipayAPP(HttpServletRequest request,
@@ -59,12 +63,13 @@ public class CallbackConroller {
             inStream.close();
             String result = new String(outSteam.toByteArray(), "utf-8");
             PaySuccessRes paySuccess = alipayAO.doCallback(result);
-            System.out
-                .println("******************isSuccess:" + paySuccess.isSuccess()
-                        + ",biz_code:" + paySuccess.getBizCode() + ",biz_type:"
-                        + paySuccess.getBizType() + "******************");
-            if (paySuccess.isSuccess() && !EJourBizTypeUser.CHARGE.getCode()
-                .equals(paySuccess.getBizCode())) {
+            System.out.println("******************isSuccess:"
+                    + paySuccess.isSuccess() + ",biz_code:"
+                    + paySuccess.getBizCode() + ",biz_type:"
+                    + paySuccess.getBizType() + "******************");
+            if (paySuccess.isSuccess()
+                    && !EJourBizTypeUser.CHARGE.getCode().equals(
+                        paySuccess.getBizCode())) {
                 doPayOrder(paySuccess.getBizType(), paySuccess.getBizCode());
             }
             // 通知支付宝我已收到请求，不用再继续回调我了
@@ -79,9 +84,10 @@ public class CallbackConroller {
             adoptOrderAO.paySuccess(bizCode);
         } else if (EJourBizTypeUser.ADOPT_COLLECT.getCode().equals(bizType)) {
             groupAdoptOrderAO.paySuccess(bizCode);
+        } else if (EJourBizTypeUser.BUY.getCode().equals(bizType)) {
+            commodityOrderAO.paySuccess(bizCode);
         } else {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "业务类型订单不存在");
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "业务类型订单不存在");
         }
     }
 }

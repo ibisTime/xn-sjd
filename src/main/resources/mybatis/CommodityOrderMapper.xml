@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ogc.standard.dao.ICommodityOrderDAO">
+	<resultMap id="commodityOrder_DB_Result" type="commodityOrder">
+		<result column="code" property="code" />
+		<result column="amount" property="amount" />
+		<result column="quantity" property="quantity" />
+		<result column="apply_user" property="applyUser" />
+		<result column="apply_datetime" property="applyDatetime" />
+		
+		<result column="apply_note" property="applyNote" />
+		<result column="express_type" property="expressType" />
+		<result column="pay_type" property="payType" />
+		<result column="pay_group" property="payGroup" />
+		<result column="pay_code" property="payCode" />
+		
+		<result column="pay_datetime" property="payDatetime" />
+		<result column="pay_amount" property="payAmount" />
+		<result column="status" property="status" />
+		<result column="updater" property="updater" />
+		<result column="update_datetime" property="updateDatetime" />
+		
+		<result column="remark" property="remark" />
+	</resultMap>
+	
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="applyUser != null and applyUser != '' ">
+				AND t.apply_user = #{applyUser}
+			</if>
+			<if test="expressType != null and expressType != '' ">
+				AND t.express_type = #{expressType}
+			</if>
+			<if test="payType != null and payType != '' ">
+				AND t.pay_type = #{payType}
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+			<if test="payGroup != null and payGroup != '' ">
+				AND t.pay_group = #{payGroup}
+			</if>
+			<if test="payCode != null and payCode != '' ">
+				AND t.pay_code = #{payCode}
+			</if>
+			
+		</trim>
+	</sql>
+	
+	<select id="select_commodity_order" parameterType="commodityOrder" resultMap="commodityOrder_DB_Result">
+		SELECT
+		t.code
+		,t.amount
+		,t.quantity
+		,t.apply_user
+		,t.apply_datetime
+		,t.apply_note
+		,t.express_type
+		,t.pay_type
+		,t.pay_group
+		,t.pay_code
+		,t.pay_datetime
+		,t.pay_amount
+		,t.status
+		,t.updater
+		,t.update_datetime
+		,t.remark
+		FROM
+		tsc_commodity_order t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_commodity_order_count" parameterType="commodityOrder"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tsc_commodity_order t
+		<include refid="where_condition" />
+	</select>
+	
+
+	
+	<insert id="insert_commodity_order_list" parameterType="commodityOrder">
+		INSERT INTO tsc_commodity_order(
+		code
+		,amount
+		,quantity
+		,apply_user
+		,apply_datetime
+		,apply_note
+		,express_type
+		,status
+		,updater
+		,update_datetime
+		,remark
+		)
+		VALUES
+		(
+		#{code}
+		,#{amount}
+		,#{quantity}
+		,#{applyUser}
+		,#{applyDatetime}
+		,#{applyNote}
+		,#{expressType}
+		,#{status}
+		,#{updater}
+		,#{updateDatetime}
+		,#{remark}
+		)
+	</insert>
+	
+	<update id="update_pay" parameterType="commodityOrder">
+		UPDATE tsc_commodity_order
+		SET
+		pay_type=#{payType}
+		,pay_group=#{payGroup}
+		,pay_code=#{payCode}
+		,pay_datetime=#{payDatetime}
+		,pay_amount=#{payAmount}
+		,status=#{status}
+		,updater=#{updater}
+		,update_datetime=#{updateDatetime}
+		,remark=#{remark}
+		WHERE
+		code=#{code}
+	</update>
+	
+	<update id="update_cancel" parameterType="commodityOrder">
+		UPDATE tsc_commodity_order
+		SET
+		status=#{status}
+		,updater=#{updater}
+		,update_datetime=#{updatedatetime}
+		,remark=#{remark}
+		WHERE
+		code=#{code}
+	</update>
+</mapper>

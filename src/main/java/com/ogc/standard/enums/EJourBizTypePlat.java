@@ -30,6 +30,10 @@ public enum EJourBizTypePlat {
 
     ADOPT_PROFIT("adopt_profit", "认养收益"),
 
+    BUY("buy", "商城购买"),
+
+    BUY_DIST("buy_dist", "商城购买分成"),
+
     HC("hc", "红冲"),
 
     LB("lb", "蓝补"),

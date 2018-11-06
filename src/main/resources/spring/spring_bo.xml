@@ -200,6 +200,19 @@
 	<bean id="commoditySpecsBO" class="com.ogc.standard.bo.impl.CommoditySpecsBOImpl">
 		<property name="paginableDAO" ref="commoditySpecsDAOImpl"/>
 	</bean>
+	
+	<bean id="cartBO" class="com.ogc.standard.bo.impl.CartBOImpl">
+		<property name="paginableDAO" ref="cartDAOImpl"/>
+	</bean>
+	
+	<bean id="commodityOrderBO" class="com.ogc.standard.bo.impl.CommodityOrderBOImpl">
+		<property name="paginableDAO" ref="commodityOrderDAOImpl"/>
+	</bean>
+	
+	<bean id="commodityOrderDetailBO" class="com.ogc.standard.bo.impl.CommodityOrderDetailBOImpl">
+		<property name="paginableDAO" ref="commodityOrderDetailDAOImpl"/>
+	</bean>
+	
 	<bean id="presellProductBO" class="com.ogc.standard.bo.impl.PresellProductBOImpl">
 		<property name="paginableDAO" ref="presellProductDAOImpl"/>
 	</bean>

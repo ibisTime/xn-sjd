@@ -35,4 +35,6 @@ public interface ICommodityBO extends IPaginableBO<Commodity> {
 
     public Commodity getCommodity(String code);
 
+    public boolean isOnShelf(String code);
+
 }

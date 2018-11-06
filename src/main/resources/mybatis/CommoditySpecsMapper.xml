@@ -78,5 +78,13 @@
 		DELETE FROM tsc_commodity_specs
 		<include refid="where_condition" />
 	</delete>
+	
+	<update id="update_inventory" parameterType="commoditySpecs">
+		UPDATE tsc_commodity_specs
+		SET
+		inventory=#{inventory}
+		WHERE
+		id=#{id}
+	</update>
 
 </mapper>

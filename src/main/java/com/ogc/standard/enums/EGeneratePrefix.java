@@ -32,7 +32,8 @@ public enum EGeneratePrefix {
 
     TOOL_ORDER("TO", "道具购买订单"), TOOL_USE_RECORD("TR", "道具使用记录"),
 
-    Commodity("CO", "商品"),
+    Commodity("CO", "商品"), cart("CA", "购物车"), CommodityOrder("COO", "商品订单（多店铺）"), CommodityOrderDetail(
+            "COOD", "商品订单（单店铺）"),
 
     PRESELL_PRODUCT("PP", "预售产品"), PRESELL_SPECS("PS", "预售规格"), PRESELL_ORDER(
             "PS", "预售订单"),
