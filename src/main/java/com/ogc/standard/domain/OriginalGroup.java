@@ -2,6 +2,7 @@ package com.ogc.standard.domain;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 import com.ogc.standard.dao.base.ABaseDO;
 
@@ -75,6 +76,9 @@ public class OriginalGroup extends ABaseDO {
 
     // 预售产品
     private PresellProduct presellProduct;
+
+    // 树木列表
+    private List<PresellInventory> treeNumberList;
 
     public void setCode(String code) {
         this.code = code;
@@ -234,6 +238,14 @@ public class OriginalGroup extends ABaseDO {
 
     public void setPresellProduct(PresellProduct presellProduct) {
         this.presellProduct = presellProduct;
+    }
+
+    public List<PresellInventory> getTreeNumberList() {
+        return treeNumberList;
+    }
+
+    public void setTreeNumberList(List<PresellInventory> treeNumberList) {
+        this.treeNumberList = treeNumberList;
     }
 
 }

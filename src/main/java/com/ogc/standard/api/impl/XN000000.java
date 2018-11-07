@@ -2,6 +2,7 @@ package com.ogc.standard.api.impl;
 
 import com.ogc.standard.ao.IAdoptOrderTreeAO;
 import com.ogc.standard.ao.IGroupAdoptOrderAO;
+import com.ogc.standard.ao.IOriginalGroupAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.dto.res.BooleanRes;
 import com.ogc.standard.exception.BizException;
@@ -21,9 +22,12 @@ public class XN000000 extends AProcessor {
     private IGroupAdoptOrderAO groupAdoptOrderAO = SpringContextHolder
         .getBean(IGroupAdoptOrderAO.class);
 
+    private IOriginalGroupAO originalGroupAO = SpringContextHolder
+        .getBean(IOriginalGroupAO.class);
+
     @Override
     public Object doBusiness() throws BizException {
-        adoptOrderTreeAO.doDailyAdoptOrderTree();
+        originalGroupAO.doDailyOriginalGroup();
         return new BooleanRes(true);
     }
 

@@ -16,11 +16,14 @@ import com.ogc.standard.bo.IOriginalGroupBO;
 import com.ogc.standard.bo.IPresellInventoryBO;
 import com.ogc.standard.bo.IPresellLogisticsBO;
 import com.ogc.standard.bo.IPresellProductBO;
+import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.DateUtil;
+import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.domain.OriginalGroup;
 import com.ogc.standard.domain.PresellInventory;
 import com.ogc.standard.domain.PresellProduct;
+import com.ogc.standard.domain.User;
 import com.ogc.standard.dto.req.XN629433Req;
 import com.ogc.standard.dto.req.XN629433ReqLogistics;
 import com.ogc.standard.enums.EGroupType;
@@ -48,9 +51,12 @@ public class OriginalGroupAOImpl implements IOriginalGroupAO {
     @Autowired
     private IPresellProductBO presellProductBO;
 
+    @Autowired
+    private IUserBO userBO;
+
     @Override
     @Transactional
-    public void directSales(String code, String userId, BigDecimal price,
+    public String directSales(String code, String userMobile, BigDecimal price,
             Integer quantity) {
         OriginalGroup originalGroup = originalGroupBO.getOriginalGroup(code);
         if (!EOriginalGroupStatus.ADOPTING.getCode()
@@ -59,7 +65,9 @@ public class OriginalGroupAOImpl implements IOriginalGroupAO {
                 "资产不是可转让状态，不能转让");
         }
 
-        if (originalGroup.getOwnerId().equals(userId)) {
+        User claimant = userBO.getUserByMobile(userMobile);
+
+        if (originalGroup.getOwnerId().equals(claimant.getUserId())) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "资产不能转让给自己");
         }
@@ -70,7 +78,7 @@ public class OriginalGroupAOImpl implements IOriginalGroupAO {
 
         // 添加派生组
         String deriveGroupCode = deriveGroupBO.saveDirectSales(code, price,
-            quantity, userId);
+            quantity, claimant.getUserId());
 
         // 转移预售权
         int presellInventoryQuantity = 0;
@@ -91,11 +99,12 @@ public class OriginalGroupAOImpl implements IOriginalGroupAO {
         originalGroupBO.refreshQuantity(code,
             originalGroup.getQuantity() - quantity);
 
+        return deriveGroupCode;
     }
 
     @Override
     @Transactional
-    public void qrSales(String code, BigDecimal price, Integer quantity) {
+    public String qrSales(String code, BigDecimal price, Integer quantity) {
         OriginalGroup originalGroup = originalGroupBO.getOriginalGroup(code);
         if (!EOriginalGroupStatus.ADOPTING.getCode()
             .equals(originalGroup.getStatus())) {
@@ -108,16 +117,19 @@ public class OriginalGroupAOImpl implements IOriginalGroupAO {
         }
 
         // 添加派生组
-        deriveGroupBO.saveQrSales(code, price, quantity);
+        String deriveGroupCode = deriveGroupBO.saveQrSales(code, price,
+            quantity);
 
         // 更新数量
         originalGroupBO.refreshQuantity(code,
             originalGroup.getQuantity() - quantity);
+
+        return deriveGroupCode;
     }
 
     @Override
     @Transactional
-    public void publicSales(String code, BigDecimal price, Integer quantity) {
+    public String publicSales(String code, BigDecimal price, Integer quantity) {
         OriginalGroup originalGroup = originalGroupBO.getOriginalGroup(code);
         if (!EOriginalGroupStatus.ADOPTING.getCode()
             .equals(originalGroup.getStatus())) {
@@ -130,11 +142,14 @@ public class OriginalGroupAOImpl implements IOriginalGroupAO {
         }
 
         // 添加派生组
-        deriveGroupBO.savePublicSales(code, price, quantity);
+        String deriveGroupCode = deriveGroupBO.savePublicSales(code, price,
+            quantity);
 
         // 更新数量
         originalGroupBO.refreshQuantity(code,
             originalGroup.getQuantity() - quantity);
+
+        return deriveGroupCode;
     }
 
     @Override
@@ -149,8 +164,16 @@ public class OriginalGroupAOImpl implements IOriginalGroupAO {
         }
 
         // 添加物流单
+        Integer totalCount = 0;
         if (CollectionUtils.isNotEmpty(req.getLogisticsList())) {
             for (XN629433ReqLogistics logistics : req.getLogisticsList()) {
+                totalCount += StringValidater
+                    .toInteger(logistics.getDeliverCount());
+                if (totalCount > originalGroup.getQuantity()) {
+                    throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                        "发货数量大于资产数量，请重新填写");
+                }
+
                 presellLogisticsBO.savePresellLogistics(req.getCode(),
                     logistics);
             }
@@ -230,6 +253,11 @@ public class OriginalGroupAOImpl implements IOriginalGroupAO {
         PresellProduct presellProduct = presellProductBO
             .getPresellProduct(originalGroup.getProductCode());
         originalGroup.setPresellProduct(presellProduct);
+
+        // 树木列表
+        List<PresellInventory> treeNumberList = presellInventoryBO
+            .queryTreeNumberListByGroup(originalGroup.getCode());
+        originalGroup.setTreeNumberList(treeNumberList);
     }
 
 }

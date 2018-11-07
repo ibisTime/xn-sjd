@@ -298,7 +298,7 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
                 presellProduct.getName());
 
             // 业务订单更改
-            presellOrderBO.payYueSuccess(data.getCode(), resultRes,
+            presellOrderBO.paySuccess(data.getCode(), data.getAmount(),
                 backJfAmount);
         }
     }
@@ -323,7 +323,7 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
                         presellInventoryBO.savePresellInventory(
                             originalGroupCode, tree.getTreeNumber());
 
-                        if (++orderQuantity > quantity) {
+                        if (orderQuantity++ > quantity) {
                             treeBO.refreshAdoptCount(tree.getTreeNumber(),
                                 singleOutput - treeRemainInventory);
 
@@ -335,6 +335,8 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
                         singleOutput);
 
                 }
+            } else {
+                break;
             }
         }
     }

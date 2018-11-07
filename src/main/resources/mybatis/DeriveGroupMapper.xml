@@ -50,6 +50,9 @@
 			<if test="url != null and url != '' ">
 				AND t.url = #{url}
 			</if>
+			<if test="queryUserId != null and queryUserId != '' ">
+				AND t.creater = #{queryUserId} or (t.type = 0 and t.claimant = #{queryUserId})
+			</if>
 			
 			<if test="statusList != null and statusList != '' ">
 				AND t.status in 
@@ -153,7 +156,6 @@
 		UPDATE tys_derive_group
 		SET
 		status = #{status}
-		,claimant = #{claimant}
 		,claim_datetime = #{claimDatetime}
 		WHERE code = #{code}
 	</update>
@@ -162,7 +164,6 @@
 		UPDATE tys_derive_group
 		SET
 		status = #{status}
-		,claimant = #{claimant}
 		,claim_datetime = #{claimDatetime}
 		,remark = #{remark}
 		WHERE code = #{code}
@@ -181,16 +182,15 @@
 		UPDATE tys_derive_group
 		SET
 		status = #{status}
-		,quantity = #{quantity}
 		,claimant = #{claimant}
 		,claim_datetime = #{claimDatetime}
 		WHERE code = #{code}
 	</update>
 	
-	<update id="update_status" parameterType="deriveGroup">
+	<update id="update_quantity" parameterType="deriveGroup">
 		UPDATE tys_derive_group
 		SET
-		status = #{status}
+		quantity = #{quantity}
 		WHERE code = #{code}
 	</update>
 	

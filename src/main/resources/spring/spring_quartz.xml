@@ -29,6 +29,8 @@
 			    <ref bean="doInvalidIdentifyCodeTrigger"/>
 			    <ref bean="doCancelPresellOrderTrigger"/>
 			    <ref bean="doCancelCommodityOrderTrigger"/>
+			    <ref bean="doDailyOriginalGroupTrigger"/>
+			    <ref bean="doCancelGroupOrderTrigger"/>
  			</list>
 		</property>
 		<property name="autoStartup" value="true" />
@@ -187,7 +189,32 @@
 		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject" ref="commodityOrderAOImpl" />
 		<property name="targetMethod" value="timeoutCancel" />
+	</bean>
+	<!-- 预售原生组开始认养扫描 -->
+	<bean id="doDailyOriginalGroupTrigger"
+		  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="doDailyOriginalGroup" />
+		<property name="cronExpression" value="0 0 0 * * ?"/><!-- 每天零点执行 -->
+	</bean>
+	
+	<bean id="doDailyOriginalGroup"
+		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="originalGroupAOImpl" />
+		<property name="targetMethod" value="doDailyOriginalGroup" />
 		<property name="concurrent" value="false" />
 	</bean> 
 
+	<!-- 寄售订单未支付扫描 -->
+	<bean id="doCancelGroupOrderTrigger"
+		  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="doCancelGroupOrder" />
+		<property name="cronExpression" value="0 */15 * * * ?"/><!-- 每15分钟执行 -->
+	</bean>
+	
+	<bean id="doCancelGroupOrder"
+		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="groupOrderAOImpl" />
+		<property name="targetMethod" value="doCancelGroupOrder" />
+		<property name="concurrent" value="false" />
+	</bean> 
 </beans>

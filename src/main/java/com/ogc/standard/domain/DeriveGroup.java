@@ -70,6 +70,12 @@ public class DeriveGroup extends ABaseDO {
     // 预售产品
     private PresellProduct presellProduct;
 
+    // 树木列表
+    private List<PresellInventory> treeNumberList;
+
+    // 查询人
+    private String queryUserId;
+
     public String getCode() {
         return code;
     }
@@ -212,6 +218,22 @@ public class DeriveGroup extends ABaseDO {
 
     public void setPresellProduct(PresellProduct presellProduct) {
         this.presellProduct = presellProduct;
+    }
+
+    public List<PresellInventory> getTreeNumberList() {
+        return treeNumberList;
+    }
+
+    public void setTreeNumberList(List<PresellInventory> treeNumberList) {
+        this.treeNumberList = treeNumberList;
+    }
+
+    public String getQueryUserId() {
+        return queryUserId;
+    }
+
+    public void setQueryUserId(String queryUserId) {
+        this.queryUserId = queryUserId;
     }
 
 }

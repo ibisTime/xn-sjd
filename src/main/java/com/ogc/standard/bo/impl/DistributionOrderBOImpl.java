@@ -19,7 +19,6 @@ import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IAgentUserBO;
 import com.ogc.standard.bo.IApplyBindMaintainBO;
 import com.ogc.standard.bo.IDistributionOrderBO;
-import com.ogc.standard.bo.IProductBO;
 import com.ogc.standard.bo.ISYSConfigBO;
 import com.ogc.standard.bo.ISettleBO;
 import com.ogc.standard.bo.IUserBO;
@@ -49,9 +48,6 @@ import com.ogc.standard.exception.EBizErrorCode;
  */
 @Service
 public class DistributionOrderBOImpl implements IDistributionOrderBO {
-
-    @Autowired
-    private IProductBO productBO;
 
     @Autowired
     private IUserBO userBO;

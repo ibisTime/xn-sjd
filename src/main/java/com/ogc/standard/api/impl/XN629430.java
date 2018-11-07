@@ -8,7 +8,7 @@ import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.ObjValidater;
 import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.dto.req.XN629430Req;
-import com.ogc.standard.dto.res.BooleanRes;
+import com.ogc.standard.dto.res.PKCodeRes;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
@@ -29,9 +29,8 @@ public class XN629430 extends AProcessor {
     public Object doBusiness() throws BizException {
         Integer quantity = StringValidater.toInteger(req.getQuantity());
         BigDecimal price = new BigDecimal(req.getPrice());
-        originalGroupAO.directSales(req.getCode(), req.getUserId(), price,
-            quantity);
-        return new BooleanRes(true);
+        return new PKCodeRes(originalGroupAO.directSales(req.getCode(),
+            req.getUserMobile(), price, quantity));
     }
 
     @Override
