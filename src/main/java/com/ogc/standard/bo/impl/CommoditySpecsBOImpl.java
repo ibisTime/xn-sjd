@@ -17,6 +17,7 @@ import com.ogc.standard.bo.ICommoditySpecsBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.dao.ICommoditySpecsDAO;
 import com.ogc.standard.domain.CommoditySpecs;
+import com.ogc.standard.exception.BizException;
 
 /** 
  * @author: taojian 
@@ -47,6 +48,30 @@ public class CommoditySpecsBOImpl extends PaginableBOImpl<CommoditySpecs>
         CommoditySpecs condition = new CommoditySpecs();
         condition.setCommodityCode(commodityCode);
         return commoditySpecsDAO.selectList(condition);
+    }
+
+    @Override
+    public Long getIeventory(Long id) {
+        CommoditySpecs condition = new CommoditySpecs();
+        condition.setId(id);
+        CommoditySpecs data = commoditySpecsDAO.select(condition);
+        if (null == data) {
+            throw new BizException("xn0000", "该商品规格不存在");
+        }
+
+        return data.getInventory();
+    }
+
+    @Override
+    public void inventoryDecrease(Long id, Long quantity) {
+        CommoditySpecs condition = new CommoditySpecs();
+        condition.setId(id);
+        CommoditySpecs data = commoditySpecsDAO.select(condition);
+        if (null == data) {
+            throw new BizException("xn0000", "该商品规格不存在");
+        }
+        data.setInventory(data.getInventory() + quantity);
+        commoditySpecsDAO.updateInventory(data);
     }
 
 }

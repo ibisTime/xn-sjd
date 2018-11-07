@@ -74,6 +74,9 @@ public class SysConstants {
 
     public static String DIST_USER_BACK_JF_RATE = "DIST_USER_BACK_JF_RATE"; // 用户返积分的总额
 
+    // 商城分销
+    public static String DIST_BUSINESS_RATE = "DIST_BUSINESS_RATE"; // 代理方的总额
+
     // 代理等级分成
     public static String DIST_AGENT1_RATE = "DIST_AGENT1_RATE"; // 一级代理分成比例
 

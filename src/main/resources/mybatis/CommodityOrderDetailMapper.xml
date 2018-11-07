@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ogc.standard.dao.ICommodityOrderDetailDAO">
+	<resultMap id="commodityOrderDetail_DB_Result" type="commodityOrderDetail">
+		<result column="code" property="code" />
+		<result column="order_code" property="orderCode" />
+		<result column="shop_code" property="shopCode" />
+		<result column="commodity_code" property="commodityCode" />
+		<result column="commodity_name" property="commodityName" />
+		
+		<result column="specs_id" property="specsId" />
+		<result column="specs_name" property="specsName" />
+		<result column="quantity" property="quantity" />
+		<result column="price" property="price" />
+		<result column="amount" property="amount" />
+		
+		<result column="list_pic" property="listPic" />
+		<result column="logistics_company" property="logisticsCompany" />
+		<result column="logistics_number" property="logisticsNumber" />
+		<result column="deliver" property="deliver" />
+		<result column="deliver_datetime" property="deliverDatetime" />
+		
+		<result column="address_code" property="addressCode" />
+		<result column="receiver" property="receiver" />
+		<result column="receiver_mobile" property="receiverMobile" />
+		<result column="receiver_datetime" property="receiverDatetime" />
+		<result column="status" property="status" />
+	</resultMap>
+	
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="orderCode != null and orderCode != '' ">
+				AND t.order_code = #{orderCode}
+			</if>
+			<if test="commodityCode != null and commodityCode != '' ">
+				AND t.commodity_code = #{commodityCode}
+			</if>
+			<if test="specsId != null and specsId != '' ">
+				AND t.specs_id = #{specsId}
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+			<if test="shopCode != null and shopCode != '' ">
+				AND t.shop_code = #{shopCode}
+			</if>
+			<if test="receiver != null and receiver != '' ">
+				AND t.receiver = #{receiver}
+			</if>
+			
+		</trim>
+	</sql>
+	
+	<select id="select_commodity_order_detail" parameterType="commodityOrderDetail" resultMap="commodityOrderDetail_DB_Result">
+		SELECT
+		t.code
+		,t.order_code
+		,t.shop_code
+		,t.commodity_code
+		,t.commodity_name
+		,t.specs_id
+		,t.specs_name
+		,t.quantity
+		,t.price
+		,t.amount
+		,t.list_pic
+		,t.logistics_company
+		,t.logistics_number
+		,t.deliver
+		,t.deliver_datetime
+		,t.address_code
+		,t.receiver
+		,t.receiver_mobile
+		,t.receiver_datetime
+		,t.status
+		FROM
+		tsc_commodity_order t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_commodity_order_detail_count" parameterType="commodityOrderDetail"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tsc_commodity_order t
+		<include refid="where_condition" />
+	</select>
+	
+
+	
+	<insert id="insert_commodity_order_detail" parameterType="commodityOrderDetail">
+		INSERT INTO tsc_commodity_order_detail(
+		code
+		,order_code
+		,shop_code
+		,commodity_code
+		,commodity_name
+		,specs_id
+		,specs_name
+		,quantity
+		,price
+		,amount
+		,list_pic
+		,address_code
+		,status
+		)
+		VALUES
+		(
+		#{code}
+		,#{orderCode}
+		,#{shopCode}
+		,#{commodityCode}
+		,#{commodityName}
+		,#{specsId}
+		,#{specsName}
+		,#{quantity}
+		,#{price}
+		,#{amount}
+		,#{listPic}
+		,#{addressCode}
+		,#{status}
+		)
+	</insert>
+	
+	<update id="update_delive" parameterType="commodityOrderDetail">
+		UPDATE tsc_commodity_order_detail
+		SET
+		logistics_company=#{logisticsCompany}
+		,logistics_number=#{logisticsNumber}
+		,deliver=#{deliver}
+		,deliver_datetime=#{deliverDatetime}
+		,receiver=#{receiver}
+		,receiver_mobile=#{receiverMobile}
+		,status=#{status}
+		WHERE
+		code=#{code}
+	</update>
+	
+	<update id="update_receive" parameterType="commodityOrderDetail">
+		UPDATE tsc_commodity_order_detail
+		SET
+		receiver_datetime=#{receiverDatetime}
+		,status=#{status}
+		WHERE
+		code=#{code}
+	</update>
+</mapper>

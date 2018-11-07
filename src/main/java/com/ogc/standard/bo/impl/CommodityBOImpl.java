@@ -117,4 +117,15 @@ public class CommodityBOImpl extends PaginableBOImpl<Commodity> implements
         return data;
     }
 
+    @Override
+    public boolean isOnShelf(String code) {
+        Commodity data = getCommodity(code);
+        if (ECommodityStatus.ON.getCode().equals(data.getStatus())) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
 }

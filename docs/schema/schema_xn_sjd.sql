@@ -1167,4 +1167,183 @@ CREATE TABLE `tys_presell_logistics` (
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--商城模块start
+
+DROP TABLE IF EXISTS `tsc_commodity`;
+CREATE TABLE `tsc_commodity` (
+  `code` varchar(32) NOT NULL COMMENT '编号',
+  `name` varchar(255) NOT NULL COMMENT '名称',
+  `parent_category_code` varchar(32) NOT NULL COMMENT '商品大类',
+  `category_code` varchar(32) NOT NULL COMMENT '商品小类',
+  `deliver_place` varchar(64) NOT NULL COMMENT '发货地',
+  `weight` varchar(32) NOT NULL COMMENT '重量',
+  `logistics` varchar(32) NOT NULL COMMENT '物流方式',
+  `month_sell_count` bigint(20) DEFAULT NULL COMMENT '月销量',
+  `list_pic` varchar(255) DEFAULT NULL COMMENT '列表图',
+  `banner_pic` varchar(255) DEFAULT NULL COMMENT 'banner图',
+  `description` varchar(255) DEFAULT NULL COMMENT '描述',
+  `shop_code` varchar(32) NOT NULL COMMENT '店铺编号',
+  `location` varchar(32) DEFAULT NULL COMMENT 'UI位置',
+  `order_no` int(11) DEFAULT NULL COMMENT 'UI次序',
+  `status` varchar(4) NOT NULL COMMENT '状态（0 草稿，1 已提交待审核，2 审核不通过，3 审核通过待上架，4 已上架待购买，5 已下架）',
+  `updater` varchar(32) DEFAULT NULL COMMENT '更改人',
+  `update_datetime` datetime DEFAULT NULL COMMENT '更改时间',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='商品';
+
+DROP TABLE IF EXISTS `tsc_commodity_specs`;
+CREATE TABLE `tsc_commodity_specs` (
+  `id` bigint(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
+  `commodity_code` varchar(32) NOT NULL COMMENT '商品编号',
+  `name` varchar(64) NOT NULL COMMENT '规格名称',
+  `price` decimal(64,0) NOT NULL COMMENT '价格',
+  `inventory` bigint(20) NOT NULL COMMENT '库存',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4  COMMENT='商品规格';
+
+DROP TABLE IF EXISTS `tsc_cart`;
+CREATE TABLE `tsc_cart` (
+  `code` varchar(32) NOT NULL COMMENT '编号',
+  `user_id` varchar(32) NOT NULL COMMENT '用户编号',
+  `commodity_code` varchar(32) NOT NULL COMMENT '商品编号',
+  `commodity_name` varchar(64) NOT NULL COMMENT '商品名称',
+  `specs_code` varchar(32) NOT NULL COMMENT '规格编号',
+  `specs_name` varchar(64) NOT NULL COMMENT '规格名称',
+  `quantity` bigint(20) NOT NULL COMMENT '数量',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='购物车';
+
+DROP TABLE IF EXISTS `tsc_commodity_order`;
+CREATE TABLE `tsc_commodity_order` (
+  `code` varchar(32) NOT NULL COMMENT '编号',
+  `amount` decimal(64,0) NOT NULL COMMENT '订单金额',
+  `quantity` bigint(20) NOT NULL COMMENT '数量',
+  `apply_user` varchar(32) NOT NULL COMMENT '下单用户',
+  `apply_datetime` datetime NOT NULL COMMENT '下单时间',
+  `apply_note` varchar(255) DEFAULT NULL COMMENT '下单说明',
+  `express_type` varchar(4) NOT NULL COMMENT '配送方式',
+  `pay_type` varchar(4) DEFAULT NULL COMMENT '支付方式',
+  `pay_group` varchar(32) DEFAULT NULL COMMENT '支付组号',
+  `pay_code` varchar(32) DEFAULT NULL COMMENT '支付渠道号',
+  `pay_datetime` datetime DEFAULT NULL COMMENT '支付时间',
+  `status` varchar(4) NOT NULL COMMENT '状态（0 待支付，1 已取消，2 已支付）',
+  `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='商品订单';
+
+DROP TABLE IF EXISTS `tsc_commodity_order_detail`;
+CREATE TABLE `tsc_commodity_order_detail` (
+  `code` varchar(32) NOT NULL COMMENT '编号',
+  `order_code` varchar(32) NOT NULL COMMENT '订单编号',
+  `shop_code` varchar(32) NOT NULL COMMENT '店铺编号',
+  `commodity_code` varchar(32) NOT NULL COMMENT '商品编号',
+  `commodity_name` varchar(64) DEFAULT NULL COMMENT '商品名称',
+  `specs_id` bigint(11) NOT NULL COMMENT '规格编号',
+  `specs_name` varchar(64) DEFAULT NULL COMMENT '规格名称',
+  `quantity` bigint(20) NOT NULL COMMENT '数量',
+  `price` decimal(64,0) NOT NULL COMMENT '单价',
+  `amount` decimal(64,0) DEFAULT NULL COMMENT '总价',
+  `list_pic` varchar(255) DEFAULT NULL COMMENT '列表图片',
+  `logistics_company` varchar(4) DEFAULT NULL COMMENT '物流公司',
+  `logistics_number` varchar(255) DEFAULT NULL COMMENT '物流单号',
+  `deliver` varchar(32) DEFAULT NULL COMMENT '发货人',
+  `deliver_datetime` datetime DEFAULT NULL COMMENT '发货时间',
+  `address_code` varchar(32) NOT NULL COMMENT '收货地址编号',
+  `receiver` varchar(32) DEFAULT NULL COMMENT '收货人',
+  `receiver_mobile` varchar(32) DEFAULT NULL COMMENT '收货人手机号',
+  `receiver_datetime` datetime DEFAULT NULL COMMENT '收货时间',
+  `status` varchar(4) NOT NULL COMMENT '状态（0 待发货，1 已发货待收货，2 已完成）',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单明细';
+
+DROP TABLE IF EXISTS `tsc_after_sale`;
+CREATE TABLE `tsc_after_sale` (
+  `code` varchar(32) NOT NULL COMMENT '编号',
+  `order_detail_code` varchar(32) NOT NULL COMMENT '订单明细编号',
+  `type` varchar(4) DEFAULT NULL COMMENT '类型',
+  `status` varchar(4) DEFAULT NULL COMMENT '状态',
+  `refund_amount` decimal(64,0) DEFAULT NULL COMMENT '退款金额',
+  `logistics_company` varchar(4) DEFAULT NULL COMMENT '物流公司',
+  `logistics_number` varchar(255) DEFAULT NULL COMMENT '物流单号',
+  `deliver` varchar(32) DEFAULT NULL COMMENT '发货人',
+  `deliver_count` int(11) DEFAULT NULL COMMENT '发货数量',
+  `deliver_datetime` datetime DEFAULT NULL COMMENT '发货时间',
+  `address_code` varchar(32) NOT NULL COMMENT '收货地址编号',
+  `receiver` varchar(32) DEFAULT NULL COMMENT '收货人',
+  `receiver_mobile` varchar(32) DEFAULT NULL COMMENT '收货人手机号',
+  `receiver_datetime` datetime DEFAULT NULL COMMENT '收货时间',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='售后';
+
+DROP TABLE IF EXISTS `tsc_comment`;
+CREATE TABLE `tsc_comment` (
+  `code` varchar(32) NOT NULL COMMENT '编号',
+  `order_detail_code` varchar(32) DEFAULT NULL COMMENT '订单明细编号',
+  `content` text COMMENT '评论内容',
+  `user_id` varchar(32) DEFAULT NULL COMMENT '评论人',	
+  `comment_datetime` datetime DEFAULT NULL COMMENT '评论时间',
+  `point_count` bigint(20) DEFAULT NULL COMMENT '点赞数量',
+  `parent_code` varchar(32) DEFAULT NULL COMMENT '父级编号',
+  `parent_user_id` varchar(32) DEFAULT NULL COMMENT '上级评论人',
+  `status` varchar(4) DEFAULT NULL COMMENT '状态（0 待审核，1 审核通过，2 审核不通过）',
+  `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `remark` text COMMENT '备注',
+  PRIMARY KEY (`code`) COMMENT '评论'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='评论';
+
+DROP TABLE IF EXISTS `tsc_keyword`;
+CREATE TABLE `tsc_keyword` (
+  `id` bigint(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `word` varchar(255) DEFAULT NULL COMMENT '词语',
+  `reaction` varchar(4) DEFAULT NULL COMMENT '反应(1 直接拦截/2 替换**/3 审核)',
+  `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`id`) COMMENT '关键字'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='关键字';
+
+DROP TABLE IF EXISTS `tsc_postage_template`;
+CREATE TABLE `tsc_postage_template` (
+  `code` varchar(32) NOT NULL COMMENT '编号',
+  `shop_code` varchar(32) NOT NULL COMMENT '店铺编号',
+  `deliver_place` varchar(64) DEFAULT NULL COMMENT '发货地',
+  `receive_place` varchar(64) DEFAULT NULL COMMENT '收货地',
+  `price` decimal(64,0) DEFAULT NULL COMMENT '价格',
+  `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='邮费模版';
+
+DROP TABLE IF EXISTS `tsc_session`;
+CREATE TABLE `tsc_session` (
+  `code` varchar(32) NOT NULL COMMENT '编号',
+  `type` varchar(4) NOT NULL COMMENT '类型（帮助）',
+  `user1` varchar(32) DEFAULT NULL COMMENT '说话人1',
+  `user2` varchar(32) DEFAULT NULL COMMENT '说话人2',
+  `unread_sum1` bigint(20) NOT NULL COMMENT '说话人1未读消息数量',
+  `unread_sum2` bigint(20) NOT NULL COMMENT '说话人2未读消息数量',
+  `create_datetime` datetime NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='会话';
+
+DROP TABLE IF EXISTS `tsc_session_message`;
+CREATE TABLE `tsc_session_message` (
+  `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `session_code` varchar(32) NOT NULL COMMENT '会话编号',
+  `user_id` varchar(32) NOT NULL COMMENT '说话人',
+  `content` varchar(255) NOT NULL COMMENT '内容',
+  `status` varchar(4) NOT NULL COMMENT '状态（0 未读，1 已读）',
+  `create_datetime` datetime NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='会话消息';
+
+--商城模块end
+
+
 SET FOREIGN_KEY_CHECKS = 1;

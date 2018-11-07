@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ogc.standard.dao.ICartDAO">
+	<resultMap id="cart_DB_Result" type="cart">
+		<result column="code" property="code" />
+		<result column="user_id" property="userId" />
+		<result column="commodity_code" property="commodityCode" />
+		<result column="commodity_name" property="commodityName" />
+		<result column="specs_code" property="specsCode" />
+		<result column="specs_name" property="specsName" />
+		<result column="quantity" property="quantity" />
+	</resultMap>
+	
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="userId != null and userId != '' ">
+				AND t.user_id = #{userId}
+			</if>
+		</trim>
+	</sql>
+	
+	<select id="select_cart" parameterType="cart" resultMap="cart_DB_Result">
+		SELECT
+		t.code
+		,t.user_id
+		,t.commodity_code
+		,t.commodity_name
+		,t.specs_code
+		,t.specs_name
+		,t.quantity
+		FROM
+		tsc_cart t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_cart_count" parameterType="cart"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tsc_cart t
+		<include refid="where_condition" />
+	</select>
+	
+
+	
+	<insert id="insert_cart" parameterType="cart">
+		INSERT INTO
+		tsc_cart(
+		code
+		,user_id
+		,commodity_code
+		,commodity_name
+		,specs_code
+		,specs_name
+		,quantity
+		)
+		VALUES(
+		#{code}
+		,#{userId}
+		,#{commodityCode}
+		,#{commodityName}
+		,#{specsCode}
+		
+		,#{specsName}
+		,#{quantity}
+		)
+	</insert>
+	
+	<delete id="delete_cart" parameterType="cart">
+		DELETE FROM tsc_cart
+		<include refid="where_condition" />
+	</delete>
+
+</mapper>

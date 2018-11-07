@@ -50,7 +50,7 @@ public class CommoditySpecsDAOImpl extends AMybatisTemplate implements
     @Override
     public long selectTotalCount(CommoditySpecs condition) {
         return super.selectTotalCount(
-            NAMESPACE.concat("select_commodity_specs"), condition);
+            NAMESPACE.concat("select_commodity_specs_count"), condition);
     }
 
     @Override
@@ -64,6 +64,11 @@ public class CommoditySpecsDAOImpl extends AMybatisTemplate implements
             int count) {
         return super.selectList(NAMESPACE.concat("select_commodity_specs"),
             start, count, condition, CommoditySpecs.class);
+    }
+
+    @Override
+    public int updateInventory(CommoditySpecs data) {
+        return super.update(NAMESPACE.concat("update_inventory"), data);
     }
 
 }

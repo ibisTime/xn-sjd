@@ -64,10 +64,6 @@ public class XN629701Req {
     @NotBlank
     private String shopCode;
 
-    // 发布方式（0 存为草稿，1 直接发布）
-    @NotBlank
-    private String publishType;
-
     // 更新人
     @NotBlank
     private String updater;
@@ -165,14 +161,6 @@ public class XN629701Req {
 
     public void setShopCode(String shopCode) {
         this.shopCode = shopCode;
-    }
-
-    public String getPublishType() {
-        return publishType;
-    }
-
-    public void setPublishType(String publishType) {
-        this.publishType = publishType;
     }
 
     public List<CommoditySpecs> getSpecsList() {

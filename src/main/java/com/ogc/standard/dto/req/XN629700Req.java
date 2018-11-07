@@ -60,10 +60,6 @@ public class XN629700Req {
     @NotBlank
     private String shopCode;
 
-    // 发布方式（0 存为草稿，1 直接发布）
-    @NotBlank
-    private String publishType;
-
     // 规格列表
     @NotBlank
     private List<CommoditySpecs> specsList;
@@ -146,14 +142,6 @@ public class XN629700Req {
 
     public void setShopCode(String shopCode) {
         this.shopCode = shopCode;
-    }
-
-    public String getPublishType() {
-        return publishType;
-    }
-
-    public void setPublishType(String publishType) {
-        this.publishType = publishType;
     }
 
     public List<CommoditySpecs> getSpecsList() {

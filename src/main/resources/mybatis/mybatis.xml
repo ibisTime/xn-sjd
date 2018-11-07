@@ -63,6 +63,10 @@
 		<typeAlias alias="address" type="com.ogc.standard.domain.Address"/>
 		<typeAlias alias="commodity" type="com.ogc.standard.domain.Commodity"/>
 		<typeAlias alias="commoditySpecs" type="com.ogc.standard.domain.CommoditySpecs"/>
+		<typeAlias alias="cart" type="com.ogc.standard.domain.Cart"/>
+		<typeAlias alias="commodityOrder" type="com.ogc.standard.domain.CommodityOrder"/>
+		<typeAlias alias="commodityOrderDetail" type="com.ogc.standard.domain.CommodityOrderDetail"/>
+		
 		<typeAlias alias="presellProduct" type="com.ogc.standard.domain.PresellProduct"/>
 		<typeAlias alias="presellSpecs" type="com.ogc.standard.domain.PresellSpecs"/>
 		<typeAlias alias="presellOrder" type="com.ogc.standard.domain.PresellOrder"/>
