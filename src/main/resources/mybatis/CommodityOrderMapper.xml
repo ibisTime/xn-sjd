@@ -47,7 +47,12 @@
 			<if test="payCode != null and payCode != '' ">
 				AND t.pay_code = #{payCode}
 			</if>
-			
+			<if test="applyDatetimeStart != null and applyDatetimeStart != '' ">
+				<![CDATA[AND t.apply_datetime >= #{applyDatetimeStart}]]>
+			</if>
+			<if test="applyDatetimeEnd != null and applyDatetimeEnd != '' ">
+				<![CDATA[AND t.apply_datetime <= #{applyDatetimeEnd}]]>
+			</if>
 		</trim>
 	</sql>
 	

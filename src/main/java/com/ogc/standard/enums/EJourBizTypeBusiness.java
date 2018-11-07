@@ -28,6 +28,8 @@ public enum EJourBizTypeBusiness {
 
     LB("lb", "蓝补"),
 
+    AFTER_SALE("after_sale", "商城售后"),
+
     BUSINESS_PROFIT("business_profit", "商城收益");
 
     public static EJourBizTypeBusiness getBizType(String code) {

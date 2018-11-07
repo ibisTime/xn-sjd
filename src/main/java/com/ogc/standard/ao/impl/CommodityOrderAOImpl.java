@@ -8,8 +8,12 @@
  */
 package com.ogc.standard.ao.impl;
 
+import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +29,7 @@ import com.ogc.standard.bo.ICommoditySpecsBO;
 import com.ogc.standard.bo.ICompanyBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
+import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.domain.CommodityOrder;
 import com.ogc.standard.domain.CommodityOrderDetail;
@@ -46,6 +51,9 @@ import com.ogc.standard.exception.BizException;
  */
 @Service
 public class CommodityOrderAOImpl implements ICommodityOrderAO {
+
+    static final Logger logger = LoggerFactory
+        .getLogger(CommodityOrderAOImpl.class);
 
     @Autowired
     private ICommodityOrderBO commodityOrderBO;
@@ -220,6 +228,36 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
         }
         commodityOrderBO
             .refreshPay(data, data.getAmount(), "alipay", "支付宝支付成功");
+    }
+
+    public void timeoutCancel() {
+        logger.info("***************开始扫描未支付订单***************");
+        CommodityOrder condition = new CommodityOrder();
+        condition.setStatus(ECommodityOrderStatus.TOPAY.getCode());
+        // 一天内未支付订单
+        condition.setApplyDatetimeEnd(DateUtil.getRelativeDateOfHour(
+            new Date(), (double) -24));
+        List<CommodityOrder> orderList = commodityOrderBO
+            .queryOrderList(condition);
+        if (CollectionUtils.isNotEmpty(orderList)) {
+            for (CommodityOrder order : orderList) {
+                cancelOrder(order);
+            }
+        }
+        logger.info("***************结束扫描未支付订单***************");
+    }
+
+    private void cancelOrder(CommodityOrder order) {
+        // 库存回加
+        List<CommodityOrderDetail> dataList = commodityOrderDetailBO
+            .queryOrderDetail(order.getCode());
+        for (CommodityOrderDetail commodityOrderDetail : dataList) {
+            commoditySpecsBO.inventoryDecrease(
+                commodityOrderDetail.getSpecsId(),
+                commodityOrderDetail.getQuantity());
+        }
+        // 状态更新
+        commodityOrderBO.platCancelOrder(order);
     }
 
 }

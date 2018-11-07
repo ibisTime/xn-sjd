@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.ICommodityOrderDetailAO;
 import com.ogc.standard.bo.IAccountBO;
+import com.ogc.standard.bo.ICommodityBO;
 import com.ogc.standard.bo.ICommodityOrderBO;
 import com.ogc.standard.bo.ICommodityOrderDetailBO;
 import com.ogc.standard.bo.ICompanyBO;
@@ -58,6 +59,9 @@ public class CommodityOrderDetailAOImpl implements ICommodityOrderDetailAO {
     @Autowired
     private ISYSConfigBO sysConfigBO;
 
+    @Autowired
+    private ICommodityBO commodityBO;
+
     @Override
     @Transactional
     public void delive(String orderCode, String shopCode,
@@ -85,6 +89,10 @@ public class CommodityOrderDetailAOImpl implements ICommodityOrderDetailAO {
     @Override
     @Transactional
     public void receive(String code, String receiver, String shopCode) {
+        CommodityOrder order = commodityOrderBO.getCommodityOrder(code);
+        if (!order.getApplyUser().equals(receiver)) {
+            throw new BizException("xn0000", "不是你的订单你不能确认收货");
+        }
         CommodityOrderDetail condition = new CommodityOrderDetail();
         condition.setOrderCode(code);
         condition.setShopCode(shopCode);

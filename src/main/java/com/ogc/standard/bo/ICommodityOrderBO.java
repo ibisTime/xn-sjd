@@ -36,4 +36,6 @@ public interface ICommodityOrderBO extends IPaginableBO<CommodityOrder> {
     public CommodityOrder getCommodityOrder(String code);
 
     public CommodityOrder getCommodityOrderByPayGroup(String payGroup);
+
+    public void platCancelOrder(CommodityOrder data);
 }
