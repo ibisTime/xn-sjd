@@ -213,6 +213,18 @@
 		<property name="paginableDAO" ref="commodityOrderDetailDAOImpl"/>
 	</bean>
 	
+	<bean id="postageTemplateBO" class="com.ogc.standard.bo.impl.PostageTemplateBOImpl">
+		<property name="paginableDAO" ref="postageTemplateDAOImpl"/>
+	</bean>
+	
+	<bean id="commentBO" class="com.ogc.standard.bo.impl.CommentBOImpl">
+		<property name="paginableDAO" ref="commentDAOImpl"/>
+	</bean>
+	
+	<bean id="keywordBO" class="com.ogc.standard.bo.impl.KeywordBOImpl">
+		<property name="paginableDAO" ref="keywordDAOImpl"/>
+	</bean>
+	
 	<bean id="presellProductBO" class="com.ogc.standard.bo.impl.PresellProductBOImpl">
 		<property name="paginableDAO" ref="presellProductDAOImpl"/>
 	</bean>

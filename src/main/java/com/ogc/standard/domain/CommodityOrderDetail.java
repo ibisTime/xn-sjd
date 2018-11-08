@@ -87,6 +87,16 @@ public class CommodityOrderDetail extends ABaseDO {
 
     // ****************DB*****************
 
+    private Commodity commodity;
+
+    public Commodity getCommodity() {
+        return commodity;
+    }
+
+    public void setCommodity(Commodity commodity) {
+        this.commodity = commodity;
+    }
+
     public String getCode() {
         return code;
     }

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ogc.standard.dao.IAfterSaleDAO">
+	<resultMap id="afterSale_DB_Result" type="afterSale">
+		<result column="code" property="code" />
+		<result column="order_detail_code" property="orderDetailCode" />
+		<result column="type" property="type" />
+		<result column="status" property="status" />
+		<result column="refund_amount" property="refundAmount" />
+		
+		<result column="logistics_company" property="logisticsCompany" />
+		<result column="logistics_number" property="logisticsNumber" />
+		<result column="deliver" property="deliver" />
+		<result column="deliver_count" property="deliverCount" />
+		<result column="deliver_datetime" property="deliverDatetime" />
+		<result column="address_code" property="addressCode" />
+		<result column="receiver" property="receiver" />
+		<result column="receiver_mobile" property="receiverMobile" />
+		<result column="receiver_datetime" property="receiverDatetime" />
+	</resultMap>
+	
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="orderDetailCode != null and orderDetailCode != '' ">
+				AND t.order_detail_code = #{orderDetailCode}
+			</if>
+			<if test="type != null and type != '' ">
+				AND t.type = #{type}
+			</if>
+			<if test="logisticsCompany != null and logisticsCompany != '' ">
+				AND t.logistics_company = #{logisticsCompany}
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+			<if test="receiver != null and receiver != '' ">
+				AND t.receiver = #{receiver}
+			</if>
+			<if test="receiver != null and receiver != '' ">
+				AND t.receiver = #{receiver}
+			</if>
+			
+		</trim>
+	</sql>
+	
+	<select id="select_after_sale" parameterType="afterSale" resultMap="afterSale_DB_Result">
+		SELECT
+		t.code
+		,t.order_detail_code
+		,t.type
+		,t.status
+		,t.refund_amount
+		,t.logistics_company
+		,t.logistics_number
+		,t.deliver
+		,t.deliver_count
+		,t.deliver_datetime
+		,t.address_code
+		,t.receiver
+		,t.receiver_mobile
+		,t.receiver_datetime
+		,t.status
+		FROM
+		tsc_after_sale t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_after_sale_count" parameterType="afterSale"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tsc_after_sale t
+		<include refid="where_condition" />
+	</select>
+	
+
+	
+	<insert id="insert_after_sale" parameterType="afterSale">
+		INSERT INTO tsc_after_sale(
+		code
+		,order_detail_code
+		,type
+		,status
+		,refund_amount
+		
+		,logistics_company
+		,logistics_number
+		,deliver
+		,deliver_datetime
+		,address_code
+		)
+		VALUES
+		(
+		#{code}
+		,#{orderDetailCode}
+		,#{type}
+		,#{status}
+		,#{refundAmount}
+		
+		,#{logisticsCompany}
+		,#{logisticsNumber}
+		,#{deliver}
+		,#{deliverDatetime}
+		,#{addressCode}
+		)
+	</insert>
+	
+	<update id="update_handle" parameterType="afterSale">
+		UPDATE tsc_after_sale
+		SET
+		status=#{status}
+		WHERE
+		code=#{code}
+	</update>
+	
+	<update id="update_receive" parameterType="afterSale">
+		UPDATE tsc_after_sale
+		SET
+		receiver=#{receiver}
+		,receiver_datetime=#{receiverDatetime}
+		,status=#{status}
+		WHERE
+		code=#{code}
+	</update>
+</mapper>

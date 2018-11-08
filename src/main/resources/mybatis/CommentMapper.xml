@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ogc.standard.dao.ICommentDAO">
+	<resultMap id="comment_DB_Result" type="comment">
+		<result column="code" property="code" />
+		<result column="commodity_code" property="commodityCode" />
+		<result column="content" property="content" />
+		<result column="user_id" property="userId" />
+		<result column="comment_datetime" property="commentDatetime" />
+		<result column="parent_code" property="parentCode" />
+		
+		<result column="parent_user_id" property="parentUserId" />
+		
+		
+		
+		<result column="status" property="status" />
+		<result column="updater" property="updater" />
+		<result column="update_datetime" property="updateDatetime" />
+		<result column="remark" property="remark" />
+	</resultMap>
+	
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="userId != null and userId != '' ">
+				AND t.user_id = #{userId}
+			</if>
+			<if test="parentCode != null and parentCode != '' ">
+				AND t.parent_code = #{parentCode}
+			</if>
+			<if test="commodityCode != null and commodityCode != '' ">
+				AND t.commodity_code = #{commodityCode}
+			</if>
+			<if test="content != null and content != '' ">
+				AND t.content like "%"#{content}#"%"
+			</if>
+			
+			<choose>
+				<when test="status != null and status != '' ">
+					AND t.status = #{status}
+				</when>
+				<when test="statusList != null and statusList.size() > 0 ">
+					AND t.status IN
+					<foreach collection="statusList" item="item" index="index" open="(" separator="," close=")">
+						#{item}
+					</foreach>
+				</when>
+			</choose>
+			
+			<if test="createDatetimeStart != null and createDatetimeStart != '' ">
+				<![CDATA[AND t.comment_datetime >= #{createDatetimeStart}]]>
+			</if>
+			<if test="createDatetimeEnd != null and createDatetimeEnd != '' ">
+				<![CDATA[AND t.comment_datetime < #{createDatetimeEnd}]]>
+			</if>
+			<if test="unCreater != null and unCreater != '' ">
+				AND t.creater != #{unCreater}#
+			</if>
+		</trim>
+	</sql>
+	
+	<select id="select_comment" parameterType="comment" resultMap="comment_DB_Result">
+		SELECT
+		t.code
+		,t.commodity_code
+		,t.content
+		,t.user_id
+		,t.comment_datetime
+		
+		,t.parent_code
+		,t.parent_user_id
+		,t.status
+		,t.updater
+		,t.update_datetime
+		,t.remark
+		FROM
+		tsc_comment t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_comment_count" parameterType="comment"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tsc_comment t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_comment" parameterType="comment">
+		INSERT INTO
+		tsc_comment(
+		code
+		,commodity_code
+		,content
+		,user_id
+		,comment_datetime
+		
+		,parent_code
+		,parent_user_id
+		,status
+		,remark
+		)
+		VALUES(
+		#{code}
+		,#{commodityCode}
+		,#{content}
+		,#{userId}
+		,#{commentDatetime}
+		,#{parentCode}
+		,#{parentUserId}
+		,#{status}
+		,#{remark}
+		)
+	</insert>
+
+	<update id="update_approveComment" parameterType="comment">
+		UPDATE tsc_comment
+		SET
+		status = #{status}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_deleteComment" parameterType="comment">
+		UPDATE tsc_comment
+		SET
+		status = #{status}
+		,updater=#{updater}
+		,update_datetime=#{updateDatetime}
+		,remark=#{remark}
+		WHERE code = #{code}
+	</update>
+</mapper>

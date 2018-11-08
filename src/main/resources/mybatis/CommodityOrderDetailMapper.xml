@@ -78,7 +78,7 @@
 		,t.receiver_datetime
 		,t.status
 		FROM
-		tsc_commodity_order t
+		tsc_commodity_order_detail t
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -89,7 +89,7 @@
 
 	<select id="select_commodity_order_detail_count" parameterType="commodityOrderDetail"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tsc_commodity_order t
+		SELECT count(1) FROM tsc_commodity_order_detail t
 		<include refid="where_condition" />
 	</select>
 	

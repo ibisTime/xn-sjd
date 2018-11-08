@@ -28,6 +28,7 @@
 			    <ref bean="doCancelGroupAdoptOrderTrigger"/>
 			    <ref bean="doInvalidIdentifyCodeTrigger"/>
 			    <ref bean="doCancelPresellOrderTrigger"/>
+			    <ref bean="doCancelCommodityOrderTrigger"/>
 			    <ref bean="doDailyOriginalGroupTrigger"/>
 			    <ref bean="doCancelGroupOrderTrigger"/>
 			    <ref bean="doRefreshPriceTrigger"/>
@@ -64,6 +65,7 @@
 		<property name="targetMethod" value="doCancelAdoptOrder" />
 		<property name="concurrent" value="false" />
 	</bean> 
+	
 	
 	<!-- 订单已支付或即将过期扫描 -->
 	<bean id="doDailyAdoptOrderTrigger"
@@ -177,6 +179,18 @@
 		<property name="concurrent" value="false" />
 	</bean> 
 	
+	<!-- 商城订单过期扫描 -->
+	<bean id="doCancelCommodityOrderTrigger"
+		  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="doCancelAdoptOrder" />
+		<property name="cronExpression" value="0 */60 * * * ?"/><!-- 每60分钟执行 -->
+	</bean>
+	
+	<bean id="doCancelCommodityOrder"
+		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="commodityOrderAOImpl" />
+		<property name="targetMethod" value="timeoutCancel" />
+	</bean>
 	<!-- 预售原生组开始认养扫描 -->
 	<bean id="doDailyOriginalGroupTrigger"
 		  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">

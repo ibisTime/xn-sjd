@@ -1285,7 +1285,7 @@ CREATE TABLE `tsc_after_sale` (
 DROP TABLE IF EXISTS `tsc_comment`;
 CREATE TABLE `tsc_comment` (
   `code` varchar(32) NOT NULL COMMENT '编号',
-  `order_detail_code` varchar(32) DEFAULT NULL COMMENT '订单明细编号',
+  `commodity_code` varchar(32) DEFAULT NULL COMMENT '商品编号',
   `content` text COMMENT '评论内容',
   `user_id` varchar(32) DEFAULT NULL COMMENT '评论人',	
   `comment_datetime` datetime DEFAULT NULL COMMENT '评论时间',

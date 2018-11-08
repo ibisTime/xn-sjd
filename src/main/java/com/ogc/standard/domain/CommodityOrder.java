@@ -76,7 +76,29 @@ public class CommodityOrder extends ABaseDO {
 
     // ****************DB*****************
 
+    // 下单时间起
+    private Date applyDatetimeStart;
+
+    // 下单时间止
+    private Date applyDatetimeEnd;
+
     private List<CommodityOrderDetail> detailList;
+
+    public Date getApplyDatetimeStart() {
+        return applyDatetimeStart;
+    }
+
+    public void setApplyDatetimeStart(Date applyDatetimeStart) {
+        this.applyDatetimeStart = applyDatetimeStart;
+    }
+
+    public Date getApplyDatetimeEnd() {
+        return applyDatetimeEnd;
+    }
+
+    public void setApplyDatetimeEnd(Date applyDatetimeEnd) {
+        this.applyDatetimeEnd = applyDatetimeEnd;
+    }
 
     public List<CommodityOrderDetail> getDetailList() {
         return detailList;

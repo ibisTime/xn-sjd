@@ -22,6 +22,7 @@ import com.ogc.standard.dao.ICommodityOrderDAO;
 import com.ogc.standard.domain.CommodityOrder;
 import com.ogc.standard.enums.ECommodityOrderStatus;
 import com.ogc.standard.enums.EGeneratePrefix;
+import com.ogc.standard.enums.ESysUser;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
 
@@ -117,6 +118,15 @@ public class CommodityOrderBOImpl extends PaginableBOImpl<CommodityOrder>
                     + payGroup + "查询订单不存在");
         }
         return list.get(0);
+    }
+
+    @Override
+    public void platCancelOrder(CommodityOrder data) {
+        data.setStatus(ECommodityOrderStatus.CANCEL.getCode());
+        data.setUpdater(ESysUser.SYS_USER.getCode());
+        data.setUpdateDatetime(new Date());
+        data.setRemark("超过支付时间平台自动取消");
+        commodityOrderDAO.updateCancel(data);
     }
 
 }
