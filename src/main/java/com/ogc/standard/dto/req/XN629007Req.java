@@ -13,6 +13,9 @@ public class XN629007Req extends AListReq {
     // 上级编号
     private String parentCode;
 
+    // 类型
+    private String type;
+
     // 名称
     private String name;
 
@@ -63,6 +66,14 @@ public class XN629007Req extends AListReq {
 
     public void setLevel(String level) {
         this.level = level;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
 }

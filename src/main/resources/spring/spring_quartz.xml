@@ -30,6 +30,7 @@
 			    <ref bean="doCancelPresellOrderTrigger"/>
 			    <ref bean="doDailyOriginalGroupTrigger"/>
 			    <ref bean="doCancelGroupOrderTrigger"/>
+			    <ref bean="doRefreshPriceTrigger"/>
  			</list>
 		</property>
 		<property name="autoStartup" value="true" />
@@ -201,6 +202,20 @@
 		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject" ref="groupOrderAOImpl" />
 		<property name="targetMethod" value="doCancelGroupOrder" />
+		<property name="concurrent" value="false" />
+	</bean> 
+	
+	<!-- 规格价格每小时涨幅扫描 -->
+	<bean id="doRefreshPriceTrigger"
+		  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="doRefreshPrice" />
+		<property name="cronExpression" value="0 0 */1 * * ?"/><!-- 每小时执行 -->
+	</bean>
+	
+	<bean id="doRefreshPrice"
+		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="presellSpecsAOImpl" />
+		<property name="targetMethod" value="doRefreshPrice" />
 		<property name="concurrent" value="false" />
 	</bean> 
 </beans>

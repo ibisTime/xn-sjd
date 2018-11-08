@@ -36,6 +36,7 @@ public class PresellProductBOImpl extends PaginableBOImpl<PresellProduct>
         data.setCode(code);
         data.setName(req.getName());
         data.setOwnerId(req.getOwnerId());
+        data.setParentCategoryCode(req.getParentCategoryCode());
         data.setCategoryCode(req.getCategoryCode());
         data.setListPic(req.getListPic());
 
@@ -91,6 +92,7 @@ public class PresellProductBOImpl extends PaginableBOImpl<PresellProduct>
         PresellProduct data = new PresellProduct();
         data.setCode(req.getCode());
         data.setName(req.getName());
+        data.setParentCategoryCode(req.getParentCategoryCode());
         data.setCategoryCode(req.getCategoryCode());
         data.setListPic(req.getListPic());
 

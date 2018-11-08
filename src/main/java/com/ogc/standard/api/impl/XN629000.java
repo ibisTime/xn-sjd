@@ -25,10 +25,10 @@ public class XN629000 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return new PKCodeRes(
-            categoryAO.addCategory(req.getName(), req.getParentCode(),
-                req.getPic(), StringValidater.toInteger(req.getOrderNo()),
-                req.getUpdater(), req.getRemark()));
+        return new PKCodeRes(categoryAO.addCategory(req.getName(),
+            req.getType(), req.getParentCode(), req.getPic(),
+            StringValidater.toInteger(req.getOrderNo()), req.getUpdater(),
+            req.getRemark()));
     }
 
     @Override

@@ -10,6 +10,7 @@ import com.ogc.standard.ao.IPresellLogisticsAO;
 import com.ogc.standard.bo.IOriginalGroupBO;
 import com.ogc.standard.bo.IPresellLogisticsBO;
 import com.ogc.standard.bo.base.Paginable;
+import com.ogc.standard.domain.OriginalGroup;
 import com.ogc.standard.domain.PresellLogistics;
 import com.ogc.standard.enums.EPresellLogisticsStatus;
 import com.ogc.standard.exception.BizException;
@@ -55,6 +56,13 @@ public class PresellLogisticsAOImpl implements IPresellLogisticsAO {
         presellLogisticsBO.refreshConfirmReceive(code);
 
         originalGroupBO.refreshReceive(presellLogistics.getOriginalGroupCode());
+
+        // 更新提货中数量
+        OriginalGroup originalGroup = originalGroupBO
+            .getOriginalGroup(presellLogistics.getOriginalGroupCode());
+        originalGroupBO.refreshReceivingQuantity(originalGroup.getCode(),
+            originalGroup.getReceivingQuantity()
+                    - presellLogistics.getDeliverCount());
     }
 
     @Override

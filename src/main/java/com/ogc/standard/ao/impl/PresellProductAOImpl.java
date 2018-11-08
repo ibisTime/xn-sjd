@@ -122,7 +122,7 @@ public class PresellProductAOImpl implements IPresellProductAO {
         // 添加新规格
         for (XN629401ReqSpecs presellSpecs : req.getPresellSpecsList()) {
             presellSpecsBO.savePresellSpecs(req.getCode(),
-                presellSpecs.getPackCount(), presellSpecs.getPackCount(),
+                presellSpecs.getName(), presellSpecs.getPackCount(),
                 presellSpecs.getPrice(), presellSpecs.getIncrease());
         }
 
@@ -163,8 +163,10 @@ public class PresellProductAOImpl implements IPresellProductAO {
 
         PresellProduct presellProduct = presellProductBO
             .getPresellProduct(code);
-        if (!EPresellProductStatus.DRAFT.getCode()
-            .equals(presellProduct.getStatus())) {
+        if (!EPresellProductStatus.PUTOFFED.getCode()
+            .equals(presellProduct.getStatus())
+                && !EPresellProductStatus.DRAFT.getCode()
+                    .equals(presellProduct.getStatus())) {
             throw new BizException("xn0000", "产品未处于可提交状态！");
         }
 

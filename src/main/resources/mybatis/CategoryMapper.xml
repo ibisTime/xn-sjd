@@ -4,6 +4,7 @@
 <mapper namespace="com.ogc.standard.dao.ICategoryDAO">
 	<resultMap id="category_DB_Result" type="category">
 		<result column="code" property="code" />
+		<result column="type" property="type" />
 		<result column="parent_code" property="parentCode" />
 		<result column="name" property="name" />
 		<result column="pic" property="pic" />
@@ -19,6 +20,9 @@
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
+			</if>
+			<if test="type != null and type != '' ">
+				AND t.type = #{type}
 			</if>
 			<if test="name != null and name != '' ">
 				AND t.name = #{name}
@@ -44,6 +48,7 @@
 	<select id="select_category" parameterType="category" resultMap="category_DB_Result">
 		SELECT
 		t.code
+		,t.type
 		,t.parent_code
 		,t.name
 		,t.pic
@@ -72,6 +77,7 @@
 		INSERT INTO
 		tzb_category(
 		code
+		,type
 		,parent_code
 		,name
 		,pic
@@ -84,6 +90,7 @@
 		)
 		VALUES(
 		#{code}
+		,#{type}
 		,#{parentCode}
 		,#{name}
 		,#{pic}
@@ -99,7 +106,8 @@
 	<update id="update_editCategory" parameterType="category">
 		UPDATE tzb_category
 		SET
-		parent_code = #{parentCode}
+		type = #{type}
+		,parent_code = #{parentCode}
 		,name = #{name}
 		,pic = #{pic}
 		,order_no = #{orderNo}

@@ -25,6 +25,9 @@ public class PresellProduct extends ABaseDO {
     // 产权方编号
     private String ownerId;
 
+    // 产品大类
+    private String parentCategoryCode;
+
     // 产品分类
     private String categoryCode;
 
@@ -432,6 +435,14 @@ public class PresellProduct extends ABaseDO {
 
     public void setMaxPrice(BigDecimal maxPrice) {
         this.maxPrice = maxPrice;
+    }
+
+    public String getParentCategoryCode() {
+        return parentCategoryCode;
+    }
+
+    public void setParentCategoryCode(String parentCategoryCode) {
+        this.parentCategoryCode = parentCategoryCode;
     }
 
 }

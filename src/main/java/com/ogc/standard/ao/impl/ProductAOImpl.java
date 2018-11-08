@@ -328,10 +328,10 @@ public class ProductAOImpl implements IProductAO {
         }
 
         // 存在认养中的古树时不能下架
-        if (CollectionUtils.isNotEmpty(treeBO.queryTreeListByProduct(code,
-            ETreeStatus.ADOPTED.getCode()))) {
-            throw new BizException("xn0000", "产品中存在认养中的古树，无法下架！");
-        }
+        // if (CollectionUtils.isNotEmpty(treeBO.queryTreeListByProduct(code,
+        // ETreeStatus.ADOPTED.getCode()))) {
+        // throw new BizException("xn0000", "产品中存在认养中的古树，无法下架！");
+        // }
 
         productBO.refreshPutOffProduct(code, updater);
     }

@@ -1,5 +1,6 @@
 package com.ogc.standard.bo;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.ogc.standard.bo.base.IPaginableBO;
@@ -16,6 +17,9 @@ public interface IPresellSpecsBO extends IPaginableBO<PresellSpecs> {
 
     // 更新库存
     public void refreshPresellSpecsPackCount(String code, Integer packCount);
+
+    // 更新价格
+    public void refreshPresellSpecsPrice(String code, BigDecimal price);
 
     // 根据产品查规格
     public List<PresellSpecs> queryPresellSpecsListByProduct(

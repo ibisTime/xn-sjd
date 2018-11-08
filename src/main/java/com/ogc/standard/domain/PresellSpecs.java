@@ -32,6 +32,10 @@ public class PresellSpecs extends ABaseDO {
     // 每小时涨幅
     private Double increase;
 
+    /*****************DB Properties*******************/
+    // 最小涨幅
+    private Double minIncrease;
+
     public void setCode(String code) {
         this.code = code;
     }
@@ -78,6 +82,14 @@ public class PresellSpecs extends ABaseDO {
 
     public void setIncrease(Double increase) {
         this.increase = increase;
+    }
+
+    public Double getMinIncrease() {
+        return minIncrease;
+    }
+
+    public void setMinIncrease(Double minIncrease) {
+        this.minIncrease = minIncrease;
     }
 
 }

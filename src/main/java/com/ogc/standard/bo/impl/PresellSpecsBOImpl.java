@@ -57,6 +57,14 @@ public class PresellSpecsBOImpl extends PaginableBOImpl<PresellSpecs>
     }
 
     @Override
+    public void refreshPresellSpecsPrice(String code, BigDecimal price) {
+        PresellSpecs condition = new PresellSpecs();
+        condition.setCode(code);
+        condition.setPrice(price);
+        presellSpecsDAO.updatePrice(condition);
+    }
+
+    @Override
     public List<PresellSpecs> queryPresellSpecsListByProduct(
             String productCode) {
         PresellSpecs condition = new PresellSpecs();

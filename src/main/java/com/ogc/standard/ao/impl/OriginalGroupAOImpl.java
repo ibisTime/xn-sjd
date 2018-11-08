@@ -66,7 +66,6 @@ public class OriginalGroupAOImpl implements IOriginalGroupAO {
         }
 
         User claimant = userBO.getUserByMobile(userMobile);
-
         if (originalGroup.getOwnerId().equals(claimant.getUserId())) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "资产不能转让给自己");
@@ -99,6 +98,10 @@ public class OriginalGroupAOImpl implements IOriginalGroupAO {
         originalGroupBO.refreshQuantity(code,
             originalGroup.getQuantity() - quantity);
 
+        // 更新寄售数量
+        originalGroupBO.refreshPresellQuantity(code,
+            originalGroup.getPresellQuantity() + quantity);
+
         return deriveGroupCode;
     }
 
@@ -123,6 +126,10 @@ public class OriginalGroupAOImpl implements IOriginalGroupAO {
         // 更新数量
         originalGroupBO.refreshQuantity(code,
             originalGroup.getQuantity() - quantity);
+
+        // 更新寄售数量
+        originalGroupBO.refreshPresellQuantity(code,
+            originalGroup.getPresellQuantity() + quantity);
 
         return deriveGroupCode;
     }
@@ -149,6 +156,10 @@ public class OriginalGroupAOImpl implements IOriginalGroupAO {
         originalGroupBO.refreshQuantity(code,
             originalGroup.getQuantity() - quantity);
 
+        // 更新寄售数量
+        originalGroupBO.refreshPresellQuantity(code,
+            originalGroup.getPresellQuantity() + quantity);
+
         return deriveGroupCode;
     }
 
@@ -158,7 +169,9 @@ public class OriginalGroupAOImpl implements IOriginalGroupAO {
         OriginalGroup originalGroup = originalGroupBO
             .getOriginalGroup(req.getCode());
         if (!EOriginalGroupStatus.TO_RECEIVE.getCode()
-            .equals(originalGroup.getStatus())) {
+            .equals(originalGroup.getStatus())
+                && !EOriginalGroupStatus.ADOPTING.getCode()
+                    .equals(originalGroup.getStatus())) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "资产不是可填写地址状态");
         }
@@ -178,6 +191,15 @@ public class OriginalGroupAOImpl implements IOriginalGroupAO {
                     logistics);
             }
         }
+
+        // 更新数量
+        originalGroupBO.refreshQuantity(originalGroup.getCode(),
+            originalGroup.getQuantity() - totalCount);
+
+        // 更新提货中数量
+        originalGroupBO.refreshReceivingQuantity(originalGroup.getCode(),
+            totalCount);
+
     }
 
     public void doDailyOriginalGroup() {

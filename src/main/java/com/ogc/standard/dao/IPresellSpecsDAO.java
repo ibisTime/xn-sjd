@@ -9,4 +9,7 @@ public interface IPresellSpecsDAO extends IBaseDAO<PresellSpecs> {
     // 更新库存
     public int updatePackCount(PresellSpecs data);
 
+    // 更新价格
+    public int updatePrice(PresellSpecs data);
+
 }

@@ -6,6 +6,7 @@
 		<result column="code" property="code" />
 		<result column="name" property="name" />
 		<result column="owner_id" property="ownerId" />
+		<result column="parent_category_code" property="parentCategoryCode" />
 		<result column="category_code" property="categoryCode" />
 		<result column="list_pic" property="listPic" />
 		
@@ -52,6 +53,9 @@
 			<if test="ownerId != null and ownerId != '' ">
 				AND t.owner_id = #{ownerId}
 			</if>
+			<if test="parentCategoryCode != null and parentCategoryCode != '' ">
+				AND t.parent_category_code = #{parentCategoryCode}
+			</if>
 			<if test="categoryCode != null and categoryCode != '' ">
 				AND t.category_code = #{categoryCode}
 			</if>
@@ -77,6 +81,7 @@
 		t.code
 		,t.name
 		,t.owner_id
+		,t.parent_category_code
 		,t.category_code
 		,t.list_pic
 		
@@ -135,6 +140,7 @@
 		code
 		,name
 		,owner_id
+		,parent_category_code
 		,category_code
 		,list_pic
 		
@@ -174,6 +180,7 @@
 		#{code}
 		,#{name}
 		,#{ownerId}
+		,#{parentCategoryCode}
 		,#{categoryCode}
 		,#{listPic}
 		
@@ -215,6 +222,7 @@
 		UPDATE tys_presell_product
 		SET
 		name = #{name}
+		,parent_category_code = #{parentCategoryCode}
 		,category_code = #{categoryCode}
 		,list_pic = #{listPic}
 		,banner_pic = #{bannerPic}

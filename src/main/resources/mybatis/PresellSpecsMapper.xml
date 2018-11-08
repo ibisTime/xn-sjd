@@ -19,6 +19,9 @@
 			<if test="productCode != null and productCode != '' ">
 				AND t.product_code = #{productCode}
 			</if>
+			<if test="minIncrease != null and minIncrease != '' ">
+				AND t.increase is not null and  t.increase > #{minIncrease}
+			</if>
 		</trim>
 	</sql>
 	
@@ -72,6 +75,10 @@
 	
 	<update id="update_packCount">
 		UPDATE tys_presell_specs set pack_count = #{packCount} where code = #{code}
+	</update>
+	
+	<update id="update_price">
+		UPDATE tys_presell_specs set price = #{price} where code = #{code}
 	</update>
 
 </mapper>

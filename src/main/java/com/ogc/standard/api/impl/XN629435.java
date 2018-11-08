@@ -32,6 +32,7 @@ public class XN629435 extends AProcessor {
         condition.setOrderCode(req.getOrderCode());
         condition.setOwnerId(req.getOwnerId());
         condition.setStatus(req.getStatus());
+        condition.setMinQuantity(req.getMinQuantity());
 
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {

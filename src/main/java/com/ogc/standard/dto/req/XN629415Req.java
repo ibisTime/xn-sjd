@@ -18,6 +18,9 @@ public class XN629415Req extends APageReq {
     // 产权方编号
     private String ownerId;
 
+    // 产品大类
+    private String parentCategoryCode;
+
     // 产品分类
     private String categoryCode;
 
@@ -76,6 +79,14 @@ public class XN629415Req extends APageReq {
 
     public void setStatusList(List<String> statusList) {
         this.statusList = statusList;
+    }
+
+    public String getParentCategoryCode() {
+        return parentCategoryCode;
+    }
+
+    public void setParentCategoryCode(String parentCategoryCode) {
+        this.parentCategoryCode = parentCategoryCode;
     }
 
 }

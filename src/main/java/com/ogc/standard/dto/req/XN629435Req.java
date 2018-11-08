@@ -22,6 +22,9 @@ public class XN629435Req extends APageReq {
     // 状态
     private String status;
 
+    // 最小数量
+    private String minQuantity;
+
     public String getOrderCode() {
         return orderCode;
     }
@@ -52,6 +55,14 @@ public class XN629435Req extends APageReq {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getMinQuantity() {
+        return minQuantity;
+    }
+
+    public void setMinQuantity(String minQuantity) {
+        this.minQuantity = minQuantity;
     }
 
 }
