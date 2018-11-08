@@ -69,6 +69,7 @@
 		<typeAlias alias="postageTemplate" type="com.ogc.standard.domain.PostageTemplate"/>
 		<typeAlias alias="comment" type="com.ogc.standard.domain.Comment"/>
 		<typeAlias alias="keyword" type="com.ogc.standard.domain.Keyword"/>
+		<typeAlias alias="afterSale" type="com.ogc.standard.domain.AfterSale"/>
 		
 		
 		<typeAlias alias="presellProduct" type="com.ogc.standard.domain.PresellProduct"/>
