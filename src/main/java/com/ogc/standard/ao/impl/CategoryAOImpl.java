@@ -26,8 +26,8 @@ public class CategoryAOImpl implements ICategoryAO {
     private ICategoryBO categoryBO;
 
     @Override
-    public String addCategory(String name, String parentCode, String pic,
-            Integer orderNo, String updater, String remark) {
+    public String addCategory(String name, String type, String parentCode,
+            String pic, Integer orderNo, String updater, String remark) {
         if (categoryBO.isCategoryNameExist(name)) {
             throw new BizException("xn0000", "产品分类名称已存在，请重新输入！");
         }
@@ -41,13 +41,14 @@ public class CategoryAOImpl implements ICategoryAO {
             }
         }
 
-        return categoryBO.saveCategory(name, parentCode, pic, orderNo, updater,
-            remark);
+        return categoryBO.saveCategory(name, type, parentCode, pic, orderNo,
+            updater, remark);
     }
 
     @Override
-    public void editCategory(String code, String name, String parentCode,
-            String pic, Integer orderNo, String updater, String remark) {
+    public void editCategory(String code, String name, String type,
+            String parentCode, String pic, Integer orderNo, String updater,
+            String remark) {
         Category category = categoryBO.getCategory(code);
         if (ECategoryStatus.PUT_ON.getCode().equals(category.getStatus())) {
             throw new BizException("xn0000", "产品分类已上架，无法修改！");
@@ -62,7 +63,7 @@ public class CategoryAOImpl implements ICategoryAO {
             }
         }
 
-        categoryBO.refreshCategory(code, name, parentCode, pic, orderNo,
+        categoryBO.refreshCategory(code, name, type, parentCode, pic, orderNo,
             updater, remark);
     }
 

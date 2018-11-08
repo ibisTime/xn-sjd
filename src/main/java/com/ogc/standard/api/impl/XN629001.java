@@ -25,7 +25,7 @@ public class XN629001 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        categoryAO.editCategory(req.getCode(), req.getName(),
+        categoryAO.editCategory(req.getCode(), req.getName(), req.getType(),
             req.getParentCode(), req.getPic(),
             StringValidater.toInteger(req.getOrderNo()), req.getUpdater(),
             req.getRemark());

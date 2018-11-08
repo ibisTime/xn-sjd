@@ -16,6 +16,9 @@ public class XN629001Req extends BaseReq {
     @NotBlank
     private String code;
 
+    // 类型
+    private String type;
+
     // 上级编号
     private String parentCode;
 
@@ -91,6 +94,14 @@ public class XN629001Req extends BaseReq {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
 }

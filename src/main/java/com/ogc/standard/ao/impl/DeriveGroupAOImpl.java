@@ -79,6 +79,10 @@ public class DeriveGroupAOImpl implements IDeriveGroupAO {
         originalGroupBO.refreshQuantity(originalGroup.getCode(),
             originalGroup.getQuantity() + deriveGroup.getQuantity());
 
+        // 更新寄售数量
+        originalGroupBO.refreshPresellQuantity(originalGroup.getCode(),
+            originalGroup.getPresellQuantity() - deriveGroup.getQuantity());
+
     }
 
     @Override
@@ -135,6 +139,14 @@ public class DeriveGroupAOImpl implements IDeriveGroupAO {
                     originalGroup.getCode());
             }
         }
+
+        // 更新数量
+        originalGroupBO.refreshQuantity(originalGroup.getCode(),
+            originalGroup.getQuantity() + deriveGroup.getQuantity());
+
+        // 更新寄售数量
+        originalGroupBO.refreshPresellQuantity(originalGroup.getCode(),
+            originalGroup.getPresellQuantity() - deriveGroup.getQuantity());
     }
 
     @Override
@@ -168,6 +180,11 @@ public class DeriveGroupAOImpl implements IDeriveGroupAO {
         if (quantity > deriveGroup.getQuantity()) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "认领数量大于剩余数量，不能认领");
+        }
+
+        if (claimant.equals(deriveGroup.getCreater())) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "无法认领自己发布的挂单寄售");
         }
 
         // 落地订单

@@ -13,6 +13,9 @@ public class XN629005Req extends APageReq {
     // 上级编号
     private String parentCode;
 
+    // 类型
+    private String type;
+
     // 名称
     private String name;
 
@@ -64,4 +67,13 @@ public class XN629005Req extends APageReq {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
 }

@@ -76,6 +76,9 @@ public class DeriveGroup extends ABaseDO {
     // 查询人
     private String queryUserId;
 
+    // 最小数量
+    private Interact minQuantity;
+
     public String getCode() {
         return code;
     }
@@ -234,6 +237,14 @@ public class DeriveGroup extends ABaseDO {
 
     public void setQueryUserId(String queryUserId) {
         this.queryUserId = queryUserId;
+    }
+
+    public Interact getMinQuantity() {
+        return minQuantity;
+    }
+
+    public void setMinQuantity(Interact minQuantity) {
+        this.minQuantity = minQuantity;
     }
 
 }

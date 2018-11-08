@@ -16,7 +16,6 @@ import com.ogc.standard.ao.IUserAO;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IAlipayBO;
 import com.ogc.standard.bo.IDeriveGroupBO;
-import com.ogc.standard.bo.IDistributionOrderBO;
 import com.ogc.standard.bo.IGroupOrderBO;
 import com.ogc.standard.bo.IOriginalGroupBO;
 import com.ogc.standard.bo.IPresellInventoryBO;
@@ -65,9 +64,6 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
 
     @Autowired
     private IAlipayBO alipayBO;
-
-    @Autowired
-    private IDistributionOrderBO distributionOrderBO;
 
     @Autowired
     private IPresellProductBO presellProductBO;
@@ -164,17 +160,12 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
             EJourBizTypeUser.PRESELL.getValue(),
             EJourBizTypePlat.PRESELL.getValue(), data.getCode());
 
-        // 进行分销
-        PresellProduct presellProduct = presellProductBO
-            .getPresellProduct(data.getProductCode());
-        BigDecimal backJfAmount = distributionOrderBO.distribution(
-            data.getCode(), presellProduct.getOwnerId(), data.getAmount(),
-            data.getApplyUser(), ESellType.PRESELL.getCode(), deductRes);
-
         // 用户升级
         userAO.upgradeUserLevel(data.getApplyUser());
 
         // 添加快报
+        PresellProduct presellProduct = presellProductBO
+            .getPresellProduct(data.getProductCode());
         smsBO.saveBulletin(data.getApplyUser(), data.getQuantity().toString(),
             ESellType.PRESELL.getCode(), presellProduct.getName());
 
@@ -182,7 +173,7 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
         claimanDeriveGroup(data);
 
         // 业务订单更改
-        groupOrderBO.payYueSuccess(data.getCode(), deductRes, backJfAmount);
+        groupOrderBO.payYueSuccess(data.getCode(), deductRes, BigDecimal.ZERO);
 
         return new BooleanRes(true);
     }
@@ -192,19 +183,12 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
         GroupOrder data = groupOrderBO.getGroupOrder(payGroup);
         if (EGroupOrderStatus.TO_PAY.getCode().equals(data.getStatus())) {
 
-            // 进行分销
-            XN629048Res deductRes = new XN629048Res(BigDecimal.ZERO,
-                BigDecimal.ZERO);
-            PresellProduct presellProduct = presellProductBO
-                .getPresellProduct(data.getProductCode());
-            BigDecimal backJfAmount = distributionOrderBO.distribution(
-                data.getCode(), presellProduct.getOwnerId(), data.getAmount(),
-                data.getApplyUser(), ESellType.PRESELL.getCode(), deductRes);
-
             // 用户升级
             userAO.upgradeUserLevel(data.getApplyUser());
 
             // 添加快报
+            PresellProduct presellProduct = presellProductBO
+                .getPresellProduct(data.getProductCode());
             smsBO.saveBulletin(data.getApplyUser(),
                 data.getQuantity().toString(), ESellType.PRESELL.getCode(),
                 presellProduct.getName());
@@ -214,7 +198,7 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
 
             // 业务订单更改
             groupOrderBO.paySuccess(data.getCode(), data.getAmount(),
-                backJfAmount);
+                BigDecimal.ZERO);
 
         }
     }
@@ -222,6 +206,8 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
     private void claimanDeriveGroup(GroupOrder data) {
         DeriveGroup deriveGroup = deriveGroupBO
             .getDeriveGroup(data.getGroupCode());
+        OriginalGroup originalGroup = originalGroupBO
+            .getOriginalGroup(deriveGroup.getOriginalCode());
 
         // 定向
         if (EPresellType.DIRECT.getCode().equals(deriveGroup.getType())) {
@@ -249,8 +235,6 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
 
             // 分配预售权
             int presellInventoryQuantity = 0;
-            OriginalGroup originalGroup = originalGroupBO
-                .getOriginalGroup(deriveGroup.getOriginalCode());
             List<PresellInventory> presellInventorieList = presellInventoryBO
                 .queryPresellInventoryListByGroup(originalGroup.getCode());
 
@@ -286,8 +270,6 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
 
             // 分配预售权
             int presellInventoryQuantity = 0;
-            OriginalGroup originalGroup = originalGroupBO
-                .getOriginalGroup(deriveGroup.getOriginalCode());
             List<PresellInventory> presellInventorieList = presellInventoryBO
                 .queryPresellInventoryListByGroup(originalGroup.getCode());
 
@@ -303,6 +285,9 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
             }
         }
 
+        // 更新寄售数量
+        originalGroupBO.refreshPresellQuantity(originalGroup.getCode(),
+            originalGroup.getPresellQuantity() - deriveGroup.getQuantity());
     }
 
     @Override
@@ -327,17 +312,43 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
     @Override
     public Paginable<GroupOrder> queryGroupOrderPage(int start, int limit,
             GroupOrder condition) {
-        return groupOrderBO.getPaginable(start, limit, condition);
+        Paginable<GroupOrder> page = groupOrderBO.getPaginable(start, limit,
+            condition);
+
+        if (null != page && CollectionUtils.isNotEmpty(page.getList())) {
+            for (GroupOrder groupOrder : page.getList()) {
+                init(groupOrder);
+            }
+        }
+
+        return page;
     }
 
     @Override
     public List<GroupOrder> queryGroupOrderList(GroupOrder condition) {
-        return groupOrderBO.queryGroupOrderList(condition);
+        List<GroupOrder> list = groupOrderBO.queryGroupOrderList(condition);
+
+        if (CollectionUtils.isNotEmpty(list)) {
+            for (GroupOrder groupOrder : list) {
+                init(groupOrder);
+            }
+        }
+        return list;
     }
 
     @Override
     public GroupOrder getGroupOrder(String code) {
-        return groupOrderBO.getGroupOrder(code);
+        GroupOrder groupOrder = groupOrderBO.getGroupOrder(code);
+
+        init(groupOrder);
+
+        return groupOrder;
     }
 
+    private void init(GroupOrder groupOrder) {
+        // 预售产品
+        PresellProduct presellProduct = presellProductBO
+            .getPresellProduct(groupOrder.getProductCode());
+        groupOrder.setPresellProduct(presellProduct);
+    }
 }

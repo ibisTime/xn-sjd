@@ -19,12 +19,13 @@ public interface ICategoryBO extends IPaginableBO<Category> {
     public boolean isCategoryNameExist(String name);
 
     // 添加分类
-    public String saveCategory(String name, String parentCode, String pic,
-            Integer orderNo, String updater, String remark);
+    public String saveCategory(String name, String type, String parentCode,
+            String pic, Integer orderNo, String updater, String remark);
 
     // 修改分类
-    public void refreshCategory(String code, String name, String parentCode,
-            String pic, Integer orderNo, String updater, String remark);
+    public void refreshCategory(String code, String name, String type,
+            String parentCode, String pic, Integer orderNo, String updater,
+            String remark);
 
     // 上架
     public void refreshPutOnCategory(String code, String updater);

@@ -17,6 +17,13 @@ public interface IOriginalGroupBO extends IPaginableBO<OriginalGroup> {
     // 更新数量
     public void refreshQuantity(String code, Integer quantity);
 
+    // 更新寄售数量
+    public void refreshPresellQuantity(String code, Integer presellQuantity);
+
+    // 更新提货中数量
+    public void refreshReceivingQuantity(String code,
+            Integer receivingQuantity);
+
     // 开始认养
     public void refreshStartAdopt(String code);
 

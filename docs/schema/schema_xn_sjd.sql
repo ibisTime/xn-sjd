@@ -828,6 +828,7 @@ CREATE TABLE `tsys_user` (
 DROP TABLE IF EXISTS `tzb_category`;
 CREATE TABLE `tzb_category` (
   `code` varchar(32) NOT NULL COMMENT '编号',
+  `type` varchar(4) NOT NULL COMMENT '类型',
   `parent_code` varchar(32) DEFAULT NULL COMMENT '上级编号',
   `name` varchar(255) DEFAULT NULL COMMENT '名称',
   `pic` text COMMENT '图片',
@@ -978,6 +979,7 @@ CREATE TABLE `tys_presell_product` (
   `code` varchar(32) NOT NULL COMMENT '编号',
   `name` varchar(255) DEFAULT NULL COMMENT '名称',
   `owner_id` varchar(32) DEFAULT NULL COMMENT '产权方编号',
+  `parent_category_code` varchar(32) DEFAULT NULL COMMENT '产品大类',
   `category_code` varchar(32) DEFAULT NULL COMMENT '产品分类',
   `list_pic` text DEFAULT NULL COMMENT '列表图片',
 
@@ -1070,6 +1072,7 @@ CREATE TABLE `tys_original_group` (
   `price` decimal(18,8) DEFAULT NULL COMMENT '单价', 
   `quantity` int DEFAULT 0 COMMENT '数量',
   `presell_quantity` int DEFAULT 0 COMMENT '挂单数量',
+  `receiving_quantity` int DEFAULT 0 COMMENT '提货中数量',
   `unit` varchar(32) DEFAULT NULL COMMENT '单位',
   `adopt_start_datetime` datetime DEFAULT NULL COMMENT '认养开始时间',
   `adopt_end_datetime` datetime DEFAULT NULL COMMENT '认养结束时间',

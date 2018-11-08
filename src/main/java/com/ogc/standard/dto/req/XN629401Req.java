@@ -22,6 +22,9 @@ public class XN629401Req extends BaseReq {
     @NotBlank
     private String name;
 
+    // 产品大类
+    private String parentCategoryCode;
+
     // 产品分类
     @NotBlank
     private String categoryCode;
@@ -323,6 +326,14 @@ public class XN629401Req extends BaseReq {
 
     public void setTreeList(List<XN629400ReqTree> treeList) {
         this.treeList = treeList;
+    }
+
+    public String getParentCategoryCode() {
+        return parentCategoryCode;
+    }
+
+    public void setParentCategoryCode(String parentCategoryCode) {
+        this.parentCategoryCode = parentCategoryCode;
     }
 
 }

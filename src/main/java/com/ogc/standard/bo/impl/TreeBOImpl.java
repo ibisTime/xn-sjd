@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.ogc.standard.bo.IApplyBindMaintainBO;
+import com.ogc.standard.bo.IPresellProductBO;
 import com.ogc.standard.bo.IProductBO;
 import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.ITreeBO;
@@ -23,6 +24,7 @@ import com.ogc.standard.dto.req.XN629010ReqTree;
 import com.ogc.standard.dto.req.XN629400ReqTree;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.enums.EProductType;
+import com.ogc.standard.enums.ESellType;
 import com.ogc.standard.enums.ETreeStatus;
 import com.ogc.standard.exception.BizException;
 
@@ -40,6 +42,9 @@ public class TreeBOImpl extends PaginableBOImpl<Tree> implements ITreeBO {
 
     @Autowired
     private IProductBO productBO;
+
+    @Autowired
+    private IPresellProductBO presellProductBO;
 
     @Override
     public boolean isTreeNumberExist(String treeNumber) {
@@ -303,9 +308,17 @@ public class TreeBOImpl extends PaginableBOImpl<Tree> implements ITreeBO {
         tree.setMaintainer(maintainer);
 
         // 产品名称
-        Product product = productBO.getProduct(tree.getProductCode());
-        tree.setProductName(product.getName());
-        tree.setSellType(product.getSellType());
+        if (EProductType.NORMAL.getCode().equals(tree.getProductType())) {
+            Product product = productBO.getProduct(tree.getProductCode());
+            tree.setProductName(product.getName());
+            tree.setSellType(product.getSellType());
+        } else {
+            PresellProduct presellProduct = presellProductBO
+                .getPresellProduct(tree.getProductCode());
+            tree.setProductName(presellProduct.getName());
+            tree.setSellType(ESellType.PRESELL.getCode());
+        }
+
     }
 
 }

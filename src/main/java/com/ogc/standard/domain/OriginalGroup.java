@@ -40,6 +40,9 @@ public class OriginalGroup extends ABaseDO {
     // 挂单数量
     private Integer presellQuantity;
 
+    // 提货中数量
+    private Integer receivingQuantity;
+
     // 单位
     private String unit;
 
@@ -79,6 +82,9 @@ public class OriginalGroup extends ABaseDO {
 
     // 树木列表
     private List<PresellInventory> treeNumberList;
+
+    // 最小数量
+    private String minQuantity;
 
     public void setCode(String code) {
         this.code = code;
@@ -246,6 +252,22 @@ public class OriginalGroup extends ABaseDO {
 
     public void setTreeNumberList(List<PresellInventory> treeNumberList) {
         this.treeNumberList = treeNumberList;
+    }
+
+    public String getMinQuantity() {
+        return minQuantity;
+    }
+
+    public void setMinQuantity(String minQuantity) {
+        this.minQuantity = minQuantity;
+    }
+
+    public Integer getReceivingQuantity() {
+        return receivingQuantity;
+    }
+
+    public void setReceivingQuantity(Integer receivingQuantity) {
+        this.receivingQuantity = receivingQuantity;
     }
 
 }

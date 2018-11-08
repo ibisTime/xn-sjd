@@ -34,6 +34,7 @@ public class XN629005 extends AProcessor {
         condition.setOrderNo(StringValidater.toInteger(req.getOrderNo()));
         condition.setStatus(req.getStatus());
         condition.setLevel(req.getLevel());
+        condition.setType(req.getType());
 
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {

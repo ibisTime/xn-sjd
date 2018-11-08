@@ -44,13 +44,14 @@ public class CategoryBOImpl extends PaginableBOImpl<Category>
     }
 
     @Override
-    public String saveCategory(String name, String parentCode, String pic,
-            Integer orderNo, String updater, String remark) {
+    public String saveCategory(String name, String type, String parentCode,
+            String pic, Integer orderNo, String updater, String remark) {
         Category data = new Category();
 
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.Category.getCode());
         data.setCode(code);
+        data.setType(type);
         data.setName(name);
         data.setParentCode(parentCode);
         data.setPic(pic);
@@ -65,12 +66,14 @@ public class CategoryBOImpl extends PaginableBOImpl<Category>
     }
 
     @Override
-    public void refreshCategory(String code, String name, String parentCode,
-            String pic, Integer orderNo, String updater, String remark) {
+    public void refreshCategory(String code, String type, String name,
+            String parentCode, String pic, Integer orderNo, String updater,
+            String remark) {
         Category data = new Category();
 
         data.setCode(code);
         data.setName(name);
+        data.setType(type);
         data.setParentCode(parentCode);
         data.setPic(pic);
         data.setOrderNo(orderNo);

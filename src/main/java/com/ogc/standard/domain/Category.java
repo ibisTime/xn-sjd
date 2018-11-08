@@ -16,6 +16,9 @@ public class Category extends ABaseDO {
     // 编号
     private String code;
 
+    // 类型
+    private String type;
+
     // 上级编号
     private String parentCode;
 
@@ -121,6 +124,14 @@ public class Category extends ABaseDO {
 
     public void setLevel(String level) {
         this.level = level;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
 }

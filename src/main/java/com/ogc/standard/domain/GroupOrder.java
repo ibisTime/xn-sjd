@@ -87,6 +87,9 @@ public class GroupOrder extends ABaseDO {
 
     private Date applyDatetimeEnd;// 下单时间止
 
+    // 预售产品
+    private PresellProduct presellProduct;
+
     public String getCode() {
         return code;
     }
@@ -277,6 +280,14 @@ public class GroupOrder extends ABaseDO {
 
     public void setApplyDatetimeEnd(Date applyDatetimeEnd) {
         this.applyDatetimeEnd = applyDatetimeEnd;
+    }
+
+    public PresellProduct getPresellProduct() {
+        return presellProduct;
+    }
+
+    public void setPresellProduct(PresellProduct presellProduct) {
+        this.presellProduct = presellProduct;
     }
 
 }

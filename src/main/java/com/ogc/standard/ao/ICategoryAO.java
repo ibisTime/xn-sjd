@@ -15,12 +15,13 @@ public interface ICategoryAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
     // 添加产品分类
-    public String addCategory(String name, String parentCode, String pic,
-            Integer orderNo, String updater, String remark);
+    public String addCategory(String name, String type, String parentCode,
+            String pic, Integer orderNo, String updater, String remark);
 
     // 修改产品分类
-    public void editCategory(String code, String name, String parentCode,
-            String pic, Integer orderNo, String updater, String remark);
+    public void editCategory(String code, String name, String type,
+            String parentCode, String pic, Integer orderNo, String updater,
+            String remark);
 
     // 上架
     public void putOnCategory(String code, String updater);

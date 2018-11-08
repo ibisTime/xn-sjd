@@ -28,6 +28,11 @@ public class PresellSpecsDAOImpl extends AMybatisTemplate
     }
 
     @Override
+    public int updatePrice(PresellSpecs data) {
+        return super.update(NAMESPACE.concat("update_price"), data);
+    }
+
+    @Override
     public PresellSpecs select(PresellSpecs condition) {
         return super.select(NAMESPACE.concat("select_presellSpecs"), condition,
             PresellSpecs.class);
