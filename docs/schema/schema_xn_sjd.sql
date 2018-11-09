@@ -1008,7 +1008,8 @@ CREATE TABLE `tys_presell_product` (
   `adopt_end_datetime` datetime DEFAULT NULL COMMENT '认养结束时间',
   `adopt_year` int DEFAULT 0 COMMENT '认养年限',
 
-  `harvest_datetime` datetime DEFAULT NULL COMMENT '收货时间',
+  `harvest_datetime` datetime DEFAULT NULL COMMENT '收获时间',
+  `deliver_datetime` datetime DEFAULT NULL COMMENT '发货时间',
   `now_count` int DEFAULT 0 COMMENT '已预售数量',
   `location` varchar(32) DEFAULT NULL COMMENT 'UI位置',
   `order_no` int DEFAULT 0 COMMENT 'UI次序',
@@ -1068,6 +1069,8 @@ CREATE TABLE `tys_original_group` (
   `order_code` varchar(32) DEFAULT NULL COMMENT '订单编号',
   `product_code` varchar(32) DEFAULT NULL COMMENT '产品编号',
   `product_name` varchar(255) DEFAULT NULL COMMENT '产品名称',
+  `specs_code` varchar(32) DEFAULT NULL COMMENT '规格编号',
+  `specs_name` varchar(255) DEFAULT NULL COMMENT '规格名称',
   `owner_id` varchar(32) DEFAULT NULL COMMENT '归属人',
 
   `price` decimal(18,8) DEFAULT NULL COMMENT '单价', 
@@ -1100,6 +1103,8 @@ CREATE TABLE `tys_derive_group` (
   `original_code` varchar(32) DEFAULT NULL COMMENT '原生组编号',
   `product_code` varchar(32) DEFAULT NULL COMMENT '产品编号',
   `product_name` varchar(255) DEFAULT NULL COMMENT '产品名称',
+  `specs_code` varchar(32) DEFAULT NULL COMMENT '规格编号',
+  `specs_name` varchar(255) DEFAULT NULL COMMENT '规格名称',
   `variety` varchar(4) DEFAULT NULL COMMENT '品种',
   `type` varchar(4) DEFAULT NULL COMMENT '类型（定向/二维码/挂单）',
 
@@ -1126,7 +1131,9 @@ CREATE TABLE `tys_group_order` (
   `owner_id` varchar(32) DEFAULT NULL COMMENT '资产归属人',
   `product_code` varchar(32) DEFAULT NULL COMMENT '产品编号',
   `product_name` varchar(255) DEFAULT NULL COMMENT '产品名称',
-
+  `specs_code` varchar(32) DEFAULT NULL COMMENT '规格编号',
+  `specs_name` varchar(255) DEFAULT NULL COMMENT '规格名称',
+  
   `price` decimal(18,8) DEFAULT NULL COMMENT '价格',
   `quantity` int DEFAULT 0 COMMENT '数量',
   `amount` decimal(18,8) DEFAULT NULL COMMENT '金额',
