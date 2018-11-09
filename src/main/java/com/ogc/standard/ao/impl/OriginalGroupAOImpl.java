@@ -198,7 +198,7 @@ public class OriginalGroupAOImpl implements IOriginalGroupAO {
 
         // 更新提货中数量
         originalGroupBO.refreshReceivingQuantity(originalGroup.getCode(),
-            totalCount);
+            originalGroup.getReceivingQuantity() + totalCount);
 
     }
 

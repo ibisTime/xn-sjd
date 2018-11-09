@@ -5,6 +5,7 @@
 	<resultMap id="groupOrder_DB_Result" type="groupOrder">
 		<result column="code" property="code" />
 		<result column="group_code" property="groupCode" />
+		<result column="owner_id" property="ownerId" />
 		<result column="product_code" property="productCode" />
 		<result column="product_name" property="productName" />
 		<result column="price" property="price" />
@@ -39,6 +40,9 @@
 			<if test="groupCode != null and groupCode != '' ">
 				AND t.group_code = #{groupCode}
 			</if>
+			<if test="ownerId != null and ownerId != '' ">
+				AND t.owner_id = #{ownerId}
+			</if>
 			<if test="productCode != null and productCode != '' ">
 				AND t.product_code = #{productCode}
 			</if>
@@ -71,6 +75,7 @@
 		SELECT
 		t.code
 		,t.group_code
+		,t.owner_id
 		,t.product_code
 		,t.product_name
 		,t.price
@@ -116,6 +121,7 @@
 		tys_group_order(
 		code
 		,group_code
+		,owner_id
 		,product_code
 		,product_name
 		,price
@@ -137,6 +143,7 @@
 		VALUES(
 		#{code}
 		,#{groupCode}
+		,#{ownerId}
 		,#{productCode}
 		,#{productName}
 		,#{price}

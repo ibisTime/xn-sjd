@@ -1,5 +1,7 @@
 package com.ogc.standard.dao;
 
+import java.util.List;
+
 import com.ogc.standard.dao.base.IBaseDAO;
 import com.ogc.standard.domain.DeriveGroup;
 
@@ -23,5 +25,8 @@ public interface IDeriveGroupDAO extends IBaseDAO<DeriveGroup> {
 
     // 更新数量
     public int updateQuantity(DeriveGroup data);
+
+    // 查询品种
+    public List<DeriveGroup> selectVarietyList(DeriveGroup data);
 
 }

@@ -120,7 +120,7 @@ public class OriginalGroupBOImpl extends PaginableBOImpl<OriginalGroup>
         OriginalGroup originalGroup = new OriginalGroup();
         originalGroup.setCode(code);
         originalGroup.setReceivingQuantity(receivingQuantity);
-        originalGroupDAO.updateReceiveOrignalGroup(originalGroup);
+        originalGroupDAO.updateReceivingQuantity(originalGroup);
     }
 
     @Override

@@ -7,6 +7,7 @@
 		<result column="original_code" property="originalCode" />
 		<result column="product_code" property="productCode" />
 		<result column="product_name" property="productName" />
+		<result column="variety" property="variety" />
 		<result column="type" property="type" />
 		
 		<result column="price" property="price" />
@@ -35,6 +36,9 @@
 			<if test="productCode != null and productCode != '' ">
 				AND t.product_code = #{productCode}
 			</if>
+			<if test="variety != null and variety != '' ">
+				AND t.variety = #{variety}
+			</if>
 			<if test="type != null and type != '' ">
 				AND t.type = #{type}
 			</if>
@@ -53,6 +57,9 @@
 			<if test="queryUserId != null and queryUserId != '' ">
 				AND t.creater = #{queryUserId} or (t.type = 0 and t.claimant = #{queryUserId})
 			</if>
+			<if test="minQuantity != null and minQuantity != '' ">
+				AND t.quantity > #{minQuantity}
+			</if>
 			
 			<if test="statusList != null and statusList != '' ">
 				AND t.status in 
@@ -63,12 +70,27 @@
 		</trim>
 	</sql>
 	
+	<select id="select_distinctVariety" parameterType="deriveGroup" resultMap="deriveGroup_DB_Result">
+		SELECT
+		DISTINCT
+		t.variety
+		FROM
+		tys_derive_group t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+	
 	<select id="select_deriveGroup" parameterType="deriveGroup" resultMap="deriveGroup_DB_Result">
 		SELECT
 		t.code
 		,t.original_code
 		,t.product_code
 		,t.product_name
+		,t.variety
 		,t.type
 		
 		,t.price
@@ -107,6 +129,7 @@
 		,original_code
 		,product_code
 		,product_name
+		,variety
 		,type
 		
 		,price
@@ -126,6 +149,7 @@
 		,#{originalCode}
 		,#{productCode}
 		,#{productName}
+		,#{variety}
 		,#{type}
 		
 		,#{price}

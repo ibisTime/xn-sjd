@@ -1,6 +1,8 @@
 package com.ogc.standard.ao.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -236,6 +238,8 @@ public class DeriveGroupAOImpl implements IDeriveGroupAO {
             }
         }
 
+        ListSort(list);
+
         Paginable<DeriveGroup> page = new Page<DeriveGroup>(1, list.size(),
             list.size());
         page.setList(list);
@@ -257,6 +261,11 @@ public class DeriveGroupAOImpl implements IDeriveGroupAO {
     }
 
     @Override
+    public List<DeriveGroup> queryVarietyList(DeriveGroup data) {
+        return deriveGroupBO.queryVarietyList(data);
+    }
+
+    @Override
     public DeriveGroup getDeriveGroup(String code) {
         DeriveGroup deriveGroup = deriveGroupBO.getDeriveGroup(code);
 
@@ -275,6 +284,25 @@ public class DeriveGroupAOImpl implements IDeriveGroupAO {
         List<PresellInventory> treeNumberList = presellInventoryBO
             .queryTreeNumberListByGroup(deriveGroup.getCode());
         deriveGroup.setTreeNumberList(treeNumberList);
+    }
+
+    // 将List按照日期排序
+    public void ListSort(List<DeriveGroup> list) {
+        Collections.sort(list, new Comparator<DeriveGroup>() {
+            @Override
+            public int compare(DeriveGroup o1, DeriveGroup o2) {
+
+                if (o1.getCreateDatetime().getTime() > o2.getCreateDatetime()
+                    .getTime()) {
+                    return -1;
+                } else if (o1.getCreateDatetime().getTime() < o2
+                    .getCreateDatetime().getTime()) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            }
+        });
     }
 
 }

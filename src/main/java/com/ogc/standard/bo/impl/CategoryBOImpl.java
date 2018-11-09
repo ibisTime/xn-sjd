@@ -44,8 +44,9 @@ public class CategoryBOImpl extends PaginableBOImpl<Category>
     }
 
     @Override
-    public String saveCategory(String name, String type, String parentCode,
-            String pic, Integer orderNo, String updater, String remark) {
+    public String saveCategory(String name, Integer level, String type,
+            String parentCode, String pic, Integer orderNo, String updater,
+            String remark) {
         Category data = new Category();
 
         String code = OrderNoGenerater
@@ -53,6 +54,7 @@ public class CategoryBOImpl extends PaginableBOImpl<Category>
         data.setCode(code);
         data.setType(type);
         data.setName(name);
+        data.setLevel(level);
         data.setParentCode(parentCode);
         data.setPic(pic);
         data.setOrderNo(orderNo);
@@ -66,13 +68,14 @@ public class CategoryBOImpl extends PaginableBOImpl<Category>
     }
 
     @Override
-    public void refreshCategory(String code, String type, String name,
-            String parentCode, String pic, Integer orderNo, String updater,
-            String remark) {
+    public void refreshCategory(String code, String name, Integer level,
+            String type, String parentCode, String pic, Integer orderNo,
+            String updater, String remark) {
         Category data = new Category();
 
         data.setCode(code);
         data.setName(name);
+        data.setLevel(level);
         data.setType(type);
         data.setParentCode(parentCode);
         data.setPic(pic);
@@ -121,6 +124,17 @@ public class CategoryBOImpl extends PaginableBOImpl<Category>
             if (data == null) {
                 throw new BizException("xn0000", "产品分类不存在！");
             }
+        }
+        return data;
+    }
+
+    @Override
+    public Category getCategoryByName(String name) {
+        Category data = null;
+        if (StringUtils.isNotBlank(name)) {
+            Category condition = new Category();
+            condition.setName(name);
+            data = categoryDAO.select(condition);
         }
         return data;
     }

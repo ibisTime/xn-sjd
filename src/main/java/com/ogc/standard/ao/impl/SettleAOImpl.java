@@ -12,12 +12,14 @@ import com.ogc.standard.ao.ISettleAO;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IAdoptOrderBO;
 import com.ogc.standard.bo.IGroupAdoptOrderBO;
+import com.ogc.standard.bo.IPresellOrderBO;
 import com.ogc.standard.bo.IProductBO;
 import com.ogc.standard.bo.ISettleBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.AdoptOrder;
 import com.ogc.standard.domain.GroupAdoptOrder;
+import com.ogc.standard.domain.PresellOrder;
 import com.ogc.standard.domain.Product;
 import com.ogc.standard.domain.Settle;
 import com.ogc.standard.domain.User;
@@ -53,6 +55,9 @@ public class SettleAOImpl implements ISettleAO {
 
     @Autowired
     private IProductBO productBO;
+
+    @Autowired
+    private IPresellOrderBO presellOrderBO;
 
     @Override
     @Transactional
@@ -126,30 +131,46 @@ public class SettleAOImpl implements ISettleAO {
     }
 
     private void initSettle(Settle settle) {
-        String productCode = null;
+        String productName = null;
         String applyUser = null;
 
-        // 集体订单
         if (ESellType.COLLECTIVE.getCode().equals(settle.getRefType())) {
+
+            // 集体订单
             GroupAdoptOrder groupAdoptOrder = groupAdoptOrderBO
                 .getGroupAdoptOrder(settle.getRefCode());
             settle.setGroupAdoptOrder(groupAdoptOrder);
 
-            productCode = groupAdoptOrder.getProductCode();
+            Product product = productBO
+                .getProduct(groupAdoptOrder.getProductCode());
+            productName = product.getName();
             applyUser = groupAdoptOrder.getApplyUser();
+
+        } else if (ESellType.PRESELL.getCode().equals(settle.getRefType())) {
+
+            // 预售订单
+            PresellOrder presellOrder = presellOrderBO
+                .getPresellOrder(settle.getRefCode());
+            settle.setPresellOrder(presellOrder);
+
+            productName = presellOrder.getProductName();
+            applyUser = presellOrder.getApplyUser();
+
         } else {
+
             // 认养订单
             AdoptOrder adoptOrder = adoptOrderBO
                 .getAdoptOrder(settle.getRefCode());
             settle.setAdoptOrder(adoptOrder);
 
-            productCode = adoptOrder.getProductCode();
+            Product product = productBO.getProduct(adoptOrder.getProductCode());
+            productName = product.getName();
             applyUser = adoptOrder.getApplyUser();
+
         }
 
         // 产品名称
-        Product product = productBO.getProduct(productCode);
-        settle.setProductName(product.getName());
+        settle.setProductName(productName);
 
         // 认养人
         User user = userBO.getUserUnCheck(applyUser);

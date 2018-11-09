@@ -49,6 +49,9 @@ public interface IDeriveGroupBO extends IPaginableBO<DeriveGroup> {
 
     public List<DeriveGroup> queryDeriveGroupList(DeriveGroup condition);
 
+    // 查询品种
+    public List<DeriveGroup> queryVarietyList(DeriveGroup data);
+
     public DeriveGroup getDeriveGroup(String code);
 
 }

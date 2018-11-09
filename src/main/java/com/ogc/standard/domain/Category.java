@@ -31,8 +31,8 @@ public class Category extends ABaseDO {
     // 顺序
     private Integer orderNo;
 
-    // 级别(1大类/2小类)
-    private String level;
+    // 级别
+    private Integer level;
 
     // 状态(0下架/1上架)
     private String status;
@@ -118,11 +118,11 @@ public class Category extends ABaseDO {
         this.updateDatetime = updateDatetime;
     }
 
-    public String getLevel() {
+    public Integer getLevel() {
         return level;
     }
 
-    public void setLevel(String level) {
+    public void setLevel(Integer level) {
         this.level = level;
     }
 

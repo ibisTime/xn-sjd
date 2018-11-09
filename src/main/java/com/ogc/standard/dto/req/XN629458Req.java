@@ -8,7 +8,9 @@ import org.hibernate.validator.constraints.NotBlank;
  * @since: Nov 4, 2018 3:28:56 PM 
  * @history:
  */
-public class XN629458Req {
+public class XN629458Req extends AListReq {
+    private static final long serialVersionUID = 6764044891331920489L;
+
     // 用户编号
     @NotBlank
 

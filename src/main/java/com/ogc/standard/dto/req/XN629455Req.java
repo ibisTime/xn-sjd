@@ -36,6 +36,12 @@ public class XN629455Req extends APageReq {
     // 查询人
     private String queryUserId;
 
+    // 最小数量
+    private String minQuantity;
+
+    // 品种
+    private String variety;
+
     public String getOriginalCode() {
         return originalCode;
     }
@@ -98,6 +104,22 @@ public class XN629455Req extends APageReq {
 
     public void setQueryUserId(String queryUserId) {
         this.queryUserId = queryUserId;
+    }
+
+    public String getMinQuantity() {
+        return minQuantity;
+    }
+
+    public void setMinQuantity(String minQuantity) {
+        this.minQuantity = minQuantity;
+    }
+
+    public String getVariety() {
+        return variety;
+    }
+
+    public void setVariety(String variety) {
+        this.variety = variety;
     }
 
 }

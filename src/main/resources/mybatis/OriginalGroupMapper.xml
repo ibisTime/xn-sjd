@@ -70,6 +70,7 @@
 		,t.price
 		,t.quantity
 		,t.presell_quantity
+		,t.receiving_quantity
 		,t.unit
 		,t.status
 		

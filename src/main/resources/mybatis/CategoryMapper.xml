@@ -30,11 +30,8 @@
 			<if test="parentCode != null and parentCode != '' ">
 				AND t.parent_code = #{parentCode}
 			</if>
-			<if test="level != null and level == 1 ">
-				AND t.parent_code is null
-			</if>
-			<if test="level != null and level == 2 ">
-				AND t.parent_code is not null
+			<if test="level != null and level != '' ">
+				AND t.level = #{level}
 			</if>
 			<if test="orderNo != null and orderNo != '' ">
 				AND t.order_no = #{orderNo}
@@ -51,6 +48,7 @@
 		,t.type
 		,t.parent_code
 		,t.name
+		,t.level
 		,t.pic
 		,t.order_no
 		,t.status
@@ -80,6 +78,7 @@
 		,type
 		,parent_code
 		,name
+		,level
 		,pic
 		,order_no
 		
@@ -93,6 +92,7 @@
 		,#{type}
 		,#{parentCode}
 		,#{name}
+		,#{level}
 		,#{pic}
 		,#{orderNo}
 		
@@ -109,6 +109,7 @@
 		type = #{type}
 		,parent_code = #{parentCode}
 		,name = #{name}
+		,level = #{level}
 		,pic = #{pic}
 		,order_no = #{orderNo}
 		,updater = #{updater}
