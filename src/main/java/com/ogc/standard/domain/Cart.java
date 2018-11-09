@@ -33,7 +33,7 @@ public class Cart extends ABaseDO {
     private String commodityName;
 
     // 规格编号
-    private String specsCode;
+    private Long specsId;
 
     // 规格名称
     private String specsName;
@@ -75,12 +75,12 @@ public class Cart extends ABaseDO {
         this.commodityName = commodityName;
     }
 
-    public String getSpecsCode() {
-        return specsCode;
+    public Long getSpecsId() {
+        return specsId;
     }
 
-    public void setSpecsCode(String specsCode) {
-        this.specsCode = specsCode;
+    public void setSpecsId(Long specsId) {
+        this.specsId = specsId;
     }
 
     public String getSpecsName() {

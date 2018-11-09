@@ -27,13 +27,7 @@ public class CommoditySpecsDAOImpl extends AMybatisTemplate implements
 
     @Override
     public int insert(CommoditySpecs data) {
-        return 0;
-    }
-
-    @Override
-    public void insert(List<CommoditySpecs> dataList) {
-        super.insertBatch(NAMESPACE.concat("insert_commodity_specs_list"),
-            (List) dataList);
+        return super.insert(NAMESPACE.concat("insert_commodity_specs"), data);
     }
 
     @Override

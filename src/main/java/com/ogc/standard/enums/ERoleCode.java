@@ -10,7 +10,8 @@ public enum ERoleCode {
 
     OWNER("JS201809301134241553541", "产权端"), MAINTAIN(
             "JS201809301134504008291", "养护端"), AGENT("JS201810041749178264163",
-            "代理商"), SALEMANS("JS201810041749297484833", "业务员");
+            "代理商"), SALEMANS("JS201810041749297484833", "业务员"), BUSINESS(
+            "JS201811081749297484833", "商家");
 
     ERoleCode(String code, String value) {
         this.code = code;

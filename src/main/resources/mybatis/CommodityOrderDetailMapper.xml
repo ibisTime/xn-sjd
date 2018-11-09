@@ -51,7 +51,12 @@
 			<if test="receiver != null and receiver != '' ">
 				AND t.receiver = #{receiver}
 			</if>
-			
+			<if test="deliverDatetimeStart != null and deliverDatetimeStart != '' ">
+				<![CDATA[AND t.deliver_datetime >= #{deliverDatetimeStart}]]>
+			</if>
+			<if test="deliverDatetimeEnd != null and deliverDatetimeEnd != '' ">
+				<![CDATA[AND t.deliver_datetime <= #{deliverDatetimeEnd}]]>
+			</if>
 		</trim>
 	</sql>
 	

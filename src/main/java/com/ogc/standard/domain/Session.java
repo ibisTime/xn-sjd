@@ -3,7 +3,7 @@
  * @Package com.ogc.standard.domain 
  * @Description 
  * @author taojian  
- * @date 2018年10月10日 下午3:22:00 
+ * @date 2018年11月8日 上午11:39:12 
  * @version V1.0   
  */
 package com.ogc.standard.domain;
@@ -16,10 +16,10 @@ import com.ogc.standard.dao.base.ABaseDO;
 /** 
  * 会话
  * @author: taojian 
- * @since: 2018年10月10日 下午3:22:00 
+ * @since: 2018年11月8日 上午11:39:12 
  * @history:
  */
-public class MissSession extends ABaseDO {
+public class Session extends ABaseDO {
 
     private static final long serialVersionUID = 7540253521864819742L;
 
@@ -57,14 +57,14 @@ public class MissSession extends ABaseDO {
     // 用户手机
     private String mobile;
 
-    private List<Question> questionsList;
+    private List<SessionMessage> messageList;
 
-    public List<Question> getQuestionsList() {
-        return questionsList;
+    public List<SessionMessage> getMessageList() {
+        return messageList;
     }
 
-    public void setQuestionsList(List<Question> questionsList) {
-        this.questionsList = questionsList;
+    public void setMessageList(List<SessionMessage> messageList) {
+        this.messageList = messageList;
     }
 
     public Date getCreateDatetimeStart() {

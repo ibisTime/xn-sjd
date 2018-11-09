@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ogc.standard.dao.ISessionMessageDAO">
+	<resultMap id="sessionMessage_DB_Result" type="sessionMessage">
+		<result column="id" property="id" />
+		<result column="session_code" property="sessionCode" />
+		<result column="user_id" property="userId" />
+		<result column="content" property="content" />
+		<result column="status" property="status" />
+		<result column="create_datetime" property="createDatetime" />
+	</resultMap>
+	
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="id != null and id != '' ">
+				AND t.id = #{id}
+			</if>
+			<if test="userId != null and userId != '' ">
+				AND t.user_id = #{userId}
+			</if>
+			<if test="sessionCode != null and sessionCode != '' ">
+				AND t.session_code = #{sessionCode}
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+		</trim>
+	</sql>
+	
+	<insert id="insert_session_message" parameterType="sessionMessage">
+		INSERT INTO tsc_session_message(
+		id
+		,session_code
+		,user_id
+		,content
+		,status
+		,create_datetime
+		)
+		VALUES(
+		#{id}
+		,#{sessionCode}
+		,#{userId}
+		,#{content}
+		,#{status}
+		,#{createDatetime}
+		)
+	</insert>
+	
+	<update id="update_status" parameterType="sessionMessage">
+		UPDATE tsc_session_message
+		SET
+		status=#{status}
+		WHERE
+		id=#{id}
+	
+	</update>
+	
+	<select id="select_session_message" parameterType="sessionMessage" resultMap="sessionMessage_DB_Result">
+		SELECT
+		t.id
+		,t.session_code
+		,t.user_id
+		,t.content
+		,t.status
+		,t.create_datetime
+		FROM
+		tsc_session_message t 
+		<include refid="where_condition" />
+	</select>
+		
+	<select id="select_session_message_count" parameterType="sessionMessage"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tsc_session_message t
+		<include refid="where_condition" />
+	</select>
+</mapper>

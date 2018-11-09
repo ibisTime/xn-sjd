@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import com.ogc.standard.ao.ICartAO;
 import com.ogc.standard.bo.ICartBO;
+import com.ogc.standard.bo.ICommoditySpecsBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.domain.Cart;
 
@@ -32,12 +33,15 @@ public class CartAOImpl implements ICartAO {
     @Autowired
     private IUserBO userBO;
 
+    @Autowired
+    private ICommoditySpecsBO commoditySpecsBO;
+
     @Override
     public String addToCart(String userId, String commodityCode,
-            String commodityName, String specsCode, String specsName,
-            Long quantity) {
+            String commodityName, Long specsId, String specsName, Long quantity) {
         userBO.getUser(userId);
-        return cartBO.saveCart(userId, commodityCode, commodityName, specsCode,
+        commoditySpecsBO.getInventory(specsId);
+        return cartBO.saveCart(userId, commodityCode, commodityName, specsId,
             specsName, quantity);
     }
 

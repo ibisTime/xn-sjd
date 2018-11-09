@@ -11,6 +11,7 @@ package com.ogc.standard.dto.req;
 import java.util.List;
 
 import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import com.ogc.standard.domain.CommoditySpecs;
 
@@ -72,7 +73,7 @@ public class XN629701Req {
     private String remark;
 
     // 规格列表
-    @NotBlank
+    @NotEmpty
     private List<CommoditySpecs> specsList;
 
     public String getCode() {

@@ -20,9 +20,6 @@
 			<if test="word != null and word != '' ">
 				AND t.word = #{word}
 			</if>
-			<if test="level != null and level != '' ">
-				AND t.level = #{level}
-			</if>
 			<if test="reaction != null and reaction != '' ">
 				AND t.reaction = #{reaction}
 			</if>
@@ -33,7 +30,6 @@
 		SELECT
 		t.id
 		,t.word
-		,t.level
 		,t.reaction
 		,t.updater
 		
@@ -59,7 +55,6 @@
 		INSERT INTO
 		tsc_keyword(
 		word
-		,level
 		,reaction
 		,updater
 		
@@ -68,7 +63,6 @@
 		)
 		VALUES(
 		#{word}
-		,#{level}
 		,#{reaction}
 		,#{updater}
 		
@@ -81,7 +75,6 @@
 		UPDATE tsc_keyword
 		SET
 		word = #{word}
-		,level = #{level}
 		,reaction = #{reaction}
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}

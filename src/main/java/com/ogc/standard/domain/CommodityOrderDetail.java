@@ -87,7 +87,30 @@ public class CommodityOrderDetail extends ABaseDO {
 
     // ****************DB*****************
 
+    // 发货时间起
+    private Date deliverDatetimeStart;
+
+    // 发货时间止
+    private Date deliverDatetimeEnd;
+
+    // 商品
     private Commodity commodity;
+
+    public Date getDeliverDatetimeStart() {
+        return deliverDatetimeStart;
+    }
+
+    public void setDeliverDatetimeStart(Date deliverDatetimeStart) {
+        this.deliverDatetimeStart = deliverDatetimeStart;
+    }
+
+    public Date getDeliverDatetimeEnd() {
+        return deliverDatetimeEnd;
+    }
+
+    public void setDeliverDatetimeEnd(Date deliverDatetimeEnd) {
+        this.deliverDatetimeEnd = deliverDatetimeEnd;
+    }
 
     public Commodity getCommodity() {
         return commodity;

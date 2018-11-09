@@ -34,7 +34,7 @@ public enum EGeneratePrefix {
 
     Commodity("CO", "商品"), cart("CA", "购物车"), CommodityOrder("COO", "商品订单（多店铺）"), CommodityOrderDetail(
             "COOD", "商品订单（单店铺）"), PostageTemplate("PO", "邮费模版"), Comment("CO",
-            "评论"), AfterSale("AS", "售后"),
+            "评论"), AfterSale("AS", "售后"), Session("SE", "会话"),
 
     PRESELL_PRODUCT("PP", "预售产品"), PRESELL_SPECS("PS", "预售规格"), PRESELL_ORDER(
             "PS", "预售订单"),
@@ -42,7 +42,7 @@ public enum EGeneratePrefix {
     ORIGINAL_GROUP("OG", "预售原生组"), PRESELL_INVENTORY("PI", "预售权"), DERIVE_GROUP(
             "DG", "预售派生组"),
 
-    PRESELL_LOGISTICS("PL", "预售物流单"),GROUP_ORDER("GO","寄售订单");
+    PRESELL_LOGISTICS("PL", "预售物流单"), GROUP_ORDER("GO", "寄售订单");
 
     public static Map<String, EGeneratePrefix> getMap() {
         Map<String, EGeneratePrefix> map = new HashMap<String, EGeneratePrefix>();

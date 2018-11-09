@@ -8,6 +8,7 @@
  */
 package com.ogc.standard.dto.req;
 
+import java.util.List;
 
 /** 
  * @author: taojian 
@@ -25,6 +26,16 @@ public class XN629757Req {
     private String parentUserId;
 
     private String status;
+
+    private List<String> statusList;
+
+    public List<String> getStatusList() {
+        return statusList;
+    }
+
+    public void setStatusList(List<String> statusList) {
+        this.statusList = statusList;
+    }
 
     public String getCommodityCode() {
         return commodityCode;

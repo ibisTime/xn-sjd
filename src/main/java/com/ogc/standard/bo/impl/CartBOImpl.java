@@ -34,15 +34,14 @@ public class CartBOImpl extends PaginableBOImpl<Cart> implements ICartBO {
 
     @Override
     public String saveCart(String userId, String commodityCode,
-            String commodityName, String specsCode, String specsName,
-            Long quantity) {
+            String commodityName, Long specsId, String specsName, Long quantity) {
         Cart data = new Cart();
         String code = OrderNoGenerater.generate(EGeneratePrefix.cart.getCode());
         data.setCode(code);
         data.setUserId(userId);
         data.setCommodityCode(commodityCode);
         data.setCommodityName(commodityName);
-        data.setSpecsCode(specsCode);
+        data.setSpecsId(specsId);
         data.setSpecsName(specsName);
         data.setQuantity(quantity);
         cartDAO.insert(data);

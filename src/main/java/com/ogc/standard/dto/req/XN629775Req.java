@@ -17,20 +17,30 @@ public class XN629775Req extends APageReq {
 
     private static final long serialVersionUID = 152992198434510873L;
 
-    private String orderDetailCode;
-
     private String logisticsCompany;
 
     private String type;
 
     private String status;
 
-    public String getOrderDetailCode() {
-        return orderDetailCode;
+    private String deliver;
+
+    private String receiver;
+
+    public String getReceiver() {
+        return receiver;
     }
 
-    public void setOrderDetailCode(String orderDetailCode) {
-        this.orderDetailCode = orderDetailCode;
+    public void setReceiver(String receiver) {
+        this.receiver = receiver;
+    }
+
+    public String getDeliver() {
+        return deliver;
+    }
+
+    public void setDeliver(String deliver) {
+        this.deliver = deliver;
     }
 
     public String getLogisticsCompany() {

@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ogc.standard.ao.ICommodityOrderAO;
 import com.ogc.standard.ao.ICommodityOrderDetailAO;
 import com.ogc.standard.bo.IAccountBO;
+import com.ogc.standard.bo.IAddressBO;
 import com.ogc.standard.bo.IAlipayBO;
 import com.ogc.standard.bo.ICommodityBO;
 import com.ogc.standard.bo.ICommodityOrderBO;
@@ -31,6 +32,7 @@ import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.core.StringValidater;
+import com.ogc.standard.domain.Address;
 import com.ogc.standard.domain.CommodityOrder;
 import com.ogc.standard.domain.CommodityOrderDetail;
 import com.ogc.standard.dto.req.XN629720Req;
@@ -43,6 +45,7 @@ import com.ogc.standard.enums.EJourBizTypeUser;
 import com.ogc.standard.enums.EPayType;
 import com.ogc.standard.enums.ESysUser;
 import com.ogc.standard.exception.BizException;
+import com.ogc.standard.exception.EBizErrorCode;
 
 /** 
  * @author: taojian 
@@ -82,6 +85,9 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
     @Autowired
     private IAlipayBO alipayBO;
 
+    @Autowired
+    private IAddressBO addressBO;
+
     @Override
     @Transactional
     public String addOrder(XN629720Req req) {
@@ -101,8 +107,18 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
                 throw new BizException("xn0000", "订单中有未上架产品["
                         + res.getCommodityName() + "]无法下单");
             }
+            // 地址检验
+            Address address = addressBO.getAddress(res.getAddressCode());
+            if (null == address) {
+                throw new BizException("xn0000", "地址编号为" + res.getAddressCode()
+                        + "不存在");
+            }
+            if (!address.getUserId().equals(req.getApplyUser())) {
+                throw new BizException("xn0000", "地址编号为" + res.getAddressCode()
+                        + "不属于" + req.getApplyUser());
+            }
             if (StringValidater.toLong(res.getQuantity()) > commoditySpecsBO
-                .getIeventory(StringValidater.toLong(res.getSpecsId()))) {
+                .getInventory(StringValidater.toLong(res.getSpecsId()))) {
                 throw new BizException("xn0000", "产品[" + res.getCommodityName()
                         + "]库存不足，不能下单");
             }
@@ -142,6 +158,8 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
             result = payByBalance(order);
             commodityOrderBO.refreshPay(order, order.getAmount(),
                 req.getUpdater(), req.getRemark());
+        } else if (EPayType.WEIXIN_H5.getCode().equals(req.getPayType())) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "暂不支持微信支付");
         } else {
             throw new BizException("xn0000", "不支持的支付方式");
         }

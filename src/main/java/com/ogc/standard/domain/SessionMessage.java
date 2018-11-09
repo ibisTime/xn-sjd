@@ -1,9 +1,9 @@
 /**
- * @Title Question.java 
+ * @Title SessionMessage.java 
  * @Package com.ogc.standard.domain 
  * @Description 
  * @author taojian  
- * @date 2018年10月10日 下午5:39:08 
+ * @date 2018年11月8日 上午11:42:18 
  * @version V1.0   
  */
 package com.ogc.standard.domain;
@@ -15,12 +15,12 @@ import com.ogc.standard.dao.base.ABaseDO;
 /** 
  * 会话消息
  * @author: taojian 
- * @since: 2018年10月10日 下午5:39:08 
+ * @since: 2018年11月8日 上午11:42:18 
  * @history:
  */
-public class Question extends ABaseDO {
+public class SessionMessage extends ABaseDO {
 
-    private static final long serialVersionUID = -2089440648460380471L;
+    private static final long serialVersionUID = -7053776905448478882L;
 
     // ***********db properties***********
 

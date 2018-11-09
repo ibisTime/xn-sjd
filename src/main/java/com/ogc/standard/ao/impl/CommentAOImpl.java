@@ -140,7 +140,11 @@ public class CommentAOImpl implements ICommentAO {
         List<Comment> resultList = page.getList();
         if (CollectionUtils.isNotEmpty(resultList)) {
             for (Comment comment : resultList) {
-                commentBO.initComment(comment);
+
+                List<Comment> commentList = new ArrayList<Comment>();
+                commentBO.searchCycleComment(comment.getCode(), commentList);
+                commentBO.orderCommentList(commentList);
+                comment.setNextCommentList(commentList);
             }
         }
         return page;

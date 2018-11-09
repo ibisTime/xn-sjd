@@ -8,8 +8,6 @@
  */
 package com.ogc.standard.dao;
 
-import java.util.List;
-
 import com.ogc.standard.dao.base.IBaseDAO;
 import com.ogc.standard.domain.CommoditySpecs;
 
@@ -20,8 +18,6 @@ import com.ogc.standard.domain.CommoditySpecs;
  */
 public interface ICommoditySpecsDAO extends IBaseDAO<CommoditySpecs> {
     String NAMESPACE = ICommoditySpecsDAO.class.getName().concat(".");
-
-    public void insert(List<CommoditySpecs> dataList);
 
     public int updateInventory(CommoditySpecs data);
 

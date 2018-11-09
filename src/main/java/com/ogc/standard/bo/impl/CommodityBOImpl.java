@@ -94,6 +94,7 @@ public class CommodityBOImpl extends PaginableBOImpl<Commodity> implements
         data.setStatus(ECommodityStatus.ON.getCode());
         data.setLocation(location);
         data.setOrderNo(orderNo);
+        data.setMonthSellCount(Long.valueOf(0));
         data.setUpdater(updater);
         data.setUpdateDatetime(new Date());
         data.setRemark(remark);
@@ -126,6 +127,12 @@ public class CommodityBOImpl extends PaginableBOImpl<Commodity> implements
             return false;
         }
 
+    }
+
+    @Override
+    public void refreshMonthSellCount(Commodity data, Long quantity) {
+        data.setMonthSellCount(quantity);
+        commodityDAO.updateMonthSellCount(data);
     }
 
 }

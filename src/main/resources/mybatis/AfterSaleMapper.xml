@@ -34,9 +34,17 @@
 			<if test="logisticsCompany != null and logisticsCompany != '' ">
 				AND t.logistics_company = #{logisticsCompany}
 			</if>
-			<if test="status != null and status != '' ">
-				AND t.status = #{status}
-			</if>
+			<choose>
+				<when test="status != null and status != '' ">
+					AND t.status = #{status}
+				</when>
+				<when test="statusList != null and statusList.size() > 0 ">
+					AND t.status IN
+					<foreach collection="statusList" item="item" index="index" open="(" separator="," close=")">
+						#{item}
+					</foreach>
+				</when>
+			</choose>
 			<if test="receiver != null and receiver != '' ">
 				AND t.receiver = #{receiver}
 			</if>

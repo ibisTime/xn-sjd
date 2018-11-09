@@ -40,6 +40,7 @@ public class XN629755 extends AProcessor {
         condition.setParentCode(req.getParentCode());
         condition.setParentUserId(req.getParentUserId());
         condition.setStatus(req.getStatus());
+        condition.setStatusList(req.getStatusList());
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
         return commentAO.queryCommentPage(start, limit, condition);

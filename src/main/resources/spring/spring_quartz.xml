@@ -32,6 +32,8 @@
 			    <ref bean="doDailyOriginalGroupTrigger"/>
 			    <ref bean="doCancelGroupOrderTrigger"/>
 			    <ref bean="doRefreshPriceTrigger"/>
+			    <ref bean="clearCommoditySellCountTigger"/>
+			    <ref bean="doReceiveTigger"/>
  			</list>
 		</property>
 		<property name="autoStartup" value="true" />
@@ -63,6 +65,20 @@
 		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject" ref="adoptOrderAOImpl" />
 		<property name="targetMethod" value="doCancelAdoptOrder" />
+		<property name="concurrent" value="false" />
+	</bean> 
+	
+	<!-- 未收货订单扫描 -->
+	<bean id="doReceiveTigger"
+		  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="doCancelAdoptOrder" />
+		<property name="cronExpression" value="0 0 2 * * ?"/><!-- 每天2点执行 -->
+	</bean>
+	
+	<bean id="doReceive"
+		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="commodityOrderDetailAOImpl" />
+		<property name="targetMethod" value="doReceive" />
 		<property name="concurrent" value="false" />
 	</bean> 
 	
@@ -192,6 +208,19 @@
 		<property name="targetMethod" value="timeoutCancel" />
 		<property name="concurrent" value="false" />
 	</bean>
+	
+	<!-- 每月商品月销量清零 -->
+	<bean id="clearCommoditySellCountTigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="doClearCount" />
+		<property name="cronExpression" value="59 59 23 L * ? *"/><!-- 每月最后一天更新 -->
+	</bean>
+	
+	<bean id="doClearCount" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="commodityAOImpl" />
+		<property name="targetMethod" value="monthZero" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
 	<!-- 预售原生组开始认养扫描 -->
 	<bean id="doDailyOriginalGroupTrigger"
 		  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">

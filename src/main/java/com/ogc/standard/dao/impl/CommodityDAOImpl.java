@@ -73,4 +73,9 @@ public class CommodityDAOImpl extends AMybatisTemplate implements ICommodityDAO 
         return super.update(NAMESPACE.concat("update_commodity"), data);
     }
 
+    @Override
+    public int updateMonthSellCount(Commodity data) {
+        return super.update(NAMESPACE.concat("update_month_sell_count"), data);
+    }
+
 }

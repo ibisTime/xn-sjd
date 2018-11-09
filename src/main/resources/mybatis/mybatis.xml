@@ -70,6 +70,8 @@
 		<typeAlias alias="comment" type="com.ogc.standard.domain.Comment"/>
 		<typeAlias alias="keyword" type="com.ogc.standard.domain.Keyword"/>
 		<typeAlias alias="afterSale" type="com.ogc.standard.domain.AfterSale"/>
+		<typeAlias alias="session" type="com.ogc.standard.domain.Session"/>
+		<typeAlias alias="sessionMessage" type="com.ogc.standard.domain.SessionMessage"/>
 		
 		
 		<typeAlias alias="presellProduct" type="com.ogc.standard.domain.PresellProduct"/>

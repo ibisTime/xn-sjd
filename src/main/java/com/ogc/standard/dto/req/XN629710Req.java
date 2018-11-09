@@ -31,7 +31,7 @@ public class XN629710Req {
 
     // 规格编号
     @NotBlank
-    private String specsCode;
+    private String specsId;
 
     // 规格名称
     @NotBlank
@@ -65,12 +65,12 @@ public class XN629710Req {
         this.commodityName = commodityName;
     }
 
-    public String getSpecsCode() {
-        return specsCode;
+    public String getSpecsId() {
+        return specsId;
     }
 
-    public void setSpecsCode(String specsCode) {
-        this.specsCode = specsCode;
+    public void setSpecsId(String specsId) {
+        this.specsId = specsId;
     }
 
     public String getSpecsName() {
