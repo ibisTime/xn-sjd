@@ -12,7 +12,7 @@ import com.ogc.standard.ao.IAfterSaleAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.ObjValidater;
-import com.ogc.standard.dto.req.XN629772Req;
+import com.ogc.standard.dto.req.XN629773Req;
 import com.ogc.standard.dto.res.BooleanRes;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
@@ -29,18 +29,18 @@ public class XN629773 extends AProcessor {
     private IAfterSaleAO afterSaleAO = SpringContextHolder
         .getBean(IAfterSaleAO.class);
 
-    private XN629772Req req;
+    private XN629773Req req;
 
     @Override
     public Object doBusiness() throws BizException {
-        afterSaleAO.handleAfterSale(req.getCode(), req.getHandleResult());
+        afterSaleAO.doReceive(req.getCode(), req.getReceiver());
         return new BooleanRes(true);
     }
 
     @Override
     public void doCheck(String inputparams, String operator)
             throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN629772Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN629773Req.class);
         ObjValidater.validateReq(req);
     }
 

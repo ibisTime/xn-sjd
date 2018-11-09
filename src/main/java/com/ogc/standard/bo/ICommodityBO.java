@@ -37,4 +37,6 @@ public interface ICommodityBO extends IPaginableBO<Commodity> {
 
     public boolean isOnShelf(String code);
 
+    public void refreshMonthSellCount(Commodity data, Long quantity);
+
 }

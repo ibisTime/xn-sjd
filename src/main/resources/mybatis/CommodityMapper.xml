@@ -5,13 +5,13 @@
 	<resultMap id="commodity_DB_Result" type="commodity">
 		<result column="code" property="code" />
 		<result column="name" property="name" />
-		<result column="parent_category_code" property="parenyCategoryCode" />
+		<result column="parent_category_code" property="parentCategoryCode" />
 		<result column="category_code" property="categoryCode" />
 		<result column="deliver_place" property="deliverPlace" />
 		
 		<result column="weight" property="weight" />
 		<result column="logistics" property="logistics" />
-		<result column="montn_sell_count" property="monthSellCount" />
+		<result column="month_sell_count" property="monthSellCount" />
 		<result column="list_pic" property="listPic" />
 		<result column="banner_pic" property="bannerPic" />
 		
@@ -30,8 +30,8 @@
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
 			</if>
-			<if test="parenyCategoryCode != null and parenyCategoryCode != '' ">
-				AND t.parent_category_code = #{parenyCategoryCode}
+			<if test="parentCategoryCode != null and parentCategoryCode != '' ">
+				AND t.parent_category_code = #{parentCategoryCode}
 			</if>
 			<if test="categoryCode != null and categoryCode != '' ">
 				AND t.category_code = #{categoryCode}
@@ -68,7 +68,7 @@
 		
 		,t.weight
 		,t.logistics
-		,t.montn_sell_count
+		,t.month_sell_count
 		,t.list_pic
 		,t.banner_pic
 		
@@ -169,10 +169,19 @@
 		SET
 		status=#{status}
 		,location=#{location}
-		,order_no=#{orderNO}
+		,order_no=#{orderNo}
+		,month_sell_count=#{monthSellCount}
 		,updater=#{updater}
 		,update_datetime=#{updateDatetime}
 		,remark=#{remark}
+		WHERE
+		code=#{code}
+	</update>
+	
+	<update id="update_month_sell_count" parameterType="commodity">
+		UPDATE tsc_commodity
+		SET
+		month_sell_count=#{monthSellCount}
 		WHERE
 		code=#{code}
 	</update>

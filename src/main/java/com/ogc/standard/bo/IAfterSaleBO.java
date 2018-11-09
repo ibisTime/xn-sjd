@@ -35,4 +35,6 @@ public interface IAfterSaleBO extends IPaginableBO<AfterSale> {
     public List<AfterSale> queryShList(AfterSale condition);
 
     public AfterSale getAfterSale(String code);
+
+    public boolean isAftrSaleExist(String orderDetailCode);
 }

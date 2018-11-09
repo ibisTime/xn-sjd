@@ -9,8 +9,11 @@
 package com.ogc.standard.ao.impl;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +26,9 @@ import com.ogc.standard.bo.ICommodityOrderDetailBO;
 import com.ogc.standard.bo.ICompanyBO;
 import com.ogc.standard.bo.ISYSConfigBO;
 import com.ogc.standard.bo.base.Paginable;
+import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.common.SysConstants;
+import com.ogc.standard.domain.Commodity;
 import com.ogc.standard.domain.CommodityOrder;
 import com.ogc.standard.domain.CommodityOrderDetail;
 import com.ogc.standard.domain.Company;
@@ -43,6 +48,9 @@ import com.ogc.standard.exception.BizException;
  */
 @Service
 public class CommodityOrderDetailAOImpl implements ICommodityOrderDetailAO {
+
+    static final Logger logger = LoggerFactory
+        .getLogger(CommodityOrderDetailAOImpl.class);
 
     @Autowired
     private ICommodityOrderDetailBO commodityOrderDetailBO;
@@ -69,7 +77,7 @@ public class CommodityOrderDetailAOImpl implements ICommodityOrderDetailAO {
             String receiver, String receiverMobile) {
         // 订单状态判断
         CommodityOrder order = commodityOrderBO.getCommodityOrder(orderCode);
-        if (!ECommodityOrderStatus.PAIED.getCode().equals(order.getCode())) {
+        if (!ECommodityOrderStatus.PAIED.getCode().equals(order.getStatus())) {
             throw new BizException("xn0000", "订单还未付款不能发货");
         }
         // 取一个订单中同一家店铺的商品，一起发货
@@ -89,6 +97,7 @@ public class CommodityOrderDetailAOImpl implements ICommodityOrderDetailAO {
     @Override
     @Transactional
     public void receive(String code, String receiver, String shopCode) {
+        // 权限确认
         CommodityOrder order = commodityOrderBO.getCommodityOrder(code);
         if (!order.getApplyUser().equals(receiver)) {
             throw new BizException("xn0000", "不是你的订单你不能确认收货");
@@ -106,6 +115,11 @@ public class CommodityOrderDetailAOImpl implements ICommodityOrderDetailAO {
             }
             // 状态更新
             commodityOrderDetailBO.refreshReceive(detail);
+            // 月销量更新
+            Commodity data = commodityBO
+                .getCommodity(detail.getCommodityCode());
+            commodityBO.refreshMonthSellCount(data,
+                detail.getQuantity() + data.getMonthSellCount());
         }
     }
 
@@ -151,6 +165,21 @@ public class CommodityOrderDetailAOImpl implements ICommodityOrderDetailAO {
             EJourBizTypeBusiness.BUSINESS_PROFIT.getCode(),
             EJourBizTypePlat.BUY_DIST.getValue(),
             EJourBizTypeBusiness.BUSINESS_PROFIT.getValue(), orderCode);
+    }
+
+    public void doReceive() {
+        logger.info("***************开始扫描待收货订单***************");
+        CommodityOrderDetail condition = new CommodityOrderDetail();
+        condition.setStatus(ECommodityOrderDetailStatus.TORECEIVE.getCode());
+        condition.setDeliverDatetimeEnd(DateUtil.getRelativeDateOfDays(
+            new Date(), -15));
+        List<CommodityOrderDetail> detailList = commodityOrderDetailBO
+            .queryDetailList(condition);
+        for (CommodityOrderDetail detail : detailList) {
+            commodityOrderDetailBO.refreshReceive(detail);
+        }
+        logger.info("***************结束扫描待收货订单***************");
+
     }
 
 }

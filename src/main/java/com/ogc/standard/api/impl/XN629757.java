@@ -39,6 +39,7 @@ public class XN629757 extends AProcessor {
         condition.setParentCode(req.getParentCode());
         condition.setParentUserId(req.getParentUserId());
         condition.setStatus(req.getStatus());
+        condition.setStatusList(req.getStatusList());
         return commentAO.queryCommentList(condition);
     }
 

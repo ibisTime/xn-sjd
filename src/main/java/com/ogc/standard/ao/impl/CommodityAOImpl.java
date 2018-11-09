@@ -48,9 +48,20 @@ public class CommodityAOImpl implements ICommodityAO {
         // 落地规格数据
         for (CommoditySpecs data : req.getSpecsList()) {
             data.setCommodityCode(code);
+            commoditySpecsBO.saveSpecs(data);
         }
-        commoditySpecsBO.saveSpecsList(req.getSpecsList());
+
         return code;
+    }
+
+    public void monthZero() {
+        // 所有上架商品
+        Commodity condition = new Commodity();
+        condition.setStatus(ECommodityStatus.ON.getCode());
+        List<Commodity> commodities = commodityBO.queryCommodityList(condition);
+        for (Commodity commodity : commodities) {
+            commodityBO.refreshMonthSellCount(commodity, Long.valueOf(0));
+        }
     }
 
     @Override
@@ -71,8 +82,8 @@ public class CommodityAOImpl implements ICommodityAO {
         // 落地新规格数据
         for (CommoditySpecs specs : req.getSpecsList()) {
             specs.setCommodityCode(req.getCode());
+            commoditySpecsBO.saveSpecs(specs);
         }
-        commoditySpecsBO.saveSpecsList(req.getSpecsList());
     }
 
     @Override

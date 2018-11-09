@@ -8,30 +8,31 @@
  */
 package com.ogc.standard.dto.req;
 
-import org.hibernate.validator.constraints.NotBlank;
-
 /** 
  * @author: taojian 
  * @since: 2018年11月7日 上午11:25:23 
  * @history:
  */
-public class XN629735Req {
+public class XN629735Req extends APageReq {
 
-    @NotBlank
-    private String code;
+    private static final long serialVersionUID = -4386212963173934436L;
 
-    @NotBlank
+    private String orderCode;
+
     private String shopCode;
 
-    @NotBlank
-    private String receiver;
+    private String commodityCode;
 
-    public String getCode() {
-        return code;
+    private String specsId;
+
+    private String status;
+
+    public String getOrderCode() {
+        return orderCode;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setOrderCode(String orderCode) {
+        this.orderCode = orderCode;
     }
 
     public String getShopCode() {
@@ -42,12 +43,28 @@ public class XN629735Req {
         this.shopCode = shopCode;
     }
 
-    public String getReceiver() {
-        return receiver;
+    public String getCommodityCode() {
+        return commodityCode;
     }
 
-    public void setReceiver(String receiver) {
-        this.receiver = receiver;
+    public void setCommodityCode(String commodityCode) {
+        this.commodityCode = commodityCode;
+    }
+
+    public String getSpecsId() {
+        return specsId;
+    }
+
+    public void setSpecsId(String specsId) {
+        this.specsId = specsId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
 }

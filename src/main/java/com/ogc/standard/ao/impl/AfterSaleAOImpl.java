@@ -73,6 +73,10 @@ public class AfterSaleAOImpl implements IAfterSaleAO {
             orderDetail.getStatus())) {
             throw new BizException("xn0000", "订单还未完成，无法申请售后");
         }
+        // 检验是否存在流程中的售后订单
+        if (afterSaleBO.isAftrSaleExist(orderDetailCode)) {
+            throw new BizException("xn0000", "该订单正在进行或已完成售后，无法重复申请售后");
+        }
         // 发货人检验
         if (!orderDetail.getReceiver().equals(deliver)) {
             throw new BizException("xn0000", "不是下单人无法申请售后");
@@ -85,6 +89,7 @@ public class AfterSaleAOImpl implements IAfterSaleAO {
     @Override
     public String applyMoney(String orderDetailCode, BigDecimal refundAmount,
             String applyUser) {
+
         // 订单号检验
         CommodityOrderDetail orderDetail = commodityOrderDetailBO
             .getCommodityOrderDetail(orderDetailCode);
@@ -92,6 +97,10 @@ public class AfterSaleAOImpl implements IAfterSaleAO {
         if (!ECommodityOrderDetailStatus.FINISH.getCode().equals(
             orderDetail.getStatus())) {
             throw new BizException("xn0000", "订单还未完成，无法申请售后");
+        }
+        // 检验是否存在流程中的售后订单
+        if (afterSaleBO.isAftrSaleExist(orderDetailCode)) {
+            throw new BizException("xn0000", "该订单正在进行或已完成售后，无法重复申请售后");
         }
         // 发货人检验
         if (!orderDetail.getReceiver().equals(applyUser)) {
@@ -159,17 +168,32 @@ public class AfterSaleAOImpl implements IAfterSaleAO {
     @Override
     public Paginable<AfterSale> queryOrderPage(int start, int limit,
             AfterSale condition) {
-        return afterSaleBO.getPaginable(start, limit, condition);
+        Paginable<AfterSale> page = afterSaleBO.getPaginable(start, limit,
+            condition);
+        for (AfterSale afterSale : page.getList()) {
+            afterSale.setOrderDetail(commodityOrderDetailBO
+                .getCommodityOrderDetail(afterSale.getOrderDetailCode()));
+        }
+        return page;
     }
 
     @Override
     public List<AfterSale> queryOrderList(AfterSale condition) {
-        return afterSaleBO.queryShList(condition);
+        List<AfterSale> afterSales = afterSaleBO.queryShList(condition);
+        for (AfterSale afterSale : afterSales) {
+            afterSale.setOrderDetail(commodityOrderDetailBO
+                .getCommodityOrderDetail(afterSale.getOrderDetailCode()));
+
+        }
+        return afterSales;
     }
 
     @Override
     public AfterSale getAfterSale(String code) {
-        return afterSaleBO.getAfterSale(code);
+        AfterSale afterSale = afterSaleBO.getAfterSale(code);
+        afterSale.setOrderDetail(commodityOrderDetailBO
+            .getCommodityOrderDetail(afterSale.getOrderDetailCode()));
+        return afterSale;
     }
 
 }

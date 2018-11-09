@@ -10,7 +10,7 @@ package com.ogc.standard.dto.req;
 
 import java.util.List;
 
-import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /** 
  * @author: taojian 
@@ -20,7 +20,7 @@ import org.hibernate.validator.constraints.NotBlank;
 public class XN629711Req {
 
     // 购物车编号列表
-    @NotBlank
+    @NotEmpty
     private List<String> codeList;
 
     public List<String> getCodeList() {

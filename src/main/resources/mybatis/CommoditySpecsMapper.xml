@@ -53,7 +53,7 @@
 	
 
 	
-	<insert id="insert_commodity_specs_list" parameterType="commoditySpecs">
+	<insert id="insert_commodity_specs" parameterType="commoditySpecs">
 		INSERT INTO tsc_commodity_specs(
 		commodity_code
 		,name
@@ -63,20 +63,18 @@
 		)
 		VALUES
 		
-		<foreach collection="list" item="commoditySpecs" separator=",">
 		(
-		#{commoditySpecs.commodityCode}
-		,#{commoditySpecs.name}
-		,#{commoditySpecs.price}
-		,#{commoditySpecs.inventory}
-		,#{commoditySpecs.reamrk}
+		#{commodityCode}
+		,#{name}
+		,#{price}
+		,#{inventory}
+		,#{remark}
 		)
-		</foreach>
 	</insert>
 	
 	<delete id="delete_commodity_specs" parameterType="commoditySpecs">
 		DELETE FROM tsc_commodity_specs
-		<include refid="where_condition" />
+		WHERE commodity_code=#{commodityCode}
 	</delete>
 	
 	<update id="update_inventory" parameterType="commoditySpecs">

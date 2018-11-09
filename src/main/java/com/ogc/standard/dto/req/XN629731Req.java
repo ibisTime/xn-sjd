@@ -18,7 +18,7 @@ import org.hibernate.validator.constraints.NotBlank;
 public class XN629731Req {
 
     @NotBlank
-    private String code;
+    private String orderCode;
 
     @NotBlank
     private String shopCode;
@@ -26,12 +26,12 @@ public class XN629731Req {
     @NotBlank
     private String receiver;
 
-    public String getCode() {
-        return code;
+    public String getOrderCode() {
+        return orderCode;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setOrderCode(String orderCode) {
+        this.orderCode = orderCode;
     }
 
     public String getShopCode() {

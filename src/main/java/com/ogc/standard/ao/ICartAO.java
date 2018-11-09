@@ -20,8 +20,7 @@ import com.ogc.standard.domain.Cart;
 public interface ICartAO {
 
     public String addToCart(String userId, String commodityCode,
-            String commodityName, String specsCode, String specsName,
-            Long quantity);
+            String commodityName, Long specsId, String specsName, Long quantity);
 
     public void dropCartList(List<String> codeList);
 

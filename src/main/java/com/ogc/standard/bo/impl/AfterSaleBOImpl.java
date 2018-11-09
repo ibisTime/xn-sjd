@@ -9,6 +9,7 @@
 package com.ogc.standard.bo.impl;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -100,6 +101,21 @@ public class AfterSaleBOImpl extends PaginableBOImpl<AfterSale> implements
             throw new BizException("xn0000", "该售后订单不存在");
         }
         return data;
+    }
+
+    @Override
+    public boolean isAftrSaleExist(String orderDetailCode) {
+        AfterSale condition = new AfterSale();
+        condition.setOrderDetailCode(orderDetailCode);
+        List<String> statusList = new ArrayList<String>();
+        statusList.add(EAfterSaleStatus.FINISH.getCode());
+        statusList.add(EAfterSaleStatus.PASS.getCode());
+        statusList.add(EAfterSaleStatus.TOHANDLE.getCode());
+        condition.setStatusList(statusList);
+        if (afterSaleDAO.selectTotalCount(condition) > 0) {
+            return true;
+        }
+        return false;
     }
 
 }

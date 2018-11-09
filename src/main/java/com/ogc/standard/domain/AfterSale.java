@@ -10,6 +10,7 @@ package com.ogc.standard.domain;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 import com.ogc.standard.dao.base.ABaseDO;
 
@@ -64,6 +65,29 @@ public class AfterSale extends ABaseDO {
 
     // 收货时间
     private Date receiverDatetime;
+
+    // *************DB****************
+
+    // 状态列表
+    private List<String> statusList;
+
+    private CommodityOrderDetail orderDetail;
+
+    public CommodityOrderDetail getOrderDetail() {
+        return orderDetail;
+    }
+
+    public void setOrderDetail(CommodityOrderDetail orderDetail) {
+        this.orderDetail = orderDetail;
+    }
+
+    public List<String> getStatusList() {
+        return statusList;
+    }
+
+    public void setStatusList(List<String> statusList) {
+        this.statusList = statusList;
+    }
 
     public String getCode() {
         return code;

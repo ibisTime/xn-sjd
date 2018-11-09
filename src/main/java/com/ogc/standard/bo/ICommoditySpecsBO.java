@@ -19,7 +19,7 @@ import com.ogc.standard.domain.CommoditySpecs;
  * @history:
  */
 public interface ICommoditySpecsBO extends IPaginableBO<CommoditySpecs> {
-    public void saveSpecsList(List<CommoditySpecs> dataList);
+    public void saveSpecs(CommoditySpecs data);
 
     public void removeSpecs(String commodityCode);
 
@@ -27,5 +27,5 @@ public interface ICommoditySpecsBO extends IPaginableBO<CommoditySpecs> {
 
     public void inventoryDecrease(Long id, Long quantity);
 
-    public Long getIeventory(Long id);
+    public Long getInventory(Long id);
 }

@@ -3,6 +3,7 @@ package com.ogc.standard.dto.req;
 import java.util.List;
 
 import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import com.ogc.standard.dto.res.XN629720Res;
 
@@ -40,7 +41,7 @@ public class XN629720Req {
     private String remark;
 
     // 明细列表
-    @NotBlank
+    @NotEmpty
     private List<XN629720Res> detailList;
 
     public String getAmount() {

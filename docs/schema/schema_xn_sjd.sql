@@ -1222,7 +1222,7 @@ CREATE TABLE `tsc_cart` (
   `user_id` varchar(32) NOT NULL COMMENT '用户编号',
   `commodity_code` varchar(32) NOT NULL COMMENT '商品编号',
   `commodity_name` varchar(64) NOT NULL COMMENT '商品名称',
-  `specs_code` varchar(32) NOT NULL COMMENT '规格编号',
+  `specs_id` bigint(20) NOT NULL COMMENT '规格编号',
   `specs_name` varchar(64) NOT NULL COMMENT '规格名称',
   `quantity` bigint(20) NOT NULL COMMENT '数量',
   PRIMARY KEY (`code`)
@@ -1241,12 +1241,14 @@ CREATE TABLE `tsc_commodity_order` (
   `pay_group` varchar(32) DEFAULT NULL COMMENT '支付组号',
   `pay_code` varchar(32) DEFAULT NULL COMMENT '支付渠道号',
   `pay_datetime` datetime DEFAULT NULL COMMENT '支付时间',
+  `pay_amount` decimal(64,0) DEFAULT NULL COMMENT '支付金额',
   `status` varchar(4) NOT NULL COMMENT '状态（0 待支付，1 已取消，2 已支付）',
   `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
   `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='商品订单';
+
 
 DROP TABLE IF EXISTS `tsc_commodity_order_detail`;
 CREATE TABLE `tsc_commodity_order_detail` (
@@ -1285,7 +1287,7 @@ CREATE TABLE `tsc_after_sale` (
   `deliver` varchar(32) DEFAULT NULL COMMENT '发货人',
   `deliver_count` int(11) DEFAULT NULL COMMENT '发货数量',
   `deliver_datetime` datetime DEFAULT NULL COMMENT '发货时间',
-  `address_code` varchar(32) NOT NULL COMMENT '收货地址编号',
+  `address_code` varchar(32) DEFAULT NULL COMMENT '收货地址编号',
   `receiver` varchar(32) DEFAULT NULL COMMENT '收货人',
   `receiver_mobile` varchar(32) DEFAULT NULL COMMENT '收货人手机号',
   `receiver_datetime` datetime DEFAULT NULL COMMENT '收货时间',
@@ -1339,8 +1341,8 @@ CREATE TABLE `tsc_session` (
   `type` varchar(4) NOT NULL COMMENT '类型（帮助）',
   `user1` varchar(32) DEFAULT NULL COMMENT '说话人1',
   `user2` varchar(32) DEFAULT NULL COMMENT '说话人2',
-  `unread_sum1` bigint(20) NOT NULL COMMENT '说话人1未读消息数量',
-  `unread_sum2` bigint(20) NOT NULL COMMENT '说话人2未读消息数量',
+  `user1_unread_sum` bigint(20) NOT NULL COMMENT '说话人1未读消息数量',
+  `user2_unread_sum` bigint(20) NOT NULL COMMENT '说话人2未读消息数量',
   `create_datetime` datetime NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='会话';

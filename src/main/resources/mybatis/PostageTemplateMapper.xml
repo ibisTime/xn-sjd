@@ -85,7 +85,7 @@
 	<update id="update_postageTemplate" parameterType="postageTemplate">
 		UPDATE tsc_postage_template
 		SET
-		,price = #{price}
+		price = #{price}
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
 		,remark = #{remark}

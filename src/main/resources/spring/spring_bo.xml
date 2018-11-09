@@ -225,6 +225,14 @@
 		<property name="paginableDAO" ref="keywordDAOImpl"/>
 	</bean>
 	
+	<bean id="sessionBO" class="com.ogc.standard.bo.impl.SessionBOImpl">
+		<property name="paginableDAO" ref="sessionDAOImpl"/>
+	</bean>
+	
+	<bean id="sessionMessageBO" class="com.ogc.standard.bo.impl.SessionMessageBOImpl">
+		<property name="paginableDAO" ref="sessionMessageDAOImpl"/>
+	</bean>
+	
 	<bean id="presellProductBO" class="com.ogc.standard.bo.impl.PresellProductBOImpl">
 		<property name="paginableDAO" ref="presellProductDAOImpl"/>
 	</bean>

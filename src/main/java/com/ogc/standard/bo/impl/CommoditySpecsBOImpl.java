@@ -32,8 +32,8 @@ public class CommoditySpecsBOImpl extends PaginableBOImpl<CommoditySpecs>
     private ICommoditySpecsDAO commoditySpecsDAO;
 
     @Override
-    public void saveSpecsList(List<CommoditySpecs> dataList) {
-        commoditySpecsDAO.insert(dataList);
+    public void saveSpecs(CommoditySpecs data) {
+        commoditySpecsDAO.insert(data);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class CommoditySpecsBOImpl extends PaginableBOImpl<CommoditySpecs>
     }
 
     @Override
-    public Long getIeventory(Long id) {
+    public Long getInventory(Long id) {
         CommoditySpecs condition = new CommoditySpecs();
         condition.setId(id);
         CommoditySpecs data = commoditySpecsDAO.select(condition);

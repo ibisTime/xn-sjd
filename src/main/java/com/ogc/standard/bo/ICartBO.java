@@ -21,8 +21,7 @@ import com.ogc.standard.domain.Cart;
 public interface ICartBO extends IPaginableBO<Cart> {
 
     public String saveCart(String userId, String commodityCode,
-            String commodityName, String specsCode, String specsName,
-            Long quantity);
+            String commodityName, Long specsId, String specsName, Long quantity);
 
     public void removeCartList(List<String> codeList);
 
