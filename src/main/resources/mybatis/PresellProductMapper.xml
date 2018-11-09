@@ -26,7 +26,6 @@
 		<result column="latitude" property="latitude" />
 		<result column="single_output" property="singleOutput" />
 		<result column="pack_unit" property="packUnit" />
-		<result column="pack_weight" property="packWeight" />
 		
 		<result column="tree_count" property="treeCount" />
 		<result column="total_output" property="totalOutput" />
@@ -35,6 +34,7 @@
 		<result column="adopt_year" property="adoptYear" />
 		
 		<result column="harvest_datetime" property="harvestDatetime" />
+		<result column="deliver_datetime" property="deliverDatetime" />
 		<result column="now_count" property="nowCount" />
 		<result column="location" property="location" />
 		<result column="order_no" property="orderNo" />
@@ -101,7 +101,6 @@
 		,t.latitude
 		,t.single_output
 		,t.pack_unit
-		,t.pack_weight
 		
 		,t.tree_count
 		,t.total_output
@@ -110,6 +109,7 @@
 		,t.adopt_year
 		
 		,t.harvest_datetime
+		,t.deliver_datetime
 		,t.now_count
 		,t.location
 		,t.order_no
@@ -160,7 +160,6 @@
 		,latitude
 		,single_output
 		,pack_unit
-		,pack_weight
 		
 		,tree_count
 		,total_output
@@ -169,6 +168,7 @@
 		,adopt_year
 		
 		,harvest_datetime
+		,deliver_datetime
 		,now_count
 		,status
 		,updater
@@ -200,7 +200,6 @@
 		,#{latitude}
 		,#{singleOutput}
 		,#{packUnit}
-		,#{packWeight}
 		
 		,#{treeCount}
 		,#{totalOutput}
@@ -209,6 +208,7 @@
 		,#{adoptYear}
 		
 		,#{harvestDatetime}
+		,#{deliverDatetime}
 		,#{nowCount}
 		,#{status}
 		,#{updater}
@@ -242,7 +242,6 @@
 		,latitude = #{latitude}
 		,single_output = #{singleOutput}
 		,pack_unit = #{packUnit}
-		,pack_weight = #{packWeight}
 		,tree_count = #{treeCount}
 		
 		,total_output = #{totalOutput}
@@ -251,6 +250,7 @@
 		,adopt_year = #{adoptYear}
 		,harvest_datetime = #{harvestDatetime}
 		
+		,deliver_datetime = #{deliverDatetime}
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
 		,remark = #{remark}

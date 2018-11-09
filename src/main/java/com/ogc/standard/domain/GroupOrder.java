@@ -30,6 +30,12 @@ public class GroupOrder extends ABaseDO {
     // 产品名称
     private String productName;
 
+    // 规格编号
+    private String specsCode;
+
+    // 规格名称
+    private String specsName;
+
     // 价格
     private BigDecimal price;
 
@@ -92,6 +98,18 @@ public class GroupOrder extends ABaseDO {
 
     // 预售产品
     private PresellProduct presellProduct;
+
+    // 卖家
+    private String sellerName;
+
+    // 流水编号
+    private String jourCode;
+
+    // 树木编号
+    private String treeNumbers;
+
+    // 下单人名称
+    private String applyUserName;
 
     public String getCode() {
         return code;
@@ -299,6 +317,54 @@ public class GroupOrder extends ABaseDO {
 
     public void setOwnerId(String ownerId) {
         this.ownerId = ownerId;
+    }
+
+    public String getSellerName() {
+        return sellerName;
+    }
+
+    public void setSellerName(String sellerName) {
+        this.sellerName = sellerName;
+    }
+
+    public String getJourCode() {
+        return jourCode;
+    }
+
+    public void setJourCode(String jourCode) {
+        this.jourCode = jourCode;
+    }
+
+    public String getTreeNumbers() {
+        return treeNumbers;
+    }
+
+    public void setTreeNumbers(String treeNumbers) {
+        this.treeNumbers = treeNumbers;
+    }
+
+    public String getApplyUserName() {
+        return applyUserName;
+    }
+
+    public void setApplyUserName(String applyUserName) {
+        this.applyUserName = applyUserName;
+    }
+
+    public String getSpecsCode() {
+        return specsCode;
+    }
+
+    public void setSpecsCode(String specsCode) {
+        this.specsCode = specsCode;
+    }
+
+    public String getSpecsName() {
+        return specsName;
+    }
+
+    public void setSpecsName(String specsName) {
+        this.specsName = specsName;
     }
 
 }

@@ -27,6 +27,12 @@ public class DeriveGroup extends ABaseDO {
     // 产品名称
     private String productName;
 
+    // 规格编号
+    private String specsCode;
+
+    // 规格名称
+    private String specsName;
+
     // 品种
     private String variety;
 
@@ -81,6 +87,9 @@ public class DeriveGroup extends ABaseDO {
 
     // 最小数量
     private String minQuantity;
+
+    // 挂单人
+    private User createrInfo;
 
     public String getCode() {
         return code;
@@ -256,6 +265,30 @@ public class DeriveGroup extends ABaseDO {
 
     public void setVariety(String variety) {
         this.variety = variety;
+    }
+
+    public String getSpecsCode() {
+        return specsCode;
+    }
+
+    public void setSpecsCode(String specsCode) {
+        this.specsCode = specsCode;
+    }
+
+    public String getSpecsName() {
+        return specsName;
+    }
+
+    public void setSpecsName(String specsName) {
+        this.specsName = specsName;
+    }
+
+    public User getCreaterInfo() {
+        return createrInfo;
+    }
+
+    public void setCreaterInfo(User createrInfo) {
+        this.createrInfo = createrInfo;
     }
 
 }

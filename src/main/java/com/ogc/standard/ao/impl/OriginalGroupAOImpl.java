@@ -20,12 +20,14 @@ import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.core.StringValidater;
+import com.ogc.standard.domain.DeriveGroup;
 import com.ogc.standard.domain.OriginalGroup;
 import com.ogc.standard.domain.PresellInventory;
 import com.ogc.standard.domain.PresellProduct;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.dto.req.XN629433Req;
 import com.ogc.standard.dto.req.XN629433ReqLogistics;
+import com.ogc.standard.enums.EDeriveGroupStatus;
 import com.ogc.standard.enums.EGroupType;
 import com.ogc.standard.enums.EOriginalGroupStatus;
 import com.ogc.standard.exception.BizException;
@@ -227,9 +229,33 @@ public class OriginalGroupAOImpl implements IOriginalGroupAO {
         if (CollectionUtils.isNotEmpty(endList)) {
             for (OriginalGroup originalGroup : endList) {
                 originalGroupBO.refreshEndAdopt(originalGroup.getCode());
+
+                // 到发货时间回收寄售
+                recoverDerive(originalGroup);
             }
         }
         logger.info("***************结束扫描已结束认养资产***************");
+    }
+
+    private void recoverDerive(OriginalGroup originalGroup) {
+        List<DeriveGroup> list = deriveGroupBO.queryDeriveGroupListByOriginal(
+            originalGroup.getCode(), EDeriveGroupStatus.TO_CLAIM.getCode());
+
+        if (CollectionUtils.isNotEmpty(list)) {
+            for (DeriveGroup deriveGroup : list) {
+                List<PresellInventory> presellInventorieList = presellInventoryBO
+                    .queryPresellInventoryListByGroup(deriveGroup.getCode());
+
+                if (CollectionUtils.isNotEmpty(presellInventorieList)) {
+                    for (PresellInventory presellInventory : presellInventorieList) {
+                        presellInventoryBO.refreshGroup(
+                            presellInventory.getCode(),
+                            EGroupType.ORIGINAL_GROUP.getCode(),
+                            originalGroup.getCode());
+                    }
+                }
+            }
+        }
     }
 
     @Override

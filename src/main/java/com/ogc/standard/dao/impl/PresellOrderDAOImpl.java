@@ -68,4 +68,11 @@ public class PresellOrderDAOImpl extends AMybatisTemplate
             count, condition, PresellOrder.class);
     }
 
+    @Override
+    public List<PresellOrder> selectListByProduct(PresellOrder condition) {
+        return super.selectList(
+            NAMESPACE.concat("select_presellOrderByProduct"), condition,
+            PresellOrder.class);
+    }
+
 }

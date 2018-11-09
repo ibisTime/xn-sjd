@@ -102,7 +102,26 @@
 			</if>
 		</trim>
 	</select>
-
+	
+	<select id="select_presellOrderByProduct" parameterType="presellOrder" resultMap="presellOrder_DB_Result">
+		SELECT DISTINCT 
+		t.product_code
+		,t.product_name
+		,t.price
+		,IFNULL(SUM(t.quantity),0) as quantity
+		,t.apply_user
+		,t.apply_datetime
+		FROM
+		tys_presell_order t
+		<include refid="where_condition" />
+		group by t.apply_user having quantity > 0
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+        
 	<select id="select_presellOrder_count" parameterType="presellOrder"
 		resultType="java.lang.Long">
 		SELECT count(1) FROM tys_presell_order t

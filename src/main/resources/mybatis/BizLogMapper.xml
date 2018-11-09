@@ -37,7 +37,7 @@
 			<if test="queryUserId != null and queryUserId != '' ">
 				AND (t.user_id = #{queryUserId} or t.adopt_user_id = #{queryUserId})
 				AND t.id not in (select id from tsys_biz_log where type = 4 and user_id = #{queryUserId})
-				<![CDATA[ AND t.user_id <> t.adopt_user_id ]]> 
+				AND t.id not in (select id from tsys_biz_log where type = 3 and user_id = #{queryUserId} and adopt_user_id = #{queryUserId})
 			</if>
 			
 			<if test="createDatetimeStart != null and createDatetimeStart != '' ">
@@ -70,23 +70,6 @@
 		</trim>
 	</select>
 
-	<select id="select_bizLog_count" parameterType="bizLog"
-		resultType="java.lang.Long">
-		SELECT count(1) FROM tsys_biz_log t
-		<include refid="where_condition" />
-	</select>
-	
-	<select id="select_bizLog_maxId" parameterType="bizLog"
-		resultType="java.lang.Long">
-		SELECT max(t.ID) FROM tsys_biz_log t
-	</select>
-
-	<select id="select_bizLog_quantitySum" parameterType="bizLog"
-		resultType="java.math.BigDecimal">
-		SELECT IFNULL(SUM(t.quantity), 0) FROM tsys_biz_log t
-		<include refid="where_condition" />
-	</select>
-	
 	<insert id="insert_bizLog" parameterType="bizLog">
 		INSERT INTO
 		tsys_biz_log(
@@ -110,5 +93,22 @@
 		,#{createDatetime}
 		)
 	</insert>
+	
+	<select id="select_bizLog_count" parameterType="bizLog"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tsys_biz_log t
+		<include refid="where_condition" />
+	</select>
+	
+	<select id="select_bizLog_maxId" parameterType="bizLog"
+		resultType="java.lang.Long">
+		SELECT max(t.ID) FROM tsys_biz_log t
+	</select>
+
+	<select id="select_bizLog_quantitySum" parameterType="bizLog"
+		resultType="java.math.BigDecimal">
+		SELECT IFNULL(SUM(t.quantity), 0) FROM tsys_biz_log t
+		<include refid="where_condition" />
+	</select>
 
 </mapper>

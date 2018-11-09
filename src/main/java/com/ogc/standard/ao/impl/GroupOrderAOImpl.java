@@ -17,9 +17,11 @@ import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IAlipayBO;
 import com.ogc.standard.bo.IDeriveGroupBO;
 import com.ogc.standard.bo.IGroupOrderBO;
+import com.ogc.standard.bo.IJourBO;
 import com.ogc.standard.bo.IOriginalGroupBO;
 import com.ogc.standard.bo.IPresellInventoryBO;
 import com.ogc.standard.bo.IPresellProductBO;
+import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.ISmsBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
@@ -27,12 +29,16 @@ import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.DeriveGroup;
 import com.ogc.standard.domain.GroupOrder;
+import com.ogc.standard.domain.Jour;
 import com.ogc.standard.domain.OriginalGroup;
 import com.ogc.standard.domain.PresellInventory;
 import com.ogc.standard.domain.PresellProduct;
+import com.ogc.standard.domain.SYSUser;
+import com.ogc.standard.domain.User;
 import com.ogc.standard.dto.res.BooleanRes;
 import com.ogc.standard.dto.res.PayOrderRes;
 import com.ogc.standard.dto.res.XN629048Res;
+import com.ogc.standard.enums.EAccountType;
 import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EDeriveGroupStatus;
 import com.ogc.standard.enums.EGroupOrderStatus;
@@ -81,6 +87,12 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
 
     @Autowired
     private IPresellInventoryBO presellInventoryBO;
+
+    @Autowired
+    private ISYSUserBO sysUserBO;
+
+    @Autowired
+    private IJourBO jourBO;
 
     @Override
     public void cancelGroupOrder(String code, String remark) {
@@ -215,8 +227,9 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
             deriveGroupBO.refreshClaimDirect(deriveGroup.getCode());
 
             // 生成新的资产
-            originalGroupBO.saveOriginalGroup(deriveGroup.getOriginalCode(),
-                data.getApplyUser(), data.getPrice(), data.getQuantity());
+            originalGroupBO.saveOriginalGroup(data.getCode(),
+                deriveGroup.getProductCode(), data.getApplyUser(),
+                data.getPrice(), data.getQuantity());
 
         }
 
@@ -229,8 +242,8 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
 
             // 生成新的资产
             String originalGroupCode = originalGroupBO.saveOriginalGroup(
-                deriveGroup.getOriginalCode(), data.getApplyUser(),
-                data.getPrice(), data.getQuantity());
+                data.getCode(), deriveGroup.getProductCode(),
+                data.getApplyUser(), data.getPrice(), data.getQuantity());
 
             // 分配预售权
             int presellInventoryQuantity = 0;
@@ -264,8 +277,8 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
 
             // 生成新的资产
             String originalGroupCode = originalGroupBO.saveOriginalGroup(
-                deriveGroup.getOriginalCode(), data.getApplyUser(),
-                data.getPrice(), data.getQuantity());
+                data.getCode(), deriveGroup.getProductCode(),
+                data.getApplyUser(), data.getPrice(), data.getQuantity());
 
             // 分配预售权
             int presellInventoryQuantity = 0;
@@ -349,5 +362,56 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
         PresellProduct presellProduct = presellProductBO
             .getPresellProduct(groupOrder.getProductCode());
         groupOrder.setPresellProduct(presellProduct);
+
+        // 产权方
+        String sellerName = null;
+        SYSUser sysUser = sysUserBO
+            .getSYSUserUnCheck(presellProduct.getOwnerId());
+        if (null != sysUser) {
+            sellerName = sysUser.getMobile();
+            if (StringUtils.isNotBlank(sysUser.getRealName())) {
+                sellerName = sysUser.getRealName() + sellerName;
+            }
+        }
+        groupOrder.setSellerName(sellerName);
+
+        // 支付流水编号
+        Account userCnyAccount = accountBO.getAccountByUser(
+            groupOrder.getApplyUser(), ECurrency.CNY.getCode());
+        Jour jour = jourBO.getJour(groupOrder.getCode(),
+            userCnyAccount.getAccountNumber(), EAccountType.CUSTOMER.getCode());
+        if (null != jour) {
+            groupOrder.setJourCode(jour.getCode());
+        }
+
+        // 原生组
+        StringBuilder treeNumbers = new StringBuilder();
+        if (EGroupOrderStatus.PAYED.getCode().equals(groupOrder.getStatus())) {
+            OriginalGroup originalGroup = originalGroupBO
+                .getOriginalGroupByOrder(groupOrder.getCode());
+
+            if (null != originalGroup) {
+                List<PresellInventory> presellInventorieList = presellInventoryBO
+                    .queryTreeNumberListByGroup(originalGroup.getCode());
+                if (CollectionUtils.isNotEmpty(presellInventorieList)) {
+                    for (PresellInventory presellInventory : presellInventorieList) {
+                        treeNumbers.append(presellInventory.getTreeNumber())
+                            .append(".");
+                    }
+                }
+            }
+        }
+        groupOrder.setTreeNumbers(treeNumbers.toString());
+
+        // 下单人
+        User applyUser = userBO.getUserUnCheck(groupOrder.getApplyUser());
+        String applyUserName = null;
+        if (null != applyUser) {
+            applyUserName = applyUser.getMobile();
+            if (null != applyUser.getNickname()) {
+                applyUserName = applyUser.getNickname();
+            }
+        }
+        groupOrder.setApplyUserName(applyUserName);
     }
 }

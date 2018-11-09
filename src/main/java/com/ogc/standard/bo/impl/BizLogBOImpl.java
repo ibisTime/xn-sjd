@@ -10,11 +10,13 @@ import org.springframework.stereotype.Component;
 
 import com.ogc.standard.bo.IAdoptOrderTreeBO;
 import com.ogc.standard.bo.IBizLogBO;
+import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.dao.IBizLogDAO;
 import com.ogc.standard.domain.AdoptOrderTree;
 import com.ogc.standard.domain.BizLog;
+import com.ogc.standard.domain.User;
 import com.ogc.standard.enums.EBizLogType;
 import com.ogc.standard.exception.BizException;
 
@@ -26,6 +28,9 @@ public class BizLogBOImpl extends PaginableBOImpl<BizLog> implements IBizLogBO {
 
     @Autowired
     private IAdoptOrderTreeBO adoptOrderTreeBO;
+
+    @Autowired
+    private IUserBO userBO;
 
     public long leaveMessage(String adoptTreeCode, String note, String userId) {
         AdoptOrderTree adoptOrderTree = adoptOrderTreeBO
@@ -79,8 +84,8 @@ public class BizLogBOImpl extends PaginableBOImpl<BizLog> implements IBizLogBO {
     }
 
     @Override
-    public long useShelter(String adoptTreeCode, String adoptUserId,
-            String userId) {
+    public long useShelter(String toolName, String adoptTreeCode,
+            String adoptUserId, String userId) {
         BizLog data = new BizLog();
 
         data.setAdoptTreeCode(adoptTreeCode);
@@ -88,8 +93,24 @@ public class BizLogBOImpl extends PaginableBOImpl<BizLog> implements IBizLogBO {
         data.setType(EBizLogType.USE_SHELTER.getCode());
         data.setQuantity(BigDecimal.ZERO);
         data.setUserId(userId);
-
         data.setCreateDatetime(new Date());
+
+        String note = null;
+        if (userId.equals(adoptUserId)) {
+            note = "我使用了" + toolName;
+        } else {
+            User user = userBO.getUserUnCheck(userId);
+            String userName = null;
+            if (null != user) {
+                userName = user.getMobile();
+                if (null != user.getNickname()) {
+                    userName = user.getNickname();
+                }
+            }
+            note = userName + "使用了" + toolName;
+        }
+        data.setNote(note);
+
         bizLogDAO.insert(data);
 
         return bizLogDAO.selectMaxId();
@@ -105,8 +126,24 @@ public class BizLogBOImpl extends PaginableBOImpl<BizLog> implements IBizLogBO {
         data.setType(EBizLogType.GET_ALL.getCode());
         data.setQuantity(quantity);
         data.setUserId(userId);
-
         data.setCreateDatetime(new Date());
+
+        String note = null;
+        if (userId.equals(adoptUserId)) {
+            note = "我使用了一键收取";
+        } else {
+            User user = userBO.getUserUnCheck(userId);
+            String userName = null;
+            if (null != user) {
+                userName = user.getMobile();
+                if (null != user.getNickname()) {
+                    userName = user.getNickname();
+                }
+            }
+            note = userName + "使用了一键收取";
+        }
+        data.setNote(note);
+
         bizLogDAO.insert(data);
 
         return bizLogDAO.selectMaxId();

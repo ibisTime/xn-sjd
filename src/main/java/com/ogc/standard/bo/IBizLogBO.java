@@ -20,8 +20,8 @@ public interface IBizLogBO extends IPaginableBO<BizLog> {
             String userId);
 
     // 使用保护罩
-    public long useShelter(String adoptTreeCode, String adoptUserId,
-            String userId);
+    public long useShelter(String toolName, String adoptTreeCode,
+            String adoptUserId, String userId);
 
     // 使用一键收取
     public long useGetall(String adoptTreeCode, String adoptUserId,

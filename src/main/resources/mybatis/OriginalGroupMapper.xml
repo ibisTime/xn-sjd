@@ -7,6 +7,8 @@
 		<result column="order_code" property="orderCode" />
 		<result column="product_code" property="productCode" />
 		<result column="product_name" property="productName" />
+		<result column="specs_code" property="specsCode" />
+		<result column="specs_name" property="specsName" />
 		<result column="owner_id" property="ownerId" />
 		
 		<result column="price" property="price" />
@@ -65,6 +67,8 @@
 		,t.order_code
 		,t.product_code
 		,t.product_name
+		,t.specs_code
+		,t.specs_name
 		,t.owner_id
 		
 		,t.price
@@ -102,6 +106,8 @@
 		,order_code
 		,product_code
 		,product_name
+		,specs_code
+		,specs_name
 		,owner_id
 		
 		,price
@@ -120,6 +126,8 @@
 		,#{orderCode}
 		,#{productCode}
 		,#{productName}
+		,#{specsCode}
+		,#{specsName}
 		,#{ownerId}
 		
 		,#{price}

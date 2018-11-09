@@ -28,6 +28,12 @@ public class OriginalGroup extends ABaseDO {
     // 产品名称
     private String productName;
 
+    // 规格编号
+    private String specsCode;
+
+    // 规格名称
+    private String specsName;
+
     // 归属人
     private String ownerId;
 
@@ -268,6 +274,22 @@ public class OriginalGroup extends ABaseDO {
 
     public void setReceivingQuantity(Integer receivingQuantity) {
         this.receivingQuantity = receivingQuantity;
+    }
+
+    public String getSpecsCode() {
+        return specsCode;
+    }
+
+    public void setSpecsCode(String specsCode) {
+        this.specsCode = specsCode;
+    }
+
+    public String getSpecsName() {
+        return specsName;
+    }
+
+    public void setSpecsName(String specsName) {
+        this.specsName = specsName;
     }
 
 }

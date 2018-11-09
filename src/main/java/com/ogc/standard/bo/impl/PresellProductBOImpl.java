@@ -55,7 +55,6 @@ public class PresellProductBOImpl extends PaginableBOImpl<PresellProduct>
         data.setLongitude(req.getLongitude());
         data.setLatitude(req.getLatitude());
         data.setPackUnit(req.getPackUnit());
-        data.setPackWeight(StringValidater.toDouble(req.getPackWeight()));
 
         data.setNowCount(0);
         data.setStatus(EPresellProductStatus.DRAFT.getCode());
@@ -73,6 +72,8 @@ public class PresellProductBOImpl extends PaginableBOImpl<PresellProduct>
         data.setAdoptYear(
             DateUtil.yearsBetween(adoptStartDatetime, adoptEndDatetime));
         data.setHarvestDatetime(DateUtil.strToDate(req.getHarvestDatetime(),
+            DateUtil.FRONT_DATE_FORMAT_STRING));
+        data.setDeliverDatetime(DateUtil.strToDate(req.getDeliverDatetime(),
             DateUtil.FRONT_DATE_FORMAT_STRING));
 
         Integer treeCode = req.getTreeList().size();
@@ -111,13 +112,14 @@ public class PresellProductBOImpl extends PaginableBOImpl<PresellProduct>
         data.setLongitude(req.getLongitude());
         data.setLatitude(req.getLatitude());
         data.setPackUnit(req.getPackUnit());
-        data.setPackWeight(StringValidater.toDouble(req.getPackWeight()));
 
         data.setAdoptStartDatetime(DateUtil.strToDate(
             req.getAdoptStartDatetime(), DateUtil.FRONT_DATE_FORMAT_STRING));
         data.setAdoptEndDatetime(
             DateUtil.getEndDatetime(req.getAdoptEndDatetime()));
         data.setHarvestDatetime(DateUtil.strToDate(req.getHarvestDatetime(),
+            DateUtil.FRONT_DATE_FORMAT_STRING));
+        data.setDeliverDatetime(DateUtil.strToDate(req.getDeliverDatetime(),
             DateUtil.FRONT_DATE_FORMAT_STRING));
 
         data.setUpdater(req.getUpdater());

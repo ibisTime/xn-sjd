@@ -47,6 +47,10 @@ public interface IDeriveGroupBO extends IPaginableBO<DeriveGroup> {
     public List<DeriveGroup> queryDeriveGroupListDirect(String claimant,
             String status);
 
+    // 原生组发布的派生组
+    public List<DeriveGroup> queryDeriveGroupListByOriginal(
+            String originalGroupCode, String status);
+
     public List<DeriveGroup> queryDeriveGroupList(DeriveGroup condition);
 
     // 查询品种

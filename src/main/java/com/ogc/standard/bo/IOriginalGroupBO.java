@@ -11,8 +11,8 @@ public interface IOriginalGroupBO extends IPaginableBO<OriginalGroup> {
 
     public String saveOriginalGroup(PresellOrder data);
 
-    public String saveOriginalGroup(String parentCode, String ownerId,
-            BigDecimal price, Integer quantity);
+    public String saveOriginalGroup(String orderCode, String productCode,
+            String ownerId, BigDecimal price, Integer quantity);
 
     // 更新数量
     public void refreshQuantity(String code, Integer quantity);

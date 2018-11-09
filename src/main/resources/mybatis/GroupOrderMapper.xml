@@ -8,6 +8,8 @@
 		<result column="owner_id" property="ownerId" />
 		<result column="product_code" property="productCode" />
 		<result column="product_name" property="productName" />
+		<result column="specs_code" property="specsCode" />
+		<result column="specs_name" property="specsName" />
 		<result column="price" property="price" />
 		
 		<result column="quantity" property="quantity" />
@@ -78,6 +80,8 @@
 		,t.owner_id
 		,t.product_code
 		,t.product_name
+		,t.specs_code
+		,t.specs_name
 		,t.price
 		
 		,t.quantity
@@ -124,6 +128,8 @@
 		,owner_id
 		,product_code
 		,product_name
+		,specs_code
+		,specs_name
 		,price
 		
 		,quantity
@@ -146,6 +152,8 @@
 		,#{ownerId}
 		,#{productCode}
 		,#{productName}
+		,#{specsCode}
+		,#{specsName}
 		,#{price}
 		
 		,#{quantity}
@@ -164,7 +172,7 @@
 		)
 	</insert>
 
-	<update id="update_CalcelPresellOrder" parameterType="groupOrder">
+	<update id="update_CalcelGroupOrder" parameterType="groupOrder">
 		UPDATE tys_group_order
 		SET
 		status = #{status}

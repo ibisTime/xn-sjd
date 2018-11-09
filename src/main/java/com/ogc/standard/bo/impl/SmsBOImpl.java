@@ -39,9 +39,6 @@ public class SmsBOImpl extends PaginableBOImpl<Sms> implements ISmsBO {
     @Autowired
     private IUserBO userBO;
 
-    @Autowired
-    private IProductBO productBO;
-
     @Override
     public boolean isSmsExit(String code) {
         Sms sms = new Sms();
@@ -99,7 +96,8 @@ public class SmsBOImpl extends PaginableBOImpl<Sms> implements ISmsBO {
 
         String unit = "棵";
         if (ESellType.DONATE.getCode().equals(sellType)
-                || ESellType.COLLECTIVE.getCode().equals(sellType)) {
+                || ESellType.COLLECTIVE.getCode().equals(sellType)
+                || ESellType.PRESELL.getCode().equals(sellType)) {
             unit = "份";
         }
 

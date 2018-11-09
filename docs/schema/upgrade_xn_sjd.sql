@@ -94,3 +94,22 @@ ADD COLUMN `owner_id` VARCHAR(32) NULL COMMENT '资产归属人' AFTER `group_co
 
 ALTER TABLE `tys_derive_group` 
 ADD COLUMN `variety` VARCHAR(32) NULL COMMENT '品种' AFTER `product_name`;
+
+ALTER TABLE `tys_original_group` 
+ADD COLUMN `specs_code` VARCHAR(32) NULL COMMENT '规格编号' AFTER `product_name`,
+ADD COLUMN `specs_name` VARCHAR(255) NULL COMMENT '规格名称' AFTER `specs_code`;
+
+ALTER TABLE `tys_derive_group` 
+ADD COLUMN `specs_code` VARCHAR(32) NULL COMMENT '规格编号' AFTER `product_name`,
+ADD COLUMN `specs_name` VARCHAR(255) NULL COMMENT '规格名称' AFTER `specs_code`;
+
+ALTER TABLE `tys_group_order` 
+ADD COLUMN `specs_code` VARCHAR(32) NULL COMMENT '规格编号' AFTER `product_name`,
+ADD COLUMN `specs_name` VARCHAR(255) NULL COMMENT '规格名称' AFTER `specs_code`;
+
+ALTER TABLE `tys_presell_product` 
+ADD COLUMN `deliver_datetime` DATETIME NULL COMMENT '预计发货时间' AFTER `harvest_datetime`;
+
+ALTER TABLE `tys_presell_product` 
+DROP COLUMN `pack_weight`;
+

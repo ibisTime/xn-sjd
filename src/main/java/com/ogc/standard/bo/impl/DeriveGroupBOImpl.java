@@ -50,17 +50,20 @@ public class DeriveGroupBOImpl extends PaginableBOImpl<DeriveGroup>
         deriveGroup.setOriginalCode(originalCode);
         deriveGroup.setProductCode(originalGroup.getProductCode());
         deriveGroup.setProductName(originalGroup.getProductName());
+        deriveGroup.setSpecsCode(originalGroup.getSpecsCode());
+
+        deriveGroup.setSpecsName(originalGroup.getSpecsName());
         deriveGroup.setVariety(presellProduct.getVariety());
         deriveGroup.setType(EPresellType.DIRECT.getCode());
-
         deriveGroup.setPrice(price);
         deriveGroup.setQuantity(quantity);
+
         deriveGroup.setUnit(presellProduct.getPackUnit());
         deriveGroup.setCreater(originalGroup.getOwnerId());
         deriveGroup.setCreateDatetime(new Date());
-
         deriveGroup.setStatus(EDeriveGroupStatus.TO_CLAIM.getCode());
         deriveGroup.setClaimant(claimant);
+
         deriveGroupDAO.insert(deriveGroup);
 
         return code;
@@ -81,17 +84,19 @@ public class DeriveGroupBOImpl extends PaginableBOImpl<DeriveGroup>
         deriveGroup.setOriginalCode(originalCode);
         deriveGroup.setProductCode(originalGroup.getProductCode());
         deriveGroup.setProductName(originalGroup.getProductName());
+        deriveGroup.setSpecsCode(originalGroup.getSpecsCode());
+
+        deriveGroup.setSpecsName(originalGroup.getSpecsName());
         deriveGroup.setVariety(presellProduct.getVariety());
         deriveGroup.setType(EPresellType.QR.getCode());
-
         deriveGroup.setPrice(price);
         deriveGroup.setQuantity(quantity);
+
         deriveGroup.setUnit(presellProduct.getPackUnit());
         deriveGroup.setCreater(originalGroup.getOwnerId());
         deriveGroup.setCreateDatetime(new Date());
-
         deriveGroup.setStatus(EDeriveGroupStatus.TO_CLAIM.getCode());
-        // TODO url, rang
+        // TODO rang
         deriveGroupDAO.insert(deriveGroup);
 
         return code;
@@ -112,18 +117,20 @@ public class DeriveGroupBOImpl extends PaginableBOImpl<DeriveGroup>
         deriveGroup.setOriginalCode(originalCode);
         deriveGroup.setProductCode(originalGroup.getProductCode());
         deriveGroup.setProductName(originalGroup.getProductName());
+        deriveGroup.setSpecsCode(originalGroup.getSpecsCode());
+
+        deriveGroup.setSpecsName(originalGroup.getSpecsName());
         deriveGroup.setVariety(presellProduct.getVariety());
         deriveGroup.setType(EPresellType.PUBLIC.getCode());
-
         deriveGroup.setPrice(price);
         deriveGroup.setQuantity(quantity);
+
         deriveGroup.setUnit(presellProduct.getPackUnit());
         deriveGroup.setCreater(originalGroup.getOwnerId());
         deriveGroup.setCreateDatetime(new Date());
-
         deriveGroup.setStatus(EDeriveGroupStatus.TO_CLAIM.getCode());
-        deriveGroupDAO.insert(deriveGroup);
 
+        deriveGroupDAO.insert(deriveGroup);
         return code;
     }
 
@@ -216,6 +223,15 @@ public class DeriveGroupBOImpl extends PaginableBOImpl<DeriveGroup>
         condition.setMinQuantity("0");
         condition.setType(EPresellType.DIRECT.getCode());
         condition.setClaimant(claimant);
+        condition.setStatus(status);
+        return deriveGroupDAO.selectList(condition);
+    }
+
+    @Override
+    public List<DeriveGroup> queryDeriveGroupListByOriginal(
+            String originalGroupCode, String status) {
+        DeriveGroup condition = new DeriveGroup();
+        condition.setOriginalCode(originalGroupCode);
         condition.setStatus(status);
         return deriveGroupDAO.selectList(condition);
     }

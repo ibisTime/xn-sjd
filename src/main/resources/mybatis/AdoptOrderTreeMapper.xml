@@ -113,6 +113,7 @@
  		FROM
 		try_adopt_order_tree t
 		<include refid="where_condition" />
+		group by t.current_holder having userAdoptTreeCount > 0
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
 				t.${order}
