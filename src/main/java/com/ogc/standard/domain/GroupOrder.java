@@ -21,6 +21,9 @@ public class GroupOrder extends ABaseDO {
     // 组编号
     private String groupCode;
 
+    // 资产归属人
+    private String ownerId;
+
     // 产品编号
     private String productCode;
 
@@ -288,6 +291,14 @@ public class GroupOrder extends ABaseDO {
 
     public void setPresellProduct(PresellProduct presellProduct) {
         this.presellProduct = presellProduct;
+    }
+
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
     }
 
 }

@@ -16,7 +16,6 @@ public class XN629404Req extends BaseReq {
     private String code;
 
     // 位置
-    @NotBlank
     private String location;
 
     // 序号

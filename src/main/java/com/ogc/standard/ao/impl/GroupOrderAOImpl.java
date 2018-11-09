@@ -43,7 +43,6 @@ import com.ogc.standard.enums.EPayType;
 import com.ogc.standard.enums.EPresellType;
 import com.ogc.standard.enums.ESellType;
 import com.ogc.standard.enums.ESysUser;
-import com.ogc.standard.enums.ESystemAccount;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
 
@@ -152,9 +151,9 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
         }
 
         // 人民币余额划转
-        Account sysCnyAccount = accountBO
-            .getAccount(ESystemAccount.SYS_ACOUNT_CNY.getCode());
-        accountBO.transAmount(userCnyAccount, sysCnyAccount, payAmount,
+        Account ownerCnyAccount = accountBO.getAccountByUser(data.getOwnerId(),
+            ECurrency.CNY.getCode());
+        accountBO.transAmount(userCnyAccount, ownerCnyAccount, payAmount,
             EJourBizTypeUser.PRESELL.getCode(),
             EJourBizTypePlat.PRESELL.getCode(),
             EJourBizTypeUser.PRESELL.getValue(),
@@ -217,7 +216,7 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
 
             // 生成新的资产
             originalGroupBO.saveOriginalGroup(deriveGroup.getOriginalCode(),
-                deriveGroup.getClaimant(), data.getPrice(), data.getQuantity());
+                data.getApplyUser(), data.getPrice(), data.getQuantity());
 
         }
 
@@ -230,7 +229,7 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
 
             // 生成新的资产
             String originalGroupCode = originalGroupBO.saveOriginalGroup(
-                deriveGroup.getOriginalCode(), deriveGroup.getClaimant(),
+                deriveGroup.getOriginalCode(), data.getApplyUser(),
                 data.getPrice(), data.getQuantity());
 
             // 分配预售权
@@ -265,8 +264,8 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
 
             // 生成新的资产
             String originalGroupCode = originalGroupBO.saveOriginalGroup(
-                deriveGroup.getOriginalCode(), deriveGroup.getClaimant(),
-                deriveGroup.getPrice(), data.getQuantity());
+                deriveGroup.getOriginalCode(), data.getApplyUser(),
+                data.getPrice(), data.getQuantity());
 
             // 分配预售权
             int presellInventoryQuantity = 0;

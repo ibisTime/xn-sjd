@@ -831,6 +831,7 @@ CREATE TABLE `tzb_category` (
   `type` varchar(4) NOT NULL COMMENT '类型',
   `parent_code` varchar(32) DEFAULT NULL COMMENT '上级编号',
   `name` varchar(255) DEFAULT NULL COMMENT '名称',
+  `level` INT(11) DEFAULT NULL COMMENT '级别',
   `pic` text COMMENT '图片',
   `order_no` int(11) DEFAULT '0' COMMENT '顺序',
   `status` varchar(4) DEFAULT NULL COMMENT '状态(0待上架/1已上架)',
@@ -1099,6 +1100,7 @@ CREATE TABLE `tys_derive_group` (
   `original_code` varchar(32) DEFAULT NULL COMMENT '原生组编号',
   `product_code` varchar(32) DEFAULT NULL COMMENT '产品编号',
   `product_name` varchar(255) DEFAULT NULL COMMENT '产品名称',
+  `variety` varchar(4) DEFAULT NULL COMMENT '品种',
   `type` varchar(4) DEFAULT NULL COMMENT '类型（定向/二维码/挂单）',
 
   `price` decimal(18,8) DEFAULT NULL COMMENT '单价', 
@@ -1121,6 +1123,7 @@ DROP TABLE IF EXISTS `tys_group_order`;
 CREATE TABLE `tys_group_order` (
   `code` varchar(32) NOT NULL COMMENT '编号',
   `group_code` varchar(32) DEFAULT NULL COMMENT '组编号',
+  `owner_id` varchar(32) DEFAULT NULL COMMENT '资产归属人',
   `product_code` varchar(32) DEFAULT NULL COMMENT '产品编号',
   `product_name` varchar(255) DEFAULT NULL COMMENT '产品名称',
 

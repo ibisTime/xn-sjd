@@ -50,6 +50,7 @@ public class DeriveGroupBOImpl extends PaginableBOImpl<DeriveGroup>
         deriveGroup.setOriginalCode(originalCode);
         deriveGroup.setProductCode(originalGroup.getProductCode());
         deriveGroup.setProductName(originalGroup.getProductName());
+        deriveGroup.setVariety(presellProduct.getVariety());
         deriveGroup.setType(EPresellType.DIRECT.getCode());
 
         deriveGroup.setPrice(price);
@@ -80,9 +81,10 @@ public class DeriveGroupBOImpl extends PaginableBOImpl<DeriveGroup>
         deriveGroup.setOriginalCode(originalCode);
         deriveGroup.setProductCode(originalGroup.getProductCode());
         deriveGroup.setProductName(originalGroup.getProductName());
+        deriveGroup.setVariety(presellProduct.getVariety());
         deriveGroup.setType(EPresellType.QR.getCode());
 
-        deriveGroup.setPrice(originalGroup.getPrice());
+        deriveGroup.setPrice(price);
         deriveGroup.setQuantity(quantity);
         deriveGroup.setUnit(presellProduct.getPackUnit());
         deriveGroup.setCreater(originalGroup.getOwnerId());
@@ -110,6 +112,7 @@ public class DeriveGroupBOImpl extends PaginableBOImpl<DeriveGroup>
         deriveGroup.setOriginalCode(originalCode);
         deriveGroup.setProductCode(originalGroup.getProductCode());
         deriveGroup.setProductName(originalGroup.getProductName());
+        deriveGroup.setVariety(presellProduct.getVariety());
         deriveGroup.setType(EPresellType.PUBLIC.getCode());
 
         deriveGroup.setPrice(price);
@@ -200,6 +203,7 @@ public class DeriveGroupBOImpl extends PaginableBOImpl<DeriveGroup>
     public List<DeriveGroup> queryDeriveGroupListByCreater(String creater,
             String status) {
         DeriveGroup condition = new DeriveGroup();
+        condition.setMinQuantity("0");
         condition.setCreater(creater);
         condition.setStatus(status);
         return deriveGroupDAO.selectList(condition);
@@ -209,6 +213,7 @@ public class DeriveGroupBOImpl extends PaginableBOImpl<DeriveGroup>
     public List<DeriveGroup> queryDeriveGroupListDirect(String claimant,
             String status) {
         DeriveGroup condition = new DeriveGroup();
+        condition.setMinQuantity("0");
         condition.setType(EPresellType.DIRECT.getCode());
         condition.setClaimant(claimant);
         condition.setStatus(status);
@@ -218,6 +223,11 @@ public class DeriveGroupBOImpl extends PaginableBOImpl<DeriveGroup>
     @Override
     public List<DeriveGroup> queryDeriveGroupList(DeriveGroup condition) {
         return deriveGroupDAO.selectList(condition);
+    }
+
+    @Override
+    public List<DeriveGroup> queryVarietyList(DeriveGroup data) {
+        return deriveGroupDAO.selectVarietyList(data);
     }
 
     @Override

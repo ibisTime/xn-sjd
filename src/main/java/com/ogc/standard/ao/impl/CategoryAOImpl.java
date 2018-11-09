@@ -11,6 +11,7 @@ import com.ogc.standard.bo.ICategoryBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Category;
 import com.ogc.standard.enums.ECategoryStatus;
+import com.ogc.standard.enums.EProductType;
 import com.ogc.standard.exception.BizException;
 
 /**
@@ -32,6 +33,7 @@ public class CategoryAOImpl implements ICategoryAO {
             throw new BizException("xn0000", "产品分类名称已存在，请重新输入！");
         }
 
+        Integer level = 1;
         if (StringUtils.isNotBlank(parentCode)) {
             Category parentCategory = categoryBO.getCategory(parentCode);
 
@@ -39,10 +41,22 @@ public class CategoryAOImpl implements ICategoryAO {
                 .equals(parentCategory.getStatus())) {
                 throw new BizException("xn0000", "父类产品分类已下架，请重新选择！");
             }
+
+            level = parentCategory.getLevel() + 1;
         }
 
-        return categoryBO.saveCategory(name, type, parentCode, pic, orderNo,
-            updater, remark);
+        if (EProductType.YS.getCode().equals(type)
+                && StringUtils.isEmpty(parentCode)) {
+            Category parentCategory = categoryBO.getCategoryByName("果树预售");
+            if (null != parentCategory) {
+                parentCode = parentCategory.getCode();
+            }
+
+            level = 2;
+        }
+
+        return categoryBO.saveCategory(name, level, type, parentCode, pic,
+            orderNo, updater, remark);
     }
 
     @Override
@@ -54,6 +68,7 @@ public class CategoryAOImpl implements ICategoryAO {
             throw new BizException("xn0000", "产品分类已上架，无法修改！");
         }
 
+        Integer level = 0;
         if (StringUtils.isNotBlank(parentCode)) {
             Category parentCategory = categoryBO.getCategory(parentCode);
 
@@ -61,10 +76,12 @@ public class CategoryAOImpl implements ICategoryAO {
                 .equals(parentCategory.getStatus())) {
                 throw new BizException("xn0000", "父类产品分类已下架，请重新选择！");
             }
+
+            level = parentCategory.getLevel() + 1;
         }
 
-        categoryBO.refreshCategory(code, name, type, parentCode, pic, orderNo,
-            updater, remark);
+        categoryBO.refreshCategory(code, name, level, type, parentCode, pic,
+            orderNo, updater, remark);
     }
 
     @Override

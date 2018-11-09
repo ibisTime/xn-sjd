@@ -27,6 +27,9 @@ public class DeriveGroup extends ABaseDO {
     // 产品名称
     private String productName;
 
+    // 品种
+    private String variety;
+
     // 类型（定向/二维码/挂单）
     private String type;
 
@@ -77,7 +80,7 @@ public class DeriveGroup extends ABaseDO {
     private String queryUserId;
 
     // 最小数量
-    private Interact minQuantity;
+    private String minQuantity;
 
     public String getCode() {
         return code;
@@ -239,12 +242,20 @@ public class DeriveGroup extends ABaseDO {
         this.queryUserId = queryUserId;
     }
 
-    public Interact getMinQuantity() {
+    public String getMinQuantity() {
         return minQuantity;
     }
 
-    public void setMinQuantity(Interact minQuantity) {
+    public void setMinQuantity(String minQuantity) {
         this.minQuantity = minQuantity;
+    }
+
+    public String getVariety() {
+        return variety;
+    }
+
+    public void setVariety(String variety) {
+        this.variety = variety;
     }
 
 }

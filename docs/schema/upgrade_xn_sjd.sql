@@ -78,10 +78,19 @@ update tzb_tree set product_type = '0';
 
 #V2.0.0 1-2
 ALTER TABLE `tys_original_group` 
-ADD COLUMN `receiving_quantity` INT(11) NULL COMMENT '提货中数量' AFTER `presell_quantity`;
+ADD COLUMN `receiving_quantity` INT(11) DEFAULT 0 COMMENT '提货中数量' AFTER `presell_quantity`;
 
 ALTER TABLE `tzb_category` 
 ADD COLUMN `type` VARCHAR(4) NULL COMMENT '类型' AFTER `code`;
 
 ALTER TABLE `tys_presell_product` 
 ADD COLUMN `parent_category_code` VARCHAR(32) NULL AFTER `owner_id`;
+
+ALTER TABLE `tzb_category` 
+ADD COLUMN `level` INT(11) DEFAULT 0 COMMENT '级别' AFTER `name`;
+
+ALTER TABLE `tys_group_order` 
+ADD COLUMN `owner_id` VARCHAR(32) NULL COMMENT '资产归属人' AFTER `group_code`;
+
+ALTER TABLE `tys_derive_group` 
+ADD COLUMN `variety` VARCHAR(32) NULL COMMENT '品种' AFTER `product_name`;

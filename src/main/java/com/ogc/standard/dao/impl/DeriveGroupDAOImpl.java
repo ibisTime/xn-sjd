@@ -77,4 +77,10 @@ public class DeriveGroupDAOImpl extends AMybatisTemplate
             count, condition, DeriveGroup.class);
     }
 
+    @Override
+    public List<DeriveGroup> selectVarietyList(DeriveGroup data) {
+        return super.selectList(NAMESPACE.concat("select_distinctVariety"),
+            data, DeriveGroup.class);
+    }
+
 }

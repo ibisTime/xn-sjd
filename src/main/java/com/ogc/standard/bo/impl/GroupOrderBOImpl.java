@@ -37,6 +37,7 @@ public class GroupOrderBOImpl extends PaginableBOImpl<GroupOrder>
 
         data.setCode(code);
         data.setGroupCode(deriveGroup.getCode());
+        data.setOwnerId(deriveGroup.getCreater());
         data.setProductCode(deriveGroup.getProductCode());
         data.setProductName(deriveGroup.getProductName());
 
@@ -65,6 +66,7 @@ public class GroupOrderBOImpl extends PaginableBOImpl<GroupOrder>
 
         data.setCode(code);
         data.setGroupCode(deriveGroup.getCode());
+        data.setOwnerId(deriveGroup.getCreater());
         data.setProductCode(deriveGroup.getProductCode());
         data.setProductName(deriveGroup.getProductName());
 
