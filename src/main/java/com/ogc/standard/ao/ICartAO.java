@@ -26,5 +26,8 @@ public interface ICartAO {
 
     public List<Cart> queryMyCart(String userId);
 
+    public String orderByCart(String applyUser, String applyNote,
+            String expressType, String addressCode, List<String> cartList);
+
     public Cart getCart(String code);
 }

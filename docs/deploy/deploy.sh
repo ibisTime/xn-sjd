@@ -1,7 +1,7 @@
 
 #!/usr/bin/expect
 
-set tomcat_path "/mnt/www/sjd/tomcat_sjd_biz/webapps"
+set tomcat_path "/mnt/www/sjd_dev/tomcat_sjd_biz/webapps"
 set war_name "xn-sjd.war"
 set host_ip "47.99.147.67"
 set host_pwd "123456qqA"

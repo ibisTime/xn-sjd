@@ -1,11 +1,6 @@
 package com.ogc.standard.dto.req;
 
-import java.util.List;
-
 import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.NotEmpty;
-
-import com.ogc.standard.dto.res.XN629720Res;
 
 /**
  * @author: taojian 
@@ -13,14 +8,6 @@ import com.ogc.standard.dto.res.XN629720Res;
  * @history:
  */
 public class XN629720Req {
-
-    // 订单金额
-    @NotBlank
-    private String amount;
-
-    // 商品数量
-    @NotBlank
-    private String quantity;
 
     // 下单人
     @NotBlank
@@ -33,32 +20,14 @@ public class XN629720Req {
     @NotBlank
     private String expressType;
 
-    // 更新人
     @NotBlank
-    private String updater;
+    private String specsId;
 
-    // 备注
-    private String remark;
+    @NotBlank
+    private String quantity;
 
-    // 明细列表
-    @NotEmpty
-    private List<XN629720Res> detailList;
-
-    public String getAmount() {
-        return amount;
-    }
-
-    public void setAmount(String amount) {
-        this.amount = amount;
-    }
-
-    public String getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(String quantity) {
-        this.quantity = quantity;
-    }
+    @NotBlank
+    private String addressCode;
 
     public String getApplyUser() {
         return applyUser;
@@ -84,28 +53,28 @@ public class XN629720Req {
         this.expressType = expressType;
     }
 
-    public String getUpdater() {
-        return updater;
+    public String getSpecsId() {
+        return specsId;
     }
 
-    public void setUpdater(String updater) {
-        this.updater = updater;
+    public void setSpecsId(String specsId) {
+        this.specsId = specsId;
     }
 
-    public String getRemark() {
-        return remark;
+    public String getQuantity() {
+        return quantity;
     }
 
-    public void setRemark(String remark) {
-        this.remark = remark;
+    public void setQuantity(String quantity) {
+        this.quantity = quantity;
     }
 
-    public List<XN629720Res> getDetailList() {
-        return detailList;
+    public String getAddressCode() {
+        return addressCode;
     }
 
-    public void setDetailList(List<XN629720Res> detailList) {
-        this.detailList = detailList;
+    public void setAddressCode(String addressCode) {
+        this.addressCode = addressCode;
     }
 
 }

@@ -33,9 +33,10 @@ import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.domain.Address;
+import com.ogc.standard.domain.Commodity;
 import com.ogc.standard.domain.CommodityOrder;
 import com.ogc.standard.domain.CommodityOrderDetail;
-import com.ogc.standard.dto.req.XN629720Req;
+import com.ogc.standard.domain.CommoditySpecs;
 import com.ogc.standard.dto.req.XN629721Req;
 import com.ogc.standard.dto.res.BooleanRes;
 import com.ogc.standard.dto.res.PayOrderRes;
@@ -90,45 +91,49 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
 
     @Override
     @Transactional
-    public String addOrder(XN629720Req req) {
+    public String addOrder(String applyUser, String applyNote,
+            String expressType, Long specsId, Long quantity, String addressCode) {
         // 用户检验
-        userBO.getUser(req.getApplyUser());
-        // 落地订单数据（多店铺）
-        String orderCode = commodityOrderBO.saveOrder(
-            StringValidater.toBigDecimal(req.getAmount()),
-            StringValidater.toLong(req.getQuantity()), req.getApplyUser(),
-            req.getApplynote(), req.getExpressType(), req.getUpdater(),
-            req.getRemark());
+        userBO.getUser(applyUser);
 
-        for (XN629720Res res : req.getDetailList()) {
-            // 店铺检验
-            companyBO.getCompany(res.getShopCode());
-            if (!commodityBO.isOnShelf(res.getCommodityCode())) {
-                throw new BizException("xn0000", "订单中有未上架产品["
-                        + res.getCommodityName() + "]无法下单");
-            }
-            // 地址检验
-            Address address = addressBO.getAddress(res.getAddressCode());
-            if (null == address) {
-                throw new BizException("xn0000", "地址编号为" + res.getAddressCode()
-                        + "不存在");
-            }
-            if (!address.getUserId().equals(req.getApplyUser())) {
-                throw new BizException("xn0000", "地址编号为" + res.getAddressCode()
-                        + "不属于" + req.getApplyUser());
-            }
-            if (StringValidater.toLong(res.getQuantity()) > commoditySpecsBO
-                .getInventory(StringValidater.toLong(res.getSpecsId()))) {
-                throw new BizException("xn0000", "产品[" + res.getCommodityName()
-                        + "]库存不足，不能下单");
-            }
-            // 落地详细订单数据（单店铺）
-            commodityOrderDetailBO.saveDetail(orderCode, res);
-            // 库存减少
-            commoditySpecsBO.inventoryDecrease(
-                StringValidater.toLong(res.getSpecsId()),
-                -StringValidater.toLong(res.getQuantity()));
+        // 落地订单数据（多店铺）
+        String orderCode = commodityOrderBO.saveOrder(applyUser, applyNote,
+            expressType, applyUser, applyNote);
+        // 规格检验
+        CommoditySpecs specs = commoditySpecsBO.getCommoditySpecs(specsId);
+        Commodity commodity = commodityBO
+            .getCommodity(specs.getCommodityCode());
+        // 地址检验
+        Address address = addressBO.getAddress(addressCode);
+        if (null == address) {
+            throw new BizException("xn0000", "该地址不存在");
         }
+        if (!address.getUserId().equals(applyUser)) {
+            throw new BizException("xn0000", "该地址不属于你");
+        }
+        // 落地单店铺订单
+        XN629720Res res = new XN629720Res();
+        res.setCommodityOrderCode(orderCode);
+        res.setShopCode(commodity.getShopCode());
+        res.setCommodityCode(specs.getCommodityCode());
+        res.setCommodityName(commodity.getName());
+        res.setSpecsId(specsId.toString());
+        res.setSpecsName(specs.getName());
+        res.setQuantity(quantity.toString());
+        res.setPrice(specs.getPrice().toString());
+        String amount = specs.getPrice()
+            .multiply(StringValidater.toBigDecimal(res.getQuantity()))
+            .toString();
+        res.setAmount(amount);
+        res.setAddressCode(addressCode);
+        commodityOrderDetailBO.saveDetail(orderCode, res);
+        // 库存减少
+        commoditySpecsBO.inventoryDecrease(
+            StringValidater.toLong(res.getSpecsId()),
+            -StringValidater.toLong(res.getQuantity()));
+        // 加上数量与总价
+        commodityOrderBO.refreshAmount(quantity,
+            StringValidater.toBigDecimal(amount), orderCode);
         return orderCode;
     }
 
@@ -145,14 +150,14 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
         }
         // 支付
         Object result = null;
-        if (EPayType.ALIPAY.equals(req.getPayType())) {
+        if (EPayType.ALIPAY.getCode().equals(req.getPayType())) {
             // 状态更新
             commodityOrderBO.refreshPayGroup(order, req.getPayType());
 
             String signOrder = alipayBO.getSignedOrder(order.getApplyUser(),
                 ESysUser.SYS_USER.getCode(), order.getPayGroup(),
                 EJourBizTypeUser.BUY.getCode(),
-                EJourBizTypeUser.BUY.getValue(), order.getAmount());
+                EJourBizTypeUser.BUY.getValue(), order.getPayAmount());
             result = new PayOrderRes(signOrder);
         } else if (EPayType.YE.getCode().equals(req.getPayType())) {
             result = payByBalance(order);

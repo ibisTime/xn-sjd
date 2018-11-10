@@ -28,4 +28,6 @@ public interface ICommoditySpecsBO extends IPaginableBO<CommoditySpecs> {
     public void inventoryDecrease(Long id, Long quantity);
 
     public Long getInventory(Long id);
+
+    public CommoditySpecs getCommoditySpecs(Long id);
 }

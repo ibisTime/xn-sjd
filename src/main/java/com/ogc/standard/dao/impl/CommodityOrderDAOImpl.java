@@ -70,4 +70,9 @@ public class CommodityOrderDAOImpl extends AMybatisTemplate implements
         return super.update(NAMESPACE.concat("update_cancel"), data);
     }
 
+    @Override
+    public int updateAmount(CommodityOrder data) {
+        return super.update(NAMESPACE.concat("update_amount"), data);
+    }
+
 }

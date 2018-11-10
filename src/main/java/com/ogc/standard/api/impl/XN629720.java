@@ -12,6 +12,7 @@ import com.ogc.standard.ao.ICommodityOrderAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.ObjValidater;
+import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.dto.req.XN629720Req;
 import com.ogc.standard.dto.res.PKCodeRes;
 import com.ogc.standard.exception.BizException;
@@ -34,7 +35,10 @@ public class XN629720 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
 
-        return new PKCodeRes(commodityOrderAO.addOrder(req));
+        return new PKCodeRes(commodityOrderAO.addOrder(req.getApplyUser(),
+            req.getApplynote(), req.getExpressType(),
+            StringValidater.toLong(req.getSpecsId()),
+            StringValidater.toLong(req.getQuantity()), req.getAddressCode()));
     }
 
     @Override
