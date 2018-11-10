@@ -64,7 +64,9 @@ public class ArticleAOImpl implements IArticleAO {
                 .getAdoptOrderTree(req.getAdoptTreeCode());
 
             if (!EAdoptOrderTreeStatus.ADOPT.getCode()
-                .equals(adoptOrderTree.getStatus())) {
+                .equals(adoptOrderTree.getStatus())
+                    && !EAdoptOrderTreeStatus.TO_ADOPT.getCode()
+                        .equals(adoptOrderTree.getStatus())) {
                 throw new BizException("xn0000", "认养权不是可发表文章状态！");
             }
 

@@ -142,7 +142,7 @@ public class ToolOrderAOImpl implements IToolOrderAO {
 
         // 添加使用保护罩日志
         if (EToolType.SHIELD.getCode().equals(tool.getType())) {
-            bizLogBO.useShelter(adoptTreeCode,
+            bizLogBO.useShelter(tool.getName(), adoptTreeCode,
                 adoptOrderTree.getCurrentHolder(), userId);
         }
 

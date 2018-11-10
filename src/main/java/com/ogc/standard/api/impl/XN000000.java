@@ -31,7 +31,7 @@ public class XN000000 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        presellSpecsAO.doRefreshPrice();
+        groupAdoptOrderAO.doInvalidIdentifyCode();
         return new BooleanRes(true);
     }
 

@@ -7,6 +7,8 @@
 		<result column="original_code" property="originalCode" />
 		<result column="product_code" property="productCode" />
 		<result column="product_name" property="productName" />
+		<result column="specs_code" property="specsCode" />
+		<result column="specs_name" property="specsName" />
 		<result column="variety" property="variety" />
 		<result column="type" property="type" />
 		
@@ -90,6 +92,8 @@
 		,t.original_code
 		,t.product_code
 		,t.product_name
+		,t.specs_code
+		,t.specs_name
 		,t.variety
 		,t.type
 		
@@ -129,6 +133,8 @@
 		,original_code
 		,product_code
 		,product_name
+		,specs_code
+		,specs_name
 		,variety
 		,type
 		
@@ -149,6 +155,8 @@
 		,#{originalCode}
 		,#{productCode}
 		,#{productName}
+		,#{specsCode}
+		,#{specsName}
 		,#{variety}
 		,#{type}
 		

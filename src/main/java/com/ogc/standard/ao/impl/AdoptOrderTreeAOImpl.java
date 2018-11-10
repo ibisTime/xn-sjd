@@ -185,7 +185,9 @@ public class AdoptOrderTreeAOImpl implements IAdoptOrderTreeAO {
     }
 
     public void doDailyAdoptOrderTree() {
+
         logger.info("***************开始生成碳泡泡***************");
+
         Map<String, String> configMap = sysConfigBO
             .getConfigsMap(ESysConfigType.TPP_RULE.getCode());
         Double rate = Double

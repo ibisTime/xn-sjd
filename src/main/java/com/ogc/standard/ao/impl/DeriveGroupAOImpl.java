@@ -16,12 +16,14 @@ import com.ogc.standard.bo.IGroupOrderBO;
 import com.ogc.standard.bo.IOriginalGroupBO;
 import com.ogc.standard.bo.IPresellInventoryBO;
 import com.ogc.standard.bo.IPresellProductBO;
+import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Page;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.DeriveGroup;
 import com.ogc.standard.domain.OriginalGroup;
 import com.ogc.standard.domain.PresellInventory;
 import com.ogc.standard.domain.PresellProduct;
+import com.ogc.standard.domain.User;
 import com.ogc.standard.enums.EDeriveGroupStatus;
 import com.ogc.standard.enums.EGroupType;
 import com.ogc.standard.exception.BizException;
@@ -44,6 +46,9 @@ public class DeriveGroupAOImpl implements IDeriveGroupAO {
 
     @Autowired
     private IGroupOrderBO groupOrderBO;
+
+    @Autowired
+    private IUserBO userBO;
 
     @Override
     @Transactional
@@ -284,6 +289,10 @@ public class DeriveGroupAOImpl implements IDeriveGroupAO {
         List<PresellInventory> treeNumberList = presellInventoryBO
             .queryTreeNumberListByGroup(deriveGroup.getCode());
         deriveGroup.setTreeNumberList(treeNumberList);
+
+        // 挂单人信息
+        User createrInfo = userBO.getUserUnCheck(deriveGroup.getCreater());
+        deriveGroup.setCreaterInfo(createrInfo);
     }
 
     // 将List按照日期排序

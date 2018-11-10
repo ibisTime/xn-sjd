@@ -89,19 +89,16 @@ public class PresellOrderBOImpl extends PaginableBOImpl<PresellOrder>
     }
 
     @Override
-    public void refreshPayGroup(String code, String payType,
+    public void refreshPayGroup(PresellOrder presellOrder, String payType,
             XN629048Res resultRes) {
-        if (StringUtils.isNotBlank(code)) {
-            PresellOrder data = new PresellOrder();
-            data.setCode(code);
-            data.setPayType(payType);
-            data.setPayGroup(code);
+        presellOrder.setPayType(payType);
+        presellOrder.setPayGroup(presellOrder.getCode());
 
-            data.setCnyDeductAmount(resultRes.getCnyAmount());
-            data.setJfDeductAmount(resultRes.getJfAmount());
-            data.setRemark("预支付发起中");
-            presellOrderDAO.updatePayGroup(data);
-        }
+        presellOrder.setCnyDeductAmount(resultRes.getCnyAmount());
+        presellOrder.setJfDeductAmount(resultRes.getJfAmount());
+        presellOrder.setRemark("预支付发起中");
+        presellOrderDAO.updatePayGroup(presellOrder);
+
     }
 
     @Override
@@ -122,6 +119,15 @@ public class PresellOrderBOImpl extends PaginableBOImpl<PresellOrder>
     @Override
     public List<PresellOrder> queryPresellOrderList(PresellOrder condition) {
         return presellOrderDAO.selectList(condition);
+    }
+
+    @Override
+    public List<PresellOrder> queryPresellOrderListByProduct(
+            String productCode) {
+        PresellOrder condition = new PresellOrder();
+        condition.setProductCode(productCode);
+        condition.setStatus(EPresellOrderStatus.PAYED.getCode());
+        return presellOrderDAO.selectListByProduct(condition);
     }
 
     @Override

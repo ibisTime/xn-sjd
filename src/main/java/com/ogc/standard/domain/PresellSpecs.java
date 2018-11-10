@@ -23,7 +23,7 @@ public class PresellSpecs extends ABaseDO {
     // 规格名称
     private String name;
 
-    // 包装数量
+    // 包装重量
     private Integer packCount;
 
     // 价格

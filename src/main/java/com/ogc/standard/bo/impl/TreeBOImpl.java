@@ -159,6 +159,7 @@ public class TreeBOImpl extends PaginableBOImpl<Tree> implements ITreeBO {
         tree.setProductCode(productCode);
         tree.setCurOrderCode(null);
         tree.setStatus(ETreeStatus.TO_ADOPT.getCode());
+        treeDAO.updateCancelTreeByProduct(tree);
     }
 
     @Override

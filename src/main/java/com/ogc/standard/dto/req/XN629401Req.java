@@ -89,10 +89,6 @@ public class XN629401Req extends BaseReq {
     @NotBlank
     private String packUnit;
 
-    // 包装重量
-    @NotBlank
-    private String packWeight;
-
     // 认养开始时间
     @NotBlank
     private String adoptStartDatetime;
@@ -104,6 +100,10 @@ public class XN629401Req extends BaseReq {
     // 收货时间
     @NotBlank
     private String harvestDatetime;
+
+    // 发货时间
+    @NotBlank
+    private String deliverDatetime;
 
     // 更新人
     @NotBlank
@@ -264,14 +264,6 @@ public class XN629401Req extends BaseReq {
         this.packUnit = packUnit;
     }
 
-    public String getPackWeight() {
-        return packWeight;
-    }
-
-    public void setPackWeight(String packWeight) {
-        this.packWeight = packWeight;
-    }
-
     public String getAdoptStartDatetime() {
         return adoptStartDatetime;
     }
@@ -334,6 +326,14 @@ public class XN629401Req extends BaseReq {
 
     public void setParentCategoryCode(String parentCategoryCode) {
         this.parentCategoryCode = parentCategoryCode;
+    }
+
+    public String getDeliverDatetime() {
+        return deliverDatetime;
+    }
+
+    public void setDeliverDatetime(String deliverDatetime) {
+        this.deliverDatetime = deliverDatetime;
     }
 
 }

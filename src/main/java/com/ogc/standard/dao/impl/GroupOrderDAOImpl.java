@@ -24,8 +24,7 @@ public class GroupOrderDAOImpl extends AMybatisTemplate
 
     @Override
     public int updateCancelOrder(GroupOrder data) {
-        return super.update(NAMESPACE.concat("update_CalcelPresellOrder"),
-            data);
+        return super.update(NAMESPACE.concat("update_CalcelGroupOrder"), data);
     }
 
     @Override

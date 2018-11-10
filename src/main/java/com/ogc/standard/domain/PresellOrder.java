@@ -33,7 +33,7 @@ public class PresellOrder extends ABaseDO {
     // 价格
     private BigDecimal price;
 
-    // 数量
+    // 数量(箱)
     private Integer quantity;
 
     // 金额
@@ -101,6 +101,9 @@ public class PresellOrder extends ABaseDO {
 
     // 树木编号
     private String treeNumbers;
+
+    // 下单人名称
+    private String applyUserName;
 
     public String getCode() {
         return code;
@@ -332,6 +335,14 @@ public class PresellOrder extends ABaseDO {
 
     public void setTreeNumbers(String treeNumbers) {
         this.treeNumbers = treeNumbers;
+    }
+
+    public String getApplyUserName() {
+        return applyUserName;
+    }
+
+    public void setApplyUserName(String applyUserName) {
+        this.applyUserName = applyUserName;
     }
 
 }

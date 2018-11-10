@@ -198,12 +198,13 @@ public class JourBOImpl extends PaginableBOImpl<Jour> implements IJourBO {
     }
 
     @Override
-    public Jour getJour(String refNo, String bizType, String accountType) {
+    public Jour getJour(String refNo, String accountNumber,
+            String accountType) {
         Jour data = null;
         if (StringUtils.isNotBlank(refNo)) {
             Jour condition = new Jour();
             condition.setRefNo(refNo);
-            condition.setBizType(bizType);
+            condition.setAccountNumber(accountNumber);
             condition.setAccountType(accountType);
             data = jourDAO.select(condition);
         }

@@ -76,9 +76,6 @@ public class PresellProduct extends ABaseDO {
     // 包装单位
     private String packUnit;
 
-    // 包装重量
-    private Double packWeight;
-
     // 树木数量
     private Integer treeCount;
 
@@ -94,8 +91,11 @@ public class PresellProduct extends ABaseDO {
     // 认养年限
     private Integer adoptYear;
 
-    // 收货时间
+    // 收获时间
     private Date harvestDatetime;
+
+    // 发货时间
+    private Date deliverDatetime;
 
     // 已预售数量
     private Integer nowCount;
@@ -285,14 +285,6 @@ public class PresellProduct extends ABaseDO {
         this.packUnit = packUnit;
     }
 
-    public Double getPackWeight() {
-        return packWeight;
-    }
-
-    public void setPackWeight(Double packWeight) {
-        this.packWeight = packWeight;
-    }
-
     public Integer getTreeCount() {
         return treeCount;
     }
@@ -443,6 +435,14 @@ public class PresellProduct extends ABaseDO {
 
     public void setParentCategoryCode(String parentCategoryCode) {
         this.parentCategoryCode = parentCategoryCode;
+    }
+
+    public Date getDeliverDatetime() {
+        return deliverDatetime;
+    }
+
+    public void setDeliverDatetime(Date deliverDatetime) {
+        this.deliverDatetime = deliverDatetime;
     }
 
 }

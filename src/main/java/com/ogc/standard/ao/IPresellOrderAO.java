@@ -31,6 +31,10 @@ public interface IPresellOrderAO {
     public Paginable<PresellOrder> queryPresellOrderPage(int start, int limit,
             PresellOrder condition);
 
+    // 根据产品查订单
+    public List<PresellOrder> queryPresellOrderListByProduct(
+            String productCode);
+
     public List<PresellOrder> queryPresellOrderList(PresellOrder condition);
 
     public PresellOrder getPresellOrder(String code);

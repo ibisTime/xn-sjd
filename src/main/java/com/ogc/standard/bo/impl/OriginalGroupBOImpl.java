@@ -43,6 +43,8 @@ public class OriginalGroupBOImpl extends PaginableBOImpl<OriginalGroup>
         originalGroup.setProductCode(data.getProductCode());
         originalGroup.setProductName(data.getProductName());
 
+        originalGroup.setSpecsCode(data.getSpecsCode());
+        originalGroup.setSpecsName(data.getSpecsName());
         originalGroup.setOwnerId(data.getApplyUser());
         originalGroup.setPrice(data.getPrice());
         originalGroup.setQuantity(data.getQuantity());
@@ -57,24 +59,23 @@ public class OriginalGroupBOImpl extends PaginableBOImpl<OriginalGroup>
 
         originalGroup
             .setAdoptStartDatetime(presellProduct.getAdoptStartDatetime());
-        originalGroup.setAdoptEndDatetime(presellProduct.getAdoptEndDatetime());
+        originalGroup.setAdoptEndDatetime(presellProduct.getDeliverDatetime());
         originalGroup.setUpdateDatetime(new Date());
         originalGroupDAO.insert(originalGroup);
         return code;
     }
 
     @Override
-    public String saveOriginalGroup(String parentCode, String ownerId,
-            BigDecimal price, Integer quantity) {
-        OriginalGroup originalGroup = getOriginalGroup(parentCode);
+    public String saveOriginalGroup(String orderCode, String productCode,
+            String ownerId, BigDecimal price, Integer quantity) {
         PresellProduct presellProduct = presellProductBO
-            .getPresellProduct(originalGroup.getProductCode());
+            .getPresellProduct(productCode);
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.ORIGINAL_GROUP.getCode());
 
         OriginalGroup data = new OriginalGroup();
         data.setCode(code);
-        data.setOrderCode(parentCode);
+        data.setOrderCode(orderCode);
         data.setProductCode(presellProduct.getCode());
         data.setProductName(presellProduct.getName());
         data.setOwnerId(ownerId);
@@ -92,7 +93,7 @@ public class OriginalGroupBOImpl extends PaginableBOImpl<OriginalGroup>
         }
 
         data.setAdoptStartDatetime(presellProduct.getAdoptStartDatetime());
-        data.setAdoptEndDatetime(presellProduct.getAdoptEndDatetime());
+        data.setAdoptEndDatetime(presellProduct.getDeliverDatetime());
         data.setUpdateDatetime(new Date());
         originalGroupDAO.insert(data);
         return code;

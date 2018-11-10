@@ -22,12 +22,16 @@ public interface IPresellOrderBO extends IPaginableBO<PresellOrder> {
             BigDecimal backjfAmount);
 
     // 三方支付预支付
-    public void refreshPayGroup(String code, String payType,
+    public void refreshPayGroup(PresellOrder presellOrder, String payType,
             XN629048Res resultRes);
 
     // 三方支付成功
     public void paySuccess(String code, BigDecimal payAmount,
             BigDecimal backJfAmount);
+
+    // 根据产品查订单
+    public List<PresellOrder> queryPresellOrderListByProduct(
+            String productCode);
 
     public List<PresellOrder> queryPresellOrderList(PresellOrder condition);
 
