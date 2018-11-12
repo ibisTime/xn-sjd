@@ -253,6 +253,10 @@
 		<property name="paginableDAO" ref="presellInventoryDAOImpl"/>
 	</bean>
 	
+	<bean id="presellLogisticsBO" class="com.ogc.standard.bo.impl.PresellLogisticsBOImpl">
+		<property name="paginableDAO" ref="presellLogisticsDAOImpl"/>
+	</bean>
+	
 	<bean id="deriveGroupBO" class="com.ogc.standard.bo.impl.DeriveGroupBOImpl">
 		<property name="paginableDAO" ref="deriveGroupDAOImpl"/>
 	</bean>

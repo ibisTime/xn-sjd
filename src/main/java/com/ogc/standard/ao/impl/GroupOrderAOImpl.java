@@ -150,6 +150,39 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
         return result;
     }
 
+    @Override
+    public Object toPayDonateGroupOrder(String code) {
+        GroupOrder groupOrder = groupOrderBO.getGroupOrder(code);
+        if (!EGroupOrderStatus.TO_PAY.getCode()
+            .equals(groupOrder.getStatus())) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "订单不是待支付状态，不能支付");
+        }
+
+        // 积分抵扣处理
+        XN629048Res deductRes = new XN629048Res(BigDecimal.ZERO,
+            BigDecimal.ZERO);
+
+        // 用户升级
+        userAO.upgradeUserLevel(groupOrder.getApplyUser());
+
+        // 添加快报
+        PresellProduct presellProduct = presellProductBO
+            .getPresellProduct(groupOrder.getProductCode());
+        smsBO.saveBulletin(groupOrder.getApplyUser(),
+            groupOrder.getQuantity().toString(), ESellType.PRESELL.getCode(),
+            presellProduct.getName());
+
+        // 认领寄售
+        claimanDeriveGroup(groupOrder);
+
+        // 业务订单更改
+        groupOrderBO.payYueSuccess(groupOrder.getCode(), deductRes,
+            BigDecimal.ZERO);
+
+        return new BooleanRes(true);
+    }
+
     // 1、判断余额是否足够，并扣除账户余额
     // 2、进行分销
     // 3、更新订单和树状态
@@ -227,7 +260,7 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
             deriveGroupBO.refreshClaimDirect(deriveGroup.getCode());
 
             // 生成新的资产
-            originalGroupBO.saveOriginalGroup(data.getCode(),
+            originalGroupBO.saveOriginalGroup(data,
                 deriveGroup.getProductCode(), data.getApplyUser(),
                 data.getPrice(), data.getQuantity());
 
@@ -241,9 +274,9 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
                 deriveGroup.getClaimant());
 
             // 生成新的资产
-            String originalGroupCode = originalGroupBO.saveOriginalGroup(
-                data.getCode(), deriveGroup.getProductCode(),
-                data.getApplyUser(), data.getPrice(), data.getQuantity());
+            String originalGroupCode = originalGroupBO.saveOriginalGroup(data,
+                deriveGroup.getProductCode(), data.getApplyUser(),
+                data.getPrice(), data.getQuantity());
 
             // 分配预售权
             int presellInventoryQuantity = 0;
@@ -276,9 +309,9 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
                 deriveGroup.getClaimant(), remainQuantity, status);
 
             // 生成新的资产
-            String originalGroupCode = originalGroupBO.saveOriginalGroup(
-                data.getCode(), deriveGroup.getProductCode(),
-                data.getApplyUser(), data.getPrice(), data.getQuantity());
+            String originalGroupCode = originalGroupBO.saveOriginalGroup(data,
+                deriveGroup.getProductCode(), data.getApplyUser(),
+                data.getPrice(), data.getQuantity());
 
             // 分配预售权
             int presellInventoryQuantity = 0;
@@ -414,4 +447,5 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
         }
         groupOrder.setApplyUserName(applyUserName);
     }
+
 }

@@ -4,6 +4,7 @@
 <mapper namespace="com.ogc.standard.dao.IOriginalGroupDAO">
 	<resultMap id="originalGroup_DB_Result" type="originalGroup">
 		<result column="code" property="code" />
+		<result column="belong_part_id" property="belongPartId" />
 		<result column="order_code" property="orderCode" />
 		<result column="product_code" property="productCode" />
 		<result column="product_name" property="productName" />
@@ -30,6 +31,9 @@
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
 			</if>
+			<if test="belongPartId != null and belongPartId != '' ">
+				AND t.belong_part_id = #{belongPartId}
+			</if>
 			<if test="orderCode != null and orderCode != '' ">
 				AND t.order_code = #{orderCode}
 			</if>
@@ -43,7 +47,7 @@
 				AND t.status = #{status}
 			</if>
 			<if test="minQuantity != null and minQuantity != '' ">
-				AND t.quantity > #{minQuantity}
+				AND (t.quantity > #{minQuantity} or t.presell_quantity > #{minQuantity} or t.receiving_quantity > #{minQuantity})
 			</if>
 			
 			<if test="adoptStartStartDatetime != null and adoptStartStartDatetime != '' ">
@@ -64,6 +68,7 @@
 	<select id="select_originalGroup" parameterType="originalGroup" resultMap="originalGroup_DB_Result">
 		SELECT
 		t.code
+		,t.belong_part_id
 		,t.order_code
 		,t.product_code
 		,t.product_name
@@ -103,6 +108,7 @@
 		INSERT INTO
 		tys_original_group(
 		code
+		,belong_part_id
 		,order_code
 		,product_code
 		,product_name
@@ -123,6 +129,7 @@
 		)
 		VALUES(
 		#{code}
+		,#{belongPartId}
 		,#{orderCode}
 		,#{productCode}
 		,#{productName}

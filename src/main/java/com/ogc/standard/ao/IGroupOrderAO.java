@@ -17,6 +17,9 @@ public interface IGroupOrderAO {
     // 支付订单
     public Object toPayGroupOrder(String code, String payType, String tradePwd);
 
+    // 支付订单
+    public Object toPayDonateGroupOrder(String code);
+
     // 支付成功订单回调处理
     public void paySuccess(String payGroup);
 

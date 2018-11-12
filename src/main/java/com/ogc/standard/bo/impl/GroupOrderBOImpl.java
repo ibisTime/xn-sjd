@@ -158,6 +158,18 @@ public class GroupOrderBOImpl extends PaginableBOImpl<GroupOrder>
     }
 
     @Override
+    public GroupOrder getUnPayedGroupOrder(String groupCode) {
+        GroupOrder data = null;
+        if (StringUtils.isNotBlank(groupCode)) {
+            GroupOrder condition = new GroupOrder();
+            condition.setGroupCode(groupCode);
+            condition.setStatus(EGroupOrderStatus.TO_PAY.getCode());
+            data = groupOrderDAO.select(condition);
+        }
+        return data;
+    }
+
+    @Override
     public GroupOrder getGroupOrder(String code) {
         GroupOrder data = null;
         if (StringUtils.isNotBlank(code)) {

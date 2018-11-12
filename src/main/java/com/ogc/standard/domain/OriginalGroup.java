@@ -19,6 +19,9 @@ public class OriginalGroup extends ABaseDO {
     // 编号
     private String code;
 
+    // 产权方编号
+    private String belongPartId;
+
     // 订单/父级原生组编号
     private String orderCode;
 
@@ -91,6 +94,9 @@ public class OriginalGroup extends ABaseDO {
 
     // 最小数量
     private String minQuantity;
+
+    // 所属人信息
+    private User ownerInfo;
 
     public void setCode(String code) {
         this.code = code;
@@ -290,6 +296,22 @@ public class OriginalGroup extends ABaseDO {
 
     public void setSpecsName(String specsName) {
         this.specsName = specsName;
+    }
+
+    public User getOwnerInfo() {
+        return ownerInfo;
+    }
+
+    public void setOwnerInfo(User ownerInfo) {
+        this.ownerInfo = ownerInfo;
+    }
+
+    public String getBelongPartId() {
+        return belongPartId;
+    }
+
+    public void setBelongPartId(String belongPartId) {
+        this.belongPartId = belongPartId;
     }
 
 }

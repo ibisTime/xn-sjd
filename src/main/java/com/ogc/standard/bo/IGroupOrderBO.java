@@ -31,6 +31,9 @@ public interface IGroupOrderBO extends IPaginableBO<GroupOrder> {
     public void paySuccess(String code, BigDecimal payAmount,
             BigDecimal backJfAmount);
 
+    // 资产待支付订单
+    public GroupOrder getUnPayedGroupOrder(String groupCode);
+
     public List<GroupOrder> queryGroupOrderList(GroupOrder condition);
 
     public GroupOrder getGroupOrder(String code);

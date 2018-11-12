@@ -2,6 +2,7 @@ package com.ogc.standard.ao.impl;
 
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -68,18 +69,50 @@ public class PresellLogisticsAOImpl implements IPresellLogisticsAO {
     @Override
     public Paginable<PresellLogistics> queryPresellLogisticsPage(int start,
             int limit, PresellLogistics condition) {
-        return presellLogisticsBO.getPaginable(start, limit, condition);
+        Paginable<PresellLogistics> page = presellLogisticsBO
+            .getPaginable(start, limit, condition);
+
+        if (null != page && CollectionUtils.isNotEmpty(page.getList())) {
+            for (PresellLogistics presellLogistics : page.getList()) {
+                init(presellLogistics);
+            }
+        }
+
+        return page;
     }
 
     @Override
     public List<PresellLogistics> queryPresellLogisticsList(
             PresellLogistics condition) {
-        return presellLogisticsBO.queryPresellLogisticsList(condition);
+        List<PresellLogistics> list = presellLogisticsBO
+            .queryPresellLogisticsList(condition);
+
+        if (CollectionUtils.isNotEmpty(list)) {
+            for (PresellLogistics presellLogistics : list) {
+                init(presellLogistics);
+            }
+        }
+
+        return list;
     }
 
     @Override
     public PresellLogistics getPresellLogistics(String code) {
-        return presellLogisticsBO.getPresellLogistics(code);
+        PresellLogistics presellLogistics = presellLogisticsBO
+            .getPresellLogistics(code);
+
+        init(presellLogistics);
+
+        return presellLogistics;
+    }
+
+    private void init(PresellLogistics presellLogistics) {
+        // 包装单位
+        OriginalGroup originalGroup = originalGroupBO
+            .getOriginalGroup(presellLogistics.getOriginalGroupCode());
+        if (null != originalGroup) {
+            presellLogistics.setUnit(originalGroup.getUnit());
+        }
     }
 
 }

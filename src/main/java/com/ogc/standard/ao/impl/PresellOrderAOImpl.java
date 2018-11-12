@@ -29,6 +29,7 @@ import com.ogc.standard.bo.ITreeBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.DateUtil;
+import com.ogc.standard.common.PhoneUtil;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.Jour;
 import com.ogc.standard.domain.OriginalGroup;
@@ -327,7 +328,20 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
                     if (tmpPackWeight > 0) {
                         treeBO.refreshAdoptCount(tree.getTreeNumber(),
                             singleOutput);
+                    } else if (tmpPackWeight == 0) {
+
+                        treeBO.refreshAdoptCount(tree.getTreeNumber(),
+                            singleOutput);
+
+                        // TODO 实际上可能分配多棵树
+                        presellInventoryBO.savePresellInventory(
+                            originalGroupCode, tree.getTreeNumber());
+
+                        orderQuantity = orderQuantity + 1;
+                        break _assignPI;
+
                     } else {
+
                         treeBO.refreshAdoptCount(tree.getTreeNumber(),
                             tree.getAdoptCount() - tmpPackWeight);
 
@@ -369,8 +383,10 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
         // 更新产品已预售数量
         PresellProduct presellProduct = presellProductBO
             .getPresellProduct(presellOrder.getProductCode());
+        PresellSpecs presellSpecs = presellSpecsBO
+            .getPresellSpecs(presellOrder.getSpecsCode());
         Integer nowCount = presellProduct.getNowCount()
-                - presellOrder.getQuantity();
+                - presellOrder.getQuantity() * presellSpecs.getPackCount();
         presellProductBO.refreshNowCount(presellProduct.getCode(), nowCount);
 
         // TODO 取消树
@@ -423,7 +439,8 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
                     .getUserUnCheck(presellOrder.getApplyUser());
                 String applyUserName = null;
                 if (null != applyUser) {
-                    applyUserName = applyUser.getMobile();
+                    applyUserName = PhoneUtil.hideMobile(applyUser.getMobile());
+                    ;
                     if (null != applyUser.getNickname()) {
                         applyUserName = applyUser.getNickname();
                     }

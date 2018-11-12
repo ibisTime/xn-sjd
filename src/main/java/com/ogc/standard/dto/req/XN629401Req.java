@@ -97,6 +97,10 @@ public class XN629401Req extends BaseReq {
     @NotBlank
     private String adoptEndDatetime;
 
+    // 认养年限
+    @NotBlank
+    private String adoptYear;
+
     // 收货时间
     @NotBlank
     private String harvestDatetime;
@@ -334,6 +338,14 @@ public class XN629401Req extends BaseReq {
 
     public void setDeliverDatetime(String deliverDatetime) {
         this.deliverDatetime = deliverDatetime;
+    }
+
+    public String getAdoptYear() {
+        return adoptYear;
+    }
+
+    public void setAdoptYear(String adoptYear) {
+        this.adoptYear = adoptYear;
     }
 
 }

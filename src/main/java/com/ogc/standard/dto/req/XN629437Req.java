@@ -13,6 +13,9 @@ public class XN629437Req extends AListReq {
     // 订单/父级原生组编号
     private String orderCode;
 
+    // 产权方编号
+    private String belongPartId;
+
     // 产品编号
     private String productCode;
 
@@ -52,6 +55,14 @@ public class XN629437Req extends AListReq {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getBelongPartId() {
+        return belongPartId;
+    }
+
+    public void setBelongPartId(String belongPartId) {
+        this.belongPartId = belongPartId;
     }
 
 }

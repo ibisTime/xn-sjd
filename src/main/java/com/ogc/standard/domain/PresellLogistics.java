@@ -61,6 +61,10 @@ public class PresellLogistics extends ABaseDO {
     // 备注
     private String remark;
 
+    /***********DB Properties***********/
+    // 包装单位
+    private String unit;
+
     public void setCode(String code) {
         this.code = code;
     }
@@ -187,6 +191,14 @@ public class PresellLogistics extends ABaseDO {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
     }
 
 }

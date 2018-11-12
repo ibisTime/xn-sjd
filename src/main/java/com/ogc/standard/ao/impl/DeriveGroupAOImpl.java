@@ -20,6 +20,7 @@ import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Page;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.DeriveGroup;
+import com.ogc.standard.domain.GroupOrder;
 import com.ogc.standard.domain.OriginalGroup;
 import com.ogc.standard.domain.PresellInventory;
 import com.ogc.standard.domain.PresellProduct;
@@ -165,6 +166,12 @@ public class DeriveGroupAOImpl implements IDeriveGroupAO {
             .equals(deriveGroup.getStatus())) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "资产不是待认领状态，不能认领");
+        }
+
+        GroupOrder groupOrder = groupOrderBO.getUnPayedGroupOrder(code);
+        if (null != groupOrder) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "存在待支付的订单，不能认领");
         }
 
         // 落地订单

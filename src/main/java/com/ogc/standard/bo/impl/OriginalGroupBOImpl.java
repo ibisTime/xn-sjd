@@ -13,6 +13,7 @@ import com.ogc.standard.bo.IPresellProductBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.IOriginalGroupDAO;
+import com.ogc.standard.domain.GroupOrder;
 import com.ogc.standard.domain.OriginalGroup;
 import com.ogc.standard.domain.PresellOrder;
 import com.ogc.standard.domain.PresellProduct;
@@ -40,6 +41,7 @@ public class OriginalGroupBOImpl extends PaginableBOImpl<OriginalGroup>
         OriginalGroup originalGroup = new OriginalGroup();
         originalGroup.setCode(code);
         originalGroup.setOrderCode(data.getCode());
+        originalGroup.setBelongPartId(presellProduct.getOwnerId());
         originalGroup.setProductCode(data.getProductCode());
         originalGroup.setProductName(data.getProductName());
 
@@ -66,7 +68,7 @@ public class OriginalGroupBOImpl extends PaginableBOImpl<OriginalGroup>
     }
 
     @Override
-    public String saveOriginalGroup(String orderCode, String productCode,
+    public String saveOriginalGroup(GroupOrder groupOrder, String productCode,
             String ownerId, BigDecimal price, Integer quantity) {
         PresellProduct presellProduct = presellProductBO
             .getPresellProduct(productCode);
@@ -75,9 +77,13 @@ public class OriginalGroupBOImpl extends PaginableBOImpl<OriginalGroup>
 
         OriginalGroup data = new OriginalGroup();
         data.setCode(code);
-        data.setOrderCode(orderCode);
+        data.setOrderCode(groupOrder.getCode());
+        data.setBelongPartId(presellProduct.getOwnerId());
         data.setProductCode(presellProduct.getCode());
         data.setProductName(presellProduct.getName());
+
+        data.setSpecsCode(groupOrder.getSpecsCode());
+        data.setSpecsName(groupOrder.getSpecsName());
         data.setOwnerId(ownerId);
 
         data.setPrice(price);

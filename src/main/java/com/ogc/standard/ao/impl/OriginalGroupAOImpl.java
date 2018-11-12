@@ -61,8 +61,10 @@ public class OriginalGroupAOImpl implements IOriginalGroupAO {
     public String directSales(String code, String userMobile, BigDecimal price,
             Integer quantity) {
         OriginalGroup originalGroup = originalGroupBO.getOriginalGroup(code);
-        if (!EOriginalGroupStatus.ADOPTING.getCode()
-            .equals(originalGroup.getStatus())) {
+        if (!EOriginalGroupStatus.TO_ADOPT.getCode()
+            .equals(originalGroup.getStatus())
+                && !EOriginalGroupStatus.ADOPTING.getCode()
+                    .equals(originalGroup.getStatus())) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "资产不是可转让状态，不能转让");
         }
@@ -111,8 +113,10 @@ public class OriginalGroupAOImpl implements IOriginalGroupAO {
     @Transactional
     public String qrSales(String code, BigDecimal price, Integer quantity) {
         OriginalGroup originalGroup = originalGroupBO.getOriginalGroup(code);
-        if (!EOriginalGroupStatus.ADOPTING.getCode()
-            .equals(originalGroup.getStatus())) {
+        if (!EOriginalGroupStatus.TO_ADOPT.getCode()
+            .equals(originalGroup.getStatus())
+                && !EOriginalGroupStatus.ADOPTING.getCode()
+                    .equals(originalGroup.getStatus())) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "资产不是可转让状态，不能转让");
         }
@@ -140,8 +144,10 @@ public class OriginalGroupAOImpl implements IOriginalGroupAO {
     @Transactional
     public String publicSales(String code, BigDecimal price, Integer quantity) {
         OriginalGroup originalGroup = originalGroupBO.getOriginalGroup(code);
-        if (!EOriginalGroupStatus.ADOPTING.getCode()
-            .equals(originalGroup.getStatus())) {
+        if (!EOriginalGroupStatus.TO_ADOPT.getCode()
+            .equals(originalGroup.getStatus())
+                && !EOriginalGroupStatus.ADOPTING.getCode()
+                    .equals(originalGroup.getStatus())) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "资产不是可转让状态，不能转让");
         }
@@ -254,6 +260,8 @@ public class OriginalGroupAOImpl implements IOriginalGroupAO {
                             originalGroup.getCode());
                     }
                 }
+
+                deriveGroupBO.refreshQuantity(deriveGroup.getCode(), 0);
             }
         }
     }
@@ -306,6 +314,10 @@ public class OriginalGroupAOImpl implements IOriginalGroupAO {
         List<PresellInventory> treeNumberList = presellInventoryBO
             .queryTreeNumberListByGroup(originalGroup.getCode());
         originalGroup.setTreeNumberList(treeNumberList);
+
+        // 所属人
+        User ownerInfo = userBO.getUserUnCheck(originalGroup.getOwnerId());
+        originalGroup.setOwnerInfo(ownerInfo);
     }
 
 }

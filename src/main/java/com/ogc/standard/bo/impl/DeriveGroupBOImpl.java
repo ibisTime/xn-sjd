@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -64,6 +65,16 @@ public class DeriveGroupBOImpl extends PaginableBOImpl<DeriveGroup>
         deriveGroup.setStatus(EDeriveGroupStatus.TO_CLAIM.getCode());
         deriveGroup.setClaimant(claimant);
 
+        DeriveGroup newest = getNewestByVariety(presellProduct.getVariety());
+        Double wave = 0d;
+        if (null != newest) {
+            Double newestPrice = newest.getPrice().doubleValue();
+            if (newestPrice > 0) {
+                wave = (price.doubleValue() - newestPrice) / newestPrice;
+            }
+        }
+        deriveGroup.setWave(wave);
+
         deriveGroupDAO.insert(deriveGroup);
 
         return code;
@@ -96,7 +107,17 @@ public class DeriveGroupBOImpl extends PaginableBOImpl<DeriveGroup>
         deriveGroup.setCreater(originalGroup.getOwnerId());
         deriveGroup.setCreateDatetime(new Date());
         deriveGroup.setStatus(EDeriveGroupStatus.TO_CLAIM.getCode());
-        // TODO rang
+
+        DeriveGroup newest = getNewestByVariety(presellProduct.getVariety());
+        Double wave = 0d;
+        if (null != newest) {
+            Double newestPrice = newest.getPrice().doubleValue();
+            if (newestPrice > 0) {
+                wave = (price.doubleValue() - newestPrice) / newestPrice;
+            }
+        }
+        deriveGroup.setWave(wave);
+
         deriveGroupDAO.insert(deriveGroup);
 
         return code;
@@ -129,6 +150,16 @@ public class DeriveGroupBOImpl extends PaginableBOImpl<DeriveGroup>
         deriveGroup.setCreater(originalGroup.getOwnerId());
         deriveGroup.setCreateDatetime(new Date());
         deriveGroup.setStatus(EDeriveGroupStatus.TO_CLAIM.getCode());
+
+        DeriveGroup newest = getNewestByVariety(presellProduct.getVariety());
+        Double wave = 0d;
+        if (null != newest) {
+            Double newestPrice = newest.getPrice().doubleValue();
+            if (newestPrice > 0) {
+                wave = (price.doubleValue() - newestPrice) / newestPrice;
+            }
+        }
+        deriveGroup.setWave(wave);
 
         deriveGroupDAO.insert(deriveGroup);
         return code;
@@ -244,6 +275,23 @@ public class DeriveGroupBOImpl extends PaginableBOImpl<DeriveGroup>
     @Override
     public List<DeriveGroup> queryVarietyList(DeriveGroup data) {
         return deriveGroupDAO.selectVarietyList(data);
+    }
+
+    @Override
+    public DeriveGroup getNewestByVariety(String variety) {
+        DeriveGroup data = null;
+        if (StringUtils.isNotBlank(variety)) {
+            DeriveGroup condition = new DeriveGroup();
+            condition.setVariety(variety);
+            condition.setStatus(EDeriveGroupStatus.CLAIMED.getCode());
+            condition.setOrder("claim_datetime", "desc");
+
+            List<DeriveGroup> list = deriveGroupDAO.selectList(condition, 0, 1);
+            if (CollectionUtils.isNotEmpty(list)) {
+                data = list.get(0);
+            }
+        }
+        return data;
     }
 
     @Override

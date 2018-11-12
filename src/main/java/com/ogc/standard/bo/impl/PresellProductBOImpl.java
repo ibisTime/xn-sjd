@@ -69,8 +69,7 @@ public class PresellProductBOImpl extends PaginableBOImpl<PresellProduct>
 
         data.setAdoptStartDatetime(adoptStartDatetime);
         data.setAdoptEndDatetime(adoptEndDatetime);
-        data.setAdoptYear(
-            DateUtil.yearsBetween(adoptStartDatetime, adoptEndDatetime));
+        data.setAdoptYear(StringValidater.toDouble(req.getAdoptYear()));
         data.setHarvestDatetime(DateUtil.strToDate(req.getHarvestDatetime(),
             DateUtil.FRONT_DATE_FORMAT_STRING));
         data.setDeliverDatetime(DateUtil.strToDate(req.getDeliverDatetime(),
@@ -117,6 +116,7 @@ public class PresellProductBOImpl extends PaginableBOImpl<PresellProduct>
             req.getAdoptStartDatetime(), DateUtil.FRONT_DATE_FORMAT_STRING));
         data.setAdoptEndDatetime(
             DateUtil.getEndDatetime(req.getAdoptEndDatetime()));
+        data.setAdoptYear(StringValidater.toDouble(req.getAdoptYear()));
         data.setHarvestDatetime(DateUtil.strToDate(req.getHarvestDatetime(),
             DateUtil.FRONT_DATE_FORMAT_STRING));
         data.setDeliverDatetime(DateUtil.strToDate(req.getDeliverDatetime(),

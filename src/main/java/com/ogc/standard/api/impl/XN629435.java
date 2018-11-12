@@ -29,6 +29,7 @@ public class XN629435 extends AProcessor {
     public Object doBusiness() throws BizException {
         OriginalGroup condition = new OriginalGroup();
         condition.setProductCode(req.getProductCode());
+        condition.setBelongPartId(req.getBelongPartId());
         condition.setOrderCode(req.getOrderCode());
         condition.setOwnerId(req.getOwnerId());
         condition.setStatus(req.getStatus());

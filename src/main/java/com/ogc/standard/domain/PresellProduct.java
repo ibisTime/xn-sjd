@@ -89,7 +89,7 @@ public class PresellProduct extends ABaseDO {
     private Date adoptEndDatetime;
 
     // 认养年限
-    private Integer adoptYear;
+    private Double adoptYear;
 
     // 收获时间
     private Date harvestDatetime;
@@ -317,11 +317,11 @@ public class PresellProduct extends ABaseDO {
         this.adoptEndDatetime = adoptEndDatetime;
     }
 
-    public Integer getAdoptYear() {
+    public Double getAdoptYear() {
         return adoptYear;
     }
 
-    public void setAdoptYear(Integer adoptYear) {
+    public void setAdoptYear(Double adoptYear) {
         this.adoptYear = adoptYear;
     }
 

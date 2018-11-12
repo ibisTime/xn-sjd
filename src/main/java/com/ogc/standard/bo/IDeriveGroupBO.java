@@ -58,4 +58,7 @@ public interface IDeriveGroupBO extends IPaginableBO<DeriveGroup> {
 
     public DeriveGroup getDeriveGroup(String code);
 
+    // 查询品种最近的交易记录
+    public DeriveGroup getNewestByVariety(String variety);
+
 }

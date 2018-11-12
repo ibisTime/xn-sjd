@@ -13,6 +13,9 @@ public class XN629435Req extends APageReq {
     // 订单/父级原生组编号
     private String orderCode;
 
+    // 产权方编号
+    private String belongPartId;
+
     // 产品编号
     private String productCode;
 
@@ -63,6 +66,14 @@ public class XN629435Req extends APageReq {
 
     public void setMinQuantity(String minQuantity) {
         this.minQuantity = minQuantity;
+    }
+
+    public String getBelongPartId() {
+        return belongPartId;
+    }
+
+    public void setBelongPartId(String belongPartId) {
+        this.belongPartId = belongPartId;
     }
 
 }

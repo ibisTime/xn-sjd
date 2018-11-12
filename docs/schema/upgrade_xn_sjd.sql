@@ -113,3 +113,13 @@ ADD COLUMN `deliver_datetime` DATETIME NULL COMMENT '预计发货时间' AFTER `
 ALTER TABLE `tys_presell_product` 
 DROP COLUMN `pack_weight`;
 
+#V2.0.0 1-3
+ALTER TABLE `tys_presell_product` 
+CHANGE COLUMN `adopt_year` `adopt_year` FLOAT NULL DEFAULT '0' COMMENT '认养年限' ;
+
+ALTER TABLE `tys_original_group` 
+ADD COLUMN `belong_part_id` VARCHAR(32) NULL COMMENT '产权方编号' AFTER `code`;
+
+update tys_original_group set belong_part_id = (select owner_id from tys_presell_product where code = tys_original_group.product_code);
+
+#V2.0.0 1-4

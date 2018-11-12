@@ -72,6 +72,7 @@ public class PresellLogisticsBOImpl extends PaginableBOImpl<PresellLogistics>
 
         data.setCode(code);
         data.setReceiverDatetime(new Date());
+        data.setStatus(EPresellLogisticsStatus.RECEIVED.getCode());
 
         presellLogisticsDAO.updateRceiveLogistisc(data);
     }

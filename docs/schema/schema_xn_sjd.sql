@@ -1006,7 +1006,7 @@ CREATE TABLE `tys_presell_product` (
   `total_output` int DEFAULT NULL COMMENT '产出总量',
   `adopt_start_datetime` datetime DEFAULT NULL COMMENT '认养开始时间',
   `adopt_end_datetime` datetime DEFAULT NULL COMMENT '认养结束时间',
-  `adopt_year` int DEFAULT 0 COMMENT '认养年限',
+  `adopt_year` FLOAT DEFAULT 0 COMMENT '认养年限',
 
   `harvest_datetime` datetime DEFAULT NULL COMMENT '收获时间',
   `deliver_datetime` datetime DEFAULT NULL COMMENT '发货时间',
@@ -1066,6 +1066,7 @@ CREATE TABLE `tys_presell_order` (
 DROP TABLE IF EXISTS `tys_original_group`;
 CREATE TABLE `tys_original_group` (
   `code` varchar(32) NOT NULL COMMENT '编号',
+  `belong_part_id` varchar(32) DEFAULT NULL COMMENT '产权方编号',
   `order_code` varchar(32) DEFAULT NULL COMMENT '订单编号',
   `product_code` varchar(32) DEFAULT NULL COMMENT '产品编号',
   `product_name` varchar(255) DEFAULT NULL COMMENT '产品名称',

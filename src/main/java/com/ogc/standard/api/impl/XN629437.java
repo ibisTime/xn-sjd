@@ -27,6 +27,7 @@ public class XN629437 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         OriginalGroup condition = new OriginalGroup();
+        condition.setBelongPartId(req.getBelongPartId());
         condition.setProductCode(req.getProductCode());
         condition.setOrderCode(req.getOrderCode());
         condition.setOwnerId(req.getOwnerId());
