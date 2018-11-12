@@ -84,6 +84,16 @@ public class CommodityOrder extends ABaseDO {
 
     private List<CommodityOrderDetail> detailList;
 
+    private List<CommodityShopOrder> shopOrderList;
+
+    public List<CommodityShopOrder> getShopOrderList() {
+        return shopOrderList;
+    }
+
+    public void setShopOrderList(List<CommodityShopOrder> shopOrderList) {
+        this.shopOrderList = shopOrderList;
+    }
+
     public Date getApplyDatetimeStart() {
         return applyDatetimeStart;
     }

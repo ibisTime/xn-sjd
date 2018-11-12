@@ -74,4 +74,15 @@ public class CommoditySpecsBOImpl extends PaginableBOImpl<CommoditySpecs>
         commoditySpecsDAO.updateInventory(data);
     }
 
+    @Override
+    public CommoditySpecs getCommoditySpecs(Long id) {
+        CommoditySpecs condition = new CommoditySpecs();
+        condition.setId(id);
+        CommoditySpecs data = commoditySpecsDAO.select(condition);
+        if (null == data) {
+            throw new BizException("xn0000", "该商品规格不存在");
+        }
+        return data;
+    }
+
 }

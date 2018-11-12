@@ -95,8 +95,6 @@
 	<insert id="insert_commodity_order" parameterType="commodityOrder">
 		INSERT INTO tsc_commodity_order(
 		code
-		,amount
-		,quantity
 		,apply_user
 		,apply_datetime
 		,apply_note
@@ -109,8 +107,6 @@
 		VALUES
 		(
 		#{code}
-		,#{amount}
-		,#{quantity}
 		,#{applyUser}
 		,#{applyDatetime}
 		,#{applyNote}
@@ -148,4 +144,15 @@
 		WHERE
 		code=#{code}
 	</update>
+	
+	<update id="update_amount" parameterType="commodityOrder">
+		UPDATE tsc_commodity_order
+		SET
+		quantity=#{quantity}
+		,amount=#{amount}
+		,pay_amount=#{payAmount}
+		WHERE
+		code=#{code}
+	</update>
+	
 </mapper>

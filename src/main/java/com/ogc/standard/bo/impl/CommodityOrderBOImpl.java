@@ -39,14 +39,12 @@ public class CommodityOrderBOImpl extends PaginableBOImpl<CommodityOrder>
     private ICommodityOrderDAO commodityOrderDAO;
 
     @Override
-    public String saveOrder(BigDecimal amount, Long quantity, String applyUser,
-            String applyNote, String expressType, String updater, String remark) {
+    public String saveOrder(String applyUser, String applyNote,
+            String expressType, String updater, String remark) {
         CommodityOrder data = new CommodityOrder();
         String code = OrderNoGenerater.generate(EGeneratePrefix.CommodityOrder
             .getCode());
         data.setCode(code);
-        data.setAmount(amount);
-        data.setQuantity(quantity);
         data.setApplyUser(applyUser);
         Date date = new Date();
         data.setApplyDatetime(date);
@@ -127,6 +125,16 @@ public class CommodityOrderBOImpl extends PaginableBOImpl<CommodityOrder>
         data.setUpdateDatetime(new Date());
         data.setRemark("超过支付时间平台自动取消");
         commodityOrderDAO.updateCancel(data);
+    }
+
+    @Override
+    public void refreshAmount(Long quantity, BigDecimal amount, String code) {
+        CommodityOrder data = new CommodityOrder();
+        data.setCode(code);
+        data.setQuantity(quantity);
+        data.setAmount(amount);
+        data.setPayAmount(amount);
+        commodityOrderDAO.updateAmount(data);
     }
 
 }

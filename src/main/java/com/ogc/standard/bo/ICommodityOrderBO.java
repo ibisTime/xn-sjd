@@ -21,8 +21,8 @@ import com.ogc.standard.domain.CommodityOrder;
  */
 public interface ICommodityOrderBO extends IPaginableBO<CommodityOrder> {
 
-    public String saveOrder(BigDecimal amount, Long quantity, String applyUser,
-            String applyNote, String expressType, String updater, String remark);
+    public String saveOrder(String applyUser, String applyNote,
+            String expressType, String updater, String remark);
 
     public void refreshPay(CommodityOrder data, BigDecimal payAmount,
             String updater, String remark);
@@ -38,4 +38,6 @@ public interface ICommodityOrderBO extends IPaginableBO<CommodityOrder> {
     public CommodityOrder getCommodityOrderByPayGroup(String payGroup);
 
     public void platCancelOrder(CommodityOrder data);
+
+    public void refreshAmount(Long quantity, BigDecimal amount, String code);
 }

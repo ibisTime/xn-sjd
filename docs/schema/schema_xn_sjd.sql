@@ -1230,8 +1230,8 @@ CREATE TABLE `tsc_cart` (
 DROP TABLE IF EXISTS `tsc_commodity_order`;
 CREATE TABLE `tsc_commodity_order` (
   `code` varchar(32) NOT NULL COMMENT '编号',
-  `amount` decimal(64,0) NOT NULL COMMENT '订单金额',
-  `quantity` bigint(20) NOT NULL COMMENT '数量',
+  `amount` decimal(64,0) DEFAULT NULL COMMENT '订单金额',
+  `quantity` bigint(20) DEFAULT NULL COMMENT '数量',
   `apply_user` varchar(32) NOT NULL COMMENT '下单用户',
   `apply_datetime` datetime NOT NULL COMMENT '下单时间',
   `apply_note` varchar(255) DEFAULT NULL COMMENT '下单说明',

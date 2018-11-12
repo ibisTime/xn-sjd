@@ -12,7 +12,6 @@ import java.util.List;
 
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.CommodityOrder;
-import com.ogc.standard.dto.req.XN629720Req;
 import com.ogc.standard.dto.req.XN629721Req;
 
 /** 
@@ -22,7 +21,8 @@ import com.ogc.standard.dto.req.XN629721Req;
  */
 public interface ICommodityOrderAO {
 
-    public String addOrder(XN629720Req req);
+    public String addOrder(String applyUser, String applyNote,
+            String expressType, Long specsId, Long quantity, String addressCode);
 
     public Object pay(XN629721Req req);
 

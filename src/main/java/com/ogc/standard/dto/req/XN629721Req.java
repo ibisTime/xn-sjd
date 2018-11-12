@@ -24,9 +24,6 @@ public class XN629721Req {
     private String payType;
 
     @NotBlank
-    private String payAmount;
-
-    @NotBlank
     private String updater;
 
     private String remark;
@@ -45,14 +42,6 @@ public class XN629721Req {
 
     public void setPayType(String payType) {
         this.payType = payType;
-    }
-
-    public String getPayAmount() {
-        return payAmount;
-    }
-
-    public void setPayAmount(String payAmount) {
-        this.payAmount = payAmount;
     }
 
     public String getUpdater() {
