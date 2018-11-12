@@ -73,8 +73,7 @@ public class CommodityOrderDetailAOImpl implements ICommodityOrderDetailAO {
     @Override
     @Transactional
     public void delive(String orderCode, String shopCode,
-            String logisticsCompany, String logisticsNumber, String deliver,
-            String receiver, String receiverMobile) {
+            String logisticsCompany, String logisticsNumber, String deliver) {
         // 订单状态判断
         CommodityOrder order = commodityOrderBO.getCommodityOrder(orderCode);
         if (!ECommodityOrderStatus.PAIED.getCode().equals(order.getStatus())) {
@@ -89,7 +88,7 @@ public class CommodityOrderDetailAOImpl implements ICommodityOrderDetailAO {
         for (CommodityOrderDetail detail : shopList) {
             // 落地数据
             commodityOrderDetailBO.refershDelive(detail, logisticsCompany,
-                logisticsNumber, deliver, receiver, receiverMobile);
+                logisticsNumber, deliver);
 
         }
     }

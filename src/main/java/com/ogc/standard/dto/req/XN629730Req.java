@@ -32,12 +32,6 @@ public class XN629730Req {
     @NotBlank
     private String deliver;
 
-    @NotBlank
-    private String receiver;
-
-    @NotBlank
-    private String receiverMobile;
-
     public String getOrderCode() {
         return orderCode;
     }
@@ -76,22 +70,6 @@ public class XN629730Req {
 
     public void setDeliver(String deliver) {
         this.deliver = deliver;
-    }
-
-    public String getReceiver() {
-        return receiver;
-    }
-
-    public void setReceiver(String receiver) {
-        this.receiver = receiver;
-    }
-
-    public String getReceiverMobile() {
-        return receiverMobile;
-    }
-
-    public void setReceiverMobile(String receiverMobile) {
-        this.receiverMobile = receiverMobile;
     }
 
 }

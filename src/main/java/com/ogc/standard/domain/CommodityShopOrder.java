@@ -25,6 +25,8 @@ public class CommodityShopOrder extends ABaseDO {
 
     private String shopCode;
 
+    private String shopName;
+
     private List<CommodityOrderDetail> detailList;
 
     public String getOrderCode() {
@@ -41,6 +43,14 @@ public class CommodityShopOrder extends ABaseDO {
 
     public void setShopCode(String shopCode) {
         this.shopCode = shopCode;
+    }
+
+    public String getShopName() {
+        return shopName;
+    }
+
+    public void setShopName(String shopName) {
+        this.shopName = shopName;
     }
 
     public List<CommodityOrderDetail> getDetailList() {

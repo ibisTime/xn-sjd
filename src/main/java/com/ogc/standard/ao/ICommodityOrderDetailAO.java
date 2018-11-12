@@ -21,8 +21,7 @@ import com.ogc.standard.domain.CommodityOrderDetail;
 public interface ICommodityOrderDetailAO {
 
     public void delive(String orderCode, String shopCode,
-            String logisticsCompany, String logisticsNumber, String deliver,
-            String receiver, String receiverMobile);
+            String logisticsCompany, String logisticsNumber, String deliver);
 
     public void receive(String code, String receiver, String shopCode);
 

@@ -148,6 +148,8 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
                 EJourBizTypeUser.BUY.getValue(), order.getPayAmount());
             result = new PayOrderRes(signOrder);
         } else if (EPayType.YE.getCode().equals(req.getPayType())) {
+            //支付密码确认
+            userBO.checkTradePwd(req.getUpdater(), req.getTradePwd());
             result = payByBalance(order);
             commodityOrderBO.refreshPay(order, order.getAmount(),
                 req.getUpdater(), req.getRemark());
@@ -287,6 +289,7 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
             CommodityShopOrder shopOrder = new CommodityShopOrder();
             shopOrder.setOrderCode(order.getCode());
             shopOrder.setShopCode(shopCode);
+            shopOrder.setShopName(companyBO.getCompany(shopCode).getName());
             shopOrder.setDetailList(shopDetail);
             shopOrders.add(shopOrder);
         }
