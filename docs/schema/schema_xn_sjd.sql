@@ -828,7 +828,7 @@ CREATE TABLE `tsys_user` (
 DROP TABLE IF EXISTS `tzb_category`;
 CREATE TABLE `tzb_category` (
   `code` varchar(32) NOT NULL COMMENT '编号',
-  `type` varchar(4) NOT NULL COMMENT '类型',
+  `type` varchar(4) NULL COMMENT '类型',
   `parent_code` varchar(32) DEFAULT NULL COMMENT '上级编号',
   `name` varchar(255) DEFAULT NULL COMMENT '名称',
   `level` INT(11) DEFAULT NULL COMMENT '级别',
@@ -1180,7 +1180,6 @@ CREATE TABLE `tys_presell_logistics` (
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---商城模块start
 
 DROP TABLE IF EXISTS `tsc_commodity`;
 CREATE TABLE `tsc_commodity` (
@@ -1357,8 +1356,6 @@ CREATE TABLE `tsc_session_message` (
   `create_datetime` datetime NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='会话消息';
-
---商城模块end
 
 
 SET FOREIGN_KEY_CHECKS = 1;
