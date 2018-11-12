@@ -8,11 +8,11 @@
  */
 package com.ogc.standard.bo;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.ogc.standard.bo.base.IPaginableBO;
 import com.ogc.standard.domain.CommodityOrderDetail;
-import com.ogc.standard.dto.res.XN629720Res;
 
 /** 
  * @author: taojian 
@@ -22,7 +22,10 @@ import com.ogc.standard.dto.res.XN629720Res;
 public interface ICommodityOrderDetailBO extends
         IPaginableBO<CommodityOrderDetail> {
 
-    public String saveDetail(String commodityOrderCode, XN629720Res res);
+    public String saveDetail(String commodityOrderCode, String shopCode,
+            String commodityCode, String commodityName, Long specsId,
+            String specsName, Long quantity, BigDecimal price,
+            String addressCode);
 
     public void refershDelive(CommodityOrderDetail data,
             String logisticsCompany, String logisticsNumber, String deliver,

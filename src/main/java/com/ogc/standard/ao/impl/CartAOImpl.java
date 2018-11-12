@@ -23,12 +23,10 @@ import com.ogc.standard.bo.ICommodityOrderBO;
 import com.ogc.standard.bo.ICommodityOrderDetailBO;
 import com.ogc.standard.bo.ICommoditySpecsBO;
 import com.ogc.standard.bo.IUserBO;
-import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.domain.Address;
 import com.ogc.standard.domain.Cart;
 import com.ogc.standard.domain.Commodity;
 import com.ogc.standard.domain.CommoditySpecs;
-import com.ogc.standard.dto.res.XN629720Res;
 import com.ogc.standard.enums.ECommodityStatus;
 import com.ogc.standard.exception.BizException;
 
@@ -122,6 +120,7 @@ public class CartAOImpl implements ICartAO {
             // 商品检验
             Commodity commodity = commodityBO.getCommodity(specs
                 .getCommodityCode());
+            // 库存检验
             if (cart.getQuantity() > commoditySpecsBO.getInventory(cart
                 .getSpecsId())) {
                 throw new BizException("xn0000", "产品[" + commodity.getName()
@@ -132,28 +131,18 @@ public class CartAOImpl implements ICartAO {
                         + commodity.getName() + "]无法下单");
             }
             // 落地单店铺订单
-            XN629720Res res = new XN629720Res();
-            res.setCommodityOrderCode(orderCode);
-            res.setShopCode(commodity.getShopCode());
-            res.setCommodityCode(commodity.getCode());
-            res.setCommodityName(commodity.getName());
-            res.setSpecsId(specs.getId().toString());
-            res.setSpecsName(specs.getName());
-            res.setQuantity(cart.getQuantity().toString());
-            res.setPrice(specs.getPrice().toString());
-            String amountString = specs.getPrice()
-                .multiply(StringValidater.toBigDecimal(res.getQuantity()))
-                .toString();
-            res.setAmount(amountString);
-            res.setAddressCode(addressCode);
-            commodityOrderDetailBO.saveDetail(orderCode, res);
+            commodityOrderDetailBO.saveDetail(orderCode,
+                commodity.getShopCode(), commodity.getCode(),
+                commodity.getName(), specs.getId(), specs.getName(),
+                cart.getQuantity(), specs.getPrice(), addressCode);
+            BigDecimal orderAmount = specs.getPrice().multiply(
+                BigDecimal.valueOf(cart.getQuantity()));
             // 库存减少
-            commoditySpecsBO.inventoryDecrease(
-                StringValidater.toLong(res.getSpecsId()),
-                -StringValidater.toLong(res.getQuantity()));
+            commoditySpecsBO.inventoryDecrease(specs.getId(),
+                -cart.getQuantity());
             // 订单商品数量与订单金额累加
             quantity = quantity + cart.getQuantity();
-            amount = amount.add(StringValidater.toBigDecimal(res.getAmount()));
+            amount = amount.add(orderAmount);
         }
         // 加上数量与总价
         commodityOrderBO.refreshAmount(quantity, amount, orderCode);

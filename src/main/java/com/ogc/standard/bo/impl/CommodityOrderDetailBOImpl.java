@@ -8,6 +8,7 @@
  */
 package com.ogc.standard.bo.impl;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -18,10 +19,8 @@ import com.ogc.standard.bo.ICommodityBO;
 import com.ogc.standard.bo.ICommodityOrderDetailBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.core.OrderNoGenerater;
-import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.dao.ICommodityOrderDetailDAO;
 import com.ogc.standard.domain.CommodityOrderDetail;
-import com.ogc.standard.dto.res.XN629720Res;
 import com.ogc.standard.enums.ECommodityOrderDetailStatus;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.exception.BizException;
@@ -43,25 +42,28 @@ public class CommodityOrderDetailBOImpl extends
     private ICommodityBO commodityBO;
 
     @Override
-    public String saveDetail(String commodityOrderCode, XN629720Res res) {
+    public String saveDetail(String commodityOrderCode, String shopCode,
+            String commodityCode, String commodityName, Long specsId,
+            String specsName, Long quantity, BigDecimal price,
+            String addressCode) {
         CommodityOrderDetail data = new CommodityOrderDetail();
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.CommodityOrderDetail.getCode());
         data.setCode(code);
         data.setOrderCode(commodityOrderCode);
-        data.setShopCode(res.getShopCode());
-        String commodityCode = res.getCommodityCode();
+        data.setShopCode(shopCode);
         data.setCommodityCode(commodityCode);
-        data.setCommodityName(res.getCommodityName());
-        data.setSpecsId(StringValidater.toLong(res.getSpecsId()));
-        data.setSpecsName(res.getSpecsName());
-        data.setQuantity(StringValidater.toLong(res.getQuantity()));
-        data.setPrice(StringValidater.toBigDecimal(res.getPrice()));
-        data.setAmount(StringValidater.toBigDecimal(res.getAmount()));
+        data.setCommodityName(commodityName);
+        data.setSpecsId(specsId);
+        data.setSpecsName(specsName);
+        data.setQuantity(quantity);
+        data.setPrice(price);
+        BigDecimal amount = price.multiply(BigDecimal.valueOf(quantity));
+        data.setAmount(amount);
         String listPic = commodityBO.getCommodity(commodityCode).getListPic();
         data.setListPic(listPic);
         data.setStatus(ECommodityOrderDetailStatus.TODELIVE.getCode());
-        data.setAddressCode(res.getAddressCode());
+        data.setAddressCode(addressCode);
         commodityOrderDetailDAO.insert(data);
         return code;
     }

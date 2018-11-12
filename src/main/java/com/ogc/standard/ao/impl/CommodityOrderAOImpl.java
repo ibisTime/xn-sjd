@@ -8,6 +8,7 @@
  */
 package com.ogc.standard.ao.impl;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -31,7 +32,6 @@ import com.ogc.standard.bo.ICompanyBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.DateUtil;
-import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.domain.Address;
 import com.ogc.standard.domain.Commodity;
 import com.ogc.standard.domain.CommodityOrder;
@@ -40,7 +40,6 @@ import com.ogc.standard.domain.CommoditySpecs;
 import com.ogc.standard.dto.req.XN629721Req;
 import com.ogc.standard.dto.res.BooleanRes;
 import com.ogc.standard.dto.res.PayOrderRes;
-import com.ogc.standard.dto.res.XN629720Res;
 import com.ogc.standard.enums.ECommodityOrderStatus;
 import com.ogc.standard.enums.EJourBizTypeUser;
 import com.ogc.standard.enums.EPayType;
@@ -112,28 +111,15 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
             throw new BizException("xn0000", "该地址不属于你");
         }
         // 落地单店铺订单
-        XN629720Res res = new XN629720Res();
-        res.setCommodityOrderCode(orderCode);
-        res.setShopCode(commodity.getShopCode());
-        res.setCommodityCode(specs.getCommodityCode());
-        res.setCommodityName(commodity.getName());
-        res.setSpecsId(specsId.toString());
-        res.setSpecsName(specs.getName());
-        res.setQuantity(quantity.toString());
-        res.setPrice(specs.getPrice().toString());
-        String amount = specs.getPrice()
-            .multiply(StringValidater.toBigDecimal(res.getQuantity()))
-            .toString();
-        res.setAmount(amount);
-        res.setAddressCode(addressCode);
-        commodityOrderDetailBO.saveDetail(orderCode, res);
+        commodityOrderDetailBO.saveDetail(orderCode, commodity.getShopCode(),
+            commodity.getCode(), commodity.getName(), specsId, specs.getName(),
+            quantity, specs.getPrice(), addressCode);
         // 库存减少
-        commoditySpecsBO.inventoryDecrease(
-            StringValidater.toLong(res.getSpecsId()),
-            -StringValidater.toLong(res.getQuantity()));
+        commoditySpecsBO.inventoryDecrease(specsId, -quantity);
         // 加上数量与总价
-        commodityOrderBO.refreshAmount(quantity,
-            StringValidater.toBigDecimal(amount), orderCode);
+        BigDecimal amount = specs.getPrice().multiply(
+            BigDecimal.valueOf(quantity));
+        commodityOrderBO.refreshAmount(quantity, amount, orderCode);
         return orderCode;
     }
 
