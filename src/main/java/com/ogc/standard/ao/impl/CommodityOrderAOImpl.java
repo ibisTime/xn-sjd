@@ -9,6 +9,7 @@
 package com.ogc.standard.ao.impl;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -36,6 +37,7 @@ import com.ogc.standard.domain.Address;
 import com.ogc.standard.domain.Commodity;
 import com.ogc.standard.domain.CommodityOrder;
 import com.ogc.standard.domain.CommodityOrderDetail;
+import com.ogc.standard.domain.CommodityShopOrder;
 import com.ogc.standard.domain.CommoditySpecs;
 import com.ogc.standard.dto.req.XN629721Req;
 import com.ogc.standard.dto.res.BooleanRes;
@@ -197,9 +199,7 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
         Paginable<CommodityOrder> page = commodityOrderBO.getPaginable(start,
             limit, condition);
         for (CommodityOrder order : page.getList()) {
-            List<CommodityOrderDetail> detailList = commodityOrderDetailBO
-                .queryOrderDetail(order.getCode());
-            order.setDetailList(detailList);
+            initOrder(order);
         }
         return page;
     }
@@ -209,9 +209,7 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
         List<CommodityOrder> dataList = commodityOrderBO
             .queryOrderList(condition);
         for (CommodityOrder order : dataList) {
-            List<CommodityOrderDetail> detailList = commodityOrderDetailBO
-                .queryOrderDetail(order.getCode());
-            order.setDetailList(detailList);
+            initOrder(order);
         }
         return dataList;
     }
@@ -219,9 +217,7 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
     @Override
     public CommodityOrder getCommodityOrder(String code) {
         CommodityOrder order = commodityOrderBO.getCommodityOrder(code);
-        List<CommodityOrderDetail> detailList = commodityOrderDetailBO
-            .queryOrderDetail(order.getCode());
-        order.setDetailList(detailList);
+        initOrder(order);
         return order;
     }
 
@@ -269,4 +265,31 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
         commodityOrderBO.platCancelOrder(order);
     }
 
+    private void initOrder(CommodityOrder order) {
+        // 获得明细列表
+        List<CommodityOrderDetail> detailList = commodityOrderDetailBO
+            .queryOrderDetail(order.getCode());
+        // 获得所包含的店铺编号
+        List<String> shopCodes = new ArrayList<String>();
+        for (CommodityOrderDetail detail : detailList) {
+            if (!shopCodes.contains(detail.getShopCode())) {
+                shopCodes.add(detail.getShopCode());
+            }
+        }
+        List<CommodityShopOrder> shopOrders = new ArrayList<CommodityShopOrder>();
+        // 分配店铺订单
+        for (String shopCode : shopCodes) {
+            CommodityOrderDetail condition = new CommodityOrderDetail();
+            condition.setShopCode(shopCode);
+            condition.setOrderCode(order.getCode());
+            List<CommodityOrderDetail> shopDetail = commodityOrderDetailBO
+                .queryDetailList(condition);
+            CommodityShopOrder shopOrder = new CommodityShopOrder();
+            shopOrder.setOrderCode(order.getCode());
+            shopOrder.setShopCode(shopCode);
+            shopOrder.setDetailList(shopDetail);
+            shopOrders.add(shopOrder);
+        }
+        order.setShopOrderList(shopOrders);
+    }
 }
