@@ -68,7 +68,14 @@ public class CategoryAOImpl implements ICategoryAO {
             throw new BizException("xn0000", "产品分类已上架，无法修改！");
         }
 
-        Integer level = 0;
+        // TODO
+        if ("果树预售".equals(name)) {
+            categoryBO.refreshCategory(code, name, 1, EProductType.YS.getCode(),
+                null, pic, orderNo, updater, remark);
+            return;
+        }
+
+        Integer level = 1;
         if (StringUtils.isNotBlank(parentCode)) {
             Category parentCategory = categoryBO.getCategory(parentCode);
 
@@ -78,6 +85,16 @@ public class CategoryAOImpl implements ICategoryAO {
             }
 
             level = parentCategory.getLevel() + 1;
+        }
+
+        if (EProductType.YS.getCode().equals(type)
+                && StringUtils.isEmpty(parentCode)) {
+            Category parentCategory = categoryBO.getCategoryByName("果树预售");
+            if (null != parentCategory) {
+                parentCode = parentCategory.getCode();
+            }
+
+            level = 2;
         }
 
         categoryBO.refreshCategory(code, name, level, type, parentCode, pic,

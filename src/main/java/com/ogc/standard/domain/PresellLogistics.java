@@ -1,6 +1,7 @@
 package com.ogc.standard.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import com.ogc.standard.dao.base.ABaseDO;
 
@@ -64,6 +65,9 @@ public class PresellLogistics extends ABaseDO {
     /***********DB Properties***********/
     // 包装单位
     private String unit;
+
+    // 状态列表
+    private List<String> statusList;
 
     public void setCode(String code) {
         this.code = code;
@@ -199,6 +203,14 @@ public class PresellLogistics extends ABaseDO {
 
     public void setUnit(String unit) {
         this.unit = unit;
+    }
+
+    public List<String> getStatusList() {
+        return statusList;
+    }
+
+    public void setStatusList(List<String> statusList) {
+        this.statusList = statusList;
     }
 
 }

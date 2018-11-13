@@ -311,6 +311,7 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
             String productCode, Integer singleOutput,
             String originalGroupCode) {
         int orderQuantity = 0;// 下单数量
+        StringBuffer treeNumbers = new StringBuffer();
 
         _assignPI: while (orderQuantity < quantity) {
             List<Tree> treeList = treeBO
@@ -324,6 +325,7 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
 
                     tmpPackWeight = tmpPackWeight
                             - (singleOutput - tree.getAdoptCount());
+                    treeNumbers.append(tree.getTreeNumber()).append("&");
 
                     if (tmpPackWeight > 0) {
                         treeBO.refreshAdoptCount(tree.getTreeNumber(),
@@ -333,9 +335,9 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
                         treeBO.refreshAdoptCount(tree.getTreeNumber(),
                             singleOutput);
 
-                        // TODO 实际上可能分配多棵树
                         presellInventoryBO.savePresellInventory(
-                            originalGroupCode, tree.getTreeNumber());
+                            originalGroupCode, treeNumbers.toString());
+                        treeNumbers.setLength(0);
 
                         orderQuantity = orderQuantity + 1;
                         break _assignPI;
@@ -345,9 +347,9 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
                         treeBO.refreshAdoptCount(tree.getTreeNumber(),
                             tree.getAdoptCount() - tmpPackWeight);
 
-                        // TODO 实际上可能分配多棵树
                         presellInventoryBO.savePresellInventory(
-                            originalGroupCode, tree.getTreeNumber());
+                            originalGroupCode, treeNumbers.toString());
+                        treeNumbers.setLength(0);
 
                         orderQuantity = orderQuantity + 1;
                         break _assignPI;
@@ -440,12 +442,12 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
                 String applyUserName = null;
                 if (null != applyUser) {
                     applyUserName = PhoneUtil.hideMobile(applyUser.getMobile());
-                    ;
                     if (null != applyUser.getNickname()) {
                         applyUserName = applyUser.getNickname();
                     }
                 }
                 presellOrder.setApplyUserName(applyUserName);
+                presellOrder.setApplyUserInfo(applyUser);
             }
         }
 
@@ -482,10 +484,10 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
         // 支付流水编号
         Account userCnyAccount = accountBO.getAccountByUser(
             presellOrder.getApplyUser(), ECurrency.CNY.getCode());
-        Jour jour = jourBO.getJour(presellOrder.getCode(),
+        List<Jour> jourList = jourBO.queryJour(presellOrder.getCode(),
             userCnyAccount.getAccountNumber(), EAccountType.CUSTOMER.getCode());
-        if (null != jour) {
-            presellOrder.setJourCode(jour.getCode());
+        if (CollectionUtils.isNotEmpty(jourList)) {
+            presellOrder.setJourCode(jourList.get(0).getCode());
         }
 
         // 原生组

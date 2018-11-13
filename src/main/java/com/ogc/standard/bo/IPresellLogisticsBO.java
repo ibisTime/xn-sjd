@@ -18,6 +18,10 @@ public interface IPresellLogisticsBO extends IPaginableBO<PresellLogistics> {
     // 收货
     public void refreshConfirmReceive(String code);
 
+    // 根据原生组查物流单
+    public List<PresellLogistics> queryUnDelivedByOriginal(
+            String originalGroupCode);
+
     public List<PresellLogistics> queryPresellLogisticsList(
             PresellLogistics condition);
 

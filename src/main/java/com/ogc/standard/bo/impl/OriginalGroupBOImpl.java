@@ -62,7 +62,9 @@ public class OriginalGroupBOImpl extends PaginableBOImpl<OriginalGroup>
         originalGroup
             .setAdoptStartDatetime(presellProduct.getAdoptStartDatetime());
         originalGroup.setAdoptEndDatetime(presellProduct.getDeliverDatetime());
+        originalGroup.setDeliverDatetime(presellProduct.getDeliverDatetime());
         originalGroup.setUpdateDatetime(new Date());
+
         originalGroupDAO.insert(originalGroup);
         return code;
     }
@@ -100,7 +102,9 @@ public class OriginalGroupBOImpl extends PaginableBOImpl<OriginalGroup>
 
         data.setAdoptStartDatetime(presellProduct.getAdoptStartDatetime());
         data.setAdoptEndDatetime(presellProduct.getDeliverDatetime());
+        data.setDeliverDatetime(presellProduct.getDeliverDatetime());
         data.setUpdateDatetime(new Date());
+
         originalGroupDAO.insert(data);
         return code;
     }

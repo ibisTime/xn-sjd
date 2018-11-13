@@ -28,6 +28,7 @@ public class XN629415 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         PresellProduct condition = new PresellProduct();
+        condition.setCode(req.getCode());
         condition.setName(req.getName());
         condition.setParentCategoryCode(req.getParentCategoryCode());
         condition.setCategoryCode(req.getCategoryCode());

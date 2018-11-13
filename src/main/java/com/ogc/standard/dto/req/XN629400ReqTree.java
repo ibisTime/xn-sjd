@@ -20,11 +20,9 @@ public class XN629400ReqTree extends BaseReq {
     private String age;
 
     // 经度
-    @NotBlank
     private String longitude;
 
     // 维度
-    @NotBlank
     private String latitude;
 
     // 实景图

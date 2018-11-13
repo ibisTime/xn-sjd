@@ -11,8 +11,8 @@ import java.util.Map;
  */
 public enum EOriginalGroupStatus {
 
-    TO_ADOPT("0", "待认养"), ADOPTING("1", "认养中"), TO_RECEIVE("2",
-            "待收货"), RECEIVED("3", "已收货");
+    TO_ADOPT("0", "待生效"), ADOPTING("1", "可转让"), TO_RECEIVE("2",
+            "待提货"), RECEIVED("3", "已提货");
 
     EOriginalGroupStatus(String code, String value) {
         this.code = code;

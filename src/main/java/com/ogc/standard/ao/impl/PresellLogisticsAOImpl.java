@@ -56,7 +56,12 @@ public class PresellLogisticsAOImpl implements IPresellLogisticsAO {
 
         presellLogisticsBO.refreshConfirmReceive(code);
 
-        originalGroupBO.refreshReceive(presellLogistics.getOriginalGroupCode());
+        // 全部收货后更新资产状态
+        if (CollectionUtils.isEmpty(presellLogisticsBO.queryUnDelivedByOriginal(
+            presellLogistics.getOriginalGroupCode()))) {
+            originalGroupBO
+                .refreshReceive(presellLogistics.getOriginalGroupCode());
+        }
 
         // 更新提货中数量
         OriginalGroup originalGroup = originalGroupBO

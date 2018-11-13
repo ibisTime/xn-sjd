@@ -1,5 +1,6 @@
 package com.ogc.standard.bo.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -75,6 +76,20 @@ public class PresellLogisticsBOImpl extends PaginableBOImpl<PresellLogistics>
         data.setStatus(EPresellLogisticsStatus.RECEIVED.getCode());
 
         presellLogisticsDAO.updateRceiveLogistisc(data);
+    }
+
+    @Override
+    public List<PresellLogistics> queryUnDelivedByOriginal(
+            String originalGroupCode) {
+        PresellLogistics condition = new PresellLogistics();
+        List<String> statusList = new ArrayList<String>();
+        statusList.add(EPresellLogisticsStatus.TO_RECEIVE.getCode());
+        statusList.add(EPresellLogisticsStatus.TO_SEND.getCode());
+
+        condition.setOriginalGroupCode(originalGroupCode);
+        condition.setStatusList(statusList);
+
+        return presellLogisticsDAO.selectList(condition);
     }
 
     @Override

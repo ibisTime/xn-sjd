@@ -93,7 +93,7 @@ ALTER TABLE `tys_group_order`
 ADD COLUMN `owner_id` VARCHAR(32) NULL COMMENT '资产归属人' AFTER `group_code`;
 
 ALTER TABLE `tys_derive_group` 
-ADD COLUMN `variety` VARCHAR(32) NULL COMMENT '品种' AFTER `product_name`;
+ADD COLUMN `variety` VARCHAR(255) NULL COMMENT '品种' AFTER `product_name`;
 
 ALTER TABLE `tys_original_group` 
 ADD COLUMN `specs_code` VARCHAR(32) NULL COMMENT '规格编号' AFTER `product_name`,
@@ -123,3 +123,8 @@ ADD COLUMN `belong_part_id` VARCHAR(32) NULL COMMENT '产权方编号' AFTER `co
 update tys_original_group set belong_part_id = (select owner_id from tys_presell_product where code = tys_original_group.product_code);
 
 #V2.0.0 1-4
+ALTER TABLE `tsys_company` 
+CHANGE COLUMN `description` `description` TEXT NULL DEFAULT NULL COMMENT '简介' ;
+
+ALTER TABLE `tys_original_group` 
+ADD COLUMN `deliver_datetime` DATETIME NULL COMMENT '发货时间' AFTER `adopt_end_datetime`;

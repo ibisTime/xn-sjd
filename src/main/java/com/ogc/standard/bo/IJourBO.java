@@ -40,7 +40,8 @@ public interface IJourBO extends IPaginableBO<Jour> {
 
     public List<Jour> queryJourList(Jour condition);
 
-    public Jour getJour(String refNo, String accountNumber, String accountType);
+    public List<Jour> queryJour(String refNo, String accountNumber,
+            String accountType);
 
     public Jour getJour(String code);
 

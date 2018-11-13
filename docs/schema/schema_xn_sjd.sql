@@ -633,7 +633,7 @@ CREATE TABLE `tsys_company` (
   `city` varchar(255) DEFAULT NULL COMMENT '市',
   `area` varchar(255) DEFAULT NULL COMMENT '区',
   `address` varchar(255) DEFAULT NULL COMMENT '地址',
-  `description` varchar(255) DEFAULT NULL COMMENT '简介',
+  `description` text COMMENT '简介',
   `bussiness_license` text COMMENT '营业执照',
   `organization_code` varchar(255) DEFAULT NULL COMMENT '组织机构代码',
   `certificate_template` text COMMENT '证书模板',
@@ -1082,6 +1082,7 @@ CREATE TABLE `tys_original_group` (
   `adopt_start_datetime` datetime DEFAULT NULL COMMENT '认养开始时间',
   `adopt_end_datetime` datetime DEFAULT NULL COMMENT '认养结束时间',
   
+  `deliver_datetime` datetime DEFAULT NULL COMMENT '发货时间',
   `status` varchar(4) DEFAULT NULL COMMENT '状态',
   `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
   `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
@@ -1106,7 +1107,7 @@ CREATE TABLE `tys_derive_group` (
   `product_name` varchar(255) DEFAULT NULL COMMENT '产品名称',
   `specs_code` varchar(32) DEFAULT NULL COMMENT '规格编号',
   `specs_name` varchar(255) DEFAULT NULL COMMENT '规格名称',
-  `variety` varchar(4) DEFAULT NULL COMMENT '品种',
+  `variety` varchar(255) DEFAULT NULL COMMENT '品种',
   `type` varchar(4) DEFAULT NULL COMMENT '类型（定向/二维码/挂单）',
 
   `price` decimal(18,8) DEFAULT NULL COMMENT '单价', 

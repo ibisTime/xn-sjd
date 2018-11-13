@@ -12,6 +12,9 @@ public class XN629415Req extends APageReq {
 
     private static final long serialVersionUID = 3564125020784062589L;
 
+    // 编号
+    private String code;
+
     // 名称
     private String name;
 
@@ -87,6 +90,14 @@ public class XN629415Req extends APageReq {
 
     public void setParentCategoryCode(String parentCategoryCode) {
         this.parentCategoryCode = parentCategoryCode;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
 }

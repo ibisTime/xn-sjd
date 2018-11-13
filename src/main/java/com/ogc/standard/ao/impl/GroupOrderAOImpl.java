@@ -299,14 +299,12 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
         if (EPresellType.PUBLIC.getCode().equals(deriveGroup.getType())) {
 
             // 认领寄售
-            Integer remainQuantity = deriveGroup.getQuantity()
-                    - data.getQuantity();
             String status = EDeriveGroupStatus.TO_CLAIM.getCode();
-            if (remainQuantity == 0) {
+            if (deriveGroup.getQuantity() == 0) {
                 status = EDeriveGroupStatus.CLAIMED.getCode();
             }
             deriveGroupBO.refreshClaimPublic(deriveGroup.getCode(),
-                deriveGroup.getClaimant(), remainQuantity, status);
+                deriveGroup.getClaimant(), deriveGroup.getQuantity(), status);
 
             // 生成新的资产
             String originalGroupCode = originalGroupBO.saveOriginalGroup(data,
@@ -411,10 +409,10 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
         // 支付流水编号
         Account userCnyAccount = accountBO.getAccountByUser(
             groupOrder.getApplyUser(), ECurrency.CNY.getCode());
-        Jour jour = jourBO.getJour(groupOrder.getCode(),
+        List<Jour> jourList = jourBO.queryJour(groupOrder.getCode(),
             userCnyAccount.getAccountNumber(), EAccountType.CUSTOMER.getCode());
-        if (null != jour) {
-            groupOrder.setJourCode(jour.getCode());
+        if (CollectionUtils.isNotEmpty(jourList)) {
+            groupOrder.setJourCode(jourList.get(0).getCode());
         }
 
         // 原生组

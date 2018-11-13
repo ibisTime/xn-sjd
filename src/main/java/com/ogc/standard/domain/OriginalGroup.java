@@ -61,6 +61,9 @@ public class OriginalGroup extends ABaseDO {
     // 认养结束时间
     private Date adoptEndDatetime;
 
+    // 发货时间
+    private Date deliverDatetime;
+
     // 状态
     private String status;
 
@@ -90,13 +93,19 @@ public class OriginalGroup extends ABaseDO {
     private PresellProduct presellProduct;
 
     // 树木列表
-    private List<PresellInventory> treeNumberList;
+    private List<String> treeNumberList;
 
     // 最小数量
     private String minQuantity;
 
     // 所属人信息
     private User ownerInfo;
+
+    // 开始发货时间
+    private Date deliverDatetimeStart;
+
+    // 结束发货时间
+    private Date deliverDatetimeEnd;
 
     public void setCode(String code) {
         this.code = code;
@@ -258,11 +267,11 @@ public class OriginalGroup extends ABaseDO {
         this.presellProduct = presellProduct;
     }
 
-    public List<PresellInventory> getTreeNumberList() {
+    public List<String> getTreeNumberList() {
         return treeNumberList;
     }
 
-    public void setTreeNumberList(List<PresellInventory> treeNumberList) {
+    public void setTreeNumberList(List<String> treeNumberList) {
         this.treeNumberList = treeNumberList;
     }
 
@@ -312,6 +321,30 @@ public class OriginalGroup extends ABaseDO {
 
     public void setBelongPartId(String belongPartId) {
         this.belongPartId = belongPartId;
+    }
+
+    public Date getDeliverDatetime() {
+        return deliverDatetime;
+    }
+
+    public void setDeliverDatetime(Date deliverDatetime) {
+        this.deliverDatetime = deliverDatetime;
+    }
+
+    public Date getDeliverDatetimeStart() {
+        return deliverDatetimeStart;
+    }
+
+    public void setDeliverDatetimeStart(Date deliverDatetimeStart) {
+        this.deliverDatetimeStart = deliverDatetimeStart;
+    }
+
+    public Date getDeliverDatetimeEnd() {
+        return deliverDatetimeEnd;
+    }
+
+    public void setDeliverDatetimeEnd(Date deliverDatetimeEnd) {
+        this.deliverDatetimeEnd = deliverDatetimeEnd;
     }
 
 }

@@ -114,7 +114,7 @@
 		FROM
 		tys_presell_order t
 		<include refid="where_condition" />
-		group by t.apply_user having quantity > 0
+		group by t.apply_user,t.price having quantity > 0
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
 				t.${order}

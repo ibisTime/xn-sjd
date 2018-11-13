@@ -1,6 +1,7 @@
 package com.ogc.standard.ao.impl;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -228,7 +229,7 @@ public class OriginalGroupAOImpl implements IOriginalGroupAO {
         logger.info("***************开始扫描已结束认养资产***************");
         OriginalGroup endCondition = new OriginalGroup();
         endCondition.setStatus(EOriginalGroupStatus.ADOPTING.getCode());
-        endCondition.setAdoptEndEndDatetime(DateUtil.getTodayStart());
+        endCondition.setDeliverDatetimeEnd(DateUtil.getTodayStart());
         List<OriginalGroup> endList = originalGroupBO
             .queryOriginalGroupList(endCondition);
 
@@ -311,8 +312,21 @@ public class OriginalGroupAOImpl implements IOriginalGroupAO {
         originalGroup.setPresellProduct(presellProduct);
 
         // 树木列表
-        List<PresellInventory> treeNumberList = presellInventoryBO
+        List<PresellInventory> presellInventorieList = presellInventoryBO
             .queryTreeNumberListByGroup(originalGroup.getCode());
+        List<String> treeNumberList = new ArrayList<String>();
+        if (CollectionUtils.isNotEmpty(presellInventorieList)) {
+            for (PresellInventory presellInventory : presellInventorieList) {
+                String[] tmp = presellInventory.getTreeNumber().split("&");
+                for (String treeNumber : tmp) {
+
+                    if (!treeNumberList.contains(treeNumber)) {
+                        treeNumberList.add(treeNumber);
+                    }
+
+                }
+            }
+        }
         originalGroup.setTreeNumberList(treeNumberList);
 
         // 所属人

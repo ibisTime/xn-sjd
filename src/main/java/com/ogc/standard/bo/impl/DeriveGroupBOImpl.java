@@ -283,6 +283,7 @@ public class DeriveGroupBOImpl extends PaginableBOImpl<DeriveGroup>
         if (StringUtils.isNotBlank(variety)) {
             DeriveGroup condition = new DeriveGroup();
             condition.setVariety(variety);
+            condition.setType(EPresellType.PUBLIC.getCode());
             condition.setStatus(EDeriveGroupStatus.CLAIMED.getCode());
             condition.setOrder("claim_datetime", "desc");
 

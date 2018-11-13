@@ -105,6 +105,9 @@ public class PresellOrder extends ABaseDO {
     // 下单人名称
     private String applyUserName;
 
+    // 下单人信息
+    private User applyUserInfo;
+
     public String getCode() {
         return code;
     }
@@ -343,6 +346,14 @@ public class PresellOrder extends ABaseDO {
 
     public void setApplyUserName(String applyUserName) {
         this.applyUserName = applyUserName;
+    }
+
+    public User getApplyUserInfo() {
+        return applyUserInfo;
+    }
+
+    public void setApplyUserInfo(User applyUserInfo) {
+        this.applyUserInfo = applyUserInfo;
     }
 
 }

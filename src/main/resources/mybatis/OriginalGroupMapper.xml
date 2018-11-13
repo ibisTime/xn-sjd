@@ -21,6 +21,7 @@
 		
 		<result column="adopt_start_datetime" property="adoptStartDatetime" />
 		<result column="adopt_end_datetime" property="adoptEndDatetime" />
+		<result column="deliver_datetime" property="deliverDatetime" />
 		<result column="updater" property="updater" />
 		<result column="update_datetime" property="updateDatetime" />
 		<result column="remark" property="remark" />
@@ -61,6 +62,13 @@
 			</if>
 			<if test="adoptEndEndDatetime != null and adoptEndEndDatetime != '' ">
 				<![CDATA[AND t.adopt_end_datetime <= #{adoptEndEndDatetime}]]>
+			</if>
+			
+			<if test="deliverDatetimeStart != null and deliverDatetimeStart != '' ">
+				<![CDATA[AND t.deliver_datetime >= #{deliverDatetimeStart}]]>
+			</if>
+			<if test="deliverDatetimeEnd != null and deliverDatetimeEnd != '' ">
+				<![CDATA[AND t.deliver_datetime <= #{deliverDatetimeEnd}]]>
 			</if>
 		</trim>
 	</sql>
