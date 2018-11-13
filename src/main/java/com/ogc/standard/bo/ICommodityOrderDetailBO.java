@@ -28,8 +28,7 @@ public interface ICommodityOrderDetailBO extends
             String addressCode);
 
     public void refershDelive(CommodityOrderDetail data,
-            String logisticsCompany, String logisticsNumber, String deliver,
-            String receiver, String receiverMobile);
+            String logisticsCompany, String logisticsNumber, String deliver);
 
     public void refreshReceive(CommodityOrderDetail data);
 

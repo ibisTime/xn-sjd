@@ -15,6 +15,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.ogc.standard.bo.IAddressBO;
 import com.ogc.standard.bo.ICommodityBO;
 import com.ogc.standard.bo.ICommodityOrderDetailBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
@@ -41,6 +42,9 @@ public class CommodityOrderDetailBOImpl extends
     @Autowired
     private ICommodityBO commodityBO;
 
+    @Autowired
+    private IAddressBO addressBO;
+
     @Override
     public String saveDetail(String commodityOrderCode, String shopCode,
             String commodityCode, String commodityName, Long specsId,
@@ -64,20 +68,19 @@ public class CommodityOrderDetailBOImpl extends
         data.setListPic(listPic);
         data.setStatus(ECommodityOrderDetailStatus.TODELIVE.getCode());
         data.setAddressCode(addressCode);
+        data.setReceiver(addressBO.getAddress(addressCode).getUserId());
+        data.setReceiverMobile(addressBO.getAddress(addressCode).getMobile());
         commodityOrderDetailDAO.insert(data);
         return code;
     }
 
     @Override
     public void refershDelive(CommodityOrderDetail data,
-            String logisticsCompany, String logisticsNumber, String deliver,
-            String receiver, String receiverMobile) {
+            String logisticsCompany, String logisticsNumber, String deliver) {
         data.setLogisticsCompany(logisticsCompany);
         data.setLogisticsNumber(logisticsNumber);
         data.setDeliver(deliver);
         data.setDeliverDatetime(new Date());
-        data.setReceiver(receiver);
-        data.setReceiverMobile(receiverMobile);
         data.setStatus(ECommodityOrderDetailStatus.TORECEIVE.getCode());
         commodityOrderDetailDAO.updateDelive(data);
     }

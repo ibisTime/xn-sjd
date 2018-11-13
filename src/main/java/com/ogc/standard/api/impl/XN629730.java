@@ -35,7 +35,7 @@ public class XN629730 extends AProcessor {
     public Object doBusiness() throws BizException {
         commodityOrderDetailAO.delive(req.getOrderCode(), req.getShopCode(),
             req.getLogisticsCompany(), req.getLogisticsNumber(),
-            req.getDeliver(), req.getReceiver(), req.getReceiverMobile());
+            req.getDeliver());
         return new BooleanRes(true);
     }
 

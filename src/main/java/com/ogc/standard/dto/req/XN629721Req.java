@@ -28,6 +28,16 @@ public class XN629721Req {
 
     private String remark;
 
+    private String tradePwd;
+
+    public String getTradePwd() {
+        return tradePwd;
+    }
+
+    public void setTradePwd(String tradePwd) {
+        this.tradePwd = tradePwd;
+    }
+
     public String getCode() {
         return code;
     }
