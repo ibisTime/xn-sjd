@@ -9,6 +9,7 @@
 		<result column="title" property="title" />
 		<result column="content" property="content" />
 		
+		<result column="publish_datetime" property="publishDatetime" />
 		<result column="status" property="status" />
 		<result column="create_datetime" property="createDatetime" />
 		<result column="updater" property="updater" />
@@ -47,6 +48,7 @@
 		,t.title
 		,t.content
 		
+		,t.publish_datetime
 		,t.status
 		,t.create_datetime
 		,t.updater
@@ -76,6 +78,7 @@
 		,title
 		,content
 		
+		,publish_datetime
 		,status
 		,create_datetime
 		,updater
@@ -89,6 +92,7 @@
 		,#{title}
 		,#{content}
 		
+		,#{publishDatetime}
 		,#{status}
 		,#{createDatetime}
 		,#{updater}
@@ -114,6 +118,7 @@
 		type=#{type}
 		,title=#{title}
 		,content=#{content}
+		,publish_datetime=#{publishDatetime}
 		,status=#{status}
 		,updater=#{updater}
 		,update_datetime=#{updateDatetime}

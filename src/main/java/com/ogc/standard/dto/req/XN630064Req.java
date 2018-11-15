@@ -13,6 +13,9 @@ public class XN630064Req {
     @NotBlank
     private String userId;
 
+    // 营业执照
+    private String bussinessLicense;
+
     // 证书模板
     @NotBlank
     private String certificateTemplate;
@@ -44,4 +47,13 @@ public class XN630064Req {
     public void setContractTemplate(String contractTemplate) {
         this.contractTemplate = contractTemplate;
     }
+
+    public String getBussinessLicense() {
+        return bussinessLicense;
+    }
+
+    public void setBussinessLicense(String bussinessLicense) {
+        this.bussinessLicense = bussinessLicense;
+    }
+
 }

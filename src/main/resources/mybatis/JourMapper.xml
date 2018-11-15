@@ -37,7 +37,7 @@
 		<if test="relaNameForQuery != null and relaNameForQuery != '' ">
 			left join tstd_user tu on t.user_id = tu.user_id
 			left join tsys_agent_user tau on t.user_id = tau.user_id
-			left join tsys_user ts on t.user_id = 'SYS_USER'
+			left join tsys_user ts on t.user_id = ts.user_id
 		</if>
 	</sql>
 	

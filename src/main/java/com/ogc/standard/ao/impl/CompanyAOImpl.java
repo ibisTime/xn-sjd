@@ -25,6 +25,20 @@ public class CompanyAOImpl implements ICompanyAO {
     private ISYSUserBO sysUserBO;
 
     @Override
+    public void completeCompanyOwner(String userId, String bussinessLicense,
+            String certificateTemplate, String contractTemplate) {
+        SYSUser sysUser = sysUserBO.getSYSUser(userId);
+        if (!ESYSUserKind.OWNER.getCode().equals(sysUser.getKind())) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "不是产权端用户，不能操作");
+        }
+
+        Company company = companyBO.getCompanyByUserId(sysUser.getUserId());
+        companyBO.refreshCompanyInfo(company, bussinessLicense,
+            certificateTemplate, contractTemplate);
+    }
+
+    @Override
     public Paginable<Company> queryCompanyPage(int start, int limit,
             Company condition) {
         return companyBO.getPaginable(start, limit, condition);
@@ -43,20 +57,6 @@ public class CompanyAOImpl implements ICompanyAO {
     @Override
     public Company getCompanyByUser(String userId) {
         return companyBO.getCompanyByUserId(userId);
-    }
-
-    @Override
-    public void completeCompanyOwner(String userId, String certificateTemplate,
-            String contractTemplate) {
-        SYSUser sysUser = sysUserBO.getSYSUser(userId);
-        if (!ESYSUserKind.OWNER.getCode().equals(sysUser.getKind())) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "不是产权端用户，不能操作");
-        }
-        Company company = companyBO.getCompanyByUserId(sysUser.getUserId());
-        companyBO.refreshCompanyInfo(company, certificateTemplate,
-            contractTemplate);
-
     }
 
 }

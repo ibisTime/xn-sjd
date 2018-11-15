@@ -76,7 +76,8 @@ public class PresellProductAOImpl implements IPresellProductAO {
         for (XN629400ReqSpecs presellSpecs : req.getPresellSpecsList()) {
             presellSpecsBO.savePresellSpecs(presellProduct.getCode(),
                 presellSpecs.getName(), presellSpecs.getPackCount(),
-                presellSpecs.getPrice(), presellSpecs.getIncrease());
+                presellSpecs.getPrice(), presellSpecs.getIncrease(),
+                presellSpecs.getIntervalHours());
         }
 
         // 添加古树
@@ -123,7 +124,8 @@ public class PresellProductAOImpl implements IPresellProductAO {
         for (XN629401ReqSpecs presellSpecs : req.getPresellSpecsList()) {
             presellSpecsBO.savePresellSpecs(req.getCode(),
                 presellSpecs.getName(), presellSpecs.getPackCount(),
-                presellSpecs.getPrice(), presellSpecs.getIncrease());
+                presellSpecs.getPrice(), presellSpecs.getIncrease(),
+                presellSpecs.getIntervalHours());
         }
 
         // 删除旧的古树
@@ -166,6 +168,8 @@ public class PresellProductAOImpl implements IPresellProductAO {
         if (!EPresellProductStatus.PUTOFFED.getCode()
             .equals(presellProduct.getStatus())
                 && !EPresellProductStatus.DRAFT.getCode()
+                    .equals(presellProduct.getStatus())
+                && !EPresellProductStatus.APPROVE_NO.getCode()
                     .equals(presellProduct.getStatus())) {
             throw new BizException("xn0000", "产品未处于可提交状态！");
         }
@@ -293,6 +297,9 @@ public class PresellProductAOImpl implements IPresellProductAO {
             .queryTreeListByProduct(presellProduct.getCode());
         presellProduct.setTreeList(treeList);
 
+        SYSUser ownerInfo = sysUserBO
+            .getSYSUserUnCheck(presellProduct.getOwnerId());
+        presellProduct.setOwnerInfo(ownerInfo);
     }
 
 }

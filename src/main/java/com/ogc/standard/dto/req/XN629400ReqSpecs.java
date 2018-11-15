@@ -24,8 +24,10 @@ public class XN629400ReqSpecs extends BaseReq {
     private String price;
 
     // 每小时涨幅
-    @NotBlank
     private String increase;
+
+    // 间隔时间
+    private String intervalHours;
 
     public String getName() {
         return name;
@@ -57,6 +59,14 @@ public class XN629400ReqSpecs extends BaseReq {
 
     public void setIncrease(String increase) {
         this.increase = increase;
+    }
+
+    public String getIntervalHours() {
+        return intervalHours;
+    }
+
+    public void setIntervalHours(String intervalHours) {
+        this.intervalHours = intervalHours;
     }
 
 }

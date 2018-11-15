@@ -37,6 +37,9 @@ public class Sms extends ABaseDO {
     // 消息内容
     private String content;
 
+    // 发布时间
+    private Date publishDatetime;
+
     // 状态
     private String status;
 
@@ -142,6 +145,14 @@ public class Sms extends ABaseDO {
 
     public void setObject(String object) {
         this.object = object;
+    }
+
+    public Date getPublishDatetime() {
+        return publishDatetime;
+    }
+
+    public void setPublishDatetime(Date publishDatetime) {
+        this.publishDatetime = publishDatetime;
     }
 
 }

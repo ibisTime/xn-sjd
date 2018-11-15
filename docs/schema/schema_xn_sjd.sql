@@ -443,10 +443,11 @@ CREATE TABLE `tstd_sms` (
   `object` varchar(4) DEFAULT NULL COMMENT '对象类型(C:C端用户/O:产权方/M:养护方/A:代理商/P:平台方)',
   `title` varchar(255) DEFAULT NULL COMMENT '标题',
   `content` varchar(255) DEFAULT NULL COMMENT '内容',
+  `publish_datetime` datetime DEFAULT NULL COMMENT '发布时间',
   `status` varchar(4) DEFAULT NULL COMMENT '状态 0-草稿 1-已发送 2-已回撤',
   `create_datetime` datetime DEFAULT NULL COMMENT '创建时间',
   `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
-  `update_datetime` varchar(45) DEFAULT NULL COMMENT '更新时间',
+  `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -999,8 +1000,9 @@ CREATE TABLE `tys_presell_product` (
   `longitude` varchar(32) DEFAULT NULL COMMENT '经度',
   `latitude` varchar(32) DEFAULT NULL COMMENT '维度',
   `single_output` int DEFAULT NULL COMMENT '单颗树产量',
-  `pack_unit` varchar(32) DEFAULT NULL COMMENT '包装单位',
+  `output_unit` varchar(32) DEFAULT NULL COMMENT '产量单位',
   `pack_weight` FLOAT DEFAULT NULL COMMENT '包装重量',
+  `pack_unit` varchar(32) DEFAULT NULL COMMENT '包装单位',
 
   `tree_count` int DEFAULT NULL COMMENT '树木数量',
   `total_output` int DEFAULT NULL COMMENT '产出总量',
@@ -1029,6 +1031,8 @@ CREATE TABLE `tys_presell_specs` (
   `pack_count` int DEFAULT 0 COMMENT '包装数量',
   `price` decimal(18,8) DEFAULT NULL COMMENT '价格',
   `increase` FLOAT DEFAULT NULL COMMENT '每小时涨幅',
+  `interval_hours` int DEFAULT 1 COMMENT '时间间隔',
+  `now_interval` int DEFAULT 0 COMMENT '当前间隔',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1220,12 +1224,14 @@ CREATE TABLE `tsc_commodity_specs` (
 DROP TABLE IF EXISTS `tsc_cart`;
 CREATE TABLE `tsc_cart` (
   `code` varchar(32) NOT NULL COMMENT '编号',
+  `shop_code` varchar(32) NOT NULL COMMENT '店铺编号',
   `user_id` varchar(32) NOT NULL COMMENT '用户编号',
   `commodity_code` varchar(32) NOT NULL COMMENT '商品编号',
   `commodity_name` varchar(64) NOT NULL COMMENT '商品名称',
   `specs_id` bigint(20) NOT NULL COMMENT '规格编号',
   `specs_name` varchar(64) NOT NULL COMMENT '规格名称',
   `quantity` bigint(20) NOT NULL COMMENT '数量',
+  `amount` DECIMAL(18,8) NOT NULL COMMENT '金额',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='购物车';
 
@@ -1243,6 +1249,7 @@ CREATE TABLE `tsc_commodity_order` (
   `pay_code` varchar(32) DEFAULT NULL COMMENT '支付渠道号',
   `pay_datetime` datetime DEFAULT NULL COMMENT '支付时间',
   `pay_amount` decimal(64,0) DEFAULT NULL COMMENT '支付金额',
+  `address_code` varchar(32) DEFAULT NULL COMMENT '地址编号',
   `status` varchar(4) NOT NULL COMMENT '状态（0 待支付，1 已取消，2 已支付）',
   `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
   `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',

@@ -8,8 +8,10 @@
  */
 package com.ogc.standard.ao.impl;
 
+import java.math.BigDecimal;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,9 +19,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ogc.standard.ao.ICommodityAO;
 import com.ogc.standard.bo.ICommodityBO;
 import com.ogc.standard.bo.ICommoditySpecsBO;
+import com.ogc.standard.bo.ICompanyBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Commodity;
 import com.ogc.standard.domain.CommoditySpecs;
+import com.ogc.standard.domain.Company;
 import com.ogc.standard.dto.req.XN629700Req;
 import com.ogc.standard.dto.req.XN629701Req;
 import com.ogc.standard.enums.EBoolean;
@@ -38,6 +42,9 @@ public class CommodityAOImpl implements ICommodityAO {
 
     @Autowired
     private ICommoditySpecsBO commoditySpecsBO;
+
+    @Autowired
+    private ICompanyBO companyBO;
 
     @Override
     @Transactional
@@ -130,8 +137,8 @@ public class CommodityAOImpl implements ICommodityAO {
         if (!ECommodityStatus.ON.getCode().equals(data.getStatus())) {
             throw new BizException("xn000000", "该商品处于无法下架的状态");
         }
-        commodityBO.refreshStatus(code, ECommodityStatus.OFF.getCode(),
-            updater, remark);
+        commodityBO.refreshStatus(code, ECommodityStatus.OFF.getCode(), updater,
+            remark);
     }
 
     @Override
@@ -139,27 +146,66 @@ public class CommodityAOImpl implements ICommodityAO {
             Commodity condition) {
         Paginable<Commodity> page = commodityBO.getPaginable(start, limit,
             condition);
-        for (Commodity data : page.getList()) {
-            data.setSpecsList(commoditySpecsBO.querySpecsList(data.getCode()));
-        }
-        return page;
-    }
 
-    @Override
-    public Commodity getCommodity(String code) {
-        Commodity data = commodityBO.getCommodity(code);
-        data.setSpecsList(commoditySpecsBO.querySpecsList(code));
-        return data;
+        if (null != page && CollectionUtils.isNotEmpty(page.getList())) {
+            for (Commodity data : page.getList()) {
+
+                init(data);
+
+            }
+        }
+
+        return page;
     }
 
     @Override
     public List<Commodity> queryCommodityList(Commodity condition) {
         List<Commodity> dataList = commodityBO.queryCommodityList(condition);
-        for (Commodity commodity : dataList) {
-            commodity.setSpecsList(commoditySpecsBO.querySpecsList(commodity
-                .getCode()));
+
+        if (CollectionUtils.isNotEmpty(dataList)) {
+            for (Commodity commodity : dataList) {
+                init(commodity);
+            }
         }
+
         return dataList;
+    }
+
+    @Override
+    public Commodity getCommodity(String code) {
+        Commodity data = commodityBO.getCommodity(code);
+
+        init(data);
+
+        return data;
+    }
+
+    private void init(Commodity data) {
+        // 规格
+        List<CommoditySpecs> specsList = commoditySpecsBO
+            .querySpecsList(data.getCode());
+        data.setSpecsList(specsList);
+
+        // 初始化最小价格和最大价格
+        BigDecimal minPrice = BigDecimal.ZERO;
+        BigDecimal maxPrice = minPrice;
+        for (CommoditySpecs commoditySpecs : specsList) {
+            if (minPrice.compareTo(BigDecimal.ZERO) == 0) {
+                minPrice = commoditySpecs.getPrice();
+            }
+            if (commoditySpecs.getPrice().compareTo(minPrice) < 0) {
+                minPrice = commoditySpecs.getPrice();
+            }
+            if (commoditySpecs.getPrice().compareTo(maxPrice) > 0) {
+                maxPrice = commoditySpecs.getPrice();
+            }
+        }
+        data.setMinPrice(minPrice);
+        data.setMaxPrice(maxPrice);
+
+        // 店铺名称
+        Company company = companyBO.getCompany(data.getShopCode());
+        data.setShopName(company.getName());
     }
 
 }

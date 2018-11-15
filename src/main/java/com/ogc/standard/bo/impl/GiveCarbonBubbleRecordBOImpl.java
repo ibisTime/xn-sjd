@@ -17,9 +17,9 @@ import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.exception.BizException;
 
 @Component
-public class GiveCarbonBubbleRecordBOImpl extends
-        PaginableBOImpl<GiveCarbonBubbleRecord> implements
-        IGiveCarbonBubbleRecordBO {
+public class GiveCarbonBubbleRecordBOImpl
+        extends PaginableBOImpl<GiveCarbonBubbleRecord>
+        implements IGiveCarbonBubbleRecordBO {
 
     @Autowired
     private IGiveCarbonBubbleRecordDAO giveCarbonBubbleRecordDAO;
@@ -32,7 +32,7 @@ public class GiveCarbonBubbleRecordBOImpl extends
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.GiveCarbonBubbleRecord.getCode());
         data.setCode(code);
-        data.setUserId(toUserId);
+        data.setUserId(userId);
         data.setToUserId(toUserId);
         data.setQuantity(quantity);
 

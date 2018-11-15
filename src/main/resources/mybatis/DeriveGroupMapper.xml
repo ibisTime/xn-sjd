@@ -226,4 +226,10 @@
 		WHERE code = #{code}
 	</update>
 	
+	<update id="update_wave" parameterType="deriveGroup">
+		UPDATE tys_derive_group
+		SET
+		wave = #{wave}
+		WHERE code = #{code}
+	</update>
 </mapper>

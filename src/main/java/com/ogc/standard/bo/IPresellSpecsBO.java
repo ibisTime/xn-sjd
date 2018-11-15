@@ -10,7 +10,7 @@ public interface IPresellSpecsBO extends IPaginableBO<PresellSpecs> {
 
     // 保存规格
     public String savePresellSpecs(String productCode, String name,
-            String packCount, String price, String increase);
+            String packCount, String price, String increase, String interval);
 
     // 删除产品规格
     public void removePresellSpecsByProduct(String productCode);
@@ -20,6 +20,9 @@ public interface IPresellSpecsBO extends IPaginableBO<PresellSpecs> {
 
     // 更新价格
     public void refreshPresellSpecsPrice(String code, BigDecimal price);
+
+    // 更新当前间隔
+    public void refreshNowInterval(String code, Integer nowInterval);
 
     // 根据产品查规格
     public List<PresellSpecs> queryPresellSpecsListByProduct(

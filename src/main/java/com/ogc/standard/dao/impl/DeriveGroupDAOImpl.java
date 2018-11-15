@@ -53,6 +53,11 @@ public class DeriveGroupDAOImpl extends AMybatisTemplate
     }
 
     @Override
+    public int updateWave(DeriveGroup data) {
+        return super.update(NAMESPACE.concat("update_wave"), data);
+    }
+
+    @Override
     public DeriveGroup select(DeriveGroup condition) {
         return super.select(NAMESPACE.concat("select_deriveGroup"), condition,
             DeriveGroup.class);

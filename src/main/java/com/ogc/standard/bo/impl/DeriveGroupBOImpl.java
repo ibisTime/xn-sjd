@@ -65,14 +65,7 @@ public class DeriveGroupBOImpl extends PaginableBOImpl<DeriveGroup>
         deriveGroup.setStatus(EDeriveGroupStatus.TO_CLAIM.getCode());
         deriveGroup.setClaimant(claimant);
 
-        DeriveGroup newest = getNewestByVariety(presellProduct.getVariety());
         Double wave = 0d;
-        if (null != newest) {
-            Double newestPrice = newest.getPrice().doubleValue();
-            if (newestPrice > 0) {
-                wave = (price.doubleValue() - newestPrice) / newestPrice;
-            }
-        }
         deriveGroup.setWave(wave);
 
         deriveGroupDAO.insert(deriveGroup);
@@ -108,14 +101,7 @@ public class DeriveGroupBOImpl extends PaginableBOImpl<DeriveGroup>
         deriveGroup.setCreateDatetime(new Date());
         deriveGroup.setStatus(EDeriveGroupStatus.TO_CLAIM.getCode());
 
-        DeriveGroup newest = getNewestByVariety(presellProduct.getVariety());
         Double wave = 0d;
-        if (null != newest) {
-            Double newestPrice = newest.getPrice().doubleValue();
-            if (newestPrice > 0) {
-                wave = (price.doubleValue() - newestPrice) / newestPrice;
-            }
-        }
         deriveGroup.setWave(wave);
 
         deriveGroupDAO.insert(deriveGroup);
@@ -151,14 +137,7 @@ public class DeriveGroupBOImpl extends PaginableBOImpl<DeriveGroup>
         deriveGroup.setCreateDatetime(new Date());
         deriveGroup.setStatus(EDeriveGroupStatus.TO_CLAIM.getCode());
 
-        DeriveGroup newest = getNewestByVariety(presellProduct.getVariety());
         Double wave = 0d;
-        if (null != newest) {
-            Double newestPrice = newest.getPrice().doubleValue();
-            if (newestPrice > 0) {
-                wave = (price.doubleValue() - newestPrice) / newestPrice;
-            }
-        }
         deriveGroup.setWave(wave);
 
         deriveGroupDAO.insert(deriveGroup);
@@ -235,6 +214,16 @@ public class DeriveGroupBOImpl extends PaginableBOImpl<DeriveGroup>
         deriveGroup.setQuantity(quantity);
 
         deriveGroupDAO.updateQuantity(deriveGroup);
+    }
+
+    @Override
+    public void refreshWave(String code, Double wave) {
+        DeriveGroup deriveGroup = new DeriveGroup();
+
+        deriveGroup.setCode(code);
+        deriveGroup.setWave(wave);
+
+        deriveGroupDAO.updateWave(deriveGroup);
     }
 
     @Override

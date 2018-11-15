@@ -7,7 +7,7 @@ package com.ogc.standard.enums;
  */
 public enum ECommodityOrderStatus {
 
-    TOPAY("0", "代支付"), PAIED("1", "已支付"), CANCEL("2", "已取消");
+    TOPAY("0", "待支付"), PAIED("1", "已支付"), CANCEL("2", "已取消");
 
     ECommodityOrderStatus(String code, String value) {
         this.code = code;

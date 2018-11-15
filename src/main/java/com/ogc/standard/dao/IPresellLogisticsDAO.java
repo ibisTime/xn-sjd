@@ -11,4 +11,8 @@ public interface IPresellLogisticsDAO extends IBaseDAO<PresellLogistics> {
 
     // 收货
     public int updateRceiveLogistisc(PresellLogistics data);
+
+    // 删除组下的物流单
+    public int deleteByOriginalGroup(PresellLogistics data);
+
 }

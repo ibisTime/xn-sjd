@@ -17,6 +17,7 @@
 		
 		<result column="pay_datetime" property="payDatetime" />
 		<result column="pay_amount" property="payAmount" />
+		<result column="address_code" property="addressCode" />
 		<result column="status" property="status" />
 		<result column="updater" property="updater" />
 		<result column="update_datetime" property="updateDatetime" />
@@ -63,15 +64,19 @@
 		,t.quantity
 		,t.apply_user
 		,t.apply_datetime
+		
 		,t.apply_note
 		,t.express_type
 		,t.pay_type
 		,t.pay_group
 		,t.pay_code
+		
 		,t.pay_datetime
 		,t.pay_amount
+		,t.address_code
 		,t.status
 		,t.updater
+		
 		,t.update_datetime
 		,t.remark
 		FROM
@@ -90,8 +95,6 @@
 		<include refid="where_condition" />
 	</select>
 	
-
-	
 	<insert id="insert_commodity_order" parameterType="commodityOrder">
 		INSERT INTO tsc_commodity_order(
 		code
@@ -99,6 +102,8 @@
 		,apply_datetime
 		,apply_note
 		,express_type
+		
+		,address_code
 		,status
 		,updater
 		,update_datetime
@@ -111,6 +116,8 @@
 		,#{applyDatetime}
 		,#{applyNote}
 		,#{expressType}
+		
+		,#{addressCode}
 		,#{status}
 		,#{updater}
 		,#{updateDatetime}

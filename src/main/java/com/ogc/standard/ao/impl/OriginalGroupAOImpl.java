@@ -185,6 +185,11 @@ public class OriginalGroupAOImpl implements IOriginalGroupAO {
                 "资产不是可填写地址状态");
         }
 
+        // TODO 判断是否存在已发货的物流单
+
+        // 删除之前的物流单
+        presellLogisticsBO.deleteByOriginalGroup(req.getCode());
+
         // 添加物流单
         Integer totalCount = 0;
         if (CollectionUtils.isNotEmpty(req.getLogisticsList())) {

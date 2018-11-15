@@ -96,6 +96,9 @@ public class CommodityOrderDetail extends ABaseDO {
     // 商品
     private Commodity commodity;
 
+    // 地址
+    private Address address;
+
     public Date getDeliverDatetimeStart() {
         return deliverDatetimeStart;
     }
@@ -278,6 +281,14 @@ public class CommodityOrderDetail extends ABaseDO {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
 }

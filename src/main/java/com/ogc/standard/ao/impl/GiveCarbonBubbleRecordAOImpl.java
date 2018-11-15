@@ -132,7 +132,7 @@ public class GiveCarbonBubbleRecordAOImpl implements IGiveCarbonBubbleRecordAO {
         User toUser = userBO
             .getUserUnCheck(giveCarbonBubbleRecord.getToUserId());
         if (null != toUser) {
-            toUserName = user.getMobile();
+            toUserName = toUser.getMobile();
             if (StringUtils.isNotBlank(toUser.getRealName())) {
                 toUserName = toUser.getRealName().concat("-")
                     .concat(toUserName);

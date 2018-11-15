@@ -26,6 +26,10 @@ public class XN805300Req {
     @NotBlank
     private String content;
 
+    // 发布时间
+    @NotBlank
+    private String publishDatetime;
+
     // 消息类型
     @NotBlank
     private String type;
@@ -87,6 +91,14 @@ public class XN805300Req {
 
     public void setObject(String object) {
         this.object = object;
+    }
+
+    public String getPublishDatetime() {
+        return publishDatetime;
+    }
+
+    public void setPublishDatetime(String publishDatetime) {
+        this.publishDatetime = publishDatetime;
     }
 
 }

@@ -9,6 +9,8 @@
 		<result column="pack_count" property="packCount" />
 		<result column="price" property="price" />
 		<result column="increase" property="increase" />
+		<result column="interval_hours" property="intervalHours" />
+		<result column="now_interval" property="nowInterval" />
 	</resultMap>
 	
 	<sql id="where_condition">
@@ -33,6 +35,8 @@
 		,t.pack_count
 		,t.price
 		,t.increase
+		,t.interval_hours
+		,t.now_interval
 		FROM
 		tys_presell_specs t
 		<include refid="where_condition" />
@@ -58,6 +62,8 @@
 		,pack_count
 		,price
 		,increase
+		,interval_hours
+		,now_interval
 		)
 		VALUES(
 		#{code}
@@ -66,6 +72,8 @@
 		,#{packCount}
 		,#{price}
 		,#{increase}
+		,#{intervalHours}
+		,#{nowInterval}
 		)
 	</insert>
 
@@ -79,6 +87,10 @@
 	
 	<update id="update_price">
 		UPDATE tys_presell_specs set price = #{price} where code = #{code}
+	</update>
+	
+	<update id="update_nowInterval">
+		UPDATE tys_presell_specs set now_interval = #{nowInterval} where code = #{code}
 	</update>
 
 </mapper>

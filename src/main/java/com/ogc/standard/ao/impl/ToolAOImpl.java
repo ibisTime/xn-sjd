@@ -126,14 +126,6 @@ public class ToolAOImpl implements IToolAO {
                 tool.setIsBuy(EBoolean.NO.getCode());
             }
         }
-
-        // 描述
-        if (EToolType.SHIELD.getCode().equals(tool.getType())) {
-            String description = tool.getDescription();
-            description = description.replace("*",
-                tool.getValidityTerm().toString());
-            tool.setDescription(description);
-        }
     }
 
 }

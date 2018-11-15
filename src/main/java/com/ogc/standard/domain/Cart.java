@@ -8,6 +8,8 @@
  */
 package com.ogc.standard.domain;
 
+import java.math.BigDecimal;
+
 import com.ogc.standard.dao.base.ABaseDO;
 
 /** 
@@ -22,6 +24,9 @@ public class Cart extends ABaseDO {
     // *******DB********
     // 编号
     private String code;
+
+    // 店铺编号
+    private String shopCode;
 
     // 用户编号
     private String userId;
@@ -41,7 +46,15 @@ public class Cart extends ABaseDO {
     // 数量
     private Long quantity;
 
+    // 总额
+    private BigDecimal amount;
+
     // *******DB********
+    // 店铺名称
+    private String shopName;
+
+    // 商品图片
+    private String commodityPhoto;
 
     public String getCode() {
         return code;
@@ -97,6 +110,38 @@ public class Cart extends ABaseDO {
 
     public void setQuantity(Long quantity) {
         this.quantity = quantity;
+    }
+
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
+    }
+
+    public String getShopName() {
+        return shopName;
+    }
+
+    public void setShopName(String shopName) {
+        this.shopName = shopName;
+    }
+
+    public String getShopCode() {
+        return shopCode;
+    }
+
+    public void setShopCode(String shopCode) {
+        this.shopCode = shopCode;
+    }
+
+    public String getCommodityPhoto() {
+        return commodityPhoto;
+    }
+
+    public void setCommodityPhoto(String commodityPhoto) {
+        this.commodityPhoto = commodityPhoto;
     }
 
 }

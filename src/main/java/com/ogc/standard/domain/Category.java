@@ -1,6 +1,7 @@
 package com.ogc.standard.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import com.ogc.standard.dao.base.ABaseDO;
 
@@ -16,7 +17,7 @@ public class Category extends ABaseDO {
     // 编号
     private String code;
 
-    // 类型
+    // 类型（0认养/1预售/2商品）
     private String type;
 
     // 上级编号
@@ -45,6 +46,10 @@ public class Category extends ABaseDO {
 
     // 备注
     private String remark;
+
+    /************DB Properties************/
+    // 类型列表
+    private List<String> typeList;
 
     public void setCode(String code) {
         this.code = code;
@@ -132,6 +137,14 @@ public class Category extends ABaseDO {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public List<String> getTypeList() {
+        return typeList;
+    }
+
+    public void setTypeList(List<String> typeList) {
+        this.typeList = typeList;
     }
 
 }

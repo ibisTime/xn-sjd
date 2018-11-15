@@ -73,6 +73,12 @@ public class PresellProduct extends ABaseDO {
     // 单颗树产量
     private Integer singleOutput;
 
+    // 产量单位
+    private String outputUnit;
+
+    // 包装重量
+    private Integer packWeight;
+
     // 包装单位
     private String packUnit;
 
@@ -132,6 +138,9 @@ public class PresellProduct extends ABaseDO {
 
     // 产品最大价格
     private BigDecimal maxPrice;
+
+    // 产权方信息
+    private SYSUser ownerInfo;
 
     public String getCode() {
         return code;
@@ -443,6 +452,30 @@ public class PresellProduct extends ABaseDO {
 
     public void setDeliverDatetime(Date deliverDatetime) {
         this.deliverDatetime = deliverDatetime;
+    }
+
+    public SYSUser getOwnerInfo() {
+        return ownerInfo;
+    }
+
+    public void setOwnerInfo(SYSUser ownerInfo) {
+        this.ownerInfo = ownerInfo;
+    }
+
+    public String getOutputUnit() {
+        return outputUnit;
+    }
+
+    public void setOutputUnit(String outputUnit) {
+        this.outputUnit = outputUnit;
+    }
+
+    public Integer getPackWeight() {
+        return packWeight;
+    }
+
+    public void setPackWeight(Integer packWeight) {
+        this.packWeight = packWeight;
     }
 
 }

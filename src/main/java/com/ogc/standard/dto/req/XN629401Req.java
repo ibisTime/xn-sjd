@@ -85,6 +85,14 @@ public class XN629401Req extends BaseReq {
     @NotBlank
     private String singleOutput;
 
+    // 产量单位
+    @NotBlank
+    private String outputUnit;
+
+    // 包装重量
+    @NotBlank
+    private String packWeight;
+
     // 包装单位
     @NotBlank
     private String packUnit;
@@ -346,6 +354,22 @@ public class XN629401Req extends BaseReq {
 
     public void setAdoptYear(String adoptYear) {
         this.adoptYear = adoptYear;
+    }
+
+    public String getOutputUnit() {
+        return outputUnit;
+    }
+
+    public void setOutputUnit(String outputUnit) {
+        this.outputUnit = outputUnit;
+    }
+
+    public String getPackWeight() {
+        return packWeight;
+    }
+
+    public void setPackWeight(String packWeight) {
+        this.packWeight = packWeight;
     }
 
 }

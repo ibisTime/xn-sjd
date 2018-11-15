@@ -111,6 +111,9 @@ public class GroupOrder extends ABaseDO {
     // 下单人名称
     private String applyUserName;
 
+    // 转让类型
+    private String presellType;
+
     public String getCode() {
         return code;
     }
@@ -365,6 +368,14 @@ public class GroupOrder extends ABaseDO {
 
     public void setSpecsName(String specsName) {
         this.specsName = specsName;
+    }
+
+    public String getPresellType() {
+        return presellType;
+    }
+
+    public void setPresellType(String presellType) {
+        this.presellType = presellType;
     }
 
 }

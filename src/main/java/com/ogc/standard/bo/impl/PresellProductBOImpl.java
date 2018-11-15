@@ -55,6 +55,7 @@ public class PresellProductBOImpl extends PaginableBOImpl<PresellProduct>
         data.setLongitude(req.getLongitude());
         data.setLatitude(req.getLatitude());
         data.setPackUnit(req.getPackUnit());
+        data.setOutputUnit(req.getOutputUnit());
 
         data.setNowCount(0);
         data.setStatus(EPresellProductStatus.DRAFT.getCode());
@@ -75,12 +76,14 @@ public class PresellProductBOImpl extends PaginableBOImpl<PresellProduct>
         data.setDeliverDatetime(DateUtil.strToDate(req.getDeliverDatetime(),
             DateUtil.FRONT_DATE_FORMAT_STRING));
 
-        Integer treeCode = req.getTreeList().size();
+        Integer treeCount = req.getTreeList().size();
         Integer singOutput = StringValidater.toInteger(req.getSingleOutput());
-        Integer totalOutput = treeCode * singOutput;
+        Integer packWeight = StringValidater.toInteger(req.getPackWeight());
+        Integer totalOutput = treeCount * singOutput;
 
-        data.setTreeCount(treeCode);
+        data.setTreeCount(treeCount);
         data.setSingleOutput(singOutput);
+        data.setPackWeight(packWeight);
         data.setTotalOutput(totalOutput);
 
         presellProductDAO.insert(data);
@@ -111,6 +114,7 @@ public class PresellProductBOImpl extends PaginableBOImpl<PresellProduct>
         data.setLongitude(req.getLongitude());
         data.setLatitude(req.getLatitude());
         data.setPackUnit(req.getPackUnit());
+        data.setOutputUnit(req.getOutputUnit());
 
         data.setAdoptStartDatetime(DateUtil.strToDate(
             req.getAdoptStartDatetime(), DateUtil.FRONT_DATE_FORMAT_STRING));
@@ -128,10 +132,12 @@ public class PresellProductBOImpl extends PaginableBOImpl<PresellProduct>
 
         Integer treeCode = req.getTreeList().size();
         Integer singOutput = StringValidater.toInteger(req.getSingleOutput());
+        Integer packWeight = StringValidater.toInteger(req.getPackWeight());
         Integer totalOutput = treeCode * singOutput;
 
         data.setTreeCount(treeCode);
         data.setSingleOutput(singOutput);
+        data.setPackWeight(packWeight);
         data.setTotalOutput(totalOutput);
 
         presellProductDAO.updateEditPresellProduct(data);

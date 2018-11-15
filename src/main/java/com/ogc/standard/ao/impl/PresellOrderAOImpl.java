@@ -122,8 +122,11 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
                 "产品认养时间已到期，不能下单");
         }
 
-        if ((quantity * presellSpecs.getPackCount()) > (presellProduct
-            .getTotalOutput() - presellProduct.getNowCount())) {
+        Integer orderWeight = quantity * presellSpecs.getPackCount()
+                * presellProduct.getPackWeight();// 下单重量
+        Integer remainWeight = presellProduct.getTotalOutput()
+                - presellProduct.getNowCount();// 剩余重量
+        if (orderWeight > remainWeight) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "库存数量不足，不能下单");
         }
@@ -135,8 +138,7 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
         // TODO 分配树
 
         // 更新产品已预售数量
-        Integer nowCount = presellProduct.getNowCount()
-                + quantity * presellSpecs.getPackCount();
+        Integer nowCount = presellProduct.getNowCount() + orderWeight;
         presellProductBO.refreshNowCount(presellProduct.getCode(), nowCount);
 
         return code;
@@ -159,8 +161,11 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
             .getPresellProduct(presellOrder.getProductCode());
         PresellSpecs presellSpecs = presellSpecsBO
             .getPresellSpecs(presellOrder.getSpecsCode());
-        Integer nowCount = presellProduct.getNowCount()
-                - presellOrder.getQuantity() * presellSpecs.getPackCount();
+
+        Integer orderWeight = presellOrder.getQuantity()
+                * presellSpecs.getPackCount() * presellProduct.getPackWeight();// 下单重量
+        Integer nowCount = presellProduct.getNowCount() - orderWeight;
+
         presellProductBO.refreshNowCount(presellProduct.getCode(), nowCount);
 
         // 取消订单
@@ -168,7 +173,6 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
     }
 
     @Override
-    @Transactional
     public Object toPayPresellOrder(String code, String payType,
             String tradePwd) {
         PresellOrder presellOrder = presellOrderBO.getPresellOrder(code);
@@ -253,9 +257,9 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
         // 分配树和预售权
         PresellSpecs presellSpecs = presellSpecsBO
             .getPresellSpecs(data.getSpecsCode());
-        assignPresellInventory(data.getQuantity(), presellSpecs.getPackCount(),
-            presellProduct.getCode(), presellProduct.getSingleOutput(),
-            originalGroupCode);
+        assignPresellInventory(data.getQuantity() * presellSpecs.getPackCount(),
+            presellProduct.getPackWeight(), presellProduct.getCode(),
+            presellProduct.getSingleOutput(), originalGroupCode);
 
         // 业务订单更改
         presellOrderBO.payYueSuccess(data.getCode(), deductRes, backJfAmount);
@@ -288,8 +292,9 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
             // 分配树和预售权
             PresellSpecs presellSpecs = presellSpecsBO
                 .getPresellSpecs(data.getSpecsCode());
-            assignPresellInventory(data.getQuantity(),
-                presellSpecs.getPackCount(), presellProduct.getCode(),
+            assignPresellInventory(
+                data.getQuantity() * presellSpecs.getPackCount(),
+                presellProduct.getPackWeight(), presellProduct.getCode(),
                 presellProduct.getSingleOutput(), originalGroupCode);
 
             // 添加快报
@@ -303,35 +308,58 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
         }
     }
 
-    // 分配树和预售权
-    // 1、获取还有库存的树列表，树按照剩余库存数量，从小到大排序
-    // 2、为树的剩余库存分配预售权
-    // 3、更新树的库存数量
+    /**
+     * 分配树和预售权
+         1、获取还有库存的树列表，树按照剩余库存数量，从小到大排序
+         2、为树的剩余库存分配预售权
+             2.1、预售权数量为下单【包装单位】数
+             2.2、一个预售权可能有多棵树
+         3、更新树的库存数量
+     * @param quantity          下单【包装单位】数:$箱
+     * @param packWeight        包装重量:$斤/箱
+     * @param productCode   
+     * @param singleOutput      单棵树产量:斤
+     * @param originalGroupCode 
+     */
     private void assignPresellInventory(Integer quantity, Integer packWeight,
             String productCode, Integer singleOutput,
             String originalGroupCode) {
-        int orderQuantity = 0;// 下单数量
-        StringBuffer treeNumbers = new StringBuffer();
+        int presellInventoryQuantity = 0;// 预售权数量
+        int tmpPackWeight;// 预售权已经分配的重量
+        int tmpTreeWeight;// 树已分配的总数量
+        StringBuffer treeNumbers = new StringBuffer();// 树木编号
 
-        _assignPI: while (orderQuantity < quantity) {
+        _assignPI: while (presellInventoryQuantity < quantity) {
             List<Tree> treeList = treeBO
                 .queryTreeListRemainInventory(productCode, singleOutput);
 
             if (CollectionUtils.isNotEmpty(treeList)) {
 
-                int tmpPackWeight = packWeight;
+                tmpPackWeight = 0;
+                tmpTreeWeight = 0;
 
                 for (Tree tree : treeList) {
 
                     tmpPackWeight = tmpPackWeight
-                            - (singleOutput - tree.getAdoptCount());
+                            + (singleOutput - tree.getAdoptCount());
                     treeNumbers.append(tree.getTreeNumber()).append("&");
 
-                    if (tmpPackWeight > 0) {
+                    /**
+                     * 三种情况：
+                     * 1、这棵树不够分：更新树的销量，再分一颗树
+                     * 2、这棵树正好被分完：更新树的销量，分配预售权，再次循环
+                     * 3、这棵树有剩余：更新树的销量，分配预售权，再次循环
+                     */
+                    if (tmpPackWeight < packWeight) {
+
                         treeBO.refreshAdoptCount(tree.getTreeNumber(),
                             singleOutput);
-                    } else if (tmpPackWeight == 0) {
+                        tmpTreeWeight = tmpTreeWeight
+                                + (singleOutput - tree.getAdoptCount());
 
+                        continue;
+
+                    } else if (tmpPackWeight == packWeight) {
                         treeBO.refreshAdoptCount(tree.getTreeNumber(),
                             singleOutput);
 
@@ -339,20 +367,21 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
                             originalGroupCode, treeNumbers.toString());
                         treeNumbers.setLength(0);
 
-                        orderQuantity = orderQuantity + 1;
-                        break _assignPI;
+                        presellInventoryQuantity = presellInventoryQuantity + 1;
 
-                    } else {
-
+                        continue _assignPI;
+                    } else if (tmpPackWeight > packWeight) {
+                        int adoptCount = tree.getAdoptCount() + packWeight
+                                - tmpTreeWeight;
                         treeBO.refreshAdoptCount(tree.getTreeNumber(),
-                            tree.getAdoptCount() - tmpPackWeight);
+                            adoptCount);
 
                         presellInventoryBO.savePresellInventory(
                             originalGroupCode, treeNumbers.toString());
                         treeNumbers.setLength(0);
 
-                        orderQuantity = orderQuantity + 1;
-                        break _assignPI;
+                        presellInventoryQuantity = presellInventoryQuantity + 1;
+                        continue _assignPI;
                     }
 
                 }
@@ -381,14 +410,16 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
     }
 
     public void cancelOrder(PresellOrder presellOrder) {
-
         // 更新产品已预售数量
         PresellProduct presellProduct = presellProductBO
             .getPresellProduct(presellOrder.getProductCode());
         PresellSpecs presellSpecs = presellSpecsBO
             .getPresellSpecs(presellOrder.getSpecsCode());
-        Integer nowCount = presellProduct.getNowCount()
-                - presellOrder.getQuantity() * presellSpecs.getPackCount();
+
+        Integer orderWeight = presellOrder.getQuantity()
+                * presellSpecs.getPackCount() * presellProduct.getPackWeight();// 下单重量
+        Integer nowCount = presellProduct.getNowCount() - orderWeight;
+
         presellProductBO.refreshNowCount(presellProduct.getCode(), nowCount);
 
         // TODO 取消树
@@ -512,9 +543,9 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
         User applyUser = userBO.getUserUnCheck(presellOrder.getApplyUser());
         String applyUserName = null;
         if (null != applyUser) {
-            applyUserName = applyUser.getMobile();
+            applyUserName = PhoneUtil.hideMobile(applyUser.getMobile());
             if (null != applyUser.getNickname()) {
-                applyUserName = applyUser.getNickname();
+                applyUserName = applyUser.getNickname() + applyUserName;
             }
         }
         presellOrder.setApplyUserName(applyUserName);

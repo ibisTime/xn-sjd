@@ -12,4 +12,7 @@ public interface IPresellSpecsDAO extends IBaseDAO<PresellSpecs> {
     // 更新价格
     public int updatePrice(PresellSpecs data);
 
+    // 更新当前间隔
+    public int updateNowInterval(PresellSpecs data);
+
 }

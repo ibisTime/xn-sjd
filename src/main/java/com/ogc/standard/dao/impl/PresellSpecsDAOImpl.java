@@ -33,6 +33,11 @@ public class PresellSpecsDAOImpl extends AMybatisTemplate
     }
 
     @Override
+    public int updateNowInterval(PresellSpecs data) {
+        return super.update(NAMESPACE.concat("update_nowInterval"), data);
+    }
+
+    @Override
     public PresellSpecs select(PresellSpecs condition) {
         return super.select(NAMESPACE.concat("select_presellSpecs"), condition,
             PresellSpecs.class);

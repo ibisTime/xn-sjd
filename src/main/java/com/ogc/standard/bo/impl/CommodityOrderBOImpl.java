@@ -40,10 +40,11 @@ public class CommodityOrderBOImpl extends PaginableBOImpl<CommodityOrder>
 
     @Override
     public String saveOrder(String applyUser, String applyNote,
-            String expressType, String updater, String remark) {
+            String expressType, String updater, String remark,
+            String addressCode) {
         CommodityOrder data = new CommodityOrder();
-        String code = OrderNoGenerater.generate(EGeneratePrefix.CommodityOrder
-            .getCode());
+        String code = OrderNoGenerater
+            .generate(EGeneratePrefix.CommodityOrder.getCode());
         data.setCode(code);
         data.setApplyUser(applyUser);
         Date date = new Date();
@@ -51,6 +52,7 @@ public class CommodityOrderBOImpl extends PaginableBOImpl<CommodityOrder>
 
         data.setApplyNote(applyNote);
         data.setExpressType(expressType);
+        data.setAddressCode(addressCode);
         data.setStatus(ECommodityOrderStatus.TOPAY.getCode());
         data.setUpdater(updater);
         data.setUpdateDatetime(date);
@@ -73,7 +75,8 @@ public class CommodityOrderBOImpl extends PaginableBOImpl<CommodityOrder>
     }
 
     @Override
-    public void refreshCancel(CommodityOrder data, String updater, String remark) {
+    public void refreshCancel(CommodityOrder data, String updater,
+            String remark) {
         data.setStatus(ECommodityOrderStatus.CANCEL.getCode());
         data.setUpdater(updater);
         data.setUpdateDatetime(new Date());
@@ -112,8 +115,8 @@ public class CommodityOrderBOImpl extends PaginableBOImpl<CommodityOrder>
         condition.setPayGroup(payGroup);
         List<CommodityOrder> list = commodityOrderDAO.selectList(condition);
         if (list.isEmpty()) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "根据"
-                    + payGroup + "查询订单不存在");
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "根据" + payGroup + "查询订单不存在");
         }
         return list.get(0);
     }

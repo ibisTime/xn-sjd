@@ -8,6 +8,7 @@
  */
 package com.ogc.standard.domain;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -83,6 +84,15 @@ public class Commodity extends ABaseDO {
 
     // 规格列表
     private List<CommoditySpecs> specsList;
+
+    // 产品最小价格
+    private BigDecimal minPrice;
+
+    // 产品最大价格
+    private BigDecimal maxPrice;
+
+    // 店铺名称
+    private String shopName;
 
     public List<CommoditySpecs> getSpecsList() {
         return specsList;
@@ -234,6 +244,30 @@ public class Commodity extends ABaseDO {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public BigDecimal getMinPrice() {
+        return minPrice;
+    }
+
+    public void setMinPrice(BigDecimal minPrice) {
+        this.minPrice = minPrice;
+    }
+
+    public BigDecimal getMaxPrice() {
+        return maxPrice;
+    }
+
+    public void setMaxPrice(BigDecimal maxPrice) {
+        this.maxPrice = maxPrice;
+    }
+
+    public String getShopName() {
+        return shopName;
+    }
+
+    public void setShopName(String shopName) {
+        this.shopName = shopName;
     }
 
 }

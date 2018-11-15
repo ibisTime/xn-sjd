@@ -22,14 +22,16 @@ import com.ogc.standard.domain.CommodityOrder;
 public interface ICommodityOrderBO extends IPaginableBO<CommodityOrder> {
 
     public String saveOrder(String applyUser, String applyNote,
-            String expressType, String updater, String remark);
+            String expressType, String updater, String remark,
+            String addressCode);
 
     public void refreshPay(CommodityOrder data, BigDecimal payAmount,
             String updater, String remark);
 
     public void refreshPayGroup(CommodityOrder data, String payType);
 
-    public void refreshCancel(CommodityOrder data, String updater, String remark);
+    public void refreshCancel(CommodityOrder data, String updater,
+            String remark);
 
     public List<CommodityOrder> queryOrderList(CommodityOrder condition);
 

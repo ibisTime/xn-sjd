@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.ICommodityOrderDetailAO;
 import com.ogc.standard.bo.IAccountBO;
+import com.ogc.standard.bo.IAddressBO;
 import com.ogc.standard.bo.ICommodityBO;
 import com.ogc.standard.bo.ICommodityOrderBO;
 import com.ogc.standard.bo.ICommodityOrderDetailBO;
@@ -28,6 +30,7 @@ import com.ogc.standard.bo.ISYSConfigBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.common.SysConstants;
+import com.ogc.standard.domain.Address;
 import com.ogc.standard.domain.Commodity;
 import com.ogc.standard.domain.CommodityOrder;
 import com.ogc.standard.domain.CommodityOrderDetail;
@@ -70,6 +73,9 @@ public class CommodityOrderDetailAOImpl implements ICommodityOrderDetailAO {
     @Autowired
     private ICommodityBO commodityBO;
 
+    @Autowired
+    private IAddressBO addressBO;
+
     @Override
     @Transactional
     public void delive(String orderCode, String shopCode,
@@ -108,8 +114,8 @@ public class CommodityOrderDetailAOImpl implements ICommodityOrderDetailAO {
             .queryDetailList(condition);
         for (CommodityOrderDetail detail : shopList) {
             // 状态判断
-            if (!ECommodityOrderDetailStatus.TORECEIVE.getCode().equals(
-                detail.getStatus())) {
+            if (!ECommodityOrderDetailStatus.TORECEIVE.getCode()
+                .equals(detail.getStatus())) {
                 throw new BizException("xn0000", "该订单不处于可收货的状态");
             }
             // 状态更新
@@ -123,23 +129,6 @@ public class CommodityOrderDetailAOImpl implements ICommodityOrderDetailAO {
     }
 
     @Override
-    public Paginable<CommodityOrderDetail> queryDetailPage(int start,
-            int limit, CommodityOrderDetail condition) {
-        return commodityOrderDetailBO.getPaginable(start, limit, condition);
-    }
-
-    @Override
-    public List<CommodityOrderDetail> queryDetailList(
-            CommodityOrderDetail condition) {
-        return commodityOrderDetailBO.queryDetailList(condition);
-    }
-
-    @Override
-    public CommodityOrderDetail getCommodityOrderDetail(String code) {
-        return commodityOrderDetailBO.getCommodityOrderDetail(code);
-    }
-
-    @Override
     public void payDetail(CommodityOrderDetail data, String applyUser,
             String orderCode) {
         accountBO.transAmount(applyUser, ESysUser.SYS_USER.getCode(),
@@ -147,7 +136,6 @@ public class CommodityOrderDetailAOImpl implements ICommodityOrderDetailAO {
             EJourBizTypeUser.BUY.getCode(), EJourBizTypePlat.BUY.getCode(),
             EJourBizTypeUser.BUY.getValue(), EJourBizTypePlat.BUY.getValue(),
             orderCode);
-
     }
 
     @Override
@@ -170,15 +158,60 @@ public class CommodityOrderDetailAOImpl implements ICommodityOrderDetailAO {
         logger.info("***************开始扫描待收货订单***************");
         CommodityOrderDetail condition = new CommodityOrderDetail();
         condition.setStatus(ECommodityOrderDetailStatus.TORECEIVE.getCode());
-        condition.setDeliverDatetimeEnd(DateUtil.getRelativeDateOfDays(
-            new Date(), -15));
+        condition.setDeliverDatetimeEnd(
+            DateUtil.getRelativeDateOfDays(new Date(), -15));
         List<CommodityOrderDetail> detailList = commodityOrderDetailBO
             .queryDetailList(condition);
         for (CommodityOrderDetail detail : detailList) {
             commodityOrderDetailBO.refreshReceive(detail);
         }
         logger.info("***************结束扫描待收货订单***************");
-
     }
 
+    @Override
+    public Paginable<CommodityOrderDetail> queryDetailPage(int start, int limit,
+            CommodityOrderDetail condition) {
+        Paginable<CommodityOrderDetail> page = commodityOrderDetailBO
+            .getPaginable(start, limit, condition);
+
+        if (null != page && CollectionUtils.isNotEmpty(page.getList())) {
+            for (CommodityOrderDetail commodityOrderDetail : page.getList()) {
+                init(commodityOrderDetail);
+            }
+        }
+
+        return page;
+    }
+
+    @Override
+    public List<CommodityOrderDetail> queryDetailList(
+            CommodityOrderDetail condition) {
+        List<CommodityOrderDetail> list = commodityOrderDetailBO
+            .queryDetailList(condition);
+
+        if (CollectionUtils.isNotEmpty(list)) {
+            for (CommodityOrderDetail commodityOrderDetail : list) {
+                init(commodityOrderDetail);
+            }
+        }
+
+        return list;
+    }
+
+    @Override
+    public CommodityOrderDetail getCommodityOrderDetail(String code) {
+        CommodityOrderDetail commodityOrderDetail = commodityOrderDetailBO
+            .getCommodityOrderDetail(code);
+
+        init(commodityOrderDetail);
+
+        return commodityOrderDetail;
+    }
+
+    private void init(CommodityOrderDetail commodityOrderDetail) {
+        // 收货地址
+        Address address = addressBO
+            .getAddress(commodityOrderDetail.getAddressCode());
+        commodityOrderDetail.setAddress(address);
+    }
 }

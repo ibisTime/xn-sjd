@@ -1,5 +1,7 @@
 package com.ogc.standard.dto.req;
 
+import java.util.List;
+
 /**
  * 列表查询产品分类
  * @author: silver 
@@ -27,6 +29,9 @@ public class XN629007Req extends AListReq {
 
     // 状态(0下架/1上架)
     private String status;
+
+    // 类型列表
+    private List<String> typeList;
 
     public String getParentCode() {
         return parentCode;
@@ -74,6 +79,14 @@ public class XN629007Req extends AListReq {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public List<String> getTypeList() {
+        return typeList;
+    }
+
+    public void setTypeList(List<String> typeList) {
+        this.typeList = typeList;
     }
 
 }

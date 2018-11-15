@@ -79,6 +79,15 @@ public class PresellLogisticsBOImpl extends PaginableBOImpl<PresellLogistics>
     }
 
     @Override
+    public void deleteByOriginalGroup(String originalGroupCode) {
+        PresellLogistics data = new PresellLogistics();
+
+        data.setOriginalGroupCode(originalGroupCode);
+
+        presellLogisticsDAO.deleteByOriginalGroup(data);
+    }
+
+    @Override
     public List<PresellLogistics> queryUnDelivedByOriginal(
             String originalGroupCode) {
         PresellLogistics condition = new PresellLogistics();

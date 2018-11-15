@@ -26,6 +26,7 @@ import com.ogc.standard.bo.ISmsBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.DateUtil;
+import com.ogc.standard.common.PhoneUtil;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.DeriveGroup;
 import com.ogc.standard.domain.GroupOrder;
@@ -256,22 +257,18 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
         // 定向
         if (EPresellType.DIRECT.getCode().equals(deriveGroup.getType())) {
 
-            // 认领寄售
-            deriveGroupBO.refreshClaimDirect(deriveGroup.getCode());
-
             // 生成新的资产
             originalGroupBO.saveOriginalGroup(data,
                 deriveGroup.getProductCode(), data.getApplyUser(),
                 data.getPrice(), data.getQuantity());
 
+            // 认领寄售
+            deriveGroupBO.refreshClaimDirect(deriveGroup.getCode());
+
         }
 
         // 二维码
         if (EPresellType.QR.getCode().equals(deriveGroup.getType())) {
-
-            // 认领寄售
-            deriveGroupBO.refreshClaimQr(deriveGroup.getCode(),
-                deriveGroup.getClaimant());
 
             // 生成新的资产
             String originalGroupCode = originalGroupBO.saveOriginalGroup(data,
@@ -293,10 +290,51 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
                         EGroupType.ORIGINAL_GROUP.getCode(), originalGroupCode);
                 }
             }
+
+            // 认领寄售
+            deriveGroupBO.refreshClaimQr(deriveGroup.getCode(),
+                deriveGroup.getClaimant());
+
         }
 
         // 挂单
         if (EPresellType.PUBLIC.getCode().equals(deriveGroup.getType())) {
+
+            // 生成新的资产
+            String originalGroupCode = originalGroupBO.saveOriginalGroup(data,
+                deriveGroup.getProductCode(), data.getApplyUser(),
+                data.getPrice(), data.getQuantity());
+
+            // 分配预售权
+            int presellInventoryQuantity = 0;
+            List<PresellInventory> presellInventorieList = presellInventoryBO
+                .queryPresellInventoryListByGroup(originalGroup.getCode());
+
+            if (CollectionUtils.isNotEmpty(presellInventorieList)) {
+                for (PresellInventory presellInventory : presellInventorieList) {
+                    if (++presellInventoryQuantity > data.getQuantity()) {
+                        break;
+                    }
+
+                    presellInventoryBO.refreshGroup(presellInventory.getCode(),
+                        EGroupType.ORIGINAL_GROUP.getCode(), originalGroupCode);
+                }
+            }
+
+            // 更新波动
+            DeriveGroup newest = deriveGroupBO
+                .getNewestByVariety(deriveGroup.getVariety());
+            Double wave = 0d;
+            if (null != newest) {
+                Double newestPrice = newest.getPrice().doubleValue();
+                if (newestPrice > 0) {
+                    wave = (data.getPrice().doubleValue() - newestPrice)
+                            / newestPrice;
+                    wave = new BigDecimal(wave)
+                        .setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                }
+            }
+            deriveGroupBO.refreshWave(deriveGroup.getCode(), wave);
 
             // 认领寄售
             String status = EDeriveGroupStatus.TO_CLAIM.getCode();
@@ -306,26 +344,6 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
             deriveGroupBO.refreshClaimPublic(deriveGroup.getCode(),
                 deriveGroup.getClaimant(), deriveGroup.getQuantity(), status);
 
-            // 生成新的资产
-            String originalGroupCode = originalGroupBO.saveOriginalGroup(data,
-                deriveGroup.getProductCode(), data.getApplyUser(),
-                data.getPrice(), data.getQuantity());
-
-            // 分配预售权
-            int presellInventoryQuantity = 0;
-            List<PresellInventory> presellInventorieList = presellInventoryBO
-                .queryPresellInventoryListByGroup(originalGroup.getCode());
-
-            if (CollectionUtils.isNotEmpty(presellInventorieList)) {
-                for (PresellInventory presellInventory : presellInventorieList) {
-                    if (++presellInventoryQuantity > data.getQuantity()) {
-                        break;
-                    }
-
-                    presellInventoryBO.refreshGroup(presellInventory.getCode(),
-                        EGroupType.ORIGINAL_GROUP.getCode(), originalGroupCode);
-                }
-            }
         }
 
         // 更新寄售数量
@@ -438,12 +456,19 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
         User applyUser = userBO.getUserUnCheck(groupOrder.getApplyUser());
         String applyUserName = null;
         if (null != applyUser) {
-            applyUserName = applyUser.getMobile();
+            applyUserName = PhoneUtil.hideMobile(applyUser.getMobile());
             if (null != applyUser.getNickname()) {
-                applyUserName = applyUser.getNickname();
+                applyUserName = applyUser.getNickname() + applyUserName;
             }
         }
         groupOrder.setApplyUserName(applyUserName);
+
+        // 转让类型
+        DeriveGroup deriveGroup = deriveGroupBO
+            .getDeriveGroup(groupOrder.getGroupCode());
+        if (null != deriveGroup) {
+            groupOrder.setPresellType(deriveGroup.getType());
+        }
     }
 
 }

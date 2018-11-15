@@ -39,6 +39,13 @@
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
 			</if>
+			
+			<if test="typeList != null and typeList != '' ">
+                AND t.type in
+                <foreach item="item" index="index" collection="typeList" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
 		</trim>
 	</sql>
 	

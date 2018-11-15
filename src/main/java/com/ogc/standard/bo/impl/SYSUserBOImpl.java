@@ -27,8 +27,8 @@ import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
 
 @Component
-public class SYSUserBOImpl extends PaginableBOImpl<SYSUser> implements
-        ISYSUserBO {
+public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
+        implements ISYSUserBO {
 
     @Autowired
     private ISYSUserDAO sysUserDAO;
@@ -67,6 +67,8 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser> implements
             data.setRoleCode(ERoleCode.OWNER.getCode());
         } else if (ESYSUserKind.MAINTAIN.getCode().equals(req.getKind())) {
             data.setRoleCode(ERoleCode.MAINTAIN.getCode());
+        } else if (ESYSUserKind.BUSINESS.getCode().equals(req.getKind())) {
+            data.setRoleCode(ERoleCode.BUSINESS.getCode());
         } else {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(), "用户类型不支持");
         }
@@ -175,8 +177,8 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser> implements
                     "系统用户不存在");
             }
             if (ESYSUserStatus.Li_Locked.getCode().equals(data.getStatus())
-                    || ESYSUserStatus.Ren_Locked.getCode().equals(
-                        data.getStatus())) {
+                    || ESYSUserStatus.Ren_Locked.getCode()
+                        .equals(data.getStatus())) {
                 throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                     "用户已被锁定，请联系管理员");
             }
@@ -199,7 +201,8 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser> implements
     // 密码检查
     @Override
     public void checkLoginPwd(String userId, String loginPwd) {
-        if (StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(loginPwd)) {
+        if (StringUtils.isNotBlank(userId)
+                && StringUtils.isNotBlank(loginPwd)) {
             SYSUser condition = new SYSUser();
             condition.setUserId(userId);
             condition.setLoginPwd(MD5Util.md5(loginPwd));
@@ -239,7 +242,8 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser> implements
 
     @Override
     public void refreshTradePwd(String userId, String tradePwd) {
-        if (StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(tradePwd)) {
+        if (StringUtils.isNotBlank(userId)
+                && StringUtils.isNotBlank(tradePwd)) {
             SYSUser data = new SYSUser();
             data.setUserId(userId);
             data.setTradePwd(MD5Util.md5(tradePwd));
@@ -250,7 +254,8 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser> implements
 
     @Override
     public void checkTradePwd(String userId, String tradePwd) {
-        if (StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(tradePwd)) {
+        if (StringUtils.isNotBlank(userId)
+                && StringUtils.isNotBlank(tradePwd)) {
             SYSUser sysUser = getSYSUser(userId);
             if (StringUtils.isBlank(sysUser.getTradePwdStrength())) {
                 throw new BizException("jd00001", "请您先设置支付密码！");
@@ -357,7 +362,8 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser> implements
     }
 
     @Override
-    public long getTotalCount(Date createDatetimeStart, Date createDatetimeEnd) {
+    public long getTotalCount(Date createDatetimeStart,
+            Date createDatetimeEnd) {
         SYSUser condition = new SYSUser();
         condition.setCreateDatetimeStart(createDatetimeStart);
         condition.setCreateDatetimeEnd(createDatetimeEnd);

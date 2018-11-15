@@ -18,6 +18,9 @@ public interface IPresellLogisticsBO extends IPaginableBO<PresellLogistics> {
     // 收货
     public void refreshConfirmReceive(String code);
 
+    // 删除组下的物流单
+    public void deleteByOriginalGroup(String originalGroupCode);
+
     // 根据原生组查物流单
     public List<PresellLogistics> queryUnDelivedByOriginal(
             String originalGroupCode);

@@ -25,6 +25,8 @@
 		<result column="longitude" property="longitude" />
 		<result column="latitude" property="latitude" />
 		<result column="single_output" property="singleOutput" />
+		<result column="output_unit" property="outputUnit" />
+		<result column="pack_weight" property="packWeight" />
 		<result column="pack_unit" property="packUnit" />
 		
 		<result column="tree_count" property="treeCount" />
@@ -100,6 +102,8 @@
 		,t.longitude
 		,t.latitude
 		,t.single_output
+		,t.output_unit
+		,t.pack_weight
 		,t.pack_unit
 		
 		,t.tree_count
@@ -159,6 +163,8 @@
 		,longitude
 		,latitude
 		,single_output
+		,output_unit
+		,pack_weight
 		,pack_unit
 		
 		,tree_count
@@ -199,6 +205,8 @@
 		,#{longitude}
 		,#{latitude}
 		,#{singleOutput}
+		,#{outputUnit}
+		,#{packWeight}
 		,#{packUnit}
 		
 		,#{treeCount}
@@ -241,6 +249,8 @@
 		
 		,latitude = #{latitude}
 		,single_output = #{singleOutput}
+		,output_unit = #{outputUnit}
+		,pack_weight = #{packWeight}
 		,pack_unit = #{packUnit}
 		,tree_count = #{treeCount}
 		

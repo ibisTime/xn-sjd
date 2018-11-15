@@ -5,6 +5,7 @@ import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.ObjValidater;
 import com.ogc.standard.dto.req.XN629422Req;
+import com.ogc.standard.enums.EPayType;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
@@ -23,8 +24,14 @@ public class XN629422 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return presellOrderAO.toPayPresellOrder(req.getCode(), req.getPayType(),
-            req.getTradePwd());
+        Object res = presellOrderAO.toPayPresellOrder(req.getCode(),
+            req.getPayType(), req.getTradePwd());
+
+        if (EPayType.YE.getCode().equals(req.getPayType()) && null != res) {
+
+        }
+
+        return res;
     }
 
     @Override

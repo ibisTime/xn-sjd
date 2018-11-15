@@ -9,8 +9,10 @@
 package com.ogc.standard.ao.impl;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,11 +24,14 @@ import com.ogc.standard.bo.ICommodityBO;
 import com.ogc.standard.bo.ICommodityOrderBO;
 import com.ogc.standard.bo.ICommodityOrderDetailBO;
 import com.ogc.standard.bo.ICommoditySpecsBO;
+import com.ogc.standard.bo.ICompanyBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.domain.Address;
 import com.ogc.standard.domain.Cart;
 import com.ogc.standard.domain.Commodity;
 import com.ogc.standard.domain.CommoditySpecs;
+import com.ogc.standard.domain.Company;
+import com.ogc.standard.dto.res.XN629712Res;
 import com.ogc.standard.enums.ECommodityStatus;
 import com.ogc.standard.exception.BizException;
 
@@ -59,36 +64,28 @@ public class CartAOImpl implements ICartAO {
     @Autowired
     private ICommodityOrderDetailBO commodityOrderDetailBO;
 
+    @Autowired
+    private ICompanyBO companyBO;
+
     @Override
     public String addToCart(String userId, String commodityCode,
-            String commodityName, Long specsId, String specsName, Long quantity) {
-        userBO.getUser(userId);
-        Long specsQuantity = commoditySpecsBO.getInventory(specsId);
-        if (specsQuantity < quantity) {
+            String commodityName, Long specsId, String specsName,
+            Long quantity) {
+        CommoditySpecs commoditySpecs = commoditySpecsBO
+            .getCommoditySpecs(specsId);
+        if (commoditySpecs.getInventory() < quantity) {
             throw new BizException("xn0000", "库存不足，无法添加购物车");
         }
         Commodity commodity = commodityBO.getCommodity(commodityCode);
         if (!ECommodityStatus.ON.getCode().equals(commodity.getStatus())) {
             throw new BizException("xn0000", "商品未上架无法添加购物车");
         }
-        return cartBO.saveCart(userId, commodityCode, commodityName, specsId,
-            specsName, quantity);
-    }
 
-    @Override
-    public void dropCartList(List<String> codeList) {
-        cartBO.removeCartList(codeList);
-    }
+        BigDecimal amount = commoditySpecs.getPrice()
+            .multiply(new BigDecimal(quantity));
 
-    @Override
-    public List<Cart> queryMyCart(String userId) {
-        userBO.getUser(userId);
-        return cartBO.queryCartList(userId);
-    }
-
-    @Override
-    public Cart getCart(String code) {
-        return cartBO.getCart(code);
+        return cartBO.saveCart(commodity.getShopCode(), userId, commodityCode,
+            commodityName, specsId, specsName, quantity, amount);
     }
 
     @Override
@@ -97,9 +94,7 @@ public class CartAOImpl implements ICartAO {
             String expressType, String addressCode, List<String> cartList) {
         // 用户检验
         userBO.getUser(applyUser);
-        // 落地订单
-        String orderCode = commodityOrderBO.saveOrder(applyUser, applyNote,
-            expressType, applyUser, applyNote);
+
         // 地址检验
         Address address = addressBO.getAddress(addressCode);
         if (null == address) {
@@ -108,35 +103,40 @@ public class CartAOImpl implements ICartAO {
         if (!address.getUserId().equals(applyUser)) {
             throw new BizException("xn0000", "该地址不属于你");
         }
+
+        // 落地订单
+        String orderCode = commodityOrderBO.saveOrder(applyUser, applyNote,
+            expressType, applyUser, applyNote, addressCode);
+
         Long quantity = Long.valueOf(0);
         BigDecimal amount = BigDecimal.ZERO;
         for (String code : cartList) {
             // 购物车检验
             Cart cart = cartBO.getCart(code);
 
-            CommoditySpecs specs = commoditySpecsBO.getCommoditySpecs(cart
-                .getSpecsId());
+            CommoditySpecs specs = commoditySpecsBO
+                .getCommoditySpecs(cart.getSpecsId());
 
             // 商品检验
-            Commodity commodity = commodityBO.getCommodity(specs
-                .getCommodityCode());
+            Commodity commodity = commodityBO
+                .getCommodity(specs.getCommodityCode());
             // 库存检验
-            if (cart.getQuantity() > commoditySpecsBO.getInventory(cart
-                .getSpecsId())) {
+            if (cart.getQuantity() > commoditySpecsBO
+                .getInventory(cart.getSpecsId())) {
                 throw new BizException("xn0000", "产品[" + commodity.getName()
                         + "]规格[" + specs.getName() + "]库存不足，不能下单");
             }
             if (!commodityBO.isOnShelf(commodity.getCode())) {
-                throw new BizException("xn0000", "订单中有未上架产品["
-                        + commodity.getName() + "]无法下单");
+                throw new BizException("xn0000",
+                    "订单中有未上架产品[" + commodity.getName() + "]无法下单");
             }
             // 落地单店铺订单
             commodityOrderDetailBO.saveDetail(orderCode,
                 commodity.getShopCode(), commodity.getCode(),
                 commodity.getName(), specs.getId(), specs.getName(),
                 cart.getQuantity(), specs.getPrice(), addressCode);
-            BigDecimal orderAmount = specs.getPrice().multiply(
-                BigDecimal.valueOf(cart.getQuantity()));
+            BigDecimal orderAmount = specs.getPrice()
+                .multiply(BigDecimal.valueOf(cart.getQuantity()));
             // 库存减少
             commoditySpecsBO.inventoryDecrease(specs.getId(),
                 -cart.getQuantity());
@@ -150,4 +150,61 @@ public class CartAOImpl implements ICartAO {
         cartBO.removeCartList(cartList);
         return orderCode;
     }
+
+    @Override
+    public void dropCartList(List<String> codeList) {
+        cartBO.removeCartList(codeList);
+    }
+
+    @Override
+    public void dropByShop(String shopCode) {
+        cartBO.removeByShop(shopCode);
+    }
+
+    @Override
+    public List<XN629712Res> queryMyCart(String userId) {
+        List<XN629712Res> resList = new ArrayList<XN629712Res>();
+
+        List<Cart> shopCartList = cartBO.quertMyShopList(userId);
+
+        if (CollectionUtils.isNotEmpty(shopCartList)) {
+            for (Cart shopCart : shopCartList) {
+                Company shop = companyBO.getCompany(shopCart.getShopCode());
+
+                List<Cart> cartList = cartBO
+                    .queryCartListByShop(shopCart.getShopCode());
+
+                if (CollectionUtils.isNotEmpty(cartList)) {
+                    for (Cart cart : cartList) {
+                        Commodity commodity = commodityBO
+                            .getCommodity(cart.getCommodityCode());
+                        cart.setCommodityPhoto(commodity.getListPic());
+                    }
+                }
+
+                XN629712Res res = new XN629712Res(shop.getCode(),
+                    shop.getName(), cartList);
+
+                resList.add(res);
+            }
+        }
+
+        return resList;
+    }
+
+    @Override
+    public Cart getCart(String code) {
+        Cart cart = cartBO.getCart(code);
+
+        init(cart);
+
+        return cart;
+    }
+
+    private void init(Cart cart) {
+        // 店铺名称
+        Company shop = companyBO.getCompany(cart.getShopCode());
+        cart.setShopName(shop.getName());
+    }
+
 }

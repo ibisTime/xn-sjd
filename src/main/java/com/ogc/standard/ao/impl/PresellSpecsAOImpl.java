@@ -36,15 +36,28 @@ public class PresellSpecsAOImpl implements IPresellSpecsAO {
 
             if (null != page && CollectionUtils.isNotEmpty(page.getList())) {
                 for (PresellSpecs presellSpecs : page.getList()) {
-                    if (null != presellSpecs.getIncrease()) {
-                        BigDecimal price = presellSpecs.getPrice();
-                        price = price.multiply(new BigDecimal(
-                            presellSpecs.getIncrease() * 0.01 + 1));
+                    if (null != presellSpecs.getIncrease()
+                            && null != presellSpecs.getIntervalHours()) {
 
-                        presellSpecsBO.refreshPresellSpecsPrice(
-                            presellSpecs.getCode(), price);
+                        // 到间隔时间后涨价，否则更新间隔时间
+                        if (presellSpecs.getNowInterval() + 1 >= presellSpecs
+                            .getIntervalHours()) {
+                            BigDecimal price = presellSpecs.getPrice();
+                            price = price.multiply(new BigDecimal(
+                                presellSpecs.getIncrease() * 0.01 + 1));
+
+                            presellSpecsBO.refreshPresellSpecsPrice(
+                                presellSpecs.getCode(), price);
+
+                            presellSpecsBO
+                                .refreshNowInterval(presellSpecs.getCode(), 0);
+                        } else {
+                            presellSpecsBO.refreshNowInterval(
+                                presellSpecs.getCode(),
+                                presellSpecs.getNowInterval() + 1);
+                        }
+
                     }
-
                 }
             } else {
                 break;

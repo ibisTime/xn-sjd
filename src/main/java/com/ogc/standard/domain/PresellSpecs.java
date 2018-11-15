@@ -29,8 +29,14 @@ public class PresellSpecs extends ABaseDO {
     // 价格
     private BigDecimal price;
 
-    // 每小时涨幅
+    // 涨幅
     private Double increase;
+
+    // 间隔时间
+    private Integer intervalHours;
+
+    // 当前间隔
+    private Integer nowInterval;
 
     /*****************DB Properties*******************/
     // 最小涨幅
@@ -90,6 +96,22 @@ public class PresellSpecs extends ABaseDO {
 
     public void setMinIncrease(Double minIncrease) {
         this.minIncrease = minIncrease;
+    }
+
+    public Integer getIntervalHours() {
+        return intervalHours;
+    }
+
+    public void setIntervalHours(Integer intervalHours) {
+        this.intervalHours = intervalHours;
+    }
+
+    public Integer getNowInterval() {
+        return nowInterval;
+    }
+
+    public void setNowInterval(Integer nowInterval) {
+        this.nowInterval = nowInterval;
     }
 
 }

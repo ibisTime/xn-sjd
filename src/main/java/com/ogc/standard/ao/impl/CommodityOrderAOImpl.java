@@ -30,19 +30,28 @@ import com.ogc.standard.bo.ICommodityOrderBO;
 import com.ogc.standard.bo.ICommodityOrderDetailBO;
 import com.ogc.standard.bo.ICommoditySpecsBO;
 import com.ogc.standard.bo.ICompanyBO;
+import com.ogc.standard.bo.IDistributionOrderBO;
+import com.ogc.standard.bo.IJourBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.DateUtil;
+import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.Address;
 import com.ogc.standard.domain.Commodity;
 import com.ogc.standard.domain.CommodityOrder;
 import com.ogc.standard.domain.CommodityOrderDetail;
 import com.ogc.standard.domain.CommodityShopOrder;
 import com.ogc.standard.domain.CommoditySpecs;
+import com.ogc.standard.domain.Company;
+import com.ogc.standard.domain.Jour;
 import com.ogc.standard.dto.req.XN629721Req;
 import com.ogc.standard.dto.res.BooleanRes;
 import com.ogc.standard.dto.res.PayOrderRes;
+import com.ogc.standard.dto.res.XN629048Res;
+import com.ogc.standard.enums.EAccountType;
+import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECommodityOrderStatus;
+import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EJourBizTypeUser;
 import com.ogc.standard.enums.EPayType;
 import com.ogc.standard.enums.ESysUser;
@@ -82,28 +91,33 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
     private ICompanyBO companyBO;
 
     @Autowired
-    private IAccountBO accountBO;
-
-    @Autowired
     private IAlipayBO alipayBO;
 
     @Autowired
     private IAddressBO addressBO;
 
+    @Autowired
+    private IJourBO jourBO;
+
+    @Autowired
+    private IAccountBO accountBO;
+
+    @Autowired
+    private IDistributionOrderBO distributionOrderBO;
+
     @Override
     @Transactional
     public String addOrder(String applyUser, String applyNote,
-            String expressType, Long specsId, Long quantity, String addressCode) {
+            String expressType, Long specsId, Long quantity,
+            String addressCode) {
         // 用户检验
         userBO.getUser(applyUser);
 
-        // 落地订单数据（多店铺）
-        String orderCode = commodityOrderBO.saveOrder(applyUser, applyNote,
-            expressType, applyUser, applyNote);
         // 规格检验
         CommoditySpecs specs = commoditySpecsBO.getCommoditySpecs(specsId);
         Commodity commodity = commodityBO
             .getCommodity(specs.getCommodityCode());
+
         // 地址检验
         Address address = addressBO.getAddress(addressCode);
         if (null == address) {
@@ -112,15 +126,22 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
         if (!address.getUserId().equals(applyUser)) {
             throw new BizException("xn0000", "该地址不属于你");
         }
+
+        // 落地订单数据（多店铺）
+        String orderCode = commodityOrderBO.saveOrder(applyUser, applyNote,
+            expressType, applyUser, applyNote, addressCode);
+
         // 落地单店铺订单
         commodityOrderDetailBO.saveDetail(orderCode, commodity.getShopCode(),
             commodity.getCode(), commodity.getName(), specsId, specs.getName(),
             quantity, specs.getPrice(), addressCode);
+
         // 库存减少
         commoditySpecsBO.inventoryDecrease(specsId, -quantity);
+
         // 加上数量与总价
-        BigDecimal amount = specs.getPrice().multiply(
-            BigDecimal.valueOf(quantity));
+        BigDecimal amount = specs.getPrice()
+            .multiply(BigDecimal.valueOf(quantity));
         commodityOrderBO.refreshAmount(quantity, amount, orderCode);
         return orderCode;
     }
@@ -144,11 +165,11 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
 
             String signOrder = alipayBO.getSignedOrder(order.getApplyUser(),
                 ESysUser.SYS_USER.getCode(), order.getPayGroup(),
-                EJourBizTypeUser.BUY.getCode(),
-                EJourBizTypeUser.BUY.getValue(), order.getPayAmount());
+                EJourBizTypeUser.BUY.getCode(), EJourBizTypeUser.BUY.getValue(),
+                order.getPayAmount());
             result = new PayOrderRes(signOrder);
         } else if (EPayType.YE.getCode().equals(req.getPayType())) {
-            //支付密码确认
+            // 支付密码确认
             userBO.checkTradePwd(req.getUpdater(), req.getTradePwd());
             result = payByBalance(order);
             commodityOrderBO.refreshPay(order, order.getAmount(),
@@ -196,6 +217,20 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
     }
 
     @Override
+    public XN629048Res getOrderDkAmount(String code) {
+        CommodityOrder commodityOrder = commodityOrderBO
+            .getCommodityOrder(code);
+        if (!ECommodityOrderStatus.TOPAY.getCode()
+            .equals(commodityOrder.getStatus())) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "当前订单不是待支付状态");
+        }
+        return distributionOrderBO.getOrderDeductAmount(
+            commodityOrder.getAmount(), commodityOrder.getApplyUser(),
+            EBoolean.YES.getCode());
+    }
+
+    @Override
     public Paginable<CommodityOrder> queryOrderPage(int start, int limit,
             CommodityOrder condition) {
         Paginable<CommodityOrder> page = commodityOrderBO.getPaginable(start,
@@ -233,8 +268,8 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
         for (CommodityOrderDetail detail : dataList) {
             commodityOrderDetailAO.distribution(detail, data.getCode());
         }
-        commodityOrderBO
-            .refreshPay(data, data.getAmount(), "alipay", "支付宝支付成功");
+        commodityOrderBO.refreshPay(data, data.getAmount(), "alipay",
+            "支付宝支付成功");
     }
 
     public void timeoutCancel() {
@@ -242,8 +277,8 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
         CommodityOrder condition = new CommodityOrder();
         condition.setStatus(ECommodityOrderStatus.TOPAY.getCode());
         // 一天内未支付订单
-        condition.setApplyDatetimeEnd(DateUtil.getRelativeDateOfHour(
-            new Date(), (double) -24));
+        condition.setApplyDatetimeEnd(
+            DateUtil.getRelativeDateOfHour(new Date(), (double) -24));
         List<CommodityOrder> orderList = commodityOrderBO
             .queryOrderList(condition);
         if (CollectionUtils.isNotEmpty(orderList)) {
@@ -271,6 +306,7 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
         // 获得明细列表
         List<CommodityOrderDetail> detailList = commodityOrderDetailBO
             .queryOrderDetail(order.getCode());
+
         // 获得所包含的店铺编号
         List<String> shopCodes = new ArrayList<String>();
         for (CommodityOrderDetail detail : detailList) {
@@ -279,6 +315,7 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
             }
         }
         List<CommodityShopOrder> shopOrders = new ArrayList<CommodityShopOrder>();
+
         // 分配店铺订单
         for (String shopCode : shopCodes) {
             CommodityOrderDetail condition = new CommodityOrderDetail();
@@ -294,5 +331,26 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
             shopOrders.add(shopOrder);
         }
         order.setShopOrderList(shopOrders);
+
+        // 卖家
+        StringBuilder sellersName = new StringBuilder();
+        for (String shopCode : shopCodes) {
+            Company shop = companyBO.getCompany(shopCode);
+            sellersName.append(shop.getName()).append(".");
+        }
+        order.setSellersName(sellersName.toString());
+
+        // 支付流水编号
+        Account userCnyAccount = accountBO
+            .getAccountByUser(order.getApplyUser(), ECurrency.CNY.getCode());
+        List<Jour> jourList = jourBO.queryJour(order.getCode(),
+            userCnyAccount.getAccountNumber(), EAccountType.CUSTOMER.getCode());
+        if (CollectionUtils.isNotEmpty(jourList)) {
+            order.setJourCode(jourList.get(0).getCode());
+        }
+
+        // 地址
+        Address address = addressBO.getAddress(order.getAddressCode());
+        order.setAddress(address);
     }
 }

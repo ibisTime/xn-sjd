@@ -8,7 +8,7 @@ package com.ogc.standard.enums;
  */
 public enum EProductType {
 
-    NORMAL("0", "正常产品"), YS("1", "预售产品");
+    NORMAL("0", "认养产品"), YS("1", "预售产品"), SP("2", "商城商品");
 
     EProductType(String code, String value) {
         this.code = code;

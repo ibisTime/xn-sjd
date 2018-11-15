@@ -24,8 +24,6 @@ public class CommodityOrder extends ABaseDO {
 
     private static final long serialVersionUID = 8572770333835172098L;
 
-    // ****************DB*****************
-
     // 编号
     private String code;
 
@@ -62,6 +60,9 @@ public class CommodityOrder extends ABaseDO {
     // 支付金额
     private BigDecimal payAmount;
 
+    // 地址编号
+    private String addressCode;
+
     // 状态
     private String status;
 
@@ -85,6 +86,15 @@ public class CommodityOrder extends ABaseDO {
     private List<CommodityOrderDetail> detailList;
 
     private List<CommodityShopOrder> shopOrderList;
+
+    // 支付流水
+    private String jourCode;
+
+    // 卖家
+    private String sellersName;
+
+    // 地址
+    private Address address;
 
     public List<CommodityShopOrder> getShopOrderList() {
         return shopOrderList;
@@ -244,6 +254,38 @@ public class CommodityOrder extends ABaseDO {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getJourCode() {
+        return jourCode;
+    }
+
+    public void setJourCode(String jourCode) {
+        this.jourCode = jourCode;
+    }
+
+    public String getSellersName() {
+        return sellersName;
+    }
+
+    public void setSellersName(String sellersName) {
+        this.sellersName = sellersName;
+    }
+
+    public String getAddressCode() {
+        return addressCode;
+    }
+
+    public void setAddressCode(String addressCode) {
+        this.addressCode = addressCode;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
 }

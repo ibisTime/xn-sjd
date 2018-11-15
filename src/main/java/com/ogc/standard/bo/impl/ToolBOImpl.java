@@ -30,6 +30,7 @@ public class ToolBOImpl extends PaginableBOImpl<Tool> implements IToolBO {
             data.setPrice(new BigDecimal(req.getPrice()));
             data.setValidityTerm(Integer.valueOf(req.getValidityTerm()));
 
+            data.setDescription(req.getDescription());
             data.setUpdater(req.getUpdater());
             data.setUpdateDatetime(new Date());
             data.setRemark(req.getRemark());

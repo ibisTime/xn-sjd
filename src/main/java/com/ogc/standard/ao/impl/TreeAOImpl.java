@@ -13,6 +13,7 @@ import com.ogc.standard.ao.ITreeAO;
 import com.ogc.standard.bo.IApplyBindMaintainBO;
 import com.ogc.standard.bo.ICategoryBO;
 import com.ogc.standard.bo.IInteractBO;
+import com.ogc.standard.bo.IPresellProductBO;
 import com.ogc.standard.bo.IProductBO;
 import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.ITreeBO;
@@ -21,6 +22,7 @@ import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.domain.Category;
 import com.ogc.standard.domain.Interact;
+import com.ogc.standard.domain.PresellProduct;
 import com.ogc.standard.domain.Product;
 import com.ogc.standard.domain.SYSUser;
 import com.ogc.standard.domain.Tree;
@@ -30,6 +32,7 @@ import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.enums.EInteractType;
 import com.ogc.standard.enums.EObjectType;
 import com.ogc.standard.enums.EProductType;
+import com.ogc.standard.enums.ESellType;
 import com.ogc.standard.enums.ETreeStatus;
 import com.ogc.standard.exception.BizException;
 
@@ -53,6 +56,9 @@ public class TreeAOImpl implements ITreeAO {
 
     @Autowired
     private ICategoryBO categoryBO;
+
+    @Autowired
+    private IPresellProductBO presellProductBO;
 
     @Override
     public String addTree(XN629030Req req) {
@@ -207,6 +213,13 @@ public class TreeAOImpl implements ITreeAO {
             tree.setSellType(product.getSellType());
 
             categoryCode = product.getCategoryCode();
+        } else if (EProductType.YS.getCode().equals(tree.getProductType())) {
+            PresellProduct presellProduct = presellProductBO
+                .getPresellProduct(tree.getProductCode());
+            tree.setProductName(presellProduct.getName());
+            tree.setSellType(ESellType.PRESELL.getCode());
+
+            categoryCode = presellProduct.getCategoryCode();
         }
 
         // 类型

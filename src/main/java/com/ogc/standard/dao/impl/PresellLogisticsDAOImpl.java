@@ -19,7 +19,12 @@ public class PresellLogisticsDAOImpl extends AMybatisTemplate
 
     @Override
     public int delete(PresellLogistics data) {
-        return super.delete(NAMESPACE.concat("delete_presellLogistics"), data);
+        return super.delete(NAMESPACE.concat(""), data);
+    }
+
+    @Override
+    public int deleteByOriginalGroup(PresellLogistics data) {
+        return super.delete(NAMESPACE.concat("delete_byOriginalGroup"), data);
     }
 
     @Override

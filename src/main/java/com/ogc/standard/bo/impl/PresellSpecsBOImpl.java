@@ -25,7 +25,7 @@ public class PresellSpecsBOImpl extends PaginableBOImpl<PresellSpecs>
 
     @Override
     public String savePresellSpecs(String productCode, String name,
-            String packCount, String price, String increase) {
+            String packCount, String price, String increase, String interval) {
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.PRESELL_SPECS.getCode());
         PresellSpecs data = new PresellSpecs();
@@ -37,6 +37,7 @@ public class PresellSpecsBOImpl extends PaginableBOImpl<PresellSpecs>
         data.setPrice(new BigDecimal(price));
 
         data.setIncrease(StringValidater.toDouble(increase));
+        data.setIntervalHours(StringValidater.toInteger(interval));
         presellSpecsDAO.insert(data);
         return code;
     }
@@ -62,6 +63,14 @@ public class PresellSpecsBOImpl extends PaginableBOImpl<PresellSpecs>
         condition.setCode(code);
         condition.setPrice(price);
         presellSpecsDAO.updatePrice(condition);
+    }
+
+    @Override
+    public void refreshNowInterval(String code, Integer nowInterval) {
+        PresellSpecs condition = new PresellSpecs();
+        condition.setCode(code);
+        condition.setNowInterval(nowInterval);
+        presellSpecsDAO.updateNowInterval(condition);
     }
 
     @Override

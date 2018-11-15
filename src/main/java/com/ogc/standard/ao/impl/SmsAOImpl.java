@@ -23,6 +23,7 @@ import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.ISmsBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
+import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.domain.Read;
 import com.ogc.standard.domain.SYSUser;
@@ -64,6 +65,8 @@ public class SmsAOImpl implements ISmsAO {
         data.setType(req.getType());
         data.setObject(req.getObject());
 
+        data.setPublishDatetime(DateUtil.strToDate(req.getPublishDatetime(),
+            DateUtil.DATA_TIME_PATTERN_1));
         data.setUpdater(req.getUpdater());
         data.setStatus(ESmsStauts.DRAFT.getCode());
         data.setCode(OrderNoGenerater.generate(EGeneratePrefix.XX.getCode()));
@@ -80,6 +83,8 @@ public class SmsAOImpl implements ISmsAO {
         data.setType(req.getType());
         data.setObject(req.getObject());
 
+        data.setPublishDatetime(DateUtil.strToDate(req.getPublishDatetime(),
+            DateUtil.DATA_TIME_PATTERN_1));
         data.setUpdater(req.getUpdater());
         data.setStatus(ESmsStauts.SENDED.getCode());
         // code是否为空

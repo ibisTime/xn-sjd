@@ -63,7 +63,7 @@ public class CarbonBubbleOrderAOImpl implements ICarbonBubbleOrderAO {
         condition.setStatus(ECarbonBubbleOrderStatus.TO_TAKE.getCode());
         condition.setInvalidDatetimeEnd(DateUtil.getHourStart());
 
-        Integer start = 0;
+        Integer start = 1;
         Integer limit = 10;
 
         while (true) {

@@ -128,3 +128,23 @@ CHANGE COLUMN `description` `description` TEXT NULL DEFAULT NULL COMMENT '简介
 
 ALTER TABLE `tys_original_group` 
 ADD COLUMN `deliver_datetime` DATETIME NULL COMMENT '发货时间' AFTER `adopt_end_datetime`;
+
+#V2.0.0 1-5
+ALTER TABLE `tys_presell_specs` 
+ADD COLUMN `interval_hours` INT NULL DEFAULT 1 COMMENT '时间间隔' AFTER `increase`,
+ADD COLUMN `now_interval` INT NULL DEFAULT 0 COMMENT '当前间隔' AFTER `interval_hours`;
+
+ALTER TABLE `tsc_cart` 
+ADD COLUMN `amount` DECIMAL(18,8) NULL COMMENT '金额' AFTER `quantity`;
+
+ALTER TABLE `tstd_sms` 
+ADD COLUMN `publish_datetime` DATETIME NULL COMMENT '发布时间' AFTER `content`;
+
+ALTER TABLE `tsc_cart` 
+ADD COLUMN `shop_code` VARCHAR(32) NULL COMMENT '店铺编号' AFTER `code`;
+
+ALTER TABLE `tys_presell_product` 
+ADD COLUMN `output_unit` VARCHAR(32) NULL COMMENT '产量单位' AFTER `single_output`;
+
+ALTER TABLE `tys_presell_product` 
+ADD COLUMN `pack_weight` INT NULL AFTER `output_unit`;

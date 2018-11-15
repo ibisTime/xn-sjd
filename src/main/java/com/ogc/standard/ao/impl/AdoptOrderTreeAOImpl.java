@@ -202,7 +202,7 @@ public class AdoptOrderTreeAOImpl implements IAdoptOrderTreeAO {
         AdoptOrderTree condition = new AdoptOrderTree();
         condition.setStatus(EAdoptOrderTreeStatus.ADOPT.getCode());
 
-        Integer start = 0;
+        Integer start = 1;
         Integer limit = 10;
 
         while (true) {

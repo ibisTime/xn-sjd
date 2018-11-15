@@ -30,6 +30,10 @@ public class XN629502Req extends BaseReq {
     @NotBlank
     private String validityTerm;
 
+    // 描述
+    @NotBlank
+    private String description;
+
     // 必填，更新人
     @NotBlank
     private String updater;
@@ -91,6 +95,14 @@ public class XN629502Req extends BaseReq {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
 }

@@ -21,8 +21,8 @@ public interface ICompanyBO extends IPaginableBO<Company> {
 
     public void refreshCompany(XN730073Req req);
 
-    public int refreshCompanyInfo(Company company, String certificateTemplate,
-            String contractTemplate);
+    public int refreshCompanyInfo(Company company, String bussinessLicense,
+            String certificateTemplate, String contractTemplate);
 
     public List<Company> queryCompanyList(Company condition);
 

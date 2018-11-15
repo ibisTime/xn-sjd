@@ -8,6 +8,7 @@
  */
 package com.ogc.standard.bo.impl;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,17 +34,22 @@ public class CartBOImpl extends PaginableBOImpl<Cart> implements ICartBO {
     private ICartDAO cartDAO;
 
     @Override
-    public String saveCart(String userId, String commodityCode,
-            String commodityName, Long specsId, String specsName, Long quantity) {
+    public String saveCart(String shopCode, String userId, String commodityCode,
+            String commodityName, Long specsId, String specsName, Long quantity,
+            BigDecimal amount) {
         Cart data = new Cart();
         String code = OrderNoGenerater.generate(EGeneratePrefix.cart.getCode());
+
         data.setCode(code);
+        data.setShopCode(shopCode);
         data.setUserId(userId);
         data.setCommodityCode(commodityCode);
         data.setCommodityName(commodityName);
+
         data.setSpecsId(specsId);
         data.setSpecsName(specsName);
         data.setQuantity(quantity);
+        data.setAmount(amount);
         cartDAO.insert(data);
         return code;
     }
@@ -58,10 +64,31 @@ public class CartBOImpl extends PaginableBOImpl<Cart> implements ICartBO {
     }
 
     @Override
-    public List<Cart> queryCartList(String userId) {
+    public void removeByShop(String shopCode) {
+        Cart data = new Cart();
+        data.setShopCode(shopCode);
+        cartDAO.deleteByShop(data);
+    }
+
+    @Override
+    public List<Cart> queryCartListByUser(String userId) {
         Cart condition = new Cart();
         condition.setUserId(userId);
         return cartDAO.selectList(condition);
+    }
+
+    @Override
+    public List<Cart> queryCartListByShop(String shopCode) {
+        Cart condition = new Cart();
+        condition.setShopCode(shopCode);
+        return cartDAO.selectList(condition);
+    }
+
+    @Override
+    public List<Cart> quertMyShopList(String userId) {
+        Cart condition = new Cart();
+        condition.setUserId(userId);
+        return cartDAO.selectShopList(condition);
     }
 
     @Override

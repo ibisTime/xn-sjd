@@ -26,6 +26,9 @@ public interface IDeriveGroupDAO extends IBaseDAO<DeriveGroup> {
     // 更新数量
     public int updateQuantity(DeriveGroup data);
 
+    // 更新波动
+    public int updateWave(DeriveGroup data);
+
     // 查询品种
     public List<DeriveGroup> selectVarietyList(DeriveGroup data);
 

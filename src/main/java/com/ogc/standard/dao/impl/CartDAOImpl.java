@@ -35,6 +35,11 @@ public class CartDAOImpl extends AMybatisTemplate implements ICartDAO {
     }
 
     @Override
+    public int deleteByShop(Cart cart) {
+        return super.delete(NAMESPACE.concat("delete_byShop"), cart);
+    }
+
+    @Override
     public Cart select(Cart condition) {
         return super.select(NAMESPACE.concat("select_cart"), condition,
             Cart.class);
@@ -56,6 +61,12 @@ public class CartDAOImpl extends AMybatisTemplate implements ICartDAO {
     public List<Cart> selectList(Cart condition, int start, int count) {
         return super.selectList(NAMESPACE.concat("select_cart"), start, count,
             condition, Cart.class);
+    }
+
+    @Override
+    public List<Cart> selectShopList(Cart cart) {
+        return super.selectList(NAMESPACE.concat("select_distinctShop"), cart,
+            Cart.class);
     }
 
 }

@@ -144,8 +144,9 @@ public class CompanyBOImpl extends PaginableBOImpl<Company>
     }
 
     @Override
-    public int refreshCompanyInfo(Company data, String certificateTemplate,
-            String contractTemplate) {
+    public int refreshCompanyInfo(Company data, String bussinessLicense,
+            String certificateTemplate, String contractTemplate) {
+        data.setBussinessLicense(bussinessLicense);
         data.setCertificateTemplate(certificateTemplate);
         data.setContractTemplate(contractTemplate);
         data.setUpdater(data.getUserId());

@@ -39,6 +39,9 @@ public interface IDeriveGroupBO extends IPaginableBO<DeriveGroup> {
     // 更新数量
     public void refreshQuantity(String code, Integer quantity);
 
+    // 更新波动
+    public void refreshWave(String code, Double wave);
+
     // 我发布的寄售
     public List<DeriveGroup> queryDeriveGroupListByCreater(String creater,
             String status);
