@@ -56,6 +56,9 @@ public class Cart extends ABaseDO {
     // 商品图片
     private String commodityPhoto;
 
+    // 物流方式
+    private String logistics;
+
     public String getCode() {
         return code;
     }
@@ -142,6 +145,14 @@ public class Cart extends ABaseDO {
 
     public void setCommodityPhoto(String commodityPhoto) {
         this.commodityPhoto = commodityPhoto;
+    }
+
+    public String getLogistics() {
+        return logistics;
+    }
+
+    public void setLogistics(String logistics) {
+        this.logistics = logistics;
     }
 
 }

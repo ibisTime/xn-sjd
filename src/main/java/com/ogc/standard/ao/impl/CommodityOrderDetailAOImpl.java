@@ -26,17 +26,20 @@ import com.ogc.standard.bo.ICommodityBO;
 import com.ogc.standard.bo.ICommodityOrderBO;
 import com.ogc.standard.bo.ICommodityOrderDetailBO;
 import com.ogc.standard.bo.ICompanyBO;
+import com.ogc.standard.bo.IJourBO;
 import com.ogc.standard.bo.ISYSConfigBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.common.SysConstants;
+import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.Address;
 import com.ogc.standard.domain.Commodity;
 import com.ogc.standard.domain.CommodityOrder;
 import com.ogc.standard.domain.CommodityOrderDetail;
 import com.ogc.standard.domain.Company;
+import com.ogc.standard.domain.Jour;
+import com.ogc.standard.enums.EAccountType;
 import com.ogc.standard.enums.ECommodityOrderDetailStatus;
-import com.ogc.standard.enums.ECommodityOrderStatus;
 import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EJourBizTypeBusiness;
 import com.ogc.standard.enums.EJourBizTypePlat;
@@ -76,56 +79,44 @@ public class CommodityOrderDetailAOImpl implements ICommodityOrderDetailAO {
     @Autowired
     private IAddressBO addressBO;
 
+    @Autowired
+    private IJourBO jourBO;
+
     @Override
     @Transactional
-    public void delive(String orderCode, String shopCode,
-            String logisticsCompany, String logisticsNumber, String deliver) {
-        // 订单状态判断
-        CommodityOrder order = commodityOrderBO.getCommodityOrder(orderCode);
-        if (!ECommodityOrderStatus.PAIED.getCode().equals(order.getStatus())) {
-            throw new BizException("xn0000", "订单还未付款不能发货");
+    public void delive(String code, String logisticsCompany,
+            String logisticsNumber, String deliver) {
+        CommodityOrderDetail commodityOrderDetail = commodityOrderDetailBO
+            .getCommodityOrderDetail(code);
+        if (!ECommodityOrderDetailStatus.TODELIVE.getCode()
+            .equals(commodityOrderDetail.getStatus())) {
+            throw new BizException("xn0000", "订单未处于可发货状态");
         }
-        // 取一个订单中同一家店铺的商品，一起发货
-        CommodityOrderDetail condition = new CommodityOrderDetail();
-        condition.setOrderCode(orderCode);
-        condition.setShopCode(shopCode);
-        List<CommodityOrderDetail> shopList = commodityOrderDetailBO
-            .queryDetailList(condition);
-        for (CommodityOrderDetail detail : shopList) {
-            // 落地数据
-            commodityOrderDetailBO.refershDelive(detail, logisticsCompany,
-                logisticsNumber, deliver);
 
-        }
+        commodityOrderDetailBO.refershDelive(commodityOrderDetail,
+            logisticsCompany, logisticsNumber, deliver);
+
     }
 
     @Override
     @Transactional
-    public void receive(String code, String receiver, String shopCode) {
-        // 权限确认
-        CommodityOrder order = commodityOrderBO.getCommodityOrder(code);
-        if (!order.getApplyUser().equals(receiver)) {
-            throw new BizException("xn0000", "不是你的订单你不能确认收货");
+    public void receive(String code, String receiver) {
+        CommodityOrderDetail detail = commodityOrderDetailBO
+            .getCommodityOrderDetail(code);
+
+        // 状态判断
+        if (!ECommodityOrderDetailStatus.TORECEIVE.getCode()
+            .equals(detail.getStatus())) {
+            throw new BizException("xn0000", "该订单不处于可收货的状态");
         }
-        CommodityOrderDetail condition = new CommodityOrderDetail();
-        condition.setOrderCode(code);
-        condition.setShopCode(shopCode);
-        List<CommodityOrderDetail> shopList = commodityOrderDetailBO
-            .queryDetailList(condition);
-        for (CommodityOrderDetail detail : shopList) {
-            // 状态判断
-            if (!ECommodityOrderDetailStatus.TORECEIVE.getCode()
-                .equals(detail.getStatus())) {
-                throw new BizException("xn0000", "该订单不处于可收货的状态");
-            }
-            // 状态更新
-            commodityOrderDetailBO.refreshReceive(detail);
-            // 月销量更新
-            Commodity data = commodityBO
-                .getCommodity(detail.getCommodityCode());
-            commodityBO.refreshMonthSellCount(data,
-                detail.getQuantity() + data.getMonthSellCount());
-        }
+
+        // 状态更新
+        commodityOrderDetailBO.refreshReceive(detail);
+
+        // 月销量更新
+        Commodity data = commodityBO.getCommodity(detail.getCommodityCode());
+        commodityBO.refreshMonthSellCount(data,
+            detail.getQuantity() + data.getMonthSellCount());
     }
 
     @Override
@@ -213,5 +204,29 @@ public class CommodityOrderDetailAOImpl implements ICommodityOrderDetailAO {
         Address address = addressBO
             .getAddress(commodityOrderDetail.getAddressCode());
         commodityOrderDetail.setAddress(address);
+
+        // 店铺名称
+        Company shop = companyBO.getCompany(commodityOrderDetail.getShopCode());
+        commodityOrderDetail.setShopName(shop.getName());
+
+        // 卖家
+        commodityOrderDetail.setSellerName(shop.getName());
+
+        // 支付流水编号
+        CommodityOrder commodityOrder = commodityOrderBO
+            .getCommodityOrder(commodityOrderDetail.getOrderCode());
+        Account userCnyAccount = accountBO.getAccountByUser(
+            commodityOrder.getApplyUser(), ECurrency.CNY.getCode());
+        List<Jour> jourList = jourBO.queryJour(commodityOrder.getCode(),
+            userCnyAccount.getAccountNumber(), EAccountType.CUSTOMER.getCode());
+        if (CollectionUtils.isNotEmpty(jourList)) {
+            commodityOrderDetail.setJourCode(jourList.get(0).getCode());
+        }
+
+        // 物流方式
+        Commodity commodity = commodityBO
+            .getCommodity(commodityOrderDetail.getCommodityCode());
+        commodityOrderDetail.setLogistics(commodity.getLogistics());
+
     }
 }

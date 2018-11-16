@@ -8,6 +8,8 @@
  */
 package com.ogc.standard.api.impl;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.ogc.standard.ao.ICommodityOrderDetailAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
@@ -40,8 +42,16 @@ public class XN629735 extends AProcessor {
         condition.setCommodityCode(req.getCommodityCode());
         condition.setSpecsId(StringValidater.toLong(req.getSpecsId()));
         condition.setStatus(req.getStatus());
+        condition.setApplyUser(req.getApplyUser());
+
+        String column = req.getOrderColumn();
+        if (StringUtils.isBlank(column)) {
+            column = ICommodityOrderDetailAO.DEFAULT_ORDER_COLUMN;
+        }
+        condition.setOrder(column, req.getOrderDir());
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
+
         return commodityOrderDetailAO.queryDetailPage(start, limit, condition);
     }
 

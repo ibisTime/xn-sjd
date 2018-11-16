@@ -46,6 +46,9 @@ public class CommodityOrderDetail extends ABaseDO {
     // 规格名称
     private String specsName;
 
+    // 下单人
+    private String applyUser;
+
     // 数量
     private Long quantity;
 
@@ -85,6 +88,9 @@ public class CommodityOrderDetail extends ABaseDO {
     // 状态
     private String status;
 
+    // 更新时间
+    private Date updateDatetime;
+
     // ****************DB*****************
 
     // 发货时间起
@@ -98,6 +104,18 @@ public class CommodityOrderDetail extends ABaseDO {
 
     // 地址
     private Address address;
+
+    // 店铺名称
+    private String shopName;
+
+    // 卖家
+    private String sellerName;
+
+    // 流水号
+    private String jourCode;
+
+    // 物流方式
+    private String logistics;
 
     public Date getDeliverDatetimeStart() {
         return deliverDatetimeStart;
@@ -289,6 +307,54 @@ public class CommodityOrderDetail extends ABaseDO {
 
     public void setAddress(Address address) {
         this.address = address;
+    }
+
+    public String getShopName() {
+        return shopName;
+    }
+
+    public void setShopName(String shopName) {
+        this.shopName = shopName;
+    }
+
+    public String getSellerName() {
+        return sellerName;
+    }
+
+    public void setSellerName(String sellerName) {
+        this.sellerName = sellerName;
+    }
+
+    public String getJourCode() {
+        return jourCode;
+    }
+
+    public void setJourCode(String jourCode) {
+        this.jourCode = jourCode;
+    }
+
+    public String getApplyUser() {
+        return applyUser;
+    }
+
+    public void setApplyUser(String applyUser) {
+        this.applyUser = applyUser;
+    }
+
+    public String getLogistics() {
+        return logistics;
+    }
+
+    public void setLogistics(String logistics) {
+        this.logistics = logistics;
+    }
+
+    public Date getUpdateDatetime() {
+        return updateDatetime;
+    }
+
+    public void setUpdateDatetime(Date updateDatetime) {
+        this.updateDatetime = updateDatetime;
     }
 
 }

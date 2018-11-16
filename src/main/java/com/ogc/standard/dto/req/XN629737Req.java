@@ -13,7 +13,9 @@ package com.ogc.standard.dto.req;
  * @since: 2018年11月7日 上午11:25:23 
  * @history:
  */
-public class XN629737Req {
+public class XN629737Req extends AListReq {
+
+    private static final long serialVersionUID = -8309630322641660133L;
 
     private String orderCode;
 

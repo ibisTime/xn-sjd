@@ -16,9 +16,12 @@ import com.ogc.standard.domain.CommodityOrderDetail;
  * @since: 2018年11月6日 下午1:36:45 
  * @history:
  */
-public interface ICommodityOrderDetailDAO extends
-        IBaseDAO<CommodityOrderDetail> {
+public interface ICommodityOrderDetailDAO
+        extends IBaseDAO<CommodityOrderDetail> {
     String NAMESPACE = ICommodityOrderDetailDAO.class.getName().concat(".");
+
+    // 支付成功
+    public int updatePay(CommodityOrderDetail data);
 
     public int updateDelive(CommodityOrderDetail data);
 

@@ -17,11 +17,9 @@ import org.hibernate.validator.constraints.NotBlank;
  */
 public class XN629730Req {
 
+    // 订单编号
     @NotBlank
-    private String orderCode;
-
-    @NotBlank
-    private String shopCode;
+    private String code;
 
     @NotBlank
     private String logisticsCompany;
@@ -32,20 +30,12 @@ public class XN629730Req {
     @NotBlank
     private String deliver;
 
-    public String getOrderCode() {
-        return orderCode;
+    public String getCode() {
+        return code;
     }
 
-    public void setOrderCode(String orderCode) {
-        this.orderCode = orderCode;
-    }
-
-    public String getShopCode() {
-        return shopCode;
-    }
-
-    public void setShopCode(String shopCode) {
-        this.shopCode = shopCode;
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getLogisticsCompany() {

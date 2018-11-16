@@ -133,7 +133,7 @@ public class CartAOImpl implements ICartAO {
             // 落地单店铺订单
             commodityOrderDetailBO.saveDetail(orderCode,
                 commodity.getShopCode(), commodity.getCode(),
-                commodity.getName(), specs.getId(), specs.getName(),
+                commodity.getName(), specs.getId(), specs.getName(), applyUser,
                 cart.getQuantity(), specs.getPrice(), addressCode);
             BigDecimal orderAmount = specs.getPrice()
                 .multiply(BigDecimal.valueOf(cart.getQuantity()));
@@ -179,6 +179,8 @@ public class CartAOImpl implements ICartAO {
                         Commodity commodity = commodityBO
                             .getCommodity(cart.getCommodityCode());
                         cart.setCommodityPhoto(commodity.getListPic());
+
+                        cart.setLogistics(commodity.getLogistics());
                     }
                 }
 

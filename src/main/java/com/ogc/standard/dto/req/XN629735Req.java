@@ -27,6 +27,9 @@ public class XN629735Req extends APageReq {
 
     private String status;
 
+    // 下单人
+    private String applyUser;
+
     public String getOrderCode() {
         return orderCode;
     }
@@ -65,6 +68,14 @@ public class XN629735Req extends APageReq {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getApplyUser() {
+        return applyUser;
+    }
+
+    public void setApplyUser(String applyUser) {
+        this.applyUser = applyUser;
     }
 
 }

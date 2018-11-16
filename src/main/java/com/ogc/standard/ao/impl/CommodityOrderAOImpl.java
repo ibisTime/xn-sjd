@@ -134,7 +134,7 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
         // 落地单店铺订单
         commodityOrderDetailBO.saveDetail(orderCode, commodity.getShopCode(),
             commodity.getCode(), commodity.getName(), specsId, specs.getName(),
-            quantity, specs.getPrice(), addressCode);
+            applyUser, quantity, specs.getPrice(), addressCode);
 
         // 库存减少
         commoditySpecsBO.inventoryDecrease(specsId, -quantity);
@@ -190,6 +190,9 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
             // 支付
             commodityOrderDetailAO.payDetail(detail, data.getApplyUser(),
                 data.getCode());
+
+            commodityOrderDetailBO.refreshPay(detail.getCode());
+
             // 分销
             commodityOrderDetailAO.distribution(detail, data.getCode());
         }

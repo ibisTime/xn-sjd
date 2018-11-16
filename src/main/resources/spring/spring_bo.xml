@@ -265,4 +265,8 @@
 		<property name="paginableDAO" ref="groupOrderDAOImpl"/>
 	</bean>
 	
+	<bean id="afterSaleBO" class="com.ogc.standard.bo.impl.AfterSaleBOImpl">
+		<property name="paginableDAO" ref="afterSaleDAOImpl"/>
+	</bean>
+	
 </beans>

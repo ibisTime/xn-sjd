@@ -22,8 +22,8 @@ import com.ogc.standard.domain.CommodityOrderDetail;
  * @history:
  */
 @Repository("commodityOrderDetailDAOImpl")
-public class CommodityOrderDetailDAOImpl extends AMybatisTemplate implements
-        ICommodityOrderDetailDAO {
+public class CommodityOrderDetailDAOImpl extends AMybatisTemplate
+        implements ICommodityOrderDetailDAO {
 
     @Override
     public int insert(CommodityOrderDetail data) {
@@ -49,18 +49,24 @@ public class CommodityOrderDetailDAOImpl extends AMybatisTemplate implements
     }
 
     @Override
-    public List<CommodityOrderDetail> selectList(CommodityOrderDetail condition) {
+    public List<CommodityOrderDetail> selectList(
+            CommodityOrderDetail condition) {
         return super.selectList(
             NAMESPACE.concat("select_commodity_order_detail"), condition,
             CommodityOrderDetail.class);
     }
 
     @Override
-    public List<CommodityOrderDetail> selectList(
-            CommodityOrderDetail condition, int start, int count) {
+    public List<CommodityOrderDetail> selectList(CommodityOrderDetail condition,
+            int start, int count) {
         return super.selectList(
             NAMESPACE.concat("select_commodity_order_detail"), start, count,
             condition, CommodityOrderDetail.class);
+    }
+
+    @Override
+    public int updatePay(CommodityOrderDetail data) {
+        return super.update(NAMESPACE.concat("update_pay"), data);
     }
 
     @Override

@@ -442,7 +442,7 @@ CREATE TABLE `tstd_sms` (
   `type` varchar(4) DEFAULT NULL COMMENT '消息类型（系统公告，短信内容）',
   `object` varchar(4) DEFAULT NULL COMMENT '对象类型(C:C端用户/O:产权方/M:养护方/A:代理商/P:平台方)',
   `title` varchar(255) DEFAULT NULL COMMENT '标题',
-  `content` varchar(255) DEFAULT NULL COMMENT '内容',
+  `content` TEXT NULL DEFAULT NULL COMMENT '内容',
   `publish_datetime` datetime DEFAULT NULL COMMENT '发布时间',
   `status` varchar(4) DEFAULT NULL COMMENT '状态 0-草稿 1-已发送 2-已回撤',
   `create_datetime` datetime DEFAULT NULL COMMENT '创建时间',
@@ -1267,6 +1267,7 @@ CREATE TABLE `tsc_commodity_order_detail` (
   `commodity_name` varchar(64) DEFAULT NULL COMMENT '商品名称',
   `specs_id` bigint(11) NOT NULL COMMENT '规格编号',
   `specs_name` varchar(64) DEFAULT NULL COMMENT '规格名称',
+  `apply_user` varchar(32) DEFAULT NULL COMMENT '下单人',
   `quantity` bigint(20) NOT NULL COMMENT '数量',
   `price` decimal(64,0) NOT NULL COMMENT '单价',
   `amount` decimal(64,0) DEFAULT NULL COMMENT '总价',
@@ -1279,6 +1280,7 @@ CREATE TABLE `tsc_commodity_order_detail` (
   `receiver` varchar(32) DEFAULT NULL COMMENT '收货人',
   `receiver_mobile` varchar(32) DEFAULT NULL COMMENT '收货人手机号',
   `receiver_datetime` datetime DEFAULT NULL COMMENT '收货时间',
+  `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
   `status` varchar(4) NOT NULL COMMENT '状态（0 待发货，1 已发货待收货，2 已完成）',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单明细';

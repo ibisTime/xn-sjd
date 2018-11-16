@@ -19,13 +19,16 @@ import com.ogc.standard.domain.CommodityOrderDetail;
  * @since: 2018年11月6日 下午2:14:15 
  * @history:
  */
-public interface ICommodityOrderDetailBO extends
-        IPaginableBO<CommodityOrderDetail> {
+public interface ICommodityOrderDetailBO
+        extends IPaginableBO<CommodityOrderDetail> {
 
     public String saveDetail(String commodityOrderCode, String shopCode,
             String commodityCode, String commodityName, Long specsId,
-            String specsName, Long quantity, BigDecimal price,
+            String specsName, String applyUser, Long quantity, BigDecimal price,
             String addressCode);
+
+    // 支付成功
+    public void refreshPay(String code);
 
     public void refershDelive(CommodityOrderDetail data,
             String logisticsCompany, String logisticsNumber, String deliver);

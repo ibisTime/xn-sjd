@@ -74,11 +74,9 @@ public class XN629401Req extends BaseReq {
     private String town;
 
     // 经度
-    @NotBlank
     private String longitude;
 
     // 维度
-    @NotBlank
     private String latitude;
 
     // 单颗树产量

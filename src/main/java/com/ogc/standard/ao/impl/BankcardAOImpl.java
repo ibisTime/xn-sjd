@@ -38,8 +38,10 @@ public class BankcardAOImpl implements IBankcardAO {
     @Override
     public String addBankcard(XN802020Req req) {
         // 验证短信验证码
-        smsOutBO.checkCaptcha(req.getBindMobile(), req.getSmsCaptcha(),
-            "802020");
+        if (StringUtils.isNotBlank(req.getSmsCaptcha())) {
+            smsOutBO.checkCaptcha(req.getBindMobile(), req.getSmsCaptcha(),
+                "802020");
+        }
 
         Bankcard data = new Bankcard();
         data.setSystemCode(req.getSystemCode());

@@ -19,14 +19,15 @@ import com.ogc.standard.domain.CommodityOrderDetail;
  * @history:
  */
 public interface ICommodityOrderDetailAO {
+    static final String DEFAULT_ORDER_COLUMN = "code";
 
-    public void delive(String orderCode, String shopCode,
-            String logisticsCompany, String logisticsNumber, String deliver);
+    public void delive(String code, String logisticsCompany,
+            String logisticsNumber, String deliver);
 
-    public void receive(String code, String receiver, String shopCode);
+    public void receive(String code, String receiver);
 
-    public Paginable<CommodityOrderDetail> queryDetailPage(int start,
-            int limit, CommodityOrderDetail condition);
+    public Paginable<CommodityOrderDetail> queryDetailPage(int start, int limit,
+            CommodityOrderDetail condition);
 
     public List<CommodityOrderDetail> queryDetailList(
             CommodityOrderDetail condition);

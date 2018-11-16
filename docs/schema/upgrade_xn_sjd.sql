@@ -148,3 +148,13 @@ ADD COLUMN `output_unit` VARCHAR(32) NULL COMMENT '产量单位' AFTER `single_o
 
 ALTER TABLE `tys_presell_product` 
 ADD COLUMN `pack_weight` INT NULL AFTER `output_unit`;
+
+ALTER TABLE `tsc_commodity_order_detail` 
+ADD COLUMN `apply_user` VARCHAR(32) NULL COMMENT '下单人' AFTER `specs_name`;
+
+ALTER TABLE `tstd_sms` 
+CHANGE COLUMN `content` `content` TEXT NULL DEFAULT NULL COMMENT '内容' ;
+
+ALTER TABLE `tsc_commodity_order_detail` 
+ADD COLUMN `update_datetime` DATETIME NULL COMMENT '更新时间' AFTER `receiver_datetime`;
+

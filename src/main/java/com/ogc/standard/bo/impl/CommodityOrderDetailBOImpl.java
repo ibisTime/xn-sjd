@@ -32,9 +32,9 @@ import com.ogc.standard.exception.BizException;
  * @history:
  */
 @Component
-public class CommodityOrderDetailBOImpl extends
-        PaginableBOImpl<CommodityOrderDetail> implements
-        ICommodityOrderDetailBO {
+public class CommodityOrderDetailBOImpl
+        extends PaginableBOImpl<CommodityOrderDetail>
+        implements ICommodityOrderDetailBO {
 
     @Autowired
     private ICommodityOrderDetailDAO commodityOrderDetailDAO;
@@ -48,7 +48,7 @@ public class CommodityOrderDetailBOImpl extends
     @Override
     public String saveDetail(String commodityOrderCode, String shopCode,
             String commodityCode, String commodityName, Long specsId,
-            String specsName, Long quantity, BigDecimal price,
+            String specsName, String applyUser, Long quantity, BigDecimal price,
             String addressCode) {
         CommodityOrderDetail data = new CommodityOrderDetail();
         String code = OrderNoGenerater
@@ -58,20 +58,37 @@ public class CommodityOrderDetailBOImpl extends
         data.setShopCode(shopCode);
         data.setCommodityCode(commodityCode);
         data.setCommodityName(commodityName);
+
         data.setSpecsId(specsId);
         data.setSpecsName(specsName);
+        data.setApplyUser(applyUser);
         data.setQuantity(quantity);
         data.setPrice(price);
         BigDecimal amount = price.multiply(BigDecimal.valueOf(quantity));
+
         data.setAmount(amount);
         String listPic = commodityBO.getCommodity(commodityCode).getListPic();
         data.setListPic(listPic);
-        data.setStatus(ECommodityOrderDetailStatus.TODELIVE.getCode());
+        data.setStatus(ECommodityOrderDetailStatus.TO_PAY.getCode());
         data.setAddressCode(addressCode);
         data.setReceiver(addressBO.getAddress(addressCode).getUserId());
         data.setReceiverMobile(addressBO.getAddress(addressCode).getMobile());
+        data.setUpdateDatetime(new Date());
+
         commodityOrderDetailDAO.insert(data);
         return code;
+    }
+
+    @Override
+    public void refreshPay(String code) {
+        CommodityOrderDetail commodityOrderDetail = new CommodityOrderDetail();
+
+        commodityOrderDetail.setCode(code);
+        commodityOrderDetail
+            .setStatus(ECommodityOrderDetailStatus.TODELIVE.getCode());
+        commodityOrderDetail.setUpdateDatetime(new Date());
+
+        commodityOrderDetailDAO.updatePay(commodityOrderDetail);
     }
 
     @Override
@@ -81,6 +98,7 @@ public class CommodityOrderDetailBOImpl extends
         data.setLogisticsNumber(logisticsNumber);
         data.setDeliver(deliver);
         data.setDeliverDatetime(new Date());
+        data.setUpdateDatetime(new Date());
         data.setStatus(ECommodityOrderDetailStatus.TORECEIVE.getCode());
         commodityOrderDetailDAO.updateDelive(data);
     }
@@ -88,7 +106,8 @@ public class CommodityOrderDetailBOImpl extends
     @Override
     public void refreshReceive(CommodityOrderDetail data) {
         data.setReceiverDatetime(new Date());
-        data.setStatus(ECommodityOrderDetailStatus.FINISH.getCode());
+        data.setUpdateDatetime(new Date());
+        data.setStatus(ECommodityOrderDetailStatus.TO_COMMENT.getCode());
         commodityOrderDetailDAO.updateReceive(data);
     }
 

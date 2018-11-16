@@ -11,6 +11,7 @@
 		
 		<result column="specs_id" property="specsId" />
 		<result column="specs_name" property="specsName" />
+		<result column="apply_user" property="applyUser" />
 		<result column="quantity" property="quantity" />
 		<result column="price" property="price" />
 		<result column="amount" property="amount" />
@@ -25,6 +26,7 @@
 		<result column="receiver" property="receiver" />
 		<result column="receiver_mobile" property="receiverMobile" />
 		<result column="receiver_datetime" property="receiverDatetime" />
+		<result column="update_datetime" property="updateDatetime" />
 		<result column="status" property="status" />
 	</resultMap>
 	
@@ -41,6 +43,9 @@
 			</if>
 			<if test="specsId != null and specsId != '' ">
 				AND t.specs_id = #{specsId}
+			</if>
+			<if test="applyUser != null and applyUser != '' ">
+				AND t.apply_user = #{applyUser}
 			</if>
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
@@ -67,20 +72,26 @@
 		,t.shop_code
 		,t.commodity_code
 		,t.commodity_name
+		
 		,t.specs_id
 		,t.specs_name
+		,t.apply_user
 		,t.quantity
 		,t.price
+		
 		,t.amount
 		,t.list_pic
 		,t.logistics_company
 		,t.logistics_number
 		,t.deliver
+		
 		,t.deliver_datetime
 		,t.address_code
 		,t.receiver
 		,t.receiver_mobile
 		,t.receiver_datetime
+		
+		,t.update_datetime
 		,t.status
 		FROM
 		tsc_commodity_order_detail t
@@ -98,8 +109,6 @@
 		<include refid="where_condition" />
 	</select>
 	
-
-	
 	<insert id="insert_commodity_order_detail" parameterType="commodityOrderDetail">
 		INSERT INTO tsc_commodity_order_detail(
 		code
@@ -107,13 +116,17 @@
 		,shop_code
 		,commodity_code
 		,commodity_name
+		
 		,specs_id
 		,specs_name
 		,quantity
+		,apply_user
 		,price
+		
 		,amount
 		,list_pic
 		,address_code
+		,update_datetime
 		,status
 		)
 		VALUES
@@ -123,16 +136,29 @@
 		,#{shopCode}
 		,#{commodityCode}
 		,#{commodityName}
+		
 		,#{specsId}
 		,#{specsName}
 		,#{quantity}
+		,#{applyUser}
 		,#{price}
+		
 		,#{amount}
 		,#{listPic}
 		,#{addressCode}
+		,#{updateDatetime}
 		,#{status}
 		)
 	</insert>
+	
+	<update id="update_pay" parameterType="commodityOrderDetail">
+		UPDATE tsc_commodity_order_detail
+		SET
+		status=#{status}
+		,update_datetime=#{updateDatetime}
+		WHERE
+		code=#{code}
+	</update>
 	
 	<update id="update_delive" parameterType="commodityOrderDetail">
 		UPDATE tsc_commodity_order_detail
@@ -144,6 +170,7 @@
 		,receiver=#{receiver}
 		,receiver_mobile=#{receiverMobile}
 		,status=#{status}
+		,update_datetime=#{updateDatetime}
 		WHERE
 		code=#{code}
 	</update>
@@ -153,6 +180,7 @@
 		SET
 		receiver_datetime=#{receiverDatetime}
 		,status=#{status}
+		,update_datetime={updateDatetime}
 		WHERE
 		code=#{code}
 	</update>
