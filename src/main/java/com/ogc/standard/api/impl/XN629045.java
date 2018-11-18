@@ -35,16 +35,22 @@ public class XN629045 extends AProcessor {
         condition.setProductSpecsName(req.getProductSpecsName());
         condition.setApplyUser(req.getUserId());
         condition.setStatus(req.getStatus());
+
         condition.setStatusList(req.getStatusList());
         condition.setSettleStatus(req.getSettleStatus());
-        condition.setStartDatetimeStart(DateUtil.getFrontDate(
-            req.getStartDatetimeStart(), false));
-        condition.setStartDatetimeEnd(DateUtil.getFrontDate(
-            req.getStartDatetimeEnd(), true));
-        condition.setEndDatetimeStart(DateUtil.getFrontDate(
-            req.getEndDatetimeStart(), false));
-        condition.setEndDatetimeEnd(DateUtil.getFrontDate(
-            req.getEndDatetimeEnd(), true));
+        condition.setCode(req.getCode());
+        condition.setApplyUserName(req.getApplyUserName());
+
+        condition.setStartDatetimeStart(
+            DateUtil.getFrontDate(req.getStartDatetimeStart(), false));
+        condition.setStartDatetimeEnd(
+            DateUtil.getFrontDate(req.getStartDatetimeEnd(), true));
+        condition.setEndDatetimeStart(
+            DateUtil.getFrontDate(req.getEndDatetimeStart(), false));
+        condition.setEndDatetimeEnd(
+            DateUtil.getFrontDate(req.getEndDatetimeEnd(), true));
+
+        condition.setExistsSettle(req.getExistsSettle());
 
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {

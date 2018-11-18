@@ -20,6 +20,9 @@ public interface IPresellOrderDAO extends IBaseDAO<PresellOrder> {
     // 支付回调成功
     public int updatePaySuccess(PresellOrder data);
 
+    // 结算
+    public int updateSettleStatus(PresellOrder data);
+
     // 根据产品查订单
     public List<PresellOrder> selectListByProduct(PresellOrder condition);
 

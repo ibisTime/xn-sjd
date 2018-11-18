@@ -32,20 +32,21 @@ import com.ogc.standard.exception.BizException;
  * @history:
  */
 @Component
-public class AfterSaleBOImpl extends PaginableBOImpl<AfterSale> implements
-        IAfterSaleBO {
+public class AfterSaleBOImpl extends PaginableBOImpl<AfterSale>
+        implements IAfterSaleBO {
 
     @Autowired
     private IAfterSaleDAO afterSaleDAO;
 
     @Override
-    public String saveAfterSale(String orderDetailCode,
+    public String saveAfterSale(String shopCode, String orderDetailCode,
             String logisticsCompany, String logisticsNumber,
             BigDecimal refundAmount, String deliver) {
         AfterSale data = new AfterSale();
-        String code = OrderNoGenerater.generate(EGeneratePrefix.AfterSale
-            .getCode());
+        String code = OrderNoGenerater
+            .generate(EGeneratePrefix.AfterSale.getCode());
         data.setCode(code);
+        data.setShopCode(shopCode);
         data.setOrderDetailCode(orderDetailCode);
         data.setType(EAfterSaleType.goodsMoney.getCode());
         data.setStatus(EAfterSaleStatus.TOHANDLE.getCode());
@@ -59,12 +60,13 @@ public class AfterSaleBOImpl extends PaginableBOImpl<AfterSale> implements
     }
 
     @Override
-    public String AfterSaleNoGoods(String orderDetailCode,
+    public String AfterSaleNoGoods(String shopCode, String orderDetailCode,
             BigDecimal refundAmount) {
         AfterSale data = new AfterSale();
-        String code = OrderNoGenerater.generate(EGeneratePrefix.AfterSale
-            .getCode());
+        String code = OrderNoGenerater
+            .generate(EGeneratePrefix.AfterSale.getCode());
         data.setCode(code);
+        data.setShopCode(shopCode);
         data.setOrderDetailCode(orderDetailCode);
         data.setType(EAfterSaleType.onlyMoney.getCode());
         data.setStatus(EAfterSaleStatus.TOHANDLE.getCode());

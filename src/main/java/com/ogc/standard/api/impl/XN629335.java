@@ -4,7 +4,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.ogc.standard.ao.IGiveTreeRecordAO;
 import com.ogc.standard.api.AProcessor;
-import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.ObjValidater;
 import com.ogc.standard.core.StringValidater;
@@ -33,8 +32,6 @@ public class XN629335 extends AProcessor {
         condition.setAdoptTreeCode(req.getAdoptTreeCode());
         condition.setUserId(req.getUserId());
         condition.setToUserId(req.getToUserId());
-        condition.setCreateDatetime(DateUtil.strToDate(req.getCreateDatetime(),
-            DateUtil.DATA_TIME_PATTERN_1));
 
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
@@ -44,8 +41,8 @@ public class XN629335 extends AProcessor {
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
 
-        return giveTreeRecordAO
-            .queryGiveTreeRecordPage(start, limit, condition);
+        return giveTreeRecordAO.queryGiveTreeRecordPage(start, limit,
+            condition);
     }
 
     @Override

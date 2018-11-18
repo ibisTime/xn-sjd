@@ -62,6 +62,7 @@ public class CommodityOrderDetailBOImpl
         data.setSpecsId(specsId);
         data.setSpecsName(specsName);
         data.setApplyUser(applyUser);
+        data.setApplyDatetime(new Date());
         data.setQuantity(quantity);
         data.setPrice(price);
         BigDecimal amount = price.multiply(BigDecimal.valueOf(quantity));
@@ -77,6 +78,17 @@ public class CommodityOrderDetailBOImpl
 
         commodityOrderDetailDAO.insert(data);
         return code;
+    }
+
+    @Override
+    public void refreshCancel(CommodityOrderDetail commodityOrderDetail) {
+        if (null != commodityOrderDetail) {
+            commodityOrderDetail
+                .setStatus(ECommodityOrderDetailStatus.CANCLED.getCode());
+            commodityOrderDetail.setUpdateDatetime(new Date());
+            commodityOrderDetailDAO.updateCancelOrder(commodityOrderDetail);
+        }
+
     }
 
     @Override

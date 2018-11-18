@@ -32,8 +32,22 @@
 		<result column="update_datetime" property="updateDatetime" />
 		<result column="remark" property="remark" />
 	</resultMap>
+	
+	<sql id="join_condition">
+		<if test="applyUserName != null and applyUserName != '' ">
+			left join tstd_user tu on t.apply_user = tu.user_id
+		</if>
+	</sql>
+	
+	<sql id="applyUserName_condition">
+		<if test="applyUserName != null and applyUserName != '' ">
+			AND tu.mobile like "%"#{applyUserName}"%" 
+		</if>
+	</sql>
+	
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			AND 1 = 1
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
 			</if>
@@ -87,8 +101,13 @@
 				AND t.pay_code = #{payCode}
 			</if>
 			
+			<if test="existsSettle != null and existsSettle != '' and existsSettle == 1 ">
+				AND EXISTS (SELECT 1 from tsys_settle where ref_code = t.code and ref_type = 1)
+			</if>
+			
 		</trim>
 	</sql>
+	
 	<select id="select_adoptOrder" parameterType="adoptOrder" resultMap="adoptOrder_DB_Result">
 		SELECT
 		t.code
@@ -117,7 +136,9 @@
 		,t.remark
 		FROM
 		try_adopt_order t
+		<include refid="join_condition" />
 		<include refid="where_condition" />
+		<include refid="applyUserName_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
 				t.${order}

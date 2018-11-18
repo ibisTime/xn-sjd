@@ -44,6 +44,11 @@ public class PresellOrderDAOImpl extends AMybatisTemplate
     }
 
     @Override
+    public int updateSettleStatus(PresellOrder data) {
+        return super.update(NAMESPACE.concat("update_settle"), data);
+    }
+
+    @Override
     public PresellOrder select(PresellOrder condition) {
         return super.select(NAMESPACE.concat("select_presellOrder"), condition,
             PresellOrder.class);

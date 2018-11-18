@@ -76,6 +76,7 @@ public class CartAOImpl implements ICartAO {
         if (commoditySpecs.getInventory() < quantity) {
             throw new BizException("xn0000", "库存不足，无法添加购物车");
         }
+
         Commodity commodity = commodityBO.getCommodity(commodityCode);
         if (!ECommodityStatus.ON.getCode().equals(commodity.getStatus())) {
             throw new BizException("xn0000", "商品未上架无法添加购物车");
@@ -84,8 +85,21 @@ public class CartAOImpl implements ICartAO {
         BigDecimal amount = commoditySpecs.getPrice()
             .multiply(new BigDecimal(quantity));
 
-        return cartBO.saveCart(commodity.getShopCode(), userId, commodityCode,
-            commodityName, specsId, specsName, quantity, amount);
+        String cartCode = null;
+
+        List<Cart> cartList = cartBO.getCartByUserSpecs(userId, specsId);
+        if (CollectionUtils.isNotEmpty(cartList)) {
+            Cart cart = cartList.get(0);
+            cartBO.refreshQuantity(cart.getCode(), cart.getQuantity() + 1);
+
+            cartCode = cart.getCode();
+        } else {
+            cartCode = cartBO.saveCart(commodity.getShopCode(), userId,
+                commodityCode, commodityName, specsId, specsName, quantity,
+                amount);
+        }
+
+        return cartCode;
     }
 
     @Override
@@ -172,7 +186,7 @@ public class CartAOImpl implements ICartAO {
                 Company shop = companyBO.getCompany(shopCart.getShopCode());
 
                 List<Cart> cartList = cartBO
-                    .queryCartListByShop(shopCart.getShopCode());
+                    .queryCartListByShopUser(shopCart.getShopCode(), userId);
 
                 if (CollectionUtils.isNotEmpty(cartList)) {
                     for (Cart cart : cartList) {

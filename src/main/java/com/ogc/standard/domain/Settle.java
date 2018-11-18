@@ -81,6 +81,9 @@ public class Settle extends ABaseDO {
     // 预售订单
     private PresellOrder presellOrder;
 
+    // 代理用户
+    private String userName;
+
     public AgentUser getAgentUser() {
         return agentUser;
     }
@@ -255,6 +258,14 @@ public class Settle extends ABaseDO {
 
     public void setPresellOrder(PresellOrder presellOrder) {
         this.presellOrder = presellOrder;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
 }

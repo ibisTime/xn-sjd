@@ -3,6 +3,7 @@ package com.ogc.standard.api.impl;
 import com.ogc.standard.ao.IAdoptOrderTreeAO;
 import com.ogc.standard.ao.IGroupAdoptOrderAO;
 import com.ogc.standard.ao.IOriginalGroupAO;
+import com.ogc.standard.ao.IPresellOrderAO;
 import com.ogc.standard.ao.IPresellSpecsAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.dto.res.BooleanRes;
@@ -29,9 +30,12 @@ public class XN000000 extends AProcessor {
     private IPresellSpecsAO presellSpecsAO = SpringContextHolder
         .getBean(IPresellSpecsAO.class);
 
+    private IPresellOrderAO presellOrderAO = SpringContextHolder
+        .getBean(IPresellOrderAO.class);
+
     @Override
     public Object doBusiness() throws BizException {
-        presellSpecsAO.doRefreshPrice();
+        presellOrderAO.doCancelPresellOrder();
         return new BooleanRes(true);
     }
 

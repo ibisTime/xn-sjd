@@ -49,6 +49,9 @@ public class CommodityOrderDetail extends ABaseDO {
     // 下单人
     private String applyUser;
 
+    // 下单时间
+    private Date applyDatetime;
+
     // 数量
     private Long quantity;
 
@@ -355,6 +358,14 @@ public class CommodityOrderDetail extends ABaseDO {
 
     public void setUpdateDatetime(Date updateDatetime) {
         this.updateDatetime = updateDatetime;
+    }
+
+    public Date getApplyDatetime() {
+        return applyDatetime;
+    }
+
+    public void setApplyDatetime(Date applyDatetime) {
+        this.applyDatetime = applyDatetime;
     }
 
 }

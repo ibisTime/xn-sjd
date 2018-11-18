@@ -25,8 +25,7 @@ public interface ICommodityOrderBO extends IPaginableBO<CommodityOrder> {
             String expressType, String updater, String remark,
             String addressCode);
 
-    public void refreshPay(CommodityOrder data, BigDecimal payAmount,
-            String updater, String remark);
+    public void refreshPay(CommodityOrder data, BigDecimal payAmount);
 
     public void refreshPayGroup(CommodityOrder data, String payType);
 

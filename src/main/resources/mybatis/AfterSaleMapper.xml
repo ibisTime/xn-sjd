@@ -4,6 +4,7 @@
 <mapper namespace="com.ogc.standard.dao.IAfterSaleDAO">
 	<resultMap id="afterSale_DB_Result" type="afterSale">
 		<result column="code" property="code" />
+		<result column="shop_code" property="shopCode" />
 		<result column="order_detail_code" property="orderDetailCode" />
 		<result column="type" property="type" />
 		<result column="status" property="status" />
@@ -24,6 +25,9 @@
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
+			</if>
+			<if test="shopCode != null and shopCode != '' ">
+				AND t.shop_code = #{shopCode}
 			</if>
 			<if test="orderDetailCode != null and orderDetailCode != '' ">
 				AND t.order_detail_code = #{orderDetailCode}
@@ -51,6 +55,9 @@
 			<if test="receiver != null and receiver != '' ">
 				AND t.receiver = #{receiver}
 			</if>
+			<if test="receiver != null and receiver != '' ">
+				AND t.receiver = #{receiver}
+			</if>
 			
 		</trim>
 	</sql>
@@ -58,6 +65,7 @@
 	<select id="select_after_sale" parameterType="afterSale" resultMap="afterSale_DB_Result">
 		SELECT
 		t.code
+		,t.shop_code
 		,t.order_detail_code
 		,t.type
 		,t.status
@@ -88,11 +96,10 @@
 		<include refid="where_condition" />
 	</select>
 	
-
-	
 	<insert id="insert_after_sale" parameterType="afterSale">
 		INSERT INTO tsc_after_sale(
 		code
+		,shop_code
 		,order_detail_code
 		,type
 		,status
@@ -107,6 +114,7 @@
 		VALUES
 		(
 		#{code}
+		,#{shopCode}
 		,#{orderDetailCode}
 		,#{type}
 		,#{status}

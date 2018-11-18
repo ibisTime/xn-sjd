@@ -12,6 +12,12 @@ public class XN629045Req extends APageReq {
 
     private static final long serialVersionUID = 6541979603349552583L;
 
+    // 编号
+    private String code;
+
+    // 认养人
+    private String applyUserName;
+
     // 订单类型（1个人/2定向/3捐赠）
     private String type;
 
@@ -38,6 +44,9 @@ public class XN629045Req extends APageReq {
     private String endDatetimeStart;// 认养结束时间起
 
     private String endDatetimeEnd;// 认养结束时间止
+
+    // 是否存在结算
+    private String existsSettle;
 
     public List<String> getStatusList() {
         return statusList;
@@ -126,4 +135,29 @@ public class XN629045Req extends APageReq {
     public void setEndDatetimeEnd(String endDatetimeEnd) {
         this.endDatetimeEnd = endDatetimeEnd;
     }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getApplyUserName() {
+        return applyUserName;
+    }
+
+    public void setApplyUserName(String applyUserName) {
+        this.applyUserName = applyUserName;
+    }
+
+    public String getExistsSettle() {
+        return existsSettle;
+    }
+
+    public void setExistsSettle(String existsSettle) {
+        this.existsSettle = existsSettle;
+    }
+
 }

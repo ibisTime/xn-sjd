@@ -123,6 +123,9 @@ public class AdoptOrder extends ABaseDO {
     // 树木编号列表
     private String treeNumbers;
 
+    // 是否存在结算
+    private String existsSettle;
+
     public List<Settle> getSettleList() {
         return settleList;
     }
@@ -433,6 +436,14 @@ public class AdoptOrder extends ABaseDO {
 
     public void setTreeNumbers(String treeNumbers) {
         this.treeNumbers = treeNumbers;
+    }
+
+    public String getExistsSettle() {
+        return existsSettle;
+    }
+
+    public void setExistsSettle(String existsSettle) {
+        this.existsSettle = existsSettle;
     }
 
 }

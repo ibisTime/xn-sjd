@@ -25,6 +25,7 @@ import com.ogc.standard.bo.IAddressBO;
 import com.ogc.standard.bo.ICommodityBO;
 import com.ogc.standard.bo.ICommodityOrderBO;
 import com.ogc.standard.bo.ICommodityOrderDetailBO;
+import com.ogc.standard.bo.ICommoditySpecsBO;
 import com.ogc.standard.bo.ICompanyBO;
 import com.ogc.standard.bo.IJourBO;
 import com.ogc.standard.bo.ISYSConfigBO;
@@ -82,6 +83,27 @@ public class CommodityOrderDetailAOImpl implements ICommodityOrderDetailAO {
     @Autowired
     private IJourBO jourBO;
 
+    @Autowired
+    private ICommoditySpecsBO commoditySpecsBO;
+
+    @Override
+    @Transactional
+    public void cancelOrder(String code, String updater, String remark) {
+        CommodityOrderDetail commodityOrderDetail = commodityOrderDetailBO
+            .getCommodityOrderDetail(code);
+
+        if (!ECommodityOrderDetailStatus.TO_PAY.getCode()
+            .equals(commodityOrderDetail.getStatus())) {
+            throw new BizException("xn0000", "该订单不处于可取消状态");
+        }
+
+        commoditySpecsBO.inventoryDecrease(commodityOrderDetail.getSpecsId(),
+            commodityOrderDetail.getQuantity());
+
+        commodityOrderDetailBO.refreshCancel(commodityOrderDetail);
+
+    }
+
     @Override
     @Transactional
     public void delive(String code, String logisticsCompany,
@@ -124,9 +146,10 @@ public class CommodityOrderDetailAOImpl implements ICommodityOrderDetailAO {
             String orderCode) {
         accountBO.transAmount(applyUser, ESysUser.SYS_USER.getCode(),
             ECurrency.CNY.getCode(), data.getAmount(),
-            EJourBizTypeUser.BUY.getCode(), EJourBizTypePlat.BUY.getCode(),
-            EJourBizTypeUser.BUY.getValue(), EJourBizTypePlat.BUY.getValue(),
-            orderCode);
+            EJourBizTypeUser.COMMODITY.getCode(),
+            EJourBizTypePlat.COMMODITY.getCode(),
+            EJourBizTypeUser.COMMODITY.getValue(),
+            EJourBizTypePlat.COMMODITY.getValue(), orderCode);
     }
 
     @Override
@@ -139,9 +162,9 @@ public class CommodityOrderDetailAOImpl implements ICommodityOrderDetailAO {
         BigDecimal businessAmount = data.getAmount().multiply(rate);
         accountBO.transAmount(ESysUser.SYS_USER.getCode(), businessman,
             ECurrency.CNY.getCode(), businessAmount,
-            EJourBizTypePlat.BUY_DIST.getCode(),
+            EJourBizTypePlat.COMMODITY_DIST.getCode(),
             EJourBizTypeBusiness.BUSINESS_PROFIT.getCode(),
-            EJourBizTypePlat.BUY_DIST.getValue(),
+            EJourBizTypePlat.COMMODITY_DIST.getValue(),
             EJourBizTypeBusiness.BUSINESS_PROFIT.getValue(), orderCode);
     }
 
@@ -229,4 +252,5 @@ public class CommodityOrderDetailAOImpl implements ICommodityOrderDetailAO {
         commodityOrderDetail.setLogistics(commodity.getLogistics());
 
     }
+
 }

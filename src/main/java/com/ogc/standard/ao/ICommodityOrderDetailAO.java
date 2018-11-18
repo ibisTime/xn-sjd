@@ -26,6 +26,8 @@ public interface ICommodityOrderDetailAO {
 
     public void receive(String code, String receiver);
 
+    public void cancelOrder(String code, String updater, String remark);
+
     public Paginable<CommodityOrderDetail> queryDetailPage(int start, int limit,
             CommodityOrderDetail condition);
 

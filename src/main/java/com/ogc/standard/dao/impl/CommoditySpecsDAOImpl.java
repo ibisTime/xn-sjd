@@ -22,8 +22,8 @@ import com.ogc.standard.domain.CommoditySpecs;
  * @history:
  */
 @Repository("commoditySpecsDAOImpl")
-public class CommoditySpecsDAOImpl extends AMybatisTemplate implements
-        ICommoditySpecsDAO {
+public class CommoditySpecsDAOImpl extends AMybatisTemplate
+        implements ICommoditySpecsDAO {
 
     @Override
     public int insert(CommoditySpecs data) {
@@ -63,6 +63,11 @@ public class CommoditySpecsDAOImpl extends AMybatisTemplate implements
     @Override
     public int updateInventory(CommoditySpecs data) {
         return super.update(NAMESPACE.concat("update_inventory"), data);
+    }
+
+    @Override
+    public int updateCommoditySpecs(CommoditySpecs data) {
+        return super.update(NAMESPACE.concat("update_specs"), data);
     }
 
 }

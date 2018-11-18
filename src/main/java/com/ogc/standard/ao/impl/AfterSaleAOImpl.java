@@ -21,7 +21,6 @@ import com.ogc.standard.bo.IAfterSaleBO;
 import com.ogc.standard.bo.ICommodityOrderBO;
 import com.ogc.standard.bo.ICommodityOrderDetailBO;
 import com.ogc.standard.bo.ICompanyBO;
-import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.AfterSale;
 import com.ogc.standard.domain.CommodityOrder;
@@ -54,9 +53,6 @@ public class AfterSaleAOImpl implements IAfterSaleAO {
     private ICommodityOrderBO commodityOrderBO;
 
     @Autowired
-    private IUserBO userBO;
-
-    @Autowired
     private IAccountBO accountBO;
 
     @Autowired
@@ -69,8 +65,10 @@ public class AfterSaleAOImpl implements IAfterSaleAO {
         CommodityOrderDetail orderDetail = commodityOrderDetailBO
             .getCommodityOrderDetail(orderDetailCode);
         // 订单状态检验
-        if (!ECommodityOrderDetailStatus.FINISH.getCode().equals(
-            orderDetail.getStatus())) {
+        if (!ECommodityOrderDetailStatus.TO_COMMENT.getCode()
+            .equals(orderDetail.getStatus())
+                && !ECommodityOrderDetailStatus.FINISH.getCode()
+                    .equals(orderDetail.getStatus())) {
             throw new BizException("xn0000", "订单还未完成，无法申请售后");
         }
         // 检验是否存在流程中的售后订单
@@ -78,11 +76,13 @@ public class AfterSaleAOImpl implements IAfterSaleAO {
             throw new BizException("xn0000", "该订单正在进行或已完成售后，无法重复申请售后");
         }
         // 发货人检验
-        if (!orderDetail.getReceiver().equals(deliver)) {
-            throw new BizException("xn0000", "不是下单人无法申请售后");
-        }
-        String codeString = afterSaleBO.saveAfterSale(orderDetailCode,
-            logisticsCompany, logisticsNumber, refundAmount, deliver);
+        // if (!orderDetail.getReceiver().equals(deliver)) {
+        // throw new BizException("xn0000", "不是下单人无法申请售后");
+        // }
+
+        String codeString = afterSaleBO.saveAfterSale(orderDetail.getShopCode(),
+            orderDetailCode, logisticsCompany, logisticsNumber, refundAmount,
+            deliver);
         return codeString;
     }
 
@@ -93,9 +93,12 @@ public class AfterSaleAOImpl implements IAfterSaleAO {
         // 订单号检验
         CommodityOrderDetail orderDetail = commodityOrderDetailBO
             .getCommodityOrderDetail(orderDetailCode);
+
         // 订单状态检验
-        if (!ECommodityOrderDetailStatus.FINISH.getCode().equals(
-            orderDetail.getStatus())) {
+        if (!ECommodityOrderDetailStatus.TO_COMMENT.getCode()
+            .equals(orderDetail.getStatus())
+                && !ECommodityOrderDetailStatus.FINISH.getCode()
+                    .equals(orderDetail.getStatus())) {
             throw new BizException("xn0000", "订单还未完成，无法申请售后");
         }
         // 检验是否存在流程中的售后订单
@@ -103,11 +106,11 @@ public class AfterSaleAOImpl implements IAfterSaleAO {
             throw new BizException("xn0000", "该订单正在进行或已完成售后，无法重复申请售后");
         }
         // 发货人检验
-        if (!orderDetail.getReceiver().equals(applyUser)) {
-            throw new BizException("xn0000", "不是下单人无法申请售后");
-        }
-        String codeString = afterSaleBO.AfterSaleNoGoods(orderDetailCode,
-            refundAmount);
+        // if (!orderDetail.getReceiver().equals(applyUser)) {
+        // throw new BizException("xn0000", "不是下单人无法申请售后");
+        // }
+        String codeString = afterSaleBO.AfterSaleNoGoods(
+            orderDetail.getShopCode(), orderDetailCode, refundAmount);
 
         return codeString;
     }
@@ -128,8 +131,8 @@ public class AfterSaleAOImpl implements IAfterSaleAO {
                     EAfterSaleStatus.FINISH.getCode());
             } else {
                 // 状态更新
-                afterSaleBO
-                    .refreshHandle(data, EAfterSaleStatus.PASS.getCode());
+                afterSaleBO.refreshHandle(data,
+                    EAfterSaleStatus.PASS.getCode());
             }
         } else {
             afterSaleBO.refreshHandle(data, EAfterSaleStatus.FALSE.getCode());
@@ -140,8 +143,8 @@ public class AfterSaleAOImpl implements IAfterSaleAO {
         BigDecimal refundAmount = data.getRefundAmount();
         CommodityOrderDetail orderDetail = commodityOrderDetailBO
             .getCommodityOrderDetail(data.getOrderDetailCode());
-        CommodityOrder order = commodityOrderBO.getCommodityOrder(orderDetail
-            .getOrderCode());
+        CommodityOrder order = commodityOrderBO
+            .getCommodityOrder(orderDetail.getOrderCode());
         Company company = companyBO.getCompany(orderDetail.getShopCode());
         String business = company.getUserId();
         String applyUser = order.getApplyUser();

@@ -30,9 +30,9 @@ public enum EJourBizTypePlat {
 
     ADOPT_PROFIT("adopt_profit", "认养收益"),
 
-    BUY("buy", "商城购买"),
+    COMMODITY("commodity", "商城购买"),
 
-    BUY_DIST("buy_dist", "商城购买分成"),
+    COMMODITY_DIST("commodity_dist", "商城购买分成"),
 
     HC("hc", "红冲"),
 
@@ -66,6 +66,8 @@ public enum EJourBizTypePlat {
     TOOL_BUY("tool_buy", "购买道具"),
 
     ADOPT_BUY_DEDUCT("adopt_buy_deduct", "认养抵扣"),
+
+    COMMODITY_BUY_DEDUCT("adopt_buy_deduct", "商城抵扣"),
 
     ADOPT_PAY_BACK("adopt_pay_back", "认养消费返利"),
 

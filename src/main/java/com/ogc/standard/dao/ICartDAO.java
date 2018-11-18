@@ -27,4 +27,7 @@ public interface ICartDAO extends IBaseDAO<Cart> {
     // 根据店铺删购物车
     public int deleteByShop(Cart cart);
 
+    // 更新数量
+    public int updateQuantity(Cart cart);
+
 }

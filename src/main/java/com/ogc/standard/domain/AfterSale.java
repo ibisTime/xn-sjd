@@ -27,6 +27,9 @@ public class AfterSale extends ABaseDO {
     // 编号
     private String code;
 
+    // 店铺编号
+    private String shopCode;
+
     // 订单明细编号
     private String orderDetailCode;
 
@@ -200,4 +203,13 @@ public class AfterSale extends ABaseDO {
     public void setReceiverDatetime(Date receiverDatetime) {
         this.receiverDatetime = receiverDatetime;
     }
+
+    public String getShopCode() {
+        return shopCode;
+    }
+
+    public void setShopCode(String shopCode) {
+        this.shopCode = shopCode;
+    }
+
 }

@@ -29,6 +29,10 @@ public interface IPresellOrderBO extends IPaginableBO<PresellOrder> {
     public void paySuccess(String code, BigDecimal payAmount,
             BigDecimal backJfAmount);
 
+    // 结算
+    public void refreshSettleStatus(PresellOrder data, String approveResult,
+            String updater, String remark);
+
     // 根据产品查订单
     public List<PresellOrder> queryPresellOrderListByProduct(
             String productCode);

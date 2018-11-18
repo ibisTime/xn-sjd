@@ -71,6 +71,14 @@ public class CartBOImpl extends PaginableBOImpl<Cart> implements ICartBO {
     }
 
     @Override
+    public void refreshQuantity(String code, Long quantity) {
+        Cart data = new Cart();
+        data.setCode(code);
+        data.setQuantity(quantity);
+        cartDAO.updateQuantity(data);
+    }
+
+    @Override
     public List<Cart> queryCartListByUser(String userId) {
         Cart condition = new Cart();
         condition.setUserId(userId);
@@ -78,9 +86,10 @@ public class CartBOImpl extends PaginableBOImpl<Cart> implements ICartBO {
     }
 
     @Override
-    public List<Cart> queryCartListByShop(String shopCode) {
+    public List<Cart> queryCartListByShopUser(String shopCode, String userId) {
         Cart condition = new Cart();
         condition.setShopCode(shopCode);
+        condition.setUserId(userId);
         return cartDAO.selectList(condition);
     }
 
@@ -89,6 +98,16 @@ public class CartBOImpl extends PaginableBOImpl<Cart> implements ICartBO {
         Cart condition = new Cart();
         condition.setUserId(userId);
         return cartDAO.selectShopList(condition);
+    }
+
+    @Override
+    public List<Cart> getCartByUserSpecs(String userId, Long specId) {
+        Cart condition = new Cart();
+        condition.setUserId(userId);
+        condition.setSpecsId(specId);
+
+        List<Cart> list = cartDAO.selectList(condition);
+        return list;
     }
 
     @Override

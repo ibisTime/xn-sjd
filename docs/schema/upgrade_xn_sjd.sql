@@ -158,3 +158,15 @@ CHANGE COLUMN `content` `content` TEXT NULL DEFAULT NULL COMMENT '内容' ;
 ALTER TABLE `tsc_commodity_order_detail` 
 ADD COLUMN `update_datetime` DATETIME NULL COMMENT '更新时间' AFTER `receiver_datetime`;
 
+#V2.0.0 2-3
+ALTER TABLE `tys_presell_order` 
+ADD COLUMN `pack_count` INT NULL COMMENT '规格包装数量' AFTER `specs_name`;
+
+ALTER TABLE `tsc_commodity` 
+CHANGE COLUMN `description` `description` TEXT NULL DEFAULT NULL COMMENT '描述' ;
+
+ALTER TABLE `tsc_commodity_order_detail` 
+ADD COLUMN `apply_datetime` DATETIME NULL COMMENT '下单时间' AFTER `apply_user`;
+
+ALTER TABLE `tsc_after_sale` 
+ADD COLUMN `shop_code` VARCHAR(32) NULL COMMENT '店铺编号' AFTER `code`;

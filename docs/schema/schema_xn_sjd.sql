@@ -1043,6 +1043,7 @@ CREATE TABLE `tys_presell_order` (
   `product_name` varchar(255) DEFAULT NULL COMMENT '产品名称',
   `specs_code` varchar(32) DEFAULT NULL COMMENT '规格编号',
   `specs_name` varchar(255) DEFAULT NULL COMMENT '规格名称',
+  `pack_count` int DEFAULT 0 COMMENT '规格包装数量',
 
   `price` decimal(18,8) DEFAULT NULL COMMENT '价格',
   `quantity` int DEFAULT 0 COMMENT '数量',
@@ -1199,7 +1200,7 @@ CREATE TABLE `tsc_commodity` (
   `month_sell_count` bigint(20) DEFAULT NULL COMMENT '月销量',
   `list_pic` varchar(255) DEFAULT NULL COMMENT '列表图',
   `banner_pic` varchar(255) DEFAULT NULL COMMENT 'banner图',
-  `description` varchar(255) DEFAULT NULL COMMENT '描述',
+  `description` text DEFAULT NULL COMMENT '描述',
   `shop_code` varchar(32) NOT NULL COMMENT '店铺编号',
   `location` varchar(32) DEFAULT NULL COMMENT 'UI位置',
   `order_no` int(11) DEFAULT NULL COMMENT 'UI次序',
@@ -1268,6 +1269,7 @@ CREATE TABLE `tsc_commodity_order_detail` (
   `specs_id` bigint(11) NOT NULL COMMENT '规格编号',
   `specs_name` varchar(64) DEFAULT NULL COMMENT '规格名称',
   `apply_user` varchar(32) DEFAULT NULL COMMENT '下单人',
+  `apply_datetime` datetime DEFAULT NULL COMMENT '下单时间',
   `quantity` bigint(20) NOT NULL COMMENT '数量',
   `price` decimal(64,0) NOT NULL COMMENT '单价',
   `amount` decimal(64,0) DEFAULT NULL COMMENT '总价',
@@ -1288,6 +1290,7 @@ CREATE TABLE `tsc_commodity_order_detail` (
 DROP TABLE IF EXISTS `tsc_after_sale`;
 CREATE TABLE `tsc_after_sale` (
   `code` varchar(32) NOT NULL COMMENT '编号',
+  `shop_code` varchar(32) DEFAULT NULL COMMENT '店铺编号',
   `order_detail_code` varchar(32) NOT NULL COMMENT '订单明细编号',
   `type` varchar(4) DEFAULT NULL COMMENT '类型',
   `status` varchar(4) DEFAULT NULL COMMENT '状态',

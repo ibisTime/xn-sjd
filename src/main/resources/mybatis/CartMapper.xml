@@ -26,6 +26,9 @@
 			<if test="userId != null and userId != '' ">
 				AND t.user_id = #{userId}
 			</if>
+			<if test="specsId != null and specsId != '' ">
+				AND t.specs_id = #{specsId}
+			</if>
 		</trim>
 	</sql>
 	
@@ -97,6 +100,10 @@
 		,#{amount}
 		)
 	</insert>
+	
+	<update id="update_quantity">
+		UPDATE tsc_cart SET quantity = #{quantity}
+	</update>
 	
 	<delete id="delete_cart" parameterType="cart">
 		DELETE FROM tsc_cart

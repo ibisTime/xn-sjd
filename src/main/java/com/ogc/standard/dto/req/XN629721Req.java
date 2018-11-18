@@ -30,6 +30,8 @@ public class XN629721Req {
 
     private String tradePwd;
 
+    private String isJfDeduct;
+
     public String getTradePwd() {
         return tradePwd;
     }
@@ -69,4 +71,13 @@ public class XN629721Req {
     public void setRemark(String remark) {
         this.remark = remark;
     }
+
+    public String getIsJfDeduct() {
+        return isJfDeduct;
+    }
+
+    public void setIsJfDeduct(String isJfDeduct) {
+        this.isJfDeduct = isJfDeduct;
+    }
+
 }

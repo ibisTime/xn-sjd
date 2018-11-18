@@ -35,9 +35,9 @@ public enum EJourBizTypeUser {
 
     PRESELL("presell", "购买预售"),
 
-    BUY("SC", "商城购买"),
+    COMMODITY("commodity", "商城购买"),
 
-    AFTER_SALE("AS", "售后退款"),
+    AFTER_SALE("after_sale", "售后退款"),
     // 碳泡泡账户
     ADOPT_DAY_BACK("adopt_day_back", "认养消费每日收取碳泡泡"),
 
@@ -65,6 +65,8 @@ public enum EJourBizTypeUser {
     TOOL_BUY("tool_buy", "购买道具"),
 
     ADOPT_BUY_DEDUCT("adopt_buy_deduct", "认养抵扣"),
+
+    COMMODITY_BUY_DEDUCT("adopt_buy_deduct", "商城抵扣"),
 
     ADOPT_PAY_BACK("adopt_pay_back", "认养消费返利"),
 

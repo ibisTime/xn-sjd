@@ -23,6 +23,8 @@ public interface ICommoditySpecsBO extends IPaginableBO<CommoditySpecs> {
 
     public void removeSpecs(String commodityCode);
 
+    public void refreshSpecs(CommoditySpecs commoditySpecs);
+
     public List<CommoditySpecs> querySpecsList(String commodityCode);
 
     public void inventoryDecrease(Long id, Long quantity);

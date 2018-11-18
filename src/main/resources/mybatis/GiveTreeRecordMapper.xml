@@ -9,13 +9,24 @@
 		<result column="to_user_id" property="toUserId" />
 		<result column="create_datetime" property="createDatetime" />
 	</resultMap>
+	
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
 			</if>
+			<if test="adoptTreeCode != null and adoptTreeCode != '' ">
+				AND t.adopt_tree_code = #{adoptTreeCode}
+			</if>
+			<if test="userId != null and userId != '' ">
+				AND t.user_id = #{userId}
+			</if>
+			<if test="toUserId != null and toUserId != '' ">
+				AND t.to_user_id = #{toUserId}
+			</if>
 		</trim>
 	</sql>
+	
 	<select id="select_giveTreeRecord" parameterType="giveTreeRecord" resultMap="giveTreeRecord_DB_Result">
 		SELECT
 		t.code

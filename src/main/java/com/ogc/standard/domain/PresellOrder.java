@@ -30,6 +30,9 @@ public class PresellOrder extends ABaseDO {
     // 规格名称
     private String specsName;
 
+    // 规格包装数量
+    private Integer packCount;
+
     // 价格
     private BigDecimal price;
 
@@ -354,6 +357,14 @@ public class PresellOrder extends ABaseDO {
 
     public void setApplyUserInfo(User applyUserInfo) {
         this.applyUserInfo = applyUserInfo;
+    }
+
+    public Integer getPackCount() {
+        return packCount;
+    }
+
+    public void setPackCount(Integer packCount) {
+        this.packCount = packCount;
     }
 
 }

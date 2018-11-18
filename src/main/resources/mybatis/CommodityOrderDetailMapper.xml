@@ -12,6 +12,7 @@
 		<result column="specs_id" property="specsId" />
 		<result column="specs_name" property="specsName" />
 		<result column="apply_user" property="applyUser" />
+		<result column="apply_datetime" property="applyDatetime" />
 		<result column="quantity" property="quantity" />
 		<result column="price" property="price" />
 		<result column="amount" property="amount" />
@@ -76,6 +77,7 @@
 		,t.specs_id
 		,t.specs_name
 		,t.apply_user
+		,t.apply_datetime
 		,t.quantity
 		,t.price
 		
@@ -121,6 +123,7 @@
 		,specs_name
 		,quantity
 		,apply_user
+		,apply_datetime
 		,price
 		
 		,amount
@@ -141,6 +144,7 @@
 		,#{specsName}
 		,#{quantity}
 		,#{applyUser}
+		,#{applyDatetime}
 		,#{price}
 		
 		,#{amount}
@@ -152,6 +156,15 @@
 	</insert>
 	
 	<update id="update_pay" parameterType="commodityOrderDetail">
+		UPDATE tsc_commodity_order_detail
+		SET
+		status=#{status}
+		,update_datetime=#{updateDatetime}
+		WHERE
+		code=#{code}
+	</update>
+	
+	<update id="update_cancelOrder" parameterType="commodityOrderDetail">
 		UPDATE tsc_commodity_order_detail
 		SET
 		status=#{status}
@@ -180,7 +193,7 @@
 		SET
 		receiver_datetime=#{receiverDatetime}
 		,status=#{status}
-		,update_datetime={updateDatetime}
+		,update_datetime=#{updateDatetime}
 		WHERE
 		code=#{code}
 	</update>

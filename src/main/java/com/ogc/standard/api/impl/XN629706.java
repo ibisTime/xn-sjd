@@ -51,6 +51,8 @@ public class XN629706 extends AProcessor {
         if (StringUtils.isBlank(column)) {
             column = "code";
         }
+        condition.setOrder(column, req.getOrderDir());
+
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
         return commodityAO.queryCommodityPage(start, limit, condition);

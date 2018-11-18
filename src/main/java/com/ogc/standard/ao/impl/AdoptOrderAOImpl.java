@@ -607,12 +607,17 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
         // }
         // }
 
+        int treeCount = 1;
         for (AdoptOrderTree adoptOrderTree : adoptOrderTreeList) {
             Tree tree = treeBO
                 .getTreeByTreeNumber(adoptOrderTree.getTreeNumber());
             treeList.add(tree);
 
-            treeNumbers.append(adoptOrderTree.getTreeNumber()).append(". ");
+            treeNumbers.append(adoptOrderTree.getTreeNumber());
+
+            if (treeCount++ < adoptOrderTreeList.size()) {
+                treeNumbers.append(". ");
+            }
         }
 
         data.setTreeList(treeList);

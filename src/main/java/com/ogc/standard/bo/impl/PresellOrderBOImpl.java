@@ -17,6 +17,7 @@ import com.ogc.standard.domain.PresellProduct;
 import com.ogc.standard.domain.PresellSpecs;
 import com.ogc.standard.dto.res.XN629048Res;
 import com.ogc.standard.enums.EAdoptOrderSettleStatus;
+import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.enums.EPayType;
 import com.ogc.standard.enums.EPresellOrderSettleStatus;
@@ -43,6 +44,7 @@ public class PresellOrderBOImpl extends PaginableBOImpl<PresellOrder>
         data.setSpecsCode(presellSpecs.getCode());
         data.setSpecsName(presellSpecs.getName());
 
+        data.setPackCount(presellSpecs.getPackCount());
         data.setPrice(presellSpecs.getPrice());
         data.setQuantity(quantity);
         data.setAmount(
@@ -114,6 +116,22 @@ public class PresellOrderBOImpl extends PaginableBOImpl<PresellOrder>
             data.setRemark("第三方支付成功");
             presellOrderDAO.updatePaySuccess(data);
         }
+    }
+
+    @Override
+    public void refreshSettleStatus(PresellOrder data, String approveResult,
+            String updater, String remark) {
+        String status = EPresellOrderSettleStatus.NO_SETTLE.getCode();
+        if (EBoolean.YES.getCode().equals(approveResult)) {
+            status = EPresellOrderSettleStatus.SETTLE.getCode();
+        }
+
+        data.setSettleStatus(status);
+        data.setUpdater(updater);
+        data.setUpdateDatetime(new Date());
+        data.setRemark("已完成结算处理");
+        presellOrderDAO.updateSettleStatus(data);
+
     }
 
     @Override

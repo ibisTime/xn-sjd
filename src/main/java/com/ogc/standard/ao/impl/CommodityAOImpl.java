@@ -84,12 +84,14 @@ public class CommodityAOImpl implements ICommodityAO {
         // 修改数据
         commodityBO.refreshCommodity(req);
 
-        // 删除原规格
-        commoditySpecsBO.removeSpecs(req.getCode());
-        // 落地新规格数据
+        // TODO 落地新规格数据
         for (CommoditySpecs specs : req.getSpecsList()) {
-            specs.setCommodityCode(req.getCode());
-            commoditySpecsBO.saveSpecs(specs);
+            if (null != specs.getId()) {
+                commoditySpecsBO.refreshSpecs(specs);
+            } else {
+                specs.setCommodityCode(req.getCode());
+                commoditySpecsBO.saveSpecs(specs);
+            }
         }
     }
 

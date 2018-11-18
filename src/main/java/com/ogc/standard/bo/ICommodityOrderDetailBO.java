@@ -27,6 +27,9 @@ public interface ICommodityOrderDetailBO
             String specsName, String applyUser, Long quantity, BigDecimal price,
             String addressCode);
 
+    // 取消订单
+    public void refreshCancel(CommodityOrderDetail commodityOrderDetail);
+
     // 支付成功
     public void refreshPay(String code);
 

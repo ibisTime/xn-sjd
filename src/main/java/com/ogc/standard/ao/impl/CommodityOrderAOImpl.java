@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.ICommodityOrderAO;
 import com.ogc.standard.ao.ICommodityOrderDetailAO;
+import com.ogc.standard.ao.IUserAO;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IAddressBO;
 import com.ogc.standard.bo.IAlipayBO;
@@ -52,9 +54,11 @@ import com.ogc.standard.enums.EAccountType;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECommodityOrderStatus;
 import com.ogc.standard.enums.ECurrency;
+import com.ogc.standard.enums.EJourBizTypePlat;
 import com.ogc.standard.enums.EJourBizTypeUser;
 import com.ogc.standard.enums.EPayType;
 import com.ogc.standard.enums.ESysUser;
+import com.ogc.standard.enums.ESystemAccount;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
 
@@ -105,6 +109,9 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
     @Autowired
     private IDistributionOrderBO distributionOrderBO;
 
+    @Autowired
+    private IUserAO userAO;
+
     @Override
     @Transactional
     public String addOrder(String applyUser, String applyNote,
@@ -151,12 +158,23 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
     public Object pay(XN629721Req req) {
         // 用户检验
         userBO.getUser(req.getUpdater());
+
         // 订单状态检验
         CommodityOrder order = commodityOrderBO
             .getCommodityOrder(req.getCode());
         if (!ECommodityOrderStatus.TOPAY.getCode().equals(order.getStatus())) {
             throw new BizException("xn0000", "该订单不处于待支付状态");
         }
+
+        // 支付密码确认
+        if (StringUtils.isNotBlank(req.getTradePwd())) {
+            userBO.checkTradePwd(req.getUpdater(), req.getTradePwd());
+        }
+
+        // 积分抵扣处理
+        XN629048Res deductRes = distributionOrderBO.getOrderDeductAmount(
+            order.getAmount(), order.getApplyUser(), req.getIsJfDeduct());
+
         // 支付
         Object result = null;
         if (EPayType.ALIPAY.getCode().equals(req.getPayType())) {
@@ -165,15 +183,13 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
 
             String signOrder = alipayBO.getSignedOrder(order.getApplyUser(),
                 ESysUser.SYS_USER.getCode(), order.getPayGroup(),
-                EJourBizTypeUser.BUY.getCode(), EJourBizTypeUser.BUY.getValue(),
-                order.getPayAmount());
+                EJourBizTypeUser.COMMODITY.getCode(),
+                EJourBizTypeUser.COMMODITY.getValue(), order.getPayAmount());
             result = new PayOrderRes(signOrder);
         } else if (EPayType.YE.getCode().equals(req.getPayType())) {
-            // 支付密码确认
-            userBO.checkTradePwd(req.getUpdater(), req.getTradePwd());
-            result = payByBalance(order);
-            commodityOrderBO.refreshPay(order, order.getAmount(),
-                req.getUpdater(), req.getRemark());
+
+            result = toPayCommodityOrderYue(order, deductRes);
+
         } else if (EPayType.WEIXIN_H5.getCode().equals(req.getPayType())) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(), "暂不支持微信支付");
         } else {
@@ -183,19 +199,55 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
     }
 
     // 余额支付
-    public Object payByBalance(CommodityOrder data) {
+    public Object toPayCommodityOrderYue(CommodityOrder data,
+            XN629048Res resultRes) {
+
+        Account userCnyAccount = accountBO.getAccountByUser(data.getApplyUser(),
+            ECurrency.CNY.getCode());
+        BigDecimal payAmount = data.getAmount()
+            .subtract(resultRes.getCnyAmount());// 实际付款人民币金额
+        if (userCnyAccount.getAmount().compareTo(payAmount) < 0) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "人民币账户余额不足");
+        }
+
+        // TODO
+        BigDecimal backJfAmount = null;
         List<CommodityOrderDetail> dataList = commodityOrderDetailBO
             .queryOrderDetail(data.getCode());
         for (CommodityOrderDetail detail : dataList) {
-            // 支付
-            commodityOrderDetailAO.payDetail(detail, data.getApplyUser(),
-                data.getCode());
 
             commodityOrderDetailBO.refreshPay(detail.getCode());
 
-            // 分销
-            commodityOrderDetailAO.distribution(detail, data.getCode());
+            // TODO 进行分销
+            Commodity commodityInfo = commodityBO
+                .getCommodity(detail.getCommodityCode());
+            // backJfAmount = distributionOrderBO.distribution(data.getCode(),
+            // commodityInfo.getShopCode(), data.getAmount(),
+            // data.getApplyUser(), ESellType.COMMODITY.getCode(), resultRes);
         }
+
+        // 人民币余额划转
+        Account sysCnyAccount = accountBO
+            .getAccount(ESystemAccount.SYS_ACOUNT_CNY.getCode());
+        accountBO.transAmount(userCnyAccount, sysCnyAccount, payAmount,
+            EJourBizTypeUser.COMMODITY.getCode(),
+            EJourBizTypePlat.COMMODITY.getCode(),
+            EJourBizTypeUser.COMMODITY.getValue(),
+            EJourBizTypePlat.COMMODITY.getValue(), data.getCode());
+
+        // 积分抵扣
+        accountBO.transAmount(data.getApplyUser(), ESysUser.SYS_USER.getCode(),
+            ECurrency.JF.getCode(), resultRes.getJfAmount(),
+            EJourBizTypeUser.COMMODITY_BUY_DEDUCT.getCode(),
+            EJourBizTypePlat.COMMODITY_BUY_DEDUCT.getCode(),
+            EJourBizTypeUser.COMMODITY_BUY_DEDUCT.getValue(),
+            EJourBizTypePlat.COMMODITY_BUY_DEDUCT.getValue(), data.getCode());
+
+        // 用户升级
+        userAO.upgradeUserLevel(data.getApplyUser());
+
+        commodityOrderBO.refreshPay(data, data.getAmount());
 
         return new BooleanRes(true);
     }
@@ -271,8 +323,7 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
         for (CommodityOrderDetail detail : dataList) {
             commodityOrderDetailAO.distribution(detail, data.getCode());
         }
-        commodityOrderBO.refreshPay(data, data.getAmount(), "alipay",
-            "支付宝支付成功");
+        commodityOrderBO.refreshPay(data, data.getAmount());
     }
 
     public void timeoutCancel() {

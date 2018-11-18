@@ -21,11 +21,11 @@ import com.ogc.standard.domain.AfterSale;
  */
 public interface IAfterSaleBO extends IPaginableBO<AfterSale> {
 
-    public String saveAfterSale(String orderDetailCode,
+    public String saveAfterSale(String shopCode, String orderDetailCode,
             String logisticsCompany, String logisticsNumber,
             BigDecimal refundAmount, String deliver);
 
-    public String AfterSaleNoGoods(String orderDetailCode,
+    public String AfterSaleNoGoods(String shopCode, String orderDetailCode,
             BigDecimal refundAmount);
 
     public void refreshHandle(AfterSale data, String status);

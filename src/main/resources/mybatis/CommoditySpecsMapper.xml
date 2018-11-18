@@ -51,8 +51,6 @@
 		<include refid="where_condition" />
 	</select>
 	
-
-	
 	<insert id="insert_commodity_specs" parameterType="commoditySpecs">
 		INSERT INTO tsc_commodity_specs(
 		commodity_code
@@ -62,7 +60,6 @@
 		,remark
 		)
 		VALUES
-		
 		(
 		#{commodityCode}
 		,#{name}
@@ -76,6 +73,17 @@
 		DELETE FROM tsc_commodity_specs
 		WHERE commodity_code=#{commodityCode}
 	</delete>
+	
+	<update id="update_specs" parameterType="commoditySpecs">
+		UPDATE tsc_commodity_specs
+		SET
+		name=#{name}
+		,price=#{price}
+		,inventory=#{inventory}
+		,remark=#{remark}
+		WHERE
+		id=#{id}
+	</update>
 	
 	<update id="update_inventory" parameterType="commoditySpecs">
 		UPDATE tsc_commodity_specs

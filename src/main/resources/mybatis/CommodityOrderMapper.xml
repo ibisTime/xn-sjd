@@ -134,9 +134,7 @@
 		,pay_datetime=#{payDatetime}
 		,pay_amount=#{payAmount}
 		,status=#{status}
-		,updater=#{updater}
 		,update_datetime=#{updateDatetime}
-		,remark=#{remark}
 		WHERE
 		code=#{code}
 	</update>

@@ -159,11 +159,9 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
         // 更新产品已预售数量
         PresellProduct presellProduct = presellProductBO
             .getPresellProduct(presellOrder.getProductCode());
-        PresellSpecs presellSpecs = presellSpecsBO
-            .getPresellSpecs(presellOrder.getSpecsCode());
 
         Integer orderWeight = presellOrder.getQuantity()
-                * presellSpecs.getPackCount() * presellProduct.getPackWeight();// 下单重量
+                * presellOrder.getPackCount() * presellProduct.getPackWeight();// 下单重量
         Integer nowCount = presellProduct.getNowCount() - orderWeight;
 
         presellProductBO.refreshNowCount(presellProduct.getCode(), nowCount);
@@ -413,11 +411,9 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
         // 更新产品已预售数量
         PresellProduct presellProduct = presellProductBO
             .getPresellProduct(presellOrder.getProductCode());
-        PresellSpecs presellSpecs = presellSpecsBO
-            .getPresellSpecs(presellOrder.getSpecsCode());
 
         Integer orderWeight = presellOrder.getQuantity()
-                * presellSpecs.getPackCount() * presellProduct.getPackWeight();// 下单重量
+                * presellOrder.getPackCount() * presellProduct.getPackWeight();// 下单重量
         Integer nowCount = presellProduct.getNowCount() - orderWeight;
 
         presellProductBO.refreshNowCount(presellProduct.getCode(), nowCount);
@@ -531,9 +527,16 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
             List<PresellInventory> presellInventorieList = presellInventoryBO
                 .queryTreeNumberListByGroup(originalGroup.getCode());
             if (CollectionUtils.isNotEmpty(presellInventorieList)) {
+
+                int presellInventoryCount = 1;
                 for (PresellInventory presellInventory : presellInventorieList) {
-                    treeNumbers.append(presellInventory.getTreeNumber())
-                        .append(".");
+                    treeNumbers.append(
+                        presellInventory.getTreeNumber().replace("&", ""));
+
+                    if (presellInventoryCount++ < presellInventorieList
+                        .size()) {
+                        treeNumbers.append(".");
+                    }
                 }
             }
         }

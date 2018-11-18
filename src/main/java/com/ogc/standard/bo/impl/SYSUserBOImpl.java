@@ -121,6 +121,21 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
         }
     }
 
+    @Override
+    public void isMobileExist(String kind, String mobile) {
+        if (StringUtils.isNotBlank(mobile)) {
+            // 判断格式
+            PhoneUtil.checkMobile(mobile);
+            SYSUser condition = new SYSUser();
+            condition.setKind(kind);
+            condition.setMobile(mobile);
+            long count = getTotalCount(condition);
+            if (count > 0) {
+                throw new BizException("li01003", "手机号已经存在");
+            }
+        }
+    }
+
     // 登录
     @Override
     public SYSUser getUserByLoginName(String loginName, String systemCode) {

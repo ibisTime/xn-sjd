@@ -44,6 +44,11 @@ public class CommoditySpecsBOImpl extends PaginableBOImpl<CommoditySpecs>
     }
 
     @Override
+    public void refreshSpecs(CommoditySpecs commoditySpecs) {
+        commoditySpecsDAO.updateCommoditySpecs(commoditySpecs);
+    }
+
+    @Override
     public List<CommoditySpecs> querySpecsList(String commodityCode) {
         CommoditySpecs condition = new CommoditySpecs();
         condition.setCommodityCode(commodityCode);

@@ -62,15 +62,12 @@ public class CommodityOrderBOImpl extends PaginableBOImpl<CommodityOrder>
     }
 
     @Override
-    public void refreshPay(CommodityOrder data, BigDecimal payAmount,
-            String updater, String remark) {
+    public void refreshPay(CommodityOrder data, BigDecimal payAmount) {
         data.setPayAmount(payAmount);
         Date date = new Date();
         data.setPayDatetime(date);
         data.setStatus(ECommodityOrderStatus.PAIED.getCode());
-        data.setUpdater(updater);
         data.setUpdateDatetime(date);
-        data.setRemark(remark);
         commodityOrderDAO.updatePay(data);
     }
 

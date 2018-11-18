@@ -84,7 +84,7 @@ public class CallbackConroller {
             adoptOrderAO.paySuccess(bizCode);
         } else if (EJourBizTypeUser.ADOPT_COLLECT.getCode().equals(bizType)) {
             groupAdoptOrderAO.paySuccess(bizCode);
-        } else if (EJourBizTypeUser.BUY.getCode().equals(bizType)) {
+        } else if (EJourBizTypeUser.COMMODITY.getCode().equals(bizType)) {
             commodityOrderAO.paySuccess(bizCode);
         } else {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(), "业务类型订单不存在");

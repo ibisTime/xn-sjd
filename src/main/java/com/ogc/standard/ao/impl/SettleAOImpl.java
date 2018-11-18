@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ogc.standard.ao.ISettleAO;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IAdoptOrderBO;
+import com.ogc.standard.bo.IAgentUserBO;
 import com.ogc.standard.bo.IGroupAdoptOrderBO;
 import com.ogc.standard.bo.IPresellOrderBO;
 import com.ogc.standard.bo.IProductBO;
@@ -18,6 +19,7 @@ import com.ogc.standard.bo.ISettleBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.AdoptOrder;
+import com.ogc.standard.domain.AgentUser;
 import com.ogc.standard.domain.GroupAdoptOrder;
 import com.ogc.standard.domain.PresellOrder;
 import com.ogc.standard.domain.Product;
@@ -30,6 +32,7 @@ import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EGroupAdoptOrderSettleStatus;
 import com.ogc.standard.enums.EJourBizTypeAgent;
 import com.ogc.standard.enums.EJourBizTypePlat;
+import com.ogc.standard.enums.EPresellOrderSettleStatus;
 import com.ogc.standard.enums.ESellType;
 import com.ogc.standard.enums.ESysUser;
 import com.ogc.standard.exception.BizException;
@@ -59,6 +62,9 @@ public class SettleAOImpl implements ISettleAO {
     @Autowired
     private IPresellOrderBO presellOrderBO;
 
+    @Autowired
+    private IAgentUserBO agentUserBO;
+
     @Override
     @Transactional
     public void approveSettleByRefCode(String refCode, String refType,
@@ -74,6 +80,18 @@ public class SettleAOImpl implements ISettleAO {
 
             groupAdoptOrderBO.refreshSettle(data, approveResult, handler,
                 handleNote);
+        } else if (ESellType.PRESELL.getCode().equals(refType)) {
+            PresellOrder data = presellOrderBO.getPresellOrder(refCode);
+            if (!EPresellOrderSettleStatus.TO_SETTLE.getCode()
+                .equals(data.getSettleStatus())) {
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                    "订单不是待结算状态");
+            }
+
+            presellOrderBO.refreshSettleStatus(data, approveResult, handler,
+                handleNote);
+        } else if (ESellType.COMMODITY.getCode().equals(refType)) {
+
         } else {
             AdoptOrder data = adoptOrderBO.getAdoptOrder(refCode);
             if (!EAdoptOrderSettleStatus.TO_SETTLE.getCode()
@@ -177,6 +195,11 @@ public class SettleAOImpl implements ISettleAO {
         if (null != user) {
             settle.setApplyUserName(user.getMobile());
         }
+
+        // 代理用户
+        AgentUser agentUser = agentUserBO
+            .getAgentUserUnCheck(settle.getUserId());
+        settle.setUserName(agentUser.getMobile());
     }
 
     @Override

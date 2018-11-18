@@ -40,6 +40,11 @@ public class CartDAOImpl extends AMybatisTemplate implements ICartDAO {
     }
 
     @Override
+    public int updateQuantity(Cart cart) {
+        return super.update(NAMESPACE.concat("update_quantity"), cart);
+    }
+
+    @Override
     public Cart select(Cart condition) {
         return super.select(NAMESPACE.concat("select_cart"), condition,
             Cart.class);

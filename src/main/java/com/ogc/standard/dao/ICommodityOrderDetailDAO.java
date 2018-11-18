@@ -23,6 +23,8 @@ public interface ICommodityOrderDetailDAO
     // 支付成功
     public int updatePay(CommodityOrderDetail data);
 
+    public int updateCancelOrder(CommodityOrderDetail data);
+
     public int updateDelive(CommodityOrderDetail data);
 
     public int updateReceive(CommodityOrderDetail data);

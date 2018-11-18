@@ -39,6 +39,9 @@ public interface ISYSUserBO extends IPaginableBO<SYSUser> {
     // 判断手机号是否存在
     public void isMobileExist(String mobile);
 
+    // 判断手机号是否存在
+    public void isMobileExist(String kind, String mobile);
+
     // 修改绑定手机号
     public void resetBindMobile(SYSUser user, String newMobile);
 

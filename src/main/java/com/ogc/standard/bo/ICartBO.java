@@ -30,12 +30,18 @@ public interface ICartBO extends IPaginableBO<Cart> {
     // 根据店铺删购物车
     public void removeByShop(String shopCode);
 
+    // 更新数量
+    public void refreshQuantity(String code, Long quantity);
+
     public List<Cart> queryCartListByUser(String userId);
 
-    public List<Cart> queryCartListByShop(String shopCode);
+    public List<Cart> queryCartListByShopUser(String shopCode, String userId);
 
     // 查询我的店铺
     public List<Cart> quertMyShopList(String userId);
+
+    // 查询购物车的产品规格
+    public List<Cart> getCartByUserSpecs(String userId, Long specId);
 
     public Cart getCart(String code);
 }

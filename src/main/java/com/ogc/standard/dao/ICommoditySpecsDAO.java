@@ -21,4 +21,6 @@ public interface ICommoditySpecsDAO extends IBaseDAO<CommoditySpecs> {
 
     public int updateInventory(CommoditySpecs data);
 
+    public int updateCommoditySpecs(CommoditySpecs data);
+
 }
