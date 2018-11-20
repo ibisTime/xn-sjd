@@ -1,11 +1,3 @@
-/**
- * @Title XN629720.java 
- * @Package com.ogc.standard.api.impl 
- * @Description 
- * @author taojian  
- * @date 2018年11月7日 上午10:34:19 
- * @version V1.0   
- */
 package com.ogc.standard.api.impl;
 
 import org.apache.commons.lang3.StringUtils;
@@ -42,10 +34,10 @@ public class XN629725 extends AProcessor {
         condition.setExpressType(req.getExpressType());
         condition.setPayType(req.getPayType());
         condition.setStatus(req.getStatus());
-        condition.setApplyDatetimeStart(DateUtil.getFrontDate(
-            req.getApplyDatetiemStart(), false));
-        condition.setApplyDatetimeEnd(DateUtil.getFrontDate(
-            req.getApplyDatetimeEnd(), true));
+        condition.setApplyDatetimeStart(
+            DateUtil.getFrontDate(req.getApplyDatetiemStart(), false));
+        condition.setApplyDatetimeEnd(
+            DateUtil.getFrontDate(req.getApplyDatetimeEnd(), true));
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
             column = "code";

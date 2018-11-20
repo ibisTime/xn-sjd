@@ -24,9 +24,6 @@ public class XN629714Req {
     @NotBlank
     private String payType;
 
-    @NotBlank
-    private String updater;
-
     private String remark;
 
     private String tradePwd;
@@ -55,14 +52,6 @@ public class XN629714Req {
 
     public void setPayType(String payType) {
         this.payType = payType;
-    }
-
-    public String getUpdater() {
-        return updater;
-    }
-
-    public void setUpdater(String updater) {
-        this.updater = updater;
     }
 
     public String getRemark() {

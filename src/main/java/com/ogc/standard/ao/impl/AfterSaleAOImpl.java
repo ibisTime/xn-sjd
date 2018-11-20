@@ -59,58 +59,58 @@ public class AfterSaleAOImpl implements IAfterSaleAO {
     private ICompanyBO companyBO;
 
     @Override
+    @Transactional
     public String applyGoods(String orderDetailCode, String logisticsCompany,
             String logisticsNumber, BigDecimal refundAmount, String deliver) {
-        // 订单号检验
+
         CommodityOrderDetail orderDetail = commodityOrderDetailBO
             .getCommodityOrderDetail(orderDetailCode);
+
         // 订单状态检验
         if (!ECommodityOrderDetailStatus.TO_COMMENT.getCode()
-            .equals(orderDetail.getStatus())
-                && !ECommodityOrderDetailStatus.FINISH.getCode()
-                    .equals(orderDetail.getStatus())) {
+            .equals(orderDetail.getStatus())) {
             throw new BizException("xn0000", "订单还未完成，无法申请售后");
         }
+
         // 检验是否存在流程中的售后订单
         if (afterSaleBO.isAftrSaleExist(orderDetailCode)) {
             throw new BizException("xn0000", "该订单正在进行或已完成售后，无法重复申请售后");
         }
-        // 发货人检验
-        // if (!orderDetail.getReceiver().equals(deliver)) {
-        // throw new BizException("xn0000", "不是下单人无法申请售后");
-        // }
 
         String codeString = afterSaleBO.saveAfterSale(orderDetail.getShopCode(),
             orderDetailCode, logisticsCompany, logisticsNumber, refundAmount,
             deliver);
+
+        // 更新明细状态
+        commodityOrderDetailBO.toAfterSell(orderDetailCode);
+
         return codeString;
     }
 
     @Override
+    @Transactional
     public String applyMoney(String orderDetailCode, BigDecimal refundAmount,
             String applyUser) {
 
-        // 订单号检验
         CommodityOrderDetail orderDetail = commodityOrderDetailBO
             .getCommodityOrderDetail(orderDetailCode);
 
         // 订单状态检验
         if (!ECommodityOrderDetailStatus.TO_COMMENT.getCode()
-            .equals(orderDetail.getStatus())
-                && !ECommodityOrderDetailStatus.FINISH.getCode()
-                    .equals(orderDetail.getStatus())) {
+            .equals(orderDetail.getStatus())) {
             throw new BizException("xn0000", "订单还未完成，无法申请售后");
         }
+
         // 检验是否存在流程中的售后订单
         if (afterSaleBO.isAftrSaleExist(orderDetailCode)) {
             throw new BizException("xn0000", "该订单正在进行或已完成售后，无法重复申请售后");
         }
-        // 发货人检验
-        // if (!orderDetail.getReceiver().equals(applyUser)) {
-        // throw new BizException("xn0000", "不是下单人无法申请售后");
-        // }
+
         String codeString = afterSaleBO.AfterSaleNoGoods(
             orderDetail.getShopCode(), orderDetailCode, refundAmount);
+
+        // 更新明细状态
+        commodityOrderDetailBO.toAfterSell(orderDetailCode);
 
         return codeString;
     }
@@ -137,6 +137,8 @@ public class AfterSaleAOImpl implements IAfterSaleAO {
         } else {
             afterSaleBO.refreshHandle(data, EAfterSaleStatus.FALSE.getCode());
         }
+
+        commodityOrderDetailBO.handleAfterSell(code);
     }
 
     private void refund(AfterSale data) {

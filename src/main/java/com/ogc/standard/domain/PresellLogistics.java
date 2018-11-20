@@ -69,6 +69,9 @@ public class PresellLogistics extends ABaseDO {
     // 状态列表
     private List<String> statusList;
 
+    // 商品信息
+    private PresellProduct presellProduct;
+
     public void setCode(String code) {
         this.code = code;
     }
@@ -211,6 +214,14 @@ public class PresellLogistics extends ABaseDO {
 
     public void setStatusList(List<String> statusList) {
         this.statusList = statusList;
+    }
+
+    public PresellProduct getPresellProduct() {
+        return presellProduct;
+    }
+
+    public void setPresellProduct(PresellProduct presellProduct) {
+        this.presellProduct = presellProduct;
     }
 
 }

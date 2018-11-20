@@ -63,6 +63,11 @@
 			<if test="applyDatetimeEnd != null and applyDatetimeEnd != '' ">
 				<![CDATA[AND t.apply_datetime <= #{applyDatetimeEnd}]]>
 			</if>
+			
+			<if test="existsSettle != null and existsSettle != '' and existsSettle == 1 ">
+				AND EXISTS (SELECT 1 from tsys_settle where ref_code = t.code and ref_type = 5)
+			</if>
+			
 		</trim>
 	</sql>
 	

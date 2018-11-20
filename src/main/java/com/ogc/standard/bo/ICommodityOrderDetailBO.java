@@ -27,16 +27,17 @@ public interface ICommodityOrderDetailBO
             String specsName, String applyUser, Long quantity, BigDecimal price,
             String addressCode);
 
-    // 取消订单
-    public void refreshCancel(CommodityOrderDetail commodityOrderDetail);
+    // 待评价
+    public void toCommentByOrder(String orderCode);
 
-    // 支付成功
-    public void refreshPay(String code);
+    // 评价
+    public void comment(String code);
 
-    public void refershDelive(CommodityOrderDetail data,
-            String logisticsCompany, String logisticsNumber, String deliver);
+    // 申请售后
+    public void toAfterSell(String code);
 
-    public void refreshReceive(CommodityOrderDetail data);
+    // 处理售后
+    public void handleAfterSell(String code);
 
     public List<CommodityOrderDetail> queryDetailList(
             CommodityOrderDetail condition);

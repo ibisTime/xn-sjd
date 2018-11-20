@@ -65,23 +65,23 @@ public class CommodityOrderDetailDAOImpl extends AMybatisTemplate
     }
 
     @Override
-    public int updatePay(CommodityOrderDetail data) {
-        return super.update(NAMESPACE.concat("update_pay"), data);
+    public int updateToCommentByOrder(CommodityOrderDetail data) {
+        return super.update(NAMESPACE.concat("update_toCommentByOrder"), data);
     }
 
     @Override
-    public int updateDelive(CommodityOrderDetail data) {
-        return super.update(NAMESPACE.concat("update_delive"), data);
+    public int updateComment(CommodityOrderDetail data) {
+        return super.update(NAMESPACE.concat("update_comment"), data);
     }
 
     @Override
-    public int updateReceive(CommodityOrderDetail data) {
-        return super.update(NAMESPACE.concat("update_receive"), data);
+    public int updateToAfterSell(CommodityOrderDetail data) {
+        return super.update(NAMESPACE.concat("update_toAfterSell"), data);
     }
 
     @Override
-    public int updateCancelOrder(CommodityOrderDetail data) {
-        return super.update(NAMESPACE.concat("update_cancelOrder"), data);
+    public int updateHandleAfterSell(CommodityOrderDetail data) {
+        return super.update(NAMESPACE.concat("update_afterSelled"), data);
     }
 
 }

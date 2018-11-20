@@ -115,7 +115,8 @@ public class CartAOImpl implements ICartAO {
 
             // 落地商品订单
             String orderCode = commodityOrderBO.saveOrder(applyUser, applyNote,
-                payGroup, expressType, applyUser, applyNote, addressCode);
+                payGroup, shop.getShopCode(), expressType, applyUser, applyNote,
+                addressCode);
 
             // 落地订单明细
             for (Cart cart : cartList) {

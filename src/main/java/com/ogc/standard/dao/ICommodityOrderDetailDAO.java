@@ -20,12 +20,16 @@ public interface ICommodityOrderDetailDAO
         extends IBaseDAO<CommodityOrderDetail> {
     String NAMESPACE = ICommodityOrderDetailDAO.class.getName().concat(".");
 
-    // 支付成功
-    public int updatePay(CommodityOrderDetail data);
+    // 待评价
+    public int updateToCommentByOrder(CommodityOrderDetail data);
 
-    public int updateCancelOrder(CommodityOrderDetail data);
+    // 评价
+    public int updateComment(CommodityOrderDetail data);
 
-    public int updateDelive(CommodityOrderDetail data);
+    // 申请售后
+    public int updateToAfterSell(CommodityOrderDetail data);
 
-    public int updateReceive(CommodityOrderDetail data);
+    // 处理售后
+    public int updateHandleAfterSell(CommodityOrderDetail data);
+
 }

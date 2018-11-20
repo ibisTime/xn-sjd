@@ -27,6 +27,9 @@ public class CommodityOrder extends ABaseDO {
     // 编号
     private String code;
 
+    // 店铺编号
+    private String shopCode;
+
     // 订单金额
     private BigDecimal amount;
 
@@ -116,6 +119,12 @@ public class CommodityOrder extends ABaseDO {
 
     // 地址
     private Address address;
+
+    // 发货时间起
+    private Date deliverDatetimeStart;
+
+    // 发货时间止
+    private Date deliverDatetimeEnd;
 
     public List<CommodityShopOrder> getShopOrderList() {
         return shopOrderList;
@@ -363,6 +372,30 @@ public class CommodityOrder extends ABaseDO {
 
     public void setReceiverDatetime(Date receiverDatetime) {
         this.receiverDatetime = receiverDatetime;
+    }
+
+    public Date getDeliverDatetimeStart() {
+        return deliverDatetimeStart;
+    }
+
+    public void setDeliverDatetimeStart(Date deliverDatetimeStart) {
+        this.deliverDatetimeStart = deliverDatetimeStart;
+    }
+
+    public Date getDeliverDatetimeEnd() {
+        return deliverDatetimeEnd;
+    }
+
+    public void setDeliverDatetimeEnd(Date deliverDatetimeEnd) {
+        this.deliverDatetimeEnd = deliverDatetimeEnd;
+    }
+
+    public String getShopCode() {
+        return shopCode;
+    }
+
+    public void setShopCode(String shopCode) {
+        this.shopCode = shopCode;
     }
 
 }

@@ -48,8 +48,11 @@ public interface ICommodityOrderAO {
     // 收货
     public void receive(String code, String receiver);
 
-    // 获取抵扣金额
+    // 获取订单抵扣金额
     public XN629048Res getOrderDkAmount(String code);
+
+    // 获取组合抵扣金额
+    public XN629048Res getGroupOrderDkAmount(String code);
 
     public Paginable<CommodityOrder> queryOrderPage(int start, int limit,
             CommodityOrder condition);

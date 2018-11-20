@@ -57,6 +57,7 @@
 			<if test="receiver != null and receiver != '' ">
 				AND t.receiver = #{receiver}
 			</if>
+			
 			<if test="deliverDatetimeStart != null and deliverDatetimeStart != '' ">
 				<![CDATA[AND t.deliver_datetime >= #{deliverDatetimeStart}]]>
 			</if>
@@ -155,46 +156,36 @@
 		)
 	</insert>
 	
-	<update id="update_pay" parameterType="commodityOrderDetail">
+	<update id="update_toCommentByOrder" parameterType="commodityOrderDetail">
 		UPDATE tsc_commodity_order_detail
 		SET
 		status=#{status}
-		,update_datetime=#{updateDatetime}
 		WHERE
-		code=#{code}
+		order_code=#{orderCode}
 	</update>
 	
-	<update id="update_cancelOrder" parameterType="commodityOrderDetail">
+	<update id="update_comment" parameterType="commodityOrderDetail">
 		UPDATE tsc_commodity_order_detail
 		SET
 		status=#{status}
-		,update_datetime=#{updateDatetime}
 		WHERE
 		code=#{code}
 	</update>
 	
-	<update id="update_delive" parameterType="commodityOrderDetail">
+	<update id="update_toAfterSell" parameterType="commodityOrderDetail">
 		UPDATE tsc_commodity_order_detail
 		SET
-		logistics_company=#{logisticsCompany}
-		,logistics_number=#{logisticsNumber}
-		,deliver=#{deliver}
-		,deliver_datetime=#{deliverDatetime}
-		,receiver=#{receiver}
-		,receiver_mobile=#{receiverMobile}
-		,status=#{status}
-		,update_datetime=#{updateDatetime}
+		status=#{status}
 		WHERE
 		code=#{code}
 	</update>
 	
-	<update id="update_receive" parameterType="commodityOrderDetail">
+	<update id="update_afterSelled" parameterType="commodityOrderDetail">
 		UPDATE tsc_commodity_order_detail
 		SET
-		receiver_datetime=#{receiverDatetime}
-		,status=#{status}
-		,update_datetime=#{updateDatetime}
+		status=#{status}
 		WHERE
 		code=#{code}
 	</update>
+	
 </mapper>

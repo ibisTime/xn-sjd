@@ -29,6 +29,15 @@ public class CommodityShopOrder extends ABaseDO {
 
     private List<CommodityOrderDetail> detailList;
 
+    public CommodityShopOrder(String orderCode, String shopCode,
+            String shopName, List<CommodityOrderDetail> detailList) {
+        super();
+        this.orderCode = orderCode;
+        this.shopCode = shopCode;
+        this.shopName = shopName;
+        this.detailList = detailList;
+    }
+
     public String getOrderCode() {
         return orderCode;
     }

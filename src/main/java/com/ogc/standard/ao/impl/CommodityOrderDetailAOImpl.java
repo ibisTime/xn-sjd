@@ -8,7 +8,6 @@
  */
 package com.ogc.standard.ao.impl;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -16,18 +15,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.ICommodityOrderDetailAO;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IAddressBO;
+import com.ogc.standard.bo.ICommentBO;
 import com.ogc.standard.bo.ICommodityBO;
 import com.ogc.standard.bo.ICommodityOrderBO;
 import com.ogc.standard.bo.ICommodityOrderDetailBO;
 import com.ogc.standard.bo.ICompanyBO;
 import com.ogc.standard.bo.IJourBO;
-import com.ogc.standard.bo.ISYSConfigBO;
+import com.ogc.standard.bo.IKeywordBO;
 import com.ogc.standard.bo.base.Paginable;
-import com.ogc.standard.common.SysConstants;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.Address;
 import com.ogc.standard.domain.Commodity;
@@ -35,12 +35,14 @@ import com.ogc.standard.domain.CommodityOrder;
 import com.ogc.standard.domain.CommodityOrderDetail;
 import com.ogc.standard.domain.Company;
 import com.ogc.standard.domain.Jour;
+import com.ogc.standard.domain.Keyword;
 import com.ogc.standard.enums.EAccountType;
+import com.ogc.standard.enums.ECommentStatus;
+import com.ogc.standard.enums.ECommodityOrderDetailStatus;
 import com.ogc.standard.enums.ECurrency;
-import com.ogc.standard.enums.EJourBizTypeBusiness;
-import com.ogc.standard.enums.EJourBizTypePlat;
-import com.ogc.standard.enums.EJourBizTypeUser;
-import com.ogc.standard.enums.ESysUser;
+import com.ogc.standard.enums.EFilterFlag;
+import com.ogc.standard.enums.EKeyWordReaction;
+import com.ogc.standard.exception.BizException;
 
 /** 
  * @author: taojian 
@@ -66,9 +68,6 @@ public class CommodityOrderDetailAOImpl implements ICommodityOrderDetailAO {
     private IAccountBO accountBO;
 
     @Autowired
-    private ISYSConfigBO sysConfigBO;
-
-    @Autowired
     private ICommodityBO commodityBO;
 
     @Autowired
@@ -77,31 +76,68 @@ public class CommodityOrderDetailAOImpl implements ICommodityOrderDetailAO {
     @Autowired
     private IJourBO jourBO;
 
-    @Override
-    public void payDetail(CommodityOrderDetail data, String applyUser,
-            String orderCode) {
-        accountBO.transAmount(applyUser, ESysUser.SYS_USER.getCode(),
-            ECurrency.CNY.getCode(), data.getAmount(),
-            EJourBizTypeUser.COMMODITY.getCode(),
-            EJourBizTypePlat.COMMODITY.getCode(),
-            EJourBizTypeUser.COMMODITY.getValue(),
-            EJourBizTypePlat.COMMODITY.getValue(), orderCode);
-    }
+    @Autowired
+    private ICommentBO commentBO;
+
+    @Autowired
+    private IKeywordBO keywordBO;
 
     @Override
-    public void distribution(CommodityOrderDetail data, String orderCode) {
-        Company company = companyBO.getCompany(data.getShopCode());
-        String businessman = company.getUserId();
-        // 商家分销
-        BigDecimal rate = sysConfigBO
-            .getBigDecimalValue(SysConstants.DIST_BUSINESS_RATE);
-        BigDecimal businessAmount = data.getAmount().multiply(rate);
-        accountBO.transAmount(ESysUser.SYS_USER.getCode(), businessman,
-            ECurrency.CNY.getCode(), businessAmount,
-            EJourBizTypePlat.COMMODITY_DIST.getCode(),
-            EJourBizTypeBusiness.BUSINESS_PROFIT.getCode(),
-            EJourBizTypePlat.COMMODITY_DIST.getValue(),
-            EJourBizTypeBusiness.BUSINESS_PROFIT.getValue(), orderCode);
+    @Transactional
+    public String comment(String code, String userId, String content) {
+        CommodityOrderDetail commodityOrderDetail = commodityOrderDetailBO
+            .getCommodityOrderDetail(code);
+
+        if (!ECommodityOrderDetailStatus.TO_COMMENT.getCode()
+            .equals(commodityOrderDetail.getStatus())) {
+            throw new BizException("xn0000", "订单未处于可评价状态");
+        }
+
+        // 关键字过滤
+        List<Keyword> keywordList = keywordBO.checkContent(content);
+        String status = ECommentStatus.RELEASED.getCode();
+        String filterFlag = null;
+
+        if (CollectionUtils.isNotEmpty(keywordList)) {
+
+            // 直接拦截
+            if (EKeyWordReaction.REFUSE.getCode()
+                .equals(keywordList.get(0).getReaction())) {
+                throw new BizException("xn0000", "你的评论含有拦截词:"
+                        + keywordList.get(0).getWord() + " 无法评论，请重新编辑再评论");
+            }
+
+            // 替换**
+            if (EKeyWordReaction.REPLACE.getCode()
+                .equals(keywordList.get(0).getReaction())) {
+                for (Keyword keyword : keywordList) {
+                    content = keywordBO.replaceKeyword(content,
+                        keyword.getWord());
+                }
+
+                filterFlag = EFilterFlag.REPLACED.getCode();
+            }
+
+            // 审核
+            if (EKeyWordReaction.APPROVE.getCode()
+                .equals(keywordList.get(0).getReaction())) {
+                status = ECommentStatus.TO_APPROVE.getCode();
+            }
+        }
+
+        if (ECommentStatus.RELEASED.getCode().equals(status)
+                && null == filterFlag) {
+            filterFlag = EFilterFlag.NORMAN.getCode();
+        } else if (ECommentStatus.TO_APPROVE.getCode().equals(status)) {
+            filterFlag = EFilterFlag.TO_APPROVE.getCode();
+        }
+
+        String commentCode = commentBO.saveComment(userId, content,
+            commodityOrderDetail.getCode(), null, null, status);
+
+        commodityOrderDetailBO.comment(code);
+
+        return commentCode;
     }
 
     @Override

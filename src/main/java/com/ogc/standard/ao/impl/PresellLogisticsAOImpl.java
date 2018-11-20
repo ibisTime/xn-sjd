@@ -10,9 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ogc.standard.ao.IPresellLogisticsAO;
 import com.ogc.standard.bo.IOriginalGroupBO;
 import com.ogc.standard.bo.IPresellLogisticsBO;
+import com.ogc.standard.bo.IPresellProductBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.OriginalGroup;
 import com.ogc.standard.domain.PresellLogistics;
+import com.ogc.standard.domain.PresellProduct;
 import com.ogc.standard.enums.EPresellLogisticsStatus;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
@@ -25,6 +27,9 @@ public class PresellLogisticsAOImpl implements IPresellLogisticsAO {
 
     @Autowired
     private IOriginalGroupBO originalGroupBO;
+
+    @Autowired
+    private IPresellProductBO presellProductBO;
 
     @Override
     public void send(String code, String deliver, String logisticsCompany,
@@ -118,6 +123,11 @@ public class PresellLogisticsAOImpl implements IPresellLogisticsAO {
         if (null != originalGroup) {
             presellLogistics.setUnit(originalGroup.getUnit());
         }
+
+        // 商品信息
+        PresellProduct presellProduct = presellProductBO
+            .getPresellProduct(originalGroup.getProductCode());
+        presellLogistics.setPresellProduct(presellProduct);
     }
 
 }

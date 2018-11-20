@@ -111,6 +111,9 @@ public class PresellOrder extends ABaseDO {
     // 下单人信息
     private User applyUserInfo;
 
+    // 是否存在结算
+    private String existsSettle;
+
     public String getCode() {
         return code;
     }
@@ -365,6 +368,14 @@ public class PresellOrder extends ABaseDO {
 
     public void setPackCount(Integer packCount) {
         this.packCount = packCount;
+    }
+
+    public String getExistsSettle() {
+        return existsSettle;
+    }
+
+    public void setExistsSettle(String existsSettle) {
+        this.existsSettle = existsSettle;
     }
 
 }

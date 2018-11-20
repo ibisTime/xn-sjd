@@ -9,7 +9,6 @@
 package com.ogc.standard.ao.impl;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -42,7 +41,6 @@ import com.ogc.standard.domain.Address;
 import com.ogc.standard.domain.Commodity;
 import com.ogc.standard.domain.CommodityOrder;
 import com.ogc.standard.domain.CommodityOrderDetail;
-import com.ogc.standard.domain.CommodityShopOrder;
 import com.ogc.standard.domain.CommoditySpecs;
 import com.ogc.standard.domain.Company;
 import com.ogc.standard.domain.Jour;
@@ -53,7 +51,6 @@ import com.ogc.standard.dto.res.PayOrderRes;
 import com.ogc.standard.dto.res.XN629048Res;
 import com.ogc.standard.enums.EAccountType;
 import com.ogc.standard.enums.EBoolean;
-import com.ogc.standard.enums.ECommodityOrderDetailStatus;
 import com.ogc.standard.enums.ECommodityOrderStatus;
 import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EJourBizTypePlat;
@@ -127,7 +124,8 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
 
         // 落地订单数据
         String orderCode = commodityOrderBO.saveOrder(applyUser, applyNote,
-            null, expressType, applyUser, applyNote, addressCode);
+            null, commodity.getShopCode(), expressType, applyUser, applyNote,
+            addressCode);
 
         // 落地单店铺订单
         commodityOrderDetailBO.saveDetail(orderCode, commodity.getShopCode(),
@@ -216,15 +214,16 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
     @Transactional
     public Object toPayGroupCommodityOrder(XN629714Req req) {
 
-        // 支付密码确认
-        if (StringUtils.isNotBlank(req.getTradePwd())) {
-            userBO.checkTradePwd(req.getUpdater(), req.getTradePwd());
-        }
-
         List<CommodityOrder> commodityOrderList = commodityOrderBO
             .queryCommodityOrderByPayGroup(req.getPayGroup());
-        Object result = null;
 
+        // 支付密码确认
+        if (StringUtils.isNotBlank(req.getTradePwd())) {
+            userBO.checkTradePwd(commodityOrderList.get(0).getApplyUser(),
+                req.getTradePwd());
+        }
+
+        Object result = null;
         for (CommodityOrder order : commodityOrderList) {
 
             if (!ECommodityOrderStatus.TO_PAY.getCode()
@@ -337,37 +336,43 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
     @Transactional
     public void delive(String code, String logisticsCompany,
             String logisticsNumber, String deliver) {
-        CommodityOrderDetail commodityOrderDetail = commodityOrderDetailBO
-            .getCommodityOrderDetail(code);
-        if (!ECommodityOrderDetailStatus.TODELIVE.getCode()
-            .equals(commodityOrderDetail.getStatus())) {
-            throw new BizException("xn0000", "订单未处于可发货状态");
+        CommodityOrder commodityOrder = commodityOrderBO
+            .getCommodityOrder(code);
+
+        // 状态判断
+        if (!ECommodityOrderStatus.TODELIVE.getCode()
+            .equals(commodityOrder.getStatus())) {
+            throw new BizException("xn0000", "该订单不处于可收货的状态");
         }
 
-        commodityOrderDetailBO.refershDelive(commodityOrderDetail,
-            logisticsCompany, logisticsNumber, deliver);
+        commodityOrderBO.refershDelive(commodityOrder, logisticsCompany,
+            logisticsNumber, deliver);
 
     }
 
     @Override
     @Transactional
     public void receive(String code, String receiver) {
-        CommodityOrderDetail detail = commodityOrderDetailBO
-            .getCommodityOrderDetail(code);
+        CommodityOrder commodityOrder = commodityOrderBO
+            .getCommodityOrder(code);
 
         // 状态判断
-        if (!ECommodityOrderDetailStatus.TORECEIVE.getCode()
-            .equals(detail.getStatus())) {
+        if (!ECommodityOrderStatus.TORECEIVE.getCode()
+            .equals(commodityOrder.getStatus())) {
             throw new BizException("xn0000", "该订单不处于可收货的状态");
         }
 
         // 状态更新
-        commodityOrderDetailBO.refreshReceive(detail);
+        commodityOrderBO.refreshReceive(commodityOrder);
+
+        // 更新订单明细状态
+        commodityOrderDetailBO.toCommentByOrder(code);
 
         // 月销量更新
-        Commodity data = commodityBO.getCommodity(detail.getCommodityCode());
-        commodityBO.refreshMonthSellCount(data,
-            detail.getQuantity() + data.getMonthSellCount());
+        // Commodity data =
+        // commodityBO.getCommodity(commodityOrder.getCommodityCode());
+        // commodityBO.refreshMonthSellCount(data,
+        // commodityOrder.getQuantity() + data.getMonthSellCount());
     }
 
     public void timeoutCancel() {
@@ -402,14 +407,15 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
 
     public void doReceive() {
         logger.info("***************开始扫描待收货订单***************");
-        CommodityOrderDetail condition = new CommodityOrderDetail();
-        condition.setStatus(ECommodityOrderDetailStatus.TORECEIVE.getCode());
+        CommodityOrder condition = new CommodityOrder();
+        condition.setStatus(ECommodityOrderStatus.TORECEIVE.getCode());
         condition.setDeliverDatetimeEnd(
             DateUtil.getRelativeDateOfDays(new Date(), -15));
-        List<CommodityOrderDetail> detailList = commodityOrderDetailBO
-            .queryDetailList(condition);
-        for (CommodityOrderDetail detail : detailList) {
-            commodityOrderDetailBO.refreshReceive(detail);
+        List<CommodityOrder> commodityOrderList = commodityOrderBO
+            .queryOrderList(condition);
+
+        for (CommodityOrder commodityOrder : commodityOrderList) {
+            commodityOrderBO.refreshReceive(commodityOrder);
         }
         logger.info("***************结束扫描待收货订单***************");
     }
@@ -422,6 +428,26 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
         return distributionOrderBO.getOrderDeductAmount(
             commodityOrder.getAmount(), commodityOrder.getApplyUser(),
             EBoolean.YES.getCode());
+    }
+
+    @Override
+    public XN629048Res getGroupOrderDkAmount(String payGroup) {
+        List<CommodityOrder> commodityOrderList = commodityOrderBO
+            .queryCommodityOrderByPayGroup(payGroup);
+
+        BigDecimal cnyAmount = BigDecimal.ZERO;// 可抵扣多少人民币
+        BigDecimal jfAmount = BigDecimal.ZERO;// 需要用多少积分来抵扣
+
+        for (CommodityOrder commodityOrder : commodityOrderList) {
+            XN629048Res res = distributionOrderBO.getOrderDeductAmount(
+                commodityOrder.getAmount(), commodityOrder.getApplyUser(),
+                EBoolean.YES.getCode());
+
+            cnyAmount = cnyAmount.add(res.getCnyAmount());
+            jfAmount = jfAmount.add(res.getJfAmount());
+        }
+
+        return new XN629048Res(cnyAmount, jfAmount);
     }
 
     @Override
@@ -456,39 +482,13 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
         // 获得明细列表
         List<CommodityOrderDetail> detailList = commodityOrderDetailBO
             .queryOrderDetail(order.getCode());
-
-        // 获得所包含的店铺编号
-        List<String> shopCodes = new ArrayList<String>();
-        for (CommodityOrderDetail detail : detailList) {
-            if (!shopCodes.contains(detail.getShopCode())) {
-                shopCodes.add(detail.getShopCode());
-            }
-        }
-        List<CommodityShopOrder> shopOrders = new ArrayList<CommodityShopOrder>();
-
-        // 分配店铺订单
-        for (String shopCode : shopCodes) {
-            CommodityOrderDetail condition = new CommodityOrderDetail();
-            condition.setShopCode(shopCode);
-            condition.setOrderCode(order.getCode());
-            List<CommodityOrderDetail> shopDetail = commodityOrderDetailBO
-                .queryDetailList(condition);
-            CommodityShopOrder shopOrder = new CommodityShopOrder();
-            shopOrder.setOrderCode(order.getCode());
-            shopOrder.setShopCode(shopCode);
-            shopOrder.setShopName(companyBO.getCompany(shopCode).getName());
-            shopOrder.setDetailList(shopDetail);
-            shopOrders.add(shopOrder);
-        }
-        order.setShopOrderList(shopOrders);
+        order.setDetailList(detailList);
 
         // 卖家
-        StringBuilder sellersName = new StringBuilder();
-        for (String shopCode : shopCodes) {
-            Company shop = companyBO.getCompany(shopCode);
-            sellersName.append(shop.getName()).append(".");
+        Company shop = companyBO.getCompany(order.getShopCode());
+        if (null != shop) {
+            order.setSellersName(shop.getName());
         }
-        order.setSellersName(sellersName.toString());
 
         // 支付流水编号
         Account userCnyAccount = accountBO

@@ -20,7 +20,6 @@ import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.ICommodityOrderDAO;
 import com.ogc.standard.domain.CommodityOrder;
-import com.ogc.standard.domain.CommodityOrderDetail;
 import com.ogc.standard.enums.ECommodityOrderStatus;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.enums.ESysUser;
@@ -40,12 +39,13 @@ public class CommodityOrderBOImpl extends PaginableBOImpl<CommodityOrder>
 
     @Override
     public String saveOrder(String applyUser, String applyNote, String payGroup,
-            String expressType, String updater, String remark,
+            String shopCode, String expressType, String updater, String remark,
             String addressCode) {
         CommodityOrder data = new CommodityOrder();
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.CommodityOrder.getCode());
         data.setCode(code);
+        data.setShopCode(shopCode);
         data.setPayGroup(payGroup);
         data.setApplyUser(applyUser);
         data.setApplyDatetime(new Date());
@@ -109,14 +109,23 @@ public class CommodityOrderBOImpl extends PaginableBOImpl<CommodityOrder>
     }
 
     @Override
-    public void refershDelive(CommodityOrderDetail data,
-            String logisticsCompany, String logisticsNumber, String deliver) {
-
+    public void refershDelive(CommodityOrder data, String logisticsCompany,
+            String logisticsNumber, String deliver) {
+        data.setLogisticsCompany(logisticsCompany);
+        data.setLogisticsNumber(logisticsNumber);
+        data.setDeliver(deliver);
+        data.setDeliverDatetime(new Date());
+        data.setUpdateDatetime(new Date());
+        data.setStatus(ECommodityOrderStatus.TORECEIVE.getCode());
+        commodityOrderDAO.updateDelive(data);
     }
 
     @Override
-    public void refreshReceive(CommodityOrderDetail data) {
-
+    public void refreshReceive(CommodityOrder data) {
+        data.setReceiverDatetime(new Date());
+        data.setUpdateDatetime(new Date());
+        data.setStatus(ECommodityOrderStatus.TO_COMMENT.getCode());
+        commodityOrderDAO.updateReceive(data);
     }
 
     @Override

@@ -21,6 +21,9 @@ import com.ogc.standard.domain.CommodityOrderDetail;
 public interface ICommodityOrderDetailAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
+    // 评价
+    public String comment(String code, String userId, String content);
+
     public Paginable<CommodityOrderDetail> queryDetailPage(int start, int limit,
             CommodityOrderDetail condition);
 
@@ -28,9 +31,4 @@ public interface ICommodityOrderDetailAO {
             CommodityOrderDetail condition);
 
     public CommodityOrderDetail getCommodityOrderDetail(String code);
-
-    public void payDetail(CommodityOrderDetail data, String applyUser,
-            String orderCode);
-
-    public void distribution(CommodityOrderDetail data, String orderCode);
 }

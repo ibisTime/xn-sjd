@@ -13,7 +13,6 @@ import java.util.List;
 
 import com.ogc.standard.bo.base.IPaginableBO;
 import com.ogc.standard.domain.CommodityOrder;
-import com.ogc.standard.domain.CommodityOrderDetail;
 
 /** 
  * @author: taojian 
@@ -23,7 +22,7 @@ import com.ogc.standard.domain.CommodityOrderDetail;
 public interface ICommodityOrderBO extends IPaginableBO<CommodityOrder> {
 
     public String saveOrder(String applyUser, String applyNote, String payGroup,
-            String expressType, String updater, String remark,
+            String shopCode, String expressType, String updater, String remark,
             String addressCode);
 
     public void refreshPay(CommodityOrder data, BigDecimal payAmount);
@@ -37,10 +36,10 @@ public interface ICommodityOrderBO extends IPaginableBO<CommodityOrder> {
 
     public void refreshAmount(Long quantity, BigDecimal amount, String code);
 
-    public void refershDelive(CommodityOrderDetail data,
-            String logisticsCompany, String logisticsNumber, String deliver);
+    public void refershDelive(CommodityOrder data, String logisticsCompany,
+            String logisticsNumber, String deliver);
 
-    public void refreshReceive(CommodityOrderDetail data);
+    public void refreshReceive(CommodityOrder data);
 
     public List<CommodityOrder> queryOrderList(CommodityOrder condition);
 

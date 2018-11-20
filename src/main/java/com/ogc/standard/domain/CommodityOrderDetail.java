@@ -1,11 +1,3 @@
-/**
- * @Title CommodityOrder.java 
- * @Package com.ogc.standard.domain 
- * @Description 
- * @author taojian  
- * @date 2018年11月6日 上午11:29:58 
- * @version V1.0   
- */
 package com.ogc.standard.domain;
 
 import java.math.BigDecimal;
@@ -14,7 +6,7 @@ import java.util.Date;
 import com.ogc.standard.dao.base.ABaseDO;
 
 /** 
- * 商品订单（单店铺）
+ * 订单明细
  * @author: taojian 
  * @since: 2018年11月6日 上午11:29:58 
  * @history:

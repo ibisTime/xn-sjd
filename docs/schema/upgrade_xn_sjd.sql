@@ -191,3 +191,12 @@ ADD COLUMN `deliver_datetime` DATETIME NULL COMMENT '发货时间' AFTER `delive
 ADD COLUMN `receiver` VARCHAR(32) NULL COMMENT '收货人' AFTER `deliver_datetime`,
 ADD COLUMN `receiver_mobile` VARCHAR(45) NULL COMMENT '收货人手机号' AFTER `receiver`,
 ADD COLUMN `receiver_datetime` DATETIME NULL COMMENT '收货时间' AFTER `receiver_mobile`;
+
+ALTER TABLE `tsc_commodity_order_detail` 
+CHANGE COLUMN `order_code` `order_code` VARCHAR(32) NULL COMMENT '订单编号' ,
+CHANGE COLUMN `shop_code` `shop_code` VARCHAR(32) NULL COMMENT '店铺编号' ,
+CHANGE COLUMN `commodity_code` `commodity_code` VARCHAR(32) NULL COMMENT '商品编号' ,
+CHANGE COLUMN `specs_id` `specs_id` BIGINT(11) NULL COMMENT '规格编号' ,
+CHANGE COLUMN `address_code` `address_code` VARCHAR(32) NULL COMMENT '收货地址编号' ,
+CHANGE COLUMN `status` `status` VARCHAR(4) NULL COMMENT '状态（0 待发货，1 已发货待收货，2 已完成）' ;
+

@@ -21,6 +21,8 @@ import com.ogc.standard.bo.ICommodityOrderDetailBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.ICommodityOrderDetailDAO;
+import com.ogc.standard.domain.Address;
+import com.ogc.standard.domain.Commodity;
 import com.ogc.standard.domain.CommodityOrderDetail;
 import com.ogc.standard.enums.ECommodityOrderDetailStatus;
 import com.ogc.standard.enums.EGeneratePrefix;
@@ -51,6 +53,9 @@ public class CommodityOrderDetailBOImpl
             String specsName, String applyUser, Long quantity, BigDecimal price,
             String addressCode) {
         CommodityOrderDetail data = new CommodityOrderDetail();
+        Commodity commodity = commodityBO.getCommodity(commodityCode);
+        Address address = addressBO.getAddress(addressCode);
+
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.CommodityOrderDetail.getCode());
         data.setCode(code);
@@ -68,12 +73,10 @@ public class CommodityOrderDetailBOImpl
         BigDecimal amount = price.multiply(BigDecimal.valueOf(quantity));
 
         data.setAmount(amount);
-        String listPic = commodityBO.getCommodity(commodityCode).getListPic();
-        data.setListPic(listPic);
-        data.setStatus(ECommodityOrderDetailStatus.TO_PAY.getCode());
+        data.setListPic(commodity.getListPic());
         data.setAddressCode(addressCode);
-        data.setReceiver(addressBO.getAddress(addressCode).getUserId());
-        data.setReceiverMobile(addressBO.getAddress(addressCode).getMobile());
+        data.setReceiver(address.getUserId());
+        data.setReceiverMobile(address.getMobile());
         data.setUpdateDatetime(new Date());
 
         commodityOrderDetailDAO.insert(data);
@@ -81,46 +84,39 @@ public class CommodityOrderDetailBOImpl
     }
 
     @Override
-    public void refreshCancel(CommodityOrderDetail commodityOrderDetail) {
-        if (null != commodityOrderDetail) {
-            commodityOrderDetail
-                .setStatus(ECommodityOrderDetailStatus.CANCLED.getCode());
-            commodityOrderDetail.setUpdateDatetime(new Date());
-            commodityOrderDetailDAO.updateCancelOrder(commodityOrderDetail);
-        }
-
+    public void toCommentByOrder(String orderCode) {
+        CommodityOrderDetail commodityOrderDetail = new CommodityOrderDetail();
+        commodityOrderDetail.setOrderCode(orderCode);
+        commodityOrderDetail
+            .setStatus(ECommodityOrderDetailStatus.TO_COMMENT.getCode());
+        commodityOrderDetailDAO.updateToCommentByOrder(commodityOrderDetail);
     }
 
     @Override
-    public void refreshPay(String code) {
+    public void comment(String code) {
         CommodityOrderDetail commodityOrderDetail = new CommodityOrderDetail();
-
         commodityOrderDetail.setCode(code);
         commodityOrderDetail
-            .setStatus(ECommodityOrderDetailStatus.TODELIVE.getCode());
-        commodityOrderDetail.setUpdateDatetime(new Date());
-
-        commodityOrderDetailDAO.updatePay(commodityOrderDetail);
+            .setStatus(ECommodityOrderDetailStatus.COMMENTED.getCode());
+        commodityOrderDetailDAO.updateComment(commodityOrderDetail);
     }
 
     @Override
-    public void refershDelive(CommodityOrderDetail data,
-            String logisticsCompany, String logisticsNumber, String deliver) {
-        data.setLogisticsCompany(logisticsCompany);
-        data.setLogisticsNumber(logisticsNumber);
-        data.setDeliver(deliver);
-        data.setDeliverDatetime(new Date());
-        data.setUpdateDatetime(new Date());
-        data.setStatus(ECommodityOrderDetailStatus.TORECEIVE.getCode());
-        commodityOrderDetailDAO.updateDelive(data);
+    public void toAfterSell(String code) {
+        CommodityOrderDetail commodityOrderDetail = new CommodityOrderDetail();
+        commodityOrderDetail.setCode(code);
+        commodityOrderDetail
+            .setStatus(ECommodityOrderDetailStatus.AFTER_SELL_ING.getCode());
+        commodityOrderDetailDAO.updateToAfterSell(commodityOrderDetail);
     }
 
     @Override
-    public void refreshReceive(CommodityOrderDetail data) {
-        data.setReceiverDatetime(new Date());
-        data.setUpdateDatetime(new Date());
-        data.setStatus(ECommodityOrderDetailStatus.TO_COMMENT.getCode());
-        commodityOrderDetailDAO.updateReceive(data);
+    public void handleAfterSell(String code) {
+        CommodityOrderDetail commodityOrderDetail = new CommodityOrderDetail();
+        commodityOrderDetail.setCode(code);
+        commodityOrderDetail
+            .setStatus(ECommodityOrderDetailStatus.AFTER_SALEED.getCode());
+        commodityOrderDetailDAO.updateHandleAfterSell(commodityOrderDetail);
     }
 
     @Override

@@ -4,6 +4,7 @@
 <mapper namespace="com.ogc.standard.dao.ICommodityOrderDAO">
 	<resultMap id="commodityOrder_DB_Result" type="commodityOrder">
 		<result column="code" property="code" />
+		<result column="shop_code" property="shopCode" />
 		<result column="amount" property="amount" />
 		<result column="quantity" property="quantity" />
 		<result column="apply_user" property="applyUser" />
@@ -37,6 +38,9 @@
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
+			</if>
+			<if test="shopCode != null and shopCode != '' ">
+				AND t.shop_code = #{shopCode}
 			</if>
 			<if test="applyUser != null and applyUser != '' ">
 				AND t.apply_user = #{applyUser}
@@ -75,12 +79,20 @@
 			<if test="applyDatetimeEnd != null and applyDatetimeEnd != '' ">
 				<![CDATA[AND t.apply_datetime <= #{applyDatetimeEnd}]]>
 			</if>
+			
+			<if test="deliverDatetimeStart != null and deliverDatetimeStart != '' ">
+				<![CDATA[AND t.deliver_datetime >= #{deliverDatetimeStart}]]>
+			</if>
+			<if test="deliverDatetimeEnd != null and deliverDatetimeEnd != '' ">
+				<![CDATA[AND t.deliver_datetime <= #{deliverDatetimeEnd}]]>
+			</if>
 		</trim>
 	</sql>
 	
 	<select id="select_commodity_order" parameterType="commodityOrder" resultMap="commodityOrder_DB_Result">
 		SELECT
 		t.code
+		,shop_code
 		,t.amount
 		,t.quantity
 		,t.apply_user
@@ -127,10 +139,12 @@
 	<insert id="insert_commodity_order" parameterType="commodityOrder">
 		INSERT INTO tsc_commodity_order(
 		code
+		,shop_code
 		,apply_user
 		,apply_datetime
 		,apply_note
 		,express_type
+		,pay_group
 		
 		,address_code
 		,status
@@ -141,10 +155,12 @@
 		VALUES
 		(
 		#{code}
+		,#{shopCode}
 		,#{applyUser}
 		,#{applyDatetime}
 		,#{applyNote}
 		,#{expressType}
+		,#{payGroup}
 		
 		,#{addressCode}
 		,#{status}
