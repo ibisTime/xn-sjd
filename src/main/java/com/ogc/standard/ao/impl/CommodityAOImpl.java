@@ -17,16 +17,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.ICommodityAO;
+import com.ogc.standard.bo.ICategoryBO;
 import com.ogc.standard.bo.ICommodityBO;
 import com.ogc.standard.bo.ICommoditySpecsBO;
 import com.ogc.standard.bo.ICompanyBO;
 import com.ogc.standard.bo.base.Paginable;
+import com.ogc.standard.domain.Category;
 import com.ogc.standard.domain.Commodity;
 import com.ogc.standard.domain.CommoditySpecs;
 import com.ogc.standard.domain.Company;
 import com.ogc.standard.dto.req.XN629700Req;
 import com.ogc.standard.dto.req.XN629701Req;
 import com.ogc.standard.enums.EBoolean;
+import com.ogc.standard.enums.ECategoryStatus;
 import com.ogc.standard.enums.ECommodityStatus;
 import com.ogc.standard.exception.BizException;
 
@@ -46,12 +49,20 @@ public class CommodityAOImpl implements ICommodityAO {
     @Autowired
     private ICompanyBO companyBO;
 
+    @Autowired
+    private ICategoryBO categoryBO;
+
     @Override
     @Transactional
-    public String addDraft(XN629700Req req) {
-        String code = null;
-        // 落地商品数据
-        code = commodityBO.saveCommodity(req);
+    public String addCommodity(XN629700Req req) {
+        Category category = categoryBO.getCategory(req.getCategoryCode());
+        if (ECategoryStatus.PUT_OFF.getCode().equals(category.getStatus())) {
+            throw new BizException("xn0000", "商品分类已下架，请重新选择！");
+        }
+
+        // 添加商品
+        String code = commodityBO.saveCommodity(req);
+
         // 落地规格数据
         for (CommoditySpecs data : req.getSpecsList()) {
             data.setCommodityCode(code);
@@ -61,19 +72,14 @@ public class CommodityAOImpl implements ICommodityAO {
         return code;
     }
 
-    public void monthZero() {
-        // 所有上架商品
-        Commodity condition = new Commodity();
-        condition.setStatus(ECommodityStatus.ON.getCode());
-        List<Commodity> commodities = commodityBO.queryCommodityList(condition);
-        for (Commodity commodity : commodities) {
-            commodityBO.refreshMonthSellCount(commodity, Long.valueOf(0));
-        }
-    }
-
     @Override
     @Transactional
     public void editCommodity(XN629701Req req) {
+        Category category = categoryBO.getCategory(req.getCategoryCode());
+        if (ECategoryStatus.PUT_OFF.getCode().equals(category.getStatus())) {
+            throw new BizException("xn0000", "商品分类已下架，请重新选择！");
+        }
+
         // 状态判断
         Commodity data = commodityBO.getCommodity(req.getCode());
         if (!ECommodityStatus.DRAFT.getCode().equals(data.getStatus())
@@ -81,28 +87,35 @@ public class CommodityAOImpl implements ICommodityAO {
                 && !ECommodityStatus.OFF.getCode().equals(data.getStatus())) {
             throw new BizException("xn000000", "该商品处于无法修改的状态");
         }
+
         // 修改数据
         commodityBO.refreshCommodity(req);
 
-        // TODO 落地新规格数据
+        // TODO 判断删除的规格
+        // 落地新规格数据
         for (CommoditySpecs specs : req.getSpecsList()) {
             if (null != specs.getId()) {
+
                 commoditySpecsBO.refreshSpecs(specs);
+
             } else {
+
                 specs.setCommodityCode(req.getCode());
                 commoditySpecsBO.saveSpecs(specs);
+
             }
         }
     }
 
     @Override
-    public void publishCommodity(String code, String updater, String remark) {
+    public void submitCommodity(String code, String updater, String remark) {
         Commodity data = commodityBO.getCommodity(code);
         if (!ECommodityStatus.DRAFT.getCode().equals(data.getStatus())
                 && !ECommodityStatus.FAILED.getCode().equals(data.getStatus())
                 && !ECommodityStatus.OFF.getCode().equals(data.getStatus())) {
             throw new BizException("xn0000", "该商品处于无法提交的状态");
         }
+
         commodityBO.refreshStatus(code, ECommodityStatus.TOAPPROVE.getCode(),
             updater, remark);
     }
@@ -114,33 +127,50 @@ public class CommodityAOImpl implements ICommodityAO {
         if (!ECommodityStatus.TOAPPROVE.getCode().equals(data.getStatus())) {
             throw new BizException("xn000000", "该商品处于无法审核的状态");
         }
+
+        String status = null;
         if (EBoolean.YES.getCode().equals(approveResult)) {
-            commodityBO.refreshStatus(code, ECommodityStatus.PASS.getCode(),
-                approver, approveNote);
+            status = ECommodityStatus.PASS.getCode();
         } else {
-            commodityBO.refreshStatus(code, ECommodityStatus.FAILED.getCode(),
-                approver, approveNote);
+            status = ECommodityStatus.FAILED.getCode();
         }
+
+        commodityBO.refreshStatus(code, status, approver, approveNote);
     }
 
     @Override
-    public void putOnShelf(String code, String location, Long orderNo,
+    public void putOn(String code, String location, Long orderNo,
             String updater, String remark) {
         Commodity data = commodityBO.getCommodity(code);
         if (!ECommodityStatus.PASS.getCode().equals(data.getStatus())) {
             throw new BizException("xn000000", "该商品处于无法上架的状态");
         }
+
         commodityBO.refreshOn(code, location, orderNo, updater, remark);
     }
 
     @Override
-    public void obtained(String code, String updater, String remark) {
+    public void putOff(String code, String updater, String remark) {
         Commodity data = commodityBO.getCommodity(code);
         if (!ECommodityStatus.ON.getCode().equals(data.getStatus())) {
             throw new BizException("xn000000", "该商品处于无法下架的状态");
         }
+
         commodityBO.refreshStatus(code, ECommodityStatus.OFF.getCode(), updater,
             remark);
+    }
+
+    @Override
+    public void doCommodityMonth() {
+
+        Commodity condition = new Commodity();
+        condition.setStatus(ECommodityStatus.ON.getCode());
+        List<Commodity> commodities = commodityBO.queryCommodityList(condition);// 所有上架商品
+
+        for (Commodity commodity : commodities) {
+            commodityBO.refreshMonthSellCount(commodity, Long.valueOf(0));
+        }
+
     }
 
     @Override

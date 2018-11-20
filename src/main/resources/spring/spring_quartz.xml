@@ -23,17 +23,20 @@
 			    <ref bean="doDailyAdoptOrderTrigger"/>
 			    <ref bean="doDailyAdoptOrderTreeTrigger"/>
 			    <ref bean="doExpireCarbonBubbleTrigger"/>
+			    
 			    <ref bean="doDailyExpireGiftTrigger"/>
 			    <ref bean="doDailyGroupAdoptOrderTrigger"/>
 			    <ref bean="doCancelGroupAdoptOrderTrigger"/>
 			    <ref bean="doInvalidIdentifyCodeTrigger"/>
 			    <ref bean="doCancelPresellOrderTrigger"/>
+			    
 			    <ref bean="doCancelCommodityOrderTrigger"/>
 			    <ref bean="doDailyOriginalGroupTrigger"/>
 			    <ref bean="doCancelGroupOrderTrigger"/>
 			    <ref bean="doRefreshPriceTrigger"/>
 			    <ref bean="clearCommoditySellCountTigger"/>
-			    <ref bean="doReceiveTigger"/>
+			    
+			    <ref bean="doCommodityReceiveTigger"/>
  			</list>
 		</property>
 		<property name="autoStartup" value="true" />
@@ -69,19 +72,18 @@
 	</bean> 
 	
 	<!-- 未收货订单扫描 -->
-	<bean id="doReceiveTigger"
+	<bean id="doCommodityReceiveTigger"
 		  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-		<property name="jobDetail" ref="doCancelAdoptOrder" />
+		<property name="jobDetail" ref="doCommodityReceive" />
 		<property name="cronExpression" value="0 0 2 * * ?"/><!-- 每天2点执行 -->
 	</bean>
 	
-	<bean id="doReceive"
+	<bean id="doCommodityReceive"
 		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-		<property name="targetObject" ref="commodityOrderDetailAOImpl" />
+		<property name="targetObject" ref="commodityOrderAOImpl" />
 		<property name="targetMethod" value="doReceive" />
 		<property name="concurrent" value="false" />
 	</bean> 
-	
 	
 	<!-- 订单已支付或即将过期扫描 -->
 	<bean id="doDailyAdoptOrderTrigger"
@@ -211,13 +213,13 @@
 	
 	<!-- 每月商品月销量清零 -->
 	<bean id="clearCommoditySellCountTigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-		<property name="jobDetail" ref="doClearCount" />
+		<property name="jobDetail" ref="doClearCommoditySellCount" />
 		<property name="cronExpression" value="59 59 23 L * ? *"/><!-- 每月最后一天更新 -->
 	</bean>
 	
-	<bean id="doClearCount" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+	<bean id="doClearCommoditySellCount" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject" ref="commodityAOImpl" />
-		<property name="targetMethod" value="monthZero" />
+		<property name="targetMethod" value="doCommodityMonth" />
 		<property name="concurrent" value="false" />
 	</bean>
 	

@@ -246,7 +246,7 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
         userAO.upgradeUserLevel(data.getApplyUser());
 
         // 添加快报
-        smsBO.saveBulletin(data.getApplyUser(), data.getQuantity().toString(),
+        smsBO.saveAdoptBulletin(data.getApplyUser(), data.getQuantity().toString(),
             ESellType.PRESELL.getCode(), presellProduct.getName());
 
         // 添加原生组
@@ -296,7 +296,7 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
                 presellProduct.getSingleOutput(), originalGroupCode);
 
             // 添加快报
-            smsBO.saveBulletin(data.getApplyUser(),
+            smsBO.saveAdoptBulletin(data.getApplyUser(),
                 data.getQuantity().toString(), ESellType.PRESELL.getCode(),
                 presellProduct.getName());
 

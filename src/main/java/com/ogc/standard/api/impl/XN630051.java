@@ -23,7 +23,8 @@ public class XN630051 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        String userId = userAO.doLogin(req.getLoginName(), req.getLoginPwd());
+        String userId = userAO.doLogin(req.getLoginName(), req.getLoginPwd(),
+            req.getType());
         return new PKUserRes(userId);
     }
 

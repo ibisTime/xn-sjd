@@ -20,13 +20,10 @@ import com.ogc.standard.dto.res.XN629712Res;
  */
 public interface ICartAO {
 
-    public String addToCart(String userId, String commodityCode,
-            String commodityName, Long specsId, String specsName,
-            Long quantity);
+    public String addToCart(String userId, Long specsId, Long quantity);
 
     public void dropCartList(List<String> codeList);
 
-    // 根据店铺删购物车
     public void dropByShop(String shopCode);
 
     public List<XN629712Res> queryMyCart(String userId);

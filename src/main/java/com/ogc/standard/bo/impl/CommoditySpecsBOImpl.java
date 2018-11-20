@@ -37,7 +37,7 @@ public class CommoditySpecsBOImpl extends PaginableBOImpl<CommoditySpecs>
     }
 
     @Override
-    public void removeSpecs(String commodityCode) {
+    public void removeSpecsByCommodity(String commodityCode) {
         CommoditySpecs data = new CommoditySpecs();
         data.setCommodityCode(commodityCode);
         commoditySpecsDAO.delete(data);
@@ -46,6 +46,18 @@ public class CommoditySpecsBOImpl extends PaginableBOImpl<CommoditySpecs>
     @Override
     public void refreshSpecs(CommoditySpecs commoditySpecs) {
         commoditySpecsDAO.updateCommoditySpecs(commoditySpecs);
+    }
+
+    @Override
+    public void refreshInventory(Long id, Long quantity) {
+        CommoditySpecs condition = new CommoditySpecs();
+        condition.setId(id);
+        CommoditySpecs data = commoditySpecsDAO.select(condition);
+        if (null == data) {
+            throw new BizException("xn0000", "该商品规格不存在");
+        }
+        data.setInventory(data.getInventory() + quantity);
+        commoditySpecsDAO.updateInventory(data);
     }
 
     @Override
@@ -65,18 +77,6 @@ public class CommoditySpecsBOImpl extends PaginableBOImpl<CommoditySpecs>
         }
 
         return data.getInventory();
-    }
-
-    @Override
-    public void inventoryDecrease(Long id, Long quantity) {
-        CommoditySpecs condition = new CommoditySpecs();
-        condition.setId(id);
-        CommoditySpecs data = commoditySpecsDAO.select(condition);
-        if (null == data) {
-            throw new BizException("xn0000", "该商品规格不存在");
-        }
-        data.setInventory(data.getInventory() + quantity);
-        commoditySpecsDAO.updateInventory(data);
     }
 
     @Override

@@ -21,13 +21,6 @@ import com.ogc.standard.domain.CommodityOrderDetail;
 public interface ICommodityOrderDetailAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
-    public void delive(String code, String logisticsCompany,
-            String logisticsNumber, String deliver);
-
-    public void receive(String code, String receiver);
-
-    public void cancelOrder(String code, String updater, String remark);
-
     public Paginable<CommodityOrderDetail> queryDetailPage(int start, int limit,
             CommodityOrderDetail condition);
 

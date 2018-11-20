@@ -15,7 +15,7 @@ import org.hibernate.validator.constraints.NotBlank;
  * @since: 2018年11月7日 上午11:25:23 
  * @history:
  */
-public class XN629730Req {
+public class XN629723Req {
 
     // 订单编号
     @NotBlank

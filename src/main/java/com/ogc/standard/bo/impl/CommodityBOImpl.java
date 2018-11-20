@@ -15,10 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.ogc.standard.bo.ICommodityBO;
+import com.ogc.standard.bo.ICompanyBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.ICommodityDAO;
 import com.ogc.standard.domain.Commodity;
+import com.ogc.standard.domain.Company;
 import com.ogc.standard.dto.req.XN629700Req;
 import com.ogc.standard.dto.req.XN629701Req;
 import com.ogc.standard.enums.ECommodityStatus;
@@ -31,27 +33,35 @@ import com.ogc.standard.exception.BizException;
  * @history:
  */
 @Component
-public class CommodityBOImpl extends PaginableBOImpl<Commodity> implements
-        ICommodityBO {
+public class CommodityBOImpl extends PaginableBOImpl<Commodity>
+        implements ICommodityBO {
     @Autowired
     private ICommodityDAO commodityDAO;
+
+    @Autowired
+    private ICompanyBO companyBO;
 
     @Override
     public String saveCommodity(XN629700Req req) {
         Commodity data = new Commodity();
-        String code = OrderNoGenerater.generate(EGeneratePrefix.Commodity
-            .getCode());
+        Company company = companyBO.getCompany(req.getShopCode());
+
+        String code = OrderNoGenerater
+            .generate(EGeneratePrefix.Commodity.getCode());
         data.setCode(code);
         data.setName(req.getName());
         data.setParentCategoryCode(req.getParentCategoryCode());
         data.setCategoryCode(req.getCategoryCode());
         data.setDeliverPlace(req.getDeliverPlace());
+
         data.setWeight(req.getWeight());
         data.setLogistics(req.getLogistics());
         data.setListPic(req.getListPic());
         data.setBannerPic(req.getBannerPic());
         data.setDescription(req.getDescription());
+
         data.setShopCode(req.getShopCode());
+        data.setSellUserId(company.getUserId());
         data.setStatus(ECommodityStatus.DRAFT.getCode());
         commodityDAO.insert(data);
         return code;
@@ -60,16 +70,21 @@ public class CommodityBOImpl extends PaginableBOImpl<Commodity> implements
     @Override
     public void refreshCommodity(XN629701Req req) {
         Commodity data = getCommodity(req.getCode());
+        Company company = companyBO.getCompany(req.getShopCode());
+
         data.setName(req.getName());
         data.setParentCategoryCode(req.getParentCategoryCode());
         data.setCategoryCode(req.getCategoryCode());
         data.setDeliverPlace(req.getDeliverPlace());
         data.setWeight(req.getWeight());
+
         data.setLogistics(req.getLogistics());
         data.setListPic(req.getListPic());
         data.setBannerPic(req.getBannerPic());
         data.setDescription(req.getDescription());
         data.setShopCode(req.getShopCode());
+
+        data.setSellUserId(company.getUserId());
         data.setUpdater(req.getUpdater());
         data.setUpdateDatetime(new Date());
         data.setRemark(req.getRemark());

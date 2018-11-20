@@ -21,15 +21,15 @@ import com.ogc.standard.domain.CommoditySpecs;
 public interface ICommoditySpecsBO extends IPaginableBO<CommoditySpecs> {
     public void saveSpecs(CommoditySpecs data);
 
-    public void removeSpecs(String commodityCode);
+    public void removeSpecsByCommodity(String commodityCode);
 
     public void refreshSpecs(CommoditySpecs commoditySpecs);
 
-    public List<CommoditySpecs> querySpecsList(String commodityCode);
-
-    public void inventoryDecrease(Long id, Long quantity);
+    public void refreshInventory(Long id, Long quantity);
 
     public Long getInventory(Long id);
+
+    public List<CommoditySpecs> querySpecsList(String commodityCode);
 
     public CommoditySpecs getCommoditySpecs(Long id);
 }

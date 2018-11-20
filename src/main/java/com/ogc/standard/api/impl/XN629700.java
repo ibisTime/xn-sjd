@@ -33,7 +33,7 @@ public class XN629700 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return new PKCodeRes(commodityAO.addDraft(req));
+        return new PKCodeRes(commodityAO.addCommodity(req));
     }
 
     @Override

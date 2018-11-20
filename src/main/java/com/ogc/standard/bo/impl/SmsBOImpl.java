@@ -7,7 +7,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.ogc.standard.bo.IProductBO;
 import com.ogc.standard.bo.ISmsBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
@@ -81,7 +80,7 @@ public class SmsBOImpl extends PaginableBOImpl<Sms> implements ISmsBO {
     }
 
     @Override
-    public void saveBulletin(String userId, String count, String sellType,
+    public void saveAdoptBulletin(String userId, String count, String sellType,
             String productName) {
         Sms sms = new Sms();
         String code = OrderNoGenerater.generate(EGeneratePrefix.XX.getCode());
@@ -103,6 +102,33 @@ public class SmsBOImpl extends PaginableBOImpl<Sms> implements ISmsBO {
 
         String content = userName + "在" + hours + "认养" + count + unit
                 + productName;
+
+        sms.setCode(code);
+        sms.setType(ESmsType.BULLETIN.getCode());
+        sms.setObject(EAccountType.CUSTOMER.getCode());
+        sms.setTitle(ESmsType.BULLETIN.getValue());
+        sms.setContent(content);
+
+        sms.setStatus(ESmsStauts.SENDED.getCode());
+        sms.setCreateDatetime(new Date());
+        smsDAO.insert(sms);
+    }
+
+    @Override
+    public void saveCommodityBulletin(String userId, String count) {
+        Sms sms = new Sms();
+        String code = OrderNoGenerater.generate(EGeneratePrefix.XX.getCode());
+        String hours = DateUtil.dateToStr(new Date(),
+            DateUtil.DATA_TIME_PATTERN_8);
+        User user = userBO.getUserUnCheck(userId);
+
+        String userName = user.getNickname();
+        if (StringUtils.isEmpty(userName)) {
+            userName = PhoneUtil.hideMobile(user.getMobile());
+        }
+
+        String unit = "件";
+        String content = userName + "在" + hours + "购买" + count + unit + "商品";
 
         sms.setCode(code);
         sms.setType(ESmsType.BULLETIN.getCode());

@@ -135,4 +135,7 @@ public class SysConstants {
 
     // 识别码
     public static final String ID_INVALID_HOURS = "ID_INVALID_HOURS";// 识别码失效时间
+
+    // 商城
+    // public static final String
 }

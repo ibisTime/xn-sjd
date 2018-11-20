@@ -11,6 +11,9 @@ public class XN630051Req {
     @NotBlank
     private String loginPwd;
 
+    // 类型
+    private String type;
+
     public String getLoginName() {
         return loginName;
     }
@@ -25,6 +28,14 @@ public class XN630051Req {
 
     public void setLoginPwd(String loginPwd) {
         this.loginPwd = loginPwd;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
 }

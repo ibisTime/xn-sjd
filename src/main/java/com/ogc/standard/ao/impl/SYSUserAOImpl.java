@@ -171,6 +171,8 @@ public class SYSUserAOImpl implements ISYSUserAO {
         EAccountType accountType = EAccountType.OWNER;
         if (ESYSUserKind.MAINTAIN.getCode().equals(req.getKind())) {
             accountType = EAccountType.MAINTAIN;
+        } else if (ESYSUserKind.BUSINESS.getCode().equals(req.getKind())) {
+            accountType = EAccountType.BUSINESS;
         }
         accountBO.distributeAccount(userId, accountType,
             ECurrency.CNY.getCode());
@@ -195,9 +197,10 @@ public class SYSUserAOImpl implements ISYSUserAO {
 
     // 用户登录
     @Override
-    public String doLogin(String loginName, String loginPwd) {
+    public String doLogin(String loginName, String loginPwd, String type) {
         SYSUser condition = new SYSUser();
         condition.setLoginName(loginName);
+        condition.setKind(type);
         List<SYSUser> userList1 = sysUserBO.queryUserList(condition);
         if (CollectionUtils.isEmpty(userList1)) {
             throw new BizException("xn805050", "登录名不存在");

@@ -170,7 +170,7 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
         // 添加快报
         PresellProduct presellProduct = presellProductBO
             .getPresellProduct(groupOrder.getProductCode());
-        smsBO.saveBulletin(groupOrder.getApplyUser(),
+        smsBO.saveAdoptBulletin(groupOrder.getApplyUser(),
             groupOrder.getQuantity().toString(), ESellType.PRESELL.getCode(),
             presellProduct.getName());
 
@@ -211,7 +211,7 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
         // 添加快报
         PresellProduct presellProduct = presellProductBO
             .getPresellProduct(data.getProductCode());
-        smsBO.saveBulletin(data.getApplyUser(), data.getQuantity().toString(),
+        smsBO.saveAdoptBulletin(data.getApplyUser(), data.getQuantity().toString(),
             ESellType.PRESELL.getCode(), presellProduct.getName());
 
         // 认领寄售
@@ -234,7 +234,7 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
             // 添加快报
             PresellProduct presellProduct = presellProductBO
                 .getPresellProduct(data.getProductCode());
-            smsBO.saveBulletin(data.getApplyUser(),
+            smsBO.saveAdoptBulletin(data.getApplyUser(),
                 data.getQuantity().toString(), ESellType.PRESELL.getCode(),
                 presellProduct.getName());
 

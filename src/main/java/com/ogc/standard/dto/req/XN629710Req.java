@@ -21,21 +21,9 @@ public class XN629710Req {
     @NotBlank
     private String userId;
 
-    // 商品编号
-    @NotBlank
-    private String commodityCode;
-
-    // 商品名称
-    @NotBlank
-    private String commodityName;
-
     // 规格编号
     @NotBlank
     private String specsId;
-
-    // 规格名称
-    @NotBlank
-    private String specsName;
 
     // 数量
     @NotBlank
@@ -49,36 +37,12 @@ public class XN629710Req {
         this.userId = userId;
     }
 
-    public String getCommodityCode() {
-        return commodityCode;
-    }
-
-    public void setCommodityCode(String commodityCode) {
-        this.commodityCode = commodityCode;
-    }
-
-    public String getCommodityName() {
-        return commodityName;
-    }
-
-    public void setCommodityName(String commodityName) {
-        this.commodityName = commodityName;
-    }
-
     public String getSpecsId() {
         return specsId;
     }
 
     public void setSpecsId(String specsId) {
         this.specsId = specsId;
-    }
-
-    public String getSpecsName() {
-        return specsName;
-    }
-
-    public void setSpecsName(String specsName) {
-        this.specsName = specsName;
     }
 
     public String getQuantity() {

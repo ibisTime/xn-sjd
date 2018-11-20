@@ -9,7 +9,6 @@
 package com.ogc.standard.ao.impl;
 
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -17,7 +16,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.ICommodityOrderDetailAO;
 import com.ogc.standard.bo.IAccountBO;
@@ -25,12 +23,10 @@ import com.ogc.standard.bo.IAddressBO;
 import com.ogc.standard.bo.ICommodityBO;
 import com.ogc.standard.bo.ICommodityOrderBO;
 import com.ogc.standard.bo.ICommodityOrderDetailBO;
-import com.ogc.standard.bo.ICommoditySpecsBO;
 import com.ogc.standard.bo.ICompanyBO;
 import com.ogc.standard.bo.IJourBO;
 import com.ogc.standard.bo.ISYSConfigBO;
 import com.ogc.standard.bo.base.Paginable;
-import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.common.SysConstants;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.Address;
@@ -40,13 +36,11 @@ import com.ogc.standard.domain.CommodityOrderDetail;
 import com.ogc.standard.domain.Company;
 import com.ogc.standard.domain.Jour;
 import com.ogc.standard.enums.EAccountType;
-import com.ogc.standard.enums.ECommodityOrderDetailStatus;
 import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EJourBizTypeBusiness;
 import com.ogc.standard.enums.EJourBizTypePlat;
 import com.ogc.standard.enums.EJourBizTypeUser;
 import com.ogc.standard.enums.ESysUser;
-import com.ogc.standard.exception.BizException;
 
 /** 
  * @author: taojian 
@@ -83,64 +77,6 @@ public class CommodityOrderDetailAOImpl implements ICommodityOrderDetailAO {
     @Autowired
     private IJourBO jourBO;
 
-    @Autowired
-    private ICommoditySpecsBO commoditySpecsBO;
-
-    @Override
-    @Transactional
-    public void cancelOrder(String code, String updater, String remark) {
-        CommodityOrderDetail commodityOrderDetail = commodityOrderDetailBO
-            .getCommodityOrderDetail(code);
-
-        if (!ECommodityOrderDetailStatus.TO_PAY.getCode()
-            .equals(commodityOrderDetail.getStatus())) {
-            throw new BizException("xn0000", "该订单不处于可取消状态");
-        }
-
-        commoditySpecsBO.inventoryDecrease(commodityOrderDetail.getSpecsId(),
-            commodityOrderDetail.getQuantity());
-
-        commodityOrderDetailBO.refreshCancel(commodityOrderDetail);
-
-    }
-
-    @Override
-    @Transactional
-    public void delive(String code, String logisticsCompany,
-            String logisticsNumber, String deliver) {
-        CommodityOrderDetail commodityOrderDetail = commodityOrderDetailBO
-            .getCommodityOrderDetail(code);
-        if (!ECommodityOrderDetailStatus.TODELIVE.getCode()
-            .equals(commodityOrderDetail.getStatus())) {
-            throw new BizException("xn0000", "订单未处于可发货状态");
-        }
-
-        commodityOrderDetailBO.refershDelive(commodityOrderDetail,
-            logisticsCompany, logisticsNumber, deliver);
-
-    }
-
-    @Override
-    @Transactional
-    public void receive(String code, String receiver) {
-        CommodityOrderDetail detail = commodityOrderDetailBO
-            .getCommodityOrderDetail(code);
-
-        // 状态判断
-        if (!ECommodityOrderDetailStatus.TORECEIVE.getCode()
-            .equals(detail.getStatus())) {
-            throw new BizException("xn0000", "该订单不处于可收货的状态");
-        }
-
-        // 状态更新
-        commodityOrderDetailBO.refreshReceive(detail);
-
-        // 月销量更新
-        Commodity data = commodityBO.getCommodity(detail.getCommodityCode());
-        commodityBO.refreshMonthSellCount(data,
-            detail.getQuantity() + data.getMonthSellCount());
-    }
-
     @Override
     public void payDetail(CommodityOrderDetail data, String applyUser,
             String orderCode) {
@@ -166,20 +102,6 @@ public class CommodityOrderDetailAOImpl implements ICommodityOrderDetailAO {
             EJourBizTypeBusiness.BUSINESS_PROFIT.getCode(),
             EJourBizTypePlat.COMMODITY_DIST.getValue(),
             EJourBizTypeBusiness.BUSINESS_PROFIT.getValue(), orderCode);
-    }
-
-    public void doReceive() {
-        logger.info("***************开始扫描待收货订单***************");
-        CommodityOrderDetail condition = new CommodityOrderDetail();
-        condition.setStatus(ECommodityOrderDetailStatus.TORECEIVE.getCode());
-        condition.setDeliverDatetimeEnd(
-            DateUtil.getRelativeDateOfDays(new Date(), -15));
-        List<CommodityOrderDetail> detailList = commodityOrderDetailBO
-            .queryDetailList(condition);
-        for (CommodityOrderDetail detail : detailList) {
-            commodityOrderDetailBO.refreshReceive(detail);
-        }
-        logger.info("***************结束扫描待收货订单***************");
     }
 
     @Override

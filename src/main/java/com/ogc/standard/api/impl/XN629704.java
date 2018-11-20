@@ -34,7 +34,7 @@ public class XN629704 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        commodityAO.putOnShelf(req.getCode(), req.getLocation(),
+        commodityAO.putOn(req.getCode(), req.getLocation(),
             StringValidater.toLong(req.getOrderNo()), req.getUpdater(),
             req.getRemark());
         return new BooleanRes(true);

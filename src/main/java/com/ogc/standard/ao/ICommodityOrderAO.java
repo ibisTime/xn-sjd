@@ -22,15 +22,22 @@ import com.ogc.standard.dto.res.XN629048Res;
  */
 public interface ICommodityOrderAO {
 
-    public String addOrder(String applyUser, String applyNote,
+    public String commitCommodityOrder(String applyUser, String applyNote,
             String expressType, Long specsId, Long quantity,
             String addressCode);
 
-    public Object pay(XN629721Req req);
+    public Object toPayCommodityOrder(XN629721Req req);
 
-    public void cancel(String code, String updater, String remark);
+    public void cancelCommodityOrder(String code, String updater,
+            String remark);
 
-    // 积分抵扣金额
+    public void paySuccess(String payGroup);
+
+    public void delive(String code, String logisticsCompany,
+            String logisticsNumber, String deliver);
+
+    public void receive(String code, String receiver);
+
     public XN629048Res getOrderDkAmount(String code);
 
     public Paginable<CommodityOrder> queryOrderPage(int start, int limit,
@@ -40,5 +47,4 @@ public interface ICommodityOrderAO {
 
     public CommodityOrder getCommodityOrder(String code);
 
-    public void paySuccess(String payGroup);
 }

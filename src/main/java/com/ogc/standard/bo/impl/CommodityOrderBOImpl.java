@@ -53,7 +53,7 @@ public class CommodityOrderBOImpl extends PaginableBOImpl<CommodityOrder>
         data.setApplyNote(applyNote);
         data.setExpressType(expressType);
         data.setAddressCode(addressCode);
-        data.setStatus(ECommodityOrderStatus.TOPAY.getCode());
+        data.setStatus(ECommodityOrderStatus.TO_PAY.getCode());
         data.setUpdater(updater);
         data.setUpdateDatetime(date);
         data.setRemark(remark);
@@ -66,7 +66,7 @@ public class CommodityOrderBOImpl extends PaginableBOImpl<CommodityOrder>
         data.setPayAmount(payAmount);
         Date date = new Date();
         data.setPayDatetime(date);
-        data.setStatus(ECommodityOrderStatus.PAIED.getCode());
+        data.setStatus(ECommodityOrderStatus.TODELIVE.getCode());
         data.setUpdateDatetime(date);
         commodityOrderDAO.updatePay(data);
     }
@@ -74,7 +74,7 @@ public class CommodityOrderBOImpl extends PaginableBOImpl<CommodityOrder>
     @Override
     public void refreshCancel(CommodityOrder data, String updater,
             String remark) {
-        data.setStatus(ECommodityOrderStatus.CANCEL.getCode());
+        data.setStatus(ECommodityOrderStatus.CANCLED.getCode());
         data.setUpdater(updater);
         data.setUpdateDatetime(new Date());
         data.setRemark(remark);
@@ -120,7 +120,7 @@ public class CommodityOrderBOImpl extends PaginableBOImpl<CommodityOrder>
 
     @Override
     public void platCancelOrder(CommodityOrder data) {
-        data.setStatus(ECommodityOrderStatus.CANCEL.getCode());
+        data.setStatus(ECommodityOrderStatus.CANCLED.getCode());
         data.setUpdater(ESysUser.SYS_USER.getCode());
         data.setUpdateDatetime(new Date());
         data.setRemark("超过支付时间平台自动取消");

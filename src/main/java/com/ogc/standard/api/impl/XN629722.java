@@ -8,7 +8,7 @@
  */
 package com.ogc.standard.api.impl;
 
-import com.ogc.standard.ao.ICommodityOrderDetailAO;
+import com.ogc.standard.ao.ICommodityOrderAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.ObjValidater;
@@ -26,14 +26,14 @@ import com.ogc.standard.spring.SpringContextHolder;
  */
 public class XN629722 extends AProcessor {
 
-    private ICommodityOrderDetailAO commodityOrderDetailAO = SpringContextHolder
-        .getBean(ICommodityOrderDetailAO.class);
+    private ICommodityOrderAO commodityOrderAO = SpringContextHolder
+        .getBean(ICommodityOrderAO.class);
 
     private XN629722Req req;
 
     @Override
     public Object doBusiness() throws BizException {
-        commodityOrderDetailAO.cancelOrder(req.getCode(), req.getUpdater(),
+        commodityOrderAO.cancelCommodityOrder(req.getCode(), req.getUpdater(),
             req.getRemark());
         return new BooleanRes(true);
     }

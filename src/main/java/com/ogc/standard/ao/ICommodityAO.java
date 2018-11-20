@@ -23,24 +23,27 @@ import com.ogc.standard.dto.req.XN629701Req;
 public interface ICommodityAO {
 
     // 新增商品
-    public String addDraft(XN629700Req req);
+    public String addCommodity(XN629700Req req);
 
     // 修改商品
     public void editCommodity(XN629701Req req);
 
     // 发布
-    public void publishCommodity(String code, String updater, String remark);
+    public void submitCommodity(String code, String updater, String remark);
 
     // 审核
     public void approveCommodity(String code, String approver,
             String approveResult, String approveNote);
 
     // 上架
-    public void putOnShelf(String code, String location, Long orderNo,
+    public void putOn(String code, String location, Long orderNo,
             String updater, String remark);
 
     // 下架
-    public void obtained(String code, String updater, String remark);
+    public void putOff(String code, String updater, String remark);
+
+    // 月初将销售数量更新为0
+    public void doCommodityMonth();
 
     public Paginable<Commodity> queryCommodityPage(int start, int limit,
             Commodity condition);

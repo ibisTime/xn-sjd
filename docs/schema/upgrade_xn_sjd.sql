@@ -170,3 +170,15 @@ ADD COLUMN `apply_datetime` DATETIME NULL COMMENT '下单时间' AFTER `apply_us
 
 ALTER TABLE `tsc_after_sale` 
 ADD COLUMN `shop_code` VARCHAR(32) NULL COMMENT '店铺编号' AFTER `code`;
+
+#V2.0.0 3-1
+ALTER TABLE `tsc_commodity` 
+CHANGE COLUMN `name` `name` VARCHAR(255) NULL COMMENT '名称' ,
+CHANGE COLUMN `parent_category_code` `parent_category_code` VARCHAR(32) NULL COMMENT '商品大类' ,
+CHANGE COLUMN `category_code` `category_code` VARCHAR(32) NULL COMMENT '商品小类' ,
+CHANGE COLUMN `deliver_place` `deliver_place` VARCHAR(64) NULL COMMENT '发货地' ,
+CHANGE COLUMN `weight` `weight` VARCHAR(32) NULL COMMENT '重量' ,
+CHANGE COLUMN `logistics` `logistics` VARCHAR(32) NULL COMMENT '物流方式' ,
+CHANGE COLUMN `shop_code` `shop_code` VARCHAR(32) NULL COMMENT '店铺编号' ,
+CHANGE COLUMN `status` `status` VARCHAR(4) NULL COMMENT '状态（0 草稿，1 已提交待审核，2 审核不通过，3 审核通过待上架，4 已上架待购买，5 已下架）' ,
+ADD COLUMN `sell_user_id` VARCHAR(32) NULL AFTER `shop_code`;

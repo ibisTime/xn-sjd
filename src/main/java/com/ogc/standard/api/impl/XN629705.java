@@ -33,7 +33,7 @@ public class XN629705 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        commodityAO.obtained(req.getCode(), req.getUpdater(), req.getRemark());
+        commodityAO.putOff(req.getCode(), req.getUpdater(), req.getRemark());
         return new BooleanRes(true);
     }
 

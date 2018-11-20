@@ -24,8 +24,6 @@ public class Commodity extends ABaseDO {
 
     private static final long serialVersionUID = 588631129311182401L;
 
-    // ******************DB********************
-
     // 编号
     private String code;
 
@@ -61,6 +59,9 @@ public class Commodity extends ABaseDO {
 
     // 店铺编号
     private String shopCode;
+
+    // 商家编号
+    private String sellUserId;
 
     // UI位置
     private String location;
@@ -268,6 +269,14 @@ public class Commodity extends ABaseDO {
 
     public void setShopName(String shopName) {
         this.shopName = shopName;
+    }
+
+    public String getSellUserId() {
+        return sellUserId;
+    }
+
+    public void setSellUserId(String sellUserId) {
+        this.sellUserId = sellUserId;
     }
 
 }

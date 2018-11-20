@@ -22,7 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.ICommodityOrderAO;
-import com.ogc.standard.ao.ICommodityOrderDetailAO;
 import com.ogc.standard.ao.IUserAO;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IAddressBO;
@@ -34,6 +33,7 @@ import com.ogc.standard.bo.ICommoditySpecsBO;
 import com.ogc.standard.bo.ICompanyBO;
 import com.ogc.standard.bo.IDistributionOrderBO;
 import com.ogc.standard.bo.IJourBO;
+import com.ogc.standard.bo.ISmsBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.DateUtil;
@@ -52,6 +52,7 @@ import com.ogc.standard.dto.res.PayOrderRes;
 import com.ogc.standard.dto.res.XN629048Res;
 import com.ogc.standard.enums.EAccountType;
 import com.ogc.standard.enums.EBoolean;
+import com.ogc.standard.enums.ECommodityOrderDetailStatus;
 import com.ogc.standard.enums.ECommodityOrderStatus;
 import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EJourBizTypePlat;
@@ -78,9 +79,6 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
 
     @Autowired
     private ICommodityOrderDetailBO commodityOrderDetailBO;
-
-    @Autowired
-    private ICommodityOrderDetailAO commodityOrderDetailAO;
 
     @Autowired
     private ICommodityBO commodityBO;
@@ -112,29 +110,21 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
     @Autowired
     private IUserAO userAO;
 
+    @Autowired
+    private ISmsBO smsBO;
+
     @Override
     @Transactional
-    public String addOrder(String applyUser, String applyNote,
+    public String commitCommodityOrder(String applyUser, String applyNote,
             String expressType, Long specsId, Long quantity,
             String addressCode) {
-        // 用户检验
-        userBO.getUser(applyUser);
 
         // 规格检验
         CommoditySpecs specs = commoditySpecsBO.getCommoditySpecs(specsId);
         Commodity commodity = commodityBO
             .getCommodity(specs.getCommodityCode());
 
-        // 地址检验
-        Address address = addressBO.getAddress(addressCode);
-        if (null == address) {
-            throw new BizException("xn0000", "该地址不存在");
-        }
-        if (!address.getUserId().equals(applyUser)) {
-            throw new BizException("xn0000", "该地址不属于你");
-        }
-
-        // 落地订单数据（多店铺）
+        // 落地订单数据
         String orderCode = commodityOrderBO.saveOrder(applyUser, applyNote,
             expressType, applyUser, applyNote, addressCode);
 
@@ -143,26 +133,47 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
             commodity.getCode(), commodity.getName(), specsId, specs.getName(),
             applyUser, quantity, specs.getPrice(), addressCode);
 
-        // 库存减少
-        commoditySpecsBO.inventoryDecrease(specsId, -quantity);
+        // 更新库存
+        commoditySpecsBO.refreshInventory(specsId, -quantity);
 
         // 加上数量与总价
         BigDecimal amount = specs.getPrice()
             .multiply(BigDecimal.valueOf(quantity));
+
         commodityOrderBO.refreshAmount(quantity, amount, orderCode);
+
         return orderCode;
     }
 
     @Override
     @Transactional
-    public Object pay(XN629721Req req) {
-        // 用户检验
-        userBO.getUser(req.getUpdater());
+    public void cancelCommodityOrder(String code, String updater,
+            String remark) {
+        CommodityOrder order = commodityOrderBO.getCommodityOrder(code);
+        if (!ECommodityOrderStatus.TO_PAY.getCode().equals(order.getStatus())) {
+            throw new BizException("xn0000", "该订单不处于可取消状态");
+        }
+
+        // 库存回加
+        List<CommodityOrderDetail> dataList = commodityOrderDetailBO
+            .queryOrderDetail(code);
+        for (CommodityOrderDetail commodityOrderDetail : dataList) {
+            commoditySpecsBO.refreshInventory(commodityOrderDetail.getSpecsId(),
+                commodityOrderDetail.getQuantity());
+        }
+
+        // 状态更新
+        commodityOrderBO.refreshCancel(order, updater, remark);
+    }
+
+    @Override
+    @Transactional
+    public Object toPayCommodityOrder(XN629721Req req) {
 
         // 订单状态检验
         CommodityOrder order = commodityOrderBO
             .getCommodityOrder(req.getCode());
-        if (!ECommodityOrderStatus.TOPAY.getCode().equals(order.getStatus())) {
+        if (!ECommodityOrderStatus.TO_PAY.getCode().equals(order.getStatus())) {
             throw new BizException("xn0000", "该订单不处于待支付状态");
         }
 
@@ -178,6 +189,7 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
         // 支付
         Object result = null;
         if (EPayType.ALIPAY.getCode().equals(req.getPayType())) {
+
             // 状态更新
             commodityOrderBO.refreshPayGroup(order, req.getPayType());
 
@@ -186,6 +198,7 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
                 EJourBizTypeUser.COMMODITY.getCode(),
                 EJourBizTypeUser.COMMODITY.getValue(), order.getPayAmount());
             result = new PayOrderRes(signOrder);
+
         } else if (EPayType.YE.getCode().equals(req.getPayType())) {
 
             result = toPayCommodityOrderYue(order, deductRes);
@@ -211,22 +224,6 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
                 "人民币账户余额不足");
         }
 
-        // TODO
-        BigDecimal backJfAmount = null;
-        List<CommodityOrderDetail> dataList = commodityOrderDetailBO
-            .queryOrderDetail(data.getCode());
-        for (CommodityOrderDetail detail : dataList) {
-
-            commodityOrderDetailBO.refreshPay(detail.getCode());
-
-            // TODO 进行分销
-            Commodity commodityInfo = commodityBO
-                .getCommodity(detail.getCommodityCode());
-            // backJfAmount = distributionOrderBO.distribution(data.getCode(),
-            // commodityInfo.getShopCode(), data.getAmount(),
-            // data.getApplyUser(), ESellType.COMMODITY.getCode(), resultRes);
-        }
-
         // 人民币余额划转
         Account sysCnyAccount = accountBO
             .getAccount(ESystemAccount.SYS_ACOUNT_CNY.getCode());
@@ -244,42 +241,131 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
             EJourBizTypeUser.COMMODITY_BUY_DEDUCT.getValue(),
             EJourBizTypePlat.COMMODITY_BUY_DEDUCT.getValue(), data.getCode());
 
+        // TODO 进行分销
+        // backJfAmount = distributionOrderBO.distribution(data.getCode(),
+        // commodityInfo.getShopCode(), data.getAmount(), data.getApplyUser(),
+        // ESellType.COMMODITY.getCode(), resultRes);
+
         // 用户升级
         userAO.upgradeUserLevel(data.getApplyUser());
 
+        // 添加快报
+        smsBO.saveCommodityBulletin(data.getApplyUser(),
+            data.getQuantity().toString());
+
+        // TODO backjfamount
         commodityOrderBO.refreshPay(data, data.getAmount());
 
         return new BooleanRes(true);
     }
 
     @Override
+    public void paySuccess(String payGroup) {
+        CommodityOrder data = commodityOrderBO.getCommodityOrder(payGroup);
+
+        // TODO 进行分销
+        // backJfAmount = distributionOrderBO.distribution(data.getCode(),
+        // commodityInfo.getShopCode(), data.getAmount(), data.getApplyUser(),
+        // ESellType.COMMODITY.getCode(), resultRes);
+
+        // 用户升级
+        userAO.upgradeUserLevel(data.getApplyUser());
+
+        // 添加快报
+        smsBO.saveCommodityBulletin(data.getApplyUser(),
+            data.getQuantity().toString());
+
+        // TODO backjfamount
+        commodityOrderBO.refreshPay(data, data.getAmount());
+
+    }
+
+    @Override
     @Transactional
-    public void cancel(String code, String updater, String remark) {
-        CommodityOrder order = commodityOrderBO.getCommodityOrder(code);
-        if (!ECommodityOrderStatus.TOPAY.getCode().equals(order.getStatus())) {
-            throw new BizException("xn0000", "该订单不处于可取消状态");
+    public void delive(String code, String logisticsCompany,
+            String logisticsNumber, String deliver) {
+        CommodityOrderDetail commodityOrderDetail = commodityOrderDetailBO
+            .getCommodityOrderDetail(code);
+        if (!ECommodityOrderDetailStatus.TODELIVE.getCode()
+            .equals(commodityOrderDetail.getStatus())) {
+            throw new BizException("xn0000", "订单未处于可发货状态");
         }
+
+        commodityOrderDetailBO.refershDelive(commodityOrderDetail,
+            logisticsCompany, logisticsNumber, deliver);
+
+    }
+
+    @Override
+    @Transactional
+    public void receive(String code, String receiver) {
+        CommodityOrderDetail detail = commodityOrderDetailBO
+            .getCommodityOrderDetail(code);
+
+        // 状态判断
+        if (!ECommodityOrderDetailStatus.TORECEIVE.getCode()
+            .equals(detail.getStatus())) {
+            throw new BizException("xn0000", "该订单不处于可收货的状态");
+        }
+
+        // 状态更新
+        commodityOrderDetailBO.refreshReceive(detail);
+
+        // 月销量更新
+        Commodity data = commodityBO.getCommodity(detail.getCommodityCode());
+        commodityBO.refreshMonthSellCount(data,
+            detail.getQuantity() + data.getMonthSellCount());
+    }
+
+    public void timeoutCancel() {
+        logger.info("***************开始扫描未支付订单***************");
+        CommodityOrder condition = new CommodityOrder();
+        condition.setStatus(ECommodityOrderStatus.TO_PAY.getCode());
+        condition.setApplyDatetimeEnd(
+            DateUtil.getRelativeDateOfMinute(new Date(), -15));// 前15分钟还未支付的订单
+        List<CommodityOrder> orderList = commodityOrderBO
+            .queryOrderList(condition);
+
+        if (CollectionUtils.isNotEmpty(orderList)) {
+            for (CommodityOrder order : orderList) {
+                cancelOrder(order);
+            }
+        }
+        logger.info("***************结束扫描未支付订单***************");
+    }
+
+    private void cancelOrder(CommodityOrder order) {
         // 库存回加
         List<CommodityOrderDetail> dataList = commodityOrderDetailBO
-            .queryOrderDetail(code);
+            .queryOrderDetail(order.getCode());
         for (CommodityOrderDetail commodityOrderDetail : dataList) {
-            commoditySpecsBO.inventoryDecrease(
-                commodityOrderDetail.getSpecsId(),
+            commoditySpecsBO.refreshInventory(commodityOrderDetail.getSpecsId(),
                 commodityOrderDetail.getQuantity());
         }
+
         // 状态更新
-        commodityOrderBO.refreshCancel(order, updater, remark);
+        commodityOrderBO.platCancelOrder(order);
+    }
+
+    public void doReceive() {
+        logger.info("***************开始扫描待收货订单***************");
+        CommodityOrderDetail condition = new CommodityOrderDetail();
+        condition.setStatus(ECommodityOrderDetailStatus.TORECEIVE.getCode());
+        condition.setDeliverDatetimeEnd(
+            DateUtil.getRelativeDateOfDays(new Date(), -15));
+        List<CommodityOrderDetail> detailList = commodityOrderDetailBO
+            .queryDetailList(condition);
+        for (CommodityOrderDetail detail : detailList) {
+            commodityOrderDetailBO.refreshReceive(detail);
+        }
+        logger.info("***************结束扫描待收货订单***************");
     }
 
     @Override
     public XN629048Res getOrderDkAmount(String code) {
         CommodityOrder commodityOrder = commodityOrderBO
             .getCommodityOrder(code);
-        if (!ECommodityOrderStatus.TOPAY.getCode()
-            .equals(commodityOrder.getStatus())) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "当前订单不是待支付状态");
-        }
+
         return distributionOrderBO.getOrderDeductAmount(
             commodityOrder.getAmount(), commodityOrder.getApplyUser(),
             EBoolean.YES.getCode());
@@ -311,49 +397,6 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
         CommodityOrder order = commodityOrderBO.getCommodityOrder(code);
         initOrder(order);
         return order;
-    }
-
-    @Override
-    public void paySuccess(String payGroup) {
-        CommodityOrder data = commodityOrderBO
-            .getCommodityOrderByPayGroup(payGroup);
-        // 分销
-        List<CommodityOrderDetail> dataList = commodityOrderDetailBO
-            .queryOrderDetail(data.getCode());
-        for (CommodityOrderDetail detail : dataList) {
-            commodityOrderDetailAO.distribution(detail, data.getCode());
-        }
-        commodityOrderBO.refreshPay(data, data.getAmount());
-    }
-
-    public void timeoutCancel() {
-        logger.info("***************开始扫描未支付订单***************");
-        CommodityOrder condition = new CommodityOrder();
-        condition.setStatus(ECommodityOrderStatus.TOPAY.getCode());
-        // 一天内未支付订单
-        condition.setApplyDatetimeEnd(
-            DateUtil.getRelativeDateOfHour(new Date(), (double) -24));
-        List<CommodityOrder> orderList = commodityOrderBO
-            .queryOrderList(condition);
-        if (CollectionUtils.isNotEmpty(orderList)) {
-            for (CommodityOrder order : orderList) {
-                cancelOrder(order);
-            }
-        }
-        logger.info("***************结束扫描未支付订单***************");
-    }
-
-    private void cancelOrder(CommodityOrder order) {
-        // 库存回加
-        List<CommodityOrderDetail> dataList = commodityOrderDetailBO
-            .queryOrderDetail(order.getCode());
-        for (CommodityOrderDetail commodityOrderDetail : dataList) {
-            commoditySpecsBO.inventoryDecrease(
-                commodityOrderDetail.getSpecsId(),
-                commodityOrderDetail.getQuantity());
-        }
-        // 状态更新
-        commodityOrderBO.platCancelOrder(order);
     }
 
     private void initOrder(CommodityOrder order) {

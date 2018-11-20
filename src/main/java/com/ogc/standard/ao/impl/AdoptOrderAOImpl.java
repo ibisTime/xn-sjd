@@ -334,7 +334,7 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
         }
 
         // 添加快报
-        smsBO.saveBulletin(data.getApplyUser(), data.getQuantity().toString(),
+        smsBO.saveAdoptBulletin(data.getApplyUser(), data.getQuantity().toString(),
             data.getType(), productInfo.getName());
 
         return new BooleanRes(true);
@@ -404,7 +404,7 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
             }
 
             // 添加快报
-            smsBO.saveBulletin(data.getApplyUser(),
+            smsBO.saveAdoptBulletin(data.getApplyUser(),
                 data.getQuantity().toString(), data.getType(),
                 productInfo.getName());
 

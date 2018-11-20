@@ -24,7 +24,7 @@ public interface ISYSUserAO {
             String loginName, String loginPwd, String photo, String remark);
 
     // 用户登录
-    public String doLogin(String loginName, String loginPwd);
+    public String doLogin(String loginName, String loginPwd, String type);
 
     // 注销 | 激活其他管理员
     public void doCloseOpen(String userId, String updater, String remark);

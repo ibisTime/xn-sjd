@@ -17,9 +17,11 @@
 		
 		<result column="description" property="description" />
 		<result column="shop_code" property="shopCode" />
+		<result column="sell_user_id" property="sellUserId" />
 		<result column="location" property="location" />
 		<result column="order_no" property="orderNo" />
 		<result column="status" property="status" />
+		
 		<result column="updater" property="updater" />
 		<result column="update_datetime" property="updateDatetime" />
 		<result column="remark" property="remark" />
@@ -44,6 +46,9 @@
 			</if>
 			<if test="shopCode != null and shopCode != '' ">
 				AND t.shop_code = #{shopCode}
+			</if>
+			<if test="sellUserId != null and sellUserId != '' ">
+				AND t.sell_user_id = #{sellUserId}
 			</if>
 			<if test="location != null and location != '' ">
 				AND t.location = #{location}
@@ -74,8 +79,10 @@
 		
 		,t.description
 		,t.shop_code
+		,t.sell_user_id
 		,t.location
 		,t.order_no
+		
 		,t.status
 		,t.updater
 		,t.update_datetime
@@ -96,8 +103,6 @@
 		<include refid="where_condition" />
 	</select>
 	
-
-	
 	<insert id="insert_commodity" parameterType="commodity">
 		INSERT INTO
 		tsc_commodity(
@@ -112,7 +117,9 @@
 		,list_pic
 		,banner_pic
 		,description
+		
 		,shop_code
+		,sell_user_id
 		,status
 		)
 		VALUES(
@@ -127,7 +134,9 @@
 		,#{listPic}
 		,#{bannerPic}
 		,#{description}
+		
 		,#{shopCode}
+		,#{sellUserId}
 		,#{status}
 		)
 	</insert>
@@ -145,6 +154,7 @@
 		,banner_pic=#{bannerPic}
 		,description=#{description}
 		,shop_code=#{shopCode}
+		,sell_user_id=#{sellUserId}
 		,status=#{status}
 		,updater=#{updater}
 		,update_datetime=#{updateDatetime}
