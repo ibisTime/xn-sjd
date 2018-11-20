@@ -9,6 +9,7 @@
 package com.ogc.standard.domain;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import com.ogc.standard.dao.base.ABaseDO;
 
@@ -58,6 +59,9 @@ public class Cart extends ABaseDO {
 
     // 物流方式
     private String logistics;
+
+    // 编号列表
+    private List<String> codeList;
 
     public String getCode() {
         return code;
@@ -153,6 +157,14 @@ public class Cart extends ABaseDO {
 
     public void setLogistics(String logistics) {
         this.logistics = logistics;
+    }
+
+    public List<String> getCodeList() {
+        return codeList;
+    }
+
+    public void setCodeList(List<String> codeList) {
+        this.codeList = codeList;
     }
 
 }

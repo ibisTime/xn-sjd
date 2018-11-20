@@ -24,12 +24,14 @@ import com.ogc.standard.bo.ICommodityOrderBO;
 import com.ogc.standard.bo.ICommodityOrderDetailBO;
 import com.ogc.standard.bo.ICommoditySpecsBO;
 import com.ogc.standard.bo.ICompanyBO;
+import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.domain.Cart;
 import com.ogc.standard.domain.Commodity;
 import com.ogc.standard.domain.CommoditySpecs;
 import com.ogc.standard.domain.Company;
 import com.ogc.standard.dto.res.XN629712Res;
 import com.ogc.standard.enums.ECommodityStatus;
+import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.exception.BizException;
 
 /** 
@@ -97,54 +99,66 @@ public class CartAOImpl implements ICartAO {
     @Override
     @Transactional
     public String orderByCart(String applyUser, String applyNote,
-            String expressType, String addressCode, List<String> cartList) {
+            String expressType, String addressCode, List<String> cartCodeList) {
 
-        // 落地订单
-        String orderCode = commodityOrderBO.saveOrder(applyUser, applyNote,
-            expressType, applyUser, applyNote, addressCode);
+        List<Cart> shopList = cartBO.quertMyShopList(cartCodeList);// 店铺列表
+        String payGroup = OrderNoGenerater
+            .generate(EGeneratePrefix.CommodityOrder.getCode());// 支付组号
 
-        Long quantity = 0l;
-        BigDecimal amount = BigDecimal.ZERO;
+        for (Cart shop : shopList) {
 
-        for (String code : cartList) {
+            List<Cart> cartList = cartBO.quertMyShopCartList(shop.getShopCode(),
+                cartCodeList);// 店铺下的购物车
 
-            Cart cart = cartBO.getCart(code);
-            CommoditySpecs specs = commoditySpecsBO
-                .getCommoditySpecs(cart.getSpecsId());
-            Commodity commodity = commodityBO
-                .getCommodity(specs.getCommodityCode());
+            Long quantity = 0l;
+            BigDecimal amount = BigDecimal.ZERO;
 
-            // 库存检验
-            if (cart.getQuantity() > commoditySpecsBO
-                .getInventory(cart.getSpecsId())) {
-                throw new BizException("xn0000", "产品[" + commodity.getName()
-                        + "]规格[" + specs.getName() + "]库存不足，不能下单");
+            // 落地商品订单
+            String orderCode = commodityOrderBO.saveOrder(applyUser, applyNote,
+                payGroup, expressType, applyUser, applyNote, addressCode);
+
+            // 落地订单明细
+            for (Cart cart : cartList) {
+                CommoditySpecs specs = commoditySpecsBO
+                    .getCommoditySpecs(cart.getSpecsId());
+                Commodity commodity = commodityBO
+                    .getCommodity(specs.getCommodityCode());
+
+                // 库存检验
+                if (cart.getQuantity() > commoditySpecsBO
+                    .getInventory(cart.getSpecsId())) {
+                    throw new BizException("xn0000", "产品[" + commodity.getName()
+                            + "]规格[" + specs.getName() + "]库存不足，不能下单");
+                }
+
+                // 落地订单明细
+                commodityOrderDetailBO.saveDetail(orderCode,
+                    commodity.getShopCode(), commodity.getCode(),
+                    commodity.getName(), specs.getId(), specs.getName(),
+                    applyUser, cart.getQuantity(), specs.getPrice(),
+                    addressCode);
+
+                BigDecimal orderAmount = specs.getPrice()
+                    .multiply(BigDecimal.valueOf(cart.getQuantity()));
+
+                // 更新库存
+                commoditySpecsBO.refreshInventory(specs.getId(),
+                    -cart.getQuantity());
+
+                // 订单商品数量与订单金额累加
+                quantity = quantity + cart.getQuantity();
+                amount = amount.add(orderAmount);
             }
 
-            // 落地单店铺订单
-            commodityOrderDetailBO.saveDetail(orderCode,
-                commodity.getShopCode(), commodity.getCode(),
-                commodity.getName(), specs.getId(), specs.getName(), applyUser,
-                cart.getQuantity(), specs.getPrice(), addressCode);
-            BigDecimal orderAmount = specs.getPrice()
-                .multiply(BigDecimal.valueOf(cart.getQuantity()));
+            // 加上数量与总价
+            commodityOrderBO.refreshAmount(quantity, amount, orderCode);
 
-            // 更新库存
-            commoditySpecsBO.refreshInventory(specs.getId(),
-                -cart.getQuantity());
-
-            // 订单商品数量与订单金额累加
-            quantity = quantity + cart.getQuantity();
-            amount = amount.add(orderAmount);
         }
 
-        // 加上数量与总价
-        commodityOrderBO.refreshAmount(quantity, amount, orderCode);
-
         // 删除购物车
-        cartBO.removeCartList(cartList);
+        cartBO.removeCartList(cartCodeList);
 
-        return orderCode;
+        return payGroup;
     }
 
     @Override

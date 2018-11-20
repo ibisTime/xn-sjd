@@ -182,3 +182,12 @@ CHANGE COLUMN `logistics` `logistics` VARCHAR(32) NULL COMMENT '物流方式' ,
 CHANGE COLUMN `shop_code` `shop_code` VARCHAR(32) NULL COMMENT '店铺编号' ,
 CHANGE COLUMN `status` `status` VARCHAR(4) NULL COMMENT '状态（0 草稿，1 已提交待审核，2 审核不通过，3 审核通过待上架，4 已上架待购买，5 已下架）' ,
 ADD COLUMN `sell_user_id` VARCHAR(32) NULL AFTER `shop_code`;
+
+ALTER TABLE `tsc_commodity_order` 
+ADD COLUMN `logistics_company` VARCHAR(32) NULL COMMENT '物流公司' AFTER `address_code`,
+ADD COLUMN `logistics_number` VARCHAR(255) NULL COMMENT '物流单号' AFTER `logistics_company`,
+ADD COLUMN `deliver` VARCHAR(32) NULL COMMENT '发货人' AFTER `logistics_number`,
+ADD COLUMN `deliver_datetime` DATETIME NULL COMMENT '发货时间' AFTER `deliver`,
+ADD COLUMN `receiver` VARCHAR(32) NULL COMMENT '收货人' AFTER `deliver_datetime`,
+ADD COLUMN `receiver_mobile` VARCHAR(45) NULL COMMENT '收货人手机号' AFTER `receiver`,
+ADD COLUMN `receiver_datetime` DATETIME NULL COMMENT '收货时间' AFTER `receiver_mobile`;

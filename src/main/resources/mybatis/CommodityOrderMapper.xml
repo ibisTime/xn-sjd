@@ -18,10 +18,18 @@
 		<result column="pay_datetime" property="payDatetime" />
 		<result column="pay_amount" property="payAmount" />
 		<result column="address_code" property="addressCode" />
+		<result column="logistics_company" property="logisticsCompany" />
+		<result column="logistics_number" property="logisticsNumber" />
+		
+		<result column="deliver" property="deliver" />
+		<result column="deliver_datetime" property="deliverDatetime" />
+		<result column="receiver" property="receiver" />
+		<result column="receiver_mobile" property="receiverMobile" />
+		<result column="receiver_datetime" property="receiverDatetime" />
+		
 		<result column="status" property="status" />
 		<result column="updater" property="updater" />
 		<result column="update_datetime" property="updateDatetime" />
-		
 		<result column="remark" property="remark" />
 	</resultMap>
 	
@@ -45,9 +53,22 @@
 			<if test="payGroup != null and payGroup != '' ">
 				AND t.pay_group = #{payGroup}
 			</if>
-			<if test="payCode != null and payCode != '' ">
-				AND t.pay_code = #{payCode}
+			<if test="addressCode != null and addressCode != '' ">
+				AND t.address_code = #{addressCode}
 			</if>
+			<if test="deliver != null and deliver != '' ">
+				AND t.deliver = #{deliver}
+			</if>
+			<if test="receiver != null and receiver != '' ">
+				AND t.receiver = #{receiver}
+			</if>
+			<if test="logisticsCompany != null and logisticsCompany != '' ">
+				AND t.logistics_company = #{logisticsCompany}
+			</if>
+			<if test="logisticsNumber != null and logisticsNumber != '' ">
+				AND t.logistics_number = #{logisticsNumber}
+			</if>
+			
 			<if test="applyDatetimeStart != null and applyDatetimeStart != '' ">
 				<![CDATA[AND t.apply_datetime >= #{applyDatetimeStart}]]>
 			</if>
@@ -74,9 +95,17 @@
 		,t.pay_datetime
 		,t.pay_amount
 		,t.address_code
+		,t.logistics_company
+		,t.logistics_number
+		
+		,t.deliver
+		,t.deliver_datetime
+		,t.receiver
+		,t.receiver_mobile
+		,t.receiver_datetime
+		
 		,t.status
 		,t.updater
-		
 		,t.update_datetime
 		,t.remark
 		FROM
@@ -156,6 +185,31 @@
 		quantity=#{quantity}
 		,amount=#{amount}
 		,pay_amount=#{payAmount}
+		WHERE
+		code=#{code}
+	</update>
+	
+	<update id="update_delive" parameterType="commodityOrder">
+		UPDATE tsc_commodity_order
+		SET
+		logistics_company=#{logisticsCompany}
+		,logistics_number=#{logisticsNumber}
+		,deliver=#{deliver}
+		,deliver_datetime=#{deliverDatetime}
+		,receiver=#{receiver}
+		,receiver_mobile=#{receiverMobile}
+		,status=#{status}
+		,update_datetime=#{updateDatetime}
+		WHERE
+		code=#{code}
+	</update>
+	
+	<update id="update_receive" parameterType="commodityOrder">
+		UPDATE tsc_commodity_order
+		SET
+		receiver_datetime=#{receiverDatetime}
+		,status=#{status}
+		,update_datetime=#{updateDatetime}
 		WHERE
 		code=#{code}
 	</update>

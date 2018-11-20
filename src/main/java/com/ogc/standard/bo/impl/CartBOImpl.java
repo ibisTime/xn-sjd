@@ -101,6 +101,22 @@ public class CartBOImpl extends PaginableBOImpl<Cart> implements ICartBO {
     }
 
     @Override
+    public List<Cart> quertMyShopList(List<String> codeList) {
+        Cart condition = new Cart();
+        condition.setCodeList(codeList);
+        return cartDAO.selectShopList(condition);
+    }
+
+    @Override
+    public List<Cart> quertMyShopCartList(String shopCode,
+            List<String> cartList) {
+        Cart condition = new Cart();
+        condition.setShopCode(shopCode);
+        condition.setCodeList(cartList);
+        return cartDAO.selectList(condition);
+    }
+
+    @Override
     public Cart getCartByUserSpecs(String userId, Long specId) {
         Cart condition = new Cart();
         condition.setUserId(userId);

@@ -12,6 +12,7 @@ import java.util.List;
 
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.CommodityOrder;
+import com.ogc.standard.dto.req.XN629714Req;
 import com.ogc.standard.dto.req.XN629721Req;
 import com.ogc.standard.dto.res.XN629048Res;
 
@@ -22,22 +23,32 @@ import com.ogc.standard.dto.res.XN629048Res;
  */
 public interface ICommodityOrderAO {
 
+    // 提交订单
     public String commitCommodityOrder(String applyUser, String applyNote,
             String expressType, Long specsId, Long quantity,
             String addressCode);
 
+    // 支付
     public Object toPayCommodityOrder(XN629721Req req);
 
+    // 组合支付
+    public Object toPayGroupCommodityOrder(XN629714Req req);
+
+    // 取消
     public void cancelCommodityOrder(String code, String updater,
             String remark);
 
+    // 三方回调
     public void paySuccess(String payGroup);
 
+    // 发货
     public void delive(String code, String logisticsCompany,
             String logisticsNumber, String deliver);
 
+    // 收货
     public void receive(String code, String receiver);
 
+    // 获取抵扣金额
     public XN629048Res getOrderDkAmount(String code);
 
     public Paginable<CommodityOrder> queryOrderPage(int start, int limit,

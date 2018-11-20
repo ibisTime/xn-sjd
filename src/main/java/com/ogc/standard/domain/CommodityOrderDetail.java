@@ -23,8 +23,6 @@ public class CommodityOrderDetail extends ABaseDO {
 
     private static final long serialVersionUID = 8572770333835172098L;
 
-    // ****************DB*****************
-
     // 编号
     private String code;
 

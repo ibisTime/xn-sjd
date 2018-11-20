@@ -63,6 +63,27 @@ public class CommodityOrder extends ABaseDO {
     // 地址编号
     private String addressCode;
 
+    // 物流公司
+    private String logisticsCompany;
+
+    // 物流单号
+    private String logisticsNumber;
+
+    // 发货人
+    private String deliver;
+
+    // 发货时间
+    private Date deliverDatetime;
+
+    // 收货人
+    private String receiver;
+
+    // 收货人手机
+    private String receiverMobile;
+
+    // 收货时间
+    private Date receiverDatetime;
+
     // 状态
     private String status;
 
@@ -286,6 +307,62 @@ public class CommodityOrder extends ABaseDO {
 
     public void setAddress(Address address) {
         this.address = address;
+    }
+
+    public String getLogisticsCompany() {
+        return logisticsCompany;
+    }
+
+    public void setLogisticsCompany(String logisticsCompany) {
+        this.logisticsCompany = logisticsCompany;
+    }
+
+    public String getLogisticsNumber() {
+        return logisticsNumber;
+    }
+
+    public void setLogisticsNumber(String logisticsNumber) {
+        this.logisticsNumber = logisticsNumber;
+    }
+
+    public String getDeliver() {
+        return deliver;
+    }
+
+    public void setDeliver(String deliver) {
+        this.deliver = deliver;
+    }
+
+    public Date getDeliverDatetime() {
+        return deliverDatetime;
+    }
+
+    public void setDeliverDatetime(Date deliverDatetime) {
+        this.deliverDatetime = deliverDatetime;
+    }
+
+    public String getReceiver() {
+        return receiver;
+    }
+
+    public void setReceiver(String receiver) {
+        this.receiver = receiver;
+    }
+
+    public String getReceiverMobile() {
+        return receiverMobile;
+    }
+
+    public void setReceiverMobile(String receiverMobile) {
+        this.receiverMobile = receiverMobile;
+    }
+
+    public Date getReceiverDatetime() {
+        return receiverDatetime;
+    }
+
+    public void setReceiverDatetime(Date receiverDatetime) {
+        this.receiverDatetime = receiverDatetime;
     }
 
 }

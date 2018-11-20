@@ -1,9 +1,9 @@
 /**
- * @Title XN629713Req.java 
+ * @Title XN629721Req.java 
  * @Package com.ogc.standard.dto.req 
  * @Description 
  * @author taojian  
- * @date 2018年11月10日 上午11:04:03 
+ * @date 2018年11月6日 下午3:42:36 
  * @version V1.0   
  */
 package com.ogc.standard.dto.req;
@@ -11,22 +11,74 @@ package com.ogc.standard.dto.req;
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
- * 根据店铺删购物车
+ * 组合支付
  * @author: silver 
- * @since: Nov 15, 2018 7:04:34 PM 
+ * @since: Nov 20, 2018 2:48:46 PM 
  * @history:
  */
 public class XN629714Req {
-    // 店铺编号
-    @NotBlank
-    private String shopCode;
 
-    public String getShopCode() {
-        return shopCode;
+    @NotBlank
+    private String payGroup;
+
+    @NotBlank
+    private String payType;
+
+    @NotBlank
+    private String updater;
+
+    private String remark;
+
+    private String tradePwd;
+
+    private String isJfDeduct;
+
+    public String getTradePwd() {
+        return tradePwd;
     }
 
-    public void setShopCode(String shopCode) {
-        this.shopCode = shopCode;
+    public void setTradePwd(String tradePwd) {
+        this.tradePwd = tradePwd;
+    }
+
+    public String getPayGroup() {
+        return payGroup;
+    }
+
+    public void setPayGroup(String payGroup) {
+        this.payGroup = payGroup;
+    }
+
+    public String getPayType() {
+        return payType;
+    }
+
+    public void setPayType(String payType) {
+        this.payType = payType;
+    }
+
+    public String getUpdater() {
+        return updater;
+    }
+
+    public void setUpdater(String updater) {
+        this.updater = updater;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public String getIsJfDeduct() {
+        return isJfDeduct;
+    }
+
+    public void setIsJfDeduct(String isJfDeduct) {
+        this.isJfDeduct = isJfDeduct;
     }
 
 }

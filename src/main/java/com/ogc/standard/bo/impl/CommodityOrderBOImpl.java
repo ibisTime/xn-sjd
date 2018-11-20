@@ -20,11 +20,11 @@ import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.ICommodityOrderDAO;
 import com.ogc.standard.domain.CommodityOrder;
+import com.ogc.standard.domain.CommodityOrderDetail;
 import com.ogc.standard.enums.ECommodityOrderStatus;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.enums.ESysUser;
 import com.ogc.standard.exception.BizException;
-import com.ogc.standard.exception.EBizErrorCode;
 
 /** 
  * @author: taojian 
@@ -39,23 +39,23 @@ public class CommodityOrderBOImpl extends PaginableBOImpl<CommodityOrder>
     private ICommodityOrderDAO commodityOrderDAO;
 
     @Override
-    public String saveOrder(String applyUser, String applyNote,
+    public String saveOrder(String applyUser, String applyNote, String payGroup,
             String expressType, String updater, String remark,
             String addressCode) {
         CommodityOrder data = new CommodityOrder();
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.CommodityOrder.getCode());
         data.setCode(code);
+        data.setPayGroup(payGroup);
         data.setApplyUser(applyUser);
-        Date date = new Date();
-        data.setApplyDatetime(date);
+        data.setApplyDatetime(new Date());
 
         data.setApplyNote(applyNote);
         data.setExpressType(expressType);
         data.setAddressCode(addressCode);
         data.setStatus(ECommodityOrderStatus.TO_PAY.getCode());
         data.setUpdater(updater);
-        data.setUpdateDatetime(date);
+        data.setUpdateDatetime(new Date());
         data.setRemark(remark);
         commodityOrderDAO.insert(data);
         return code;
@@ -82,40 +82,11 @@ public class CommodityOrderBOImpl extends PaginableBOImpl<CommodityOrder>
     }
 
     @Override
-    public List<CommodityOrder> queryOrderList(CommodityOrder condition) {
-
-        return commodityOrderDAO.selectList(condition);
-    }
-
-    @Override
-    public CommodityOrder getCommodityOrder(String code) {
-        CommodityOrder condition = new CommodityOrder();
-        condition.setCode(code);
-        CommodityOrder data = commodityOrderDAO.select(condition);
-        if (null == data) {
-            throw new BizException("xn0000", "不存在该订单");
-        }
-        return data;
-    }
-
-    @Override
     public void refreshPayGroup(CommodityOrder data, String payType) {
         data.setPayType(payType);
         data.setPayGroup(data.getCode());
         data.setRemark("预支付发起中");
         commodityOrderDAO.updatePay(data);
-    }
-
-    @Override
-    public CommodityOrder getCommodityOrderByPayGroup(String payGroup) {
-        CommodityOrder condition = new CommodityOrder();
-        condition.setPayGroup(payGroup);
-        List<CommodityOrder> list = commodityOrderDAO.selectList(condition);
-        if (list.isEmpty()) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "根据" + payGroup + "查询订单不存在");
-        }
-        return list.get(0);
     }
 
     @Override
@@ -135,6 +106,41 @@ public class CommodityOrderBOImpl extends PaginableBOImpl<CommodityOrder>
         data.setAmount(amount);
         data.setPayAmount(amount);
         commodityOrderDAO.updateAmount(data);
+    }
+
+    @Override
+    public void refershDelive(CommodityOrderDetail data,
+            String logisticsCompany, String logisticsNumber, String deliver) {
+
+    }
+
+    @Override
+    public void refreshReceive(CommodityOrderDetail data) {
+
+    }
+
+    @Override
+    public List<CommodityOrder> queryOrderList(CommodityOrder condition) {
+        return commodityOrderDAO.selectList(condition);
+    }
+
+    @Override
+    public CommodityOrder getCommodityOrder(String code) {
+        CommodityOrder condition = new CommodityOrder();
+        condition.setCode(code);
+        CommodityOrder data = commodityOrderDAO.select(condition);
+        if (null == data) {
+            throw new BizException("xn0000", "不存在该订单");
+        }
+        return data;
+    }
+
+    @Override
+    public List<CommodityOrder> queryCommodityOrderByPayGroup(String payGroup) {
+        CommodityOrder condition = new CommodityOrder();
+        condition.setPayGroup(payGroup);
+        List<CommodityOrder> list = commodityOrderDAO.selectList(condition);
+        return list;
     }
 
 }

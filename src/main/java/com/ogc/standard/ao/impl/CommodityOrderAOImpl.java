@@ -46,6 +46,7 @@ import com.ogc.standard.domain.CommodityShopOrder;
 import com.ogc.standard.domain.CommoditySpecs;
 import com.ogc.standard.domain.Company;
 import com.ogc.standard.domain.Jour;
+import com.ogc.standard.dto.req.XN629714Req;
 import com.ogc.standard.dto.req.XN629721Req;
 import com.ogc.standard.dto.res.BooleanRes;
 import com.ogc.standard.dto.res.PayOrderRes;
@@ -126,7 +127,7 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
 
         // 落地订单数据
         String orderCode = commodityOrderBO.saveOrder(applyUser, applyNote,
-            expressType, applyUser, applyNote, addressCode);
+            null, expressType, applyUser, applyNote, addressCode);
 
         // 落地单店铺订单
         commodityOrderDetailBO.saveDetail(orderCode, commodity.getShopCode(),
@@ -170,16 +171,16 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
     @Transactional
     public Object toPayCommodityOrder(XN629721Req req) {
 
+        // 支付密码确认
+        if (StringUtils.isNotBlank(req.getTradePwd())) {
+            userBO.checkTradePwd(req.getUpdater(), req.getTradePwd());
+        }
+
         // 订单状态检验
         CommodityOrder order = commodityOrderBO
             .getCommodityOrder(req.getCode());
         if (!ECommodityOrderStatus.TO_PAY.getCode().equals(order.getStatus())) {
             throw new BizException("xn0000", "该订单不处于待支付状态");
-        }
-
-        // 支付密码确认
-        if (StringUtils.isNotBlank(req.getTradePwd())) {
-            userBO.checkTradePwd(req.getUpdater(), req.getTradePwd());
         }
 
         // 积分抵扣处理
@@ -208,6 +209,58 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
         } else {
             throw new BizException("xn0000", "不支持的支付方式");
         }
+        return result;
+    }
+
+    @Override
+    @Transactional
+    public Object toPayGroupCommodityOrder(XN629714Req req) {
+
+        // 支付密码确认
+        if (StringUtils.isNotBlank(req.getTradePwd())) {
+            userBO.checkTradePwd(req.getUpdater(), req.getTradePwd());
+        }
+
+        List<CommodityOrder> commodityOrderList = commodityOrderBO
+            .queryCommodityOrderByPayGroup(req.getPayGroup());
+        Object result = null;
+
+        for (CommodityOrder order : commodityOrderList) {
+
+            if (!ECommodityOrderStatus.TO_PAY.getCode()
+                .equals(order.getStatus())) {
+                throw new BizException("xn0000", "该订单不处于待支付状态");
+            }
+
+            // 积分抵扣处理
+            XN629048Res deductRes = distributionOrderBO.getOrderDeductAmount(
+                order.getAmount(), order.getApplyUser(), req.getIsJfDeduct());
+
+            // 支付
+            if (EPayType.ALIPAY.getCode().equals(req.getPayType())) {
+
+                // 状态更新
+                commodityOrderBO.refreshPayGroup(order, req.getPayType());
+
+                String signOrder = alipayBO.getSignedOrder(order.getApplyUser(),
+                    ESysUser.SYS_USER.getCode(), order.getPayGroup(),
+                    EJourBizTypeUser.COMMODITY.getCode(),
+                    EJourBizTypeUser.COMMODITY.getValue(),
+                    order.getPayAmount());
+                result = new PayOrderRes(signOrder);
+
+            } else if (EPayType.YE.getCode().equals(req.getPayType())) {
+
+                result = toPayCommodityOrderYue(order, deductRes);
+
+            } else if (EPayType.WEIXIN_H5.getCode().equals(req.getPayType())) {
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                    "暂不支持微信支付");
+            } else {
+                throw new BizException("xn0000", "不支持的支付方式");
+            }
+        }
+
         return result;
     }
 
@@ -450,4 +503,5 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
         Address address = addressBO.getAddress(order.getAddressCode());
         order.setAddress(address);
     }
+
 }

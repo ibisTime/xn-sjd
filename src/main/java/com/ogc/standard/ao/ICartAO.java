@@ -29,7 +29,7 @@ public interface ICartAO {
     public List<XN629712Res> queryMyCart(String userId);
 
     public String orderByCart(String applyUser, String applyNote,
-            String expressType, String addressCode, List<String> cartList);
+            String expressType, String addressCode, List<String> cartCodeList);
 
     public Cart getCart(String code);
 }

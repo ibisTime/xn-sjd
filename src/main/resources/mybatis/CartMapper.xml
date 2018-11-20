@@ -17,6 +17,13 @@
 	
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="codeList != null and codeList != '' ">
+                AND t.code in
+                <foreach item="item" index="index" collection="codeList" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
 			</if>
