@@ -106,6 +106,9 @@ public class PresellProduct extends ABaseDO {
     // 已预售数量
     private Integer nowCount;
 
+    // 最大积分抵扣比例
+    private double maxJfdkRate;
+
     // UI位置
     private String location;
 
@@ -476,6 +479,14 @@ public class PresellProduct extends ABaseDO {
 
     public void setPackWeight(Integer packWeight) {
         this.packWeight = packWeight;
+    }
+
+    public double getMaxJfdkRate() {
+        return maxJfdkRate;
+    }
+
+    public void setMaxJfdkRate(double maxJfdkRate) {
+        this.maxJfdkRate = maxJfdkRate;
     }
 
 }

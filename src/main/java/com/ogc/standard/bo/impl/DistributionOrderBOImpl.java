@@ -22,11 +22,14 @@ import com.ogc.standard.bo.IDistributionOrderBO;
 import com.ogc.standard.bo.ISYSConfigBO;
 import com.ogc.standard.bo.ISettleBO;
 import com.ogc.standard.bo.IUserBO;
+import com.ogc.standard.bo.IUserExtBO;
 import com.ogc.standard.common.AmountUtil;
+import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.common.SysConstants;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.AgentUser;
 import com.ogc.standard.domain.User;
+import com.ogc.standard.domain.UserExt;
 import com.ogc.standard.dto.res.XN629048Res;
 import com.ogc.standard.enums.EAgentUserLevel;
 import com.ogc.standard.enums.EBoolean;
@@ -67,6 +70,9 @@ public class DistributionOrderBOImpl implements IDistributionOrderBO {
     @Autowired
     private ISettleBO settleBO;
 
+    @Autowired
+    private IUserExtBO userExtBO;
+
     @Override
     public XN629048Res getOrderDeductAmount(BigDecimal amount, String applyUser,
             String isDk) {
@@ -97,6 +103,47 @@ public class DistributionOrderBOImpl implements IDistributionOrderBO {
 
         }
         return new XN629048Res(cnyAmount, jfAmount);
+    }
+
+    @Override
+    public XN629048Res getOrderDeductAmount(Double maxJfdkRate,
+            BigDecimal amount, String applyUser, String isDk) {
+        BigDecimal cnyAmount = BigDecimal.ZERO;// 可抵扣多少人民币
+        BigDecimal jfAmount = BigDecimal.ZERO;// 需要用多少积分来抵扣
+
+        if (amount.longValue() > 0 && EBoolean.YES.getCode().equals(isDk)) {
+            Map<String, String> configMap = sysConfigBO
+                .getConfigsMap(ESysConfigType.PAY_RULE.getCode());
+
+            Double rate = Double
+                .valueOf(configMap.get(SysConstants.JF_DK_MAX_RATE));// 订单可用积分抵扣比例
+
+            Double cny2jfRate = Double
+                .valueOf(configMap.get(SysConstants.CNY2JF_RATE));// 1人民币兑换多少积分
+
+            cnyAmount = AmountUtil.mul(amount, rate);
+            jfAmount = AmountUtil.mul(cnyAmount, cny2jfRate);
+
+            // 积分余额不够时用剩余积分抵扣
+            Account jfAccount = accountBO.getAccountByUser(applyUser,
+                ECurrency.JF.getCode());
+            if (jfAmount.compareTo(jfAccount.getAmount()) == 1) {
+                jfAmount = jfAccount.getAmount();
+                cnyAmount = AmountUtil.mul(jfAccount.getAmount(),
+                    1.0 / cny2jfRate);
+            }
+
+            // 最多只能抵扣最大抵扣比例
+            BigDecimal maxCnyAmount = amount
+                .multiply(new BigDecimal(maxJfdkRate));
+            if (cnyAmount.compareTo(maxCnyAmount) == 1) {
+                cnyAmount = maxCnyAmount;
+                jfAmount = AmountUtil.mul(cnyAmount, cny2jfRate);
+            }
+        }
+
+        return new XN629048Res(cnyAmount, jfAmount);
+
     }
 
     @Override
@@ -136,6 +183,14 @@ public class DistributionOrderBOImpl implements IDistributionOrderBO {
         // 用户同等金额积分奖励
         BigDecimal jfAwardAmount = payAmount.multiply(
             new BigDecimal(mapList.get(SysConstants.DIST_USER_BACK_JF_RATE)));// 认养返积分比例
+
+        // 生日购买双倍积分
+        UserExt userExt = userExtBO.getUserExt(applyUser);
+        if (null != userExt.getBirthday()) {
+            if (DateUtil.isToday(userExt.getBirthday())) {
+                jfAwardAmount = jfAwardAmount.multiply(new BigDecimal(2));
+            }
+        }
 
         Account sysAccount = accountBO
             .getAccount(ESystemAccount.SYS_ACOUNT_JF_POOL.getCode());

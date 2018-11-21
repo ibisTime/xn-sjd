@@ -86,6 +86,7 @@
 			<if test="deliverDatetimeEnd != null and deliverDatetimeEnd != '' ">
 				<![CDATA[AND t.deliver_datetime <= #{deliverDatetimeEnd}]]>
 			</if>
+			
 		</trim>
 	</sql>
 	
@@ -205,6 +206,14 @@
 		code=#{code}
 	</update>
 	
+	<update id="update_address" parameterType="commodityOrder">
+		UPDATE tsc_commodity_order
+		SET
+		address_code=#{addressCode}
+		WHERE
+		code=#{code}
+	</update>
+	
 	<update id="update_delive" parameterType="commodityOrder">
 		UPDATE tsc_commodity_order
 		SET
@@ -228,6 +237,16 @@
 		,update_datetime=#{updateDatetime}
 		WHERE
 		code=#{code}
+	</update>
+	
+	<update id="update_comment" parameterType="commodityOrder">
+		UPDATE tsc_commodity_order
+		SET
+		status=#{status}
+		,update_datetime=#{updateDatetime}
+		WHERE
+		code = #{code}
+		AND NOT EXISTS (SELECT 1 from tsc_commodity_order_detail WHERE order_code = tsc_commodity_order.code and tsc_commodity_order_detail.status != 0)
 	</update>
 	
 </mapper>

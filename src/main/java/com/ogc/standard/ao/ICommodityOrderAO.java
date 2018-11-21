@@ -41,6 +41,9 @@ public interface ICommodityOrderAO {
     // 三方回调
     public void paySuccess(String payGroup);
 
+    // 编辑收货地址
+    public void editAddress(String code, String addressCode);
+
     // 发货
     public void delive(String code, String logisticsCompany,
             String logisticsNumber, String deliver);

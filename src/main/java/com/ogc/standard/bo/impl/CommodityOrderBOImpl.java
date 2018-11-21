@@ -109,6 +109,14 @@ public class CommodityOrderBOImpl extends PaginableBOImpl<CommodityOrder>
     }
 
     @Override
+    public void refreshAddress(String code, String addressCode) {
+        CommodityOrder data = new CommodityOrder();
+        data.setCode(code);
+        data.setAddressCode(addressCode);
+        commodityOrderDAO.updateAddress(data);
+    }
+
+    @Override
     public void refershDelive(CommodityOrder data, String logisticsCompany,
             String logisticsNumber, String deliver) {
         data.setLogisticsCompany(logisticsCompany);
@@ -126,6 +134,14 @@ public class CommodityOrderBOImpl extends PaginableBOImpl<CommodityOrder>
         data.setUpdateDatetime(new Date());
         data.setStatus(ECommodityOrderStatus.TO_COMMENT.getCode());
         commodityOrderDAO.updateReceive(data);
+    }
+
+    @Override
+    public void refreshComment(String code) {
+        CommodityOrder data = new CommodityOrder();
+        data.setCode(code);
+        data.setStatus(ECommodityOrderStatus.FINISH.getCode());
+        commodityOrderDAO.updateComment(data);
     }
 
     @Override

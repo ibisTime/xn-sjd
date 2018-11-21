@@ -200,3 +200,14 @@ CHANGE COLUMN `specs_id` `specs_id` BIGINT(11) NULL COMMENT '规格编号' ,
 CHANGE COLUMN `address_code` `address_code` VARCHAR(32) NULL COMMENT '收货地址编号' ,
 CHANGE COLUMN `status` `status` VARCHAR(4) NULL COMMENT '状态（0 待发货，1 已发货待收货，2 已完成）' ;
 
+ALTER TABLE `tsc_commodity` 
+ADD COLUMN `original_price` VARCHAR(255) NULL COMMENT '原价' AFTER `weight`;
+
+ALTER TABLE `tzb_product` 
+ADD COLUMN `max_jfdk_rate` DOUBLE NULL DEFAULT NULL COMMENT '最大积分抵扣比例' AFTER `now_count`;
+
+ALTER TABLE `tys_presell_product` 
+ADD COLUMN `max_jfdk_rate` DOUBLE NULL COMMENT '最大积分抵扣比例' AFTER `now_count`;
+
+ALTER TABLE `tsc_commodity` 
+ADD COLUMN `max_jfdk_rate` DOUBLE NULL COMMENT '最大积分抵扣比例' AFTER `sell_user_id`;

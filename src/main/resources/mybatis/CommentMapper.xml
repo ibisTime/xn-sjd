@@ -11,9 +11,6 @@
 		<result column="parent_code" property="parentCode" />
 		
 		<result column="parent_user_id" property="parentUserId" />
-		
-		
-		
 		<result column="status" property="status" />
 		<result column="updater" property="updater" />
 		<result column="update_datetime" property="updateDatetime" />

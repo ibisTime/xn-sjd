@@ -44,6 +44,7 @@ import com.ogc.standard.dto.res.BooleanRes;
 import com.ogc.standard.dto.res.PayOrderRes;
 import com.ogc.standard.dto.res.XN629048Res;
 import com.ogc.standard.enums.EAccountType;
+import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EJourBizTypePlat;
 import com.ogc.standard.enums.EJourBizTypeUser;
@@ -185,8 +186,11 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
         }
 
         // 积分抵扣处理
-        XN629048Res deductRes = new XN629048Res(BigDecimal.ZERO,
-            BigDecimal.ZERO);
+        PresellProduct presellProduct = presellProductBO
+            .getPresellProduct(presellOrder.getProductCode());
+        XN629048Res deductRes = distributionOrderBO.getOrderDeductAmount(
+            presellProduct.getMaxJfdkRate(), presellOrder.getAmount(),
+            presellOrder.getApplyUser(), EBoolean.YES.getCode());
 
         // 支付订单
         Object result = null;
@@ -246,8 +250,9 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
         userAO.upgradeUserLevel(data.getApplyUser());
 
         // 添加快报
-        smsBO.saveAdoptBulletin(data.getApplyUser(), data.getQuantity().toString(),
-            ESellType.PRESELL.getCode(), presellProduct.getName());
+        smsBO.saveAdoptBulletin(data.getApplyUser(),
+            data.getQuantity().toString(), ESellType.PRESELL.getCode(),
+            presellProduct.getName());
 
         // 添加原生组
         String originalGroupCode = originalGroupBO.saveOriginalGroup(data);
@@ -423,6 +428,24 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
         // 订单状态变更
         presellOrderBO.cancelPresellOrder(presellOrder.getCode(),
             "超15分钟未支付系统自动取消");
+    }
+
+    @Override
+    public XN629048Res getOrderDkAmount(String code) {
+
+        PresellOrder presellOrder = presellOrderBO.getPresellOrder(code);
+        if (!EPresellOrderStatus.TO_PAY.getCode()
+            .equals(presellOrder.getStatus())) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "当前订单不是待支付状态");
+        }
+
+        PresellProduct presellProduct = presellProductBO
+            .getPresellProduct(presellOrder.getProductCode());
+
+        return distributionOrderBO.getOrderDeductAmount(
+            presellProduct.getMaxJfdkRate(), presellOrder.getAmount(),
+            presellOrder.getApplyUser(), EBoolean.YES.getCode());
     }
 
     @Override

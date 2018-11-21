@@ -133,9 +133,13 @@ public class CommodityOrderDetailAOImpl implements ICommodityOrderDetailAO {
         }
 
         String commentCode = commentBO.saveComment(userId, content,
-            commodityOrderDetail.getCode(), null, null, status);
+            commodityOrderDetail.getCommodityCode(), null, null, status);
 
+        // 更新明细状态
         commodityOrderDetailBO.comment(code);
+
+        // 更新订单状态
+        commodityOrderBO.refreshComment(commodityOrderDetail.getOrderCode());
 
         return commentCode;
     }

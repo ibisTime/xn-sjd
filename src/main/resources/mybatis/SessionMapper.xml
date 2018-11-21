@@ -26,6 +26,10 @@
 			<if test="user2 != null and user2 != '' ">
 				AND t.user2 = #{user2}
 			</if>
+			<if test="minUser2UnreadSum != null and minUser2UnreadSum != '' ">
+				AND t.user2_unread_sum > #{minUser2UnreadSum}
+			</if>
+			
 			<if test="createDatetimeStart != null and createDatetimeStart != '' ">
 				<![CDATA[AND t.create_datetime >= #{createDatetimeStart}]]>
 			</if>
@@ -56,8 +60,6 @@
 		)
 	</insert>
 	
-
-	
 	<update id="update_unread_sum1" parameterType="session">
 		UPDATE tsc_session
 		SET
@@ -74,7 +76,6 @@
 		code=#{code}
 	</update>
 	
-	
 	<select id="select_session" parameterType="session" resultMap="session_DB_Result">
 		SELECT
 		t.code
@@ -88,7 +89,6 @@
 		tsc_session t 
 		<include refid="where_condition" />
 	</select>
-
 	
 	<select id="select_session_count" parameterType="session"
 		resultType="java.lang.Long">

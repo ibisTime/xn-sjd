@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.PresellOrder;
+import com.ogc.standard.dto.res.XN629048Res;
 
 @Component
 public interface IPresellOrderAO {
@@ -27,6 +28,9 @@ public interface IPresellOrderAO {
 
     // 定时取消未支付订单
     public void doCancelPresellOrder();
+
+    // 获取订单抵扣金额
+    public XN629048Res getOrderDkAmount(String code);
 
     public Paginable<PresellOrder> queryPresellOrderPage(int start, int limit,
             PresellOrder condition);

@@ -76,6 +76,11 @@ public class CommodityOrderDAOImpl extends AMybatisTemplate
     }
 
     @Override
+    public int updateAddress(CommodityOrder data) {
+        return super.update(NAMESPACE.concat("update_address"), data);
+    }
+
+    @Override
     public int updateDelive(CommodityOrder data) {
         return super.update(NAMESPACE.concat("update_delive"), data);
     }
@@ -83,6 +88,11 @@ public class CommodityOrderDAOImpl extends AMybatisTemplate
     @Override
     public int updateReceive(CommodityOrder data) {
         return super.update(NAMESPACE.concat("update_receive"), data);
+    }
+
+    @Override
+    public int updateComment(CommodityOrder data) {
+        return super.update(NAMESPACE.concat("update_comment"), data);
     }
 
 }

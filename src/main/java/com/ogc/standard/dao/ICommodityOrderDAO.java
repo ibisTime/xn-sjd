@@ -25,7 +25,12 @@ public interface ICommodityOrderDAO extends IBaseDAO<CommodityOrder> {
 
     public int updateAmount(CommodityOrder data);
 
+    public int updateAddress(CommodityOrder data);
+
     public int updateDelive(CommodityOrder data);
 
     public int updateReceive(CommodityOrder data);
+
+    public int updateComment(CommodityOrder data);
+
 }

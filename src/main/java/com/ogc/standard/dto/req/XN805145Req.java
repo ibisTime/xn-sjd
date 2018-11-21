@@ -8,8 +8,6 @@
  */
 package com.ogc.standard.dto.req;
 
-import org.hibernate.validator.constraints.NotBlank;
-
 /** 
  * @author: dl 
  * @since: 2018年8月20日 下午5:52:34 
@@ -20,7 +18,6 @@ public class XN805145Req extends APageReq {
     private static final long serialVersionUID = -213328536116448889L;
 
     // 用户编号
-    @NotBlank
     private String userId;
 
     public String getUserId() {

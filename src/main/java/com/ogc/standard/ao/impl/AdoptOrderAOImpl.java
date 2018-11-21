@@ -236,9 +236,12 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
             userBO.checkTradePwd(data.getApplyUser(), tradePwd);
         }
 
+        Product product = productBO.getProduct(data.getProductCode());
+
         // 积分抵扣处理
         XN629048Res deductRes = distributionOrderBO.getOrderDeductAmount(
-            data.getAmount(), data.getApplyUser(), isJfDeduct);
+            product.getMaxJfdkRate(), data.getAmount(), data.getApplyUser(),
+            isJfDeduct);
 
         // 支付订单
         Object result = null;
@@ -334,8 +337,9 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
         }
 
         // 添加快报
-        smsBO.saveAdoptBulletin(data.getApplyUser(), data.getQuantity().toString(),
-            data.getType(), productInfo.getName());
+        smsBO.saveAdoptBulletin(data.getApplyUser(),
+            data.getQuantity().toString(), data.getType(),
+            productInfo.getName());
 
         return new BooleanRes(true);
     }
@@ -524,8 +528,12 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "当前订单不是待支付状态");
         }
-        return distributionOrderBO.getOrderDeductAmount(data.getAmount(),
-            data.getApplyUser(), EBoolean.YES.getCode());
+
+        Product product = productBO.getProduct(data.getProductCode());
+
+        return distributionOrderBO.getOrderDeductAmount(
+            product.getMaxJfdkRate(), data.getAmount(), data.getApplyUser(),
+            EBoolean.YES.getCode());
     }
 
     @Override

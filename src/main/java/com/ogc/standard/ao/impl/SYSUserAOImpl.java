@@ -200,7 +200,8 @@ public class SYSUserAOImpl implements ISYSUserAO {
     public String doLogin(String loginName, String loginPwd, String type) {
         SYSUser condition = new SYSUser();
         condition.setLoginName(loginName);
-        condition.setKind(type);
+        // TODO
+        // condition.setKind(type);
         List<SYSUser> userList1 = sysUserBO.queryUserList(condition);
         if (CollectionUtils.isEmpty(userList1)) {
             throw new BizException("xn805050", "登录名不存在");

@@ -8,6 +8,8 @@
  */
 package com.ogc.standard.api.impl;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.ogc.standard.ao.ICommentAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
@@ -41,8 +43,16 @@ public class XN629755 extends AProcessor {
         condition.setParentUserId(req.getParentUserId());
         condition.setStatus(req.getStatus());
         condition.setStatusList(req.getStatusList());
+
+        String column = req.getOrderColumn();
+        if (StringUtils.isBlank(column)) {
+            column = ICommentAO.DEFAULT_ORDER_COLUMN;
+        }
+        condition.setOrder(column, req.getOrderDir());
+
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
+
         return commentAO.queryCommentPage(start, limit, condition);
     }
 

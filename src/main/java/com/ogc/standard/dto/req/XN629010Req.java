@@ -94,6 +94,9 @@ public class XN629010Req extends BaseReq {
     // 募集总数量(集体)
     private String raiseCount;
 
+    // 最大积分抵扣比例
+    private String maxJfdkRate;
+
     // 产品规格列表
     @NotEmpty
     private List<XN629010ReqSpecs> productSpecsList;
@@ -315,6 +318,14 @@ public class XN629010Req extends BaseReq {
 
     public void setEndDatetime(String endDatetime) {
         this.endDatetime = endDatetime;
+    }
+
+    public String getMaxJfdkRate() {
+        return maxJfdkRate;
+    }
+
+    public void setMaxJfdkRate(String maxJfdkRate) {
+        this.maxJfdkRate = maxJfdkRate;
     }
 
 }

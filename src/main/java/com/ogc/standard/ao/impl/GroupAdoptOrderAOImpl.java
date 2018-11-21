@@ -222,9 +222,12 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
             userBO.checkTradePwd(data.getApplyUser(), tradePwd);
         }
 
+        Product product = productBO.getProduct(data.getProductCode());
+
         // 积分抵扣处理
         XN629048Res deductRes = distributionOrderBO.getOrderDeductAmount(
-            data.getAmount(), data.getApplyUser(), isJfDeduct);
+            product.getMaxJfdkRate(), data.getAmount(), data.getApplyUser(),
+            isJfDeduct);
 
         // 支付订单
         Object result = null;
@@ -303,8 +306,9 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
         }
 
         // 添加快报
-        smsBO.saveAdoptBulletin(data.getApplyUser(), data.getQuantity().toString(),
-            ESellType.COLLECTIVE.getCode(), product.getName());
+        smsBO.saveAdoptBulletin(data.getApplyUser(),
+            data.getQuantity().toString(), ESellType.COLLECTIVE.getCode(),
+            product.getName());
 
         return new BooleanRes(true);
     }
@@ -372,8 +376,12 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "当前订单不是待支付状态");
         }
-        return distributionOrderBO.getOrderDeductAmount(data.getAmount(),
-            data.getApplyUser(), EBoolean.YES.getCode());
+
+        Product product = productBO.getProduct(data.getProductCode());
+
+        return distributionOrderBO.getOrderDeductAmount(
+            product.getMaxJfdkRate(), data.getAmount(), data.getApplyUser(),
+            EBoolean.YES.getCode());
     }
 
     // 更新已满标的订单

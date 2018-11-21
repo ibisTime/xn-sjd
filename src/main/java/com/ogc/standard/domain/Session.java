@@ -59,6 +59,9 @@ public class Session extends ABaseDO {
 
     private List<SessionMessage> messageList;
 
+    // 说话人2最少未读消息数
+    private String minUser2UnreadSum;
+
     public List<SessionMessage> getMessageList() {
         return messageList;
     }
@@ -153,6 +156,14 @@ public class Session extends ABaseDO {
 
     public void setUser2UnreadSum(Long user2UnreadSum) {
         this.user2UnreadSum = user2UnreadSum;
+    }
+
+    public String getMinUser2UnreadSum() {
+        return minUser2UnreadSum;
+    }
+
+    public void setMinUser2UnreadSum(String minUser2UnreadSum) {
+        this.minUser2UnreadSum = minUser2UnreadSum;
     }
 
 }

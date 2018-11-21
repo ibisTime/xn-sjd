@@ -42,6 +42,9 @@ public class Commodity extends ABaseDO {
     // 重量
     private String weight;
 
+    // 原价
+    private String originalPrice;
+
     // 物流方式
     private String logistics;
 
@@ -62,6 +65,9 @@ public class Commodity extends ABaseDO {
 
     // 商家编号
     private String sellUserId;
+
+    // 最大积分抵扣比例
+    private double maxJfdkRate;
 
     // UI位置
     private String location;
@@ -277,6 +283,22 @@ public class Commodity extends ABaseDO {
 
     public void setSellUserId(String sellUserId) {
         this.sellUserId = sellUserId;
+    }
+
+    public String getOriginalPrice() {
+        return originalPrice;
+    }
+
+    public void setOriginalPrice(String originalPrice) {
+        this.originalPrice = originalPrice;
+    }
+
+    public double getMaxJfdkRate() {
+        return maxJfdkRate;
+    }
+
+    public void setMaxJfdkRate(double maxJfdkRate) {
+        this.maxJfdkRate = maxJfdkRate;
     }
 
 }

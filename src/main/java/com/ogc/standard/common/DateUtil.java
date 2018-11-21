@@ -394,6 +394,20 @@ public class DateUtil {
         return isBetween;
     }
 
+    public static Boolean isToday(String d) {
+        Boolean isToday = false;
+        SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
+
+        String today = fmt.format(new Date()).toString();
+        String date = fmt.format(d).toString();
+
+        if (date.equals(today)) {
+            isToday = true;
+        }
+
+        return isToday;
+    }
+
     public static void main(String[] args) {
         System.out.println("使用后保护碳泡泡*小时内不被收取".replace("*", "12"));
     }

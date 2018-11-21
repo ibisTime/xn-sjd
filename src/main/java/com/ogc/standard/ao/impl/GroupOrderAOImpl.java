@@ -211,8 +211,9 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
         // 添加快报
         PresellProduct presellProduct = presellProductBO
             .getPresellProduct(data.getProductCode());
-        smsBO.saveAdoptBulletin(data.getApplyUser(), data.getQuantity().toString(),
-            ESellType.PRESELL.getCode(), presellProduct.getName());
+        smsBO.saveAdoptBulletin(data.getApplyUser(),
+            data.getQuantity().toString(), ESellType.PRESELL.getCode(),
+            presellProduct.getName());
 
         // 认领寄售
         claimanDeriveGroup(data);

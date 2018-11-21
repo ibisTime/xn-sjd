@@ -115,6 +115,10 @@ public class XN629400Req extends BaseReq {
     @NotBlank
     private String deliverDatetime;
 
+    // 最大积分抵扣比例
+    @NotBlank
+    private String maxJfdkRate;
+
     // 更新人
     @NotBlank
     private String updater;
@@ -368,6 +372,14 @@ public class XN629400Req extends BaseReq {
 
     public void setPackWeight(String packWeight) {
         this.packWeight = packWeight;
+    }
+
+    public String getMaxJfdkRate() {
+        return maxJfdkRate;
+    }
+
+    public void setMaxJfdkRate(String maxJfdkRate) {
+        this.maxJfdkRate = maxJfdkRate;
     }
 
 }

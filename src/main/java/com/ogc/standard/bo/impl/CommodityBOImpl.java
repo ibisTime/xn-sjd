@@ -18,6 +18,7 @@ import com.ogc.standard.bo.ICommodityBO;
 import com.ogc.standard.bo.ICompanyBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.core.OrderNoGenerater;
+import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.dao.ICommodityDAO;
 import com.ogc.standard.domain.Commodity;
 import com.ogc.standard.domain.Company;
@@ -55,6 +56,7 @@ public class CommodityBOImpl extends PaginableBOImpl<Commodity>
         data.setDeliverPlace(req.getDeliverPlace());
 
         data.setWeight(req.getWeight());
+        data.setOriginalPrice(req.getOriginalPrice());
         data.setLogistics(req.getLogistics());
         data.setListPic(req.getListPic());
         data.setBannerPic(req.getBannerPic());
@@ -62,6 +64,7 @@ public class CommodityBOImpl extends PaginableBOImpl<Commodity>
 
         data.setShopCode(req.getShopCode());
         data.setSellUserId(company.getUserId());
+        data.setMaxJfdkRate(StringValidater.toDouble(req.getMaxJfdkRate()));
         data.setStatus(ECommodityStatus.DRAFT.getCode());
         commodityDAO.insert(data);
         return code;
@@ -78,6 +81,7 @@ public class CommodityBOImpl extends PaginableBOImpl<Commodity>
         data.setDeliverPlace(req.getDeliverPlace());
         data.setWeight(req.getWeight());
 
+        data.setOriginalPrice(req.getOriginalPrice());
         data.setLogistics(req.getLogistics());
         data.setListPic(req.getListPic());
         data.setBannerPic(req.getBannerPic());
@@ -85,6 +89,7 @@ public class CommodityBOImpl extends PaginableBOImpl<Commodity>
         data.setShopCode(req.getShopCode());
 
         data.setSellUserId(company.getUserId());
+        data.setMaxJfdkRate(StringValidater.toDouble(req.getMaxJfdkRate()));
         data.setUpdater(req.getUpdater());
         data.setUpdateDatetime(new Date());
         data.setRemark(req.getRemark());

@@ -85,6 +85,9 @@ public class Product extends ABaseDO {
     // 已募集数量
     private Integer nowCount;
 
+    // 最大积分抵扣比例
+    private double maxJfdkRate;
+
     // 当前识别码（集体）
     private String identifyCode;
 
@@ -576,6 +579,14 @@ public class Product extends ABaseDO {
 
     public void setEndDatetime(Date endDatetime) {
         this.endDatetime = endDatetime;
+    }
+
+    public double getMaxJfdkRate() {
+        return maxJfdkRate;
+    }
+
+    public void setMaxJfdkRate(double maxJfdkRate) {
+        this.maxJfdkRate = maxJfdkRate;
     }
 
 }

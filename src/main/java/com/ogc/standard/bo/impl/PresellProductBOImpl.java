@@ -85,6 +85,7 @@ public class PresellProductBOImpl extends PaginableBOImpl<PresellProduct>
         data.setSingleOutput(singOutput);
         data.setPackWeight(packWeight);
         data.setTotalOutput(totalOutput);
+        data.setMaxJfdkRate(StringValidater.toDouble(req.getMaxJfdkRate()));
 
         presellProductDAO.insert(data);
         return data;
@@ -139,6 +140,7 @@ public class PresellProductBOImpl extends PaginableBOImpl<PresellProduct>
         data.setSingleOutput(singOutput);
         data.setPackWeight(packWeight);
         data.setTotalOutput(totalOutput);
+        data.setMaxJfdkRate(StringValidater.toDouble(req.getMaxJfdkRate()));
 
         presellProductDAO.updateEditPresellProduct(data);
 

@@ -36,10 +36,14 @@ public interface ICommodityOrderBO extends IPaginableBO<CommodityOrder> {
 
     public void refreshAmount(Long quantity, BigDecimal amount, String code);
 
+    public void refreshAddress(String code, String addressCode);
+
     public void refershDelive(CommodityOrder data, String logisticsCompany,
             String logisticsNumber, String deliver);
 
     public void refreshReceive(CommodityOrder data);
+
+    public void refreshComment(String code);
 
     public List<CommodityOrder> queryOrderList(CommodityOrder condition);
 

@@ -181,9 +181,21 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
             throw new BizException("xn0000", "该订单不处于待支付状态");
         }
 
+        // 最大积分抵扣比例
+        Double maxJfdkRate = 0d;
+        List<CommodityOrderDetail> commodityOrderDetailList = commodityOrderDetailBO
+            .queryOrderDetail(req.getCode());
+        if (CollectionUtils.isNotEmpty(commodityOrderDetailList)) {
+            String commodityCode = commodityOrderDetailList.get(0)
+                .getCommodityCode();
+            Commodity commodity = commodityBO.getCommodity(commodityCode);
+            maxJfdkRate = commodity.getMaxJfdkRate();
+        }
+
         // 积分抵扣处理
         XN629048Res deductRes = distributionOrderBO.getOrderDeductAmount(
-            order.getAmount(), order.getApplyUser(), req.getIsJfDeduct());
+            maxJfdkRate, order.getAmount(), order.getApplyUser(),
+            req.getIsJfDeduct());
 
         // 支付
         Object result = null;
@@ -231,9 +243,21 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
                 throw new BizException("xn0000", "该订单不处于待支付状态");
             }
 
+            // 最大积分抵扣比例
+            Double maxJfdkRate = 0d;
+            List<CommodityOrderDetail> commodityOrderDetailList = commodityOrderDetailBO
+                .queryOrderDetail(order.getCode());
+            if (CollectionUtils.isNotEmpty(commodityOrderDetailList)) {
+                String commodityCode = commodityOrderDetailList.get(0)
+                    .getCommodityCode();
+                Commodity commodity = commodityBO.getCommodity(commodityCode);
+                maxJfdkRate = commodity.getMaxJfdkRate();
+            }
+
             // 积分抵扣处理
             XN629048Res deductRes = distributionOrderBO.getOrderDeductAmount(
-                order.getAmount(), order.getApplyUser(), req.getIsJfDeduct());
+                maxJfdkRate, order.getAmount(), order.getApplyUser(),
+                req.getIsJfDeduct());
 
             // 支付
             if (EPayType.ALIPAY.getCode().equals(req.getPayType())) {
@@ -333,6 +357,20 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
     }
 
     @Override
+    public void editAddress(String code, String addressCode) {
+        CommodityOrder commodityOrder = commodityOrderBO
+            .getCommodityOrder(code);
+
+        // 状态判断
+        if (!ECommodityOrderStatus.TODELIVE.getCode()
+            .equals(commodityOrder.getStatus())) {
+            throw new BizException("xn0000", "该订单不处于可修改收货地址的状态");
+        }
+
+        commodityOrderBO.refreshAddress(code, addressCode);
+    }
+
+    @Override
     @Transactional
     public void delive(String code, String logisticsCompany,
             String logisticsNumber, String deliver) {
@@ -425,7 +463,18 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
         CommodityOrder commodityOrder = commodityOrderBO
             .getCommodityOrder(code);
 
-        return distributionOrderBO.getOrderDeductAmount(
+        // 最大积分抵扣比例
+        Double maxJfdkRate = 0d;
+        List<CommodityOrderDetail> commodityOrderDetailList = commodityOrderDetailBO
+            .queryOrderDetail(code);
+        if (CollectionUtils.isNotEmpty(commodityOrderDetailList)) {
+            String commodityCode = commodityOrderDetailList.get(0)
+                .getCommodityCode();
+            Commodity commodity = commodityBO.getCommodity(commodityCode);
+            maxJfdkRate = commodity.getMaxJfdkRate();
+        }
+
+        return distributionOrderBO.getOrderDeductAmount(maxJfdkRate,
             commodityOrder.getAmount(), commodityOrder.getApplyUser(),
             EBoolean.YES.getCode());
     }

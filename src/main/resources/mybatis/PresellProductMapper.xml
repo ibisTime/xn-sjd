@@ -38,6 +38,7 @@
 		<result column="harvest_datetime" property="harvestDatetime" />
 		<result column="deliver_datetime" property="deliverDatetime" />
 		<result column="now_count" property="nowCount" />
+		<result column="max_jfdk_rate" property="maxJfdkRate" />
 		<result column="location" property="location" />
 		<result column="order_no" property="orderNo" />
 		<result column="status" property="status" />
@@ -115,6 +116,7 @@
 		,t.harvest_datetime
 		,t.deliver_datetime
 		,t.now_count
+		,t.max_jfdk_rate
 		,t.location
 		,t.order_no
 		,t.status
@@ -176,6 +178,7 @@
 		,harvest_datetime
 		,deliver_datetime
 		,now_count
+		,max_jfdk_rate
 		,status
 		,updater
 		,update_datetime
@@ -218,6 +221,7 @@
 		,#{harvestDatetime}
 		,#{deliverDatetime}
 		,#{nowCount}
+		,#{maxJfdkRate}
 		,#{status}
 		,#{updater}
 		,#{updateDatetime}
@@ -261,6 +265,7 @@
 		,harvest_datetime = #{harvestDatetime}
 		
 		,deliver_datetime = #{deliverDatetime}
+		,max_jfdk_rate = #{maxJfdkRate}
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
 		,remark = #{remark}

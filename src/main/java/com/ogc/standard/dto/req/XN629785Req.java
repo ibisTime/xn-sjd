@@ -27,6 +27,9 @@ public class XN629785Req extends APageReq {
 
     private String createDatetimeEnd;
 
+    // 说话人2最少未读消息数
+    private String minUser2UnreadSum;
+
     public String getType() {
         return type;
     }
@@ -65,6 +68,14 @@ public class XN629785Req extends APageReq {
 
     public void setCreateDatetimeEnd(String createDatetimeEnd) {
         this.createDatetimeEnd = createDatetimeEnd;
+    }
+
+    public String getMinUser2UnreadSum() {
+        return minUser2UnreadSum;
+    }
+
+    public void setMinUser2UnreadSum(String minUser2UnreadSum) {
+        this.minUser2UnreadSum = minUser2UnreadSum;
     }
 
 }

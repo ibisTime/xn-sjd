@@ -30,6 +30,7 @@
 		<result column="raise_end_datetime" property="raiseEndDatetime" />
 		<result column="raise_count" property="raiseCount" />
 		<result column="now_count" property="nowCount" />
+		<result column="max_jfdk_rate" property="maxJfdkRate" />
 		
 		<result column="identify_code" property="identifyCode" />
 		<result column="id_invalid_datetime" property="idInvalidDatetime" />
@@ -142,6 +143,7 @@
 		,t.raise_end_datetime
 		,t.raise_count
 		,t.now_count
+		,t.max_jfdk_rate
 		,t.identify_code
 		
 		,t.id_invalid_datetime
@@ -199,6 +201,7 @@
 		,raise_end_datetime
 		,raise_count
 		,now_count
+		,max_jfdk_rate
 		,location
 		,order_no
 		
@@ -235,6 +238,7 @@
 		,#{raiseEndDatetime}
 		,#{raiseCount}
 		,#{nowCount}
+		,#{maxJfdkRate}
 		,#{location}
 		,#{orderNo}
 		
@@ -268,6 +272,7 @@
 		,raise_start_datetime = #{raiseStartDatetime}
 		,raise_end_datetime = #{raiseEndDatetime}
 		,raise_count = #{raiseCount}
+		,max_jfdk_rate = #{maxJfdkRate}
 		,status = #{status}
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}

@@ -45,6 +45,14 @@ public class XN629701Req {
     @NotBlank
     private String weight;
 
+    // 最大积分抵扣比例
+    @NotBlank
+    private String maxJfdkRate;
+
+    // 原价
+    @NotBlank
+    private String originalPrice;
+
     // 物流方式
     @NotBlank
     private String logistics;
@@ -187,4 +195,21 @@ public class XN629701Req {
     public void setRemark(String remark) {
         this.remark = remark;
     }
+
+    public String getOriginalPrice() {
+        return originalPrice;
+    }
+
+    public void setOriginalPrice(String originalPrice) {
+        this.originalPrice = originalPrice;
+    }
+
+    public String getMaxJfdkRate() {
+        return maxJfdkRate;
+    }
+
+    public void setMaxJfdkRate(String maxJfdkRate) {
+        this.maxJfdkRate = maxJfdkRate;
+    }
+
 }

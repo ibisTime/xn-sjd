@@ -41,17 +41,21 @@ public class XN629785 extends AProcessor {
         condition.setType(req.getType());
         condition.setUser1(req.getUser1());
         condition.setUser2(req.getUser2());
-        condition.setCreateDatetimeStart(DateUtil.getFrontDate(
-            req.getCreateDatetimeStart(), false));
-        condition.setCreateDatetimeEnd(DateUtil.getFrontDate(
-            req.getCreateDatetimeEnd(), true));
+        condition.setMinUser2UnreadSum(req.getMinUser2UnreadSum());
+        condition.setCreateDatetimeStart(
+            DateUtil.getFrontDate(req.getCreateDatetimeStart(), false));
+        condition.setCreateDatetimeEnd(
+            DateUtil.getFrontDate(req.getCreateDatetimeEnd(), true));
+
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
             column = "code";
         }
         condition.setOrder(column, req.getOrderDir());
+
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
+
         return sessionAO.querySessionPage(start, limit, condition);
     }
 
