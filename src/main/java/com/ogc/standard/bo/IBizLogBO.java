@@ -27,6 +27,10 @@ public interface IBizLogBO extends IPaginableBO<BizLog> {
     public long useGetall(String adoptTreeCode, String adoptUserId,
             String userId, BigDecimal quantity);
 
+    // 发送弹幕
+    public long sendBarrage(String adoptTreeCode, String adoptUserId,
+            String userId, String note);
+
     // 本周用户碳泡泡总量
     public BigDecimal getWeekQuantitySum(String adoptUserId, String userId);
 

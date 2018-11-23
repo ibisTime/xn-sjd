@@ -62,6 +62,12 @@ public class BizLog extends ABaseDO {
     // 查询人(adoptUserId + userId)
     private String queryUserId;
 
+    // 弹幕图片
+    private String barragePic;
+
+    // 弹幕内容
+    private String barrageContent;
+
     public Integer getId() {
         return id;
     }
@@ -180,6 +186,22 @@ public class BizLog extends ABaseDO {
 
     public void setQueryUserId(String queryUserId) {
         this.queryUserId = queryUserId;
+    }
+
+    public String getBarragePic() {
+        return barragePic;
+    }
+
+    public void setBarragePic(String barragePic) {
+        this.barragePic = barragePic;
+    }
+
+    public String getBarrageContent() {
+        return barrageContent;
+    }
+
+    public void setBarrageContent(String barrageContent) {
+        this.barrageContent = barrageContent;
     }
 
 }

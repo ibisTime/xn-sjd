@@ -72,28 +72,29 @@ public class SignLogAOImpl implements ISignLogAO {
         long continueSignDay = 1L;
 
         if (signLogBO.isFirstCheckIn(userId, ESignLogType.SIGN_IN.getCode())) {
+            Map<String, String> configMap = sysConfigBO
+                .getConfigsMap(ESysConfigType.TPP_RULE.getCode());
 
-            // 添加碳泡泡
+            quantity = new BigDecimal(configMap.get(SysConstants.SIGN_TPP));
+            quantity = AmountUtil.mul(quantity, 1000L);
+
             continueSignDay = keepCheckIn(userId,
                 ESignLogType.SIGN_IN.getCode());// 连续签到天数
 
-            Map<String, String> configMap = sysConfigBO
-                .getConfigsMap(ESysConfigType.TPP_RULE.getCode());
-            quantity = new BigDecimal(configMap.get(SysConstants.SIGN_TPP));
-            BigDecimal continueSignRate = new BigDecimal(
-                configMap.get(SysConstants.CONTINUE_SIGN_RATE));
-            quantity = AmountUtil.mul(quantity, 1000L);
-            quantity = AmountUtil.mul(quantity, continueSignDay);// 连续签到天数
-            quantity = AmountUtil.mul(quantity, continueSignRate);// 连续签到比例
+            // 三天的倍数
+            if (continueSignDay % 3 == 0) {
+                BigDecimal continueSignQuantity = new BigDecimal(
+                    configMap.get(SysConstants.CONTINUE_SIGN_RATE));
+
+                BigDecimal rate = new BigDecimal(continueSignDay / 3);
+
+                quantity = quantity.add(rate.multiply(continueSignQuantity));
+            }
 
             Account userTppAccount = accountBO.getAccountByUser(userId,
                 ECurrency.TPP.getCode());
             Account sysTppAccount = accountBO
                 .getAccount(ESystemAccount.SYS_ACOUNT_TPP_POOL.getCode());
-
-            if (quantity.compareTo(sysTppAccount.getAmount()) == 1) {
-                quantity = sysTppAccount.getAmount();
-            }
 
             String note = "获得" + AmountUtil.div(quantity, 1000L).intValue()
                     + "碳泡泡，已连续签到" + continueSignDay + "天";
@@ -104,6 +105,45 @@ public class SignLogAOImpl implements ISignLogAO {
         }
 
         return new XN805140Res(quantity.intValue(), continueSignDay);
+    }
+
+    @Override
+    public void doAssignSignJf(String userId) {
+        BigDecimal quantity = BigDecimal.ZERO;
+        long continueSignDay = 1L;
+
+        if (signLogBO.isFirstCheckIn(userId, ESignLogType.SIGN_IN.getCode())) {
+            Map<String, String> configMap = sysConfigBO
+                .getConfigsMap(ESysConfigType.JF_RULE.getCode());
+
+            quantity = new BigDecimal(configMap.get(SysConstants.SIGN_JF));
+            quantity = AmountUtil.mul(quantity, 1000L);
+
+            continueSignDay = keepCheckIn(userId,
+                ESignLogType.SIGN_IN.getCode());// 连续签到天数
+
+            // 三天的倍数
+            if (continueSignDay % 3 == 0) {
+                BigDecimal continueSignQuantity = new BigDecimal(
+                    configMap.get(SysConstants.CONTINUE_LOGIN_RATE));
+
+                BigDecimal rate = new BigDecimal(continueSignDay / 3);
+
+                quantity = quantity.add(rate.multiply(continueSignQuantity));
+            }
+
+            Account userJfAccount = accountBO.getAccountByUser(userId,
+                ECurrency.JF.getCode());
+            Account sysJfAccount = accountBO
+                .getAccount(ESystemAccount.SYS_ACOUNT_JF_POOL.getCode());
+
+            String note = "获得" + AmountUtil.div(quantity, 1000L).intValue()
+                    + "积分，已连续签到" + continueSignDay + "天";
+            accountBO.transAmount(sysJfAccount, userJfAccount, quantity,
+                EJourBizTypeUser.SIGN.getCode(),
+                EJourBizTypePlat.SIGN.getCode(), note, note, userId);
+
+        }
     }
 
     @Override
@@ -177,4 +217,5 @@ public class SignLogAOImpl implements ISignLogAO {
 
         signLog.setUserName(userName);
     }
+
 }

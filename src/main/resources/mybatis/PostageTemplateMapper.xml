@@ -5,6 +5,7 @@
 	<resultMap id="postageTemplate_DB_Result" type="postageTemplate">
 		<result column="code" property="code" />
 		<result column="shop_code" property="shopCode" />
+		<result column="shop_name" property="shopName" />
 		<result column="deliver_place" property="deliverPlace" />
 		<result column="receive_place" property="receivePlace" />
 		<result column="price" property="price" />
@@ -21,6 +22,9 @@
 			<if test="shopCode != null and shopCode != '' ">
 				AND t.shop_code = #{shopCode}
 			</if>
+			<if test="shopName != null and shopName != '' ">
+				AND t.shop_name like "%"#{shopName}"%"
+			</if>
 			<if test="deliverPlace != null and deliverPlace != '' ">
 				AND t.deliver_place = #{deliverPlace}
 			</if>
@@ -33,6 +37,7 @@
 		SELECT
 		t.code
 		,t.shop_code
+		,t.shop_name
 		,t.deliver_place
 		,t.receive_place
 		,t.price
@@ -61,6 +66,7 @@
 		tsc_postage_template(
 		code
 		,shop_code
+		,shop_name
 		,deliver_place
 		,receive_place
 		,price
@@ -72,6 +78,7 @@
 		VALUES(
 		#{code}
 		,#{shopCode}
+		,#{shopName}
 		,#{deliverPlace}
 		,#{receivePlace}
 		,#{price}

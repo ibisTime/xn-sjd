@@ -3,6 +3,7 @@ package com.ogc.standard.ao.impl;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -18,6 +19,7 @@ import com.ogc.standard.bo.IProductBO;
 import com.ogc.standard.bo.IProductSpecsBO;
 import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.ITreeBO;
+import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.domain.Category;
@@ -26,16 +28,19 @@ import com.ogc.standard.domain.Product;
 import com.ogc.standard.domain.ProductSpecs;
 import com.ogc.standard.domain.SYSUser;
 import com.ogc.standard.domain.Tree;
+import com.ogc.standard.domain.User;
 import com.ogc.standard.dto.req.XN629010Req;
 import com.ogc.standard.dto.req.XN629010ReqSpecs;
 import com.ogc.standard.dto.req.XN629010ReqTree;
 import com.ogc.standard.dto.req.XN629011Req;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECategoryStatus;
+import com.ogc.standard.enums.EDirectType;
 import com.ogc.standard.enums.EProductStatus;
 import com.ogc.standard.enums.ESYSUserKind;
 import com.ogc.standard.enums.ESellType;
 import com.ogc.standard.enums.ETreeStatus;
+import com.ogc.standard.enums.EUserLevel;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
 
@@ -62,6 +67,9 @@ public class ProductAOImpl implements IProductAO {
 
     @Autowired
     private IApplyBindMaintainBO applyBindMaintainBO;
+
+    @Autowired
+    private IUserBO userBO;
 
     @Override
     @Transactional
@@ -422,5 +430,46 @@ public class ProductAOImpl implements IProductAO {
         // 产权方信息
         SYSUser ownerInfo = sysUserBO.getSYSUserUnCheck(product.getOwnerId());
         product.setOwnerInfo(ownerInfo);
+
+        // 定向产品的定向用户
+        if (ESellType.DIRECT.getCode().equals(product.getSellType())
+                && EDirectType.USERS.getCode()
+                    .equals(product.getDirectType())) {
+            String[] directUser = product.getDirectObject().split(",");
+            StringBuffer directObjectName = new StringBuffer();
+
+            int userCount = 1;
+            for (String userId : directUser) {
+                User user = userBO.getUserUnCheck(userId);
+                String userName = null;
+
+                if (null != user) {
+                    userName = user.getMobile();
+                    if (null != user.getRealName()) {
+                        userName = user.getRealName().concat(userName);
+                    }
+                }
+
+                directObjectName.append(userName);
+
+                if (userCount++ < directUser.length) {
+                    directObjectName.append(",");
+                }
+            }
+
+            product.setDirectObjectName(directObjectName.toString());
+        }
+
+        // 定向产品的定向等级
+        if (ESellType.DIRECT.getCode().equals(product.getSellType())
+                && EDirectType.LEVEL.getCode()
+                    .equals(product.getDirectType())) {
+            Map<String, EUserLevel> userLevel = EUserLevel.getMap();
+
+            product.setDirectObjectName(
+                userLevel.get(product.getDirectObject()).getValue());
+            ;
+        }
+
     }
 }

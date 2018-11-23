@@ -66,6 +66,7 @@ public class XN802320 extends AProcessor {
         condition.setOrder(orderColumn, req.getOrderDir());
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
+
         return jourAO.queryJourPage(start, limit, condition);
     }
 

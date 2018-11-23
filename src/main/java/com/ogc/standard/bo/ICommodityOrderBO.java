@@ -45,6 +45,8 @@ public interface ICommodityOrderBO extends IPaginableBO<CommodityOrder> {
 
     public void refreshComment(String code);
 
+    public void refreshSettle(String code);
+
     public List<CommodityOrder> queryOrderList(CommodityOrder condition);
 
     public CommodityOrder getCommodityOrder(String code);

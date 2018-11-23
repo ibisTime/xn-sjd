@@ -154,9 +154,9 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
                     throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                         "定向产品等级不符，不能下单");
                 }
-            } else if (EDirectType.ONE_USER.getCode()
+            } else if (EDirectType.USERS.getCode()
                 .equals(product.getDirectType())) {
-                if (!product.getDirectObject().equals(user.getUserId())) {
+                if (!product.getDirectObject().contains(user.getUserId())) {
                     throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                         "定向产品针对用户不符，不能下单");
                 }
@@ -239,7 +239,7 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
         Product product = productBO.getProduct(data.getProductCode());
 
         // 积分抵扣处理
-        XN629048Res deductRes = distributionOrderBO.getOrderDeductAmount(
+        XN629048Res deductRes = distributionOrderBO.getAdoptOrderDeductAmount(
             product.getMaxJfdkRate(), data.getAmount(), data.getApplyUser(),
             isJfDeduct);
 
@@ -291,7 +291,7 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
 
         // 进行分销
         Product productInfo = productBO.getProduct(data.getProductCode());
-        BigDecimal backJfAmount = distributionOrderBO.distribution(
+        BigDecimal backJfAmount = distributionOrderBO.adoptDistribution(
             data.getCode(), productInfo.getOwnerId(), data.getAmount(),
             data.getApplyUser(), data.getType(), resultRes);
 
@@ -362,7 +362,7 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
             XN629048Res resultRes = new XN629048Res(data.getCnyDeductAmount(),
                 data.getJfDeductAmount());
             Product productInfo = productBO.getProduct(data.getProductCode());
-            BigDecimal backJfAmount = distributionOrderBO.distribution(
+            BigDecimal backJfAmount = distributionOrderBO.adoptDistribution(
                 data.getCode(), productInfo.getOwnerId(), data.getAmount(),
                 data.getApplyUser(), data.getType(), resultRes);
 
@@ -531,7 +531,7 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
 
         Product product = productBO.getProduct(data.getProductCode());
 
-        return distributionOrderBO.getOrderDeductAmount(
+        return distributionOrderBO.getAdoptOrderDeductAmount(
             product.getMaxJfdkRate(), data.getAmount(), data.getApplyUser(),
             EBoolean.YES.getCode());
     }

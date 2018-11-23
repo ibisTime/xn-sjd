@@ -93,6 +93,7 @@
 		
 		,t.adopt_start_datetime
 		,t.adopt_end_datetime
+		,t.deliver_datetime
 		,t.updater
 		,t.update_datetime
 		,t.remark
@@ -132,6 +133,7 @@
 		
 		,adopt_start_datetime
 		,adopt_end_datetime
+		,deliver_datetime
 		,update_datetime
 		,remark
 		)
@@ -153,6 +155,7 @@
 		
 		,#{adoptStartDatetime}
 		,#{adoptEndDatetime}
+		,#{deliverDatetime}
 		,#{updateDatetime}
 		,#{remark}
 		)

@@ -206,10 +206,10 @@ public class UserAOImpl implements IUserAO {
         Account sysJfAccount = accountBO
             .getAccount(ESystemAccount.SYS_ACOUNT_JF_POOL.getCode());
 
-        // 积分池不足时将剩余积分转给用户
-        if (quantity.compareTo(sysJfAccount.getAmount()) == 1) {
-            quantity = sysJfAccount.getAmount();
-        }
+        // // 积分池不足时将剩余积分转给用户
+        // if (quantity.compareTo(sysJfAccount.getAmount()) == 1) {
+        // quantity = sysJfAccount.getAmount();
+        // }
 
         accountBO.transAmount(sysJfAccount, userJfAccount, quantity,
             EJourBizTypeUser.REGIST.getCode(),
@@ -227,9 +227,9 @@ public class UserAOImpl implements IUserAO {
             quantity = AmountUtil.mul(quantity, 1000L);
 
             // 积分池不足时将剩余积分转给用户
-            if (quantity.compareTo(sysJfAccount.getAmount()) == 1) {
-                quantity = sysJfAccount.getAmount();
-            }
+            // if (quantity.compareTo(sysJfAccount.getAmount()) == 1) {
+            // quantity = sysJfAccount.getAmount();
+            // }
 
             accountBO.transAmount(sysJfAccount, userRefereeJfAccount, quantity,
                 EJourBizTypeUser.INVITE_USER.getCode(),
@@ -597,9 +597,9 @@ public class UserAOImpl implements IUserAO {
                 .getAccount(ESystemAccount.SYS_ACOUNT_JF_POOL.getCode());
 
             // 积分池不足时将剩余积分转给用户
-            if (quantity.compareTo(sysJfAccount.getAmount()) == 1) {
-                quantity = sysJfAccount.getAmount();
-            }
+            // if (quantity.compareTo(sysJfAccount.getAmount()) == 1) {
+            // quantity = sysJfAccount.getAmount();
+            // }
 
             accountBO.transAmount(sysJfAccount, userJfAccount, quantity,
                 EJourBizTypeUser.UPLOAD_PHOTO.getCode(),
@@ -761,9 +761,9 @@ public class UserAOImpl implements IUserAO {
             .getAccount(ESystemAccount.SYS_ACOUNT_JF_POOL.getCode());
 
         // 积分池不足时将剩余积分转给用户
-        if (quantity.compareTo(sysJfAccount.getAmount()) == 1) {
-            quantity = sysJfAccount.getAmount();
-        }
+        // if (quantity.compareTo(sysJfAccount.getAmount()) == 1) {
+        // quantity = sysJfAccount.getAmount();
+        // }
 
         accountBO.transAmount(sysJfAccount, userJfAccount, quantity,
             EJourBizTypeUser.BIND_MOBILE.getCode(),
@@ -847,9 +847,9 @@ public class UserAOImpl implements IUserAO {
             .getAccount(ESystemAccount.SYS_ACOUNT_JF_POOL.getCode());
 
         // 积分池不足时将剩余积分转给用户
-        if (quantity.compareTo(sysJfAccount.getAmount()) == 1) {
-            quantity = sysJfAccount.getAmount();
-        }
+        // if (quantity.compareTo(sysJfAccount.getAmount()) == 1) {
+        // quantity = sysJfAccount.getAmount();
+        // }
 
         accountBO.transAmount(sysJfAccount, userJfAccount, quantity,
             EJourBizTypeUser.BIND_email.getCode(),
@@ -877,9 +877,9 @@ public class UserAOImpl implements IUserAO {
                 .getAccount(ESystemAccount.SYS_ACOUNT_JF_POOL.getCode());
 
             // 积分池不足时将剩余积分转给用户
-            if (quantity.compareTo(sysJfAccount.getAmount()) == 1) {
-                quantity = sysJfAccount.getAmount();
-            }
+            // if (quantity.compareTo(sysJfAccount.getAmount()) == 1) {
+            // quantity = sysJfAccount.getAmount();
+            // }
 
             accountBO.transAmount(sysJfAccount, userJfAccount, quantity,
                 EJourBizTypeUser.COMPLETE_INFO.getCode(),

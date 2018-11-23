@@ -216,4 +216,18 @@
 		,remark = #{remark}
 		WHERE code = #{code}
 	</update>
+	
+	<update id="update_pointCount" parameterType="article">
+		UPDATE tsj_article
+		SET
+		point_count = #{pointCount}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_collectCount" parameterType="article">
+		UPDATE tsj_article
+		SET
+		collect_count = #{collectCount}
+		WHERE code = #{code}
+	</update>
 </mapper>

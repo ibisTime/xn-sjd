@@ -269,4 +269,8 @@
 		<property name="paginableDAO" ref="afterSaleDAOImpl"/>
 	</bean>
 	
+	<bean id="barrageBO" class="com.ogc.standard.bo.impl.BarrageBOImpl">
+		<property name="paginableDAO" ref="barrageDAOImpl"/>
+	</bean>
+	
 </beans>

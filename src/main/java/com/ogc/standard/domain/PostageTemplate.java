@@ -30,6 +30,9 @@ public class PostageTemplate extends ABaseDO {
     // 店铺编号
     private String shopCode;
 
+    // 店铺名称
+    private String shopName;
+
     // 发货地
     private String deliverPlace;
 
@@ -113,4 +116,21 @@ public class PostageTemplate extends ABaseDO {
     public void setRemark(String remark) {
         this.remark = remark;
     }
+
+    public String getReceivePlace() {
+        return receivePlace;
+    }
+
+    public void setReceivePlace(String receivePlace) {
+        this.receivePlace = receivePlace;
+    }
+
+    public String getShopName() {
+        return shopName;
+    }
+
+    public void setShopName(String shopName) {
+        this.shopName = shopName;
+    }
+
 }

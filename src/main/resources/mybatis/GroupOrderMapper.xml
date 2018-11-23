@@ -5,6 +5,7 @@
 	<resultMap id="groupOrder_DB_Result" type="groupOrder">
 		<result column="code" property="code" />
 		<result column="group_code" property="groupCode" />
+		<result column="presell_type" property="presellType" />
 		<result column="owner_id" property="ownerId" />
 		<result column="product_code" property="productCode" />
 		<result column="product_name" property="productName" />
@@ -42,6 +43,9 @@
 			<if test="groupCode != null and groupCode != '' ">
 				AND t.group_code = #{groupCode}
 			</if>
+			<if test="presellType != null and presellType != '' ">
+				AND t.presell_type = #{presellType}
+			</if>
 			<if test="ownerId != null and ownerId != '' ">
 				AND t.owner_id = #{ownerId}
 			</if>
@@ -77,6 +81,7 @@
 		SELECT
 		t.code
 		,t.group_code
+		,t.presell_type
 		,t.owner_id
 		,t.product_code
 		,t.product_name
@@ -125,6 +130,7 @@
 		tys_group_order(
 		code
 		,group_code
+		,presell_type
 		,owner_id
 		,product_code
 		,product_name
@@ -149,6 +155,7 @@
 		VALUES(
 		#{code}
 		,#{groupCode}
+		,#{presellType}
 		,#{ownerId}
 		,#{productCode}
 		,#{productName}

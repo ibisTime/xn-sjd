@@ -32,6 +32,10 @@ public class Interact extends ABaseDO {
     // 创建时间
     private Date createDatetime;
 
+    /**************DB Porperties******************/
+    // 文章
+    private Article article;
+
     public void setCode(String code) {
         this.code = code;
     }
@@ -78,6 +82,14 @@ public class Interact extends ABaseDO {
 
     public Date getCreateDatetime() {
         return createDatetime;
+    }
+
+    public Article getArticle() {
+        return article;
+    }
+
+    public void setArticle(Article article) {
+        this.article = article;
     }
 
 }

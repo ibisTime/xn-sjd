@@ -12,6 +12,7 @@ import java.util.List;
 
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Session;
+import com.ogc.standard.dto.res.XN629788Res;
 
 /** 
  * @author: taojian 
@@ -25,6 +26,8 @@ public interface ISessionAO {
     public void replay(String code, String userId, String content);
 
     public void read(String code, String userId);
+
+    public XN629788Res existsUnread(String user1, String user2);
 
     public Paginable<Session> querySessionPage(int start, int limit,
             Session condition);

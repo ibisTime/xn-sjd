@@ -21,6 +21,8 @@ import com.ogc.standard.domain.AdoptOrder;
 import com.ogc.standard.domain.AdoptOrderTree;
 import com.ogc.standard.domain.Company;
 import com.ogc.standard.domain.GroupAdoptOrder;
+import com.ogc.standard.domain.PresellOrder;
+import com.ogc.standard.domain.PresellProduct;
 import com.ogc.standard.domain.Product;
 import com.ogc.standard.domain.Tree;
 import com.ogc.standard.domain.User;
@@ -110,6 +112,40 @@ public class AdoptOrderTreeBOImpl extends PaginableBOImpl<AdoptOrderTree>
         Company company = companyBO.getCompanyByUserId(product.getOwnerId());
         data.setCertificateTemplate(company.getCertificateTemplate());
         data.setCurrentHolder(groupAdoptOrder.getApplyUser());
+        adoptOrderTreeDAO.insert(data);
+        return code;
+    }
+
+    @Override
+    public String saveAdoptOrderTree(PresellProduct presellProduct,
+            PresellOrder presellOrder, String treeNumber) {
+        AdoptOrderTree data = new AdoptOrderTree();
+        String code = OrderNoGenerater
+            .generate(EGeneratePrefix.ADOPT_ORDER_TREE.getCode());
+        data.setCode(code);
+        data.setOrderType(ESellType.PRESELL.getCode());
+        data.setOrderCode(presellOrder.getCode());
+        data.setParentCategoryCode(presellProduct.getParentCategoryCode());
+        data.setCategoryCode(presellProduct.getCategoryCode());
+
+        data.setOwnerId(presellProduct.getOwnerId());
+        data.setProductCode(presellProduct.getCode());
+        data.setTreeNumber(treeNumber);
+        data.setStartDatetime(presellProduct.getAdoptStartDatetime());
+        data.setEndDatetime(presellProduct.getAdoptEndDatetime());
+
+        data.setAmount(presellOrder.getPrice());
+        data.setCreateDatetime(new Date());
+        if ((new Date()).before(presellProduct.getAdoptStartDatetime())) {
+            data.setStatus(EAdoptOrderTreeStatus.TO_ADOPT.getCode());
+        } else {
+            data.setStatus(EAdoptOrderTreeStatus.ADOPT.getCode());
+        }
+
+        Company company = companyBO
+            .getCompanyByUserId(presellProduct.getOwnerId());
+        data.setCertificateTemplate(company.getCertificateTemplate());
+        data.setCurrentHolder(presellOrder.getApplyUser());
         adoptOrderTreeDAO.insert(data);
         return code;
     }

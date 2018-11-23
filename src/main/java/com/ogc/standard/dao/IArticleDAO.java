@@ -12,4 +12,9 @@ public interface IArticleDAO extends IBaseDAO<Article> {
     void updateStatus(Article data);
 
     void updatePutOn(Article data);
+
+    public int updatePoint(Article data);
+
+    public int updateCollect(Article data);
+
 }

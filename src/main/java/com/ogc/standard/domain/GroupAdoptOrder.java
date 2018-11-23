@@ -125,6 +125,11 @@ public class GroupAdoptOrder extends ABaseDO {
     // 树木编号列表
     private String treeNumbers;
 
+    private List<Settle> settleList;
+
+    // 是否存在结算
+    private String existsSettle;
+
     public String getCode() {
         return code;
     }
@@ -427,6 +432,22 @@ public class GroupAdoptOrder extends ABaseDO {
 
     public void setSettleStatus(String settleStatus) {
         this.settleStatus = settleStatus;
+    }
+
+    public List<Settle> getSettleList() {
+        return settleList;
+    }
+
+    public void setSettleList(List<Settle> settleList) {
+        this.settleList = settleList;
+    }
+
+    public String getExistsSettle() {
+        return existsSettle;
+    }
+
+    public void setExistsSettle(String existsSettle) {
+        this.existsSettle = existsSettle;
     }
 
 }

@@ -71,23 +71,19 @@ public class PresellOrderBOImpl extends PaginableBOImpl<PresellOrder>
     }
 
     @Override
-    public void payYueSuccess(String code, XN629048Res resultRes,
+    public void payYueSuccess(PresellOrder data, XN629048Res resultRes,
             BigDecimal backjfAmount) {
-        if (StringUtils.isNotBlank(code)) {
-            PresellOrder data = new PresellOrder();
-            data.setCode(code);
-            data.setPayType(EPayType.YE.getCode());
-            // data.setCnyDeductAmount(resultRes.getCnyAmount());
-            // data.setJfDeductAmount(resultRes.getJfAmount());
-            data.setPayAmount(data.getAmount());
+        data.setPayType(EPayType.YE.getCode());
+        data.setCnyDeductAmount(resultRes.getCnyAmount());
+        data.setJfDeductAmount(resultRes.getJfAmount());
+        data.setPayAmount(data.getAmount().subtract(resultRes.getCnyAmount()));
 
-            // data.setBackJfAmount(backjfAmount);
-            data.setPayDatetime(new Date());
-            data.setStatus(EPresellOrderStatus.PAYED.getCode());
-            data.setSettleStatus(EAdoptOrderSettleStatus.TO_SETTLE.getCode());
-            data.setRemark("余额支付成功");
-            presellOrderDAO.updatePayYueSuccess(data);
-        }
+        data.setBackJfAmount(backjfAmount);
+        data.setPayDatetime(new Date());
+        data.setStatus(EPresellOrderStatus.PAYED.getCode());
+        data.setSettleStatus(EAdoptOrderSettleStatus.TO_SETTLE.getCode());
+        data.setRemark("余额支付成功");
+        presellOrderDAO.updatePayYueSuccess(data);
     }
 
     @Override

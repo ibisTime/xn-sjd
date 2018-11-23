@@ -44,6 +44,7 @@ import com.ogc.standard.domain.CommodityOrderDetail;
 import com.ogc.standard.domain.CommoditySpecs;
 import com.ogc.standard.domain.Company;
 import com.ogc.standard.domain.Jour;
+import com.ogc.standard.domain.User;
 import com.ogc.standard.dto.req.XN629714Req;
 import com.ogc.standard.dto.req.XN629721Req;
 import com.ogc.standard.dto.res.BooleanRes;
@@ -193,7 +194,7 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
         }
 
         // 积分抵扣处理
-        XN629048Res deductRes = distributionOrderBO.getOrderDeductAmount(
+        XN629048Res deductRes = distributionOrderBO.getAdoptOrderDeductAmount(
             maxJfdkRate, order.getAmount(), order.getApplyUser(),
             req.getIsJfDeduct());
 
@@ -255,7 +256,7 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
             }
 
             // 积分抵扣处理
-            XN629048Res deductRes = distributionOrderBO.getOrderDeductAmount(
+            XN629048Res deductRes = distributionOrderBO.getAdoptOrderDeductAmount(
                 maxJfdkRate, order.getAmount(), order.getApplyUser(),
                 req.getIsJfDeduct());
 
@@ -362,8 +363,10 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
             .getCommodityOrder(code);
 
         // 状态判断
-        if (!ECommodityOrderStatus.TODELIVE.getCode()
-            .equals(commodityOrder.getStatus())) {
+        if (!ECommodityOrderStatus.TO_PAY.getCode()
+            .equals(commodityOrder.getStatus())
+                && !ECommodityOrderStatus.TODELIVE.getCode()
+                    .equals(commodityOrder.getStatus())) {
             throw new BizException("xn0000", "该订单不处于可修改收货地址的状态");
         }
 
@@ -474,7 +477,7 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
             maxJfdkRate = commodity.getMaxJfdkRate();
         }
 
-        return distributionOrderBO.getOrderDeductAmount(maxJfdkRate,
+        return distributionOrderBO.getAdoptOrderDeductAmount(maxJfdkRate,
             commodityOrder.getAmount(), commodityOrder.getApplyUser(),
             EBoolean.YES.getCode());
     }
@@ -551,6 +554,18 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
         // 地址
         Address address = addressBO.getAddress(order.getAddressCode());
         order.setAddress(address);
+
+        // 下单人
+        User applyUser = userBO.getUserUnCheck(order.getApplyUser());
+        String applyUserName = null;
+        if (null != applyUser) {
+            applyUserName = applyUser.getMobile();
+            if (null != applyUser.getRealName()) {
+                applyUserName = applyUser.getRealName().concat(applyUserName);
+            }
+        }
+        order.setApplyUserName(applyUserName);
+
     }
 
 }

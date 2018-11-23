@@ -26,6 +26,10 @@ public interface IInteractBO extends IPaginableBO<Interact> {
     public Interact getInteract(String type, String objectType,
             String objectCode, String userId);
 
+    // 查询用户点赞收藏
+    public List<Interact> queryInteractList(String userId, String type,
+            String objectType);
+
     public List<Interact> queryInteractList(Interact condition);
 
     public Interact getInteract(String code);

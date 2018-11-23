@@ -33,4 +33,6 @@ public interface ICommodityOrderDAO extends IBaseDAO<CommodityOrder> {
 
     public int updateComment(CommodityOrder data);
 
+    public int updateSettle(CommodityOrder data);
+
 }

@@ -59,6 +59,11 @@ public class ArticleBOImpl extends PaginableBOImpl<Article>
         data.setUpdater(updater);
         data.setUpdateDatatime(new Date());
         data.setAdoptTreeCode(adoptTreeCode);
+
+        data.setCollectCount(0);
+        data.setReadCount(0);
+        data.setPointCount(0);
+
         articleDAO.insert(data);
         return code;
     }
@@ -104,6 +109,22 @@ public class ArticleBOImpl extends PaginableBOImpl<Article>
         data.setUpdateDatatime(new Date());
         data.setRemark(remark);
         articleDAO.updatePutOn(data);
+    }
+
+    @Override
+    public void refreshPoint(String code, Integer pointCount) {
+        Article data = new Article();
+        data.setCode(code);
+        data.setPointCount(pointCount);
+        articleDAO.updatePoint(data);
+    }
+
+    @Override
+    public void refreshCollect(String code, Integer collectCount) {
+        Article data = new Article();
+        data.setCode(code);
+        data.setCollectCount(collectCount);
+        articleDAO.updateCollect(data);
     }
 
     @Override

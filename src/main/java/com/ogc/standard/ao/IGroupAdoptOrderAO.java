@@ -46,6 +46,6 @@ public interface IGroupAdoptOrderAO {
     public List<GroupAdoptOrder> queryGroupAdoptOrderList(
             GroupAdoptOrder condition);
 
-    public GroupAdoptOrder getGroupAdoptOrder(String code);
+    public GroupAdoptOrder getGroupAdoptOrder(String code, String isSettle);
 
 }

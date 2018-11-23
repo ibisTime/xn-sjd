@@ -91,6 +91,7 @@
 		,t.pay_group
 		,t.pay_code
 		,t.jf_deduct_amount
+		,t.cny_deduct_amount
 		
 		,t.back_jf_amount
 		,t.pay_amount

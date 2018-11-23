@@ -8,7 +8,6 @@
  */
 package com.ogc.standard.dto.req;
 
-
 /** 
  * @author: taojian 
  * @since: 2018年11月7日 下午2:28:27 
@@ -23,6 +22,9 @@ public class XN629745Req extends APageReq {
     private String deliverPlace;
 
     private String receivePlace;
+
+    // 店铺名称
+    private String shopName;
 
     public String getShopCode() {
         return shopCode;
@@ -46,6 +48,14 @@ public class XN629745Req extends APageReq {
 
     public void setReceivePlace(String receivePlace) {
         this.receivePlace = receivePlace;
+    }
+
+    public String getShopName() {
+        return shopName;
+    }
+
+    public void setShopName(String shopName) {
+        this.shopName = shopName;
     }
 
 }

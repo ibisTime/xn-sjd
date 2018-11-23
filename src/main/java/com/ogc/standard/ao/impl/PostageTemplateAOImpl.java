@@ -11,6 +11,7 @@ package com.ogc.standard.ao.impl;
 import java.math.BigDecimal;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +34,8 @@ public class PostageTemplateAOImpl implements IPostageTemplateAO {
 
     @Override
     public String addTemplate(String shopCode, String deliverPlace,
-            String receivePlace, BigDecimal price, String updater, String remark) {
+            String receivePlace, BigDecimal price, String updater,
+            String remark) {
         if (postageTemplateBO.isTemplateExist(shopCode, deliverPlace,
             receivePlace)) {
             throw new BizException("xn0000", "已存在该邮费模版");
@@ -62,17 +64,43 @@ public class PostageTemplateAOImpl implements IPostageTemplateAO {
     @Override
     public Paginable<PostageTemplate> queryTemplatePage(int start, int limit,
             PostageTemplate condition) {
-        return postageTemplateBO.getPaginable(start, limit, condition);
+        Paginable<PostageTemplate> page = postageTemplateBO.getPaginable(start,
+            limit, condition);
+
+        if (null != page && CollectionUtils.isNotEmpty(page.getList())) {
+            for (PostageTemplate postageTemplate : page.getList()) {
+                init(postageTemplate);
+            }
+        }
+
+        return page;
     }
 
     @Override
     public List<PostageTemplate> queryTemplateList(PostageTemplate condition) {
-        return postageTemplateBO.queryTemplateList(condition);
+        List<PostageTemplate> list = postageTemplateBO
+            .queryTemplateList(condition);
+
+        if (CollectionUtils.isNotEmpty(list)) {
+            for (PostageTemplate postageTemplate : list) {
+                init(postageTemplate);
+            }
+        }
+
+        return list;
     }
 
     @Override
     public PostageTemplate getPostageTemplate(String code) {
-        return postageTemplateBO.getPostageTemplate(code);
+        PostageTemplate postageTemplate = postageTemplateBO
+            .getPostageTemplate(code);
+
+        init(postageTemplate);
+
+        return postageTemplate;
+    }
+
+    private void init(PostageTemplate postageTemplate) {
     }
 
 }

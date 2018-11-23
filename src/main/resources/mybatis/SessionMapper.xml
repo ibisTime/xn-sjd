@@ -36,6 +36,16 @@
 			<if test="createDatetimeEnd != null and createDatetimeEnd != '' ">
 				<![CDATA[AND t.create_datetime <= #{createDatetimeEnd}]]>
 			</if>
+			
+			<if test="existsUnread != null and existsUnread != '' and existsUnread == 1">
+				<if test="user1 != null and user1 != '' ">
+					AND t.user1_unread_sum > 0
+				</if>
+				<if test="user2 != null and user2 != '' ">
+					AND t.user2_unread_sum > 0
+				</if>
+			</if>
+			
 		</trim>
 	</sql>
 	

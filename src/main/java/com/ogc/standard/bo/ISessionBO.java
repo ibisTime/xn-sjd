@@ -28,6 +28,8 @@ public interface ISessionBO extends IPaginableBO<Session> {
 
     public Session getSessionExist(String type, String user1, String user2);
 
+    public List<Session> queryUnread(String user1, String user2);
+
     public List<Session> querySessionList(Session condition);
 
     public Session getSession(String code);

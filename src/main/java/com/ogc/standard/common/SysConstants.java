@@ -63,6 +63,10 @@ public class SysConstants {
 
     public static final String CNY2JF_RATE = "CNY2JF_RATE"; // 积分兑换人民币比例
 
+    public static final String ADOPT_DK_RATE = "ADOPT_DK_RATE"; // 认养消耗汇率
+
+    public static final String PRESELL_DK_RATE = "PRESELL_DK_RATE"; // 预售消耗汇率
+
     // 认养分销
     public static String DIST_OWENER_RATE = "DIST_OWENER_RATE"; // 产权方的总额
 
@@ -73,6 +77,21 @@ public class SysConstants {
     public static String DIST_AGENT_RATE = "DIST_AGENT_RATE"; // 代理方的总额
 
     public static String DIST_USER_BACK_JF_RATE = "DIST_USER_BACK_JF_RATE"; // 用户返积分的总额
+
+    public static String ADOPT_DIRECT = "ADOPT_DIRECT"; // 用户直推认养送
+
+    // 预售分销
+    public static String PRESELL_DIST_OWENER_RATE = "PRESELL_DIST_OWENER_RATE"; // 产权方的总额
+
+    public static String PRESELL_DIST_MAINTAIN_RATE = "PRESELL_DIST_MAINTAIN_RATE"; // 养护方的总额
+
+    public static String PRESELL_DIST_PLAT_RATE = "PRESELL_DIST_PLAT_RATE"; // 平台方的总额
+
+    public static String PRESELL_DIST_AGENT_RATE = "PRESELL_DIST_AGENT_RATE"; // 代理方的总额
+
+    public static String PRESELL_DIST_USER_BACK_JF_RATE = "PRESELL_DIST_USER_BACK_JF_RATE"; // 用户返积分的总额
+
+    public static String PRESELL_DIRECT = "PRESELL_DIRECT"; // 用户直推预售送
 
     // 商城分销
     public static String DIST_BUSINESS_RATE = "DIST_BUSINESS_RATE"; // 代理方的总额
@@ -95,11 +114,15 @@ public class SysConstants {
 
     public static final String SIGN_TPP = "SIGN_TPP";// 签到
 
-    public static final String CONTINUE_SIGN_RATE = "CONTINUE_SIGN_RATE";// 连续签到返碳泡泡比例
+    public static final String CONTINUE_SIGN_RATE = "CONTINUE_SIGN_RATE";// 连续3天签到
 
     public static final String SHARE = "SHARE";// 分享
 
     public static final String CREATE_TPP_RATE = "CREATE_TPP_RATE";// 碳泡泡产生比例
+
+    public static final String ADOPT_CREATE_TPP_RATE = "CREATE_TPP_RATE";// 碳泡泡产生比例
+
+    public static final String PRESELL_CREATE_TPP_RATE = "CREATE_TPP_RATE";// 碳泡泡产生比例
 
     public static final String TPP_EXPIRE_HOUR = "TPP_EXPIRE_HOUR";// 碳泡泡过期时间
 
@@ -120,6 +143,12 @@ public class SysConstants {
 
     public static final String INVITE_USER = "INVITE_USER";// 邀请好友注册
 
+    public static final String BACK_JFPOOL_RATE = "BACK_JFPOOL_RATE";// 返积分池汇率
+
+    public static final String ADOPT_CREATE_RATE = "ADOPT_CREATE_RATE";// 认养产生汇率
+
+    public static final String PRESELL_CREATE_RATE = "PRESELL_CREATE_RATE";// 预售产生汇率
+
     // 用户等级
     public static final String USER_LEVEL_0 = "USER_LEVEL_0";// 初探翠林
 
@@ -137,5 +166,4 @@ public class SysConstants {
     public static final String ID_INVALID_HOURS = "ID_INVALID_HOURS";// 识别码失效时间
 
     // 商城
-    // public static final String
 }

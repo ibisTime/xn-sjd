@@ -18,17 +18,22 @@
 		
 		<result column="pay_datetime" property="payDatetime" />
 		<result column="pay_amount" property="payAmount" />
+		<result column="cny_deduct_amount" property="cnyDeductAmount" />
+		<result column="jf_deduct_amount" property="jfDeductAmount" />
+		<result column="back_jf_amount" property="backJfAmount" />
+		
 		<result column="address_code" property="addressCode" />
 		<result column="logistics_company" property="logisticsCompany" />
 		<result column="logistics_number" property="logisticsNumber" />
-		
 		<result column="deliver" property="deliver" />
 		<result column="deliver_datetime" property="deliverDatetime" />
+		
 		<result column="receiver" property="receiver" />
 		<result column="receiver_mobile" property="receiverMobile" />
 		<result column="receiver_datetime" property="receiverDatetime" />
-		
 		<result column="status" property="status" />
+		<result column="settle_status" property="settleStatus" />
+		
 		<result column="updater" property="updater" />
 		<result column="update_datetime" property="updateDatetime" />
 		<result column="remark" property="remark" />
@@ -53,6 +58,9 @@
 			</if>
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
+			</if>
+			<if test="settleStatus != null and settleStatus != '' ">
+				AND t.settle_status = #{settleStatus}
 			</if>
 			<if test="payGroup != null and payGroup != '' ">
 				AND t.pay_group = #{payGroup}
@@ -107,17 +115,22 @@
 		
 		,t.pay_datetime
 		,t.pay_amount
+		,t.cny_deduct_amount
+		,t.jf_deduct_amount
+		,t.back_jf_amount
+		
 		,t.address_code
 		,t.logistics_company
 		,t.logistics_number
-		
 		,t.deliver
 		,t.deliver_datetime
+		
 		,t.receiver
 		,t.receiver_mobile
 		,t.receiver_datetime
-		
 		,t.status
+		,t.settle_status
+		
 		,t.updater
 		,t.update_datetime
 		,t.remark
@@ -149,6 +162,7 @@
 		
 		,address_code
 		,status
+		,settle_status
 		,updater
 		,update_datetime
 		,remark
@@ -165,6 +179,7 @@
 		
 		,#{addressCode}
 		,#{status}
+		,#{settleStatus}
 		,#{updater}
 		,#{updateDatetime}
 		,#{remark}
@@ -179,7 +194,9 @@
 		,pay_code=#{payCode}
 		,pay_datetime=#{payDatetime}
 		,pay_amount=#{payAmount}
+		
 		,status=#{status}
+		,settle_status=#{settleStatus}
 		,update_datetime=#{updateDatetime}
 		WHERE
 		code=#{code}
@@ -249,4 +266,12 @@
 		AND NOT EXISTS (SELECT 1 from tsc_commodity_order_detail WHERE order_code = tsc_commodity_order.code and tsc_commodity_order_detail.status != 0)
 	</update>
 	
+	<update id="update_settle" parameterType="commodityOrder">
+		UPDATE tsc_commodity_order
+		SET
+		settle_status=#{settleStatus}
+		,update_datetime=#{updateDatetime}
+		WHERE
+		code=#{code}
+	</update>
 </mapper>

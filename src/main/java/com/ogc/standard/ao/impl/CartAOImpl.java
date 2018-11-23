@@ -82,7 +82,8 @@ public class CartAOImpl implements ICartAO {
         Cart cart = cartBO.getCartByUserSpecs(userId, specsId);
         if (null != cart) {
 
-            cartBO.refreshQuantity(cart.getCode(), cart.getQuantity() + 1);
+            cartBO.refreshQuantity(cart.getCode(),
+                cart.getQuantity() + quantity, cart.getAmount().add(amount));
             cartCode = cart.getCode();
 
         } else {

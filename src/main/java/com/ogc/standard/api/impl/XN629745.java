@@ -38,9 +38,11 @@ public class XN629745 extends AProcessor {
         condition.setShopCode(req.getShopCode());
         condition.setDeliverPlace(req.getReceivePlace());
         condition.setReceiverPlace(req.getReceivePlace());
+        condition.setShopName(req.getShopName());
 
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
+
         return postageTemplateAO.queryTemplatePage(start, limit, condition);
     }
 

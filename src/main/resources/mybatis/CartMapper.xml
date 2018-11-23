@@ -109,7 +109,10 @@
 	</insert>
 	
 	<update id="update_quantity">
-		UPDATE tsc_cart SET quantity = #{quantity}
+		UPDATE tsc_cart SET 
+		quantity = #{quantity}
+		,amount = #{amount}
+		WHERE code=#{code}
 	</update>
 	
 	<delete id="delete_cart" parameterType="cart">

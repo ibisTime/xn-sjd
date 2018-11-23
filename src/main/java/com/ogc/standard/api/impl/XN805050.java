@@ -26,11 +26,11 @@ public class XN805050 extends AProcessor {
         XN805050Res res = new XN805050Res(userAO.doLogin(req.getLoginName(),
             req.getLoginPwd(), req.getClient(), req.getLocation()));
 
-        if (null != res.getUserId()) {
-            userAO.doAssignLoginJF(res.getUserId());
-
-            userAO.upgradeUserLevel(res.getUserId());
-        }
+        // if (null != res.getUserId()) {
+        // userAO.doAssignLoginJF(res.getUserId());
+        //
+        // userAO.upgradeUserLevel(res.getUserId());
+        // }
 
         return res;
     }

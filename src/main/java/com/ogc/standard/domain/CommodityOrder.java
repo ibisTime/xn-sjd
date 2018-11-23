@@ -63,6 +63,15 @@ public class CommodityOrder extends ABaseDO {
     // 支付金额
     private BigDecimal payAmount;
 
+    // 抵扣人民币
+    private BigDecimal cnyDeductAmount;
+
+    // 积分抵扣金额
+    private BigDecimal jfDeductAmount;
+
+    // 积分返点金额
+    private BigDecimal backJfAmount;
+
     // 地址编号
     private String addressCode;
 
@@ -89,6 +98,9 @@ public class CommodityOrder extends ABaseDO {
 
     // 状态
     private String status;
+
+    // 结算状态
+    private String settleStatus;
 
     // 更新人
     private String updater;
@@ -125,6 +137,9 @@ public class CommodityOrder extends ABaseDO {
 
     // 发货时间止
     private Date deliverDatetimeEnd;
+
+    // 下单人
+    private String applyUserName;
 
     public List<CommodityShopOrder> getShopOrderList() {
         return shopOrderList;
@@ -396,6 +411,46 @@ public class CommodityOrder extends ABaseDO {
 
     public void setShopCode(String shopCode) {
         this.shopCode = shopCode;
+    }
+
+    public String getApplyUserName() {
+        return applyUserName;
+    }
+
+    public void setApplyUserName(String applyUserName) {
+        this.applyUserName = applyUserName;
+    }
+
+    public String getSettleStatus() {
+        return settleStatus;
+    }
+
+    public void setSettleStatus(String settleStatus) {
+        this.settleStatus = settleStatus;
+    }
+
+    public BigDecimal getCnyDeductAmount() {
+        return cnyDeductAmount;
+    }
+
+    public void setCnyDeductAmount(BigDecimal cnyDeductAmount) {
+        this.cnyDeductAmount = cnyDeductAmount;
+    }
+
+    public BigDecimal getJfDeductAmount() {
+        return jfDeductAmount;
+    }
+
+    public void setJfDeductAmount(BigDecimal jfDeductAmount) {
+        this.jfDeductAmount = jfDeductAmount;
+    }
+
+    public BigDecimal getBackJfAmount() {
+        return backJfAmount;
+    }
+
+    public void setBackJfAmount(BigDecimal backJfAmount) {
+        this.backJfAmount = backJfAmount;
     }
 
 }

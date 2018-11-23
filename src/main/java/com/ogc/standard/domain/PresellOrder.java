@@ -2,6 +2,7 @@ package com.ogc.standard.domain;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 import com.ogc.standard.dao.base.ABaseDO;
 
@@ -113,6 +114,8 @@ public class PresellOrder extends ABaseDO {
 
     // 是否存在结算
     private String existsSettle;
+
+    private List<Settle> settleList;
 
     public String getCode() {
         return code;
@@ -376,6 +379,14 @@ public class PresellOrder extends ABaseDO {
 
     public void setExistsSettle(String existsSettle) {
         this.existsSettle = existsSettle;
+    }
+
+    public List<Settle> getSettleList() {
+        return settleList;
+    }
+
+    public void setSettleList(List<Settle> settleList) {
+        this.settleList = settleList;
     }
 
 }

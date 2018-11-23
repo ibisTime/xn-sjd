@@ -211,3 +211,24 @@ ADD COLUMN `max_jfdk_rate` DOUBLE NULL COMMENT '最大积分抵扣比例' AFTER 
 
 ALTER TABLE `tsc_commodity` 
 ADD COLUMN `max_jfdk_rate` DOUBLE NULL COMMENT '最大积分抵扣比例' AFTER `sell_user_id`;
+
+ALTER TABLE `tsc_commodity_order` 
+ADD COLUMN `shop_code` VARCHAR(32) NULL COMMENT '店铺编号' AFTER `code`;
+
+ALTER TABLE `tsc_postage_template` 
+CHANGE COLUMN `shop_code` `shop_code` VARCHAR(32) NULL COMMENT '店铺编号' ,
+ADD COLUMN `shop_name` VARCHAR(255) NULL COMMENT '店铺名称' AFTER `shop_code`;
+
+ALTER TABLE `tsc_commodity` 
+CHANGE COLUMN `description` `description` LONGTEXT NULL DEFAULT NULL COMMENT '描述' ;
+
+ALTER TABLE `tsc_commodity_order` 
+ADD COLUMN `settle_status` VARCHAR(4) NULL COMMENT '结算状态' AFTER `status`;
+
+ALTER TABLE `tsc_commodity_order` 
+ADD COLUMN `cny_deduct_amount` DECIMAL(18,8) NULL COMMENT '人民币抵扣金额' AFTER `pay_amount`,
+ADD COLUMN `jf_deduct_amount` DECIMAL(18,8) NULL COMMENT '积分抵扣金额' AFTER `cny_deduct_amount`,
+ADD COLUMN `back_jf_amount` DECIMAL(18,8) NULL COMMENT '积分返点金额' AFTER `jf_deduct_amount`;
+
+ALTER TABLE `tys_group_order` 
+ADD COLUMN `presell_type` VARCHAR(4) NULL COMMENT '预售类型' AFTER `group_code`;

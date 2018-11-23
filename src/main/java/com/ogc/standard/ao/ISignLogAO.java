@@ -15,6 +15,8 @@ public interface ISignLogAO {
 
     public XN805140Res doAssignSignTPP(String userId);
 
+    public void doAssignSignJf(String userId);
+
     public Paginable<SignLog> querySignLogPage(int start, int limit,
             SignLog condition);
 

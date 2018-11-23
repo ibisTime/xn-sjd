@@ -1137,6 +1137,7 @@ DROP TABLE IF EXISTS `tys_group_order`;
 CREATE TABLE `tys_group_order` (
   `code` varchar(32) NOT NULL COMMENT '编号',
   `group_code` varchar(32) DEFAULT NULL COMMENT '组编号',
+  `presell_type` varchar(4) DEFAULT NULL COMMENT '预售类型',
   `owner_id` varchar(32) DEFAULT NULL COMMENT '资产归属人',
   `product_code` varchar(32) DEFAULT NULL COMMENT '产品编号',
   `product_name` varchar(255) DEFAULT NULL COMMENT '产品名称',
@@ -1203,7 +1204,7 @@ CREATE TABLE `tsc_commodity` (
   `month_sell_count` bigint(20) DEFAULT NULL COMMENT '月销量',
   `list_pic` varchar(255) DEFAULT NULL COMMENT '列表图',
   `banner_pic` varchar(255) DEFAULT NULL COMMENT 'banner图',
-  `description` text DEFAULT NULL COMMENT '描述',
+  `description` longtext DEFAULT NULL COMMENT '描述',
   `shop_code` varchar(32) DEFAULT NULL COMMENT '店铺编号',
   `sell_user_id` varchar(32) DEFAULT NULL COMMENT '商家用户编号',
   `max_jfdk_rate` DOUBLE DEFAULT NULL COMMENT '最大积分抵扣比例',
@@ -1244,6 +1245,7 @@ CREATE TABLE `tsc_cart` (
 DROP TABLE IF EXISTS `tsc_commodity_order`;
 CREATE TABLE `tsc_commodity_order` (
   `code` varchar(32) NOT NULL COMMENT '编号',
+  `shop_code` varchar(32) DEFAULT NULL COMMENT '店铺编号',
   `amount` decimal(64,0) DEFAULT NULL COMMENT '订单金额',
   `quantity` bigint(20) DEFAULT NULL COMMENT '数量',
   `apply_user` varchar(32) NOT NULL COMMENT '下单用户',
@@ -1255,14 +1257,24 @@ CREATE TABLE `tsc_commodity_order` (
   `pay_code` varchar(32) DEFAULT NULL COMMENT '支付渠道号',
   `pay_datetime` datetime DEFAULT NULL COMMENT '支付时间',
   `pay_amount` decimal(64,0) DEFAULT NULL COMMENT '支付金额',
+  `cny_deduct_amount` decimal(18,8) DEFAULT NULL COMMENT '人民币抵扣金额',
+  `jf_deduct_amount` decimal(18,8) DEFAULT NULL COMMENT '积分抵扣金额',
+  `back_jf_amount` decimal(18,8) DEFAULT NULL COMMENT '积分返点金额',
   `address_code` varchar(32) DEFAULT NULL COMMENT '地址编号',
+  `logistics_company` varchar(4) DEFAULT NULL COMMENT '物流公司',
+  `logistics_number` varchar(255) DEFAULT NULL COMMENT '物流单号',
+  `deliver` varchar(32) DEFAULT NULL COMMENT '发货人',
+  `deliver_datetime` datetime DEFAULT NULL COMMENT '发货时间',
+  `receiver` varchar(32) DEFAULT NULL COMMENT '收货人',
+  `receiver_mobile` varchar(32) DEFAULT NULL COMMENT '收货人手机号',
+  `receiver_datetime` datetime DEFAULT NULL COMMENT '收货时间',
   `status` varchar(4) NOT NULL COMMENT '状态（0 待支付，1 已取消，2 已支付）',
+  `settle_status` varchar(4) DEFAULT NULL COMMENT '结算状态',
   `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
   `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='商品订单';
-
 
 DROP TABLE IF EXISTS `tsc_commodity_order_detail`;
 CREATE TABLE `tsc_commodity_order_detail` (
@@ -1343,7 +1355,8 @@ CREATE TABLE `tsc_keyword` (
 DROP TABLE IF EXISTS `tsc_postage_template`;
 CREATE TABLE `tsc_postage_template` (
   `code` varchar(32) NOT NULL COMMENT '编号',
-  `shop_code` varchar(32) NOT NULL COMMENT '店铺编号',
+  `shop_code` varchar(32) DEFAULT NULL COMMENT '店铺编号',
+  `shop_name` varchar(255) DEFAULT NULL COMMENT '店铺名称',
   `deliver_place` varchar(64) DEFAULT NULL COMMENT '发货地',
   `receive_place` varchar(64) DEFAULT NULL COMMENT '收货地',
   `price` decimal(64,0) DEFAULT NULL COMMENT '价格',
@@ -1375,6 +1388,19 @@ CREATE TABLE `tsc_session_message` (
   `create_datetime` datetime NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='会话消息';
+
+DROP TABLE IF EXISTS `tsj_barrage`;
+CREATE TABLE `tsj_barrage` (
+  `code` varchar(32) NOT NULL COMMENT '编号',
+  `content` varchar(255) DEFAULT NULL COMMENT '会话编号',
+  `pic` varchar(255) DEFAULT NULL COMMENT '图片',
+  `status` varchar(4) DEFAULT NULL COMMENT '状态（0上架/1下架）',
+  `order_no` varchar(32) DEFAULT NULL COMMENT '序号',
+  `updater` varchar(255) DEFAULT NULL COMMENT '更新人',
+  `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='弹幕';
 
 
 SET FOREIGN_KEY_CHECKS = 1;

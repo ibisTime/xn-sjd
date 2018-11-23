@@ -85,6 +85,10 @@
 			<if test="endDatetimeEnd != null and endDatetimeEnd != '' ">
 				<![CDATA[AND t.end_datetime <= #{endDatetimeEnd}]]>
 			</if>
+			
+			<if test="existsSettle != null and existsSettle != '' and existsSettle == 1 ">
+				AND EXISTS (SELECT 1 from tsys_settle where ref_code = t.code and ref_type = 1)
+			</if>
 		</trim>
 	</sql>
 	

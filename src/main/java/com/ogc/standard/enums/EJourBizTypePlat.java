@@ -28,7 +28,13 @@ public enum EJourBizTypePlat {
 
     ADOPT_DIST("adopt_dist", "认养分成"),
 
+    ADOPT_DIRECT("adopt_direct", "用户直推认养分成"),
+
+    PRESELL_DIRECT("presell_direct", "用户直推预售分成"),
+
     ADOPT_PROFIT("adopt_profit", "认养收益"),
+
+    PRESELL_DIST("presell_dist", "预售分成"),
 
     COMMODITY("commodity", "商城购买"),
 
@@ -71,9 +77,13 @@ public enum EJourBizTypePlat {
 
     ADOPT_PAY_BACK("adopt_pay_back", "认养消费返利"),
 
+    PRESELL_PAY_BACK("presell_pay_back", "预售消费返利"),
+
     UN_FULL_DEDUCTJF("un_full_deductjf", "集体认养未满标退抵扣积分"),
 
-    UN_FULL_BACKJF("un_full_backjf", "集体认养未满标退返利积分");
+    UN_FULL_BACKJF("un_full_backjf", "集体认养未满标退返利积分"),
+
+    DIST_USER_BACK_JFPOOL("dist_user_back_jfpool", "认养返积分池");
 
     public static EJourBizTypePlat getBizType(String code) {
         Map<String, EJourBizTypePlat> map = getBizTypeMap();

@@ -21,6 +21,9 @@ public class GroupOrder extends ABaseDO {
     // 组编号
     private String groupCode;
 
+    // 预售类型
+    private String presellType;
+
     // 资产归属人
     private String ownerId;
 
@@ -110,9 +113,6 @@ public class GroupOrder extends ABaseDO {
 
     // 下单人名称
     private String applyUserName;
-
-    // 转让类型
-    private String presellType;
 
     public String getCode() {
         return code;

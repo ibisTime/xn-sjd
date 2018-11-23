@@ -173,6 +173,9 @@ public class Product extends ABaseDO {
     // 捐赠认养结束时间
     private Date endDatetime;
 
+    // 定向对象名称
+    private String directObjectName;
+
     public String getDirectType() {
         return directType;
     }
@@ -587,6 +590,14 @@ public class Product extends ABaseDO {
 
     public void setMaxJfdkRate(double maxJfdkRate) {
         this.maxJfdkRate = maxJfdkRate;
+    }
+
+    public String getDirectObjectName() {
+        return directObjectName;
+    }
+
+    public void setDirectObjectName(String directObjectName) {
+        this.directObjectName = directObjectName;
     }
 
 }

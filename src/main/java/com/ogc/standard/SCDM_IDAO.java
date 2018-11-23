@@ -9,28 +9,22 @@ import com.ogc.standard.common.DateUtil;
 
 public class SCDM_IDAO {
     // 实体
-    private static String key = "groupOrder";
+    private static String key = "barrage";
 
     // 实体名称
-    private static String keyName = "寄售订单";
+    private static String keyName = "弹幕";
 
     // 包路径
     private static String packge = "com.ogc.standard.";
 
     // 表名
-    private static String dbname = "tys_group_order";
+    private static String dbname = "tsj_barrage";
 
-    private static String[] DBwords = { "code", "group_code", "product_code",
-            "product_name", "price", "quantity", "amount", "apply_user",
-            "apply_datetime", "status", "pay_type", "pay_group", "pay_code",
-            "cny_deduct_amount", "jf_deduct_amount", "back_jf_amount",
-            "pay_amount", "pay_datetime", "settle_status", "updater",
-            "update_datetime", "remark" };
+    private static String[] DBwords = { "code", "content", "pic", "status",
+            "order_no", "updater", "update_datetime", "remark" };
 
-    private static String[] DBwordsName = { "编号", "组编号", "产品编号", "产品名称", "价格",
-            "数量", "金额", "下单人编号", "下单时间", "状态", "支付方式", "支付组号", "支付渠道编号",
-            "抵扣人民币", "积分抵扣金额", "积分返点金额", "支付金额", "支付时间", "结算状态", "更新人", "更新时间",
-            "备注" };
+    private static String[] DBwordsName = { "编号", "会话编号", "图片", "状态（0上架/1下架）",
+            "序号", "更新人", "更新时间", "备注" };
 
     public void testname() throws Exception {
     }
@@ -43,7 +37,7 @@ public class SCDM_IDAO {
     public static void main(String[] args) {
 
         System.out.println("*********开始打印*********");
-        String path = "/Users/silver/Desktop/tmp/tys_group_order";
+        String path = "/Users/silver/Desktop/tmp/tsj_barrage";
 
         File DOMAINfile = new File(path, Key + ".java");
 

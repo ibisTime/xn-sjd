@@ -15,10 +15,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.ogc.standard.bo.ICompanyBO;
 import com.ogc.standard.bo.IPostageTemplateBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.IPostageTemplateDAO;
+import com.ogc.standard.domain.Company;
 import com.ogc.standard.domain.PostageTemplate;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.exception.BizException;
@@ -35,16 +37,24 @@ public class PostageTemplateBOImpl extends PaginableBOImpl<PostageTemplate>
     @Autowired
     private IPostageTemplateDAO postageTemplateDAO;
 
+    @Autowired
+    private ICompanyBO companyBO;
+
     @Override
     public String saveTemplate(String shopCode, String deliverPlace,
-            String receivePlace, BigDecimal price, String updater, String remark) {
+            String receivePlace, BigDecimal price, String updater,
+            String remark) {
         PostageTemplate data = new PostageTemplate();
-        String code = OrderNoGenerater.generate(EGeneratePrefix.PostageTemplate
-            .getCode());
+        Company shop = companyBO.getCompany(shopCode);
+
+        String code = OrderNoGenerater
+            .generate(EGeneratePrefix.PostageTemplate.getCode());
         data.setCode(code);
         data.setShopCode(shopCode);
+        data.setShopName(shop.getName());
         data.setDeliverPlace(deliverPlace);
         data.setReceiverPlace(receivePlace);
+
         data.setPrice(price);
         data.setUpdater(updater);
         data.setUpdateDatetime(new Date());

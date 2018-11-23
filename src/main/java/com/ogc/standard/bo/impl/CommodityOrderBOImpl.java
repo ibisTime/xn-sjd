@@ -20,6 +20,7 @@ import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.ICommodityOrderDAO;
 import com.ogc.standard.domain.CommodityOrder;
+import com.ogc.standard.enums.ECommodityOrderSettleStatus;
 import com.ogc.standard.enums.ECommodityOrderStatus;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.enums.ESysUser;
@@ -54,21 +55,13 @@ public class CommodityOrderBOImpl extends PaginableBOImpl<CommodityOrder>
         data.setExpressType(expressType);
         data.setAddressCode(addressCode);
         data.setStatus(ECommodityOrderStatus.TO_PAY.getCode());
+        data.setSettleStatus(ECommodityOrderSettleStatus.NO_SETTLE.getCode());
+
         data.setUpdater(updater);
         data.setUpdateDatetime(new Date());
         data.setRemark(remark);
         commodityOrderDAO.insert(data);
         return code;
-    }
-
-    @Override
-    public void refreshPay(CommodityOrder data, BigDecimal payAmount) {
-        data.setPayAmount(payAmount);
-        Date date = new Date();
-        data.setPayDatetime(date);
-        data.setStatus(ECommodityOrderStatus.TODELIVE.getCode());
-        data.setUpdateDatetime(date);
-        commodityOrderDAO.updatePay(data);
     }
 
     @Override
@@ -79,6 +72,17 @@ public class CommodityOrderBOImpl extends PaginableBOImpl<CommodityOrder>
         data.setUpdateDatetime(new Date());
         data.setRemark(remark);
         commodityOrderDAO.updateCancel(data);
+    }
+
+    @Override
+    public void refreshPay(CommodityOrder data, BigDecimal payAmount) {
+        data.setPayAmount(payAmount);
+        Date date = new Date();
+        data.setPayDatetime(date);
+        data.setStatus(ECommodityOrderStatus.TODELIVE.getCode());
+        data.setSettleStatus(ECommodityOrderSettleStatus.TO_SETTLE.getCode());
+        data.setUpdateDatetime(date);
+        commodityOrderDAO.updatePay(data);
     }
 
     @Override
@@ -142,6 +146,14 @@ public class CommodityOrderBOImpl extends PaginableBOImpl<CommodityOrder>
         data.setCode(code);
         data.setStatus(ECommodityOrderStatus.FINISH.getCode());
         commodityOrderDAO.updateComment(data);
+    }
+
+    @Override
+    public void refreshSettle(String code) {
+        CommodityOrder data = new CommodityOrder();
+        data.setCode(code);
+        data.setSettleStatus(ECommodityOrderSettleStatus.SETTLE.getCode());
+        commodityOrderDAO.updateSettle(data);
     }
 
     @Override

@@ -31,7 +31,7 @@ public interface ICartBO extends IPaginableBO<Cart> {
     public void removeByShop(String shopCode);
 
     // 更新数量
-    public void refreshQuantity(String code, Long quantity);
+    public void refreshQuantity(String code, Long quantity, BigDecimal amount);
 
     // 查询我的店铺
     public List<Cart> quertMyShopList(String userId);

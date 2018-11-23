@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.IGroupOrderAO;
 import com.ogc.standard.ao.IUserAO;
@@ -96,6 +97,7 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
     private IJourBO jourBO;
 
     @Override
+    @Transactional
     public void cancelGroupOrder(String code, String remark) {
         GroupOrder groupOrder = groupOrderBO.getGroupOrder(code);
         if (!EGroupOrderStatus.TO_PAY.getCode()
@@ -104,8 +106,15 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
                 "订单不是待支付状态，不能取消");
         }
 
+        // 还原寄售数量
+        DeriveGroup deriveGroup = deriveGroupBO
+            .getDeriveGroup(groupOrder.getGroupCode());
+        deriveGroupBO.refreshQuantity(deriveGroup.getCode(),
+            deriveGroup.getQuantity() + groupOrder.getQuantity());
+
         // 取消订单
         groupOrderBO.cancelGrouplOrder(code, remark);
+
     }
 
     @Override
@@ -277,13 +286,13 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
                 data.getPrice(), data.getQuantity());
 
             // 分配预售权
-            int presellInventoryQuantity = 0;
+            int presellInventoryQuantity = 1;
             List<PresellInventory> presellInventorieList = presellInventoryBO
                 .queryPresellInventoryListByGroup(originalGroup.getCode());
 
             if (CollectionUtils.isNotEmpty(presellInventorieList)) {
                 for (PresellInventory presellInventory : presellInventorieList) {
-                    if (++presellInventoryQuantity > data.getQuantity()) {
+                    if (presellInventoryQuantity++ > data.getQuantity()) {
                         break;
                     }
 
@@ -307,13 +316,13 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
                 data.getPrice(), data.getQuantity());
 
             // 分配预售权
-            int presellInventoryQuantity = 0;
+            int presellInventoryQuantity = 1;
             List<PresellInventory> presellInventorieList = presellInventoryBO
                 .queryPresellInventoryListByGroup(originalGroup.getCode());
 
             if (CollectionUtils.isNotEmpty(presellInventorieList)) {
                 for (PresellInventory presellInventory : presellInventorieList) {
-                    if (++presellInventoryQuantity > data.getQuantity()) {
+                    if (presellInventoryQuantity++ > data.getQuantity()) {
                         break;
                     }
 
@@ -366,6 +375,12 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
             for (GroupOrder groupOrder : groupOrderList) {
                 groupOrderBO.cancelGrouplOrder(groupOrder.getCode(),
                     "超15分钟未支付系统自动取消");
+
+                // 还原寄售数量
+                DeriveGroup deriveGroup = deriveGroupBO
+                    .getDeriveGroup(groupOrder.getGroupCode());
+                deriveGroupBO.refreshQuantity(deriveGroup.getCode(),
+                    deriveGroup.getQuantity() + groupOrder.getQuantity());
             }
         }
         logger.info("***************结束扫描未支付寄售订单***************");
@@ -464,12 +479,6 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
         }
         groupOrder.setApplyUserName(applyUserName);
 
-        // 转让类型
-        DeriveGroup deriveGroup = deriveGroupBO
-            .getDeriveGroup(groupOrder.getGroupCode());
-        if (null != deriveGroup) {
-            groupOrder.setPresellType(deriveGroup.getType());
-        }
     }
 
 }

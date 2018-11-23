@@ -37,6 +37,8 @@ public class XN805145 extends AProcessor {
     public Object doBusiness() throws BizException {
         SignLog condition = new SignLog();
         condition.setUserId(req.getUserId());
+        condition.setType(req.getType());
+
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
             column = ISignLogAO.DEFAULT_ORDER_COLUMN;

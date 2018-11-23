@@ -109,6 +109,11 @@ public class DeriveGroupAOImpl implements IDeriveGroupAO {
                 "您不是定向认领人，不能认领");
         }
 
+        if (null != groupOrderBO.getUnPayedGroupOrder(code)) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "存在待支付的订单，无法再次下单");
+        }
+
         // 落地订单
         String orderCode = groupOrderBO.saveGroupOrder(deriveGroup, claimant);
 

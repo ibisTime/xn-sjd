@@ -409,7 +409,11 @@ public class DateUtil {
     }
 
     public static void main(String[] args) {
-        System.out.println("使用后保护碳泡泡*小时内不被收取".replace("*", "12"));
+
+        for (int i = 1; i < 10; i++) {
+            System.out.print(i / 3);
+            System.out.println(i % 3);
+        }
     }
 
     /**

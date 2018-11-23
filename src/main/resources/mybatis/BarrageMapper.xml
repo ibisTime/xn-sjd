@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ogc.standard.dao.IBarrageDAO">
+	<resultMap id="barrage_DB_Result" type="barrage">
+		<result column="code" property="code" />
+		<result column="content" property="content" />
+		<result column="pic" property="pic" />
+		<result column="status" property="status" />
+		<result column="order_no" property="orderNo" />
+		
+		<result column="updater" property="updater" />
+		<result column="update_datetime" property="updateDatetime" />
+		<result column="remark" property="remark" />
+	</resultMap>
+	
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+		</trim>
+	</sql>
+	
+	<select id="select_barrage" parameterType="barrage" resultMap="barrage_DB_Result">
+		SELECT
+		t.code
+		,t.content
+		,t.pic
+		,t.status
+		,t.order_no
+		
+		,t.updater
+		,t.update_datetime
+		,t.remark
+		FROM
+		tsj_barrage t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_barrage_count" parameterType="barrage"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tsj_barrage t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_barrage" parameterType="barrage">
+		INSERT INTO
+		tsj_barrage(
+		code
+		,content
+		,pic
+		,status
+		
+		,updater
+		,update_datetime
+		,remark
+		)
+		VALUES(
+		#{code}
+		,#{content}
+		,#{pic}
+		,#{status}
+		
+		,#{updater}
+		,#{updateDatetime}
+		,#{remark}
+		)
+	</insert>
+
+	<update id="update_barrage" parameterType="barrage">
+		UPDATE tsj_barrage
+		SET
+		content = #{content}
+		,pic = #{pic}
+		,order_no = #{orderNo}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_status" parameterType="barrage">
+		UPDATE tsj_barrage
+		SET
+		status = #{status}
+		,order_no = #{orderNo}
+		,update_datetime = #{updateDatetime}
+		WHERE code = #{code}
+	</update>
+
+
+</mapper>

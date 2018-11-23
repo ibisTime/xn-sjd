@@ -15,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ogc.standard.ao.IPresellOrderAO;
 import com.ogc.standard.ao.IUserAO;
 import com.ogc.standard.bo.IAccountBO;
+import com.ogc.standard.bo.IAdoptOrderTreeBO;
+import com.ogc.standard.bo.IAgentUserBO;
 import com.ogc.standard.bo.IAlipayBO;
 import com.ogc.standard.bo.IDistributionOrderBO;
 import com.ogc.standard.bo.IJourBO;
@@ -24,6 +26,7 @@ import com.ogc.standard.bo.IPresellOrderBO;
 import com.ogc.standard.bo.IPresellProductBO;
 import com.ogc.standard.bo.IPresellSpecsBO;
 import com.ogc.standard.bo.ISYSUserBO;
+import com.ogc.standard.bo.ISettleBO;
 import com.ogc.standard.bo.ISmsBO;
 import com.ogc.standard.bo.ITreeBO;
 import com.ogc.standard.bo.IUserBO;
@@ -31,6 +34,7 @@ import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.common.PhoneUtil;
 import com.ogc.standard.domain.Account;
+import com.ogc.standard.domain.AgentUser;
 import com.ogc.standard.domain.Jour;
 import com.ogc.standard.domain.OriginalGroup;
 import com.ogc.standard.domain.PresellInventory;
@@ -38,6 +42,7 @@ import com.ogc.standard.domain.PresellOrder;
 import com.ogc.standard.domain.PresellProduct;
 import com.ogc.standard.domain.PresellSpecs;
 import com.ogc.standard.domain.SYSUser;
+import com.ogc.standard.domain.Settle;
 import com.ogc.standard.domain.Tree;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.dto.res.BooleanRes;
@@ -104,6 +109,15 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
 
     @Autowired
     private IJourBO jourBO;
+
+    @Autowired
+    private IAdoptOrderTreeBO adoptOrderTreeBO;
+
+    @Autowired
+    private ISettleBO settleBO;
+
+    @Autowired
+    private IAgentUserBO agentUserBO;
 
     @Override
     @Transactional
@@ -188,7 +202,7 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
         // 积分抵扣处理
         PresellProduct presellProduct = presellProductBO
             .getPresellProduct(presellOrder.getProductCode());
-        XN629048Res deductRes = distributionOrderBO.getOrderDeductAmount(
+        XN629048Res deductRes = distributionOrderBO.getAdoptOrderDeductAmount(
             presellProduct.getMaxJfdkRate(), presellOrder.getAmount(),
             presellOrder.getApplyUser(), EBoolean.YES.getCode());
 
@@ -224,7 +238,8 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
             XN629048Res deductRes) {
         Account userCnyAccount = accountBO.getAccountByUser(data.getApplyUser(),
             ECurrency.CNY.getCode());
-        BigDecimal payAmount = data.getAmount();// 实际付款人民币金额
+        BigDecimal payAmount = data.getAmount()
+            .subtract(deductRes.getCnyAmount());// 实际付款人民币金额
         if (userCnyAccount.getAmount().compareTo(payAmount) < 0) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "人民币账户余额不足");
@@ -242,7 +257,7 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
         // 进行分销
         PresellProduct presellProduct = presellProductBO
             .getPresellProduct(data.getProductCode());
-        BigDecimal backJfAmount = distributionOrderBO.distribution(
+        BigDecimal backJfAmount = distributionOrderBO.presellDistribution(
             data.getCode(), presellProduct.getOwnerId(), data.getAmount(),
             data.getApplyUser(), ESellType.PRESELL.getCode(), deductRes);
 
@@ -260,12 +275,11 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
         // 分配树和预售权
         PresellSpecs presellSpecs = presellSpecsBO
             .getPresellSpecs(data.getSpecsCode());
-        assignPresellInventory(data.getQuantity() * presellSpecs.getPackCount(),
-            presellProduct.getPackWeight(), presellProduct.getCode(),
+        assignPresellInventory(data, presellProduct, presellSpecs,
             presellProduct.getSingleOutput(), originalGroupCode);
 
         // 业务订单更改
-        presellOrderBO.payYueSuccess(data.getCode(), deductRes, backJfAmount);
+        presellOrderBO.payYueSuccess(data, deductRes, backJfAmount);
 
         return new BooleanRes(true);
     }
@@ -282,7 +296,7 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
             // 进行分销
             PresellProduct presellProduct = presellProductBO
                 .getPresellProduct(data.getProductCode());
-            BigDecimal backJfAmount = distributionOrderBO.distribution(
+            BigDecimal backJfAmount = distributionOrderBO.presellDistribution(
                 data.getCode(), presellProduct.getOwnerId(), data.getAmount(),
                 data.getApplyUser(), ESellType.PRESELL.getCode(), resultRes);
 
@@ -295,9 +309,7 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
             // 分配树和预售权
             PresellSpecs presellSpecs = presellSpecsBO
                 .getPresellSpecs(data.getSpecsCode());
-            assignPresellInventory(
-                data.getQuantity() * presellSpecs.getPackCount(),
-                presellProduct.getPackWeight(), presellProduct.getCode(),
+            assignPresellInventory(data, presellProduct, presellSpecs,
                 presellProduct.getSingleOutput(), originalGroupCode);
 
             // 添加快报
@@ -318,23 +330,21 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
              2.1、预售权数量为下单【包装单位】数
              2.2、一个预售权可能有多棵树
          3、更新树的库存数量
-     * @param quantity          下单【包装单位】数:$箱
-     * @param packWeight        包装重量:$斤/箱
-     * @param productCode   
-     * @param singleOutput      单棵树产量:斤
-     * @param originalGroupCode 
      */
-    private void assignPresellInventory(Integer quantity, Integer packWeight,
-            String productCode, Integer singleOutput,
-            String originalGroupCode) {
+    private void assignPresellInventory(PresellOrder presellOrder,
+            PresellProduct presellProduct, PresellSpecs presellSpecs,
+            Integer singleOutput, String originalGroupCode) {
         int presellInventoryQuantity = 0;// 预售权数量
         int tmpPackWeight;// 预售权已经分配的重量
         int tmpTreeWeight;// 树已分配的总数量
+        int packWeight = presellProduct.getPackWeight();// 包装重量:$斤/箱
+        int quantity = presellOrder.getQuantity() * presellSpecs.getPackCount();// 下单【包装单位】数:$箱
+
         StringBuffer treeNumbers = new StringBuffer();// 树木编号
 
         _assignPI: while (presellInventoryQuantity < quantity) {
-            List<Tree> treeList = treeBO
-                .queryTreeListRemainInventory(productCode, singleOutput);
+            List<Tree> treeList = treeBO.queryTreeListRemainInventory(
+                presellProduct.getCode(), singleOutput);
 
             if (CollectionUtils.isNotEmpty(treeList)) {
 
@@ -347,6 +357,10 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
                             + (singleOutput - tree.getAdoptCount());
                     treeNumbers.append(tree.getTreeNumber()).append("&");
 
+                    // 添加认养权
+                    adoptOrderTreeBO.saveAdoptOrderTree(presellProduct,
+                        presellOrder, tree.getTreeNumber());
+
                     /**
                      * 三种情况：
                      * 1、这棵树不够分：更新树的销量，再分一颗树
@@ -354,14 +368,12 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
                      * 3、这棵树有剩余：更新树的销量，分配预售权，再次循环
                      */
                     if (tmpPackWeight < packWeight) {
-
                         treeBO.refreshAdoptCount(tree.getTreeNumber(),
                             singleOutput);
                         tmpTreeWeight = tmpTreeWeight
                                 + (singleOutput - tree.getAdoptCount());
 
                         continue;
-
                     } else if (tmpPackWeight == packWeight) {
                         treeBO.refreshAdoptCount(tree.getTreeNumber(),
                             singleOutput);
@@ -443,7 +455,7 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
         PresellProduct presellProduct = presellProductBO
             .getPresellProduct(presellOrder.getProductCode());
 
-        return distributionOrderBO.getOrderDeductAmount(
+        return distributionOrderBO.getAdoptOrderDeductAmount(
             presellProduct.getMaxJfdkRate(), presellOrder.getAmount(),
             presellOrder.getApplyUser(), EBoolean.YES.getCode());
     }
@@ -505,10 +517,22 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
     }
 
     @Override
-    public PresellOrder getPresellOrder(String code) {
+    public PresellOrder getPresellOrder(String code, String isSettle) {
         PresellOrder presellOrder = presellOrderBO.getPresellOrder(code);
 
         init(presellOrder);
+
+        if (EBoolean.YES.getCode().equals(isSettle)) {
+            List<Settle> settleList = settleBO.querySettleList(code);
+            if (CollectionUtils.isNotEmpty(settleList)) {
+                for (Settle settle : settleList) {
+                    AgentUser agentUser = agentUserBO
+                        .getAgentUser(settle.getUserId());
+                    settle.setAgentUser(agentUser);
+                }
+            }
+            presellOrder.setSettleList(settleList);
+        }
 
         return presellOrder;
     }

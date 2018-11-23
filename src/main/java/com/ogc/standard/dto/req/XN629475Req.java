@@ -19,6 +19,9 @@ public class XN629475Req extends APageReq {
     // 状态
     private String status;
 
+    // 预售类型
+    private String presellType;
+
     public String getProductCode() {
         return productCode;
     }
@@ -41,6 +44,14 @@ public class XN629475Req extends APageReq {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getPresellType() {
+        return presellType;
+    }
+
+    public void setPresellType(String presellType) {
+        this.presellType = presellType;
     }
 
 }

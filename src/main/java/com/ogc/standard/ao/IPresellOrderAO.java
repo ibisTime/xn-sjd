@@ -41,6 +41,6 @@ public interface IPresellOrderAO {
 
     public List<PresellOrder> queryPresellOrderList(PresellOrder condition);
 
-    public PresellOrder getPresellOrder(String code);
+    public PresellOrder getPresellOrder(String code, String isSettle);
 
 }

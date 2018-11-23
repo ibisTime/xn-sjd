@@ -20,6 +20,7 @@ import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.ISessionDAO;
 import com.ogc.standard.domain.Session;
+import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.exception.BizException;
 
@@ -29,8 +30,8 @@ import com.ogc.standard.exception.BizException;
  * @history:
  */
 @Component
-public class SessionBOImpl extends PaginableBOImpl<Session> implements
-        ISessionBO {
+public class SessionBOImpl extends PaginableBOImpl<Session>
+        implements ISessionBO {
 
     @Autowired
     private ISessionDAO sessionDAO;
@@ -38,8 +39,8 @@ public class SessionBOImpl extends PaginableBOImpl<Session> implements
     @Override
     public Session saveSession(String type, String user1, String user2) {
         Session data = new Session();
-        String code = OrderNoGenerater.generate(EGeneratePrefix.Session
-            .getCode());
+        String code = OrderNoGenerater
+            .generate(EGeneratePrefix.Session.getCode());
         data.setCode(code);
         data.setType(type);
         data.setUser1(user1);
@@ -74,6 +75,16 @@ public class SessionBOImpl extends PaginableBOImpl<Session> implements
             return null;
         }
         return sessions.get(0);
+    }
+
+    @Override
+    public List<Session> queryUnread(String user1, String user2) {
+        Session condition = new Session();
+        condition.setUser1(user1);
+        condition.setUser2(user2);
+        condition.setExistsUnread(EBoolean.YES.getCode());
+
+        return sessionDAO.selectList(condition);
     }
 
     @Override

@@ -42,6 +42,9 @@ public class XN629055Req extends APageReq {
     // 状态
     private List<String> statusList;
 
+    // 是否存在结算
+    private String existsSettle;
+
     public String getProductCode() {
         return productCode;
     }
@@ -120,6 +123,14 @@ public class XN629055Req extends APageReq {
 
     public void setStatusList(List<String> statusList) {
         this.statusList = statusList;
+    }
+
+    public String getExistsSettle() {
+        return existsSettle;
+    }
+
+    public void setExistsSettle(String existsSettle) {
+        this.existsSettle = existsSettle;
     }
 
 }

@@ -31,6 +31,7 @@ public class XN629475 extends AProcessor {
         condition.setProductCode(req.getProductCode());
         condition.setApplyUser(req.getUserId());
         condition.setStatus(req.getStatus());
+        condition.setPresellType(req.getPresellType());
 
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {

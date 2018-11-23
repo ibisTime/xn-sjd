@@ -10,6 +10,7 @@ package com.ogc.standard.ao.impl;
 
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +23,8 @@ import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Session;
 import com.ogc.standard.domain.SessionMessage;
 import com.ogc.standard.domain.User;
+import com.ogc.standard.dto.res.XN629788Res;
+import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ESessionMessageStatus;
 import com.ogc.standard.enums.ESessionType;
 import com.ogc.standard.enums.ESysUser;
@@ -101,6 +104,19 @@ public class SessionAOImpl implements ISessionAO {
     }
 
     @Override
+    public XN629788Res existsUnread(String user1, String user2) {
+        List<Session> unread = sessionBO.queryUnread(user1, user2);
+
+        XN629788Res res = new XN629788Res(EBoolean.NO.getCode());
+
+        if (CollectionUtils.isNotEmpty(unread)) {
+            res = new XN629788Res(EBoolean.YES.getCode());
+        }
+
+        return res;
+    }
+
+    @Override
     public Paginable<Session> querySessionPage(int start, int limit,
             Session condition) {
         Paginable<Session> page = sessionBO.getPaginable(start, limit,
@@ -128,8 +144,8 @@ public class SessionAOImpl implements ISessionAO {
     }
 
     private void initSession(Session session) {
-        List<SessionMessage> messages = sessionMessageBO.querySessionMessages(
-            session.getCode(), null, null);
+        List<SessionMessage> messages = sessionMessageBO
+            .querySessionMessages(session.getCode(), null, null);
         session.setMessageList(messages);
         User user = userBO.getUser(session.getUser1());
         session.setUser1Nickname(user.getNickname());

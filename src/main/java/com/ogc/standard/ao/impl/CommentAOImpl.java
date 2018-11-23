@@ -63,15 +63,15 @@ public class CommentAOImpl implements ICommentAO {
         if (CollectionUtils.isNotEmpty(keywordList)) {
 
             // 直接拦截
-            if (EKeyWordReaction.REFUSE.getCode().equals(
-                keywordList.get(0).getReaction())) {
+            if (EKeyWordReaction.REFUSE.getCode()
+                .equals(keywordList.get(0).getReaction())) {
                 throw new BizException("xn0000", "你的评论含有拦截词:"
                         + keywordList.get(0).getWord() + " 无法评论，请重新编辑再评论");
             }
 
             // 替换**
-            if (EKeyWordReaction.REPLACE.getCode().equals(
-                keywordList.get(0).getReaction())) {
+            if (EKeyWordReaction.REPLACE.getCode()
+                .equals(keywordList.get(0).getReaction())) {
                 for (Keyword keyword : keywordList) {
                     content = keywordBO.replaceKeyword(content,
                         keyword.getWord());
@@ -81,8 +81,8 @@ public class CommentAOImpl implements ICommentAO {
             }
 
             // 审核
-            if (EKeyWordReaction.APPROVE.getCode().equals(
-                keywordList.get(0).getReaction())) {
+            if (EKeyWordReaction.APPROVE.getCode()
+                .equals(keywordList.get(0).getReaction())) {
                 status = ECommentStatus.TO_APPROVE.getCode();
             }
         }
@@ -124,8 +124,8 @@ public class CommentAOImpl implements ICommentAO {
     public void dropOssComment(String code, String updater) {
         Comment comment = commentBO.getComment(code);
         if (!ECommentStatus.RELEASED.getCode().equals(comment.getStatus())
-                && !ECommentStatus.APPROVED_YES.getCode().equals(
-                    comment.getStatus())) {
+                && !ECommentStatus.APPROVED_YES.getCode()
+                    .equals(comment.getStatus())) {
             throw new BizException("xn0000", "评论状态不可删除");
         }
 
@@ -145,6 +145,8 @@ public class CommentAOImpl implements ICommentAO {
                 commentBO.searchCycleComment(comment.getCode(), commentList);
                 commentBO.orderCommentList(commentList);
                 comment.setNextCommentList(commentList);
+
+                commentBO.initComment(comment);
             }
         }
         return page;

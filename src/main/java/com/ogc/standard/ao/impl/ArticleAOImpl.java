@@ -13,12 +13,14 @@ import com.ogc.standard.ao.IArticleAO;
 import com.ogc.standard.bo.IAdoptOrderTreeBO;
 import com.ogc.standard.bo.IArticleBO;
 import com.ogc.standard.bo.IGroupAdoptOrderBO;
+import com.ogc.standard.bo.IInteractBO;
 import com.ogc.standard.bo.ITreeBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.AdoptOrderTree;
 import com.ogc.standard.domain.Article;
 import com.ogc.standard.domain.GroupAdoptOrder;
+import com.ogc.standard.domain.Interact;
 import com.ogc.standard.domain.Tree;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.dto.req.XN629340Req;
@@ -27,6 +29,7 @@ import com.ogc.standard.dto.req.XN629342Req;
 import com.ogc.standard.dto.req.XN629343Req;
 import com.ogc.standard.dto.req.XN629344Req;
 import com.ogc.standard.dto.req.XN629345Req;
+import com.ogc.standard.dto.res.XN629348Res;
 import com.ogc.standard.enums.EAdoptOrderTreeStatus;
 import com.ogc.standard.enums.EArticleOpenLevel;
 import com.ogc.standard.enums.EArticleStatus;
@@ -34,6 +37,8 @@ import com.ogc.standard.enums.EArticleType;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.EDealType;
 import com.ogc.standard.enums.EGroupAdoptOrderStatus;
+import com.ogc.standard.enums.EInteractType;
+import com.ogc.standard.enums.EObjectType;
 import com.ogc.standard.enums.ESellType;
 import com.ogc.standard.enums.EUser;
 import com.ogc.standard.exception.BizException;
@@ -55,6 +60,9 @@ public class ArticleAOImpl implements IArticleAO {
 
     @Autowired
     private IGroupAdoptOrderBO groupAdoptOrderBO;
+
+    @Autowired
+    private IInteractBO interactBO;
 
     @Override
     @Transactional
@@ -216,6 +224,63 @@ public class ArticleAOImpl implements IArticleAO {
     }
 
     @Override
+    public void pointArticle(String code, String userId) {
+        Interact interact = interactBO.getInteract(
+            EInteractType.POINT.getCode(), EObjectType.ARTICLE.getCode(), code,
+            userId);
+        Article article = articleBO.getArticle(code);
+        Integer pointCount = article.getPointCount();
+
+        if (null == interact) {
+            interactBO.saveInteract(EInteractType.POINT.getCode(),
+                EObjectType.ARTICLE.getCode(), code, userId);
+
+            pointCount = pointCount + 1;
+            articleBO.refreshPoint(code, pointCount);
+        } else {
+            interactBO.removeInteract(interact.getCode());
+
+            pointCount = pointCount - 1;
+            articleBO.refreshPoint(code, pointCount);
+        }
+    }
+
+    @Override
+    public void collectArticle(String code, String userId) {
+        Interact interact = interactBO.getInteract(
+            EInteractType.COLLECT.getCode(), EObjectType.ARTICLE.getCode(),
+            code, userId);
+        Article article = articleBO.getArticle(code);
+        Integer collectCount = article.getCollectCount();
+
+        if (null == interact) {
+            interactBO.saveInteract(EInteractType.COLLECT.getCode(),
+                EObjectType.ARTICLE.getCode(), code, userId);
+
+            collectCount = collectCount + 1;
+            articleBO.refreshCollect(code, collectCount);
+        } else {
+            interactBO.removeInteract(interact.getCode());
+
+            collectCount = collectCount - 1;
+            articleBO.refreshCollect(code, collectCount);
+        }
+    }
+
+    @Override
+    public XN629348Res isPointCollect(String code, String userId, String type) {
+        Interact interact = interactBO.getInteract(type,
+            EObjectType.ARTICLE.getCode(), code, userId);
+
+        XN629348Res res = new XN629348Res(EBoolean.YES.getCode());
+        if (null == interact) {
+            res = new XN629348Res(EBoolean.NO.getCode());
+        }
+
+        return res;
+    }
+
+    @Override
     public Paginable<Article> queryArticlePage(int start, int limit,
             Article condition, XN629345Req req) {
         Paginable<Article> page = articleBO.getPaginable(start, limit,
@@ -240,6 +305,22 @@ public class ArticleAOImpl implements IArticleAO {
         }
 
         return page;
+    }
+
+    @Override
+    public List<Interact> queryMyCollectArticleList(String userId) {
+        List<Interact> collectArticleList = interactBO.queryInteractList(userId,
+            EInteractType.COLLECT.getCode(), EObjectType.ARTICLE.getCode());
+
+        if (CollectionUtils.isNotEmpty(collectArticleList)) {
+            for (Interact interact : collectArticleList) {
+                Article article = articleBO
+                    .getArticle(interact.getObjectCode());
+                interact.setArticle(article);
+            }
+        }
+
+        return collectArticleList;
     }
 
     @Override

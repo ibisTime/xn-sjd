@@ -71,10 +71,11 @@ public class CartBOImpl extends PaginableBOImpl<Cart> implements ICartBO {
     }
 
     @Override
-    public void refreshQuantity(String code, Long quantity) {
+    public void refreshQuantity(String code, Long quantity, BigDecimal amount) {
         Cart data = new Cart();
         data.setCode(code);
         data.setQuantity(quantity);
+        data.setAmount(amount);
         cartDAO.updateQuantity(data);
     }
 

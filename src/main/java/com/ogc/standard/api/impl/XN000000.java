@@ -35,7 +35,7 @@ public class XN000000 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        presellOrderAO.doCancelPresellOrder();
+        originalGroupAO.doDailyOriginalGroup();
         return new BooleanRes(true);
     }
 

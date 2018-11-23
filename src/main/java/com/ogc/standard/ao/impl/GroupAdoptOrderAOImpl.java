@@ -18,11 +18,13 @@ import com.ogc.standard.ao.IGroupAdoptOrderAO;
 import com.ogc.standard.ao.IUserAO;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IAdoptOrderTreeBO;
+import com.ogc.standard.bo.IAgentUserBO;
 import com.ogc.standard.bo.IAlipayBO;
 import com.ogc.standard.bo.IDistributionOrderBO;
 import com.ogc.standard.bo.IGroupAdoptOrderBO;
 import com.ogc.standard.bo.IProductBO;
 import com.ogc.standard.bo.IProductSpecsBO;
+import com.ogc.standard.bo.ISettleBO;
 import com.ogc.standard.bo.ISmsBO;
 import com.ogc.standard.bo.ITreeBO;
 import com.ogc.standard.bo.IUserBO;
@@ -30,9 +32,11 @@ import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.AdoptOrderTree;
+import com.ogc.standard.domain.AgentUser;
 import com.ogc.standard.domain.GroupAdoptOrder;
 import com.ogc.standard.domain.Product;
 import com.ogc.standard.domain.ProductSpecs;
+import com.ogc.standard.domain.Settle;
 import com.ogc.standard.domain.Tree;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.dto.res.BooleanRes;
@@ -91,6 +95,12 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
 
     @Autowired
     private IUserAO userAO;
+
+    @Autowired
+    private ISettleBO settleBO;
+
+    @Autowired
+    private IAgentUserBO agentUserBO;
 
     @Override
     @Transactional
@@ -225,7 +235,7 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
         Product product = productBO.getProduct(data.getProductCode());
 
         // 积分抵扣处理
-        XN629048Res deductRes = distributionOrderBO.getOrderDeductAmount(
+        XN629048Res deductRes = distributionOrderBO.getAdoptOrderDeductAmount(
             product.getMaxJfdkRate(), data.getAmount(), data.getApplyUser(),
             isJfDeduct);
 
@@ -279,7 +289,7 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
 
         // 进行分销
         Product productInfo = productBO.getProduct(data.getProductCode());
-        BigDecimal backJfAmount = distributionOrderBO.distribution(
+        BigDecimal backJfAmount = distributionOrderBO.adoptDistribution(
             data.getCode(), productInfo.getOwnerId(), data.getAmount(),
             data.getApplyUser(), ESellType.COLLECTIVE.getCode(), resultRes);
 
@@ -333,7 +343,7 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
 
             // 进行分销
             Product productInfo = productBO.getProduct(data.getProductCode());
-            BigDecimal backJfAmount = distributionOrderBO.distribution(
+            BigDecimal backJfAmount = distributionOrderBO.adoptDistribution(
                 data.getCode(), productInfo.getOwnerId(), data.getAmount(),
                 data.getApplyUser(), ESellType.COLLECTIVE.getCode(), resultRes);
 
@@ -379,7 +389,7 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
 
         Product product = productBO.getProduct(data.getProductCode());
 
-        return distributionOrderBO.getOrderDeductAmount(
+        return distributionOrderBO.getAdoptOrderDeductAmount(
             product.getMaxJfdkRate(), data.getAmount(), data.getApplyUser(),
             EBoolean.YES.getCode());
     }
@@ -620,10 +630,22 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
     }
 
     @Override
-    public GroupAdoptOrder getGroupAdoptOrder(String code) {
+    public GroupAdoptOrder getGroupAdoptOrder(String code, String isSettle) {
         GroupAdoptOrder data = groupAdoptOrderBO.getGroupAdoptOrder(code);
 
         initGroupAdoptOrder(data);
+
+        if (EBoolean.YES.getCode().equals(isSettle)) {
+            List<Settle> settleList = settleBO.querySettleList(code);
+            if (CollectionUtils.isNotEmpty(settleList)) {
+                for (Settle settle : settleList) {
+                    AgentUser agentUser = agentUserBO
+                        .getAgentUser(settle.getUserId());
+                    settle.setAgentUser(agentUser);
+                }
+            }
+            data.setSettleList(settleList);
+        }
 
         return data;
     }

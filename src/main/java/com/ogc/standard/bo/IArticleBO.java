@@ -26,6 +26,12 @@ public interface IArticleBO extends IPaginableBO<Article> {
     public void putOn(String code, String location, String orderNo,
             String remark, String updater);
 
+    // 点赞
+    public void refreshPoint(String code, Integer pointCount);
+
+    // 收藏
+    public void refreshCollect(String code, Integer collectCount);
+
     // 查询好友私密文章列表
     public List<Article> queryPrivateArticleList(String userId);
 
