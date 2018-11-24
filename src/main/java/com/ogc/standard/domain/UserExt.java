@@ -62,6 +62,27 @@ public class UserExt extends ABaseDO {
     // 自我介绍
     private String introduce;
 
+    // 身份证照片
+    private String idPic;
+
+    // 企业名称
+    private String companyName;
+
+    // 营业执照号
+    private String bussinessLicenseId;
+
+    // 企业简介
+    private String companyIntroduce;
+
+    // 营业执照
+    private String bussinessLicense;
+
+    // 个人认证状态
+    private String personAuthStatus;
+
+    // 企业认证状态
+    private String companyAuthStatus;
+
     // ***********db properties***********
 
     public String getUserId() {
@@ -166,6 +187,62 @@ public class UserExt extends ABaseDO {
 
     public void setPassport(String passport) {
         this.passport = passport;
+    }
+
+    public String getIdPic() {
+        return idPic;
+    }
+
+    public void setIdPic(String idPic) {
+        this.idPic = idPic;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getBussinessLicenseId() {
+        return bussinessLicenseId;
+    }
+
+    public void setBussinessLicenseId(String bussinessLicenseId) {
+        this.bussinessLicenseId = bussinessLicenseId;
+    }
+
+    public String getCompanyIntroduce() {
+        return companyIntroduce;
+    }
+
+    public void setCompanyIntroduce(String companyIntroduce) {
+        this.companyIntroduce = companyIntroduce;
+    }
+
+    public String getBussinessLicense() {
+        return bussinessLicense;
+    }
+
+    public void setBussinessLicense(String bussinessLicense) {
+        this.bussinessLicense = bussinessLicense;
+    }
+
+    public String getPersonAuthStatus() {
+        return personAuthStatus;
+    }
+
+    public void setPersonAuthStatus(String personAuthStatus) {
+        this.personAuthStatus = personAuthStatus;
+    }
+
+    public String getCompanyAuthStatus() {
+        return companyAuthStatus;
+    }
+
+    public void setCompanyAuthStatus(String companyAuthStatus) {
+        this.companyAuthStatus = companyAuthStatus;
     }
 
 }

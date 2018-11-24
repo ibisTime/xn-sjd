@@ -14,6 +14,14 @@ INSERT INTO `tzb_category` (`code`,`type`,`parent_code`,`name`,`level`,`pic`,`or
 INSERT INTO `tzb_category` (`code`,`type`,`parent_code`,`name`,`level`,`pic`,`order_no`,`status`,`updater`,`update_datetime`,`remark`) VALUES ('C2018111815490763959107','2',NULL,'分类四',1,'FoA-Kvbf5h0UOGkNjxK3VcCGSgjO',3,'1','UCOIN201700000000000001','2018-11-18 15:49:21','');
 
 /*
+-- Query: SELECT * FROM dev_xn_sjd.tstd_company_channel
+LIMIT 0, 1000
+
+-- Date: 2018-11-24 17:12
+*/
+INSERT INTO `tstd_company_channel` (`id`,`company_code`,`company_name`,`channel_type`,`status`,`channel_company`,`private_key1`,`private_key2`,`private_key3`,`private_key4`,`private_key5`,`page_url`,`error_url`,`back_url`,`fee`,`remark`,`system_code`) VALUES (2,'CD-SJD0000025','时间岛','35','1','1508529861','fgfbrckpfmqttx1dva334eoskxb05u53','wxb0df94ba24824c3e',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'CD-SJD0000025');
+
+/*
 -- Query: SELECT `user_id`,`role_code`,`real_name`,`photo`,`mobile`,`login_name`,`login_pwd`,`login_pwd_strength`,`create_datetime`,`status`,`updater`, now() `update_datetime`,`remark`,`system_code` FROM tsys_user where user_id='UCOIN201700000000000001'
 LIMIT 0, 500
 
@@ -35,9 +43,9 @@ INSERT INTO `tsys_role` (`code`,`name`,`type`,`updater`,`update_datetime`,`remar
 INSERT INTO `tsys_role` (`code`,`name`,`type`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('JS201811081749297484833','商家','B','UCOIN201700000000000001',now(),'不能删','CD-SJD0000025');
 /*
 -- Query: SELECT * FROM dev_xn_sjd.tsys_menu
-LIMIT 0, 1000
+LIMIT 0, 50000
 
--- Date: 2018-11-23 22:31
+-- Date: 2018-11-24 18:34
 */
 INSERT INTO `tsys_menu` (`code`,`parent_code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CD201809281332308235420','CD2018112110474868528055','产权方管理','1','#',1,'UCOIN201700000000000001','2018-11-21 10:49:38','','CD-SJD0000025');
 INSERT INTO `tsys_menu` (`code`,`parent_code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CD201809281333105776717','CD2018112110474868528055','养护方管理','1','#',4,'UCOIN201700000000000001','2018-11-21 10:52:42','','CD-SJD0000025');
@@ -443,9 +451,9 @@ INSERT INTO `tsys_menu` (`code`,`parent_code`,`name`,`type`,`url`,`order_no`,`up
 INSERT INTO `tsys_menu` (`code`,`parent_code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('SM201711272034567989636','COINSM2017121215543215610','攻略','1','/public/strategy.htm',2,'UCOIN201700000000000001','2018-10-08 23:03:05','','CD-SJD0000025');
 /*
 -- Query: SELECT * FROM dev_xn_sjd.tsys_menu_role
-LIMIT 0, 1000
+LIMIT 0, 50000
 
--- Date: 2018-11-23 22:31
+-- Date: 2018-11-24 18:34
 */
 INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (1,'JS201810041749297484833','COINSM201700000000000000','UCOIN201700000000000001','2018-10-06 16:10:08',NULL,'CD-SJD0000025');
 INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (2,'JS201810041749297484833','CD201810041752035736055','UCOIN201700000000000001','2018-10-06 16:10:08',NULL,'CD-SJD0000025');
@@ -1117,6 +1125,7 @@ INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_d
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','biz_type','un_full_deductjf','集体认养未满标退抵扣积分','admin',now(),'');
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','biz_type','un_full_backjf','集体认养未满标退返利积分','admin',now(),'');
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','biz_type','presell','购买预售','admin',now(),'');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','biz_type','consign_sell','购买寄售','admin',now(),'');
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','biz_type','commodity','购买商品','admin',now(),'');
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','biz_type','commodity_dist','购买商品分成','admin',now(),'');
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','biz_type','after_sale','商城售后','admin',now(),'');
@@ -1336,8 +1345,9 @@ INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_d
 
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('0',NULL,'gift_order_status','礼物订单状态','admin',now(),'');
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','gift_order_status','0','待认领','admin',now(),'');
-INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','gift_order_status','1','已认领','admin',now(),'');
-INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','gift_order_status','2','已过期','admin',now(),'');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','gift_order_status','1','待发货','admin',now(),'');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','gift_order_status','2','已完成','admin',now(),'');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','gift_order_status','3','已过期','admin',now(),'');
 
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('0',NULL,'user_releation_type','用户关系类型','admin',now(),'');
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','user_releation_type','0','拉黑','admin',now(),'');
@@ -1424,3 +1434,9 @@ INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_d
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('0',NULL,'barrage_status','弹幕状态','admin',now(),'');
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','barrage_status','1','上架','admin',now(),'');
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','barrage_status','0','下架','admin',now(),'');
+
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('0',NULL,'share_type','分享类型','admin',now(),'');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','share_type','0','发送给朋友','admin',now(),'');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','share_type','1','分享到朋友圈','admin',now(),'');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','share_type','2','分享到手机QQ','admin',now(),'');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','share_type','3','分享到QQ空间','admin',now(),'');

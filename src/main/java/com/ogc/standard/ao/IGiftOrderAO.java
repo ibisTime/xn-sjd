@@ -16,6 +16,9 @@ public interface IGiftOrderAO {
 
     public int editGiftOrder(GiftOrder data);
 
+    // 发货礼物
+    public void sendGift(String code);
+
     // 认领礼物
     public void claimGift(XN629323Req req);
 

@@ -119,6 +119,15 @@ public interface IUserAO {
     // 绑定邮箱
     public void bindEmail(String captcha, String email, String userId);
 
+    // 个人认证
+    public void personAuth(String userId, String realName, String idNo,
+            String idPic, String introduce);
+
+    // 企业认证
+    public void companyAuth(String userId, String companyName,
+            String companyIntroduce, String bussinessLicenseId,
+            String bussinessLicense);
+
     // 更新用户等级
     public void upgradeUserLevel(String userId);
 

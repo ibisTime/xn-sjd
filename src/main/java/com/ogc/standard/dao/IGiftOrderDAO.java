@@ -16,4 +16,8 @@ public interface IGiftOrderDAO extends IBaseDAO<GiftOrder> {
 
     // 更新过期状态
     public int updateExpireGift(GiftOrder data);
+
+    // 发货
+    public int updateSendGift(GiftOrder data);
+
 }

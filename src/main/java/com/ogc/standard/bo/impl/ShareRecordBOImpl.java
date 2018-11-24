@@ -1,5 +1,6 @@
 package com.ogc.standard.bo.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -30,6 +31,7 @@ public class ShareRecordBOImpl extends PaginableBOImpl<ShareRecord>
         data.setCode(code);
         data.setUserId(userId);
         data.setChannel(channel);
+        data.setCreateDatetime(new Date());
         shareRecordDAO.insert(data);
 
         return code;

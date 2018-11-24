@@ -8,7 +8,9 @@ package com.ogc.standard.enums;
  */
 public enum EGiftOrderStatus {
 
-    TO_CLAIM("0", "待认领"), CLAIMED("1", "已认领"), EXPIRED("2", "已过期");
+    TO_CLAIM("0", "待认领"), TO_SEND("1", "待发货"), FINSHED("2", "已完成"),
+
+    EXPIRED("3", "已过期");
 
     EGiftOrderStatus(String code, String value) {
         this.code = code;

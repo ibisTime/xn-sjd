@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.IGroupAdoptOrderAO;
 import com.ogc.standard.ao.IUserAO;
+import com.ogc.standard.ao.IWeChatAO;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IAdoptOrderTreeBO;
 import com.ogc.standard.bo.IAgentUserBO;
@@ -101,6 +102,9 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
 
     @Autowired
     private IAgentUserBO agentUserBO;
+
+    @Autowired
+    private IWeChatAO weChatAO;
 
     @Override
     @Transactional
@@ -251,7 +255,13 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
                 EJourBizTypeUser.ADOPT_COLLECT.getValue(), data.getAmount());
             result = new PayOrderRes(signOrder);
         } else if (EPayType.WEIXIN_H5.getCode().equals(payType)) {// 微信支付
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "暂不支持微信支付");
+            groupAdoptOrderBO.refreshPayGroup(data, payType, deductRes);
+
+            User user = userBO.getUser(data.getApplyUser());
+            result = weChatAO.getPrepayIdH5(data.getApplyUser(),
+                user.getH5OpenId(), ESysUser.SYS_USER.getCode(), data.getCode(),
+                data.getCode(), EJourBizTypeUser.ADOPT_COLLECT.getCode(),
+                EJourBizTypeUser.ADOPT_COLLECT.getValue(), data.getAmount());
         }
         return result;
     }

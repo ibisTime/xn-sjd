@@ -15,6 +15,13 @@
 		<result column="grad_datatime" property="gradDatetime" />
 		<result column="work_time" property="workTime" />
 		<result column="pdf" property="pdf" />
+		<result column="id_pic" property="idPic" />
+		<result column="company_name" property="companyName" />
+		<result column="bussiness_license_id" property="bussinessLicenseId" />
+		<result column="company_introduce" property="companyIntroduce" />
+		<result column="bussiness_license" property="bussinessLicense" />
+		<result column="person_auth_status" property="personAuthStatus" />
+		<result column="company_auth_status" property="companyAuthStatus" />
 	</resultMap>
 	
 	<sql id="where_condition">
@@ -53,6 +60,13 @@
 		,t.grad_datetime
 		,t.work_time
 		,t.pdf
+		,t.id_pic
+		,t.company_name
+		,t.bussiness_license_id
+		,t.company_introduce
+		,t.bussiness_license
+		,t.person_auth_status
+		,t.company_auth_status
 		FROM
 		tstd_user_ext t
 		<include refid="where_condition"/>
@@ -99,6 +113,27 @@
 		</if>
 		<if test="pdf != null and pdf != '' ">
 			,pdf=#{pdf}
+		</if>
+		<if test="idPic != null and idPic != '' ">
+			,id_pic=#{idPic}
+		</if>
+		<if test="companyName != null and companyName != '' ">
+			,company_name=#{companyName}
+		</if>
+		<if test="bussinessLicenseId != null and bussinessLicenseId != '' ">
+			,bussiness_license_id=#{bussinessLicenseId}
+		</if>
+		<if test="companyIntroduce != null and companyIntroduce != '' ">
+			,company_introduce=#{companyIntroduce}
+		</if>
+		<if test="bussinessLicense != null and bussinessLicense != '' ">
+			,bussiness_license=#{bussinessLicense}
+		</if>
+		<if test="personAuthStatus != null and personAuthStatus != '' ">
+			,person_auth_status=#{personAuthStatus}
+		</if>
+		<if test="companyAuthStatus != null and companyAuthStatus != '' ">
+			,company_auth_status=#{companyAuthStatus}
 		</if>
 		WHERE
 		user_id=#{userId}

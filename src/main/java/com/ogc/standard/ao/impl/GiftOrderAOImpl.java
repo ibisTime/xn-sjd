@@ -68,9 +68,6 @@ public class GiftOrderAOImpl implements IGiftOrderAO {
         if (!EGiftOrderStatus.TO_CLAIM.getCode().equals(data.getStatus())) {
             throw new BizException("xn0000", "礼物不是待认领状态");
         }
-        if (new Date().getTime() > data.getInvalidDatetime().getTime()) {
-            throw new BizException("xn0000", "礼物已失效");
-        }
         Address address = addressBO.getAddress(req.getAddressCode());
 
         data.setReceiver(address.getAddressee());
@@ -81,9 +78,19 @@ public class GiftOrderAOImpl implements IGiftOrderAO {
 
         data.setReMobile(address.getMobile());
         data.setClaimer(req.getClaimer());
-        data.setStatus(EGiftOrderStatus.CLAIMED.getCode());
+        data.setStatus(EGiftOrderStatus.TO_SEND.getCode());
         data.setClaimDatetime(new Date());
         giftOrderBO.refreshGiftOrder(data);
+    }
+
+    @Override
+    public void sendGift(String code) {
+        GiftOrder data = giftOrderBO.getGiftOrder(code);
+        if (!EGiftOrderStatus.TO_SEND.getCode().equals(data.getStatus())) {
+            throw new BizException("xn0000", "礼物不是待发货状态");
+        }
+
+        giftOrderBO.refreshSendGift(code);
     }
 
     @Override

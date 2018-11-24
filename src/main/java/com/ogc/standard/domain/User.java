@@ -181,6 +181,16 @@ public class User extends ABaseDO {
     // 自我介绍
     private String introduce;
 
+    private UserExt userExt;
+
+    public UserExt getUserExt() {
+        return userExt;
+    }
+
+    public void setUserExt(UserExt userExt) {
+        this.userExt = userExt;
+    }
+
     public List<String> getUserRefereeList() {
         return userRefereeList;
     }

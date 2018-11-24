@@ -26,6 +26,10 @@ public class ShareRecord extends ABaseDO {
     // 分享时间
     private Date createDatetime;
 
+    /**************DB Properties**************/
+    // 分享人
+    private String userName;
+
     public void setCode(String code) {
         this.code = code;
     }
@@ -56,6 +60,14 @@ public class ShareRecord extends ABaseDO {
 
     public Date getCreateDatetime() {
         return createDatetime;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
 }

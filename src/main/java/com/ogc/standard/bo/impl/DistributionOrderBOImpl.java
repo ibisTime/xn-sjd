@@ -120,7 +120,7 @@ public class DistributionOrderBOImpl implements IDistributionOrderBO {
             Double adoptDkRate = Double
                 .valueOf(configMap.get(SysConstants.ADOPT_DK_RATE));// 1人民币兑换多少积分
 
-            cnyAmount = AmountUtil.mul(amount, maxJfdkRate);
+            cnyAmount = AmountUtil.mul(amount, maxJfdkRate * 0.01);
             jfAmount = AmountUtil.mul(cnyAmount, adoptDkRate);
         }
 
@@ -141,7 +141,7 @@ public class DistributionOrderBOImpl implements IDistributionOrderBO {
             Double adoptDkRate = Double
                 .valueOf(configMap.get(SysConstants.PRESELL_DK_RATE));// 1人民币兑换多少积分
 
-            cnyAmount = AmountUtil.mul(amount, maxJfdkRate);
+            cnyAmount = AmountUtil.mul(amount, maxJfdkRate * 0.01);
             jfAmount = AmountUtil.mul(cnyAmount, adoptDkRate);
         }
 

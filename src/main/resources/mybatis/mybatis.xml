@@ -85,5 +85,7 @@
 		<typeAlias alias="groupOrder" type="com.ogc.standard.domain.GroupOrder"/>
 		<typeAlias alias="barrage" type="com.ogc.standard.domain.Barrage"/>
 		
+		<typeAlias alias="companyChannel" type="com.ogc.standard.domain.CompanyChannel"/>
+		
 	</typeAliases>
 </configuration>

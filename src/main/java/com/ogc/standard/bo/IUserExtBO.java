@@ -30,4 +30,13 @@ public interface IUserExtBO extends IPaginableBO<UserExt> {
 
     // 绑定邮箱
     public void refreshEmail(UserExt data);
+
+    // 个人认证
+    public void personAuth(String userId, String idPic, String introduce);
+
+    // 企业认证
+    public void companyAuth(String userId, String companyName,
+            String companyIntroduce, String bussinessLicenseId,
+            String bussinessLicense);
+
 }

@@ -232,3 +232,17 @@ ADD COLUMN `back_jf_amount` DECIMAL(18,8) NULL COMMENT '积分返点金额' AFTE
 
 ALTER TABLE `tys_group_order` 
 ADD COLUMN `presell_type` VARCHAR(4) NULL COMMENT '预售类型' AFTER `group_code`;
+
+#V2.0.0 3-1
+ALTER TABLE `tstd_user_ext` 
+ADD COLUMN `id_pic` TEXT NULL COMMENT '身份证照' AFTER `pdf`,
+ADD COLUMN `company_name` VARCHAR(255) NULL COMMENT '企业名称' AFTER `id_pic`,
+ADD COLUMN `bussiness_license_id` VARCHAR(255) NULL COMMENT '营业执照号' AFTER `company_name`,
+ADD COLUMN `company_introduce` TEXT NULL COMMENT '企业简介' AFTER `bussiness_license_id`,
+ADD COLUMN `bussiness_license` TEXT NULL COMMENT '营业执照' AFTER `company_introduce`;
+
+ALTER TABLE `tstd_user_ext` 
+ADD COLUMN `person_auth_status` VARCHAR(4) NULL COMMENT '个人认证状态' AFTER `bussiness_license`,
+ADD COLUMN `company_auth_status` VARCHAR(4) NULL COMMENT '企业认证状态' AFTER `person_auth_status`;
+
+INSERT INTO `tstd_company_channel` (`company_code`, `company_name`, `channel_type`, `status`, `channel_company`, `private_key1`, `private_key2`, `system_code`) VALUES ('CD-SJD0000025', '时间岛', '35', '1', '1481010032', '3a9f4e501a7d8d43981a68d0978c58d8', 'wxb0df94ba24824c3e', 'CD-SJD0000025');

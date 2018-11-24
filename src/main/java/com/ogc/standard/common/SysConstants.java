@@ -1,6 +1,8 @@
 package com.ogc.standard.common;
 
 public class SysConstants {
+    // ip
+    public static String IP = "192.168.1.1";
 
     // 七牛云图片配置
     public static String QINIU_ACCESS_KEY = "qiniu_access_key";

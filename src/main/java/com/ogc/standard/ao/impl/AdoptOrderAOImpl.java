@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.IAdoptOrderAO;
 import com.ogc.standard.ao.IUserAO;
+import com.ogc.standard.ao.IWeChatAO;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IAdoptOrderBO;
 import com.ogc.standard.bo.IAdoptOrderTreeBO;
@@ -42,6 +43,7 @@ import com.ogc.standard.domain.Tree;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.dto.res.BooleanRes;
 import com.ogc.standard.dto.res.PayOrderRes;
+import com.ogc.standard.dto.res.XN002501Res;
 import com.ogc.standard.dto.res.XN629048Res;
 import com.ogc.standard.enums.EAdoptOrderStatus;
 import com.ogc.standard.enums.EAdoptOrderTreeStatus;
@@ -106,6 +108,9 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
 
     @Autowired
     private ISmsBO smsBO;
+
+    @Autowired
+    private IWeChatAO weChatAO;
 
     @Override
     @Transactional
@@ -255,7 +260,8 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
                 EJourBizTypeUser.ADOPT.getValue(), data.getAmount());
             result = new PayOrderRes(signOrder);
         } else if (EPayType.WEIXIN_H5.getCode().equals(payType)) {// 微信支付
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "暂不支持微信支付");
+            adoptOrderBO.refreshPayGroup(data, payType, deductRes);
+            result = toPayAdoptOrderWeChat(data);
         }
         return result;
     }
@@ -416,6 +422,15 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "订单号[" + data.getCode() + "]支付重复回调");
         }
+    }
+
+    private Object toPayAdoptOrderWeChat(AdoptOrder data) {
+        User user = userBO.getUser(data.getApplyUser());
+        XN002501Res prepayIdH5 = weChatAO.getPrepayIdH5(data.getApplyUser(),
+            user.getH5OpenId(), ESysUser.SYS_USER.getCode(), data.getCode(),
+            data.getCode(), EJourBizTypeUser.ADOPT.getCode(),
+            EJourBizTypeUser.ADOPT.getValue(), data.getAmount());
+        return prepayIdH5;
     }
 
     public void doCancelAdoptOrder() {

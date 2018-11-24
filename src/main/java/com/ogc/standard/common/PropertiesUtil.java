@@ -51,5 +51,8 @@ public class PropertiesUtil {
 
         public static String ALIPAY_PROVIDERID = props
             .getProperty("alipay.providerid");
+
+        public static String WECHAT_H5_BACKURL = props
+            .getProperty("WECHAT_H5_BACKURL");
     }
 }

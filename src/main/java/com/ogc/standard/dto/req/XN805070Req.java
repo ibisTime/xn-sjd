@@ -18,6 +18,8 @@ public class XN805070Req {
 
     private String idNo;
 
+    private String birthday;
+
     public String getUserId() {
         return userId;
     }
@@ -65,4 +67,13 @@ public class XN805070Req {
     public void setIdNo(String idNo) {
         this.idNo = idNo;
     }
+
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
+
 }

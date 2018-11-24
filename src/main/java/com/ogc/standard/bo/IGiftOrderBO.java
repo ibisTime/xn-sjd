@@ -24,6 +24,9 @@ public interface IGiftOrderBO extends IPaginableBO<GiftOrder> {
     // 更新过期礼物
     public void refreshExpireGift(String code);
 
+    // 发货
+    public void refreshSendGift(String code);
+
     public List<GiftOrder> queryGiftOrderList(GiftOrder condition);
 
     public GiftOrder getGiftOrder(String code);

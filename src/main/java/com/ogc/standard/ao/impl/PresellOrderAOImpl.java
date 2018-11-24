@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.IPresellOrderAO;
 import com.ogc.standard.ao.IUserAO;
+import com.ogc.standard.ao.IWeChatAO;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IAdoptOrderTreeBO;
 import com.ogc.standard.bo.IAgentUserBO;
@@ -118,6 +119,9 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
 
     @Autowired
     private IAgentUserBO agentUserBO;
+
+    @Autowired
+    private IWeChatAO weChatAO;
 
     @Override
     @Transactional
@@ -224,7 +228,14 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
 
         } else if (EPayType.WEIXIN_H5.getCode().equals(payType)) {// 微信支付
 
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "暂不支持微信支付");
+            presellOrderBO.refreshPayGroup(presellOrder, payType, deductRes);
+
+            User user = userBO.getUser(presellOrder.getApplyUser());
+            result = weChatAO.getPrepayIdH5(presellOrder.getApplyUser(),
+                user.getH5OpenId(), ESysUser.SYS_USER.getCode(),
+                presellOrder.getCode(), presellOrder.getCode(),
+                EJourBizTypeUser.PRESELL.getCode(),
+                EJourBizTypeUser.PRESELL.getValue(), presellOrder.getAmount());
 
         }
 

@@ -57,4 +57,9 @@ public class GiftOrderDAOImpl extends AMybatisTemplate
         return super.update(NAMESPACE.concat("update_giftOrder"), data);
     }
 
+    @Override
+    public int updateSendGift(GiftOrder data) {
+        return super.update(NAMESPACE.concat("update_sendGiftOrder"), data);
+    }
+
 }

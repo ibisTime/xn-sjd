@@ -9,6 +9,7 @@ import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.dao.IUserExtDAO;
 import com.ogc.standard.domain.UserExt;
+import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.exception.BizException;
 
 @Component
@@ -47,6 +48,34 @@ public class UserExtBOImpl extends PaginableBOImpl<UserExt>
         userExtDAO.insert(data);
         return userId;
 
+    }
+
+    @Override
+    public void personAuth(String userId, String idPic, String introduce) {
+        UserExt data = getUserExt(userId);
+        UserExt userExt = new UserExt();
+        userExt.setGender(data.getGender());
+        userExt.setUserId(userId);
+        userExt.setIdPic(idPic);
+        userExt.setIntroduce(introduce);
+        userExt.setPersonAuthStatus(EBoolean.YES.getCode());
+        userExtDAO.updateUserExt(userExt);
+    }
+
+    @Override
+    public void companyAuth(String userId, String companyName,
+            String companyIntroduce, String bussinessLicenseId,
+            String bussinessLicense) {
+        UserExt data = getUserExt(userId);
+        UserExt userExt = new UserExt();
+        userExt.setUserId(userId);
+        userExt.setGender(data.getGender());
+        userExt.setCompanyName(companyName);
+        userExt.setCompanyIntroduce(companyIntroduce);
+        userExt.setBussinessLicenseId(bussinessLicenseId);
+        userExt.setBussinessLicense(bussinessLicense);
+        userExt.setCompanyAuthStatus(EBoolean.YES.getCode());
+        userExtDAO.updateUserExt(userExt);
     }
 
     @Override

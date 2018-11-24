@@ -39,6 +39,8 @@ public enum EJourBizTypeUser {
 
     PRESELL("presell", "购买预售"),
 
+    CONSIGN_SELL("consign_sell", "购买寄售"),
+
     COMMODITY("commodity", "商城购买"),
 
     AFTER_SALE("after_sale", "售后退款"),

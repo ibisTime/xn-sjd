@@ -455,7 +455,7 @@
 	<update id="full_user" parameterType="user">
 		UPDATE tstd_user
 		SET
-		realName = #{realName}
+		real_name = #{realName}
 		,id_kind = #{idKind}
 		,id_no = #{idNo}
 		WHERE

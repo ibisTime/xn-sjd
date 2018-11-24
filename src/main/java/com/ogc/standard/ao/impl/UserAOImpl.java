@@ -352,9 +352,9 @@ public class UserAOImpl implements IUserAO {
                 .getAccount(ESystemAccount.SYS_ACOUNT_JF_POOL.getCode());
 
             // 积分池不足时将剩余积分转给用户
-            if (quantity.compareTo(sysJfAccount.getAmount()) == 1) {
-                quantity = sysJfAccount.getAmount();
-            }
+            // if (quantity.compareTo(sysJfAccount.getAmount()) == 1) {
+            // quantity = sysJfAccount.getAmount();
+            // }
 
             String note = "获得" + AmountUtil.div(quantity, 1000L).intValue()
                     + "积分，已连续登录" + continueLoginDay + "天";
@@ -366,26 +366,38 @@ public class UserAOImpl implements IUserAO {
 
     // 微信登录送积分
     private BigDecimal addLoginAmount(User user) {
-        Map<String, String> configMap = sysConfigBO
-            .getConfigsMap(ESysConfigType.JF_RULE.getCode());
-        BigDecimal quantity = new BigDecimal(
-            configMap.get(SysConstants.SIGN_JF));
-        quantity = AmountUtil.mul(quantity, 1000L);
+        BigDecimal quantity = BigDecimal.ZERO;
 
-        Account userJfAccount = accountBO.getAccountByUser(user.getUserId(),
-            ECurrency.JF.getCode());
-        Account sysJfAccount = accountBO
-            .getAccount(ESystemAccount.SYS_ACOUNT_JF_POOL.getCode());
+        if (signLogBO.isFirstCheckIn(user.getUserId(),
+            ESignLogType.LOGIN.getCode())) {
+            // 添加积分
+            long continueLoginDay = signLogAO.keepCheckIn(user.getUserId(),
+                ESignLogType.LOGIN.getCode());// 连续登录天数
 
-        // 积分池不足时将剩余积分转给用户
-        if (quantity.compareTo(sysJfAccount.getAmount()) == 1) {
-            quantity = sysJfAccount.getAmount();
+            Map<String, String> configMap = sysConfigBO
+                .getConfigsMap(ESysConfigType.JF_RULE.getCode());
+            BigDecimal continueLoginRate = new BigDecimal(
+                configMap.get(SysConstants.CONTINUE_LOGIN_RATE));
+            quantity = AmountUtil.mul(quantity, 1000L);
+            quantity = AmountUtil.mul(quantity, continueLoginDay);// 连续签到天数
+            quantity = AmountUtil.mul(quantity, continueLoginRate);// 连续签到比例
+
+            Account userJfAccount = accountBO.getAccountByUser(user.getUserId(),
+                ECurrency.JF.getCode());
+            Account sysJfAccount = accountBO
+                .getAccount(ESystemAccount.SYS_ACOUNT_JF_POOL.getCode());
+
+            // 积分池不足时将剩余积分转给用户
+            // if (quantity.compareTo(sysJfAccount.getAmount()) == 1) {
+            // quantity = sysJfAccount.getAmount();
+            // }
+
+            accountBO.transAmount(sysJfAccount, userJfAccount, quantity,
+                EJourBizTypeUser.LOGIN.getCode(),
+                EJourBizTypePlat.LOGIN.getCode(),
+                EJourBizTypeUser.LOGIN.getValue(),
+                EJourBizTypePlat.LOGIN.getValue(), user.getUserId());
         }
-
-        accountBO.transAmount(sysJfAccount, userJfAccount, quantity,
-            EJourBizTypeUser.LOGIN.getCode(), EJourBizTypePlat.LOGIN.getCode(),
-            EJourBizTypeUser.LOGIN.getValue(),
-            EJourBizTypePlat.LOGIN.getValue(), user.getUserId());
 
         return quantity;
     }
@@ -692,6 +704,8 @@ public class UserAOImpl implements IUserAO {
             user.setGradDatetime(data.getGradDatetime());
         }
 
+        user.setUserExt(data);
+
         // 推荐人转义
         initUserRef(user);
 
@@ -895,6 +909,7 @@ public class UserAOImpl implements IUserAO {
         UserExt data = userExtBO.getUserExt(req.getUserId());
         data.setGender(req.getGender());
         data.setAge(req.getAge());
+        data.setBirthday(req.getBirthday());
         userExtBO.refreshUserExt(data);
 
     }
@@ -966,10 +981,14 @@ public class UserAOImpl implements IUserAO {
             // Step4：根据openId，unionId从数据库中查询用户信息
             User dbUser = userBO.doGetUserByOpenId(h5OpenId);
             if (null != dbUser) {// 如果user存在，说明用户授权登录过，直接登录
+                String isNeedMobile = EBoolean.YES.getCode();
+                if (StringUtils.isNotBlank(dbUser.getMobile())) {
+                    isNeedMobile = EBoolean.NO.getCode();
+                }
 
                 BigDecimal jfAmount = addLoginAmount(dbUser);// 每天登录送积分
-                result = new XN805051Res(dbUser.getUserId(),
-                    EBoolean.NO.getCode(), jfAmount);
+                result = new XN805051Res(dbUser.getUserId(), isNeedMobile,
+                    jfAmount);
 
             } else {
 
@@ -982,14 +1001,14 @@ public class UserAOImpl implements IUserAO {
                     gender = ESex.WOMEN.getCode();
                 }
 
-                // Step5：判断注册是否传手机号，有则注册，无则反馈
-                if (EBoolean.YES.getCode().equals(req.getIsNeedMobile())) {
-                    result = doWxLoginRegMobile(req, unionId, h5OpenId,
-                        nickname, photo, gender);
-                } else {
-                    result = doWxLoginReg(req, unionId, h5OpenId, nickname,
-                        photo, gender);
-                }
+                // // Step5：判断注册是否传手机号，有则注册，无则反馈
+                // if (EBoolean.YES.getCode().equals(req.getIsNeedMobile())) {
+                // result = doWxLoginRegMobile(req, unionId, h5OpenId,
+                // nickname, photo, gender);
+                // } else {
+                result = doWxLoginReg(req, unionId, h5OpenId, nickname, photo,
+                    gender);
+                // }
             }
         } catch (Exception e) {
             throw new BizException("xn000000", e.getMessage());
@@ -1045,7 +1064,7 @@ public class UserAOImpl implements IUserAO {
         // 分配账户
         accountAO.distributeAccount(userId);
 
-        result = new XN805051Res(userId, EBoolean.NO.getCode());
+        result = new XN805051Res(userId, EBoolean.YES.getCode());
         return result;
     }
 
@@ -1154,6 +1173,22 @@ public class UserAOImpl implements IUserAO {
         }
 
         userBO.refreshLevel(userId, userLevel);
+    }
+
+    @Override
+    public void personAuth(String userId, String realName, String idNo,
+            String idPic, String introduce) {
+        userBO.refreshIdentity(userId, realName, null, idNo);
+
+        userExtBO.personAuth(userId, idPic, introduce);
+    }
+
+    @Override
+    public void companyAuth(String userId, String companyName,
+            String companyIntroduce, String bussinessLicenseId,
+            String bussinessLicense) {
+        userExtBO.companyAuth(userId, companyName, companyIntroduce,
+            bussinessLicenseId, bussinessLicense);
     }
 
     @Override

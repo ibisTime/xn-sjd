@@ -74,6 +74,16 @@ public class GiftOrderBOImpl extends PaginableBOImpl<GiftOrder>
     }
 
     @Override
+    public void refreshSendGift(String code) {
+        if (StringUtils.isNotBlank(code)) {
+            GiftOrder giftOrder = new GiftOrder();
+            giftOrder.setCode(code);
+            giftOrder.setStatus(EGiftOrderStatus.FINSHED.getCode());
+            giftOrderDAO.updateSendGift(giftOrder);
+        }
+    }
+
+    @Override
     public List<GiftOrder> queryGiftOrderList(GiftOrder condition) {
         return giftOrderDAO.selectList(condition);
     }

@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.IGroupOrderAO;
 import com.ogc.standard.ao.IUserAO;
+import com.ogc.standard.ao.IWeChatAO;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IAlipayBO;
 import com.ogc.standard.bo.IDeriveGroupBO;
@@ -96,6 +97,9 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
     @Autowired
     private IJourBO jourBO;
 
+    @Autowired
+    private IWeChatAO weChatAO;
+
     @Override
     @Transactional
     public void cancelGroupOrder(String code, String remark) {
@@ -153,7 +157,16 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
 
         } else if (EPayType.WEIXIN_H5.getCode().equals(payType)) {// 微信支付
 
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "暂不支持微信支付");
+            groupOrderBO.refreshPayGroup(groupOrder.getCode(), payType,
+                deductRes);
+
+            User user = userBO.getUser(groupOrder.getApplyUser());
+            result = weChatAO.getPrepayIdH5(groupOrder.getApplyUser(),
+                user.getH5OpenId(), ESysUser.SYS_USER.getCode(),
+                groupOrder.getCode(), groupOrder.getCode(),
+                EJourBizTypeUser.ADOPT_COLLECT.getCode(),
+                EJourBizTypeUser.ADOPT_COLLECT.getValue(),
+                groupOrder.getAmount());
 
         }
 
@@ -209,10 +222,10 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
         Account ownerCnyAccount = accountBO.getAccountByUser(data.getOwnerId(),
             ECurrency.CNY.getCode());
         accountBO.transAmount(userCnyAccount, ownerCnyAccount, payAmount,
-            EJourBizTypeUser.PRESELL.getCode(),
-            EJourBizTypePlat.PRESELL.getCode(),
-            EJourBizTypeUser.PRESELL.getValue(),
-            EJourBizTypePlat.PRESELL.getValue(), data.getCode());
+            EJourBizTypeUser.CONSIGN_SELL.getCode(),
+            EJourBizTypePlat.CONSIGN_SELL.getCode(),
+            EJourBizTypeUser.CONSIGN_SELL.getValue(),
+            EJourBizTypePlat.CONSIGN_SELL.getValue(), data.getCode());
 
         // 用户升级
         userAO.upgradeUserLevel(data.getApplyUser());

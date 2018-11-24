@@ -15,7 +15,6 @@ public class XN629323Req {
     private String code;
 
     // 收货地址编号
-    @NotBlank
     private String addressCode;
 
     // 认领人

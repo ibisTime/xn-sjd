@@ -509,6 +509,13 @@ CREATE TABLE `tstd_user_ext` (
   `grad_datetime` datetime DEFAULT NULL COMMENT '毕业时间',
   `work_time` varchar(4) DEFAULT NULL COMMENT '工作年限',
   `pdf` varchar(255) DEFAULT NULL COMMENT '用户资料',
+  `id_pic` TEXT DEFAULT NULL COMMENT '身份证照',
+  `company_name` varchar(255) DEFAULT NULL COMMENT '企业名称',
+  `bussiness_license_id` varchar(255) DEFAULT NULL COMMENT '营业执照号',
+  `company_introduce` TEXT DEFAULT NULL COMMENT '企业简介',
+  `bussiness_license` TEXT DEFAULT NULL COMMENT '营业执照',
+  `person_auth_status` varchar(4) DEFAULT NULL COMMENT '个人认证状态',
+  `company_auth_status` varchar(4) DEFAULT NULL COMMENT '企业认证状态',
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1402,5 +1409,26 @@ CREATE TABLE `tsj_barrage` (
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='弹幕';
 
+DROP TABLE IF EXISTS `tstd_company_channel`;
+CREATE TABLE `tstd_company_channel` (
+  `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT '编号（自增长）',
+  `company_code` varchar(32) DEFAULT NULL COMMENT '公司编号',
+  `company_name` varchar(32) DEFAULT NULL COMMENT '公司名称',
+  `channel_type` varchar(4) DEFAULT NULL COMMENT '渠道类型',
+  `status` varchar(4) DEFAULT NULL COMMENT '状态（启用/不启用）',
+  `channel_company` varchar(32) DEFAULT NULL COMMENT '渠道给公司的代号',
+  `private_key1` text COMMENT '秘钥1',
+  `private_key2` text COMMENT '私钥2',
+  `private_key3` text COMMENT '私钥3',
+  `private_key4` text COMMENT '私钥4',
+  `private_key5` text COMMENT '私钥5',
+  `page_url` varchar(255) DEFAULT NULL COMMENT '界面正确回调地址',
+  `error_url` varchar(255) DEFAULT NULL COMMENT '界面错误回调地址',
+  `back_url` varchar(255) DEFAULT NULL COMMENT '服务器回调地址',
+  `fee` bigint(32) DEFAULT NULL COMMENT '手续费',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  `system_code` varchar(32) NOT NULL COMMENT '系统编号',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4
 
 SET FOREIGN_KEY_CHECKS = 1;
