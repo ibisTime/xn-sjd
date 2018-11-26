@@ -257,11 +257,18 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
             String signOrder = alipayBO.getSignedOrder(data.getApplyUser(),
                 ESysUser.SYS_USER.getCode(), data.getPayGroup(),
                 EJourBizTypeUser.ADOPT.getCode(),
-                EJourBizTypeUser.ADOPT.getValue(), data.getAmount());
+                EJourBizTypeUser.ADOPT.getValue(),
+                data.getAmount().subtract(deductRes.getCnyAmount()));
             result = new PayOrderRes(signOrder);
         } else if (EPayType.WEIXIN_H5.getCode().equals(payType)) {// 微信支付
             adoptOrderBO.refreshPayGroup(data, payType, deductRes);
-            result = toPayAdoptOrderWeChat(data);
+
+            User user = userBO.getUser(data.getApplyUser());
+            result = weChatAO.getPrepayIdH5(data.getApplyUser(),
+                user.getH5OpenId(), ESysUser.SYS_USER.getCode(), data.getCode(),
+                data.getCode(), EJourBizTypeUser.ADOPT.getCode(),
+                EJourBizTypeUser.ADOPT.getValue(),
+                data.getAmount().subtract(deductRes.getCnyAmount()));
         }
         return result;
     }

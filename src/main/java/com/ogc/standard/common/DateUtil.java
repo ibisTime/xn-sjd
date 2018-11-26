@@ -399,7 +399,8 @@ public class DateUtil {
         SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
 
         String today = fmt.format(new Date()).toString();
-        String date = fmt.format(d).toString();
+        String date = fmt.format(strToDate(d, FRONT_DATE_FORMAT_STRING))
+            .toString();
 
         if (date.equals(today)) {
             isToday = true;
@@ -409,11 +410,7 @@ public class DateUtil {
     }
 
     public static void main(String[] args) {
-
-        for (int i = 1; i < 10; i++) {
-            System.out.print(i / 3);
-            System.out.println(i % 3);
-        }
+        System.out.println(isToday("2018-08-03"));
     }
 
     /**
