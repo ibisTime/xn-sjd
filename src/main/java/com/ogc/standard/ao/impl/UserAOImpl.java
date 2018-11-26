@@ -1059,7 +1059,7 @@ public class UserAOImpl implements IUserAO {
         // 分配账户
         accountAO.distributeAccount(userId);
 
-        result = new XN805051Res(userId, EBoolean.YES.getCode());
+        result = new XN805051Res(userId, EBoolean.NO.getCode());
         return result;
     }
 
@@ -1111,6 +1111,13 @@ public class UserAOImpl implements IUserAO {
                 photo, gender);
             // 分配账户
             accountAO.distributeAccount(userId);
+
+            // C端自行添加自己为好友
+            userRelationBO.saveUserRelation(userId, userId,
+                EUserReleationType.FRIEND.getCode());
+
+            // ext中添加数据
+            userExtBO.addUserExt(userId);
             mobileUserId = userId;
         } else {
             userBO.refreshWxInfo(mobileUserId, unionId, h5OpenId, nickname,
