@@ -10,9 +10,9 @@ import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
 
 /**
- * 微信登录
- * @author: dl 
- * @since: 2018年8月20日 下午5:44:39 
+ * 微信登录(强绑手机号)
+ * @author: xieyj 
+ * @since: 2018年11月26日 上午10:57:02 
  * @history:
  */
 public class XN805051 extends AProcessor {
@@ -22,9 +22,7 @@ public class XN805051 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-
         return userAO.doLoginWeChat(req);
-
     }
 
     @Override

@@ -1,7 +1,9 @@
 package com.ogc.standard.dto.req;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 /**
- * 微信登录
+ * 微信登录(强制绑定手机号)
  * @author: silver 
  * @since: Oct 15, 2018 10:24:01 PM 
  * @history:
@@ -9,19 +11,19 @@ package com.ogc.standard.dto.req;
 public class XN805051Req {
 
     // 开放编号（必填）
+    @NotBlank
     private String code;
 
     // 类型(必填 微信h5=wx_h5)
+    @NotBlank
     private String type;
 
-    // 是否强制绑定手机号
-    private String isNeedMobile;
+    // 类型(必填)
+    @NotBlank
+    private String kind;
 
     // 手机号（选填）
     private String mobile;
-
-    // 类型(必填)
-    private String kind;
 
     // 短信验证码（选填）
     private String smsCaptcha;
@@ -46,14 +48,6 @@ public class XN805051Req {
 
     public void setType(String type) {
         this.type = type;
-    }
-
-    public String getIsNeedMobile() {
-        return isNeedMobile;
-    }
-
-    public void setIsNeedMobile(String isNeedMobile) {
-        this.isNeedMobile = isNeedMobile;
     }
 
     public String getMobile() {

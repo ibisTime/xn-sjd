@@ -6,7 +6,7 @@ public class XN805051Res {
     // 用户编号
     private String userId;
 
-    // 是否绑定手机号
+    // 是否需要绑定手机号
     private String isNeedMobile;
 
     // 送积分
@@ -37,8 +37,7 @@ public class XN805051Res {
         this.isNeedMobile = isNeedMobile;
     }
 
-    public XN805051Res(String userId, String isNeedMobile,
-            BigDecimal jfAmount) {
+    public XN805051Res(String userId, String isNeedMobile, BigDecimal jfAmount) {
         super();
         this.userId = userId;
         this.isNeedMobile = isNeedMobile;

@@ -146,16 +146,16 @@ public class UserAOImpl implements IUserAO {
                 User refereeUser = userBO.getUserByMobile(req.getUserReferee());
                 userReferee = refereeUser.getUserId();
                 agentId = refereeUser.getAgentId();
-            } else if (EUserRefereeType.AGENT.getCode()
-                .equals(req.getUserRefereeType())) {
-                AgentUser agentUser = agentUserBO
-                    .getAgentUserByMobile(req.getUserReferee());
+            } else if (EUserRefereeType.AGENT.getCode().equals(
+                req.getUserRefereeType())) {
+                AgentUser agentUser = agentUserBO.getAgentUserByMobile(req
+                    .getUserReferee());
                 userReferee = agentUser.getUserId();
                 agentId = agentUser.getUserId();
-            } else if (EUserRefereeType.SALEMANS.getCode()
-                .equals(req.getUserRefereeType())) {
-                AgentUser agentUser = agentUserBO
-                    .getAgentUserByMobile(req.getUserReferee());
+            } else if (EUserRefereeType.SALEMANS.getCode().equals(
+                req.getUserRefereeType())) {
+                AgentUser agentUser = agentUserBO.getAgentUserByMobile(req
+                    .getUserReferee());
                 userReferee = agentUser.getUserId();
                 agentId = agentUser.getParentUserId();
             } else {
@@ -254,8 +254,8 @@ public class UserAOImpl implements IUserAO {
             req.setLoginPwd(EUserPwd.InitPwd8.getCode());
         }
         user.setLoginPwd(MD5Util.md5(req.getLoginPwd()));
-        user.setLoginPwdStrength(
-            PwdUtil.calculateSecurityLevel(req.getLoginPwd()));
+        user.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(req
+            .getLoginPwd()));
         user.setLevel(EUserLevel.ZERO.getCode());
         user.setUserReferee(req.getUserReferee());
         user.setIdKind(req.getIdKind());
@@ -313,9 +313,9 @@ public class UserAOImpl implements IUserAO {
         }
         User user = userBO.getUser(userId);
         if (!EUserStatus.NORMAL.getCode().equals(user.getStatus())) {
-            throw new BizException("xn805050",
-                "该账号" + EUserStatus.getMap().get(user.getStatus()).getValue()
-                        + "，请联系工作人员");
+            throw new BizException("xn805050", "该账号"
+                    + EUserStatus.getMap().get(user.getStatus()).getValue()
+                    + "，请联系工作人员");
         }
 
         // 增加登陆日志
@@ -382,8 +382,8 @@ public class UserAOImpl implements IUserAO {
             quantity = AmountUtil.mul(quantity, continueLoginDay);// 连续签到天数
             quantity = AmountUtil.mul(quantity, continueLoginRate);// 连续签到比例
 
-            Account userJfAccount = accountBO.getAccountByUser(user.getUserId(),
-                ECurrency.JF.getCode());
+            Account userJfAccount = accountBO.getAccountByUser(
+                user.getUserId(), ECurrency.JF.getCode());
             Account sysJfAccount = accountBO
                 .getAccount(ESystemAccount.SYS_ACOUNT_JF_POOL.getCode());
 
@@ -420,12 +420,10 @@ public class UserAOImpl implements IUserAO {
         userBO.refreshMobile(userId, newMobile);
 
         // 发送短信
-        smsOutBO.sendSmsOut(oldMobile,
-            String.format(SysConstants.DO_CHANGE_MOBILE_CN,
-                PhoneUtil.hideMobile(oldMobile),
-                DateUtil.dateToStr(new Date(), DateUtil.DATA_TIME_PATTERN_1),
-                newMobile),
-            ECaptchaType.MOBILE_CHANGE.getCode());
+        smsOutBO.sendSmsOut(oldMobile, String.format(
+            SysConstants.DO_CHANGE_MOBILE_CN, PhoneUtil.hideMobile(oldMobile),
+            DateUtil.dateToStr(new Date(), DateUtil.DATA_TIME_PATTERN_1),
+            newMobile), ECaptchaType.MOBILE_CHANGE.getCode());
 
     }
 
@@ -449,12 +447,10 @@ public class UserAOImpl implements IUserAO {
         userBO.refreshMobile(userId, newMobile);
 
         // 发送短信
-        smsOutBO.sendSmsOut(oldMobile,
-            String.format(SysConstants.DO_CHANGE_MOBILE_CN,
-                PhoneUtil.hideMobile(oldMobile),
-                DateUtil.dateToStr(new Date(), DateUtil.DATA_TIME_PATTERN_1),
-                newMobile),
-            ECaptchaType.MOBILE_CHANGE.getCode());
+        smsOutBO.sendSmsOut(oldMobile, String.format(
+            SysConstants.DO_CHANGE_MOBILE_CN, PhoneUtil.hideMobile(oldMobile),
+            DateUtil.dateToStr(new Date(), DateUtil.DATA_TIME_PATTERN_1),
+            newMobile), ECaptchaType.MOBILE_CHANGE.getCode());
     }
 
     @Override
@@ -469,7 +465,8 @@ public class UserAOImpl implements IUserAO {
         smsOutBO.checkCaptcha(mobile, smsCaptcha, "805063");
         userBO.refreshLoginPwd(userId, newLoginPwd);
         // 发送短信
-        smsOutBO.sendSmsOut(mobile,
+        smsOutBO.sendSmsOut(
+            mobile,
             String.format(SysConstants.DO_RESET_LOGIN_PWD_CN,
                 PhoneUtil.hideMobile(mobile)),
             ECaptchaType.LOGIN_PWD_RESET.getCode());
@@ -490,7 +487,8 @@ public class UserAOImpl implements IUserAO {
         userBO.refreshLoginPwd(userId, newLoginPwd);
         // 发送短信
 
-        smsOutBO.sendSmsOut(user.getMobile(),
+        smsOutBO.sendSmsOut(
+            user.getMobile(),
             String.format(SysConstants.DO_MODIFY_LOGIN_PWD_CN,
                 PhoneUtil.hideMobile(user.getMobile())),
             ECaptchaType.MODIFY_LOGIN_PWD.getCode());
@@ -508,8 +506,7 @@ public class UserAOImpl implements IUserAO {
 
     @Override
     @Transactional
-    public void doSetTradePwd(String userId, String tradePwd,
-            String smsCaptcha) {
+    public void doSetTradePwd(String userId, String tradePwd, String smsCaptcha) {
         User user = userBO.getUser(userId);
         // 短信验证码是否正确
         smsOutBO.checkCaptcha(user.getMobile(), smsCaptcha, "805066");
@@ -532,7 +529,8 @@ public class UserAOImpl implements IUserAO {
         smsOutBO.checkCaptcha(mobile, smsCaptcha, "805067");
         userBO.refreshTradePwd(userId, newTradePwd);
         // 发短信
-        smsOutBO.sendSmsOut(mobile,
+        smsOutBO.sendSmsOut(
+            mobile,
             String.format(SysConstants.DO_RESET_TRADE_PWD_CN,
                 PhoneUtil.hideMobile(mobile)),
             ECaptchaType.RESET_TRADE_PWD.getCode());
@@ -548,8 +546,8 @@ public class UserAOImpl implements IUserAO {
             throw new BizException("li01004", "请先实名认证");
         }
         // 证件是否正确
-        if (!(user.getIdKind().equalsIgnoreCase(idKind)
-                && user.getIdNo().equalsIgnoreCase(idNo))) {
+        if (!(user.getIdKind().equalsIgnoreCase(idKind) && user.getIdNo()
+            .equalsIgnoreCase(idNo))) {
             throw new BizException("li01009", "身份证不符合");
         }
         // 短信验证码是否正确
@@ -557,7 +555,8 @@ public class UserAOImpl implements IUserAO {
         smsOutBO.checkCaptcha(mobile, smsCaptcha, "805068");
         userBO.refreshTradePwd(userId, newTradePwd);
         // 发短信
-        smsOutBO.sendSmsOut(mobile,
+        smsOutBO.sendSmsOut(
+            mobile,
             String.format(SysConstants.DO_RESET_TRADE_PWD_CN,
                 PhoneUtil.hideMobile(mobile)),
             ECaptchaType.RESET_TRADE_PWD.getCode());
@@ -584,7 +583,8 @@ public class UserAOImpl implements IUserAO {
         userBO.refreshTradePwd(userId, newTradePwd);
         String mobile = user.getMobile();
         // 发短信
-        smsOutBO.sendSmsOut(mobile,
+        smsOutBO.sendSmsOut(
+            mobile,
             String.format(SysConstants.DO_MODIFY_TRADE_PWD_CN,
                 PhoneUtil.hideMobile(mobile)),
             ECaptchaType.MODIFY_TRADE_PWD.getCode());
@@ -715,15 +715,15 @@ public class UserAOImpl implements IUserAO {
     private void initUserRef(User user) {
         if (StringUtils.isNotBlank(user.getUserReferee())) {
             String mobile = null;
-            if (EUserRefereeType.AGENT.getCode()
-                .equals(user.getUserRefereeType())
-                    || EUserRefereeType.SALEMANS.getCode()
-                        .equals(user.getUserRefereeType())) {
-                AgentUser agentUser = agentUserBO
-                    .getAgentUser(user.getUserReferee());
+            if (EUserRefereeType.AGENT.getCode().equals(
+                user.getUserRefereeType())
+                    || EUserRefereeType.SALEMANS.getCode().equals(
+                        user.getUserRefereeType())) {
+                AgentUser agentUser = agentUserBO.getAgentUser(user
+                    .getUserReferee());
                 mobile = agentUser.getMobile();
-            } else if (EUserRefereeType.USER.getCode()
-                .equals(user.getUserRefereeType())) {
+            } else if (EUserRefereeType.USER.getCode().equals(
+                user.getUserRefereeType())) {
                 User userReferee = userBO.getUser(user.getUserReferee());
                 mobile = userReferee.getMobile();
             }
@@ -736,8 +736,8 @@ public class UserAOImpl implements IUserAO {
 
     @Override
     @Transactional
-    public void doBindMobile(String isSendSms, String mobile, String smsCaptcha,
-            String userId) {
+    public void doBindMobile(String isSendSms, String mobile,
+            String smsCaptcha, String userId) {
         User user = userBO.getUser(userId);
 
         if (user.getMobile() != null) {
@@ -753,13 +753,10 @@ public class UserAOImpl implements IUserAO {
 
         // 发送短信
         if (isSendSms.equals(EBoolean.YES.getCode())) {
-            smsOutBO.sendSmsOut(mobile,
-                String.format(SysConstants.DO_BIND_MOBILE_CN,
-                    PhoneUtil.hideMobile(mobile),
-                    DateUtil.dateToStr(new Date(),
-                        DateUtil.DATA_TIME_PATTERN_1),
-                    mobile),
-                ECaptchaType.MOBILE_CHANGE.getCode());
+            smsOutBO.sendSmsOut(mobile, String.format(
+                SysConstants.DO_BIND_MOBILE_CN, PhoneUtil.hideMobile(mobile),
+                DateUtil.dateToStr(new Date(), DateUtil.DATA_TIME_PATTERN_1),
+                mobile), ECaptchaType.MOBILE_CHANGE.getCode());
         }
 
         // 添加积分
@@ -803,8 +800,7 @@ public class UserAOImpl implements IUserAO {
     }
 
     @Override
-    public void doResetReferee(String userId, String userReferee,
-            String updater) {
+    public void doResetReferee(String userId, String userReferee, String updater) {
         userBO.refreshReferee(userId, userReferee, updater);
     }
 
@@ -812,16 +808,16 @@ public class UserAOImpl implements IUserAO {
     public void doIdentify(String userId, String idKind, String idNo,
             String realName) {
         // 更新用户表
-        userBO.refreshIdentity(userId, realName, EIDKind.IDCard.getCode(),
-            idNo);
+        userBO
+            .refreshIdentity(userId, realName, EIDKind.IDCard.getCode(), idNo);
     }
 
     @Override
     public void doTwoIdentify(String userId, String idKind, String idNo,
             String realName) {
         // 更新用户表
-        userBO.refreshIdentity(userId, realName, EIDKind.IDCard.getCode(),
-            idNo);
+        userBO
+            .refreshIdentity(userId, realName, EIDKind.IDCard.getCode(), idNo);
 
     }
 
@@ -830,8 +826,8 @@ public class UserAOImpl implements IUserAO {
             String realName, String cardNo, String bindMobile) {
         // 三方认证
         // 更新用户表
-        userBO.refreshIdentity(userId, realName, EIDKind.IDCard.getCode(),
-            idNo);
+        userBO
+            .refreshIdentity(userId, realName, EIDKind.IDCard.getCode(), idNo);
 
     }
 
@@ -914,9 +910,9 @@ public class UserAOImpl implements IUserAO {
 
     }
 
+    //
     @Override
     public XN805051Res doLoginWeChat(XN805051Req req) {
-
         // Step1：获取密码参数信息
         Map<String, String> configMap = sysConfigBO
             .getConfigsMap(ESysConfigType.WEIXIN_H5.getCode());
@@ -927,14 +923,16 @@ public class UserAOImpl implements IUserAO {
             appId = configMap.get(SysConstants.WX_H5_ACCESS_KEY);
             appSecret = configMap.get(SysConstants.WX_H5_SECRET_KEY);
         } else {
-            throw new BizException("XN000000", "登录类型不支持");
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "登录类型不支持");
         }
 
         if (StringUtils.isBlank(appId)) {
-            throw new BizException("XN000000", "参数appId配置获取失败，请检查配置");
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "参数appId配置获取失败，请检查配置");
         }
         if (StringUtils.isBlank(appSecret)) {
-            throw new BizException("XN000000", "参数appSecret配置获取失败，请检查配置");
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "参数appSecret配置获取失败，请检查配置");
         }
 
         // Step2：通过Authorization Code获取Access Token
@@ -950,16 +948,17 @@ public class UserAOImpl implements IUserAO {
         XN805051Res result = null;
 
         try {
-            String response = PostSimulater
-                .requestPostForm(WechatConstant.WX_TOKEN_URL, fromProperties);
+            String response = PostSimulater.requestPostForm(
+                WechatConstant.WX_TOKEN_URL, fromProperties);
             res = getMapFromResponse(response);
             accessToken = (String) res.get("access_token");
             if (res.get("error") != null) {
-                throw new BizException("XN000000",
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                     "微信登录失败原因：" + res.get("error"));
             }
             if (StringUtils.isBlank(accessToken)) {
-                throw new BizException("XN000000", "accessToken不能为空");
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                    "accessToken不能为空");
             }
 
             // Step3：使用Access Token来获取用户的OpenID
@@ -970,27 +969,27 @@ public class UserAOImpl implements IUserAO {
             queryParas.put("access_token", accessToken);
             queryParas.put("openid", openId);
             queryParas.put("lang", "zh_CN");
-            wxRes = getMapFromResponse(PostSimulater
-                .requestPostForm(WechatConstant.WX_USER_INFO_URL, queryParas));
+            wxRes = getMapFromResponse(PostSimulater.requestPostForm(
+                WechatConstant.WX_USER_INFO_URL, queryParas));
             String unionId = (String) wxRes.get("unionid");
             String h5OpenId = null;
             if (ESysConfigType.WEIXIN_H5.getCode().equals(req.getType())) {
                 h5OpenId = (String) wxRes.get("openid");
+            } else {
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                    "微信现只支持公众号登录");
             }
 
             // Step4：根据openId，unionId从数据库中查询用户信息
             User dbUser = userBO.doGetUserByOpenId(h5OpenId);
-            if (null != dbUser) {// 如果user存在，说明用户授权登录过，直接登录
-                String isNeedMobile = EBoolean.YES.getCode();
-                if (StringUtils.isNotBlank(dbUser.getMobile())) {
-                    isNeedMobile = EBoolean.NO.getCode();
-                }
-
+            if (null != dbUser && StringUtils.isNotBlank(dbUser.getMobile())) {// 如果user存在，说明用户授权登录过，直接登录
                 BigDecimal jfAmount = addLoginAmount(dbUser);// 每天登录送积分
-                result = new XN805051Res(dbUser.getUserId(), isNeedMobile,
-                    jfAmount);
-
+                result = new XN805051Res(dbUser.getUserId(),
+                    EBoolean.NO.getCode(), jfAmount);
             } else {
+                if (StringUtils.isBlank(req.getMobile())) {// 手机号不为空判断
+                    return new XN805051Res(null, EBoolean.YES.getCode());
+                }
 
                 String nickname = (String) wxRes.get("nickname");
                 String photo = (String) wxRes.get("headimgurl");
@@ -1001,17 +1000,13 @@ public class UserAOImpl implements IUserAO {
                     gender = ESex.WOMEN.getCode();
                 }
 
-                // // Step5：判断注册是否传手机号，有则注册，无则反馈
-                // if (EBoolean.YES.getCode().equals(req.getIsNeedMobile())) {
-                // result = doWxLoginRegMobile(req, unionId, h5OpenId,
-                // nickname, photo, gender);
-                // } else {
-                result = doWxLoginReg(req, unionId, h5OpenId, nickname, photo,
-                    gender);
-                // }
+                // Step5：判断注册是否传手机号，有则注册，无则反馈
+                result = doWxLoginRegMobile(req, unionId, h5OpenId, nickname,
+                    photo, gender);
             }
         } catch (Exception e) {
-            throw new BizException("xn000000", e.getMessage());
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                e.getMessage());
         }
         return result;
     }
@@ -1031,16 +1026,16 @@ public class UserAOImpl implements IUserAO {
                 User refereeUser = userBO.getUserByMobile(req.getUserReferee());
                 userReferee = refereeUser.getUserId();
                 agentId = refereeUser.getAgentId();
-            } else if (EUserRefereeType.AGENT.getCode()
-                .equals(req.getUserRefereeKind())) {
-                AgentUser agentUser = agentUserBO
-                    .getAgentUserByMobile(req.getUserReferee());
+            } else if (EUserRefereeType.AGENT.getCode().equals(
+                req.getUserRefereeKind())) {
+                AgentUser agentUser = agentUserBO.getAgentUserByMobile(req
+                    .getUserReferee());
                 userReferee = agentUser.getUserId();
                 agentId = agentUser.getUserId();
-            } else if (EUserRefereeType.SALEMANS.getCode()
-                .equals(req.getUserRefereeKind())) {
-                AgentUser agentUser = agentUserBO
-                    .getAgentUserByMobile(req.getUserReferee());
+            } else if (EUserRefereeType.SALEMANS.getCode().equals(
+                req.getUserRefereeKind())) {
+                AgentUser agentUser = agentUserBO.getAgentUserByMobile(req
+                    .getUserReferee());
                 userReferee = agentUser.getUserId();
                 agentId = agentUser.getParentUserId();
             } else {
@@ -1070,66 +1065,59 @@ public class UserAOImpl implements IUserAO {
 
     private XN805051Res doWxLoginRegMobile(XN805051Req req, String unionId,
             String h5OpenId, String nickname, String photo, String gender) {
-        XN805051Res result = null;
-        if (StringUtils.isNotBlank(req.getMobile())) {
-            // 判断是否需要验证码验证码,登录前一定要验证
-            if (StringUtils.isBlank(req.getSmsCaptcha())) {
-                throw new BizException("xn702002", "请输入短信验证码");
-            }
-            // 短信验证码是否正确
-            smsOutBO.checkCaptcha(req.getMobile(), req.getSmsCaptcha(),
-                "805051");
-
-            String mobileUserId = userBO.getUserId(req.getMobile(),
-                req.getKind());
-            if (StringUtils.isBlank(mobileUserId)) {
-                userBO.doCheckOpenId(unionId, h5OpenId);
-
-                // 获取推荐用户相对应的代理信息
-                String agentId = null;
-                String userReferee = null;
-                if (StringUtils.isNotBlank(req.getUserRefereeKind())) {
-                    if (EUserRefereeType.USER.getCode()
-                        .equals(req.getUserRefereeKind())) {
-                        User refereeUser = userBO
-                            .getUserByMobile(req.getUserReferee());
-                        userReferee = refereeUser.getUserId();
-                        agentId = refereeUser.getAgentId();
-                    } else if (EUserRefereeType.AGENT.getCode()
-                        .equals(req.getUserRefereeKind())) {
-                        AgentUser agentUser = agentUserBO
-                            .getAgentUserByMobile(req.getUserReferee());
-                        userReferee = agentUser.getUserId();
-                        agentId = agentUser.getUserId();
-                    } else if (EUserRefereeType.SALEMANS.getCode()
-                        .equals(req.getUserRefereeKind())) {
-                        AgentUser agentUser = agentUserBO
-                            .getAgentUserByMobile(req.getUserReferee());
-                        userReferee = agentUser.getUserId();
-                        agentId = agentUser.getParentUserId();
-                    } else {
-                        throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                            "推荐类型不支持");
-                    }
-                }
-
-                // 插入用户信息
-                String userId = userBO.doRegister(unionId, h5OpenId,
-                    req.getMobile(), EUserPwd.InitPwd8.getCode(), userReferee,
-                    req.getUserRefereeKind(), agentId, req.getKind(), nickname,
-                    photo, gender);
-
-                // 分配账户
-                accountAO.distributeAccount(userId);
-            } else {
-                userBO.refreshWxInfo(mobileUserId, unionId, h5OpenId, nickname,
-                    photo, gender);
-                result = new XN805051Res(mobileUserId);
-            }
-        } else {
-            result = new XN805051Res(null, EBoolean.YES.getCode());
+        // 判断是否需要验证码验证码,登录前一定要验证
+        if (StringUtils.isBlank(req.getSmsCaptcha())) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "请输入短信验证码");
         }
-        return result;
+        // 短信验证码是否正确
+        smsOutBO.checkCaptcha(req.getMobile(), req.getSmsCaptcha(), "805051");
+
+        String mobileUserId = userBO.getUserId(req.getMobile(), req.getKind());
+        if (StringUtils.isBlank(mobileUserId)) {
+            userBO.doCheckOpenId(unionId, h5OpenId);
+
+            // 获取推荐用户相对应的代理信息
+            String agentId = null;
+            String userReferee = null;
+            if (StringUtils.isNotBlank(req.getUserRefereeKind())) {
+                if (EUserRefereeType.USER.getCode().equals(
+                    req.getUserRefereeKind())) {
+                    User refereeUser = userBO.getUserByMobile(req
+                        .getUserReferee());
+                    userReferee = refereeUser.getUserId();
+                    agentId = refereeUser.getAgentId();
+                } else if (EUserRefereeType.AGENT.getCode().equals(
+                    req.getUserRefereeKind())) {
+                    AgentUser agentUser = agentUserBO.getAgentUserByMobile(req
+                        .getUserReferee());
+                    userReferee = agentUser.getUserId();
+                    agentId = agentUser.getUserId();
+                } else if (EUserRefereeType.SALEMANS.getCode().equals(
+                    req.getUserRefereeKind())) {
+                    AgentUser agentUser = agentUserBO.getAgentUserByMobile(req
+                        .getUserReferee());
+                    userReferee = agentUser.getUserId();
+                    agentId = agentUser.getParentUserId();
+                } else {
+                    throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                        "推荐类型不支持");
+                }
+            }
+
+            // 插入用户信息
+            String userId = userBO.doRegister(unionId, h5OpenId,
+                req.getMobile(), EUserPwd.InitPwd8.getCode(), userReferee,
+                req.getUserRefereeKind(), agentId, req.getKind(), nickname,
+                photo, gender);
+            // 分配账户
+            accountAO.distributeAccount(userId);
+            mobileUserId = userId;
+        } else {
+            userBO.refreshWxInfo(mobileUserId, unionId, h5OpenId, nickname,
+                photo, gender);
+        }
+
+        return new XN805051Res(mobileUserId, EBoolean.NO.getCode());
     }
 
     @Override
