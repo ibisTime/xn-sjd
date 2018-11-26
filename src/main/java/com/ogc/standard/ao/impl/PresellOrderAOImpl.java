@@ -223,7 +223,8 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
             String signOrder = alipayBO.getSignedOrder(
                 presellOrder.getApplyUser(), ESysUser.SYS_USER.getCode(),
                 presellOrder.getPayGroup(), EJourBizTypeUser.PRESELL.getCode(),
-                EJourBizTypeUser.PRESELL.getValue(), presellOrder.getAmount());
+                EJourBizTypeUser.PRESELL.getValue(),
+                presellOrder.getAmount().subtract(deductRes.getCnyAmount()));
             result = new PayOrderRes(signOrder);
 
         } else if (EPayType.WEIXIN_H5.getCode().equals(payType)) {// 微信支付
@@ -235,7 +236,8 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
                 user.getH5OpenId(), ESysUser.SYS_USER.getCode(),
                 presellOrder.getCode(), presellOrder.getCode(),
                 EJourBizTypeUser.PRESELL.getCode(),
-                EJourBizTypeUser.PRESELL.getValue(), presellOrder.getAmount());
+                EJourBizTypeUser.PRESELL.getValue(),
+                presellOrder.getAmount().subtract(deductRes.getCnyAmount()));
 
         }
 

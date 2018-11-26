@@ -81,8 +81,11 @@
 	<update id="update_userExt" parameterType="userExt">
 		UPDATE tstd_user_ext
 		SET
+		<if test="userId != null and userId != '' ">
+			user_id=#{userId}
+		</if>
 		<if test="gender != null and gender != '' ">
-			gender=#{gender}
+			,gender=#{gender}
 		</if>
 		<if test="introduce != null and introduce != '' ">
 			,introduce=#{introduce}
