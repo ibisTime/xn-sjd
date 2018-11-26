@@ -39,6 +39,8 @@ import com.ogc.standard.dto.res.XN002501Res;
 import com.ogc.standard.enums.EChannelType;
 import com.ogc.standard.enums.EChargeStatus;
 import com.ogc.standard.enums.ECurrency;
+import com.ogc.standard.enums.EJourBizTypeUser;
+import com.ogc.standard.enums.ESystemAccount;
 import com.ogc.standard.enums.ESystemCode;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.http.PostSimulater;
@@ -131,17 +133,23 @@ public class WeChatAOImpl implements IWeChatAO {
                 chargeBO.callBackChange(order, true);
 
                 // 收款方账户加钱
-                // accountBO.changeAmount(order.getAccountNumber(),
-                // EChannelType.getEChannelType(order.getChannelType()),
-                // wechatOrderNo, order.getPayGroup(), order.getBizNo(),
-                // order.getBizType(), order.getBizNote(), order.getAmount());
-                //
-                // // 托管账户加钱
-                // accountBO.changeAmount(
-                // ESystemAccount.SYS_ACOUNT_WEIXIN.getCode(),
-                // EChannelType.getEChannelType(order.getChannelType()),
-                // wechatOrderNo, order.getPayGroup(), order.getBizNo(),
-                // order.getBizType(), order.getBizNote(), order.getAmount());
+                Account userAccount = accountBO
+                    .getAccount(order.getAccountNumber());
+                accountBO.changeAmount(userAccount, order.getAmount(),
+                    EChannelType.getEChannelType(order.getChannelType()),
+                    wechatOrderNo, order.getPayGroup(),
+                    EJourBizTypeUser.getBizType(order.getBizType()).getCode(),
+                    order.getBizNote());
+
+                // 托管账户加钱
+                Account sysAccount = accountBO
+                    .getAccount(ESystemAccount.SYS_ACOUNT_WEIXIN.getCode());
+                accountBO.changeAmount(sysAccount, order.getAmount(),
+                    EChannelType.getEChannelType(order.getChannelType()),
+                    wechatOrderNo, order.getPayGroup(),
+                    EJourBizTypeUser.getBizType(order.getBizType()).getCode(),
+                    order.getBizNote());
+
             } else {
                 // 更新充值订单状态
                 chargeBO.callBackChange(order, false);

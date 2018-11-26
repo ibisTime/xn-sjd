@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.ogc.standard.ao.IAdoptOrderAO;
 import com.ogc.standard.ao.ICommodityOrderAO;
 import com.ogc.standard.ao.IGroupAdoptOrderAO;
+import com.ogc.standard.ao.IGroupOrderAO;
 import com.ogc.standard.ao.IPresellOrderAO;
 import com.ogc.standard.ao.IWeChatAO;
 import com.ogc.standard.ao.impl.IAlipayAO;
@@ -54,6 +55,9 @@ public class CallbackConroller {
 
     @Autowired
     private IPresellOrderAO presellOrderAO;
+
+    @Autowired
+    private IGroupOrderAO groupOrderAO;
 
     // 支付宝支付回调
     @RequestMapping("/alipay/callback")
@@ -148,8 +152,11 @@ public class CallbackConroller {
             adoptOrderAO.paySuccess(bizCode);
         } else if (EJourBizTypeUser.ADOPT_COLLECT.getCode().equals(bizType)) {
             groupAdoptOrderAO.paySuccess(bizCode);
+            groupAdoptOrderAO.toFullAdopt();
         } else if (EJourBizTypeUser.PRESELL.getCode().equals(bizType)) {
             presellOrderAO.paySuccess(bizCode);
+        } else if (EJourBizTypeUser.CONSIGN_SELL.getCode().equals(bizType)) {
+            groupOrderAO.paySuccess(bizCode);
         } else if (EJourBizTypeUser.COMMODITY.getCode().equals(bizType)) {
             commodityOrderAO.paySuccess(bizCode);
         } else {

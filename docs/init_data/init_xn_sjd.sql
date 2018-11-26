@@ -865,11 +865,10 @@ INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`r
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('qiniu','qiniu_bucket','o2lin','admin',now(),'存储空间');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('qiniu','qiniu_domain','http://image.o2lin.com','admin',now(),'访问域名');
 
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('PAY_RULE','JF_DK_MAX_RATE','0.1','admin',now(),'订单可用积分抵扣比例');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('PAY_RULE','CNY2JF_RATE','100','admin',now(),'1人民币兑换多少积分');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('PAY_RULE','ID_INVALID_HOURS','1','admin',now(),'识别码失效时间(小时)');
 
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('SYSTEM_URL','REGISTER_URL','http://sjd.front.hichengdai.com/#/register?','admin',now(),'C端注册地址');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('SYSTEM_URL','REGISTER_URL','http://front.o2lin.com/#/login?','admin',now(),'C端注册地址');
 
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('USER_LEVEL','USER_LEVEL_0','0','admin',now(),'初探翠林');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('USER_LEVEL','USER_LEVEL_1','100','admin',now(),'护树新秀');

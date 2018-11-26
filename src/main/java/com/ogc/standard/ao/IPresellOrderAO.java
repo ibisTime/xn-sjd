@@ -21,7 +21,7 @@ public interface IPresellOrderAO {
 
     // 支付订单
     public Object toPayPresellOrder(String code, String payType,
-            String tradePwd);
+            String tradePwd, String isJfDeduct);
 
     // 支付成功订单回调处理
     public void paySuccess(String payGroup);

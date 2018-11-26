@@ -154,8 +154,6 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
         String code = presellOrderBO.savePresellOrder(userId, presellProduct,
             presellSpecs, quantity);
 
-        // TODO 分配树
-
         // 更新产品已预售数量
         Integer nowCount = presellProduct.getNowCount() + orderWeight;
         presellProductBO.refreshNowCount(presellProduct.getCode(), nowCount);
@@ -173,8 +171,6 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
                 "订单不是待支付状态，不能取消");
         }
 
-        // TODO 取消树
-
         // 更新产品已预售数量
         PresellProduct presellProduct = presellProductBO
             .getPresellProduct(presellOrder.getProductCode());
@@ -191,7 +187,7 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
 
     @Override
     public Object toPayPresellOrder(String code, String payType,
-            String tradePwd) {
+            String tradePwd, String isJfDeduct) {
         PresellOrder presellOrder = presellOrderBO.getPresellOrder(code);
         if (!EPresellOrderStatus.TO_PAY.getCode()
             .equals(presellOrder.getStatus())) {
@@ -206,9 +202,9 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
         // 积分抵扣处理
         PresellProduct presellProduct = presellProductBO
             .getPresellProduct(presellOrder.getProductCode());
-        XN629048Res deductRes = distributionOrderBO.getAdoptOrderDeductAmount(
+        XN629048Res deductRes = distributionOrderBO.getPresellOrderDeductAmount(
             presellProduct.getMaxJfdkRate(), presellOrder.getAmount(),
-            presellOrder.getApplyUser(), EBoolean.YES.getCode());
+            presellOrder.getApplyUser(), isJfDeduct);
 
         // 支付订单
         Object result = null;
@@ -447,8 +443,6 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
         Integer nowCount = presellProduct.getNowCount() - orderWeight;
 
         presellProductBO.refreshNowCount(presellProduct.getCode(), nowCount);
-
-        // TODO 取消树
 
         // 订单状态变更
         presellOrderBO.cancelPresellOrder(presellOrder.getCode(),

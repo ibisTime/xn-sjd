@@ -25,7 +25,7 @@ public class XN629422 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         Object res = presellOrderAO.toPayPresellOrder(req.getCode(),
-            req.getPayType(), req.getTradePwd());
+            req.getPayType(), req.getTradePwd(), req.getIsJfDeduct());
 
         if (EPayType.YE.getCode().equals(req.getPayType()) && null != res) {
 

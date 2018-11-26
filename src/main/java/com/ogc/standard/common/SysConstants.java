@@ -131,6 +131,8 @@ public class SysConstants {
     // 积分规则
     public static final String REGISTER = "REGISTER";// 注册送积分
 
+    public static final String REAL_NAME = "REAL_NAME";// 实名送积分
+
     public static final String BIND_MOBILE = "BIND_MOBILE";// 绑定手机号
 
     public static final String BIND_EMAIL = "BIND_EMAIL";// 绑定邮箱

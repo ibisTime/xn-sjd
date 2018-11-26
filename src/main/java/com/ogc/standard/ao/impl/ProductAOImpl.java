@@ -249,7 +249,13 @@ public class ProductAOImpl implements IProductAO {
         }
 
         // 更新募集数量
-        productBO.refreshRaiseCount(req.getCode(), req.getTreeList().size());
+        if (ESellType.COLLECTIVE.getCode().equals(req.getSellType())) {
+            productBO.refreshRaiseCount(req.getCode(),
+                StringValidater.toInteger(req.getRaiseCount()));
+        } else {
+            productBO.refreshRaiseCount(req.getCode(),
+                req.getTreeList().size());
+        }
     }
 
     @Override

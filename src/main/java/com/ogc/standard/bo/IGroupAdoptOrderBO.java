@@ -35,10 +35,16 @@ public interface IGroupAdoptOrderBO extends IPaginableBO<GroupAdoptOrder> {
             BigDecimal backJfAmount);
 
     // 更新已满标订单状态
-    public void refreshFullOrder(String identifyCode);
+    public void refreshFullOrder(String code);
 
     // 更新未满标订单状态
-    public void refreshUnFullOrder(String identifyCode);
+    public void refreshUnFullOrder(String code);
+
+    // 更新已满标订单状态
+    public void refreshFullOrderById(String id);
+
+    // 更新未满标订单状态
+    public void refreshUnFullOrderById(String id);
 
     // 开始认养
     public void refreshStartAdopt(String code);

@@ -145,19 +145,35 @@ public class GroupAdoptOrderBOImpl extends PaginableBOImpl<GroupAdoptOrder>
     }
 
     @Override
-    public void refreshFullOrder(String identifyCode) {
+    public void refreshFullOrder(String code) {
         GroupAdoptOrder data = new GroupAdoptOrder();
-        data.setIdentifyCode(identifyCode);
+        data.setCode(code);
         data.setStatus(EGroupAdoptOrderStatus.FULL.getCode());
-        groupAdoptOrderDAO.updateFullOrderp(data);
+        groupAdoptOrderDAO.updateFullOrder(data);
     }
 
     @Override
-    public void refreshUnFullOrder(String identifyCode) {
+    public void refreshUnFullOrder(String code) {
         GroupAdoptOrder data = new GroupAdoptOrder();
-        data.setIdentifyCode(identifyCode);
+        data.setCode(code);
         data.setStatus(EGroupAdoptOrderStatus.UNFULL.getCode());
-        groupAdoptOrderDAO.updateUnFullOrderp(data);
+        groupAdoptOrderDAO.updateUnFullOrder(data);
+    }
+
+    @Override
+    public void refreshFullOrderById(String id) {
+        GroupAdoptOrder data = new GroupAdoptOrder();
+        data.setIdentifyCode(id);
+        data.setStatus(EGroupAdoptOrderStatus.FULL.getCode());
+        groupAdoptOrderDAO.updateFullOrderById(data);
+    }
+
+    @Override
+    public void refreshUnFullOrderById(String id) {
+        GroupAdoptOrder data = new GroupAdoptOrder();
+        data.setIdentifyCode(id);
+        data.setStatus(EGroupAdoptOrderStatus.UNFULL.getCode());
+        groupAdoptOrderDAO.updateUnFullOrderById(data);
     }
 
     @Override

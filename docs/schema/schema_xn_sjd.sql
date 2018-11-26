@@ -514,6 +514,7 @@ CREATE TABLE `tstd_user_ext` (
   `bussiness_license_id` varchar(255) DEFAULT NULL COMMENT '营业执照号',
   `company_introduce` TEXT DEFAULT NULL COMMENT '企业简介',
   `bussiness_license` TEXT DEFAULT NULL COMMENT '营业执照',
+  `auth_status` varchar(4) DEFAULT NULL COMMENT '认证状态',
   `person_auth_status` varchar(4) DEFAULT NULL COMMENT '个人认证状态',
   `company_auth_status` varchar(4) DEFAULT NULL COMMENT '企业认证状态',
   PRIMARY KEY (`user_id`)

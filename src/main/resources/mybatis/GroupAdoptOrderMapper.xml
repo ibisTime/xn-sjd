@@ -87,7 +87,7 @@
 			</if>
 			
 			<if test="existsSettle != null and existsSettle != '' and existsSettle == 1 ">
-				AND EXISTS (SELECT 1 from tsys_settle where ref_code = t.code and ref_type = 1)
+				AND EXISTS (SELECT 1 from tsys_settle where ref_code = t.code and ref_type = 4)
 			</if>
 		</trim>
 	</sql>
@@ -268,7 +268,21 @@
 		WHERE code = #{code}
 	</update>
 	
+	<update id="update_fullOrderById" parameterType="groupAdoptOrder">
+		UPDATE try_group_adopt_order
+		SET
+		status = #{status}
+		WHERE identify_code = #{identifyCode} and status = 2
+	</update>
+	
 	<update id="update_fullOrder" parameterType="groupAdoptOrder">
+		UPDATE try_group_adopt_order
+		SET
+		status = #{status}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_unFullOrderById" parameterType="groupAdoptOrder">
 		UPDATE try_group_adopt_order
 		SET
 		status = #{status}
@@ -279,7 +293,7 @@
 		UPDATE try_group_adopt_order
 		SET
 		status = #{status}
-		WHERE identify_code = #{identifyCode} and status = 2
+		WHERE code = #{code}
 	</update>
 	
 	<update id="update_startAdopt" parameterType="groupAdoptOrder">

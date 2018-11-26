@@ -50,12 +50,22 @@ public class GroupAdoptOrderDAOImpl extends AMybatisTemplate
     }
 
     @Override
-    public int updateFullOrderp(GroupAdoptOrder data) {
+    public int updateFullOrderById(GroupAdoptOrder data) {
+        return super.update(NAMESPACE.concat("update_fullOrderById"), data);
+    }
+
+    @Override
+    public int updateUnFullOrderById(GroupAdoptOrder data) {
+        return super.update(NAMESPACE.concat("update_unFullOrderById"), data);
+    }
+
+    @Override
+    public int updateFullOrder(GroupAdoptOrder data) {
         return super.update(NAMESPACE.concat("update_fullOrder"), data);
     }
 
     @Override
-    public int updateUnFullOrderp(GroupAdoptOrder data) {
+    public int updateUnFullOrder(GroupAdoptOrder data) {
         return super.update(NAMESPACE.concat("update_unFullOrder"), data);
     }
 

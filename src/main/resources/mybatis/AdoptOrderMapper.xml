@@ -102,7 +102,7 @@
 			</if>
 			
 			<if test="existsSettle != null and existsSettle != '' and existsSettle == 1 ">
-				AND EXISTS (SELECT 1 from tsys_settle where ref_code = t.code and ref_type = 1)
+				AND EXISTS (SELECT 1 from tsys_settle where ref_code = t.code and ref_type in (1,2,3))
 			</if>
 			
 		</trim>

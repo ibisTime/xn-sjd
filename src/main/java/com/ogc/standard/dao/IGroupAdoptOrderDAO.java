@@ -23,10 +23,16 @@ public interface IGroupAdoptOrderDAO extends IBaseDAO<GroupAdoptOrder> {
     public int updatePayGroup(GroupAdoptOrder data);
 
     // 更新已满标订单
-    public int updateFullOrderp(GroupAdoptOrder data);
+    public int updateFullOrder(GroupAdoptOrder data);
 
     // 更新未满标订单
-    public int updateUnFullOrderp(GroupAdoptOrder data);
+    public int updateUnFullOrder(GroupAdoptOrder data);
+
+    // 更新已满标订单
+    public int updateFullOrderById(GroupAdoptOrder data);
+
+    // 更新未满标订单
+    public int updateUnFullOrderById(GroupAdoptOrder data);
 
     // 开始认养
     public int updateStartAdopt(GroupAdoptOrder data);

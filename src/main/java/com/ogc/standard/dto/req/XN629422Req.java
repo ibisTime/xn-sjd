@@ -20,6 +20,9 @@ public class XN629422Req {
     // 支付密码
     private String tradePwd;
 
+    // 积分抵扣
+    private String isJfDeduct;
+
     public String getCode() {
         return code;
     }
@@ -42,6 +45,14 @@ public class XN629422Req {
 
     public void setTradePwd(String tradePwd) {
         this.tradePwd = tradePwd;
+    }
+
+    public String getIsJfDeduct() {
+        return isJfDeduct;
+    }
+
+    public void setIsJfDeduct(String isJfDeduct) {
+        this.isJfDeduct = isJfDeduct;
     }
 
 }

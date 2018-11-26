@@ -9,6 +9,7 @@ import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.dto.res.BooleanRes;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
+import com.ogc.standard.pay.CallbackConroller;
 import com.ogc.standard.spring.SpringContextHolder;
 
 /**
@@ -33,9 +34,13 @@ public class XN000000 extends AProcessor {
     private IPresellOrderAO presellOrderAO = SpringContextHolder
         .getBean(IPresellOrderAO.class);
 
+    private CallbackConroller callbackConroller = SpringContextHolder
+        .getBean(CallbackConroller.class);
+
     @Override
     public Object doBusiness() throws BizException {
-        originalGroupAO.doDailyOriginalGroup();
+        callbackConroller.doPayOrder("adopt_collect",
+            "GAO2018112622450439194534");
         return new BooleanRes(true);
     }
 

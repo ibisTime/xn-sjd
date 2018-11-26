@@ -77,6 +77,9 @@ public class UserExt extends ABaseDO {
     // 营业执照
     private String bussinessLicense;
 
+    // 认证状态
+    private String authStatus;
+
     // 个人认证状态
     private String personAuthStatus;
 
@@ -243,6 +246,14 @@ public class UserExt extends ABaseDO {
 
     public void setCompanyAuthStatus(String companyAuthStatus) {
         this.companyAuthStatus = companyAuthStatus;
+    }
+
+    public String getAuthStatus() {
+        return authStatus;
+    }
+
+    public void setAuthStatus(String authStatus) {
+        this.authStatus = authStatus;
     }
 
 }

@@ -58,6 +58,7 @@ public class UserExtBOImpl extends PaginableBOImpl<UserExt>
         userExt.setUserId(userId);
         userExt.setIdPic(idPic);
         userExt.setIntroduce(introduce);
+        userExt.setAuthStatus(EBoolean.YES.getCode());
         userExt.setPersonAuthStatus(EBoolean.YES.getCode());
         userExtDAO.updateUserExt(userExt);
     }
@@ -74,6 +75,7 @@ public class UserExtBOImpl extends PaginableBOImpl<UserExt>
         userExt.setCompanyIntroduce(companyIntroduce);
         userExt.setBussinessLicenseId(bussinessLicenseId);
         userExt.setBussinessLicense(bussinessLicense);
+        userExt.setAuthStatus(EBoolean.YES.getCode());
         userExt.setCompanyAuthStatus(EBoolean.YES.getCode());
         userExtDAO.updateUserExt(userExt);
     }

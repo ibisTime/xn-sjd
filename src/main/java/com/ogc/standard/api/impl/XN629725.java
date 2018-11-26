@@ -34,15 +34,18 @@ public class XN629725 extends AProcessor {
         condition.setExpressType(req.getExpressType());
         condition.setPayType(req.getPayType());
         condition.setStatus(req.getStatus());
+        condition.setCode(req.getCode());
         condition.setApplyDatetimeStart(
             DateUtil.getFrontDate(req.getApplyDatetiemStart(), false));
         condition.setApplyDatetimeEnd(
             DateUtil.getFrontDate(req.getApplyDatetimeEnd(), true));
+
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
             column = "code";
         }
         condition.setOrder(column, req.getOrderDir());
+
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
         return commodityOrderAO.queryOrderPage(start, limit, condition);

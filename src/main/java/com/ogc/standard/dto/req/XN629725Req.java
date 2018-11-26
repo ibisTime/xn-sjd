@@ -8,7 +8,6 @@
  */
 package com.ogc.standard.dto.req;
 
-
 /** 
  * @author: taojian 
  * @since: 2018年11月6日 下午3:42:36 
@@ -17,6 +16,8 @@ package com.ogc.standard.dto.req;
 public class XN629725Req extends APageReq {
 
     private static final long serialVersionUID = -3471724529126853239L;
+
+    private String code;
 
     private String applyUser;
 
@@ -31,6 +32,14 @@ public class XN629725Req extends APageReq {
     private String applyDatetiemStart;
 
     private String applyDatetimeEnd;
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
 
     public String getApplyUser() {
         return applyUser;

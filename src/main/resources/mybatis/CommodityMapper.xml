@@ -158,7 +158,7 @@
 		,deliver_place=#{deliverPlace}
 		,weight=#{weight}
 		
-		,originalPrice=#{original_price}
+		,original_price=#{originalPrice}
 		,logistics=#{logistics}
 		,list_pic=#{listPic}
 		,banner_pic=#{bannerPic}

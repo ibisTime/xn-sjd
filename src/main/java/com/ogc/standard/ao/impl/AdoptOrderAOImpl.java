@@ -43,7 +43,6 @@ import com.ogc.standard.domain.Tree;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.dto.res.BooleanRes;
 import com.ogc.standard.dto.res.PayOrderRes;
-import com.ogc.standard.dto.res.XN002501Res;
 import com.ogc.standard.dto.res.XN629048Res;
 import com.ogc.standard.enums.EAdoptOrderStatus;
 import com.ogc.standard.enums.EAdoptOrderTreeStatus;
@@ -431,15 +430,6 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
         }
     }
 
-    private Object toPayAdoptOrderWeChat(AdoptOrder data) {
-        User user = userBO.getUser(data.getApplyUser());
-        XN002501Res prepayIdH5 = weChatAO.getPrepayIdH5(data.getApplyUser(),
-            user.getH5OpenId(), ESysUser.SYS_USER.getCode(), data.getCode(),
-            data.getCode(), EJourBizTypeUser.ADOPT.getCode(),
-            EJourBizTypeUser.ADOPT.getValue(), data.getAmount());
-        return prepayIdH5;
-    }
-
     public void doCancelAdoptOrder() {
         logger.info("***************开始扫描未支付订单***************");
         AdoptOrder condition = new AdoptOrder();
@@ -650,6 +640,8 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
             }
         }
 
+        data.setTreeNumbers(treeNumbers.toString());
+
         data.setTreeList(treeList);
 
         Integer adoptYear = DateUtil.yearsBetween(data.getStartDatetime(),
@@ -661,7 +653,6 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
             data.setApplyUserName(user.getMobile());
         }
 
-        data.setTreeNumbers(treeNumbers.toString());
     }
 
 }

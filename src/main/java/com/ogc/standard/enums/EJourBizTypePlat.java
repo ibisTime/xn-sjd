@@ -85,7 +85,9 @@ public enum EJourBizTypePlat {
 
     UN_FULL_BACKJF("un_full_backjf", "集体认养未满标退返利积分"),
 
-    DIST_USER_BACK_JFPOOL("dist_user_back_jfpool", "认养返积分池");
+    DIST_USER_BACK_JFPOOL("dist_user_back_jfpool", "认养返积分池"),
+
+    REAL_NAME("real_name", "实名认证");
 
     public static EJourBizTypePlat getBizType(String code) {
         Map<String, EJourBizTypePlat> map = getBizTypeMap();

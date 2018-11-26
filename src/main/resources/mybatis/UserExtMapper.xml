@@ -20,6 +20,7 @@
 		<result column="bussiness_license_id" property="bussinessLicenseId" />
 		<result column="company_introduce" property="companyIntroduce" />
 		<result column="bussiness_license" property="bussinessLicense" />
+		<result column="auth_status" property="authStatus" />
 		<result column="person_auth_status" property="personAuthStatus" />
 		<result column="company_auth_status" property="companyAuthStatus" />
 	</resultMap>
@@ -65,6 +66,7 @@
 		,t.bussiness_license_id
 		,t.company_introduce
 		,t.bussiness_license
+		,t.auth_status
 		,t.person_auth_status
 		,t.company_auth_status
 		FROM
@@ -131,6 +133,9 @@
 		</if>
 		<if test="bussinessLicense != null and bussinessLicense != '' ">
 			,bussiness_license=#{bussinessLicense}
+		</if>
+		<if test="authStatus != null and authStatus != '' ">
+			,auth_status=#{authStatus}
 		</if>
 		<if test="personAuthStatus != null and personAuthStatus != '' ">
 			,person_auth_status=#{personAuthStatus}

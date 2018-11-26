@@ -233,6 +233,7 @@ ADD COLUMN `back_jf_amount` DECIMAL(18,8) NULL COMMENT '积分返点金额' AFTE
 ALTER TABLE `tys_group_order` 
 ADD COLUMN `presell_type` VARCHAR(4) NULL COMMENT '预售类型' AFTER `group_code`;
 
+
 #V2.0.0 3-1
 ALTER TABLE `tstd_user_ext` 
 ADD COLUMN `id_pic` TEXT NULL COMMENT '身份证照' AFTER `pdf`,
@@ -246,3 +247,10 @@ ADD COLUMN `person_auth_status` VARCHAR(4) NULL COMMENT '个人认证状态' AFT
 ADD COLUMN `company_auth_status` VARCHAR(4) NULL COMMENT '企业认证状态' AFTER `person_auth_status`;
 
 INSERT INTO `tstd_company_channel` (`company_code`, `company_name`, `channel_type`, `status`, `channel_company`, `private_key1`, `private_key2`, `system_code`) VALUES ('CD-SJD0000025', '时间岛', '35', '1', '1481010032', '3a9f4e501a7d8d43981a68d0978c58d8', 'wxb0df94ba24824c3e', 'CD-SJD0000025');
+
+update tys_presell_product set pack_weight = 10;
+
+ALTER TABLE `tstd_user_ext` 
+ADD COLUMN `auth_status` VARCHAR(4) NULL COMMENT '认证状态' AFTER `bussiness_license`;
+
+update tsj_article set collect_count = 0, point_count = 0, read_count = 0;

@@ -151,8 +151,9 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
                 deductRes);
             String signOrder = alipayBO.getSignedOrder(
                 groupOrder.getApplyUser(), ESysUser.SYS_USER.getCode(),
-                groupOrder.getPayGroup(), EJourBizTypeUser.PRESELL.getCode(),
-                EJourBizTypeUser.PRESELL.getValue(), groupOrder.getAmount());
+                groupOrder.getCode(), EJourBizTypeUser.CONSIGN_SELL.getCode(),
+                EJourBizTypeUser.CONSIGN_SELL.getValue(),
+                groupOrder.getAmount());
             result = new PayOrderRes(signOrder);
 
         } else if (EPayType.WEIXIN_H5.getCode().equals(payType)) {// 微信支付
@@ -164,8 +165,8 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
             result = weChatAO.getPrepayIdH5(groupOrder.getApplyUser(),
                 user.getH5OpenId(), ESysUser.SYS_USER.getCode(),
                 groupOrder.getCode(), groupOrder.getCode(),
-                EJourBizTypeUser.ADOPT_COLLECT.getCode(),
-                EJourBizTypeUser.ADOPT_COLLECT.getValue(),
+                EJourBizTypeUser.CONSIGN_SELL.getCode(),
+                EJourBizTypeUser.CONSIGN_SELL.getValue(),
                 groupOrder.getAmount());
 
         }

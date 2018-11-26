@@ -130,10 +130,6 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
         String code = groupAdoptOrderBO.saveGroupAdoptOrderFirst(identifyCode,
             userId, quantity, product, productSpecs);
 
-        // 更新认养产品的已募集数量
-        productBO.refreshNowCount(product.getCode(),
-            product.getNowCount() + quantity);
-
         // 锁定产品
         productBO.refreshLockProduct(product.getCode(), identifyCode,
             specsCode);
@@ -183,8 +179,8 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
             userId, quantity, product, productSpecs);
 
         // 更新认养产品的已募集数量
-        productBO.refreshNowCount(product.getCode(),
-            product.getNowCount() + quantity);
+        // productBO.refreshNowCount(product.getCode(),
+        // product.getNowCount() + quantity);
 
         return code;
     }
@@ -311,6 +307,10 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
         // 业务订单更改
         groupAdoptOrderBO.payYueSuccess(data, resultRes, backJfAmount);
 
+        // 更新认养产品的已募集数量
+        productBO.refreshNowCount(data.getProductCode(),
+            data.getQuantity() + productInfo.getNowCount());
+
         // 分配认养权、更新树状态
         List<Tree> treeList = treeBO
             .queryTreeListByProduct(data.getProductCode());
@@ -337,6 +337,7 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
 
     // 支付宝回调
     @Override
+    @Transactional
     public void paySuccess(String payGroup) {
         GroupAdoptOrder data = groupAdoptOrderBO
             .getGroupAdoptOrderByPayGroup(payGroup);
@@ -364,6 +365,10 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
 
             // 业务订单更改
             groupAdoptOrderBO.paySuccess(data, data.getAmount(), backJfAmount);
+
+            // 更新认养产品的已募集数量
+            // productBO.refreshNowCount(data.getProductCode(),
+            // data.getQuantity() + productInfo.getNowCount());
 
             // 分配认养权、更新树状态
             List<Tree> treeList = treeBO
@@ -407,6 +412,8 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
     }
 
     // 更新已满标的订单
+    @Override
+    @Transactional
     public void toFullAdopt() {
         // 已满标的锁定产品
         List<Product> productList = productBO
@@ -419,7 +426,14 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
                 productBO.refreshAdoptProduct(product.getCode());
 
                 // 更新订单状态
-                groupAdoptOrderBO.refreshFullOrder(product.getIdentifyCode());
+                List<GroupAdoptOrder> groupAdoptOrderList = groupAdoptOrderBO
+                    .queryGroupAdoptOrderById(product.getIdentifyCode());
+                for (GroupAdoptOrder groupAdoptOrder : groupAdoptOrderList) {
+                    System.out.println(groupAdoptOrder.getStatus());
+                }
+
+                groupAdoptOrderBO
+                    .refreshFullOrderById(product.getIdentifyCode());
             }
         }
     }
@@ -593,7 +607,7 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
 
                     // 更新订单状态
                     groupAdoptOrderBO
-                        .refreshUnFullOrder(product.getIdentifyCode());
+                        .refreshUnFullOrderById(product.getIdentifyCode());
 
                     // 重置产品下树的认养数量
                     treeBO.refreshAdoptCountByProduct(product.getCode(), 0);

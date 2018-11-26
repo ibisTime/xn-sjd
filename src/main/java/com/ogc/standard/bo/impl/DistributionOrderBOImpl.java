@@ -43,6 +43,7 @@ import com.ogc.standard.enums.EJourBizTypeUser;
 import com.ogc.standard.enums.ESysConfigType;
 import com.ogc.standard.enums.ESysUser;
 import com.ogc.standard.enums.ESystemAccount;
+import com.ogc.standard.enums.EUserRefereeType;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
 
@@ -122,6 +123,13 @@ public class DistributionOrderBOImpl implements IDistributionOrderBO {
 
             cnyAmount = AmountUtil.mul(amount, maxJfdkRate * 0.01);
             jfAmount = AmountUtil.mul(cnyAmount, adoptDkRate);
+
+            Account userJfAccount = accountBO.getAccountByUser(applyUser,
+                ECurrency.JF.getCode());
+            if (jfAmount.compareTo(userJfAccount.getAmount()) == 1) {
+                jfAmount = userJfAccount.getAmount();
+                cnyAmount = jfAmount.divide(new BigDecimal(adoptDkRate));
+            }
         }
 
         return new XN629048Res(cnyAmount, jfAmount);
@@ -143,6 +151,13 @@ public class DistributionOrderBOImpl implements IDistributionOrderBO {
 
             cnyAmount = AmountUtil.mul(amount, maxJfdkRate * 0.01);
             jfAmount = AmountUtil.mul(cnyAmount, adoptDkRate);
+
+            Account userJfAccount = accountBO.getAccountByUser(applyUser,
+                ECurrency.JF.getCode());
+            if (jfAmount.compareTo(userJfAccount.getAmount()) == 1) {
+                jfAmount = userJfAccount.getAmount();
+                cnyAmount = jfAmount.divide(new BigDecimal(adoptDkRate));
+            }
         }
 
         return new XN629048Res(cnyAmount, jfAmount);
@@ -226,7 +241,7 @@ public class DistributionOrderBOImpl implements IDistributionOrderBO {
 
         // 直推用户分销
         User user = userBO.getUser(applyUser);
-        if (EAccountType.CUSTOMER.getCode().equals(user.getUserRefereeType())) {
+        if (EUserRefereeType.USER.getCode().equals(user.getUserRefereeType())) {
 
             BigDecimal adoptDirectRate = sysJfpoolCny.multiply(
                 new BigDecimal(mapList.get(SysConstants.ADOPT_DIRECT)));// 用户直推认养送比例
@@ -239,6 +254,7 @@ public class DistributionOrderBOImpl implements IDistributionOrderBO {
                 EJourBizTypePlat.ADOPT_DIRECT.getValue(),
                 EJourBizTypeUser.ADOPT_DIRECT.getValue(), code);
 
+            // TODO 间推用户分销
         }
 
         return jfAwardAmount;

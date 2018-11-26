@@ -80,7 +80,9 @@ public enum EJourBizTypeUser {
 
     UN_FULL_DEDUCTJF("un_full_deductjf", "集体认养未满标退抵扣积分"),
 
-    UN_FULL_BACKJF("un_full_backjf", "集体认养未满标退返利积分");
+    UN_FULL_BACKJF("un_full_backjf", "集体认养未满标退返利积分"),
+
+    REAL_NAME("real_name", "实名认证");
 
     public static EJourBizTypeUser getBizType(String code) {
         Map<String, EJourBizTypeUser> map = getBizTypeMap();
