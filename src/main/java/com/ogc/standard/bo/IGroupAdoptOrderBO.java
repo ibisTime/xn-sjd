@@ -62,10 +62,10 @@ public interface IGroupAdoptOrderBO extends IPaginableBO<GroupAdoptOrder> {
     public List<GroupAdoptOrder> queryGroupAdoptOrderList(
             GroupAdoptOrder condition);
 
-    public GroupAdoptOrder getGroupAdoptOrder(String code);
+    // 获取产品下已支付的所有下单数量
+    public GroupAdoptOrder getPayedTotalQuantity(String productCode);
 
-    public GroupAdoptOrder getGroupAdoptOrderByIdentifyCode(
-            String identifyCode);
+    public GroupAdoptOrder getGroupAdoptOrder(String code);
 
     public GroupAdoptOrder getGroupAdoptOrderByPayGroup(String payGroup);
 

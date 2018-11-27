@@ -1,8 +1,11 @@
 package com.ogc.standard.ao.impl;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -16,6 +19,7 @@ import com.ogc.standard.ao.IGroupOrderAO;
 import com.ogc.standard.ao.IUserAO;
 import com.ogc.standard.ao.IWeChatAO;
 import com.ogc.standard.bo.IAccountBO;
+import com.ogc.standard.bo.IAdoptOrderTreeBO;
 import com.ogc.standard.bo.IAlipayBO;
 import com.ogc.standard.bo.IDeriveGroupBO;
 import com.ogc.standard.bo.IGroupOrderBO;
@@ -99,6 +103,9 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
 
     @Autowired
     private IWeChatAO weChatAO;
+
+    @Autowired
+    private IAdoptOrderTreeBO adoptOrderTreeBO;
 
     @Override
     @Transactional
@@ -277,18 +284,47 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
             .getDeriveGroup(data.getGroupCode());
         OriginalGroup originalGroup = originalGroupBO
             .getOriginalGroup(deriveGroup.getOriginalCode());
+        PresellProduct presellProduct = presellProductBO
+            .getPresellProduct(originalGroup.getProductCode());
 
         // 定向
         if (EPresellType.DIRECT.getCode().equals(deriveGroup.getType())) {
 
             // 生成新的资产
-            originalGroupBO.saveOriginalGroup(data,
+            String originalGroupCode = originalGroupBO.saveOriginalGroup(data,
                 deriveGroup.getProductCode(), data.getApplyUser(),
                 data.getPrice(), data.getQuantity());
+
+            // 转移预售权
+            int presellInventoryQuantity = 1;
+            List<PresellInventory> presellInventorieList = presellInventoryBO
+                .queryPresellInventoryListByGroup(originalGroup.getCode());
+            if (CollectionUtils.isNotEmpty(presellInventorieList)) {
+                for (PresellInventory presellInventory : presellInventorieList) {
+                    if (presellInventoryQuantity++ > data.getQuantity()) {
+                        break;
+                    }
+
+                    presellInventoryBO.refreshGroup(presellInventory.getCode(),
+                        EGroupType.DERIVE_GROUP.getCode(), originalGroupCode);
+                }
+            }
 
             // 认领寄售
             deriveGroupBO.refreshClaimDirect(deriveGroup.getCode());
 
+            // 生成认养权
+            PresellInventory presellInventory = presellInventoryBO
+                .getTreeNumberByGroup(originalGroupCode);
+            String[] treeNumbers = presellInventory.getTreeNumber().split("&");// 认养权的树
+
+            Set<String> treeNumberSet = new HashSet<>(
+                Arrays.asList(treeNumbers));
+
+            for (String treeNumber : treeNumberSet) {
+                adoptOrderTreeBO.saveAdoptOrderTree(presellProduct, data,
+                    treeNumber);
+            }
         }
 
         // 二维码
@@ -319,6 +355,18 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
             deriveGroupBO.refreshClaimQr(deriveGroup.getCode(),
                 deriveGroup.getClaimant());
 
+            // 生成认养权
+            PresellInventory presellInventory = presellInventoryBO
+                .getTreeNumberByGroup(originalGroupCode);
+            String[] treeNumbers = presellInventory.getTreeNumber().split("&");// 认养权的树
+
+            Set<String> treeNumberSet = new HashSet<>(
+                Arrays.asList(treeNumbers));
+
+            for (String treeNumber : treeNumberSet) {
+                adoptOrderTreeBO.saveAdoptOrderTree(presellProduct, data,
+                    treeNumber);
+            }
         }
 
         // 挂单
@@ -368,6 +416,18 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
             deriveGroupBO.refreshClaimPublic(deriveGroup.getCode(),
                 deriveGroup.getClaimant(), deriveGroup.getQuantity(), status);
 
+            // 生成认养权
+            PresellInventory presellInventory = presellInventoryBO
+                .getTreeNumberByGroup(originalGroupCode);
+            String[] treeNumbers = presellInventory.getTreeNumber().split("&");// 认养权的树
+
+            Set<String> treeNumberSet = new HashSet<>(
+                Arrays.asList(treeNumbers));
+
+            for (String treeNumber : treeNumberSet) {
+                adoptOrderTreeBO.saveAdoptOrderTree(presellProduct, data,
+                    treeNumber);
+            }
         }
 
         // 更新寄售数量

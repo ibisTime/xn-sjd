@@ -128,6 +128,14 @@ public class ArticleBOImpl extends PaginableBOImpl<Article>
     }
 
     @Override
+    public void refreshRead(String code, Integer readCount) {
+        Article data = new Article();
+        data.setCode(code);
+        data.setReadCount(readCount);
+        articleDAO.updateRead(data);
+    }
+
+    @Override
     public List<Article> queryPrivateArticleList(String userId) {
         Article condition = new Article();
         condition.setQueryUserId(userId);

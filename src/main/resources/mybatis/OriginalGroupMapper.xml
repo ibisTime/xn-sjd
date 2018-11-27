@@ -16,6 +16,7 @@
 		<result column="quantity" property="quantity" />
 		<result column="presell_quantity" property="presellQuantity" />
 		<result column="receiving_quantity" property="receivingQuantity" />
+		<result column="received_quantity" property="receivedQuantity" />
 		<result column="unit" property="unit" />
 		<result column="status" property="status" />
 		
@@ -48,7 +49,7 @@
 				AND t.status = #{status}
 			</if>
 			<if test="minQuantity != null and minQuantity != '' ">
-				AND (t.quantity > #{minQuantity} or t.presell_quantity > #{minQuantity} or t.receiving_quantity > #{minQuantity})
+				AND (t.quantity > #{minQuantity} or t.presell_quantity > #{minQuantity} or t.receiving_quantity > #{minQuantity} or t.received_quantity > #{minQuantity})
 			</if>
 			
 			<if test="adoptStartStartDatetime != null and adoptStartStartDatetime != '' ">
@@ -88,6 +89,7 @@
 		,t.quantity
 		,t.presell_quantity
 		,t.receiving_quantity
+		,t.received_quantity
 		,t.unit
 		,t.status
 		
@@ -195,6 +197,13 @@
 		UPDATE tys_original_group
 		SET
 		receiving_quantity = #{receivingQuantity}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_receivedQuantity" parameterType="originalGroup">
+		UPDATE tys_original_group
+		SET
+		received_quantity = #{receivedQuantity}
 		WHERE code = #{code}
 	</update>
 	

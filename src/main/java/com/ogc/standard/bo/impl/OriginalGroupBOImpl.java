@@ -135,6 +135,14 @@ public class OriginalGroupBOImpl extends PaginableBOImpl<OriginalGroup>
     }
 
     @Override
+    public void refreshReceivedQuantity(String code, Integer receivedQuantity) {
+        OriginalGroup originalGroup = new OriginalGroup();
+        originalGroup.setCode(code);
+        originalGroup.setReceivedQuantity(receivedQuantity);
+        originalGroupDAO.updateReceivedQuantity(originalGroup);
+    }
+
+    @Override
     public void refreshStartAdopt(String code) {
         OriginalGroup originalGroup = new OriginalGroup();
         originalGroup.setCode(code);

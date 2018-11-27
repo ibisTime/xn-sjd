@@ -102,6 +102,12 @@ public class GroupAdoptOrderDAOImpl extends AMybatisTemplate
     }
 
     @Override
+    public GroupAdoptOrder selectPayedTotalQuantity(GroupAdoptOrder data) {
+        return super.select(NAMESPACE.concat("select_payedTotalQuantity"), data,
+            GroupAdoptOrder.class);
+    }
+
+    @Override
     public List<GroupAdoptOrder> selectList(GroupAdoptOrder condition) {
         return super.selectList(NAMESPACE.concat("select_groupAdoptOrder"),
             condition, GroupAdoptOrder.class);

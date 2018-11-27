@@ -32,6 +32,9 @@ public interface IArticleBO extends IPaginableBO<Article> {
     // 收藏
     public void refreshCollect(String code, Integer collectCount);
 
+    // 阅读
+    public void refreshRead(String code, Integer readCount);
+
     // 查询好友私密文章列表
     public List<Article> queryPrivateArticleList(String userId);
 

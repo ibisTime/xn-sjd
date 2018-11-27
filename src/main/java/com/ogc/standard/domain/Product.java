@@ -176,6 +176,9 @@ public class Product extends ABaseDO {
     // 定向对象名称
     private String directObjectName;
 
+    // 销售类型列表
+    private List<String> sellTypeList;
+
     public String getDirectType() {
         return directType;
     }
@@ -598,6 +601,14 @@ public class Product extends ABaseDO {
 
     public void setDirectObjectName(String directObjectName) {
         this.directObjectName = directObjectName;
+    }
+
+    public List<String> getSellTypeList() {
+        return sellTypeList;
+    }
+
+    public void setSellTypeList(List<String> sellTypeList) {
+        this.sellTypeList = sellTypeList;
     }
 
 }

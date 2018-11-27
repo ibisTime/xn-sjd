@@ -39,6 +39,9 @@ public interface IArticleAO {
     // 收藏
     public void collectArticle(String code, String userId);
 
+    // 阅读
+    public void readArticle(String code, String userId);
+
     // 用户是否点赞收藏
     public XN629348Res isPointCollect(String code, String userId, String type);
 

@@ -16,6 +16,7 @@ import com.ogc.standard.bo.IAgentUserBO;
 import com.ogc.standard.bo.IApplyBindMaintainBO;
 import com.ogc.standard.bo.ICompanyBO;
 import com.ogc.standard.bo.IJourBO;
+import com.ogc.standard.bo.IPresellProductBO;
 import com.ogc.standard.bo.IProductBO;
 import com.ogc.standard.bo.ISYSRoleBO;
 import com.ogc.standard.bo.ISYSUserBO;
@@ -89,6 +90,9 @@ public class SYSUserAOImpl implements ISYSUserAO {
 
     @Autowired
     private IAdoptOrderTreeBO adoptOrderTreeBO;
+
+    @Autowired
+    private IPresellProductBO presellProductBO;
 
     // 新增用户（平台）
     @Override
@@ -448,11 +452,17 @@ public class SYSUserAOImpl implements ISYSUserAO {
             long count = treeBO.getTotalCountByOwnerId(data.getUserId());
             data.setTreeQuantity(String.valueOf(count));
 
-            // 古树市值
-            XN630065PriceRes priceRes = productBO
+            // 认养古树市值
+            XN630065PriceRes adoptPriceRes = productBO
                 .getOwnerProductPrice(data.getUserId());
-            data.setMaxPrice(priceRes.getMaxPrice());
-            data.setMinPrice(priceRes.getMinPrice());
+            data.setMaxPrice(adoptPriceRes.getMaxPrice());
+            data.setMinPrice(adoptPriceRes.getMinPrice());
+
+            // 预售古树市值
+            XN630065PriceRes presellPriceRes = presellProductBO
+                .getOwnerProductPrice(data.getUserId());
+            data.setMaxPresellPrice(presellPriceRes.getMaxPrice());
+            data.setMinPresellPrice(presellPriceRes.getMinPrice());
 
         } else if (ESYSUserKind.MAINTAIN.getCode().equals(data.getKind())) {
 
@@ -507,7 +517,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
             sysUserCount = sysUserBO.getTotalCount(createDatetimeStart,
                 createDatetimeEnd);
 
-            userTotalCount = userCount + agentUserCount + sysUserCount;
+            userTotalCount = userCount;
 
             res = new XN629901Res(userTotalCount);
         }

@@ -8,6 +8,7 @@ import com.ogc.standard.bo.base.IPaginableBO;
 import com.ogc.standard.domain.AdoptOrder;
 import com.ogc.standard.domain.AdoptOrderTree;
 import com.ogc.standard.domain.GroupAdoptOrder;
+import com.ogc.standard.domain.GroupOrder;
 import com.ogc.standard.domain.PresellOrder;
 import com.ogc.standard.domain.PresellProduct;
 import com.ogc.standard.domain.Product;
@@ -24,6 +25,9 @@ public interface IAdoptOrderTreeBO extends IPaginableBO<AdoptOrderTree> {
 
     public String saveAdoptOrderTree(PresellProduct presellProduct,
             PresellOrder presellOrder, String treeNumber);
+
+    public String saveAdoptOrderTree(PresellProduct presellProduct,
+            GroupOrder groupOrder, String treeNumber);
 
     public void giveTree(AdoptOrderTree data, User user, User toUser);
 
@@ -53,6 +57,12 @@ public interface IAdoptOrderTreeBO extends IPaginableBO<AdoptOrderTree> {
     public long getCountByOwner(String ownerId, Date createDatetimeStart,
             Date createDatetimeEnd);
 
+    // 产权方的认养权数量
+    public long getDistinctCountByOwner(String ownerId,
+            Date createDatetimeStart, Date createDatetimeEnd,
+            List<String> orderTypeList);
+
     // 产权方认养总额
-    public BigDecimal getTotalAmount(String ownerId, List<String> statusList);
+    public BigDecimal getTotalAmount(String ownerId, List<String> statusList,
+            List<String> orderTypeList);
 }

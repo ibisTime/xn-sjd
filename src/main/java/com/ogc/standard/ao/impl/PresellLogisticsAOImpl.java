@@ -74,6 +74,12 @@ public class PresellLogisticsAOImpl implements IPresellLogisticsAO {
         originalGroupBO.refreshReceivingQuantity(originalGroup.getCode(),
             originalGroup.getReceivingQuantity()
                     - presellLogistics.getDeliverCount());
+
+        // 更新已收货数量
+        originalGroupBO.refreshReceivedQuantity(originalGroup.getCode(),
+            originalGroup.getReceivedQuantity()
+                    + presellLogistics.getDeliverCount());
+
     }
 
     @Override

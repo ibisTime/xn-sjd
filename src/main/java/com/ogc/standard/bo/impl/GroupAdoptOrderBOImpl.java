@@ -243,18 +243,11 @@ public class GroupAdoptOrderBOImpl extends PaginableBOImpl<GroupAdoptOrder>
     }
 
     @Override
-    public GroupAdoptOrder getGroupAdoptOrderByIdentifyCode(
-            String identifyCode) {
-        GroupAdoptOrder data = null;
-        if (StringUtils.isNotBlank(identifyCode)) {
-            GroupAdoptOrder condition = new GroupAdoptOrder();
-            condition.setIdentifyCode(identifyCode);
-            data = groupAdoptOrderDAO.select(condition);
-            if (data == null) {
-                throw new BizException("xn0000", "识别码不存在");
-            }
-        }
-        return data;
+    public GroupAdoptOrder getPayedTotalQuantity(String productCode) {
+        GroupAdoptOrder condition = new GroupAdoptOrder();
+        condition.setProductCode(productCode);
+        condition.setStatus(EGroupAdoptOrderStatus.PAYED.getCode());
+        return groupAdoptOrderDAO.selectPayedTotalQuantity(condition);
     }
 
     @Override

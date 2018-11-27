@@ -230,4 +230,11 @@
 		collect_count = #{collectCount}
 		WHERE code = #{code}
 	</update>
+	
+	<update id="update_readCount" parameterType="article">
+		UPDATE tsj_article
+		SET
+		read_count = #{readCount}
+		WHERE code = #{code}
+	</update>
 </mapper>

@@ -48,6 +48,11 @@ public class OriginalGroupDAOImpl extends AMybatisTemplate
     }
 
     @Override
+    public int updateReceivedQuantity(OriginalGroup data) {
+        return super.update(NAMESPACE.concat("update_receivedQuantity"), data);
+    }
+
+    @Override
     public int updateReceiveOrignalGroup(OriginalGroup data) {
         return super.update(NAMESPACE.concat("update_receive"), data);
     }

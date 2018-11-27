@@ -34,5 +34,6 @@ public interface IAdoptOrderTreeAO {
     public AdoptOrderTree getAdoptOrderTree(String code);
 
     // 查询产权方认养总额
-    public XN629904Res getTotalAmount(String ownerId, List<String> statusList);
+    public XN629904Res getTotalAmount(String ownerId, List<String> statusList,
+            List<String> orderTypeList);
 }

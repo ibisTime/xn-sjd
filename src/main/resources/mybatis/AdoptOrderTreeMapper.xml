@@ -53,12 +53,20 @@
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
 			</if>
+			
 			<if test="statusList != null and statusList != '' ">
 				AND t.status in 
                 <foreach item="item" index="index" collection="statusList" open="(" separator="," close=")">
 	            	#{item}
                 </foreach> 
 			</if>
+			<if test="orderTypeList != null and orderTypeList != '' ">
+				AND t.order_type in 
+                <foreach item="item" index="index" collection="orderTypeList" open="(" separator="," close=")">
+	            	#{item}
+                </foreach> 
+			</if>
+			
 			<if test="currentHolder != null and currentHolder != '' ">
 				AND t.current_holder = #{currentHolder}
 			</if>
@@ -124,6 +132,12 @@
 	<select id="select_adoptOrderTree_count" parameterType="adoptOrderTree"
 		resultType="java.lang.Long">
 		SELECT count(1) FROM try_adopt_order_tree t
+		<include refid="where_condition" />
+	</select>
+	
+	<select id="select_distinctAdoptOrderTree_count" parameterType="adoptOrderTree"
+		resultType="java.lang.Long">
+		SELECT count(distinct(t.tree_number)) FROM try_adopt_order_tree t
 		<include refid="where_condition" />
 	</select>
 	

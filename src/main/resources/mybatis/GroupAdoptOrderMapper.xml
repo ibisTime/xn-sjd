@@ -139,6 +139,13 @@
 		<include refid="where_condition" />
 	</select>
 	
+	<select id="select_payedTotalQuantity" parameterType="groupAdoptOrder" resultMap="groupAdoptOrder_DB_Result">
+		SELECT 
+		ifnull(sum(t.quantity),0) as quantity
+		FROM try_group_adopt_order t
+		<include refid="where_condition" />
+	</select>
+	
 	<insert id="insert_firstGroupAdoptOrder" parameterType="groupAdoptOrder">
 		INSERT INTO
 		try_group_adopt_order(

@@ -17,4 +17,6 @@ public interface IArticleDAO extends IBaseDAO<Article> {
 
     public int updateCollect(Article data);
 
+    public int updateRead(Article data);
+
 }

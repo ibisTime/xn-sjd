@@ -25,10 +25,10 @@ public class XN629902 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        Date createStartDatetime = DateUtil.strToDate(
-            req.getCreateStartDatetime(), DateUtil.FRONT_DATE_FORMAT_STRING);
-        Date createEndDatetime = DateUtil.strToDate(req.getCreateEndDatetime(),
-            DateUtil.FRONT_DATE_FORMAT_STRING);
+        Date createStartDatetime = DateUtil
+            .getStartDatetime(req.getCreateStartDatetime());
+        Date createEndDatetime = DateUtil
+            .getEndDatetime(req.getCreateEndDatetime());
 
         return settleAO.getSettleTotalAmount(req.getUserId(), req.getStatus(),
             createStartDatetime, createEndDatetime);

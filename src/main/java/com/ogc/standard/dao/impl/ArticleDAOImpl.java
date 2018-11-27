@@ -70,4 +70,9 @@ public class ArticleDAOImpl extends AMybatisTemplate implements IArticleDAO {
         return super.update(NAMESPACE.concat("update_collectCount"), data);
     }
 
+    @Override
+    public int updateRead(Article data) {
+        return super.update(NAMESPACE.concat("update_readCount"), data);
+    }
+
 }

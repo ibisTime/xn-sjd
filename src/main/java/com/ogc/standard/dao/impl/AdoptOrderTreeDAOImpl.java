@@ -36,6 +36,12 @@ public class AdoptOrderTreeDAOImpl extends AMybatisTemplate
     }
 
     @Override
+    public long selectDistinctTotalCount(AdoptOrderTree condition) {
+        return super.selectTotalCount(
+            NAMESPACE.concat("select_distinctAdoptOrderTree_count"), condition);
+    }
+
+    @Override
     public BigDecimal selectTotalAmount(AdoptOrderTree condition) {
         return super.select(NAMESPACE.concat("select_adoptOrderTree_amountSum"),
             condition, BigDecimal.class);

@@ -173,7 +173,7 @@
 	<bean id="doInvalidIdentifyCodeTrigger"
 		  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="doInvalidIdentifyCode" />
-		<property name="cronExpression" value="0 */15 * * * ?"/><!-- 每15分钟执行 -->
+		<property name="cronExpression" value="0 */5 * * * ?"/><!-- 每5分钟执行 -->
 	</bean>
 	
 	<bean id="doInvalidIdentifyCode"

@@ -92,6 +92,13 @@
                 </foreach>
             </if>
             
+			<if test="sellTypeList != null and sellTypeList != '' ">
+                AND t.sell_type in
+                <foreach item="item" index="index" collection="sellTypeList" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            
 			<if test="raiseStartStartDatetime != null and raiseStartStartDatetime != '' ">
 				<![CDATA[AND t.raise_start_datetime >= #{raiseStartStartDatetime}]]>
 			</if>

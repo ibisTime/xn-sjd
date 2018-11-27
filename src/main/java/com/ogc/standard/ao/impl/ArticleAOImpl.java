@@ -268,6 +268,13 @@ public class ArticleAOImpl implements IArticleAO {
     }
 
     @Override
+    public void readArticle(String code, String userId) {
+        Article article = articleBO.getArticle(code);
+
+        articleBO.refreshRead(code, article.getReadCount() + 1);
+    }
+
+    @Override
     public XN629348Res isPointCollect(String code, String userId, String type) {
         Interact interact = interactBO.getInteract(type,
             EObjectType.ARTICLE.getCode(), code, userId);

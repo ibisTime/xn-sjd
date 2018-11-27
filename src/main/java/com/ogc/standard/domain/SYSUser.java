@@ -100,11 +100,17 @@ public class SYSUser extends ABaseDO {
     // 公司
     private Company company;
 
-    // 古树最大市值
+    // 认养古树最大市值
     private BigDecimal maxPrice;
 
-    // 古树最小市值
+    // 认养古树最小市值
     private BigDecimal minPrice;
+
+    // 预售古树最大市值
+    private BigDecimal maxPresellPrice;
+
+    // 预售古树最小市值
+    private BigDecimal minPresellPrice;
 
     public String getUserId() {
         return userId;
@@ -336,6 +342,22 @@ public class SYSUser extends ABaseDO {
 
     public void setMinPrice(BigDecimal minPrice) {
         this.minPrice = minPrice;
+    }
+
+    public BigDecimal getMaxPresellPrice() {
+        return maxPresellPrice;
+    }
+
+    public void setMaxPresellPrice(BigDecimal maxPresellPrice) {
+        this.maxPresellPrice = maxPresellPrice;
+    }
+
+    public BigDecimal getMinPresellPrice() {
+        return minPresellPrice;
+    }
+
+    public void setMinPresellPrice(BigDecimal minPresellPrice) {
+        this.minPresellPrice = minPresellPrice;
     }
 
 }

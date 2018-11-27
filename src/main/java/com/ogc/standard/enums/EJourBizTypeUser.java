@@ -31,7 +31,11 @@ public enum EJourBizTypeUser {
 
     ADOPT_DIRECT("adopt_direct", "用户直推认养分成"),
 
+    ADOPT_INDIRECT("adopt_indirect", "用户间推认养分成"),
+
     PRESELL_DIRECT("presell_direct", "用户直推预售分成"),
+
+    PRESELL_INDIRECT("presell_indirect", "用户间推预售分成"),
 
     ADOPT_COLLECT("adopt_collect", "集体认养"),
 
@@ -44,6 +48,7 @@ public enum EJourBizTypeUser {
     COMMODITY("commodity", "商城购买"),
 
     AFTER_SALE("after_sale", "售后退款"),
+
     // 碳泡泡账户
     ADOPT_DAY_BACK("adopt_day_back", "认养消费每日收取碳泡泡"),
 

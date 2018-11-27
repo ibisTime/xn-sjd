@@ -143,6 +143,10 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
             }
         }
 
+        // 更新认养产品的已募集数量
+        productBO.refreshNowCount(product.getCode(),
+            product.getNowCount() + quantity);
+
         return code;
     }
 
@@ -179,8 +183,8 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
             userId, quantity, product, productSpecs);
 
         // 更新认养产品的已募集数量
-        // productBO.refreshNowCount(product.getCode(),
-        // product.getNowCount() + quantity);
+        productBO.refreshNowCount(product.getCode(),
+            product.getNowCount() + quantity);
 
         return code;
     }
@@ -307,10 +311,6 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
         // 业务订单更改
         groupAdoptOrderBO.payYueSuccess(data, resultRes, backJfAmount);
 
-        // 更新认养产品的已募集数量
-        productBO.refreshNowCount(data.getProductCode(),
-            data.getQuantity() + productInfo.getNowCount());
-
         // 分配认养权、更新树状态
         List<Tree> treeList = treeBO
             .queryTreeListByProduct(data.getProductCode());
@@ -366,10 +366,6 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
             // 业务订单更改
             groupAdoptOrderBO.paySuccess(data, data.getAmount(), backJfAmount);
 
-            // 更新认养产品的已募集数量
-            // productBO.refreshNowCount(data.getProductCode(),
-            // data.getQuantity() + productInfo.getNowCount());
-
             // 分配认养权、更新树状态
             List<Tree> treeList = treeBO
                 .queryTreeListByProduct(data.getProductCode());
@@ -422,18 +418,16 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
         if (CollectionUtils.isNotEmpty(productList)) {
             for (Product product : productList) {
 
-                // 更新产品状态
-                productBO.refreshAdoptProduct(product.getCode());
+                // 若已全部支付，则更新状态
+                GroupAdoptOrder groupAdoptOrder = groupAdoptOrderBO
+                    .getPayedTotalQuantity(product.getCode());
+                if (groupAdoptOrder.getQuantity() == product.getRaiseCount()) {
+                    productBO.refreshAdoptProduct(product.getCode());
 
-                // 更新订单状态
-                List<GroupAdoptOrder> groupAdoptOrderList = groupAdoptOrderBO
-                    .queryGroupAdoptOrderById(product.getIdentifyCode());
-                for (GroupAdoptOrder groupAdoptOrder : groupAdoptOrderList) {
-                    System.out.println(groupAdoptOrder.getStatus());
+                    groupAdoptOrderBO
+                        .refreshFullOrderById(product.getIdentifyCode());
                 }
 
-                groupAdoptOrderBO
-                    .refreshFullOrderById(product.getIdentifyCode());
             }
         }
     }

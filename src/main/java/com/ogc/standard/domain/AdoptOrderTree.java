@@ -88,6 +88,9 @@ public class AdoptOrderTree extends ABaseDO {
     // 用户认养权数量
     private Integer userAdoptTreeCount;
 
+    // 订单类型列表
+    private List<String> orderTypeList;
+
     public User getUser() {
         return user;
     }
@@ -278,6 +281,14 @@ public class AdoptOrderTree extends ABaseDO {
 
     public void setUserAdoptTreeCount(Integer userAdoptTreeCount) {
         this.userAdoptTreeCount = userAdoptTreeCount;
+    }
+
+    public List<String> getOrderTypeList() {
+        return orderTypeList;
+    }
+
+    public void setOrderTypeList(List<String> orderTypeList) {
+        this.orderTypeList = orderTypeList;
     }
 
 }

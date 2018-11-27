@@ -84,21 +84,6 @@ public class OriginalGroupAOImpl implements IOriginalGroupAO {
         String deriveGroupCode = deriveGroupBO.saveDirectSales(code, price,
             quantity, claimant.getUserId());
 
-        // 转移预售权
-        int presellInventoryQuantity = 0;
-        List<PresellInventory> presellInventorieList = presellInventoryBO
-            .queryPresellInventoryListByGroup(code);
-        if (CollectionUtils.isNotEmpty(presellInventorieList)) {
-            for (PresellInventory presellInventory : presellInventorieList) {
-                if (++presellInventoryQuantity > quantity) {
-                    break;
-                }
-
-                presellInventoryBO.refreshGroup(presellInventory.getCode(),
-                    EGroupType.DERIVE_GROUP.getCode(), deriveGroupCode);
-            }
-        }
-
         // 更新数量
         originalGroupBO.refreshQuantity(code,
             originalGroup.getQuantity() - quantity);

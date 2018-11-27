@@ -170,9 +170,9 @@ public class CarbonBubbleOrderAOImpl implements ICarbonBubbleOrderAO {
                     ECurrency.TPP.getCode());
 
                 BigDecimal quantity = carbonBubbleOrder.getQuantity();
-                if (quantity.compareTo(sysTppAccount.getAmount()) == 1) {
-                    quantity = sysTppAccount.getAmount();
-                }
+                // if (quantity.compareTo(sysTppAccount.getAmount()) == 1) {
+                // quantity = sysTppAccount.getAmount();
+                // }
 
                 accountBO.transAmount(sysTppAccount, userTppAccount, quantity,
                     EJourBizTypeUser.ADOPT_DAY_BACK.getCode(),

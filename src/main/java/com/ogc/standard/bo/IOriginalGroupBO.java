@@ -25,6 +25,9 @@ public interface IOriginalGroupBO extends IPaginableBO<OriginalGroup> {
     public void refreshReceivingQuantity(String code,
             Integer receivingQuantity);
 
+    // 更新已提货数量
+    public void refreshReceivedQuantity(String code, Integer receivedQuantity);
+
     // 开始认养
     public void refreshStartAdopt(String code);
 

@@ -31,7 +31,6 @@ import com.ogc.standard.domain.AgentUser;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.domain.UserExt;
 import com.ogc.standard.dto.res.XN629048Res;
-import com.ogc.standard.enums.EAccountType;
 import com.ogc.standard.enums.EAgentUserLevel;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.EChannelType;
@@ -195,8 +194,10 @@ public class DistributionOrderBOImpl implements IDistributionOrderBO {
         }
 
         // 代理方分销
-        distributionAgent(code, applyUser, amount, type, mapList, payAmount,
-            resultRes);
+        BigDecimal agentTotalAmount = payAmount.multiply(
+            new BigDecimal(mapList.get(SysConstants.DIST_AGENT_RATE)));// 分成总金额
+        distributionAgent(code, applyUser, amount, type, mapList,
+            agentTotalAmount, resultRes);
 
         // 平台积分池分销
         BigDecimal sysJfpoolCny = payAmount.multiply(
@@ -224,13 +225,6 @@ public class DistributionOrderBOImpl implements IDistributionOrderBO {
             }
         }
 
-        // 积分池不足时将剩余积分转给用户
-        // Account sysAccount = accountBO
-        // .getAccount(ESystemAccount.SYS_ACOUNT_JF_POOL.getCode());
-        // if (jfAwardAmount.compareTo(sysAccount.getAmount()) == 1) {
-        // jfAwardAmount = sysAccount.getAmount();
-        // }
-
         // C端用户返积分
         accountBO.transAmount(ESysUser.SYS_USER.getCode(),
             ECurrency.JF.getCode(), applyUser, ECurrency.JF.getCode(),
@@ -243,8 +237,8 @@ public class DistributionOrderBOImpl implements IDistributionOrderBO {
         User user = userBO.getUser(applyUser);
         if (EUserRefereeType.USER.getCode().equals(user.getUserRefereeType())) {
 
-            BigDecimal adoptDirectRate = sysJfpoolCny.multiply(
-                new BigDecimal(mapList.get(SysConstants.ADOPT_DIRECT)));// 用户直推认养送比例
+            BigDecimal adoptDirectRate = new BigDecimal(
+                mapList.get(SysConstants.ADOPT_DIRECT));// 用户直推认养送比例
             BigDecimal adoptDirectAmount = payAmount.multiply(adoptDirectRate);// 用户直推认养送金额
 
             accountBO.transAmount(ESysUser.SYS_USER.getCode(),
@@ -254,7 +248,24 @@ public class DistributionOrderBOImpl implements IDistributionOrderBO {
                 EJourBizTypePlat.ADOPT_DIRECT.getValue(),
                 EJourBizTypeUser.ADOPT_DIRECT.getValue(), code);
 
-            // TODO 间推用户分销
+            // 间推用户分销
+            User directUser = userBO.getUser(user.getUserReferee());
+            if (EUserRefereeType.USER.getCode()
+                .equals(directUser.getUserRefereeType())) {
+
+                BigDecimal adoptInDirectRate = new BigDecimal(
+                    mapList.get(SysConstants.ADOPT_INDIRECT));// 用户间推认养送比例
+                BigDecimal adoptInDirectAmount = payAmount
+                    .multiply(adoptInDirectRate);// 用户间推认养送金额
+
+                accountBO.transAmount(ESysUser.SYS_USER.getCode(),
+                    directUser.getUserReferee(), ECurrency.CNY.getCode(),
+                    adoptInDirectAmount,
+                    EJourBizTypePlat.ADOPT_INDIRECT.getCode(),
+                    EJourBizTypeUser.ADOPT_INDIRECT.getCode(),
+                    EJourBizTypePlat.ADOPT_INDIRECT.getValue(),
+                    EJourBizTypeUser.ADOPT_INDIRECT.getValue(), code);
+            }
         }
 
         return jfAwardAmount;
@@ -291,8 +302,10 @@ public class DistributionOrderBOImpl implements IDistributionOrderBO {
         }
 
         // 代理方分销
-        distributionAgent(code, applyUser, amount, type, mapList, payAmount,
-            resultRes);
+        BigDecimal agentTotalAmount = payAmount.multiply(
+            new BigDecimal(mapList.get(SysConstants.PRESELL_DIST_AGENT_RATE)));// 分成总金额
+        distributionAgent(code, applyUser, amount, type, mapList,
+            agentTotalAmount, resultRes);
 
         // 平台积分池分销
         BigDecimal sysJfpoolCny = payAmount.multiply(new BigDecimal(
@@ -320,13 +333,6 @@ public class DistributionOrderBOImpl implements IDistributionOrderBO {
             }
         }
 
-        // 积分池不足时将剩余积分转给用户
-        // Account sysAccount = accountBO
-        // .getAccount(ESystemAccount.SYS_ACOUNT_JF_POOL.getCode());
-        // if (jfAwardAmount.compareTo(sysAccount.getAmount()) == 1) {
-        // jfAwardAmount = sysAccount.getAmount();
-        // }
-
         // C端用户返积分
         accountBO.transAmount(ESysUser.SYS_USER.getCode(),
             ECurrency.JF.getCode(), applyUser, ECurrency.JF.getCode(),
@@ -337,10 +343,10 @@ public class DistributionOrderBOImpl implements IDistributionOrderBO {
 
         // 直推用户分销
         User user = userBO.getUser(applyUser);
-        if (EAccountType.CUSTOMER.getCode().equals(user.getUserRefereeType())) {
+        if (EUserRefereeType.USER.getCode().equals(user.getUserRefereeType())) {
 
-            BigDecimal adoptDirectRate = sysJfpoolCny.multiply(
-                new BigDecimal(mapList.get(SysConstants.PRESELL_DIRECT)));// 用户直推预售送比例
+            BigDecimal adoptDirectRate = new BigDecimal(
+                mapList.get(SysConstants.PRESELL_DIRECT));// 用户直推预售送比例
             BigDecimal adoptDirectAmount = payAmount.multiply(adoptDirectRate);// 用户直推预售送金额
 
             accountBO.transAmount(ESysUser.SYS_USER.getCode(),
@@ -350,6 +356,24 @@ public class DistributionOrderBOImpl implements IDistributionOrderBO {
                 EJourBizTypePlat.PRESELL_DIRECT.getValue(),
                 EJourBizTypeUser.PRESELL_DIRECT.getValue(), code);
 
+            // 间推用户分销
+            User directUser = userBO.getUser(user.getUserReferee());
+            if (EUserRefereeType.USER.getCode()
+                .equals(directUser.getUserRefereeType())) {
+
+                BigDecimal adoptInDirectRate = new BigDecimal(
+                    mapList.get(SysConstants.PRESELL_INDIRECT));// 用户间推预售送比例
+                BigDecimal adoptInDirectAmount = payAmount
+                    .multiply(adoptInDirectRate);// 用户间推认养送金额
+
+                accountBO.transAmount(ESysUser.SYS_USER.getCode(),
+                    directUser.getUserReferee(), ECurrency.CNY.getCode(),
+                    adoptInDirectAmount,
+                    EJourBizTypePlat.PRESELL_INDIRECT.getCode(),
+                    EJourBizTypeUser.PRESELL_INDIRECT.getCode(),
+                    EJourBizTypePlat.PRESELL_INDIRECT.getValue(),
+                    EJourBizTypeUser.PRESELL_INDIRECT.getValue(), code);
+            }
         }
 
         return jfAwardAmount;
@@ -358,7 +382,7 @@ public class DistributionOrderBOImpl implements IDistributionOrderBO {
     // 代理等级分销
     private void distributionAgent(String code, String applyUserId,
             BigDecimal amount, String type, Map<String, String> mapList,
-            BigDecimal payAmount, XN629048Res resultRes) {
+            BigDecimal agentTotalAmount, XN629048Res resultRes) {
         // 拿到下单用户的代理商
         User applyUser = userBO.getUser(applyUserId);
         if (StringUtils.isBlank(applyUser.getAgentId())) {
@@ -368,9 +392,6 @@ public class DistributionOrderBOImpl implements IDistributionOrderBO {
         String dkNote = getDKNote(resultRes.getJfAmount(),
             resultRes.getCnyAmount());
 
-        // 分成总金额
-        BigDecimal agentTotalAmount = payAmount.multiply(
-            new BigDecimal(mapList.get(SysConstants.DIST_AGENT_RATE)));
         AgentUser agentUser = agentUserBO.getAgentUser(applyUser.getAgentId());
         if (EAgentUserLevel.FOUR.getCode().equals(agentUser.getLevel())) {
             agent4Back(code, amount, type, applyUser, agentUser,
@@ -423,7 +444,7 @@ public class DistributionOrderBOImpl implements IDistributionOrderBO {
         BigDecimal level3Rate = totalLevel3Rate.subtract(level4Rate);
         BigDecimal settle3Amount = agentTotalAmount.multiply(level3Rate);
 
-        preNote = "三级代理下级用户" + realName + "消费" + AmountUtil.div(amount, 1000L)
+        preNote = "四级代理下级用户" + realName + "消费" + AmountUtil.div(amount, 1000L)
                 + ",则用于级差是" + AmountUtil.div(settle3Amount, 1000L) + "。";
         if (StringUtils.isNotBlank(dkNote)) {
             preNote = preNote + "(" + dkNote + ")";
@@ -443,7 +464,7 @@ public class DistributionOrderBOImpl implements IDistributionOrderBO {
         BigDecimal level2Rate = totalLevel2Rate.subtract(totalLevel3Rate);
         BigDecimal settle2Amount = agentTotalAmount.multiply(level2Rate);
 
-        preNote = "二级代理下级用户" + realName + "消费" + AmountUtil.div(amount, 1000L)
+        preNote = "四级代理下级用户" + realName + "消费" + AmountUtil.div(amount, 1000L)
                 + ",则用于级差是" + AmountUtil.div(settle2Amount, 1000L) + "。";
         if (StringUtils.isNotBlank(dkNote)) {
             preNote = preNote + "(" + dkNote + ")";
@@ -463,7 +484,7 @@ public class DistributionOrderBOImpl implements IDistributionOrderBO {
         BigDecimal level1Rate = totalLevel1Rate.subtract(totalLevel2Rate);
         BigDecimal settle1Amount = agentTotalAmount.multiply(level1Rate);
 
-        preNote = "一级代理下级用户" + realName + "消费" + AmountUtil.div(amount, 1000L)
+        preNote = "四级代理下级用户" + realName + "消费" + AmountUtil.div(amount, 1000L)
                 + ",则用于级差是" + AmountUtil.div(settle1Amount, 1000L) + "。";
         if (StringUtils.isNotBlank(dkNote)) {
             preNote = preNote + "(" + dkNote + ")";
@@ -504,7 +525,7 @@ public class DistributionOrderBOImpl implements IDistributionOrderBO {
         BigDecimal level2Rate = totalLevel2Rate.subtract(level3Rate);
         BigDecimal settle2Amount = agentTotalAmount.multiply(level2Rate);
 
-        preNote = "二级代理下级用户" + realName + "消费" + AmountUtil.div(amount, 1000L)
+        preNote = "三级代理下级用户" + realName + "消费" + AmountUtil.div(amount, 1000L)
                 + ",则用于级差是" + AmountUtil.div(settle2Amount, 1000L) + "。";
         if (StringUtils.isNotBlank(dkNote)) {
             preNote = preNote + "(" + dkNote + ")";
@@ -524,7 +545,7 @@ public class DistributionOrderBOImpl implements IDistributionOrderBO {
         BigDecimal level1Rate = totalLevel1Rate.subtract(totalLevel2Rate);
         BigDecimal settle1Amount = agentTotalAmount.multiply(level1Rate);
 
-        preNote = "一级代理下级用户" + realName + "消费" + AmountUtil.div(amount, 1000L)
+        preNote = "三级代理下级用户" + realName + "消费" + AmountUtil.div(amount, 1000L)
                 + ",则用于级差是" + AmountUtil.div(settle1Amount, 1000L) + "。";
         if (StringUtils.isNotBlank(dkNote)) {
             preNote = preNote + "(" + dkNote + ")";
@@ -565,7 +586,7 @@ public class DistributionOrderBOImpl implements IDistributionOrderBO {
         BigDecimal level1Rate = totalLevel1Rate.subtract(level2Rate);
         BigDecimal settle1Amount = agentTotalAmount.multiply(level1Rate);
 
-        preNote = "一级代理下级用户" + realName + "消费" + AmountUtil.div(amount, 1000L)
+        preNote = "二级代理下级用户" + realName + "消费" + AmountUtil.div(amount, 1000L)
                 + ",则用于级差是" + AmountUtil.div(settle1Amount, 1000L) + "。";
         if (StringUtils.isNotBlank(dkNote)) {
             preNote = preNote + "(" + dkNote + ")";

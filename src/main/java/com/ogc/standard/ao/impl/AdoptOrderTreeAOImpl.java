@@ -173,13 +173,15 @@ public class AdoptOrderTreeAOImpl implements IAdoptOrderTreeAO {
     }
 
     @Override
-    public XN629904Res getTotalAmount(String ownerId, List<String> statusList) {
+    public XN629904Res getTotalAmount(String ownerId, List<String> statusList,
+            List<String> orderTypeList) {
         // 已认养的总值
         BigDecimal totalAmount = adoptOrderTreeBO.getTotalAmount(ownerId,
-            statusList);
+            statusList, orderTypeList);
 
         // 已认养的树木数量
-        long treeCount = adoptOrderTreeBO.getCountByOwner(ownerId, null, null);
+        long treeCount = adoptOrderTreeBO.getDistinctCountByOwner(ownerId, null,
+            null, orderTypeList);
 
         return new XN629904Res(totalAmount, treeCount);
     }

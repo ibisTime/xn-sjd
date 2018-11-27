@@ -83,4 +83,15 @@ public class PresellInventoryBOImpl extends PaginableBOImpl<PresellInventory>
         return data;
     }
 
+    @Override
+    public PresellInventory getTreeNumberByGroup(String groupCode) {
+        PresellInventory data = null;
+        if (StringUtils.isNotBlank(groupCode)) {
+            PresellInventory condition = new PresellInventory();
+            condition.setGroupCode(groupCode);
+            data = presellInventoryDAO.selectTreeNumber(condition);
+        }
+        return data;
+    }
+
 }

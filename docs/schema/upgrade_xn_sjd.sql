@@ -254,3 +254,7 @@ ALTER TABLE `tstd_user_ext`
 ADD COLUMN `auth_status` VARCHAR(4) NULL COMMENT '认证状态' AFTER `bussiness_license`;
 
 update tsj_article set collect_count = 0, point_count = 0, read_count = 0;
+
+#V2.0.0 3-2
+ALTER TABLE `tys_original_group` 
+ADD COLUMN `received_quantity` INT(11) NULL DEFAULT 0 COMMENT '已提货数量' AFTER `receiving_quantity`;

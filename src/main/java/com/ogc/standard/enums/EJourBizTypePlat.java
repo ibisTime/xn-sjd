@@ -30,7 +30,11 @@ public enum EJourBizTypePlat {
 
     ADOPT_DIRECT("adopt_direct", "用户直推认养分成"),
 
+    ADOPT_INDIRECT("adopt_indirect", "用户间推认养分成"),
+
     PRESELL_DIRECT("presell_direct", "用户直推预售分成"),
+
+    PRESELL_INDIRECT("presell_indirect", "用户间推预售分成"),
 
     ADOPT_PROFIT("adopt_profit", "认养收益"),
 

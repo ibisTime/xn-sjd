@@ -1,21 +1,26 @@
 package com.ogc.standard.bo.impl;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.ogc.standard.bo.IPresellProductBO;
+import com.ogc.standard.bo.IPresellSpecsBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.dao.IPresellProductDAO;
 import com.ogc.standard.domain.PresellProduct;
+import com.ogc.standard.domain.PresellSpecs;
 import com.ogc.standard.dto.req.XN629400Req;
 import com.ogc.standard.dto.req.XN629401Req;
+import com.ogc.standard.dto.res.XN630065PriceRes;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.enums.EPresellProductStatus;
 import com.ogc.standard.exception.BizException;
@@ -26,6 +31,9 @@ public class PresellProductBOImpl extends PaginableBOImpl<PresellProduct>
 
     @Autowired
     private IPresellProductDAO presellProductDAO;
+
+    @Autowired
+    private IPresellSpecsBO presellSpecsBO;
 
     @Override
     public PresellProduct savePresellProduct(XN629400Req req) {
@@ -205,6 +213,46 @@ public class PresellProductBOImpl extends PaginableBOImpl<PresellProduct>
     public List<PresellProduct> queryPresellProductList(
             PresellProduct condition) {
         return presellProductDAO.selectList(condition);
+    }
+
+    @Override
+    public XN630065PriceRes getOwnerProductPrice(String ownerId) {
+        PresellProduct productCondition = new PresellProduct();
+        productCondition.setOwnerId(ownerId);
+        List<PresellProduct> productList = queryPresellProductList(
+            productCondition);
+
+        // 初始化最小价格和最大价格
+        BigDecimal minPrice = BigDecimal.ZERO;
+        BigDecimal maxPrice = minPrice;
+
+        if (CollectionUtils.isNotEmpty(productList)) {
+            for (PresellProduct product : productList) {
+                List<PresellSpecs> specsList = presellSpecsBO
+                    .queryPresellSpecsListByProduct(product.getCode());
+
+                BigDecimal minPriceTmp = BigDecimal.ZERO;
+                BigDecimal maxPriceTmp = minPriceTmp;
+                for (PresellSpecs productSpecs : specsList) {
+                    if (minPriceTmp.compareTo(BigDecimal.ZERO) == 0) {
+                        minPriceTmp = productSpecs.getPrice();
+                    }
+                    if (productSpecs.getPrice().compareTo(minPriceTmp) < 0) {
+                        minPriceTmp = productSpecs.getPrice();
+                    }
+                    if (productSpecs.getPrice().compareTo(maxPriceTmp) > 0) {
+                        maxPriceTmp = productSpecs.getPrice();
+                    }
+                }
+
+                // minPrice = minPrice
+                // .add(AmountUtil.mul(minPriceTmp, product.getRaiseCount()));
+                // maxPrice = maxPrice
+                // .add(AmountUtil.mul(maxPriceTmp, product.getRaiseCount()));
+            }
+        }
+
+        return new XN630065PriceRes(maxPrice, minPrice);
     }
 
     @Override

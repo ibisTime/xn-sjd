@@ -14,4 +14,7 @@ public interface IPresellInventoryDAO extends IBaseDAO<PresellInventory> {
     // 查询树木列表
     public List<PresellInventory> selectTreeNumberList(PresellInventory data);
 
+    // 查询树木
+    public PresellInventory selectTreeNumber(PresellInventory data);
+
 }

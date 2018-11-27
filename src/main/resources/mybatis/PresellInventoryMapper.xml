@@ -57,6 +57,16 @@
 			</if>
 		</trim>
 	</select>
+	
+	<select id="select_concat_treeNumber" parameterType="presellInventory" resultMap="presellInventory_DB_Result">
+		SELECT
+		t.group_code, 
+		group_concat(distinct(t.tree_number)) as tree_number
+		FROM
+		tys_presell_inventory t
+		<include refid="where_condition" />
+		group by t.group_code
+	</select>
 
 	<select id="select_presellInventory_count" parameterType="presellInventory"
 		resultType="java.lang.Long">

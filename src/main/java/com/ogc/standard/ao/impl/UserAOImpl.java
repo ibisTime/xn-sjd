@@ -596,7 +596,8 @@ public class UserAOImpl implements IUserAO {
 
         // 添加积分
         User user = userBO.getUser(userId);
-        if (null == user.getPhoto()) {
+        if (null == user.getPhoto()
+                || user.getPhoto().startsWith("http://thirdwx")) {
             Map<String, String> configMap = sysConfigBO
                 .getConfigsMap(ESysConfigType.JF_RULE.getCode());
             BigDecimal quantity = new BigDecimal(
@@ -762,6 +763,11 @@ public class UserAOImpl implements IUserAO {
                 ECaptchaType.MOBILE_CHANGE.getCode());
         }
 
+        assignBindMobileJF(userId);
+
+    }
+
+    private void assignBindMobileJF(String userId) {
         // 添加积分
         Map<String, String> configMap = sysConfigBO
             .getConfigsMap(ESysConfigType.JF_RULE.getCode());
@@ -784,7 +790,6 @@ public class UserAOImpl implements IUserAO {
             EJourBizTypePlat.BIND_MOBILE.getCode(),
             EJourBizTypeUser.BIND_MOBILE.getValue(),
             EJourBizTypePlat.BIND_MOBILE.getValue(), userId);
-
     }
 
     @Override
@@ -877,8 +882,8 @@ public class UserAOImpl implements IUserAO {
     public void doModifyUserInfo(XN805070Req req) {
 
         // 添加积分
-        User user = userBO.getUser(req.getUserId());
-        if (null == user.getRealName()) {
+        UserExt userExt = userExtBO.getUserExt(req.getUserId());
+        if (null == userExt.getAge()) {
             Map<String, String> configMap = sysConfigBO
                 .getConfigsMap(ESysConfigType.JF_RULE.getCode());
             BigDecimal quantity = new BigDecimal(
@@ -1122,6 +1127,11 @@ public class UserAOImpl implements IUserAO {
 
             // ext中添加数据
             userExtBO.addUserExt(userId);
+
+            doAssignRegistJf(userId, userReferee, req.getUserRefereeKind());
+
+            assignBindMobileJF(userId);
+
             mobileUserId = userId;
         } else {
             userBO.refreshWxInfo(mobileUserId, unionId, h5OpenId, nickname,

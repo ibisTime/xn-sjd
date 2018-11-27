@@ -52,6 +52,9 @@ public class OriginalGroup extends ABaseDO {
     // 提货中数量
     private Integer receivingQuantity;
 
+    // 已提货数量
+    private Integer receivedQuantity;
+
     // 单位
     private String unit;
 
@@ -345,6 +348,14 @@ public class OriginalGroup extends ABaseDO {
 
     public void setDeliverDatetimeEnd(Date deliverDatetimeEnd) {
         this.deliverDatetimeEnd = deliverDatetimeEnd;
+    }
+
+    public Integer getReceivedQuantity() {
+        return receivedQuantity;
+    }
+
+    public void setReceivedQuantity(Integer receivedQuantity) {
+        this.receivedQuantity = receivedQuantity;
     }
 
 }

@@ -6,6 +6,7 @@ import com.ogc.standard.bo.base.IPaginableBO;
 import com.ogc.standard.domain.PresellProduct;
 import com.ogc.standard.dto.req.XN629400Req;
 import com.ogc.standard.dto.req.XN629401Req;
+import com.ogc.standard.dto.res.XN630065PriceRes;
 
 public interface IPresellProductBO extends IPaginableBO<PresellProduct> {
 
@@ -35,6 +36,8 @@ public interface IPresellProductBO extends IPaginableBO<PresellProduct> {
 
     public List<PresellProduct> queryPresellProductList(
             PresellProduct condition);
+
+    public XN630065PriceRes getOwnerProductPrice(String ownerId);
 
     public PresellProduct getPresellProduct(String code);
 

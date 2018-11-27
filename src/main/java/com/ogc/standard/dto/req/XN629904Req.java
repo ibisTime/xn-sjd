@@ -18,6 +18,9 @@ public class XN629904Req extends BaseReq {
     // 状态列表
     private List<String> statusList;
 
+    // 订单类型列表
+    private List<String> orderTypeList;
+
     public List<String> getStatusList() {
         return statusList;
     }
@@ -32,6 +35,14 @@ public class XN629904Req extends BaseReq {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public List<String> getOrderTypeList() {
+        return orderTypeList;
+    }
+
+    public void setOrderTypeList(List<String> orderTypeList) {
+        this.orderTypeList = orderTypeList;
     }
 
 }

@@ -18,6 +18,8 @@ public interface IAdoptOrderTreeDAO extends IBaseDAO<AdoptOrderTree> {
     // 查询认养总额
     public BigDecimal selectTotalAmount(AdoptOrderTree condition);
 
+    public long selectDistinctTotalCount(AdoptOrderTree condition);
+
     // 产品已认养名单
     public List<AdoptOrderTree> selectProductAdoptedOrder(
             AdoptOrderTree condition);

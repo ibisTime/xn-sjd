@@ -82,6 +82,8 @@ public class SysConstants {
 
     public static String ADOPT_DIRECT = "ADOPT_DIRECT"; // 用户直推认养送
 
+    public static String ADOPT_INDIRECT = "ADOPT_INDIRECT"; // 用户间推认养送
+
     // 预售分销
     public static String PRESELL_DIST_OWENER_RATE = "PRESELL_DIST_OWENER_RATE"; // 产权方的总额
 
@@ -94,6 +96,8 @@ public class SysConstants {
     public static String PRESELL_DIST_USER_BACK_JF_RATE = "PRESELL_DIST_USER_BACK_JF_RATE"; // 用户返积分的总额
 
     public static String PRESELL_DIRECT = "PRESELL_DIRECT"; // 用户直推预售送
+
+    public static String PRESELL_INDIRECT = "PRESELL_INDIRECT"; // 用户间推预售送
 
     // 商城分销
     public static String DIST_BUSINESS_RATE = "DIST_BUSINESS_RATE"; // 代理方的总额

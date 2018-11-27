@@ -2,7 +2,9 @@ package com.ogc.standard.ao.impl;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -347,9 +349,11 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
         int tmpPackWeight;// 预售权已经分配的重量
         int tmpTreeWeight;// 树已分配的总数量
         int packWeight = presellProduct.getPackWeight();// 包装重量:$斤/箱
-        int quantity = presellOrder.getQuantity() * presellSpecs.getPackCount();// 下单【包装单位】数:$箱
+        int quantity = presellOrder.getQuantity() * presellSpecs.getPackCount();// 下单数量
 
         StringBuffer treeNumbers = new StringBuffer();// 树木编号
+
+        Set<String> adoptOrderTreeNumberSet = new HashSet<String>();// 认养权的树
 
         _assignPI: while (presellInventoryQuantity < quantity) {
             List<Tree> treeList = treeBO.queryTreeListRemainInventory(
@@ -366,9 +370,7 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
                             + (singleOutput - tree.getAdoptCount());
                     treeNumbers.append(tree.getTreeNumber()).append("&");
 
-                    // 添加认养权
-                    adoptOrderTreeBO.saveAdoptOrderTree(presellProduct,
-                        presellOrder, tree.getTreeNumber());
+                    adoptOrderTreeNumberSet.add(tree.getTreeNumber());
 
                     /**
                      * 三种情况：
@@ -413,6 +415,13 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
                 break;
             }
         }
+
+        // 添加认养权
+        for (String treeNumber : adoptOrderTreeNumberSet) {
+            adoptOrderTreeBO.saveAdoptOrderTree(presellProduct, presellOrder,
+                treeNumber);
+        }
+
     }
 
     @Override

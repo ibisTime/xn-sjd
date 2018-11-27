@@ -24,4 +24,7 @@ public interface IPresellInventoryBO extends IPaginableBO<PresellInventory> {
 
     public PresellInventory getPresellInventory(String code);
 
+    // 查询组下的树木
+    public PresellInventory getTreeNumberByGroup(String groupCode);
+
 }

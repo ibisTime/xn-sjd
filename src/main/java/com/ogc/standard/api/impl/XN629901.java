@@ -26,10 +26,10 @@ public class XN629901 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        Date createDatetimeStart = DateUtil.strToDate(
-            req.getCreateDatetimeStart(), DateUtil.FRONT_DATE_FORMAT_STRING);
-        Date createDatetimeEnd = DateUtil.strToDate(req.getCreateDatetimeEnd(),
-            DateUtil.FRONT_DATE_FORMAT_STRING);
+        Date createDatetimeStart = DateUtil
+            .getStartDatetime(req.getCreateDatetimeStart());
+        Date createDatetimeEnd = DateUtil
+            .getEndDatetime(req.getCreateDatetimeEnd());
 
         return sysUserAO.getTotalCreateCount(req.getUserId(), req.getType(),
             createDatetimeStart, createDatetimeEnd);

@@ -517,6 +517,7 @@ CREATE TABLE `tstd_user_ext` (
   `auth_status` varchar(4) DEFAULT NULL COMMENT '认证状态',
   `person_auth_status` varchar(4) DEFAULT NULL COMMENT '个人认证状态',
   `company_auth_status` varchar(4) DEFAULT NULL COMMENT '企业认证状态',
+  `auth_status` varchar(4) DEFAULT NULL COMMENT '认证状态',
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1093,6 +1094,7 @@ CREATE TABLE `tys_original_group` (
   `quantity` int DEFAULT 0 COMMENT '数量',
   `presell_quantity` int DEFAULT 0 COMMENT '挂单数量',
   `receiving_quantity` int DEFAULT 0 COMMENT '提货中数量',
+  `received_quantity` int DEFAULT 0 COMMENT '已提货数量',
   `unit` varchar(32) DEFAULT NULL COMMENT '单位',
   `adopt_start_datetime` datetime DEFAULT NULL COMMENT '认养开始时间',
   `adopt_end_datetime` datetime DEFAULT NULL COMMENT '认养结束时间',

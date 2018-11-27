@@ -21,6 +21,7 @@ import com.ogc.standard.domain.AdoptOrder;
 import com.ogc.standard.domain.AdoptOrderTree;
 import com.ogc.standard.domain.Company;
 import com.ogc.standard.domain.GroupAdoptOrder;
+import com.ogc.standard.domain.GroupOrder;
 import com.ogc.standard.domain.PresellOrder;
 import com.ogc.standard.domain.PresellProduct;
 import com.ogc.standard.domain.Product;
@@ -146,6 +147,40 @@ public class AdoptOrderTreeBOImpl extends PaginableBOImpl<AdoptOrderTree>
             .getCompanyByUserId(presellProduct.getOwnerId());
         data.setCertificateTemplate(company.getCertificateTemplate());
         data.setCurrentHolder(presellOrder.getApplyUser());
+        adoptOrderTreeDAO.insert(data);
+        return code;
+    }
+
+    @Override
+    public String saveAdoptOrderTree(PresellProduct presellProduct,
+            GroupOrder groupOrder, String treeNumber) {
+        AdoptOrderTree data = new AdoptOrderTree();
+        String code = OrderNoGenerater
+            .generate(EGeneratePrefix.ADOPT_ORDER_TREE.getCode());
+        data.setCode(code);
+        data.setOrderType(ESellType.PRESELL.getCode());
+        data.setOrderCode(groupOrder.getCode());
+        data.setParentCategoryCode(presellProduct.getParentCategoryCode());
+        data.setCategoryCode(presellProduct.getCategoryCode());
+
+        data.setOwnerId(presellProduct.getOwnerId());
+        data.setProductCode(presellProduct.getCode());
+        data.setTreeNumber(treeNumber);
+        data.setStartDatetime(presellProduct.getAdoptStartDatetime());
+        data.setEndDatetime(presellProduct.getAdoptEndDatetime());
+
+        data.setAmount(groupOrder.getPrice());
+        data.setCreateDatetime(new Date());
+        if ((new Date()).before(presellProduct.getAdoptStartDatetime())) {
+            data.setStatus(EAdoptOrderTreeStatus.TO_ADOPT.getCode());
+        } else {
+            data.setStatus(EAdoptOrderTreeStatus.ADOPT.getCode());
+        }
+
+        Company company = companyBO
+            .getCompanyByUserId(presellProduct.getOwnerId());
+        data.setCertificateTemplate(company.getCertificateTemplate());
+        data.setCurrentHolder(groupOrder.getApplyUser());
         adoptOrderTreeDAO.insert(data);
         return code;
     }
@@ -289,10 +324,24 @@ public class AdoptOrderTreeBOImpl extends PaginableBOImpl<AdoptOrderTree>
     }
 
     @Override
-    public BigDecimal getTotalAmount(String ownerId, List<String> statusList) {
+    public long getDistinctCountByOwner(String ownerId,
+            Date createDatetimeStart, Date createDatetimeEnd,
+            List<String> orderTypeList) {
+        AdoptOrderTree condition = new AdoptOrderTree();
+        condition.setOwnerId(ownerId);
+        condition.setCreateDatetimeStart(createDatetimeStart);
+        condition.setCreateDatetimeEnd(createDatetimeEnd);
+        condition.setOrderTypeList(orderTypeList);
+        return adoptOrderTreeDAO.selectDistinctTotalCount(condition);
+    }
+
+    @Override
+    public BigDecimal getTotalAmount(String ownerId, List<String> statusList,
+            List<String> orderTypeList) {
         AdoptOrderTree condition = new AdoptOrderTree();
         condition.setOwnerId(ownerId);
         condition.setStatusList(statusList);
+        condition.setOrderTypeList(orderTypeList);
         return adoptOrderTreeDAO.selectTotalAmount(condition);
     }
 
