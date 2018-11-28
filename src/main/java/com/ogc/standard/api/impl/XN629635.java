@@ -31,6 +31,7 @@ public class XN629635 extends AProcessor {
         condition.setTreeNumber(req.getTreeNumber());
         condition.setProjectCode(req.getProjectCode());
         condition.setMaintainerCode(req.getMaintainerCode());
+        condition.setMaintain(req.getMaintain());
 
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {

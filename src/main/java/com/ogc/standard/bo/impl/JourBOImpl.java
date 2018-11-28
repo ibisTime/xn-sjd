@@ -242,12 +242,10 @@ public class JourBOImpl extends PaginableBOImpl<Jour> implements IJourBO {
     }
 
     @Override
-    public BigDecimal getTotalAmount(String bizType, String channelType,
-            String accountNumber, String dateStart, String dateEnd) {
+    public BigDecimal getTotalAmount(String accountNumber,
+            List<String> bizTypeList, String dateStart, String dateEnd) {
         Jour jour = new Jour();
-        jour.setType(EJourType.BALANCE.getCode());
-        jour.setBizType(bizType);
-        jour.setChannelType(channelType);
+        jour.setBizTypeList(bizTypeList);
         jour.setAccountNumber(accountNumber);
         jour.setCreateDatetimeStart(DateUtil.getFrontDate(dateStart, false));
         jour.setCreateDatetimeEnd(DateUtil.getFrontDate(dateEnd, true));

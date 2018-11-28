@@ -47,6 +47,6 @@ public interface IGroupAdoptOrderDAO extends IBaseDAO<GroupAdoptOrder> {
     public int updatePaySuccess(GroupAdoptOrder data);
 
     // 查询已支付的下单数量
-    public GroupAdoptOrder selectPayedTotalQuantity(GroupAdoptOrder data);
+    public long selectPayedTotalQuantity(GroupAdoptOrder data);
 
 }

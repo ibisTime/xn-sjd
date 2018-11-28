@@ -2,6 +2,7 @@ package com.ogc.standard.ao.impl;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -16,10 +17,12 @@ import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IAdoptOrderTreeBO;
 import com.ogc.standard.bo.IBizLogBO;
 import com.ogc.standard.bo.ICarbonBubbleOrderBO;
+import com.ogc.standard.bo.ISYSConfigBO;
 import com.ogc.standard.bo.IToolUseRecordBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.DateUtil;
+import com.ogc.standard.common.SysConstants;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.AdoptOrderTree;
 import com.ogc.standard.domain.CarbonBubbleOrder;
@@ -30,6 +33,7 @@ import com.ogc.standard.enums.ECarbonBubbleOrderStatus;
 import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EJourBizTypePlat;
 import com.ogc.standard.enums.EJourBizTypeUser;
+import com.ogc.standard.enums.ESysConfigType;
 import com.ogc.standard.enums.ESystemAccount;
 import com.ogc.standard.enums.EToolType;
 import com.ogc.standard.exception.BizException;
@@ -56,6 +60,9 @@ public class CarbonBubbleOrderAOImpl implements ICarbonBubbleOrderAO {
 
     @Autowired
     private IToolUseRecordBO toolUseRecordBO;
+
+    @Autowired
+    private ISYSConfigBO sysConfigBO;
 
     public void expireCarbonBubble() {
         logger.info("***************开始扫描已过期碳泡泡***************");
@@ -107,6 +114,24 @@ public class CarbonBubbleOrderAOImpl implements ICarbonBubbleOrderAO {
 
                 return new XN629350Res("1", "正在使用保护罩，碳泡泡不能收取");
             }
+        }
+
+        // 每日被收取上限
+        if (!data.getAdoptUserId().equals(collector)) {
+            BigDecimal otherTakedQuantity = carbonBubbleOrderBO
+                .otherTakedTppAmount(data.getAdoptUserId());
+
+            Map<String, String> configMap = sysConfigBO
+                .getConfigsMap(ESysConfigType.TPP_RULE.getCode());
+            BigDecimal otherTakeMaxQuantity = new BigDecimal(
+                configMap.get(SysConstants.OTHER_TAKE_MAX_QUANTITY));
+            otherTakeMaxQuantity = otherTakeMaxQuantity
+                .multiply(new BigDecimal(1000));// 每天最多被偷取数量
+
+            if (otherTakedQuantity.compareTo(otherTakeMaxQuantity) != -1) {
+                throw new BizException("xn0000", "用户今天被收取碳泡泡数量已达上限，不能收取");
+            }
+
         }
 
         // 更改碳泡泡产生订单状态

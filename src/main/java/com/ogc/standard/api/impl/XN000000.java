@@ -5,6 +5,7 @@ import com.ogc.standard.ao.IGroupAdoptOrderAO;
 import com.ogc.standard.ao.IOriginalGroupAO;
 import com.ogc.standard.ao.IPresellOrderAO;
 import com.ogc.standard.ao.IPresellSpecsAO;
+import com.ogc.standard.ao.IUserAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.dto.res.BooleanRes;
 import com.ogc.standard.exception.BizException;
@@ -37,10 +38,11 @@ public class XN000000 extends AProcessor {
     private CallbackConroller callbackConroller = SpringContextHolder
         .getBean(CallbackConroller.class);
 
+    private IUserAO userAO = SpringContextHolder.getBean(IUserAO.class);
+
     @Override
     public Object doBusiness() throws BizException {
-        callbackConroller.doPayOrder("adopt_collect",
-            "GAO2018112622450439194534");
+        groupAdoptOrderAO.doInvalidIdentifyCode();
         return new BooleanRes(true);
     }
 

@@ -220,9 +220,8 @@ public class UserAOImpl implements IUserAO {
         // 推荐用户添加积分
         if (StringUtils.isNotBlank(userReferee)
                 && EUserRefereeType.USER.getCode().equals(userRefereeType)) {
-            User refereeUser = userBO.getUserByMobile(userReferee);
-            Account userRefereeJfAccount = accountBO.getAccountByUser(
-                refereeUser.getUserId(), ECurrency.JF.getCode());
+            Account userRefereeJfAccount = accountBO
+                .getAccountByUser(userReferee, ECurrency.JF.getCode());
             quantity = new BigDecimal(configMap.get(SysConstants.INVITE_USER));
             quantity = AmountUtil.mul(quantity, 1000L);
 
@@ -235,8 +234,7 @@ public class UserAOImpl implements IUserAO {
                 EJourBizTypeUser.INVITE_USER.getCode(),
                 EJourBizTypePlat.INVITE_USER.getCode(),
                 EJourBizTypeUser.INVITE_USER.getValue(),
-                EJourBizTypePlat.INVITE_USER.getValue(),
-                refereeUser.getUserId());
+                EJourBizTypePlat.INVITE_USER.getValue(), userReferee);
         }
 
     }

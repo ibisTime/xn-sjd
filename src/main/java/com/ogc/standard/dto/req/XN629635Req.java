@@ -19,6 +19,17 @@ public class XN629635Req extends APageReq {
     // 养护人编号
     private String maintainerCode;
 
+    // 养护方
+    private String maintain;
+
+    public String getMaintain() {
+        return maintain;
+    }
+
+    public void setMaintain(String maintain) {
+        this.maintain = maintain;
+    }
+
     public String getTreeNumber() {
         return treeNumber;
     }

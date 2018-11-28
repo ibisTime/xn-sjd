@@ -13,6 +13,7 @@ import java.util.List;
 
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Jour;
+import com.ogc.standard.dto.res.XN629905Res;
 
 /** 
  * @author: xieyj 
@@ -33,10 +34,7 @@ public interface IJourAO {
 
     public Jour getJour(String code);
 
-    public BigDecimal getTotalAmount(String bizType, String channelType,
-            String accountNumber, String dateStart, String dateEnd);
+    public XN629905Res getTotalBenefitAmount(String userId, String accountType,
+            String dateStart, String dateEnd);
 
-    // 获取一段时间统计金额
-    // public XN802901Res getTotalAmountByDate(String accountNumber,
-    // String dateStart, String dateEnd);
 }

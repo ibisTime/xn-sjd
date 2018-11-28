@@ -228,8 +228,11 @@ public class PresellProductBOImpl extends PaginableBOImpl<PresellProduct>
 
         if (CollectionUtils.isNotEmpty(productList)) {
             for (PresellProduct product : productList) {
+
                 List<PresellSpecs> specsList = presellSpecsBO
                     .queryPresellSpecsListByProduct(product.getCode());
+                BigDecimal totalPackCount = new BigDecimal(
+                    product.getTotalOutput() / product.getPackWeight());
 
                 BigDecimal minPriceTmp = BigDecimal.ZERO;
                 BigDecimal maxPriceTmp = minPriceTmp;
@@ -238,17 +241,17 @@ public class PresellProductBOImpl extends PaginableBOImpl<PresellProduct>
                         minPriceTmp = productSpecs.getPrice();
                     }
                     if (productSpecs.getPrice().compareTo(minPriceTmp) < 0) {
-                        minPriceTmp = productSpecs.getPrice();
+                        minPriceTmp = productSpecs.getPrice()
+                            .multiply(totalPackCount);
                     }
                     if (productSpecs.getPrice().compareTo(maxPriceTmp) > 0) {
-                        maxPriceTmp = productSpecs.getPrice();
+                        maxPriceTmp = productSpecs.getPrice()
+                            .multiply(totalPackCount);
                     }
                 }
 
-                // minPrice = minPrice
-                // .add(AmountUtil.mul(minPriceTmp, product.getRaiseCount()));
-                // maxPrice = maxPrice
-                // .add(AmountUtil.mul(maxPriceTmp, product.getRaiseCount()));
+                minPrice = minPriceTmp.multiply(totalPackCount);
+                maxPrice = maxPriceTmp.multiply(totalPackCount);
             }
         }
 

@@ -25,7 +25,7 @@
 				AND t.adopt_user_id = #{adoptUserId}
 			</if>
 			<if test="createDatetimeStart != null and createDatetimeStart != '' ">
-				<![CDATA[AND t.create_datetime >= #{startDatetimeStart}]]>
+				<![CDATA[AND t.create_datetime >= #{createDatetimeStart}]]>
 			</if>
 			<if test="createDatetimeEnd != null and createDatetimeEnd != '' ">
 				<![CDATA[AND t.create_datetime <= #{createDatetimeEnd}]]>
@@ -39,8 +39,12 @@
 			<if test="taker != null and taker != '' ">
 				AND t.taker = #{taker}
 			</if>
+			<if test="isOtherTaker != null and isOtherTaker != '' and isOtherTaker == 1">
+				AND t.taker != #{adoptUserId}
+			</if>
+			
 			<if test="takeDatetimeStart != null and takeDatetimeStart != '' ">
-				<![CDATA[AND t.take_datetime >= #{startDatetimeStart}]]>
+				<![CDATA[AND t.take_datetime >= #{takeDatetimeStart}]]>
 			</if>
 			<if test="takeDatetimeEnd != null and takeDatetimeEnd != '' ">
 				<![CDATA[AND t.take_datetime <= #{takeDatetimeEnd}]]>

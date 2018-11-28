@@ -553,6 +553,11 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
         }
         groupOrder.setApplyUserName(applyUserName);
 
+        if (null == groupOrder.getPayAmount() && null != groupOrder.getAmount()
+                && null != groupOrder.getCnyDeductAmount()) {
+            groupOrder.setPayAmount(groupOrder.getAmount()
+                .subtract(groupOrder.getCnyDeductAmount()));
+        }
     }
 
 }

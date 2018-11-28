@@ -132,6 +132,8 @@ public class SysConstants {
 
     public static final String TPP_EXPIRE_HOUR = "TPP_EXPIRE_HOUR";// 碳泡泡过期时间
 
+    public static final String OTHER_TAKE_MAX_QUANTITY = "OTHER_TAKE_MAX_QUANTITY";// 每天最多被偷取数量
+
     // 积分规则
     public static final String REGISTER = "REGISTER";// 注册送积分
 

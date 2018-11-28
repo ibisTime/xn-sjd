@@ -269,7 +269,7 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
         PresellProduct presellProduct = presellProductBO
             .getPresellProduct(data.getProductCode());
         BigDecimal backJfAmount = distributionOrderBO.presellDistribution(
-            data.getCode(), presellProduct.getOwnerId(), data.getAmount(),
+            data.getCode(), presellProduct.getOwnerId(), payAmount,
             data.getApplyUser(), ESellType.PRESELL.getCode(), deductRes);
 
         // 用户升级
@@ -301,14 +301,15 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
         PresellOrder data = presellOrderBO.getPresellOrder(payGroup);
         if (EPresellOrderStatus.TO_PAY.getCode().equals(data.getStatus())) {
 
-            XN629048Res resultRes = new XN629048Res(BigDecimal.ZERO,
-                BigDecimal.ZERO);
+            XN629048Res resultRes = new XN629048Res(data.getCnyDeductAmount(),
+                data.getJfDeductAmount());
 
             // 进行分销
             PresellProduct presellProduct = presellProductBO
                 .getPresellProduct(data.getProductCode());
             BigDecimal backJfAmount = distributionOrderBO.presellDistribution(
-                data.getCode(), presellProduct.getOwnerId(), data.getAmount(),
+                data.getCode(), presellProduct.getOwnerId(),
+                data.getAmount().subtract(data.getCnyDeductAmount()),
                 data.getApplyUser(), ESellType.PRESELL.getCode(), resultRes);
 
             // 用户升级
@@ -615,6 +616,13 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
             }
         }
         presellOrder.setApplyUserName(applyUserName);
+
+        if (null == presellOrder.getPayAmount()
+                && null != presellOrder.getAmount()
+                && null != presellOrder.getCnyDeductAmount()) {
+            presellOrder.setPayAmount(presellOrder.getAmount()
+                .subtract(presellOrder.getCnyDeductAmount()));
+        }
     }
 
 }

@@ -32,6 +32,12 @@ public interface ISmsBO extends IPaginableBO<Sms> {
     public void saveAdoptBulletin(String userId, String count, String sellType,
             String productName);
 
+    // 添加集体快报
+    public void saveFirstAdoptBulletin(String userId, String productName);
+
+    // 添加集体过期快报
+    public void saveExpireGroupAdoptBulletin(String userId, String productName);
+
     // 添加商城快报
     public void saveCommodityBulletin(String userId, String count);
 

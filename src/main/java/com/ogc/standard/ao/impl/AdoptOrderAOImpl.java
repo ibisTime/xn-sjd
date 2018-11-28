@@ -304,7 +304,7 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
         // 进行分销
         Product productInfo = productBO.getProduct(data.getProductCode());
         BigDecimal backJfAmount = distributionOrderBO.adoptDistribution(
-            data.getCode(), productInfo.getOwnerId(), data.getAmount(),
+            data.getCode(), productInfo.getOwnerId(), payAmount,
             data.getApplyUser(), data.getType(), resultRes);
 
         // 用户升级
@@ -375,7 +375,8 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
                 data.getJfDeductAmount());
             Product productInfo = productBO.getProduct(data.getProductCode());
             BigDecimal backJfAmount = distributionOrderBO.adoptDistribution(
-                data.getCode(), productInfo.getOwnerId(), data.getAmount(),
+                data.getCode(), productInfo.getOwnerId(),
+                data.getAmount().subtract(data.getCnyDeductAmount()),
                 data.getApplyUser(), data.getType(), resultRes);
 
             // 用户升级
@@ -653,6 +654,11 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
             data.setApplyUserName(user.getMobile());
         }
 
+        if (null == data.getPayAmount() && null != data.getAmount()
+                && null != data.getCnyDeductAmount()) {
+            data.setPayAmount(
+                data.getAmount().subtract(data.getCnyDeductAmount()));
+        }
     }
 
 }

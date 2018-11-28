@@ -107,12 +107,16 @@ public class ShareRecordAOImpl implements IShareRecordAO {
     }
 
     private void init(ShareRecord shareRecord) {
+        String userName = null;
         User user = userBO.getUserUnCheck(shareRecord.getUserId());
-        String userName = user.getMobile();
-        if (null != user.getRealName()) {
-            userName = user.getRealName() + userName;
+        if (null != user) {
+            userName = user.getMobile();
+            if (null != user.getRealName()) {
+                userName = user.getRealName() + userName;
+            }
+            shareRecord.setUserName(userName);
         }
-        shareRecord.setUserName(userName);
+
     }
 
 }

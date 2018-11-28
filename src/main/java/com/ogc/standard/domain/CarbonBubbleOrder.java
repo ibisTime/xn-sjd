@@ -44,8 +44,6 @@ public class CarbonBubbleOrder extends ABaseDO {
 
     /************DB properties**********/
 
-    /***********辅助字段*********/
-
     // 生成时间起
     private Date createDatetimeStart;
 
@@ -66,6 +64,9 @@ public class CarbonBubbleOrder extends ABaseDO {
 
     // 收取人用户信息
     private User takeUser;
+
+    // 是否为其他人收取
+    private String isOtherTaker;
 
     public String getAdoptUserId() {
         return adoptUserId;
@@ -193,6 +194,14 @@ public class CarbonBubbleOrder extends ABaseDO {
 
     public void setInvalidDatetimeEnd(Date invalidDatetimeEnd) {
         this.invalidDatetimeEnd = invalidDatetimeEnd;
+    }
+
+    public String getIsOtherTaker() {
+        return isOtherTaker;
+    }
+
+    public void setIsOtherTaker(String isOtherTaker) {
+        this.isOtherTaker = isOtherTaker;
     }
 
 }

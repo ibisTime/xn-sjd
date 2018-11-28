@@ -243,9 +243,27 @@ public class GroupAdoptOrderBOImpl extends PaginableBOImpl<GroupAdoptOrder>
     }
 
     @Override
-    public GroupAdoptOrder getPayedTotalQuantity(String productCode) {
+    public GroupAdoptOrder getFirstPayedOrderById(String identifyCode) {
+        GroupAdoptOrder data = null;
+        if (StringUtils.isNotBlank(identifyCode)) {
+            GroupAdoptOrder condition = new GroupAdoptOrder();
+            condition.setIdentifyCode(identifyCode);
+            condition.setStatus(EGroupAdoptOrderStatus.PAYED.getCode());
+            condition.setOrder("apply_datetime", "asc");
+
+            List<GroupAdoptOrder> groupAdoptOrderList = groupAdoptOrderDAO
+                .selectList(condition);
+            if (CollectionUtils.isNotEmpty(groupAdoptOrderList)) {
+                data = groupAdoptOrderList.get(0);
+            }
+        }
+        return data;
+    }
+
+    @Override
+    public long getPayedTotalQuantity(String id) {
         GroupAdoptOrder condition = new GroupAdoptOrder();
-        condition.setProductCode(productCode);
+        condition.setIdentifyCode(id);
         condition.setStatus(EGroupAdoptOrderStatus.PAYED.getCode());
         return groupAdoptOrderDAO.selectPayedTotalQuantity(condition);
     }

@@ -302,14 +302,11 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
         // 进行分销
         Product productInfo = productBO.getProduct(data.getProductCode());
         BigDecimal backJfAmount = distributionOrderBO.adoptDistribution(
-            data.getCode(), productInfo.getOwnerId(), data.getAmount(),
+            data.getCode(), productInfo.getOwnerId(), payAmount,
             data.getApplyUser(), ESellType.COLLECTIVE.getCode(), resultRes);
 
         // 用户升级
         userAO.upgradeUserLevel(data.getApplyUser());
-
-        // 业务订单更改
-        groupAdoptOrderBO.payYueSuccess(data, resultRes, backJfAmount);
 
         // 分配认养权、更新树状态
         List<Tree> treeList = treeBO
@@ -328,9 +325,19 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
         }
 
         // 添加快报
-        smsBO.saveAdoptBulletin(data.getApplyUser(),
-            data.getQuantity().toString(), ESellType.COLLECTIVE.getCode(),
-            product.getName());
+        long totalPayedQuantity = groupAdoptOrderBO
+            .getPayedTotalQuantity(product.getIdentifyCode());
+        if (totalPayedQuantity == 0) {
+            smsBO.saveFirstAdoptBulletin(data.getApplyUser(),
+                product.getName());
+        } else {
+            smsBO.saveAdoptBulletin(data.getApplyUser(),
+                data.getQuantity().toString(), ESellType.COLLECTIVE.getCode(),
+                product.getName());
+        }
+
+        // 业务订单更改
+        groupAdoptOrderBO.payYueSuccess(data, resultRes, backJfAmount);
 
         return new BooleanRes(true);
     }
@@ -357,14 +364,12 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
             // 进行分销
             Product productInfo = productBO.getProduct(data.getProductCode());
             BigDecimal backJfAmount = distributionOrderBO.adoptDistribution(
-                data.getCode(), productInfo.getOwnerId(), data.getAmount(),
+                data.getCode(), productInfo.getOwnerId(),
+                data.getAmount().subtract(data.getCnyDeductAmount()),
                 data.getApplyUser(), ESellType.COLLECTIVE.getCode(), resultRes);
 
             // 用户升级
             userAO.upgradeUserLevel(data.getApplyUser());
-
-            // 业务订单更改
-            groupAdoptOrderBO.paySuccess(data, data.getAmount(), backJfAmount);
 
             // 分配认养权、更新树状态
             List<Tree> treeList = treeBO
@@ -383,9 +388,20 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
             }
 
             // 添加快报
-            smsBO.saveAdoptBulletin(data.getApplyUser(),
-                data.getQuantity().toString(), ESellType.COLLECTIVE.getCode(),
-                productInfo.getName());
+            long totalPayedQuantity = groupAdoptOrderBO
+                .getPayedTotalQuantity(product.getIdentifyCode());
+            if (totalPayedQuantity == 0) {
+                smsBO.saveFirstAdoptBulletin(data.getApplyUser(),
+                    product.getName());
+            } else {
+                smsBO.saveAdoptBulletin(data.getApplyUser(),
+                    data.getQuantity().toString(),
+                    ESellType.COLLECTIVE.getCode(), product.getName());
+            }
+
+            // 业务订单更改
+            groupAdoptOrderBO.paySuccess(data, data.getAmount(), backJfAmount);
+
         } else {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "订单号[" + data.getCode() + "]支付重复回调");
@@ -419,9 +435,9 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
             for (Product product : productList) {
 
                 // 若已全部支付，则更新状态
-                GroupAdoptOrder groupAdoptOrder = groupAdoptOrderBO
-                    .getPayedTotalQuantity(product.getCode());
-                if (groupAdoptOrder.getQuantity() == product.getRaiseCount()) {
+                long totalPayedQuantity = groupAdoptOrderBO
+                    .getPayedTotalQuantity(product.getIdentifyCode());
+                if (totalPayedQuantity == product.getRaiseCount()) {
                     productBO.refreshAdoptProduct(product.getCode());
 
                     groupAdoptOrderBO
@@ -546,6 +562,12 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
                     continue;
                 }
 
+                // 添加快报
+                GroupAdoptOrder firstOrder = groupAdoptOrderBO
+                    .getFirstPayedOrderById(product.getIdentifyCode());
+                smsBO.saveExpireGroupAdoptBulletin(firstOrder.getApplyUser(),
+                    product.getName());
+
                 // 订单退款
                 List<GroupAdoptOrder> groupAdoptOrderList = groupAdoptOrderBO
                     .queryGroupAdoptOrderById(product.getIdentifyCode());
@@ -613,6 +635,7 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
                     productBO.refreshUnLockProduct(product.getCode());
 
                 }
+
             }
         }
 
@@ -700,6 +723,12 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
         }
 
         data.setTreeNumbers(treeNumbers.toString());
+
+        if (null == data.getPayAmount() && null != data.getAmount()
+                && null != data.getCnyDeductAmount()) {
+            data.setPayAmount(
+                data.getAmount().subtract(data.getCnyDeductAmount()));
+        }
     }
 
 }

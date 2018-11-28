@@ -10,9 +10,11 @@ import org.springframework.stereotype.Component;
 
 import com.ogc.standard.bo.ICarbonBubbleOrderBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
+import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.ICarbonBubbleOrderDAO;
 import com.ogc.standard.domain.CarbonBubbleOrder;
+import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECarbonBubbleOrderStatus;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.exception.BizException;
@@ -65,6 +67,17 @@ public class CarbonBubbleOrderBOImpl extends PaginableBOImpl<CarbonBubbleOrder>
         CarbonBubbleOrder condition = new CarbonBubbleOrder();
         condition.setAdoptUserId(adoptUserId);
         condition.setStatus(ECarbonBubbleOrderStatus.TO_TAKE.getCode());
+        return carbonBubbleOrderDAO.selectTotalQuantity(condition);
+    }
+
+    @Override
+    public BigDecimal otherTakedTppAmount(String adoptUserId) {
+        CarbonBubbleOrder condition = new CarbonBubbleOrder();
+        condition.setAdoptUserId(adoptUserId);
+        condition.setStatus(ECarbonBubbleOrderStatus.TAKED.getCode());
+        condition.setIsOtherTaker(EBoolean.YES.getCode());
+        condition.setTakeDatetimeStart(DateUtil.getTodayStart());
+        condition.setTakeDatetimeEnd(DateUtil.getTodayEnd());
         return carbonBubbleOrderDAO.selectTotalQuantity(condition);
     }
 

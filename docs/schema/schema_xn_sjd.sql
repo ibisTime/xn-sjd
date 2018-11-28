@@ -517,7 +517,6 @@ CREATE TABLE `tstd_user_ext` (
   `auth_status` varchar(4) DEFAULT NULL COMMENT '认证状态',
   `person_auth_status` varchar(4) DEFAULT NULL COMMENT '个人认证状态',
   `company_auth_status` varchar(4) DEFAULT NULL COMMENT '企业认证状态',
-  `auth_status` varchar(4) DEFAULT NULL COMMENT '认证状态',
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

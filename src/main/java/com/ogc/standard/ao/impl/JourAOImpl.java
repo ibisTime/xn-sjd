@@ -17,12 +17,17 @@ import com.ogc.standard.bo.IJourBO;
 import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
+import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.AgentUser;
 import com.ogc.standard.domain.Jour;
 import com.ogc.standard.domain.SYSUser;
 import com.ogc.standard.domain.User;
+import com.ogc.standard.dto.res.XN629905Res;
 import com.ogc.standard.enums.EAccountType;
 import com.ogc.standard.enums.EBoolean;
+import com.ogc.standard.enums.ECurrency;
+import com.ogc.standard.enums.EJourBizTypeMaintain;
+import com.ogc.standard.enums.EJourBizTypeOwner;
 import com.ogc.standard.enums.EJourStatus;
 import com.ogc.standard.enums.EUser;
 import com.ogc.standard.exception.BizException;
@@ -39,9 +44,6 @@ public class JourAOImpl implements IJourAO {
     private IJourBO jourBO;
 
     @Autowired
-    private IAccountBO accountBO;
-
-    @Autowired
     private IUserBO userBO;
 
     @Autowired
@@ -49,6 +51,9 @@ public class JourAOImpl implements IJourAO {
 
     @Autowired
     private IAgentUserBO agentUserBO;
+
+    @Autowired
+    private IAccountBO accountBO;
 
     /*
      * 人工调账： 1、判断流水账是否平，平则更改订单状态，不平则更改产生红冲蓝补订单，而后更改订单状态
@@ -179,9 +184,24 @@ public class JourAOImpl implements IJourAO {
     }
 
     @Override
-    public BigDecimal getTotalAmount(String bizType, String channelType,
-            String accountNumber, String dateStart, String dateEnd) {
-        return jourBO.getTotalAmount(bizType, channelType, accountNumber,
-            dateStart, dateEnd);
+    public XN629905Res getTotalBenefitAmount(String userId, String accountType,
+            String dateStart, String dateEnd) {
+        Account account = accountBO.getAccountByUser(userId,
+            ECurrency.CNY.getCode());
+
+        List<String> bizTypeList = new ArrayList<String>();
+
+        if (EAccountType.OWNER.getCode().equals(accountType)) {
+            bizTypeList.add(EJourBizTypeOwner.OWNER_PROFIT.getCode());
+        }
+
+        if (EAccountType.MAINTAIN.getCode().equals(accountType)) {
+            bizTypeList.add(EJourBizTypeMaintain.MAINTAIN_DEDECT.getCode());
+        }
+
+        BigDecimal totalAmount = jourBO.getTotalAmount(
+            account.getAccountNumber(), bizTypeList, dateStart, dateEnd);
+
+        return new XN629905Res(totalAmount);
     }
 }

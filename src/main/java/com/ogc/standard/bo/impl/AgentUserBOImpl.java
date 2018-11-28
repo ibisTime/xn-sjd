@@ -217,6 +217,7 @@ public class AgentUserBOImpl extends PaginableBOImpl<AgentUser>
         data.setParentUserId(parentUserId);
         data.setUpdater(updater);
         data.setUpdateDatetime(new Date());
+        data.setRemark(remark);
         agentUserDAO.updatePass(data);
     }
 
@@ -228,6 +229,7 @@ public class AgentUserBOImpl extends PaginableBOImpl<AgentUser>
         data.setStatus(status);
         data.setUpdater(updater);
         data.setUpdateDatetime(new Date());
+        data.setRemark(remark);
         agentUserDAO.updateStatus(data);
     }
 

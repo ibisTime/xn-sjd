@@ -50,8 +50,8 @@ public interface IJourBO extends IPaginableBO<Jour> {
     public BigDecimal getTotalAmount(String bizType, String channelType,
             String accountNumber);
 
-    public BigDecimal getTotalAmount(String bizType, String channelType,
-            String accountNumber, String dateStart, String dateEnd);
+    public BigDecimal getTotalAmount(String accountNumber,
+            List<String> bizTypeList, String dateStart, String dateEnd);
 
     public BigDecimal getTotalAmount(Jour condition);
 

@@ -3,7 +3,7 @@ package com.ogc.standard.dto.req;
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
- * 新增古树
+ * 收取碳泡泡
  * @author: silver 
  * @since: 2018年9月27日 下午8:33:25 
  * @history:

@@ -115,6 +115,55 @@ public class SmsBOImpl extends PaginableBOImpl<Sms> implements ISmsBO {
     }
 
     @Override
+    public void saveFirstAdoptBulletin(String userId, String productName) {
+        Sms sms = new Sms();
+        String code = OrderNoGenerater.generate(EGeneratePrefix.XX.getCode());
+        User user = userBO.getUserUnCheck(userId);
+
+        String userName = user.getNickname();
+        if (StringUtils.isEmpty(userName)) {
+            userName = PhoneUtil.hideMobile(user.getMobile());
+        }
+
+        String content = userName + "已成功开启" + productName + "的集体认养.";
+
+        sms.setCode(code);
+        sms.setType(ESmsType.BULLETIN.getCode());
+        sms.setObject(EAccountType.CUSTOMER.getCode());
+        sms.setTitle(ESmsType.BULLETIN.getValue());
+        sms.setContent(content);
+
+        sms.setStatus(ESmsStauts.SENDED.getCode());
+        sms.setCreateDatetime(new Date());
+        smsDAO.insert(sms);
+    }
+
+    @Override
+    public void saveExpireGroupAdoptBulletin(String userId,
+            String productName) {
+        Sms sms = new Sms();
+        String code = OrderNoGenerater.generate(EGeneratePrefix.XX.getCode());
+        User user = userBO.getUserUnCheck(userId);
+
+        String userName = user.getNickname();
+        if (StringUtils.isEmpty(userName)) {
+            userName = PhoneUtil.hideMobile(user.getMobile());
+        }
+
+        String content = userName + "开启的" + productName + "的集体认养已超时，可再度开启.";
+
+        sms.setCode(code);
+        sms.setType(ESmsType.BULLETIN.getCode());
+        sms.setObject(EAccountType.CUSTOMER.getCode());
+        sms.setTitle(ESmsType.BULLETIN.getValue());
+        sms.setContent(content);
+
+        sms.setStatus(ESmsStauts.SENDED.getCode());
+        sms.setCreateDatetime(new Date());
+        smsDAO.insert(sms);
+    }
+
+    @Override
     public void saveCommodityBulletin(String userId, String count) {
         Sms sms = new Sms();
         String code = OrderNoGenerater.generate(EGeneratePrefix.XX.getCode());
