@@ -114,7 +114,7 @@ public class SmsAOImpl implements ISmsAO {
             read.setCreateDatetime(date);
             dataList.add(read);
         }
-        readBO.saveToRead(dataList);
+        // readBO.saveToRead(dataList);
 
     }
 

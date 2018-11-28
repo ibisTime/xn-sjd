@@ -220,8 +220,10 @@ public class UserAOImpl implements IUserAO {
         // 推荐用户添加积分
         if (StringUtils.isNotBlank(userReferee)
                 && EUserRefereeType.USER.getCode().equals(userRefereeType)) {
-            Account userRefereeJfAccount = accountBO
-                .getAccountByUser(userReferee, ECurrency.JF.getCode());
+            User userRefereeInfo = userBO.getUserByMobile(userReferee);
+
+            Account userRefereeJfAccount = accountBO.getAccountByUser(
+                userRefereeInfo.getUserId(), ECurrency.JF.getCode());
             quantity = new BigDecimal(configMap.get(SysConstants.INVITE_USER));
             quantity = AmountUtil.mul(quantity, 1000L);
 
@@ -234,7 +236,8 @@ public class UserAOImpl implements IUserAO {
                 EJourBizTypeUser.INVITE_USER.getCode(),
                 EJourBizTypePlat.INVITE_USER.getCode(),
                 EJourBizTypeUser.INVITE_USER.getValue(),
-                EJourBizTypePlat.INVITE_USER.getValue(), userReferee);
+                EJourBizTypePlat.INVITE_USER.getValue(),
+                userRefereeInfo.getUserId());
         }
 
     }
@@ -1116,6 +1119,14 @@ public class UserAOImpl implements IUserAO {
                 req.getMobile(), EUserPwd.InitPwd8.getCode(), userReferee,
                 req.getUserRefereeKind(), agentId, req.getKind(), nickname,
                 photo, gender);
+
+            // 发送短信
+            smsOutBO.sendSmsOut(req.getMobile(),
+                String.format(SysConstants.DO_ADD_USER_CN,
+                    PhoneUtil.hideMobile(req.getMobile()),
+                    EUserPwd.InitPwd8.getCode()),
+                ECaptchaType.C_REG.getCode());
+
             // 分配账户
             accountAO.distributeAccount(userId);
 
@@ -1126,7 +1137,8 @@ public class UserAOImpl implements IUserAO {
             // ext中添加数据
             userExtBO.addUserExt(userId);
 
-            doAssignRegistJf(userId, userReferee, req.getUserRefereeKind());
+            doAssignRegistJf(userId, req.getUserReferee(),
+                req.getUserRefereeKind());
 
             assignBindMobileJF(userId);
 

@@ -32,6 +32,8 @@ public class XN805041 extends AProcessor {
         // 注册用户
         synchronized (IUserAO.class) {
             userId = userAO.doRegisterByMobile(req);
+
+            // 送积分
             userAO.doAssignRegistJf(userId, req.getUserReferee(),
                 req.getUserRefereeType());
 
@@ -43,8 +45,8 @@ public class XN805041 extends AProcessor {
                     && EUserRefereeType.USER.getCode()
                         .equals(req.getUserRefereeType())) {
                 User refereeUser = userAO.getUserByMobile(req.getUserReferee());
-
                 userAO.upgradeUserLevel(refereeUser.getUserId());
+
             }
         }
 

@@ -410,7 +410,8 @@ public class DateUtil {
     }
 
     public static void main(String[] args) {
-        System.out.println(isToday("2018-08-03"));
+        System.out.println(String.format(SysConstants.DO_ADD_USER_CN,
+            PhoneUtil.hideMobile("13454146415"), "123456"));
     }
 
     /**

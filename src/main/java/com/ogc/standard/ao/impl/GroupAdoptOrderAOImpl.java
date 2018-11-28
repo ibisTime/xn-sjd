@@ -400,7 +400,9 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
             }
 
             // 业务订单更改
-            groupAdoptOrderBO.paySuccess(data, data.getAmount(), backJfAmount);
+            groupAdoptOrderBO.paySuccess(data,
+                data.getAmount().subtract(data.getCnyDeductAmount()),
+                backJfAmount);
 
         } else {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
