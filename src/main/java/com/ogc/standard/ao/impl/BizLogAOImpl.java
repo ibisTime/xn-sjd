@@ -18,6 +18,8 @@ import com.ogc.standard.domain.BizLog;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.dto.res.XN629900Res;
 import com.ogc.standard.enums.EBizLogType;
+import com.ogc.standard.enums.ESysUser;
+import com.ogc.standard.enums.ESystemUserId;
 
 @Service
 public class BizLogAOImpl implements IBizLogAO {
@@ -93,8 +95,15 @@ public class BizLogAOImpl implements IBizLogAO {
 
     private void initBizLog(BizLog bizLog) {
         // 操作人
-        User user = userBO.getUserUnCheck(bizLog.getUserId());
-        bizLog.setUserInfo(user);
+        if (ESysUser.SYS_USER.getCode().equals(bizLog.getUserId())) {
+            User user = new User(ESystemUserId.ADMIN.getCode(),
+                ESystemUserId.ADMIN.getValue(), ESystemUserId.ADMIN.getValue(),
+                ESystemUserId.ADMIN.getValue());
+            bizLog.setUserInfo(user);
+        } else {
+            User user = userBO.getUserUnCheck(bizLog.getUserId());
+            bizLog.setUserInfo(user);
+        }
 
         // 认养人
         User adoptUser = userBO.getUserUnCheck(bizLog.getAdoptUserId());

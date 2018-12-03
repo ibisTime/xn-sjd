@@ -101,6 +101,9 @@ public class Article extends ABaseDO {
     // 认养权
     private AdoptOrderTree adoptOrderTree;
 
+    // 产品名称
+    private String productName;
+
     public void setCode(String code) {
         this.code = code;
     }
@@ -323,6 +326,14 @@ public class Article extends ABaseDO {
 
     public void setAdoptOrderTree(AdoptOrderTree adoptOrderTree) {
         this.adoptOrderTree = adoptOrderTree;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
 }

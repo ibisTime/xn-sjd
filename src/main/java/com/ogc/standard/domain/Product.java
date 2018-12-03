@@ -97,6 +97,9 @@ public class Product extends ABaseDO {
     // 当前集体订单规格（集体）
     private String specsCode;
 
+    // 集体第一认养人
+    private String collectFirstUser;
+
     // UI位置
     private String location;
 
@@ -178,6 +181,9 @@ public class Product extends ABaseDO {
 
     // 销售类型列表
     private List<String> sellTypeList;
+
+    // 集体第一认养人
+    private String collectFirstUserName;
 
     public String getDirectType() {
         return directType;
@@ -609,6 +615,22 @@ public class Product extends ABaseDO {
 
     public void setSellTypeList(List<String> sellTypeList) {
         this.sellTypeList = sellTypeList;
+    }
+
+    public String getCollectFirstUser() {
+        return collectFirstUser;
+    }
+
+    public void setCollectFirstUser(String collectFirstUser) {
+        this.collectFirstUser = collectFirstUser;
+    }
+
+    public String getCollectFirstUserName() {
+        return collectFirstUserName;
+    }
+
+    public void setCollectFirstUserName(String collectFirstUserName) {
+        this.collectFirstUserName = collectFirstUserName;
     }
 
 }

@@ -21,6 +21,7 @@ import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.ITreeBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
+import com.ogc.standard.common.PhoneUtil;
 import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.domain.Category;
 import com.ogc.standard.domain.Company;
@@ -474,7 +475,20 @@ public class ProductAOImpl implements IProductAO {
 
             product.setDirectObjectName(
                 userLevel.get(product.getDirectObject()).getValue());
-            ;
+        }
+
+        // 集体产品的第一个支付人
+        if (ESellType.COLLECTIVE.getCode().equals(product.getSellType())) {
+            User firstUser = userBO
+                .getUserUnCheck(product.getCollectFirstUser());
+            if (null != firstUser) {
+                String userName = PhoneUtil.hideMobile(firstUser.getMobile());
+                if (null != firstUser.getNickname()) {
+                    userName = firstUser.getNickname();
+                }
+
+                product.setCollectFirstUserName(userName);
+            }
         }
 
     }

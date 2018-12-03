@@ -14,6 +14,8 @@ import com.ogc.standard.bo.IAdoptOrderTreeBO;
 import com.ogc.standard.bo.IArticleBO;
 import com.ogc.standard.bo.IGroupAdoptOrderBO;
 import com.ogc.standard.bo.IInteractBO;
+import com.ogc.standard.bo.IPresellProductBO;
+import com.ogc.standard.bo.IProductBO;
 import com.ogc.standard.bo.ITreeBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
@@ -21,6 +23,8 @@ import com.ogc.standard.domain.AdoptOrderTree;
 import com.ogc.standard.domain.Article;
 import com.ogc.standard.domain.GroupAdoptOrder;
 import com.ogc.standard.domain.Interact;
+import com.ogc.standard.domain.PresellProduct;
+import com.ogc.standard.domain.Product;
 import com.ogc.standard.domain.Tree;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.dto.req.XN629340Req;
@@ -39,6 +43,7 @@ import com.ogc.standard.enums.EDealType;
 import com.ogc.standard.enums.EGroupAdoptOrderStatus;
 import com.ogc.standard.enums.EInteractType;
 import com.ogc.standard.enums.EObjectType;
+import com.ogc.standard.enums.EProductType;
 import com.ogc.standard.enums.ESellType;
 import com.ogc.standard.enums.EUser;
 import com.ogc.standard.exception.BizException;
@@ -63,6 +68,12 @@ public class ArticleAOImpl implements IArticleAO {
 
     @Autowired
     private IInteractBO interactBO;
+
+    @Autowired
+    private IProductBO productBO;
+
+    @Autowired
+    private IPresellProductBO presellProductBO;
 
     @Override
     @Transactional
@@ -373,6 +384,15 @@ public class ArticleAOImpl implements IArticleAO {
 
         Tree tree = treeBO.getTreeByTreeNumber(article.getTreeNo());
         article.setTreeName(tree.getScientificName());
+
+        if (EProductType.NORMAL.getCode().equals(tree.getProductType())) {
+            Product product = productBO.getProduct(tree.getProductCode());
+            article.setProductName(product.getName());
+        } else if (EProductType.YS.getCode().equals(tree.getProductType())) {
+            PresellProduct presellProduct = presellProductBO
+                .getPresellProduct(tree.getProductCode());
+            article.setProductName(presellProduct.getName());
+        }
 
         if (StringUtils.isNotBlank(article.getAdoptTreeCode())) {
             AdoptOrderTree adoptOrderTree = adoptOrderTreeBO

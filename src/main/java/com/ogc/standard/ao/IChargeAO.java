@@ -10,7 +10,7 @@ public interface IChargeAO {
 
     String DEFAULT_ORDER_COLUMN = "code";
 
-    public String applyOrderOnline(String userId, String payType,
+    public Object applyOrderOnline(String userId, String payType,
             BigDecimal transAmount);
 
     public String applyOrder(String accountNumber, BigDecimal amount,

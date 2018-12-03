@@ -35,6 +35,7 @@
 		<result column="identify_code" property="identifyCode" />
 		<result column="id_invalid_datetime" property="idInvalidDatetime" />
 		<result column="specs_code" property="specsCode" />
+		<result column="collect_first_user" property="collectFirstUser" />
 		<result column="location" property="location" />
 		<result column="order_no" property="orderNo" />
 		
@@ -155,6 +156,7 @@
 		
 		,t.id_invalid_datetime
 		,t.specs_code
+		,t.collect_first_user
 		,t.location
 		,t.order_no
 		,t.status
@@ -162,13 +164,28 @@
 		,t.updater
 		,t.update_datetime
 		,t.remark
+		
+		,(case sell_type when 3 then (select max(`raise_count` - `now_count`) from tzb_product)
+			else `raise_count` - `now_count` end ) as remain_count  
+		,1 as temp_column
 		FROM
 		tzb_product t
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
-			<if test="order != null and order != '' ">
-				t.${order}
-			</if>
+<!-- 			<if test="order != null and order != '' "> -->
+<!-- 				t.${order} -->
+<!-- 			</if> -->
+			
+			<choose>
+			     <when test="order != null and order.indexOf('temp_column') == -1 ">
+				 	t.${order}
+				 </when>
+				 <otherwise>
+					 <if test="order != null and order.indexOf('temp_column') != -1 ">
+						remain_count desc, t.order_no, t.status asc
+					 </if>
+				 </otherwise>
+			</choose>
 		</trim>
 	</select>
 
@@ -334,6 +351,7 @@
 		,identify_code = #{identifyCode}
 		,id_invalid_datetime = #{idInvalidDatetime}
 		,specs_code = #{specsCode}
+		,collect_first_user = #{collectFirstUser}
 		WHERE code = #{code}
 	</update>
 	
@@ -348,6 +366,13 @@
 		UPDATE tzb_product
 		SET
 		now_count = #{nowCount}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_collectFirstUser" parameterType="product">
+		UPDATE tzb_product
+		SET
+		collect_first_user = #{collectFirstUser}
 		WHERE code = #{code}
 	</update>
 	

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import com.ogc.standard.bo.IOriginalGroupBO;
 import com.ogc.standard.bo.IPresellProductBO;
+import com.ogc.standard.bo.IPresellSpecsBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.IOriginalGroupDAO;
@@ -17,6 +18,7 @@ import com.ogc.standard.domain.GroupOrder;
 import com.ogc.standard.domain.OriginalGroup;
 import com.ogc.standard.domain.PresellOrder;
 import com.ogc.standard.domain.PresellProduct;
+import com.ogc.standard.domain.PresellSpecs;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.enums.EOriginalGroupStatus;
 import com.ogc.standard.exception.BizException;
@@ -31,10 +33,16 @@ public class OriginalGroupBOImpl extends PaginableBOImpl<OriginalGroup>
     @Autowired
     private IPresellProductBO presellProductBO;
 
+    @Autowired
+    private IPresellSpecsBO presellSpecsBO;
+
     @Override
     public String saveOriginalGroup(PresellOrder data) {
         PresellProduct presellProduct = presellProductBO
             .getPresellProduct(data.getProductCode());
+        PresellSpecs presellSpecs = presellSpecsBO
+            .getPresellSpecs(data.getSpecsCode());
+
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.ORIGINAL_GROUP.getCode());
 
@@ -49,7 +57,8 @@ public class OriginalGroupBOImpl extends PaginableBOImpl<OriginalGroup>
         originalGroup.setSpecsName(data.getSpecsName());
         originalGroup.setOwnerId(data.getApplyUser());
         originalGroup.setPrice(data.getPrice());
-        originalGroup.setQuantity(data.getQuantity());
+        originalGroup
+            .setQuantity(data.getQuantity() * presellSpecs.getPackCount());
         originalGroup.setUnit(presellProduct.getPackUnit());
 
         Date nowDate = new Date();

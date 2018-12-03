@@ -287,8 +287,19 @@ public class ProductBOImpl extends PaginableBOImpl<Product>
         product.setIdentifyCode(null);
         product.setIdInvalidDatetime(null);
         product.setSpecsCode(null);
+        product.setCollectFirstUser(null);
 
         productDAO.updateUnLockProduct(product);
+    }
+
+    @Override
+    public void refreshCollectFirstUser(String code, String collectFirstUser) {
+        Product product = new Product();
+
+        product.setCode(code);
+        product.setCollectFirstUser(collectFirstUser);
+
+        productDAO.updateCollectFirstUser(product);
     }
 
     @Override

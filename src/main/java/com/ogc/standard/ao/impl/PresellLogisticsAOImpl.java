@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.alibaba.fastjson.JSONObject;
 import com.ogc.standard.ao.IPresellLogisticsAO;
 import com.ogc.standard.bo.IOriginalGroupBO;
 import com.ogc.standard.bo.IPresellLogisticsBO;
@@ -18,6 +19,7 @@ import com.ogc.standard.domain.PresellProduct;
 import com.ogc.standard.enums.EPresellLogisticsStatus;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
+import com.ogc.standard.util.kdniao.KdniaoTrackQueryUtil;
 
 @Service
 public class PresellLogisticsAOImpl implements IPresellLogisticsAO {
@@ -80,6 +82,23 @@ public class PresellLogisticsAOImpl implements IPresellLogisticsAO {
             originalGroup.getReceivedQuantity()
                     + presellLogistics.getDeliverCount());
 
+    }
+
+    @Override
+    public Object trackQuery(String expCode, String expNo) {
+        KdniaoTrackQueryUtil api = new KdniaoTrackQueryUtil();
+        Object track = null;
+
+        try {
+            String result = api.getOrderTracesByJson(expCode, expNo);
+
+            track = JSONObject.parseObject(result);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return track;
     }
 
     @Override

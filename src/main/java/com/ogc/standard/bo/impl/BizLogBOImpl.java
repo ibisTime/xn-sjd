@@ -18,6 +18,7 @@ import com.ogc.standard.domain.AdoptOrderTree;
 import com.ogc.standard.domain.BizLog;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.enums.EBizLogType;
+import com.ogc.standard.enums.ESysUser;
 import com.ogc.standard.exception.BizException;
 
 @Component
@@ -160,6 +161,27 @@ public class BizLogBOImpl extends PaginableBOImpl<BizLog> implements IBizLogBO {
         data.setUserId(userId);
         data.setNote(note);
         data.setCreateDatetime(new Date());
+
+        bizLogDAO.insert(data);
+
+        return bizLogDAO.selectMaxId();
+    }
+
+    @Override
+    public long createCarbonBubble(String adoptTreeCode, String adoptUserId,
+            BigDecimal quantity) {
+        BizLog data = new BizLog();
+        String quantityString = quantity.divide(new BigDecimal(1000))
+            .toString();
+        String note = "产生" + quantityString + "个碳泡泡";
+
+        data.setAdoptTreeCode(adoptTreeCode);
+        data.setAdoptUserId(adoptUserId);
+        data.setType(EBizLogType.CREATE_CB.getCode());
+        data.setNote(note);
+        data.setQuantity(quantity);
+        data.setCreateDatetime(new Date());
+        data.setUserId(ESysUser.SYS_USER.getCode());
 
         bizLogDAO.insert(data);
 

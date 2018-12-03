@@ -53,6 +53,9 @@ public interface IProductBO extends IPaginableBO<Product> {
     // 解锁产品
     public void refreshUnLockProduct(String code);
 
+    // 更新集体第一下单人
+    public void refreshCollectFirstUser(String code, String collectFirstUser);
+
     // 统计产权方的产品市值
     public XN630065PriceRes getOwnerProductPrice(String ownerId);
 

@@ -641,4 +641,17 @@ public class User extends ABaseDO {
         this.h5OpenId = h5OpenId;
     }
 
+    public User(String userId, String loginName, String nickname,
+            String realName) {
+        super();
+        this.userId = userId;
+        this.loginName = loginName;
+        this.nickname = nickname;
+        this.realName = realName;
+    }
+
+    public User() {
+        super();
+    }
+
 }

@@ -124,13 +124,29 @@
 		,t.updater
 		,t.update_datetime
 		,t.remark
+		
+		<![CDATA[,(case 1 when now_count >= total_output then 1
+ 			when  now()<adopt_start_datetime or adopt_end_datetime>now() then 0
+			else 1 end) as buyable]]>
+		
 		FROM
 		tys_presell_product t
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
-			<if test="order != null and order != '' ">
-				t.${order}
-			</if>
+<!-- 			<if test="order != null and order != '' "> -->
+<!-- 				t.${order} -->
+<!-- 			</if> -->
+			
+			<choose>
+			     <when test="order != null and order.indexOf('buyable') == -1 ">
+				 	t.${order}
+				 </when>
+				 <otherwise>
+					 <if test="order != null and order.indexOf('buyable') != -1 ">
+						${order}
+					 </if>
+				 </otherwise>
+			</choose>
 		</trim>
 	</select>
 

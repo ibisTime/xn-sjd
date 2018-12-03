@@ -258,3 +258,14 @@ update tsj_article set collect_count = 0, point_count = 0, read_count = 0;
 #V2.0.0 3-2
 ALTER TABLE `tys_original_group` 
 ADD COLUMN `received_quantity` INT(11) NULL DEFAULT 0 COMMENT '已提货数量' AFTER `receiving_quantity`;
+
+#V2.0.0 3-4
+ALTER TABLE `tzb_product` 
+ADD COLUMN `collect_first_user` VARCHAR(32) NULL COMMENT '集体第一下单人' AFTER `specs_code`;
+
+ALTER TABLE `tsys_company` 
+CHANGE COLUMN `contract_template` `contract_template` LONGTEXT NULL DEFAULT NULL COMMENT '合同模板' ;
+
+ALTER TABLE `tsys_config` 
+CHANGE COLUMN `cvalue` `cvalue` LONGTEXT NULL DEFAULT NULL COMMENT 'value' ;
+

@@ -72,6 +72,11 @@ public class ProductDAOImpl extends AMybatisTemplate implements IProductDAO {
     }
 
     @Override
+    public int updateCollectFirstUser(Product data) {
+        return super.update(NAMESPACE.concat("update_collectFirstUser"), data);
+    }
+
+    @Override
     public Product select(Product condition) {
         return super.select(NAMESPACE.concat("select_product"), condition,
             Product.class);

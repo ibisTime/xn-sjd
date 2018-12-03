@@ -12,6 +12,9 @@ import java.security.MessageDigest;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.alibaba.fastjson.JSONObject;
+import com.ogc.standard.common.PropertiesUtil;
+
 /**
  *
  * 快递鸟物流轨迹即时查询接口
@@ -26,28 +29,29 @@ import java.util.Map;
  * ID和Key请到官网申请：http://www.kdniao.com/ServiceApply.aspx
  */
 
-public class KdniaoTrackQueryAPI {
+public class KdniaoTrackQueryUtil {
+    // 电商ID
+    public static final String EBusinessID = PropertiesUtil.Config.KDNIAO_EBUSINESSID;
+
+    // 电商加密私钥，快递鸟提供，注意保管，不要泄漏
+    public static final String AppKey = PropertiesUtil.Config.KDNIAO_APPKEY;
+
+    // 请求url
+    public static final String ReqURL = PropertiesUtil.Config.KDNIAO_REQURL;
 
     // DEMO
     public static void main(String[] args) {
-        KdniaoTrackQueryAPI api = new KdniaoTrackQueryAPI();
+        KdniaoTrackQueryUtil api = new KdniaoTrackQueryUtil();
         try {
-            String result = api.getOrderTracesByJson("SF", "251292679396");
-            System.out.print(result);
+            String result = api.getOrderTracesByJson("YD", "123456");
+            System.out.println(result);
 
+            JSONObject track = JSONObject.parseObject(result);
+            System.out.println(track.get("Traces"));
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
-    // 电商ID
-    private String EBusinessID = "1393243";
-
-    // 电商加密私钥，快递鸟提供，注意保管，不要泄漏
-    private String AppKey = "17ba2ca4-0a89-4dec-818a-a1fe6f42e963";
-
-    // 请求url
-    private String ReqURL = "http://api.kdniao.cc/Ebusiness/EbusinessOrderHandle.aspx";
 
     /**
      * Json方式 查询订单物流轨迹

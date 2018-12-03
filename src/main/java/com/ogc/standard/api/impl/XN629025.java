@@ -55,6 +55,11 @@ public class XN629025 extends AProcessor {
             column = IProductAO.DEFAULT_ORDER_COLUMN;
         }
         condition.setOrder(column, req.getOrderDir());
+
+        if (StringUtils.isNotBlank(column) && "buyable".equals(column)) {
+            condition.setOrder("temp_column", "asc");
+        }
+
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
 

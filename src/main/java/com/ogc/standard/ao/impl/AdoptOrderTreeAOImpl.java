@@ -220,6 +220,10 @@ public class AdoptOrderTreeAOImpl implements IAdoptOrderTreeAO {
                         adoptOrderTree.getCode(), createDatetime,
                         invalidDatetime, adoptOrderTree.getCurrentHolder(),
                         quantity);
+
+                    // 添加日志
+                    bizLogBO.createCarbonBubble(adoptOrderTree.getCode(),
+                        adoptOrderTree.getCurrentHolder(), quantity);
                 }
             } else {
                 break;

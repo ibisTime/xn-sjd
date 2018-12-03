@@ -42,7 +42,7 @@ public class XN000000 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        groupAdoptOrderAO.doInvalidIdentifyCode();
+        adoptOrderTreeAO.doDailyAdoptOrderTree();
         return new BooleanRes(true);
     }
 

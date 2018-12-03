@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.IChargeAO;
+import com.ogc.standard.ao.IWeChatAO;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IAgentUserBO;
 import com.ogc.standard.bo.IAlipayBO;
@@ -21,6 +22,8 @@ import com.ogc.standard.domain.AgentUser;
 import com.ogc.standard.domain.Charge;
 import com.ogc.standard.domain.SYSUser;
 import com.ogc.standard.domain.User;
+import com.ogc.standard.dto.res.PayOrderRes;
+import com.ogc.standard.dto.res.XN002501Res;
 import com.ogc.standard.enums.EAccountType;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.EChannelType;
@@ -55,16 +58,27 @@ public class ChargeAOImpl implements IChargeAO {
     @Autowired
     private IAlipayBO alipayBO;
 
+    @Autowired
+    private IWeChatAO weChatAO;
+
     @Override
-    public String applyOrderOnline(String userId, String payType,
+    public Object applyOrderOnline(String userId, String payType,
             BigDecimal transAmount) {
         User user = userBO.getUser(userId);
-        String result = null;
+        Object result = null;
         if (EPayType.ALIPAY.getCode().equals(payType)) {
-            result = alipayBO.getSignedOrder(user.getUserId(), user.getUserId(),
+            String aipayRes = alipayBO.getSignedOrder(user.getUserId(),
+                user.getUserId(), EJourBizTypeUser.CHARGE.getCode(),
+                EJourBizTypeUser.CHARGE.getCode(),
+                EJourBizTypeUser.CHARGE.getValue(), transAmount);
+            result = new PayOrderRes(aipayRes);
+        } else if (EPayType.WEIXIN_H5.getCode().equals(payType)) {
+            XN002501Res wechatRes = weChatAO.getPrepayIdH5(userId,
+                user.getH5OpenId(), userId, user.getUserId(),
                 EJourBizTypeUser.CHARGE.getCode(),
                 EJourBizTypeUser.CHARGE.getCode(),
                 EJourBizTypeUser.CHARGE.getValue(), transAmount);
+            result = wechatRes;
         } else {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(), "暂不支持支付方式");
         }

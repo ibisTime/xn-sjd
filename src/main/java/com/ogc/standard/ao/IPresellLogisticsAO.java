@@ -18,6 +18,9 @@ public interface IPresellLogisticsAO {
     // 确认收货
     public void confirmReceive(String code);
 
+    // 查询物流
+    public Object trackQuery(String expCode, String expNo);
+
     public Paginable<PresellLogistics> queryPresellLogisticsPage(int start,
             int limit, PresellLogistics condition);
 

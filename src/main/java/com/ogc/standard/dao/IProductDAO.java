@@ -42,4 +42,7 @@ public interface IProductDAO extends IBaseDAO<Product> {
     // 更新现募集数量
     public int updateNowCount(Product data);
 
+    // 更新集体第一下单人
+    public int updateCollectFirstUser(Product data);
+
 }

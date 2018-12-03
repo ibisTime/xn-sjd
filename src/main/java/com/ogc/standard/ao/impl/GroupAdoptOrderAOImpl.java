@@ -330,6 +330,9 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
         if (totalPayedQuantity == 0) {
             smsBO.saveFirstAdoptBulletin(data.getApplyUser(),
                 product.getName());
+
+            productBO.refreshCollectFirstUser(data.getProductCode(),
+                data.getApplyUser());
         } else {
             smsBO.saveAdoptBulletin(data.getApplyUser(),
                 data.getQuantity().toString(), ESellType.COLLECTIVE.getCode(),
@@ -393,6 +396,9 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
             if (totalPayedQuantity == 0) {
                 smsBO.saveFirstAdoptBulletin(data.getApplyUser(),
                     product.getName());
+
+                productBO.refreshCollectFirstUser(data.getProductCode(),
+                    data.getApplyUser());
             } else {
                 smsBO.saveAdoptBulletin(data.getApplyUser(),
                     data.getQuantity().toString(),
@@ -698,6 +704,7 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
     private void initGroupAdoptOrder(GroupAdoptOrder data) {
         Product product = productBO.getProduct(data.getProductCode());
         data.setProduct(product);
+
         List<AdoptOrderTree> adoptOrderTreeList = adoptOrderTreeBO
             .queryAdoptOrderTreeList(data.getCode());
         data.setAdoptOrderTreeList(adoptOrderTreeList);
