@@ -31,7 +31,7 @@
 	
 	<sql id="mobileForQuery_condition">
 		<if test="mobileForQuery != null and mobileForQuery != '' ">
-			AND (tu.mobile like "%"#{mobileForQuery}"%" or tu.mobile like "%"#{mobileForQuery}"%" or tu.mobile like "%"#{mobileForQuery}"%")
+			AND (tu.mobile like "%"#{mobileForQuery}"%" or tau.mobile like "%"#{mobileForQuery}"%" or ts.mobile like "%"#{mobileForQuery}"%")
 		</if>
 		<if test="relaNameForQuery != null and relaNameForQuery != '' ">
 			AND (concat_ws('-', tu.real_name, tu.mobile) like "%"#{relaNameForQuery}"%" or 

@@ -28,9 +28,10 @@ public class CompanyAOImpl implements ICompanyAO {
     public void completeCompanyOwner(String userId, String bussinessLicense,
             String certificateTemplate, String contractTemplate) {
         SYSUser sysUser = sysUserBO.getSYSUser(userId);
-        if (!ESYSUserKind.OWNER.getCode().equals(sysUser.getKind())) {
+        if (!ESYSUserKind.OWNER.getCode().equals(sysUser.getKind())
+                && !ESYSUserKind.BUSINESS.getCode().equals(sysUser.getKind())) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "不是产权端用户，不能操作");
+                "不是产权端或商家端用户，不能操作");
         }
 
         Company company = companyBO.getCompanyByUserId(sysUser.getUserId());

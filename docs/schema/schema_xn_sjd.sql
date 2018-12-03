@@ -616,6 +616,7 @@ CREATE TABLE `tsys_biz_log` (
 DROP TABLE IF EXISTS `tsys_cnavigate`;
 CREATE TABLE `tsys_cnavigate` (
   `code` varchar(32) NOT NULL COMMENT '编号',
+  `shop_code` varchar(32) DEFAULT NULL COMMENT '店铺编号',
   `name` varchar(255) DEFAULT NULL COMMENT '名称',
   `type` varchar(32) DEFAULT NULL COMMENT '类型',
   `url` varchar(255) DEFAULT NULL COMMENT '访问Url',
@@ -1211,7 +1212,7 @@ CREATE TABLE `tsc_commodity` (
   `weight` varchar(32) DEFAULT NULL COMMENT '重量',
   `original_price` varchar(255) DEFAULT NULL COMMENT '原价',
   `logistics` varchar(32) DEFAULT NULL COMMENT '物流方式',
-  `month_sell_count` bigint(20) DEFAULT NULL COMMENT '月销量',
+  `month_sell_count` bigint(20) DEFAULT 0 COMMENT '月销量',
   `list_pic` varchar(255) DEFAULT NULL COMMENT '列表图',
   `banner_pic` varchar(255) DEFAULT NULL COMMENT 'banner图',
   `description` longtext DEFAULT NULL COMMENT '描述',
@@ -1256,6 +1257,7 @@ DROP TABLE IF EXISTS `tsc_commodity_order`;
 CREATE TABLE `tsc_commodity_order` (
   `code` varchar(32) NOT NULL COMMENT '编号',
   `shop_code` varchar(32) DEFAULT NULL COMMENT '店铺编号',
+  `shop_owner` varchar(32) DEFAULT NULL COMMENT '店主编号',
   `amount` decimal(64,0) DEFAULT NULL COMMENT '订单金额',
   `quantity` bigint(20) DEFAULT NULL COMMENT '数量',
   `apply_user` varchar(32) NOT NULL COMMENT '下单用户',
@@ -1271,6 +1273,10 @@ CREATE TABLE `tsc_commodity_order` (
   `jf_deduct_amount` decimal(18,8) DEFAULT NULL COMMENT '积分抵扣金额',
   `back_jf_amount` decimal(18,8) DEFAULT NULL COMMENT '积分返点金额',
   `address_code` varchar(32) DEFAULT NULL COMMENT '地址编号',
+  `province` varchar(64) DEFAULT NULL COMMENT '省份',
+  `city` varchar(64) DEFAULT NULL COMMENT '城市',
+  `district` varchar(64) DEFAULT NULL COMMENT '区',
+  `detail_address` varchar(255) DEFAULT NULL COMMENT '详细地址',
   `logistics_company` varchar(4) DEFAULT NULL COMMENT '物流公司',
   `logistics_number` varchar(255) DEFAULT NULL COMMENT '物流单号',
   `deliver` varchar(32) DEFAULT NULL COMMENT '发货人',
@@ -1300,6 +1306,7 @@ CREATE TABLE `tsc_commodity_order_detail` (
   `quantity` bigint(20) DEFAULT NULL COMMENT '数量',
   `price` decimal(64,0) DEFAULT NULL COMMENT '单价',
   `amount` decimal(64,0) DEFAULT NULL COMMENT '总价',
+  `max_jfdk_rate` DOUBLE DEFAULT NULL COMMENT '最大积分抵扣比例',
   `list_pic` varchar(255) DEFAULT NULL COMMENT '列表图片',
   `logistics_company` varchar(4) DEFAULT NULL COMMENT '物流公司',
   `logistics_number` varchar(255) DEFAULT NULL COMMENT '物流单号',

@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.ICommodityOrderAO;
 import com.ogc.standard.ao.IUserAO;
+import com.ogc.standard.ao.IWeChatAO;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IAddressBO;
 import com.ogc.standard.bo.IAlipayBO;
@@ -37,7 +38,6 @@ import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.domain.Account;
-import com.ogc.standard.domain.Address;
 import com.ogc.standard.domain.Commodity;
 import com.ogc.standard.domain.CommodityOrder;
 import com.ogc.standard.domain.CommodityOrderDetail;
@@ -57,6 +57,7 @@ import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EJourBizTypePlat;
 import com.ogc.standard.enums.EJourBizTypeUser;
 import com.ogc.standard.enums.EPayType;
+import com.ogc.standard.enums.ESellType;
 import com.ogc.standard.enums.ESysUser;
 import com.ogc.standard.enums.ESystemAccount;
 import com.ogc.standard.exception.BizException;
@@ -112,6 +113,9 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
     @Autowired
     private ISmsBO smsBO;
 
+    @Autowired
+    private IWeChatAO weChatAO;
+
     @Override
     @Transactional
     public String commitCommodityOrder(String applyUser, String applyNote,
@@ -120,6 +124,10 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
 
         // 规格检验
         CommoditySpecs specs = commoditySpecsBO.getCommoditySpecs(specsId);
+        if (quantity > specs.getInventory()) {
+            throw new BizException("xn0000", "产品库存不足，无法下单");
+        }
+
         Commodity commodity = commodityBO
             .getCommodity(specs.getCommodityCode());
 
@@ -182,28 +190,24 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
             throw new BizException("xn0000", "该订单不处于待支付状态");
         }
 
-        // 最大积分抵扣比例
+        // 积分抵扣处理，订单只有一个商品
         Double maxJfdkRate = 0d;
         List<CommodityOrderDetail> commodityOrderDetailList = commodityOrderDetailBO
             .queryOrderDetail(req.getCode());
         if (CollectionUtils.isNotEmpty(commodityOrderDetailList)) {
-            String commodityCode = commodityOrderDetailList.get(0)
-                .getCommodityCode();
-            Commodity commodity = commodityBO.getCommodity(commodityCode);
-            maxJfdkRate = commodity.getMaxJfdkRate();
+            maxJfdkRate = commodityOrderDetailList.get(0).getMaxJfdkRate();
         }
-
-        // 积分抵扣处理
-        XN629048Res deductRes = distributionOrderBO.getAdoptOrderDeductAmount(
-            maxJfdkRate, order.getAmount(), order.getApplyUser(),
-            req.getIsJfDeduct());
+        XN629048Res deductRes = distributionOrderBO
+            .getCommodityOrderDeductAmount(maxJfdkRate, order.getAmount(),
+                order.getApplyUser(), req.getIsJfDeduct());
 
         // 支付
         Object result = null;
         if (EPayType.ALIPAY.getCode().equals(req.getPayType())) {
 
             // 状态更新
-            commodityOrderBO.refreshPayGroup(order, req.getPayType());
+            commodityOrderBO.refreshPayGroup(order, req.getPayType(),
+                deductRes);
 
             String signOrder = alipayBO.getSignedOrder(order.getApplyUser(),
                 ESysUser.SYS_USER.getCode(), order.getPayGroup(),
@@ -216,10 +220,23 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
             result = toPayCommodityOrderYue(order, deductRes);
 
         } else if (EPayType.WEIXIN_H5.getCode().equals(req.getPayType())) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "暂不支持微信支付");
+
+            // 状态更新
+            commodityOrderBO.refreshPayGroup(order, req.getPayType(),
+                deductRes);
+
+            User user = userBO.getUser(order.getApplyUser());
+            result = weChatAO.getPrepayIdH5(order.getApplyUser(),
+                user.getH5OpenId(), ESysUser.SYS_USER.getCode(),
+                order.getPayGroup(), order.getPayGroup(),
+                EJourBizTypeUser.COMMODITY.getCode(),
+                EJourBizTypeUser.COMMODITY.getValue(),
+                order.getAmount().subtract(deductRes.getCnyAmount()));
+
         } else {
             throw new BizException("xn0000", "不支持的支付方式");
         }
+
         return result;
     }
 
@@ -244,27 +261,23 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
                 throw new BizException("xn0000", "该订单不处于待支付状态");
             }
 
-            // 最大积分抵扣比例
+            // 积分抵扣处理，订单只有一个商品
             Double maxJfdkRate = 0d;
             List<CommodityOrderDetail> commodityOrderDetailList = commodityOrderDetailBO
                 .queryOrderDetail(order.getCode());
             if (CollectionUtils.isNotEmpty(commodityOrderDetailList)) {
-                String commodityCode = commodityOrderDetailList.get(0)
-                    .getCommodityCode();
-                Commodity commodity = commodityBO.getCommodity(commodityCode);
-                maxJfdkRate = commodity.getMaxJfdkRate();
+                maxJfdkRate = commodityOrderDetailList.get(0).getMaxJfdkRate();
             }
-
-            // 积分抵扣处理
-            XN629048Res deductRes = distributionOrderBO.getAdoptOrderDeductAmount(
-                maxJfdkRate, order.getAmount(), order.getApplyUser(),
-                req.getIsJfDeduct());
+            XN629048Res deductRes = distributionOrderBO
+                .getCommodityOrderDeductAmount(maxJfdkRate, order.getAmount(),
+                    order.getApplyUser(), req.getIsJfDeduct());
 
             // 支付
             if (EPayType.ALIPAY.getCode().equals(req.getPayType())) {
 
                 // 状态更新
-                commodityOrderBO.refreshPayGroup(order, req.getPayType());
+                commodityOrderBO.refreshPayGroup(order, req.getPayType(),
+                    deductRes);
 
                 String signOrder = alipayBO.getSignedOrder(order.getApplyUser(),
                     ESysUser.SYS_USER.getCode(), order.getPayGroup(),
@@ -278,8 +291,19 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
                 result = toPayCommodityOrderYue(order, deductRes);
 
             } else if (EPayType.WEIXIN_H5.getCode().equals(req.getPayType())) {
-                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                    "暂不支持微信支付");
+
+                // 状态更新
+                commodityOrderBO.refreshPayGroup(order, req.getPayType(),
+                    deductRes);
+
+                User user = userBO.getUser(order.getApplyUser());
+                result = weChatAO.getPrepayIdH5(order.getApplyUser(),
+                    user.getH5OpenId(), ESysUser.SYS_USER.getCode(),
+                    order.getCode(), order.getCode(),
+                    EJourBizTypeUser.COMMODITY.getCode(),
+                    EJourBizTypeUser.COMMODITY.getValue(),
+                    order.getAmount().subtract(deductRes.getCnyAmount()));
+
             } else {
                 throw new BizException("xn0000", "不支持的支付方式");
             }
@@ -318,10 +342,10 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
             EJourBizTypeUser.COMMODITY_BUY_DEDUCT.getValue(),
             EJourBizTypePlat.COMMODITY_BUY_DEDUCT.getValue(), data.getCode());
 
-        // TODO 进行分销
-        // backJfAmount = distributionOrderBO.distribution(data.getCode(),
-        // commodityInfo.getShopCode(), data.getAmount(), data.getApplyUser(),
-        // ESellType.COMMODITY.getCode(), resultRes);
+        // 进行分销
+        BigDecimal backJfAmount = distributionOrderBO.commodityDistribution(
+            data.getCode(), data.getShopOwner(), data.getAmount(),
+            data.getApplyUser(), ESellType.COMMODITY.getCode(), resultRes);
 
         // 用户升级
         userAO.upgradeUserLevel(data.getApplyUser());
@@ -330,30 +354,38 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
         smsBO.saveCommodityBulletin(data.getApplyUser(),
             data.getQuantity().toString());
 
-        // TODO backjfamount
-        commodityOrderBO.refreshPay(data, data.getAmount());
+        // 业务订单更改
+        commodityOrderBO.payYueSuccess(data, resultRes, backJfAmount);
 
         return new BooleanRes(true);
     }
 
     @Override
     public void paySuccess(String payGroup) {
-        CommodityOrder data = commodityOrderBO.getCommodityOrder(payGroup);
+        List<CommodityOrder> commodityOrderList = commodityOrderBO
+            .queryCommodityOrderByPayGroup(payGroup);
 
-        // TODO 进行分销
-        // backJfAmount = distributionOrderBO.distribution(data.getCode(),
-        // commodityInfo.getShopCode(), data.getAmount(), data.getApplyUser(),
-        // ESellType.COMMODITY.getCode(), resultRes);
+        for (CommodityOrder data : commodityOrderList) {
 
-        // 用户升级
-        userAO.upgradeUserLevel(data.getApplyUser());
+            // 进行分销
+            XN629048Res resultRes = new XN629048Res(data.getCnyDeductAmount(),
+                data.getJfDeductAmount());
+            BigDecimal backJfAmount = distributionOrderBO.commodityDistribution(
+                data.getCode(), data.getShopOwner(), data.getAmount(),
+                data.getApplyUser(), ESellType.COMMODITY.getCode(), resultRes);
 
-        // 添加快报
-        smsBO.saveCommodityBulletin(data.getApplyUser(),
-            data.getQuantity().toString());
+            // 用户升级
+            userAO.upgradeUserLevel(data.getApplyUser());
 
-        // TODO backjfamount
-        commodityOrderBO.refreshPay(data, data.getAmount());
+            // 添加快报
+            smsBO.saveCommodityBulletin(data.getApplyUser(),
+                data.getQuantity().toString());
+
+            // 业务订单更改
+            commodityOrderBO.paySuccess(data.getCode(), data.getAmount(),
+                backJfAmount);
+
+        }
 
     }
 
@@ -471,35 +503,18 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
         List<CommodityOrderDetail> commodityOrderDetailList = commodityOrderDetailBO
             .queryOrderDetail(code);
         if (CollectionUtils.isNotEmpty(commodityOrderDetailList)) {
-            String commodityCode = commodityOrderDetailList.get(0)
-                .getCommodityCode();
-            Commodity commodity = commodityBO.getCommodity(commodityCode);
-            maxJfdkRate = commodity.getMaxJfdkRate();
+            maxJfdkRate = commodityOrderDetailList.get(0).getMaxJfdkRate();
         }
 
-        return distributionOrderBO.getAdoptOrderDeductAmount(maxJfdkRate,
+        return distributionOrderBO.getCommodityOrderDeductAmount(maxJfdkRate,
             commodityOrder.getAmount(), commodityOrder.getApplyUser(),
             EBoolean.YES.getCode());
     }
 
     @Override
     public XN629048Res getGroupOrderDkAmount(String payGroup) {
-        List<CommodityOrder> commodityOrderList = commodityOrderBO
-            .queryCommodityOrderByPayGroup(payGroup);
-
-        BigDecimal cnyAmount = BigDecimal.ZERO;// 可抵扣多少人民币
-        BigDecimal jfAmount = BigDecimal.ZERO;// 需要用多少积分来抵扣
-
-        for (CommodityOrder commodityOrder : commodityOrderList) {
-            XN629048Res res = distributionOrderBO.getOrderDeductAmount(
-                commodityOrder.getAmount(), commodityOrder.getApplyUser(),
-                EBoolean.YES.getCode());
-
-            cnyAmount = cnyAmount.add(res.getCnyAmount());
-            jfAmount = jfAmount.add(res.getJfAmount());
-        }
-
-        return new XN629048Res(cnyAmount, jfAmount);
+        return distributionOrderBO.getCommodityGroupOrderDeductAmount(payGroup,
+            EBoolean.YES.getCode());
     }
 
     @Override
@@ -551,10 +566,6 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
             order.setJourCode(jourList.get(0).getCode());
         }
 
-        // 地址
-        Address address = addressBO.getAddress(order.getAddressCode());
-        order.setAddress(address);
-
         // 下单人
         User applyUser = userBO.getUserUnCheck(order.getApplyUser());
         String applyUserName = null;
@@ -566,6 +577,16 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
         }
         order.setApplyUserName(applyUserName);
 
+        // 收货人
+        User receiverinfo = userBO.getUserUnCheck(order.getReceiver());
+        String receiverName = null;
+        if (null != receiverinfo) {
+            receiverName = receiverinfo.getMobile();
+            if (null != receiverinfo.getRealName()) {
+                receiverName = receiverinfo.getRealName().concat(receiverName);
+            }
+        }
+        order.setReceiverName(receiverName);
     }
 
 }

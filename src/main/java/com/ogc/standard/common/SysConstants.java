@@ -69,6 +69,8 @@ public class SysConstants {
 
     public static final String PRESELL_DK_RATE = "PRESELL_DK_RATE"; // 预售消耗汇率
 
+    public static final String COMMODITY_DK_RATE = "COMMODITY_DK_RATE"; // 商城消耗汇率
+
     // 认养分销
     public static String DIST_OWENER_RATE = "DIST_OWENER_RATE"; // 产权方的总额
 
@@ -101,6 +103,14 @@ public class SysConstants {
 
     // 商城分销
     public static String DIST_BUSINESS_RATE = "DIST_BUSINESS_RATE"; // 代理方的总额
+
+    public static String COMMODITY_DIST_USER_BACK_JF_RATE = "COMMODITY_DIST_USER_BACK_JF_RATE"; // 用户返积分的总额
+
+    public static String COMMODITY_DIST_AGENT_RATE = "COMMODITY_DIST_AGENT_RATE"; // 代理方的总额
+
+    public static String COMMODITY_DIRECT = "COMMODITY_DIRECT"; // 用户直推商城送
+
+    public static String COMMODITY_INDIRECT = "COMMODITY_INDIRECT"; // 用户间推商城送
 
     // 代理等级分成
     public static String DIST_AGENT1_RATE = "DIST_AGENT1_RATE"; // 一级代理分成比例
@@ -158,6 +168,8 @@ public class SysConstants {
     public static final String ADOPT_CREATE_RATE = "ADOPT_CREATE_RATE";// 认养产生汇率
 
     public static final String PRESELL_CREATE_RATE = "PRESELL_CREATE_RATE";// 预售产生汇率
+
+    public static final String COMMODITY_CREATE_RATE = "COMMODITY_CREATE_RATE";// 商城产生汇率
 
     // 用户等级
     public static final String USER_LEVEL_0 = "USER_LEVEL_0";// 初探翠林

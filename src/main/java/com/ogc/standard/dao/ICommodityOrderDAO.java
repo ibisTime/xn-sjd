@@ -19,7 +19,11 @@ import com.ogc.standard.domain.CommodityOrder;
 public interface ICommodityOrderDAO extends IBaseDAO<CommodityOrder> {
     String NAMESPACE = ICommodityOrderDAO.class.getName().concat(".");
 
-    public int updatePay(CommodityOrder data);
+    public int updatePayYueSuccess(CommodityOrder data);
+
+    public int updatePayGroup(CommodityOrder data);
+
+    public int updatePaySuccess(CommodityOrder data);
 
     public int updateCancel(CommodityOrder data);
 

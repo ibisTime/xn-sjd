@@ -229,7 +229,6 @@
 		WHERE code = #{code}
 	</update>
 	
-	
 	<update id="update_settle" parameterType="presellOrder">
 		UPDATE tys_presell_order
 		SET

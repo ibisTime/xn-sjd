@@ -73,6 +73,7 @@ public class CommodityOrderDetailBOImpl
         BigDecimal amount = price.multiply(BigDecimal.valueOf(quantity));
 
         data.setAmount(amount);
+        data.setMaxJfdkRate(commodity.getMaxJfdkRate());
         data.setListPic(commodity.getListPic());
         data.setAddressCode(addressCode);
         data.setReceiver(address.getUserId());

@@ -27,6 +27,7 @@ public class XN630500 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         CNavigate result = new CNavigate();
+        result.setShopCode(req.getShopCode());
         result.setName(req.getName());
         result.setType(req.getType());
         result.setUrl(req.getUrl());

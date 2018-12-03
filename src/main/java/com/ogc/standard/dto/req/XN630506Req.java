@@ -1,6 +1,10 @@
 package com.ogc.standard.dto.req;
 
 public class XN630506Req {
+
+    // 店铺编号
+    private String shopCode;
+
     // 类型（选填）
     private String type;
 
@@ -33,4 +37,13 @@ public class XN630506Req {
     public void setLocation(String location) {
         this.location = location;
     }
+
+    public String getShopCode() {
+        return shopCode;
+    }
+
+    public void setShopCode(String shopCode) {
+        this.shopCode = shopCode;
+    }
+
 }

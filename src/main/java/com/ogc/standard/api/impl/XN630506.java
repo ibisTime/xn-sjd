@@ -27,6 +27,7 @@ public class XN630506 extends AProcessor {
     public Object doBusiness() throws BizException {
         CNavigate condition = new CNavigate();
         condition.setType(req.getType());
+        condition.setShopCode(req.getShopCode());
         condition.setParentCode(req.getParentCode());
         condition.setLocation(req.getLocation());
         condition.setStatus(EBoolean.YES.getCode());

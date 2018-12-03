@@ -4,6 +4,9 @@ public class XN630505Req extends APageReq {
 
     private static final long serialVersionUID = 1L;
 
+    // 店铺编号
+    private String shopCode;
+
     // 名字（选填）
     private String name;
 
@@ -57,6 +60,14 @@ public class XN630505Req extends APageReq {
 
     public void setParentCode(String parentCode) {
         this.parentCode = parentCode;
+    }
+
+    public String getShopCode() {
+        return shopCode;
+    }
+
+    public void setShopCode(String shopCode) {
+        this.shopCode = shopCode;
     }
 
 }

@@ -4,6 +4,9 @@ import org.hibernate.validator.constraints.NotBlank;
 
 public class XN630500Req {
 
+    // 店铺编号
+    private String shopCode;
+
     // 名字（必填）
     @NotBlank
     private String name;
@@ -106,4 +109,13 @@ public class XN630500Req {
     public void setRemark(String remark) {
         this.remark = remark;
     }
+
+    public String getShopCode() {
+        return shopCode;
+    }
+
+    public void setShopCode(String shopCode) {
+        this.shopCode = shopCode;
+    }
+
 }

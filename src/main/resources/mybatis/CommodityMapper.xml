@@ -119,6 +119,7 @@
 		,weight
 		,original_price
 		,logistics
+		,month_sell_count
 		,list_pic
 		,banner_pic
 		,description
@@ -138,6 +139,7 @@
 		,#{weight}
 		,#{originalPrice}
 		,#{logistics}
+		,#{monthSellCount}
 		,#{listPic}
 		,#{bannerPic}
 		,#{description}

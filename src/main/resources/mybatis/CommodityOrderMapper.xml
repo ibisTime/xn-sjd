@@ -5,6 +5,7 @@
 	<resultMap id="commodityOrder_DB_Result" type="commodityOrder">
 		<result column="code" property="code" />
 		<result column="shop_code" property="shopCode" />
+		<result column="shop_owner" property="shopOwner" />
 		<result column="amount" property="amount" />
 		<result column="quantity" property="quantity" />
 		<result column="apply_user" property="applyUser" />
@@ -23,6 +24,11 @@
 		<result column="back_jf_amount" property="backJfAmount" />
 		
 		<result column="address_code" property="addressCode" />
+		<result column="province" property="province" />
+		<result column="city" property="city" />
+		<result column="district" property="district" />
+		<result column="detail_address" property="detailAddress" />
+		
 		<result column="logistics_company" property="logisticsCompany" />
 		<result column="logistics_number" property="logisticsNumber" />
 		<result column="deliver" property="deliver" />
@@ -46,6 +52,9 @@
 			</if>
 			<if test="shopCode != null and shopCode != '' ">
 				AND t.shop_code = #{shopCode}
+			</if>
+			<if test="shopOwner != null and shopOwner != '' ">
+				AND t.shop_owner = #{shopOwner}
 			</if>
 			<if test="applyUser != null and applyUser != '' ">
 				AND t.apply_user = #{applyUser}
@@ -101,7 +110,8 @@
 	<select id="select_commodity_order" parameterType="commodityOrder" resultMap="commodityOrder_DB_Result">
 		SELECT
 		t.code
-		,shop_code
+		,t.shop_code
+		,t.shop_owner
 		,t.amount
 		,t.quantity
 		,t.apply_user
@@ -120,6 +130,11 @@
 		,t.back_jf_amount
 		
 		,t.address_code
+		,t.province
+		,t.city
+		,t.district
+		,t.detail_address
+		
 		,t.logistics_company
 		,t.logistics_number
 		,t.deliver
@@ -154,6 +169,7 @@
 		INSERT INTO tsc_commodity_order(
 		code
 		,shop_code
+		,shop_owner
 		,apply_user
 		,apply_datetime
 		,apply_note
@@ -161,6 +177,13 @@
 		,pay_group
 		
 		,address_code
+		,province
+		,city
+		,district
+		,detail_address
+		
+		,receiver
+		,receiver_mobile
 		,status
 		,settle_status
 		,updater
@@ -171,6 +194,7 @@
 		(
 		#{code}
 		,#{shopCode}
+		,#{shopOwner}
 		,#{applyUser}
 		,#{applyDatetime}
 		,#{applyNote}
@@ -178,6 +202,13 @@
 		,#{payGroup}
 		
 		,#{addressCode}
+		,#{province}
+		,#{city}
+		,#{district}
+		,#{detailAddress}
+		
+		,#{receiver}
+		,#{receiverMobile}
 		,#{status}
 		,#{settleStatus}
 		,#{updater}
@@ -186,20 +217,45 @@
 		)
 	</insert>
 	
-	<update id="update_pay" parameterType="commodityOrder">
+	<update id="update_payYueSuccess" parameterType="commodityOrder">
 		UPDATE tsc_commodity_order
 		SET
-		pay_type=#{payType}
-		,pay_group=#{payGroup}
-		,pay_code=#{payCode}
-		,pay_datetime=#{payDatetime}
-		,pay_amount=#{payAmount}
+		status = #{status}
+		,pay_type = #{payType}
+		,cny_deduct_amount = #{cnyDeductAmount}
+		,jf_deduct_amount = #{jfDeductAmount}
+		,back_jf_amount = #{backJfAmount}
 		
-		,status=#{status}
-		,settle_status=#{settleStatus}
-		,update_datetime=#{updateDatetime}
+		,pay_amount = #{payAmount}
+		,pay_datetime = #{payDatetime}
+		,settle_status = #{settleStatus}
+		,remark = #{remark}
+		
 		WHERE
 		code=#{code}
+	</update>
+	
+	<update id="update_payGroup" parameterType="commodityOrder">
+		UPDATE tsc_commodity_order
+		SET
+		pay_type = #{payType}
+		,pay_group = #{payGroup}
+		,cny_deduct_amount = #{cnyDeductAmount}
+		,jf_deduct_amount = #{jfDeductAmount}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_paySuccess" parameterType="commodityOrder">
+		UPDATE tsc_commodity_order
+		SET
+		status = #{status}
+		,pay_amount = #{payAmount}
+		,pay_datetime = #{payDatetime}
+		,settle_status = #{settleStatus}
+		,back_jf_amount = #{backJfAmount}
+		,remark = #{remark}
+		WHERE code = #{code}
 	</update>
 	
 	<update id="update_cancel" parameterType="commodityOrder">
@@ -227,6 +283,12 @@
 		UPDATE tsc_commodity_order
 		SET
 		address_code=#{addressCode}
+		,province=#{province}
+		,city=#{city}
+		,district=#{district}
+		,detail_address=#{detailAddress}
+		,receiver = #{receiver}
+		,receiver_mobile = #{receiverMobile}
 		WHERE
 		code=#{code}
 	</update>

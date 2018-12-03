@@ -26,6 +26,7 @@ import com.ogc.standard.dto.res.XN629905Res;
 import com.ogc.standard.enums.EAccountType;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECurrency;
+import com.ogc.standard.enums.EJourBizTypeBusiness;
 import com.ogc.standard.enums.EJourBizTypeMaintain;
 import com.ogc.standard.enums.EJourBizTypeOwner;
 import com.ogc.standard.enums.EJourStatus;
@@ -197,6 +198,10 @@ public class JourAOImpl implements IJourAO {
 
         if (EAccountType.MAINTAIN.getCode().equals(accountType)) {
             bizTypeList.add(EJourBizTypeMaintain.MAINTAIN_DEDECT.getCode());
+        }
+
+        if (EAccountType.BUSINESS.getCode().equals(accountType)) {
+            bizTypeList.add(EJourBizTypeBusiness.BUSINESS_PROFIT.getCode());
         }
 
         BigDecimal totalAmount = jourBO.getTotalAmount(

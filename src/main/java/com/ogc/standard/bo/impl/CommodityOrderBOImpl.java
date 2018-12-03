@@ -12,17 +12,24 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.ogc.standard.bo.IAddressBO;
 import com.ogc.standard.bo.ICommodityOrderBO;
+import com.ogc.standard.bo.ICompanyBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.ICommodityOrderDAO;
+import com.ogc.standard.domain.Address;
 import com.ogc.standard.domain.CommodityOrder;
+import com.ogc.standard.domain.Company;
+import com.ogc.standard.dto.res.XN629048Res;
 import com.ogc.standard.enums.ECommodityOrderSettleStatus;
 import com.ogc.standard.enums.ECommodityOrderStatus;
 import com.ogc.standard.enums.EGeneratePrefix;
+import com.ogc.standard.enums.EPayType;
 import com.ogc.standard.enums.ESysUser;
 import com.ogc.standard.exception.BizException;
 
@@ -38,28 +45,52 @@ public class CommodityOrderBOImpl extends PaginableBOImpl<CommodityOrder>
     @Autowired
     private ICommodityOrderDAO commodityOrderDAO;
 
+    @Autowired
+    private ICompanyBO companyBO;
+
+    @Autowired
+    private IAddressBO addressBO;
+
     @Override
     public String saveOrder(String applyUser, String applyNote, String payGroup,
             String shopCode, String expressType, String updater, String remark,
             String addressCode) {
+        Company shop = companyBO.getCompany(shopCode);
+        Address address = addressBO.getAddress(addressCode);
+
         CommodityOrder data = new CommodityOrder();
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.CommodityOrder.getCode());
         data.setCode(code);
         data.setShopCode(shopCode);
-        data.setPayGroup(payGroup);
+        data.setShopOwner(shop.getUserId());
         data.setApplyUser(applyUser);
         data.setApplyDatetime(new Date());
 
         data.setApplyNote(applyNote);
         data.setExpressType(expressType);
         data.setAddressCode(addressCode);
+        data.setProvince(address.getProvince());
+        data.setCity(address.getCity());
+
+        data.setDistrict(address.getDistrict());
+        data.setDetailAddress(address.getDetailAddress());
+        data.setReceiver(address.getUserId());
+        data.setReceiverMobile(address.getMobile());
+
         data.setStatus(ECommodityOrderStatus.TO_PAY.getCode());
         data.setSettleStatus(ECommodityOrderSettleStatus.NO_SETTLE.getCode());
-
         data.setUpdater(updater);
+
         data.setUpdateDatetime(new Date());
         data.setRemark(remark);
+
+        if (null == payGroup) {
+            data.setPayGroup(code);
+        } else {
+            data.setPayGroup(payGroup);
+        }
+
         commodityOrderDAO.insert(data);
         return code;
     }
@@ -75,22 +106,47 @@ public class CommodityOrderBOImpl extends PaginableBOImpl<CommodityOrder>
     }
 
     @Override
-    public void refreshPay(CommodityOrder data, BigDecimal payAmount) {
-        data.setPayAmount(payAmount);
-        Date date = new Date();
-        data.setPayDatetime(date);
+    public void payYueSuccess(CommodityOrder data, XN629048Res resultRes,
+            BigDecimal backjfAmount) {
+        data.setPayType(EPayType.YE.getCode());
+        data.setCnyDeductAmount(resultRes.getCnyAmount());
+        data.setJfDeductAmount(resultRes.getJfAmount());
+        data.setPayAmount(data.getAmount().subtract(resultRes.getCnyAmount()));
+
+        data.setBackJfAmount(backjfAmount);
+        data.setPayDatetime(new Date());
         data.setStatus(ECommodityOrderStatus.TODELIVE.getCode());
         data.setSettleStatus(ECommodityOrderSettleStatus.TO_SETTLE.getCode());
-        data.setUpdateDatetime(date);
-        commodityOrderDAO.updatePay(data);
+        data.setRemark("余额支付成功");
+        commodityOrderDAO.updatePayYueSuccess(data);
     }
 
     @Override
-    public void refreshPayGroup(CommodityOrder data, String payType) {
+    public void refreshPayGroup(CommodityOrder data, String payType,
+            XN629048Res resultRes) {
         data.setPayType(payType);
         data.setPayGroup(data.getCode());
+
+        data.setCnyDeductAmount(resultRes.getCnyAmount());
+        data.setJfDeductAmount(resultRes.getJfAmount());
         data.setRemark("预支付发起中");
-        commodityOrderDAO.updatePay(data);
+        commodityOrderDAO.updatePayGroup(data);
+    }
+
+    @Override
+    public void paySuccess(String code, BigDecimal payAmount,
+            BigDecimal backJfAmount) {
+        if (StringUtils.isNotBlank(code)) {
+            CommodityOrder data = new CommodityOrder();
+            data.setCode(code);
+            data.setPayAmount(payAmount);
+            data.setBackJfAmount(backJfAmount);
+            data.setStatus(ECommodityOrderStatus.TODELIVE.getCode());
+            data.setSettleStatus(
+                ECommodityOrderSettleStatus.TO_SETTLE.getCode());
+            data.setRemark("第三方支付成功");
+            commodityOrderDAO.updatePaySuccess(data);
+        }
     }
 
     @Override
@@ -115,8 +171,17 @@ public class CommodityOrderBOImpl extends PaginableBOImpl<CommodityOrder>
     @Override
     public void refreshAddress(String code, String addressCode) {
         CommodityOrder data = new CommodityOrder();
+        Address address = addressBO.getAddress(addressCode);
+
         data.setCode(code);
         data.setAddressCode(addressCode);
+        data.setProvince(address.getProvince());
+        data.setCity(address.getCity());
+
+        data.setDistrict(address.getDistrict());
+        data.setDetailAddress(address.getDetailAddress());
+        data.setReceiver(address.getUserId());
+        data.setReceiverMobile(address.getMobile());
         commodityOrderDAO.updateAddress(data);
     }
 

@@ -37,6 +37,10 @@ public enum EJourBizTypeUser {
 
     PRESELL_INDIRECT("presell_indirect", "用户间推预售分成"),
 
+    COMMODITY_DIRECT("commodity_direct", "用户直推商城分成"),
+
+    COMMODITY_INDIRECT("commodity_indirect", "用户间推商城分成"),
+
     ADOPT_COLLECT("adopt_collect", "集体认养"),
 
     UN_FULL_CNY("un_full_cny", "集体认养未满标退款"),
@@ -87,7 +91,9 @@ public enum EJourBizTypeUser {
 
     UN_FULL_BACKJF("un_full_backjf", "集体认养未满标退返利积分"),
 
-    REAL_NAME("real_name", "实名认证");
+    REAL_NAME("real_name", "实名认证"),
+
+    COMMODITY_PAY_BACK("commodity_pay_back", "商城消费返利");
 
     public static EJourBizTypeUser getBizType(String code) {
         Map<String, EJourBizTypeUser> map = getBizTypeMap();

@@ -14,8 +14,10 @@
 		<result column="apply_user" property="applyUser" />
 		<result column="apply_datetime" property="applyDatetime" />
 		<result column="quantity" property="quantity" />
+		
 		<result column="price" property="price" />
 		<result column="amount" property="amount" />
+		<result column="max_jfdk_rate" property="maxJfdkRate" />
 		
 		<result column="list_pic" property="listPic" />
 		<result column="logistics_company" property="logisticsCompany" />
@@ -83,6 +85,7 @@
 		,t.price
 		
 		,t.amount
+		,t.max_jfdk_rate
 		,t.list_pic
 		,t.logistics_company
 		,t.logistics_number
@@ -128,6 +131,7 @@
 		,price
 		
 		,amount
+		,max_jfdk_rate
 		,list_pic
 		,address_code
 		,update_datetime
@@ -149,6 +153,7 @@
 		,#{price}
 		
 		,#{amount}
+		,#{maxJfdkRate}
 		,#{listPic}
 		,#{addressCode}
 		,#{updateDatetime}

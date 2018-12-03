@@ -29,17 +29,20 @@ public class XN630505 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         CNavigate condition = new CNavigate();
+        condition.setShopCode(req.getShopCode());
         condition.setName(req.getName());
         condition.setType(req.getType());
         condition.setStatus(req.getStatus());
         condition.setLocation(req.getLocation());
         condition.setParentCode(req.getParentCode());
         condition.setIsFront(EBoolean.NO.getCode());
+
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
             column = ICNavigateAO.DEFAULT_ORDER_COLUMN;
         }
         condition.setOrder(column, req.getOrderDir());
+
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
         return cNavigateAO.queryCNavigatePage(start, limit, condition);

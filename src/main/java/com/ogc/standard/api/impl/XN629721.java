@@ -34,6 +34,7 @@ public class XN629721 extends AProcessor {
     public Object doBusiness() throws BizException {
 
         return commodityOrderAO.toPayCommodityOrder(req);
+
     }
 
     @Override

@@ -432,7 +432,7 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
 
         // 更新寄售数量
         originalGroupBO.refreshPresellQuantity(originalGroup.getCode(),
-            originalGroup.getPresellQuantity() - deriveGroup.getQuantity());
+            originalGroup.getPresellQuantity() - data.getQuantity());
     }
 
     @Override

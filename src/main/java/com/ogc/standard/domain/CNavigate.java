@@ -16,6 +16,9 @@ public class CNavigate extends ABaseDO {
     // 编号
     private String code;
 
+    // 店铺编号
+    private String shopCode;
+
     // 名称
     private String name;
 
@@ -145,4 +148,13 @@ public class CNavigate extends ABaseDO {
     public void setIsCompanyEdit(String isCompanyEdit) {
         this.isCompanyEdit = isCompanyEdit;
     }
+
+    public String getShopCode() {
+        return shopCode;
+    }
+
+    public void setShopCode(String shopCode) {
+        this.shopCode = shopCode;
+    }
+
 }

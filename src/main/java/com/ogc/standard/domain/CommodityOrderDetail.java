@@ -51,6 +51,9 @@ public class CommodityOrderDetail extends ABaseDO {
     // 总金额
     private BigDecimal amount;
 
+    // 最大积分抵扣比例
+    private double maxJfdkRate;
+
     // 列表图
     private String listPic;
 
@@ -356,6 +359,14 @@ public class CommodityOrderDetail extends ABaseDO {
 
     public void setApplyDatetime(Date applyDatetime) {
         this.applyDatetime = applyDatetime;
+    }
+
+    public double getMaxJfdkRate() {
+        return maxJfdkRate;
+    }
+
+    public void setMaxJfdkRate(double maxJfdkRate) {
+        this.maxJfdkRate = maxJfdkRate;
     }
 
 }

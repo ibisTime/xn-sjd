@@ -30,6 +30,9 @@ public class CommodityOrder extends ABaseDO {
     // 店铺编号
     private String shopCode;
 
+    // 店主
+    private String shopOwner;
+
     // 订单金额
     private BigDecimal amount;
 
@@ -74,6 +77,18 @@ public class CommodityOrder extends ABaseDO {
 
     // 地址编号
     private String addressCode;
+
+    // 省份
+    private String province;
+
+    // 城市
+    private String city;
+
+    // 区
+    private String district;
+
+    // 具体地址
+    private String detailAddress;
 
     // 物流公司
     private String logisticsCompany;
@@ -129,9 +144,6 @@ public class CommodityOrder extends ABaseDO {
     // 卖家
     private String sellersName;
 
-    // 地址
-    private Address address;
-
     // 发货时间起
     private Date deliverDatetimeStart;
 
@@ -140,6 +152,9 @@ public class CommodityOrder extends ABaseDO {
 
     // 下单人
     private String applyUserName;
+
+    // 收货人
+    private String receiverName;
 
     public List<CommodityShopOrder> getShopOrderList() {
         return shopOrderList;
@@ -325,14 +340,6 @@ public class CommodityOrder extends ABaseDO {
         this.addressCode = addressCode;
     }
 
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
-    }
-
     public String getLogisticsCompany() {
         return logisticsCompany;
     }
@@ -451,6 +458,54 @@ public class CommodityOrder extends ABaseDO {
 
     public void setBackJfAmount(BigDecimal backJfAmount) {
         this.backJfAmount = backJfAmount;
+    }
+
+    public String getShopOwner() {
+        return shopOwner;
+    }
+
+    public void setShopOwner(String shopOwner) {
+        this.shopOwner = shopOwner;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(String district) {
+        this.district = district;
+    }
+
+    public String getDetailAddress() {
+        return detailAddress;
+    }
+
+    public void setDetailAddress(String detailAddress) {
+        this.detailAddress = detailAddress;
+    }
+
+    public String getReceiverName() {
+        return receiverName;
+    }
+
+    public void setReceiverName(String receiverName) {
+        this.receiverName = receiverName;
     }
 
 }

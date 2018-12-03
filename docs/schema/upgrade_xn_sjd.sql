@@ -269,3 +269,21 @@ CHANGE COLUMN `contract_template` `contract_template` LONGTEXT NULL DEFAULT NULL
 ALTER TABLE `tsys_config` 
 CHANGE COLUMN `cvalue` `cvalue` LONGTEXT NULL DEFAULT NULL COMMENT 'value' ;
 
+#V2.0.0 4-1
+ALTER TABLE `tsc_commodity_order_detail` 
+ADD COLUMN `max_jfdk_rate` DOUBLE NULL COMMENT '最大积分抵扣比例' AFTER `amount`;
+
+ALTER TABLE `tsc_commodity_order` 
+ADD COLUMN `shop_owner` VARCHAR(32) NULL COMMENT '店主编号' AFTER `shop_code`;
+
+ALTER TABLE `tsys_cnavigate` 
+ADD COLUMN `shop_code` VARCHAR(32) NULL COMMENT '店铺编号' AFTER `code`;
+
+ALTER TABLE `tsc_commodity` 
+CHANGE COLUMN `month_sell_count` `month_sell_count` BIGINT(20) NULL DEFAULT 0 COMMENT '月销量' ;
+
+ALTER TABLE `tsc_commodity_order` 
+ADD COLUMN `province` VARCHAR(255) NULL COMMENT '省' AFTER `address_code`,
+ADD COLUMN `city` VARCHAR(255) NULL COMMENT '市' AFTER `province`,
+ADD COLUMN `district` VARCHAR(255) NULL COMMENT '区' AFTER `city`,
+ADD COLUMN `detail_address` VARCHAR(255) NULL COMMENT '详细地址' AFTER `district`;

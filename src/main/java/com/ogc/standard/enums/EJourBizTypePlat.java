@@ -36,6 +36,10 @@ public enum EJourBizTypePlat {
 
     PRESELL_INDIRECT("presell_indirect", "用户间推预售分成"),
 
+    COMMODITY_DIRECT("commodity_direct", "用户直推商城分成"),
+
+    COMMODITY_INDIRECT("commodity_indirect", "用户间推商城分成"),
+
     ADOPT_PROFIT("adopt_profit", "认养收益"),
 
     PRESELL_DIST("presell_dist", "预售分成"),
@@ -91,7 +95,11 @@ public enum EJourBizTypePlat {
 
     DIST_USER_BACK_JFPOOL("dist_user_back_jfpool", "认养返积分池"),
 
-    REAL_NAME("real_name", "实名认证");
+    COMMODITY_USER_BACK_JFPOOL("commodity_user_back_jfpool", "商城返积分池"),
+
+    REAL_NAME("real_name", "实名认证"),
+
+    COMMODITY_PAY_BACK("commodity_pay_back", "商城消费返利");
 
     public static EJourBizTypePlat getBizType(String code) {
         Map<String, EJourBizTypePlat> map = getBizTypeMap();
