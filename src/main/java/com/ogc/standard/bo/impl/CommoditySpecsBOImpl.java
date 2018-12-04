@@ -15,8 +15,10 @@ import org.springframework.stereotype.Component;
 
 import com.ogc.standard.bo.ICommoditySpecsBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
+import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.ICommoditySpecsDAO;
 import com.ogc.standard.domain.CommoditySpecs;
+import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.exception.BizException;
 
 /** 
@@ -33,6 +35,9 @@ public class CommoditySpecsBOImpl extends PaginableBOImpl<CommoditySpecs>
 
     @Override
     public void saveSpecs(CommoditySpecs data) {
+        String code = OrderNoGenerater
+            .generate(EGeneratePrefix.COMMODITY_SPECS.getCode());
+        data.setCode(code);
         commoditySpecsDAO.insert(data);
     }
 

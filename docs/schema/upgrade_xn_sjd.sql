@@ -36,6 +36,7 @@ ADD COLUMN `h5_open_id` VARCHAR(255) NULL COMMENT '公众号开放编号' AFTER 
 ALTER TABLE `tsj_gift_order` 
 ADD COLUMN `to_user` VARCHAR(32) NULL COMMENT '被赠送人' AFTER `code`;
 
+
 ALTER TABLE `tb_tool_use_record` 
 ADD COLUMN `tool_code` VARCHAR(32) NULL COMMENT '道具编号' AFTER `code`;
 
@@ -287,3 +288,6 @@ ADD COLUMN `province` VARCHAR(255) NULL COMMENT '省' AFTER `address_code`,
 ADD COLUMN `city` VARCHAR(255) NULL COMMENT '市' AFTER `province`,
 ADD COLUMN `district` VARCHAR(255) NULL COMMENT '区' AFTER `city`,
 ADD COLUMN `detail_address` VARCHAR(255) NULL COMMENT '详细地址' AFTER `district`;
+
+ALTER TABLE `tsc_commodity_specs` 
+ADD COLUMN `code` VARCHAR(32) NULL COMMENT '编号' FIRST;

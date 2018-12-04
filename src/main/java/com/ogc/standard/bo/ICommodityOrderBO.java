@@ -49,9 +49,10 @@ public interface ICommodityOrderBO extends IPaginableBO<CommodityOrder> {
 
     public void refreshReceive(CommodityOrder data);
 
-    public void refreshComment(String code);
+    public void refreshFinish(String code);
 
-    public void refreshSettle(String code);
+    public void refreshSettleStatus(CommodityOrder data, String approveResult,
+            String updater, String remark);
 
     public List<CommodityOrder> queryOrderList(CommodityOrder condition);
 

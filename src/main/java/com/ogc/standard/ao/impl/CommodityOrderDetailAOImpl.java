@@ -15,7 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.ICommodityOrderDetailAO;
 import com.ogc.standard.bo.IAccountBO;
@@ -83,7 +82,6 @@ public class CommodityOrderDetailAOImpl implements ICommodityOrderDetailAO {
     private IKeywordBO keywordBO;
 
     @Override
-    @Transactional
     public String comment(String code, String userId, String content) {
         CommodityOrderDetail commodityOrderDetail = commodityOrderDetailBO
             .getCommodityOrderDetail(code);
@@ -139,7 +137,7 @@ public class CommodityOrderDetailAOImpl implements ICommodityOrderDetailAO {
         commodityOrderDetailBO.comment(code);
 
         // 更新订单状态
-        commodityOrderBO.refreshComment(commodityOrderDetail.getOrderCode());
+        commodityOrderBO.refreshFinish(commodityOrderDetail.getOrderCode());
 
         return commentCode;
     }

@@ -156,6 +156,9 @@ public class CommodityOrder extends ABaseDO {
     // 收货人
     private String receiverName;
 
+    // 是否存在结算
+    private String existsSettle;
+
     public List<CommodityShopOrder> getShopOrderList() {
         return shopOrderList;
     }
@@ -506,6 +509,14 @@ public class CommodityOrder extends ABaseDO {
 
     public void setReceiverName(String receiverName) {
         this.receiverName = receiverName;
+    }
+
+    public String getExistsSettle() {
+        return existsSettle;
+    }
+
+    public void setExistsSettle(String existsSettle) {
+        this.existsSettle = existsSettle;
     }
 
 }

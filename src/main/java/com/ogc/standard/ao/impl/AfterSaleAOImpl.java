@@ -84,6 +84,9 @@ public class AfterSaleAOImpl implements IAfterSaleAO {
         // 更新明细状态
         commodityOrderDetailBO.toAfterSell(orderDetailCode);
 
+        // 更新订单状态
+        commodityOrderBO.refreshFinish(orderDetailCode);
+
         return codeString;
     }
 
@@ -111,6 +114,9 @@ public class AfterSaleAOImpl implements IAfterSaleAO {
 
         // 更新明细状态
         commodityOrderDetailBO.toAfterSell(orderDetailCode);
+
+        // 更新订单状态
+        commodityOrderBO.refreshFinish(orderDetailCode);
 
         return codeString;
     }

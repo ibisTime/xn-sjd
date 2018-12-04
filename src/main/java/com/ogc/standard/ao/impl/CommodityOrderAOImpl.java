@@ -24,7 +24,6 @@ import com.ogc.standard.ao.ICommodityOrderAO;
 import com.ogc.standard.ao.IUserAO;
 import com.ogc.standard.ao.IWeChatAO;
 import com.ogc.standard.bo.IAccountBO;
-import com.ogc.standard.bo.IAddressBO;
 import com.ogc.standard.bo.IAlipayBO;
 import com.ogc.standard.bo.ICommodityBO;
 import com.ogc.standard.bo.ICommodityOrderBO;
@@ -94,9 +93,6 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
 
     @Autowired
     private IAlipayBO alipayBO;
-
-    @Autowired
-    private IAddressBO addressBO;
 
     @Autowired
     private IJourBO jourBO;
@@ -254,12 +250,8 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
         }
 
         Object result = null;
-        for (CommodityOrder order : commodityOrderList) {
 
-            if (!ECommodityOrderStatus.TO_PAY.getCode()
-                .equals(order.getStatus())) {
-                throw new BizException("xn0000", "该订单不处于待支付状态");
-            }
+        for (CommodityOrder order : commodityOrderList) {
 
             // 积分抵扣处理，订单只有一个商品
             Double maxJfdkRate = 0d;
@@ -357,6 +349,19 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
         // 业务订单更改
         commodityOrderBO.payYueSuccess(data, resultRes, backJfAmount);
 
+        // 更新商品月销量
+        List<CommodityOrderDetail> commodityOrderDetailList = commodityOrderDetailBO
+            .queryOrderDetail(data.getCode());
+        if (CollectionUtils.isNotEmpty(commodityOrderDetailList)) {
+            for (CommodityOrderDetail commodityOrderDetail : commodityOrderDetailList) {
+                Commodity commodity = commodityBO
+                    .getCommodity(commodityOrderDetail.getCommodityCode());
+                commodityBO.refreshMonthSellCount(commodity,
+                    commodity.getMonthSellCount()
+                            + commodityOrderDetail.getQuantity());
+            }
+        }
+
         return new BooleanRes(true);
     }
 
@@ -385,6 +390,18 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
             commodityOrderBO.paySuccess(data.getCode(), data.getAmount(),
                 backJfAmount);
 
+            // 更新商品月销量
+            List<CommodityOrderDetail> commodityOrderDetailList = commodityOrderDetailBO
+                .queryOrderDetail(data.getCode());
+            if (CollectionUtils.isNotEmpty(commodityOrderDetailList)) {
+                for (CommodityOrderDetail commodityOrderDetail : commodityOrderDetailList) {
+                    Commodity commodity = commodityBO
+                        .getCommodity(commodityOrderDetail.getCommodityCode());
+                    commodityBO.refreshMonthSellCount(commodity,
+                        commodity.getMonthSellCount()
+                                + commodityOrderDetail.getQuantity());
+                }
+            }
         }
 
     }
@@ -441,11 +458,6 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
         // 更新订单明细状态
         commodityOrderDetailBO.toCommentByOrder(code);
 
-        // 月销量更新
-        // Commodity data =
-        // commodityBO.getCommodity(commodityOrder.getCommodityCode());
-        // commodityBO.refreshMonthSellCount(data,
-        // commodityOrder.getQuantity() + data.getMonthSellCount());
     }
 
     public void timeoutCancel() {
@@ -578,15 +590,7 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
         order.setApplyUserName(applyUserName);
 
         // 收货人
-        User receiverinfo = userBO.getUserUnCheck(order.getReceiver());
-        String receiverName = null;
-        if (null != receiverinfo) {
-            receiverName = receiverinfo.getMobile();
-            if (null != receiverinfo.getRealName()) {
-                receiverName = receiverinfo.getRealName().concat(receiverName);
-            }
-        }
-        order.setReceiverName(receiverName);
+        order.setReceiverName(order.getReceiver());
     }
 
 }

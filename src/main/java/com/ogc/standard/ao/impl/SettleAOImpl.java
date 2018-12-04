@@ -12,6 +12,8 @@ import com.ogc.standard.ao.ISettleAO;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IAdoptOrderBO;
 import com.ogc.standard.bo.IAgentUserBO;
+import com.ogc.standard.bo.ICommodityOrderBO;
+import com.ogc.standard.bo.ICommodityOrderDetailBO;
 import com.ogc.standard.bo.IGroupAdoptOrderBO;
 import com.ogc.standard.bo.IPresellOrderBO;
 import com.ogc.standard.bo.IProductBO;
@@ -20,6 +22,8 @@ import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.AdoptOrder;
 import com.ogc.standard.domain.AgentUser;
+import com.ogc.standard.domain.CommodityOrder;
+import com.ogc.standard.domain.CommodityOrderDetail;
 import com.ogc.standard.domain.GroupAdoptOrder;
 import com.ogc.standard.domain.PresellOrder;
 import com.ogc.standard.domain.Product;
@@ -28,6 +32,7 @@ import com.ogc.standard.domain.User;
 import com.ogc.standard.dto.res.XN629902Res;
 import com.ogc.standard.enums.EAdoptOrderSettleStatus;
 import com.ogc.standard.enums.EBoolean;
+import com.ogc.standard.enums.ECommodityOrderSettleStatus;
 import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EGroupAdoptOrderSettleStatus;
 import com.ogc.standard.enums.EJourBizTypeAgent;
@@ -65,6 +70,12 @@ public class SettleAOImpl implements ISettleAO {
     @Autowired
     private IAgentUserBO agentUserBO;
 
+    @Autowired
+    private ICommodityOrderBO commodityOrderBO;
+
+    @Autowired
+    private ICommodityOrderDetailBO commodityOrderDetailBO;
+
     @Override
     @Transactional
     public void approveSettleByRefCode(String refCode, String refType,
@@ -91,7 +102,15 @@ public class SettleAOImpl implements ISettleAO {
             presellOrderBO.refreshSettleStatus(data, approveResult, handler,
                 handleNote);
         } else if (ESellType.COMMODITY.getCode().equals(refType)) {
+            CommodityOrder data = commodityOrderBO.getCommodityOrder(refCode);
+            if (!ECommodityOrderSettleStatus.TO_SETTLE.getCode()
+                .equals(data.getSettleStatus())) {
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                    "订单不是待结算状态");
+            }
 
+            commodityOrderBO.refreshSettleStatus(data, approveResult, handler,
+                handleNote);
         } else {
             AdoptOrder data = adoptOrderBO.getAdoptOrder(refCode);
             if (!EAdoptOrderSettleStatus.TO_SETTLE.getCode()
@@ -173,6 +192,31 @@ public class SettleAOImpl implements ISettleAO {
 
             productName = presellOrder.getProductName();
             applyUser = presellOrder.getApplyUser();
+
+        } else if (ESellType.COMMODITY.getCode().equals(settle.getRefType())) {
+
+            // 商城订单
+            CommodityOrder commodityOrder = commodityOrderBO
+                .getCommodityOrder(settle.getRefCode());
+            settle.setCommodityOrder(commodityOrder);
+
+            List<CommodityOrderDetail> commodityOrderDetailList = commodityOrderDetailBO
+                .queryOrderDetail(commodityOrder.getCode());
+            StringBuffer productNames = new StringBuffer();
+
+            if (CollectionUtils.isNotEmpty(commodityOrderDetailList)) {
+                int detailOrderCount = 1;
+                for (CommodityOrderDetail commodityOrderDetail : commodityOrderDetailList) {
+                    productNames
+                        .append(commodityOrderDetail.getCommodityName());
+
+                    if (detailOrderCount++ < commodityOrderDetailList.size()) {
+                        productNames.append(". ");
+                    }
+                }
+            }
+            productName = productNames.toString();
+            applyUser = commodityOrder.getApplyUser();
 
         } else {
 

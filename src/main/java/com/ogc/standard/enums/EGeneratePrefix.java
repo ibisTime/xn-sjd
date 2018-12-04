@@ -42,7 +42,9 @@ public enum EGeneratePrefix {
     ORIGINAL_GROUP("OG", "预售原生组"), PRESELL_INVENTORY("PI", "预售权"), DERIVE_GROUP(
             "DG", "预售派生组"),
 
-    PRESELL_LOGISTICS("PL", "预售物流单"), GROUP_ORDER("GO", "寄售订单");
+    PRESELL_LOGISTICS("PL", "预售物流单"), GROUP_ORDER("GO", "寄售订单"),
+    
+    COMMODITY_SPECS("CS","商品规格");
 
     public static Map<String, EGeneratePrefix> getMap() {
         Map<String, EGeneratePrefix> map = new HashMap<String, EGeneratePrefix>();

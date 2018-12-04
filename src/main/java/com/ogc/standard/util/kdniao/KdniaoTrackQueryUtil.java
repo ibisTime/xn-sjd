@@ -12,7 +12,6 @@ import java.security.MessageDigest;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.alibaba.fastjson.JSONObject;
 import com.ogc.standard.common.PropertiesUtil;
 
 /**
@@ -43,11 +42,8 @@ public class KdniaoTrackQueryUtil {
     public static void main(String[] args) {
         KdniaoTrackQueryUtil api = new KdniaoTrackQueryUtil();
         try {
-            String result = api.getOrderTracesByJson("YD", "123456");
+            String result = api.getOrderTracesByJson("YD", "3720520214862");
             System.out.println(result);
-
-            JSONObject track = JSONObject.parseObject(result);
-            System.out.println(track.get("Traces"));
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -41,6 +41,7 @@ import com.ogc.standard.enums.EAgentUserLevel;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.EChannelType;
 import com.ogc.standard.enums.ECurrency;
+import com.ogc.standard.enums.EJourBizTypeBusiness;
 import com.ogc.standard.enums.EJourBizTypeMaintain;
 import com.ogc.standard.enums.EJourBizTypeOwner;
 import com.ogc.standard.enums.EJourBizTypePlat;
@@ -479,7 +480,15 @@ public class DistributionOrderBOImpl implements IDistributionOrderBO {
             EJourBizTypePlat.COMMODITY_USER_BACK_JFPOOL.getCode(),
             EJourBizTypePlat.COMMODITY_USER_BACK_JFPOOL.getValue());
 
-        // TODO 商家分销
+        // 商家分销
+        BigDecimal bussinessAmount = payAmount.multiply(new BigDecimal(
+            mapList.get(SysConstants.COMMODITY_DIST_BUSINESS_RATE)));// 商家金额
+        accountBO.transAmount(ESysUser.SYS_USER.getCode(),
+            ECurrency.CNY.getCode(), ownerId, ECurrency.CNY.getCode(),
+            bussinessAmount, EJourBizTypeBusiness.BUSINESS_PROFIT.getCode(),
+            EJourBizTypePlat.COMMODITY_DIST.getCode(),
+            EJourBizTypeBusiness.BUSINESS_PROFIT.getValue(),
+            EJourBizTypePlat.COMMODITY_DIST.getValue(), code);
 
         // 代理方分销
         BigDecimal agentTotalAmount = payAmount.multiply(new BigDecimal(

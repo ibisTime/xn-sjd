@@ -26,6 +26,7 @@ import com.ogc.standard.domain.Address;
 import com.ogc.standard.domain.CommodityOrder;
 import com.ogc.standard.domain.Company;
 import com.ogc.standard.dto.res.XN629048Res;
+import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECommodityOrderSettleStatus;
 import com.ogc.standard.enums.ECommodityOrderStatus;
 import com.ogc.standard.enums.EGeneratePrefix;
@@ -75,7 +76,7 @@ public class CommodityOrderBOImpl extends PaginableBOImpl<CommodityOrder>
 
         data.setDistrict(address.getDistrict());
         data.setDetailAddress(address.getDetailAddress());
-        data.setReceiver(address.getUserId());
+        data.setReceiver(address.getAddressee());
         data.setReceiverMobile(address.getMobile());
 
         data.setStatus(ECommodityOrderStatus.TO_PAY.getCode());
@@ -206,7 +207,7 @@ public class CommodityOrderBOImpl extends PaginableBOImpl<CommodityOrder>
     }
 
     @Override
-    public void refreshComment(String code) {
+    public void refreshFinish(String code) {
         CommodityOrder data = new CommodityOrder();
         data.setCode(code);
         data.setStatus(ECommodityOrderStatus.FINISH.getCode());
@@ -214,11 +215,19 @@ public class CommodityOrderBOImpl extends PaginableBOImpl<CommodityOrder>
     }
 
     @Override
-    public void refreshSettle(String code) {
-        CommodityOrder data = new CommodityOrder();
-        data.setCode(code);
-        data.setSettleStatus(ECommodityOrderSettleStatus.SETTLE.getCode());
+    public void refreshSettleStatus(CommodityOrder data, String approveResult,
+            String updater, String remark) {
+        String status = ECommodityOrderSettleStatus.NO_SETTLE.getCode();
+        if (EBoolean.YES.getCode().equals(approveResult)) {
+            status = ECommodityOrderSettleStatus.SETTLE.getCode();
+        }
+
+        data.setSettleStatus(status);
+        data.setUpdater(updater);
+        data.setUpdateDatetime(new Date());
+        data.setRemark("已完成结算处理");
         commodityOrderDAO.updateSettle(data);
+
     }
 
     @Override

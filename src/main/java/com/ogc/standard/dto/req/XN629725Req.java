@@ -33,6 +33,12 @@ public class XN629725Req extends APageReq {
 
     private String applyDatetimeEnd;
 
+    // 结算状态
+    private String settleStatus;
+
+    // 是否存在结算
+    private String existsSettle;
+
     public String getCode() {
         return code;
     }
@@ -95,6 +101,22 @@ public class XN629725Req extends APageReq {
 
     public void setApplyDatetimeEnd(String applyDatetimeEnd) {
         this.applyDatetimeEnd = applyDatetimeEnd;
+    }
+
+    public String getSettleStatus() {
+        return settleStatus;
+    }
+
+    public void setSettleStatus(String settleStatus) {
+        this.settleStatus = settleStatus;
+    }
+
+    public String getExistsSettle() {
+        return existsSettle;
+    }
+
+    public void setExistsSettle(String existsSettle) {
+        this.existsSettle = existsSettle;
     }
 
 }

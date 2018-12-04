@@ -22,7 +22,8 @@ public class CommoditySpecs extends ABaseDO {
 
     private static final long serialVersionUID = 5036576645673751634L;
 
-    // ******************DB********************
+    // 编号
+    private String code;
 
     // 编号
     private Long id;
@@ -42,7 +43,13 @@ public class CommoditySpecs extends ABaseDO {
     // 备注
     private String remark;
 
-    // ******************DB********************
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
 
     public Long getId() {
         return id;

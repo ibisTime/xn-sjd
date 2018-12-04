@@ -1230,6 +1230,7 @@ CREATE TABLE `tsc_commodity` (
 
 DROP TABLE IF EXISTS `tsc_commodity_specs`;
 CREATE TABLE `tsc_commodity_specs` (
+  `code` varchar(32) DEFAULT NULL COMMENT '编号',
   `id` bigint(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
   `commodity_code` varchar(32) NOT NULL COMMENT '商品编号',
   `name` varchar(64) NOT NULL COMMENT '规格名称',

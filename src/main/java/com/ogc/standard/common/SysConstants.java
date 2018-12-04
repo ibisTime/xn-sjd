@@ -102,11 +102,13 @@ public class SysConstants {
     public static String PRESELL_INDIRECT = "PRESELL_INDIRECT"; // 用户间推预售送
 
     // 商城分销
-    public static String DIST_BUSINESS_RATE = "DIST_BUSINESS_RATE"; // 代理方的总额
+    public static String COMMODITY_DIST_BUSINESS_RATE = "COMMODITY_DIST_BUSINESS_RATE"; // 商家的总额
 
     public static String COMMODITY_DIST_USER_BACK_JF_RATE = "COMMODITY_DIST_USER_BACK_JF_RATE"; // 用户返积分的总额
 
     public static String COMMODITY_DIST_AGENT_RATE = "COMMODITY_DIST_AGENT_RATE"; // 代理方的总额
+
+    public static String COMMODITY_DIST_PLAT_RATE = "COMMODITY_DIST_PLAT_RATE"; // 平台方的总额
 
     public static String COMMODITY_DIRECT = "COMMODITY_DIRECT"; // 用户直推商城送
 

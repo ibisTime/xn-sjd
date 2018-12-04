@@ -35,6 +35,10 @@ public class XN629725 extends AProcessor {
         condition.setPayType(req.getPayType());
         condition.setStatus(req.getStatus());
         condition.setCode(req.getCode());
+
+        condition.setExistsSettle(req.getExistsSettle());
+        condition.setSettleStatus(req.getSettleStatus());
+
         condition.setApplyDatetimeStart(
             DateUtil.getFrontDate(req.getApplyDatetiemStart(), false));
         condition.setApplyDatetimeEnd(

@@ -468,6 +468,7 @@
 		union_id =#{unionId}
 		,h5_open_id =#{h5OpenId}
 		,nickname = #{nickname}
+		,photo = #{photo}
 		WHERE
 		user_id = #{userId}		
 	</update>
