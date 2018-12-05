@@ -119,7 +119,7 @@ public class CompanyBOImpl extends PaginableBOImpl<Company>
         data.setOrganizationCode(req.getOrganizationCode());
         data.setUpdater(req.getUserId());
         data.setUpdateDatetime(new Date());
-        data.setRemark("资料重新提交");
+        data.setRemark(req.getRemark());
         companyDAO.update(data);
     }
 

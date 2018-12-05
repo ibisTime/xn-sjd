@@ -101,6 +101,9 @@ public class Commodity extends ABaseDO {
     // 店铺名称
     private String shopName;
 
+    // 编号列表
+    private List<String> codeList;
+
     public List<CommoditySpecs> getSpecsList() {
         return specsList;
     }
@@ -299,6 +302,14 @@ public class Commodity extends ABaseDO {
 
     public void setMaxJfdkRate(double maxJfdkRate) {
         this.maxJfdkRate = maxJfdkRate;
+    }
+
+    public List<String> getCodeList() {
+        return codeList;
+    }
+
+    public void setCodeList(List<String> codeList) {
+        this.codeList = codeList;
     }
 
 }

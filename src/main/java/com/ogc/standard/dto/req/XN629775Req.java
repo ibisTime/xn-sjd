@@ -27,6 +27,10 @@ public class XN629775Req extends APageReq {
 
     private String receiver;
 
+    private String shopCode;
+
+    private String code;
+
     public String getReceiver() {
         return receiver;
     }
@@ -65,6 +69,22 @@ public class XN629775Req extends APageReq {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getShopCode() {
+        return shopCode;
+    }
+
+    public void setShopCode(String shopCode) {
+        this.shopCode = shopCode;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
 }

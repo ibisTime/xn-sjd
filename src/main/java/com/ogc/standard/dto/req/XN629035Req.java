@@ -28,6 +28,9 @@ public class XN629035Req extends APageReq {
     // 状态（0待认养/1已认养）
     private String status;
 
+    // 产地
+    private String originPlace;
+
     public String getMaintainId() {
         return maintainId;
     }
@@ -74,6 +77,14 @@ public class XN629035Req extends APageReq {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getOriginPlace() {
+        return originPlace;
+    }
+
+    public void setOriginPlace(String originPlace) {
+        this.originPlace = originPlace;
     }
 
 }

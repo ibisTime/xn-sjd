@@ -39,6 +39,7 @@ public class XN629205 extends AProcessor {
         condition.setStatus(req.getStatus());
         condition.setStatusList(req.getStatusList());
         condition.setCurrentHolder(req.getCurrentHolder());
+        condition.setOrderCodeForQuery(req.getOrderCodeForQuery());
 
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {

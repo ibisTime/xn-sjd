@@ -291,3 +291,32 @@ ADD COLUMN `detail_address` VARCHAR(255) NULL COMMENT '详细地址' AFTER `dist
 
 ALTER TABLE `tsc_commodity_specs` 
 ADD COLUMN `code` VARCHAR(32) NULL COMMENT '编号' FIRST;
+
+#V2.0.0 4-2
+ALTER TABLE `tsc_commodity_order` 
+ADD COLUMN `postal_fee` DECIMAL(18,8) NULL COMMENT '邮费' AFTER `back_jf_amount`;
+
+DROP TABLE IF EXISTS `tsc_default_postage`;
+CREATE TABLE `tsc_default_postage` (
+  `code` varchar(32) NOT NULL COMMENT '编号',
+  `shop_code` varchar(32) DEFAULT NULL COMMENT '店铺编号',
+  `shop_name` varchar(255) DEFAULT NULL COMMENT '店铺名称',
+  `type` varchar(4) DEFAULT NULL COMMENT '类型（0同省/1跨省）',
+  `name` varchar(64) DEFAULT NULL COMMENT '名称',
+  `price` decimal(64,0) DEFAULT NULL COMMENT '价格',
+  `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='默认邮费模版';
+
+ALTER TABLE `tsj_share_record` 
+ADD COLUMN `content` VARCHAR(255) NULL COMMENT '分享内容' AFTER `channel`;
+
+ALTER TABLE `tsc_commodity_order` 
+CHANGE COLUMN `postal_fee` `postal_fee` DECIMAL(18,8) NULL DEFAULT 0 COMMENT '邮费' ;
+
+ALTER TABLE `tys_derive_group` 
+ADD COLUMN `original_quantity` INT(11) NULL COMMENT '初始数量' AFTER `price`;
+
+update tys_derive_group set original_quantity = quantity;

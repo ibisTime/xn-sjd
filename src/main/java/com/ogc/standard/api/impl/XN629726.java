@@ -32,7 +32,8 @@ public class XN629726 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return commodityOrderAO.getCommodityOrder(req.getCode());
+        return commodityOrderAO.getCommodityOrder(req.getCode(),
+            req.getIsSettle());
     }
 
     @Override

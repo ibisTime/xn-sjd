@@ -128,6 +128,7 @@ public class AfterSaleAOImpl implements IAfterSaleAO {
         if (!EAfterSaleStatus.TOHANDLE.getCode().equals(data.getStatus())) {
             throw new BizException("xn0000", "该售后订单不处于可处理的状态");
         }
+
         if (EBoolean.YES.getCode().equals(handleResult)) {
             if (EAfterSaleType.onlyMoney.getCode().equals(data.getType())) {
                 // 退款

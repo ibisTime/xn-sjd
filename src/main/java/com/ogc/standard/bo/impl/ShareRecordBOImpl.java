@@ -23,7 +23,8 @@ public class ShareRecordBOImpl extends PaginableBOImpl<ShareRecord>
     private IShareRecordDAO shareRecordDAO;
 
     @Override
-    public String saveShareRecord(String userId, String channel) {
+    public String saveShareRecord(String userId, String channel,
+            String content) {
         ShareRecord data = new ShareRecord();
 
         String code = OrderNoGenerater
@@ -31,6 +32,7 @@ public class ShareRecordBOImpl extends PaginableBOImpl<ShareRecord>
         data.setCode(code);
         data.setUserId(userId);
         data.setChannel(channel);
+        data.setContent(content);
         data.setCreateDatetime(new Date());
         shareRecordDAO.insert(data);
 

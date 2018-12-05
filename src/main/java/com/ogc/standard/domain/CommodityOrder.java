@@ -75,6 +75,9 @@ public class CommodityOrder extends ABaseDO {
     // 积分返点金额
     private BigDecimal backJfAmount;
 
+    // 邮费
+    private BigDecimal postalFee;
+
     // 地址编号
     private String addressCode;
 
@@ -158,6 +161,9 @@ public class CommodityOrder extends ABaseDO {
 
     // 是否存在结算
     private String existsSettle;
+
+    // 结算订单
+    private List<Settle> settleList;
 
     public List<CommodityShopOrder> getShopOrderList() {
         return shopOrderList;
@@ -517,6 +523,22 @@ public class CommodityOrder extends ABaseDO {
 
     public void setExistsSettle(String existsSettle) {
         this.existsSettle = existsSettle;
+    }
+
+    public List<Settle> getSettleList() {
+        return settleList;
+    }
+
+    public void setSettleList(List<Settle> settleList) {
+        this.settleList = settleList;
+    }
+
+    public BigDecimal getPostalFee() {
+        return postalFee;
+    }
+
+    public void setPostalFee(BigDecimal postalFee) {
+        this.postalFee = postalFee;
     }
 
 }

@@ -32,4 +32,6 @@ public interface ICommodityOrderDetailDAO
     // 处理售后
     public int updateHandleAfterSell(CommodityOrderDetail data);
 
+    public int updateStatusByOrder(CommodityOrderDetail data);
+
 }

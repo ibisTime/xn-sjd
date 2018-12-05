@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -83,6 +84,23 @@ public class PostageTemplateBOImpl extends PaginableBOImpl<PostageTemplate>
     @Override
     public List<PostageTemplate> queryTemplateList(PostageTemplate condition) {
         return postageTemplateDAO.selectList(condition);
+    }
+
+    @Override
+    public PostageTemplate getPostageTemplate(String shopCode,
+            String deliverPlace, String receivePlace) {
+        PostageTemplate data = null;
+
+        PostageTemplate condition = new PostageTemplate();
+        condition.setShopCode(shopCode);
+        condition.setDeliverPlace(deliverPlace);
+        condition.setReceivePlace(receivePlace);
+        List<PostageTemplate> postageTemplates = postageTemplateDAO
+            .selectList(condition);
+        if (CollectionUtils.isNotEmpty(postageTemplates)) {
+            data = postageTemplates.get(0);
+        }
+        return data;
     }
 
     @Override

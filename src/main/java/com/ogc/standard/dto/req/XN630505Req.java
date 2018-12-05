@@ -1,5 +1,7 @@
 package com.ogc.standard.dto.req;
 
+import java.util.List;
+
 public class XN630505Req extends APageReq {
 
     private static final long serialVersionUID = 1L;
@@ -21,6 +23,8 @@ public class XN630505Req extends APageReq {
 
     // 父编号（选填）
     private String parentCode;
+
+    private List<String> typeList;
 
     public String getName() {
         return name;
@@ -68,6 +72,14 @@ public class XN630505Req extends APageReq {
 
     public void setShopCode(String shopCode) {
         this.shopCode = shopCode;
+    }
+
+    public List<String> getTypeList() {
+        return typeList;
+    }
+
+    public void setTypeList(List<String> typeList) {
+        this.typeList = typeList;
     }
 
 }

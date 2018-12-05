@@ -40,7 +40,8 @@ public interface ICommodityOrderBO extends IPaginableBO<CommodityOrder> {
 
     public void platCancelOrder(CommodityOrder data);
 
-    public void refreshAmount(Long quantity, BigDecimal amount, String code);
+    public void refreshAmount(Long quantity, BigDecimal amount, String code,
+            BigDecimal postalFee);
 
     public void refreshAddress(String code, String addressCode);
 

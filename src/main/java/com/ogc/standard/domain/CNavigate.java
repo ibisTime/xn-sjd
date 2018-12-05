@@ -1,5 +1,7 @@
 package com.ogc.standard.domain;
 
+import java.util.List;
+
 import com.ogc.standard.dao.base.ABaseDO;
 
 /**
@@ -52,6 +54,8 @@ public class CNavigate extends ABaseDO {
 
     // 是否前端查询
     private String isFront;
+
+    private List<String> typeList;
 
     public String getCode() {
         return code;
@@ -155,6 +159,14 @@ public class CNavigate extends ABaseDO {
 
     public void setShopCode(String shopCode) {
         this.shopCode = shopCode;
+    }
+
+    public List<String> getTypeList() {
+        return typeList;
+    }
+
+    public void setTypeList(List<String> typeList) {
+        this.typeList = typeList;
     }
 
 }

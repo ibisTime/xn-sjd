@@ -1129,6 +1129,7 @@ CREATE TABLE `tys_derive_group` (
   `type` varchar(4) DEFAULT NULL COMMENT '类型（定向/二维码/挂单）',
 
   `price` decimal(18,8) DEFAULT NULL COMMENT '单价', 
+  `original_quantity` int DEFAULT 0 COMMENT '初始数量',
   `quantity` int DEFAULT 0 COMMENT '数量',
   `unit` varchar(32) DEFAULT NULL COMMENT '单位',
   `creater` varchar(32) DEFAULT NULL COMMENT '挂单人',
@@ -1273,6 +1274,7 @@ CREATE TABLE `tsc_commodity_order` (
   `cny_deduct_amount` decimal(18,8) DEFAULT NULL COMMENT '人民币抵扣金额',
   `jf_deduct_amount` decimal(18,8) DEFAULT NULL COMMENT '积分抵扣金额',
   `back_jf_amount` decimal(18,8) DEFAULT NULL COMMENT '积分返点金额',
+  `postal_fee` decimal(18,8) NULL DEFAULT 0 COMMENT '邮费',
   `address_code` varchar(32) DEFAULT NULL COMMENT '地址编号',
   `province` varchar(64) DEFAULT NULL COMMENT '省份',
   `city` varchar(64) DEFAULT NULL COMMENT '城市',
@@ -1441,5 +1443,19 @@ CREATE TABLE `tstd_company_channel` (
   `system_code` varchar(32) NOT NULL COMMENT '系统编号',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+
+DROP TABLE IF EXISTS `tsc_default_postage`;
+CREATE TABLE `tsc_default_postage` (
+  `code` varchar(32) NOT NULL COMMENT '编号',
+  `shop_code` varchar(32) DEFAULT NULL COMMENT '店铺编号',
+  `shop_name` varchar(255) DEFAULT NULL COMMENT '店铺名称',
+  `type` varchar(4) DEFAULT NULL COMMENT '类型（0同省/1跨省）',
+  `name` varchar(64) DEFAULT NULL COMMENT '名称',
+  `price` decimal(64,0) DEFAULT NULL COMMENT '价格',
+  `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='默认邮费模版';
 
 SET FOREIGN_KEY_CHECKS = 1;

@@ -91,6 +91,9 @@ public class AdoptOrderTree extends ABaseDO {
     // 订单类型列表
     private List<String> orderTypeList;
 
+    // 订单编号模糊查
+    private String orderCodeForQuery;
+
     public User getUser() {
         return user;
     }
@@ -289,6 +292,14 @@ public class AdoptOrderTree extends ABaseDO {
 
     public void setOrderTypeList(List<String> orderTypeList) {
         this.orderTypeList = orderTypeList;
+    }
+
+    public String getOrderCodeForQuery() {
+        return orderCodeForQuery;
+    }
+
+    public void setOrderCodeForQuery(String orderCodeForQuery) {
+        this.orderCodeForQuery = orderCodeForQuery;
     }
 
 }

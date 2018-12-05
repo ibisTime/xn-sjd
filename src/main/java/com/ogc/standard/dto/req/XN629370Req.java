@@ -20,6 +20,9 @@ public class XN629370Req extends BaseReq {
     @NotBlank
     private String channel;
 
+    // 内容
+    private String content;
+
     public String getUserId() {
         return userId;
     }
@@ -34,6 +37,14 @@ public class XN629370Req extends BaseReq {
 
     public void setChannel(String channel) {
         this.channel = channel;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 
 }

@@ -22,6 +22,7 @@
 		<result column="cny_deduct_amount" property="cnyDeductAmount" />
 		<result column="jf_deduct_amount" property="jfDeductAmount" />
 		<result column="back_jf_amount" property="backJfAmount" />
+		<result column="postal_fee" property="postalFee" />
 		
 		<result column="address_code" property="addressCode" />
 		<result column="province" property="province" />
@@ -131,6 +132,7 @@
 		,t.cny_deduct_amount
 		,t.jf_deduct_amount
 		,t.back_jf_amount
+		,t.postal_fee
 		
 		,t.address_code
 		,t.province
@@ -187,6 +189,7 @@
 		
 		,receiver
 		,receiver_mobile
+		,postal_fee
 		,status
 		,settle_status
 		,updater
@@ -212,6 +215,7 @@
 		
 		,#{receiver}
 		,#{receiverMobile}
+		,#{postalFee}
 		,#{status}
 		,#{settleStatus}
 		,#{updater}
@@ -278,6 +282,7 @@
 		quantity=#{quantity}
 		,amount=#{amount}
 		,pay_amount=#{payAmount}
+		,postal_fee=#{postalFee}
 		WHERE
 		code=#{code}
 	</update>

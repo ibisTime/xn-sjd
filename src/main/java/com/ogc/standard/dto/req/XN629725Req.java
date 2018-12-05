@@ -39,6 +39,8 @@ public class XN629725Req extends APageReq {
     // 是否存在结算
     private String existsSettle;
 
+    private String shopCode;
+
     public String getCode() {
         return code;
     }
@@ -117,6 +119,14 @@ public class XN629725Req extends APageReq {
 
     public void setExistsSettle(String existsSettle) {
         this.existsSettle = existsSettle;
+    }
+
+    public String getShopCode() {
+        return shopCode;
+    }
+
+    public void setShopCode(String shopCode) {
+        this.shopCode = shopCode;
     }
 
 }

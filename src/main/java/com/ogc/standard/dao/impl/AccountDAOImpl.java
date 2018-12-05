@@ -102,7 +102,7 @@ public class AccountDAOImpl extends AMybatisTemplate implements IAccountDAO {
     }
 
     /** 
-     * @see com.xnjr.account.dao.ibis.account.dao.IAccountDAO#updateStatus(com.ibis.account.domain.Account)
+     * @see com.xnjr.account.dao.ibis.account.dao.IAccountDAO#updateStatusByOrder(com.ibis.account.domain.Account)
      */
     @Override
     public int updateStatus(Account data) {

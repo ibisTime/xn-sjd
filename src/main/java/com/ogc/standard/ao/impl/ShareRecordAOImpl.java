@@ -43,8 +43,9 @@ public class ShareRecordAOImpl implements IShareRecordAO {
 
     @Override
     @Transactional
-    public String addShareRecord(String userId, String channel) {
-        String code = shareRecordBO.saveShareRecord(userId, channel);
+    public String addShareRecord(String userId, String channel,
+            String content) {
+        String code = shareRecordBO.saveShareRecord(userId, channel, content);
 
         // 添加碳泡泡
         Map<String, String> configMap = sysConfigBO

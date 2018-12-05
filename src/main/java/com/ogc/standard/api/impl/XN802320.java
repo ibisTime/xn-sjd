@@ -45,6 +45,7 @@ public class XN802320 extends AProcessor {
         condition.setRefNo(req.getRefNo());
 
         condition.setRelaNameForQuery(req.getRelaNameForQuery());
+        condition.setRefNoForQuery(req.getRefNoForQuery());
 
         if (CollectionUtils.isNotEmpty(req.getCurrencyList())) {
             condition.setCurrencyList(req.getCurrencyList());

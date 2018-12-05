@@ -79,6 +79,7 @@ public class CommodityOrderDetailBOImpl
         data.setReceiver(address.getUserId());
         data.setReceiverMobile(address.getMobile());
         data.setUpdateDatetime(new Date());
+        data.setStatus(ECommodityOrderDetailStatus.TO_PAY.getCode());
 
         commodityOrderDetailDAO.insert(data);
         return code;
@@ -118,6 +119,14 @@ public class CommodityOrderDetailBOImpl
         commodityOrderDetail
             .setStatus(ECommodityOrderDetailStatus.AFTER_SALEED.getCode());
         commodityOrderDetailDAO.updateHandleAfterSell(commodityOrderDetail);
+    }
+
+    @Override
+    public void refreshStatus(String orderCode, String status) {
+        CommodityOrderDetail commodityOrderDetail = new CommodityOrderDetail();
+        commodityOrderDetail.setOrderCode(orderCode);
+        commodityOrderDetail.setStatus(status);
+        commodityOrderDetailDAO.updateStatusByOrder(commodityOrderDetail);
     }
 
     @Override

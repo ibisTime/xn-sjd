@@ -15,7 +15,7 @@ public interface IShareRecordAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
     // 添加分享记录
-    public String addShareRecord(String userId, String channel);
+    public String addShareRecord(String userId, String channel, String content);
 
     public Paginable<ShareRecord> queryShareRecordPage(int start, int limit,
             ShareRecord condition);

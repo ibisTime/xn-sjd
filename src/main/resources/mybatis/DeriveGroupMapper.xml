@@ -13,6 +13,7 @@
 		<result column="type" property="type" />
 		
 		<result column="price" property="price" />
+		<result column="original_quantity" property="originalQuantity" />
 		<result column="quantity" property="quantity" />
 		<result column="unit" property="unit" />
 		<result column="creater" property="creater" />
@@ -98,6 +99,7 @@
 		,t.type
 		
 		,t.price
+		,t.original_quantity
 		,t.quantity
 		,t.unit
 		,t.creater
@@ -139,6 +141,7 @@
 		,type
 		
 		,price
+		,original_quantity
 		,quantity
 		,unit
 		,creater
@@ -161,6 +164,7 @@
 		,#{type}
 		
 		,#{price}
+		,#{originalQuantity}
 		,#{quantity}
 		,#{unit}
 		,#{creater}

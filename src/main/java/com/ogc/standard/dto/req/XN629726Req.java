@@ -19,6 +19,8 @@ public class XN629726Req {
     @NotBlank
     private String code;
 
+    private String isSettle;
+
     public String getCode() {
         return code;
     }
@@ -26,4 +28,13 @@ public class XN629726Req {
     public void setCode(String code) {
         this.code = code;
     }
+
+    public String getIsSettle() {
+        return isSettle;
+    }
+
+    public void setIsSettle(String isSettle) {
+        this.isSettle = isSettle;
+    }
+
 }

@@ -305,6 +305,10 @@ public class DeriveGroupAOImpl implements IDeriveGroupAO {
         // 挂单人信息
         User createrInfo = userBO.getUserUnCheck(deriveGroup.getCreater());
         deriveGroup.setCreaterInfo(createrInfo);
+
+        // 成交数量
+        deriveGroup.setDealQuantity(
+            deriveGroup.getOriginalQuantity() - deriveGroup.getQuantity());
     }
 
     // 将List按照日期排序

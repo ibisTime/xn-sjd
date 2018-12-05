@@ -35,11 +35,13 @@ public class XN629775 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         AfterSale condition = new AfterSale();
+        condition.setCode(req.getCode());
         condition.setType(req.getType());
         condition.setStatus(req.getStatus());
         condition.setLogisticsCompany(req.getLogisticsCompany());
         condition.setDeliver(req.getDeliver());
         condition.setReceiver(req.getReceiver());
+        condition.setShopCode(req.getShopCode());
 
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());

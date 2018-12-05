@@ -24,8 +24,8 @@ public class XN629370 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return new PKCodeRes(
-            shareRecordAO.addShareRecord(req.getUserId(), req.getChannel()));
+        return new PKCodeRes(shareRecordAO.addShareRecord(req.getUserId(),
+            req.getChannel(), req.getContent()));
     }
 
     @Override

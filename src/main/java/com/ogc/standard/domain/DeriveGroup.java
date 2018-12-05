@@ -42,6 +42,9 @@ public class DeriveGroup extends ABaseDO {
     // 单价
     private BigDecimal price;
 
+    // 初始数量
+    private Integer originalQuantity;
+
     // 数量
     private Integer quantity;
 
@@ -90,6 +93,9 @@ public class DeriveGroup extends ABaseDO {
 
     // 挂单人
     private User createrInfo;
+
+    // 交易数量
+    private Integer dealQuantity;
 
     public String getCode() {
         return code;
@@ -289,6 +295,22 @@ public class DeriveGroup extends ABaseDO {
 
     public void setCreaterInfo(User createrInfo) {
         this.createrInfo = createrInfo;
+    }
+
+    public Integer getOriginalQuantity() {
+        return originalQuantity;
+    }
+
+    public void setOriginalQuantity(Integer originalQuantity) {
+        this.originalQuantity = originalQuantity;
+    }
+
+    public Integer getDealQuantity() {
+        return dealQuantity;
+    }
+
+    public void setDealQuantity(Integer dealQuantity) {
+        this.dealQuantity = dealQuantity;
     }
 
 }

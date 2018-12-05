@@ -277,4 +277,8 @@
 		<property name="paginableDAO" ref="companyChannelDAOImpl"/>
 	</bean>
 	
+	<bean id="defaultPostageBO" class="com.ogc.standard.bo.impl.DefaultPostageBOImpl">
+		<property name="paginableDAO" ref="defaultPostageDAOImpl"/>
+	</bean>
+	
 </beans>

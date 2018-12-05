@@ -86,6 +86,7 @@
 		<typeAlias alias="barrage" type="com.ogc.standard.domain.Barrage"/>
 		
 		<typeAlias alias="companyChannel" type="com.ogc.standard.domain.CompanyChannel"/>
+		<typeAlias alias="defaultPostage" type="com.ogc.standard.domain.DefaultPostage"/>
 		
 	</typeAliases>
 </configuration>

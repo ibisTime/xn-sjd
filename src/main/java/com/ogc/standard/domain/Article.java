@@ -104,6 +104,12 @@ public class Article extends ABaseDO {
     // 产品名称
     private String productName;
 
+    // 产品编号
+    private String productCode;
+
+    // 产品状态
+    private String productStatus;
+
     public void setCode(String code) {
         this.code = code;
     }
@@ -334,6 +340,22 @@ public class Article extends ABaseDO {
 
     public void setProductName(String productName) {
         this.productName = productName;
+    }
+
+    public String getProductCode() {
+        return productCode;
+    }
+
+    public void setProductCode(String productCode) {
+        this.productCode = productCode;
+    }
+
+    public String getProductStatus() {
+        return productStatus;
+    }
+
+    public void setProductStatus(String productStatus) {
+        this.productStatus = productStatus;
     }
 
 }

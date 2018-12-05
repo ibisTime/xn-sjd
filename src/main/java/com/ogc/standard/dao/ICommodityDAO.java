@@ -8,6 +8,8 @@
  */
 package com.ogc.standard.dao;
 
+import java.util.List;
+
 import com.ogc.standard.dao.base.IBaseDAO;
 import com.ogc.standard.domain.Commodity;
 
@@ -26,4 +28,7 @@ public interface ICommodityDAO extends IBaseDAO<Commodity> {
     public int updateCommodity(Commodity data);
 
     public int updateMonthSellCount(Commodity data);
+
+    public List<Commodity> selectDistinctDeliverPlace(Commodity data);
+
 }

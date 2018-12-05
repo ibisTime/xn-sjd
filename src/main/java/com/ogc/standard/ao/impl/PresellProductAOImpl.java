@@ -300,6 +300,9 @@ public class PresellProductAOImpl implements IPresellProductAO {
         SYSUser ownerInfo = sysUserBO
             .getSYSUserUnCheck(presellProduct.getOwnerId());
         presellProduct.setOwnerInfo(ownerInfo);
+
+        Company ownerCompany = companyBO.getCompany(ownerInfo.getCompanyCode());
+        presellProduct.setOwnerCompany(ownerCompany);
     }
 
 }

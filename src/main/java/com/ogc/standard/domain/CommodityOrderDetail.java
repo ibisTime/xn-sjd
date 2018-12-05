@@ -2,6 +2,7 @@ package com.ogc.standard.domain;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 import com.ogc.standard.dao.base.ABaseDO;
 
@@ -112,6 +113,9 @@ public class CommodityOrderDetail extends ABaseDO {
 
     // 物流方式
     private String logistics;
+
+    // 状态列表
+    private List<String> statusList;
 
     public Date getDeliverDatetimeStart() {
         return deliverDatetimeStart;
@@ -367,6 +371,14 @@ public class CommodityOrderDetail extends ABaseDO {
 
     public void setMaxJfdkRate(double maxJfdkRate) {
         this.maxJfdkRate = maxJfdkRate;
+    }
+
+    public List<String> getStatusList() {
+        return statusList;
+    }
+
+    public void setStatusList(List<String> statusList) {
+        this.statusList = statusList;
     }
 
 }

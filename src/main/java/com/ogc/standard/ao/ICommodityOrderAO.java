@@ -15,6 +15,7 @@ import com.ogc.standard.domain.CommodityOrder;
 import com.ogc.standard.dto.req.XN629714Req;
 import com.ogc.standard.dto.req.XN629721Req;
 import com.ogc.standard.dto.res.XN629048Res;
+import com.ogc.standard.dto.res.XN629801Res;
 
 /** 
  * @author: taojian 
@@ -57,11 +58,15 @@ public interface ICommodityOrderAO {
     // 获取组合抵扣金额
     public XN629048Res getGroupOrderDkAmount(String code);
 
+    // 邮费
+    public XN629801Res getPostage(List<String> commodityCodeList,
+            String addressCode);
+
     public Paginable<CommodityOrder> queryOrderPage(int start, int limit,
             CommodityOrder condition);
 
     public List<CommodityOrder> queryOrderList(CommodityOrder condition);
 
-    public CommodityOrder getCommodityOrder(String code);
+    public CommodityOrder getCommodityOrder(String code, String isSettle);
 
 }

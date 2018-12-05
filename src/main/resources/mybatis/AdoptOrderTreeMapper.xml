@@ -34,6 +34,9 @@
 			<if test="orderCode != null and orderCode != '' ">
 				AND t.order_code = #{orderCode}
 			</if>
+			<if test="orderCodeForQuery != null and orderCodeForQuery != '' ">
+				AND t.order_code like '%'#{orderCodeForQuery}'%'
+			</if>
 			<if test="parentCategoryCode != null and parentCategoryCode != '' ">
 				AND t.parent_category_code = #{parentCategoryCode}
 			</if>
@@ -112,16 +115,16 @@
 	
 	<select id="select_productAdoptedOrderTree" parameterType="adoptOrderTree" resultMap="adoptOrderTree_DB_Result">
 		SELECT
-		DISTINCT
-		count(t.code) as userAdoptTreeCount
+		t.code
+		,1 as userAdoptTreeCount
 		,t.tree_number
 		,t.start_datetime
 		,t.current_holder
-		,IFNULL(SUM(amount),0) as amount
+		,t.amount
  		FROM
 		try_adopt_order_tree t
 		<include refid="where_condition" />
-		group by t.current_holder having userAdoptTreeCount > 0
+<!-- 		group by t.current_holder having userAdoptTreeCount > 0 -->
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
 				t.${order}

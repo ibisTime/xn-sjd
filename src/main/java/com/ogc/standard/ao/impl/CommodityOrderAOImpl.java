@@ -9,6 +9,7 @@
 package com.ogc.standard.ao.impl;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -24,35 +25,48 @@ import com.ogc.standard.ao.ICommodityOrderAO;
 import com.ogc.standard.ao.IUserAO;
 import com.ogc.standard.ao.IWeChatAO;
 import com.ogc.standard.bo.IAccountBO;
+import com.ogc.standard.bo.IAddressBO;
+import com.ogc.standard.bo.IAgentUserBO;
 import com.ogc.standard.bo.IAlipayBO;
 import com.ogc.standard.bo.ICommodityBO;
 import com.ogc.standard.bo.ICommodityOrderBO;
 import com.ogc.standard.bo.ICommodityOrderDetailBO;
 import com.ogc.standard.bo.ICommoditySpecsBO;
 import com.ogc.standard.bo.ICompanyBO;
+import com.ogc.standard.bo.IDefaultPostageBO;
 import com.ogc.standard.bo.IDistributionOrderBO;
 import com.ogc.standard.bo.IJourBO;
+import com.ogc.standard.bo.IPostageTemplateBO;
+import com.ogc.standard.bo.ISettleBO;
 import com.ogc.standard.bo.ISmsBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.domain.Account;
+import com.ogc.standard.domain.Address;
+import com.ogc.standard.domain.AgentUser;
 import com.ogc.standard.domain.Commodity;
 import com.ogc.standard.domain.CommodityOrder;
 import com.ogc.standard.domain.CommodityOrderDetail;
 import com.ogc.standard.domain.CommoditySpecs;
 import com.ogc.standard.domain.Company;
+import com.ogc.standard.domain.DefaultPostage;
 import com.ogc.standard.domain.Jour;
+import com.ogc.standard.domain.PostageTemplate;
+import com.ogc.standard.domain.Settle;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.dto.req.XN629714Req;
 import com.ogc.standard.dto.req.XN629721Req;
 import com.ogc.standard.dto.res.BooleanRes;
 import com.ogc.standard.dto.res.PayOrderRes;
 import com.ogc.standard.dto.res.XN629048Res;
+import com.ogc.standard.dto.res.XN629801Res;
 import com.ogc.standard.enums.EAccountType;
 import com.ogc.standard.enums.EBoolean;
+import com.ogc.standard.enums.ECommodityOrderDetailStatus;
 import com.ogc.standard.enums.ECommodityOrderStatus;
 import com.ogc.standard.enums.ECurrency;
+import com.ogc.standard.enums.EDefaultPostageTypeStatus;
 import com.ogc.standard.enums.EJourBizTypePlat;
 import com.ogc.standard.enums.EJourBizTypeUser;
 import com.ogc.standard.enums.EPayType;
@@ -112,6 +126,21 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
     @Autowired
     private IWeChatAO weChatAO;
 
+    @Autowired
+    private IAddressBO addressBO;
+
+    @Autowired
+    private ISettleBO settleBO;
+
+    @Autowired
+    private IAgentUserBO agentUserBO;
+
+    @Autowired
+    private IPostageTemplateBO postageTemplateBO;
+
+    @Autowired
+    private IDefaultPostageBO defaultPostageBO;
+
     @Override
     @Transactional
     public String commitCommodityOrder(String applyUser, String applyNote,
@@ -132,7 +161,7 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
             null, commodity.getShopCode(), expressType, applyUser, applyNote,
             addressCode);
 
-        // 落地单店铺订单
+        // 落地订单明细
         commodityOrderDetailBO.saveDetail(orderCode, commodity.getShopCode(),
             commodity.getCode(), commodity.getName(), specsId, specs.getName(),
             applyUser, quantity, specs.getPrice(), addressCode);
@@ -144,7 +173,9 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
         BigDecimal amount = specs.getPrice()
             .multiply(BigDecimal.valueOf(quantity));
 
-        commodityOrderBO.refreshAmount(quantity, amount, orderCode);
+        BigDecimal postalFee = getPostage(commodity.getCode(), addressCode);
+
+        commodityOrderBO.refreshAmount(quantity, amount, orderCode, postalFee);
 
         return orderCode;
     }
@@ -168,6 +199,9 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
 
         // 状态更新
         commodityOrderBO.refreshCancel(order, updater, remark);
+
+        commodityOrderDetailBO.refreshStatus(code,
+            ECommodityOrderDetailStatus.CANCLED.getCode());
     }
 
     @Override
@@ -208,7 +242,8 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
             String signOrder = alipayBO.getSignedOrder(order.getApplyUser(),
                 ESysUser.SYS_USER.getCode(), order.getPayGroup(),
                 EJourBizTypeUser.COMMODITY.getCode(),
-                EJourBizTypeUser.COMMODITY.getValue(), order.getPayAmount());
+                EJourBizTypeUser.COMMODITY.getValue(),
+                order.getAmount().subtract(deductRes.getCnyAmount()));
             result = new PayOrderRes(signOrder);
 
         } else if (EPayType.YE.getCode().equals(req.getPayType())) {
@@ -275,7 +310,7 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
                     ESysUser.SYS_USER.getCode(), order.getPayGroup(),
                     EJourBizTypeUser.COMMODITY.getCode(),
                     EJourBizTypeUser.COMMODITY.getValue(),
-                    order.getPayAmount());
+                    order.getAmount().subtract(deductRes.getCnyAmount()));
                 result = new PayOrderRes(signOrder);
 
             } else if (EPayType.YE.getCode().equals(req.getPayType())) {
@@ -349,6 +384,9 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
         // 业务订单更改
         commodityOrderBO.payYueSuccess(data, resultRes, backJfAmount);
 
+        commodityOrderDetailBO.refreshStatus(data.getCode(),
+            ECommodityOrderDetailStatus.TODELIVE.getCode());
+
         // 更新商品月销量
         List<CommodityOrderDetail> commodityOrderDetailList = commodityOrderDetailBO
             .queryOrderDetail(data.getCode());
@@ -387,8 +425,12 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
                 data.getQuantity().toString());
 
             // 业务订单更改
-            commodityOrderBO.paySuccess(data.getCode(), data.getAmount(),
+            commodityOrderBO.paySuccess(data.getCode(),
+                data.getAmount().subtract(resultRes.getCnyAmount()),
                 backJfAmount);
+
+            commodityOrderDetailBO.refreshStatus(data.getCode(),
+                ECommodityOrderDetailStatus.TODELIVE.getCode());
 
             // 更新商品月销量
             List<CommodityOrderDetail> commodityOrderDetailList = commodityOrderDetailBO
@@ -437,6 +479,9 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
 
         commodityOrderBO.refershDelive(commodityOrder, logisticsCompany,
             logisticsNumber, deliver);
+
+        commodityOrderDetailBO.refreshStatus(code,
+            ECommodityOrderDetailStatus.TORECEIVE.getCode());
 
     }
 
@@ -488,6 +533,10 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
 
         // 状态更新
         commodityOrderBO.platCancelOrder(order);
+
+        commodityOrderDetailBO.refreshStatus(order.getCode(),
+            ECommodityOrderDetailStatus.CANCLED.getCode());
+
     }
 
     public void doReceive() {
@@ -501,6 +550,9 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
 
         for (CommodityOrder commodityOrder : commodityOrderList) {
             commodityOrderBO.refreshReceive(commodityOrder);
+
+            commodityOrderDetailBO.refreshStatus(commodityOrder.getCode(),
+                ECommodityOrderDetailStatus.TO_COMMENT.getCode());
         }
         logger.info("***************结束扫描待收货订单***************");
     }
@@ -529,6 +581,71 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
             EBoolean.YES.getCode());
     }
 
+    private BigDecimal getPostage(String commodityCode, String addressCode) {
+
+        List<String> commodityCodeList = new ArrayList<String>();
+        commodityCodeList.add(commodityCode);
+
+        BigDecimal postalFee = getPostalFee(commodityCodeList, addressCode);
+
+        return postalFee;
+    }
+
+    @Override
+    public XN629801Res getPostage(List<String> commodityCodeList,
+            String addressCode) {
+
+        BigDecimal postalFee = getPostalFee(commodityCodeList, addressCode);
+
+        return new XN629801Res(postalFee);
+
+    }
+
+    private BigDecimal getPostalFee(List<String> commodityCodeList,
+            String addressCode) {
+        BigDecimal postalFee = BigDecimal.ZERO;
+
+        List<Commodity> deliverPlaceList = commodityBO
+            .queryDeliverPlaceList(commodityCodeList);
+        Address address = addressBO.getAddress(addressCode);
+
+        for (Commodity deliverPlace : deliverPlaceList) {
+            PostageTemplate postageTemplate = postageTemplateBO
+                .getPostageTemplate(deliverPlace.getShopCode(),
+                    deliverPlace.getDeliverPlace(), address.getProvince());
+
+            if (null == postageTemplate) {
+
+                if (deliverPlace.getDeliverPlace()
+                    .equals(address.getProvince())) {
+                    // 同省
+                    DefaultPostage defaultPostage = defaultPostageBO
+                        .getDefaultPostage(deliverPlace.getShopCode(),
+                            EDefaultPostageTypeStatus.SAME_PROVINCE.getCode());
+
+                    if (null != defaultPostage) {
+                        postalFee = postalFee.add(defaultPostage.getPrice());
+                    }
+
+                } else {
+                    // 跨省
+                    DefaultPostage defaultPostage = defaultPostageBO
+                        .getDefaultPostage(deliverPlace.getShopCode(),
+                            EDefaultPostageTypeStatus.DIF_PROVINCE.getCode());
+
+                    if (null != defaultPostage) {
+                        postalFee = postalFee.add(defaultPostage.getPrice());
+                    }
+
+                }
+
+            } else {
+                postalFee = postalFee.add(postageTemplate.getPrice());
+            }
+        }
+        return postalFee;
+    }
+
     @Override
     public Paginable<CommodityOrder> queryOrderPage(int start, int limit,
             CommodityOrder condition) {
@@ -551,9 +668,23 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
     }
 
     @Override
-    public CommodityOrder getCommodityOrder(String code) {
+    public CommodityOrder getCommodityOrder(String code, String isSettle) {
         CommodityOrder order = commodityOrderBO.getCommodityOrder(code);
+
         initOrder(order);
+
+        if (EBoolean.YES.getCode().equals(isSettle)) {
+            List<Settle> settleList = settleBO.querySettleList(code);
+            if (CollectionUtils.isNotEmpty(settleList)) {
+                for (Settle settle : settleList) {
+                    AgentUser agentUser = agentUserBO
+                        .getAgentUser(settle.getUserId());
+                    settle.setAgentUser(agentUser);
+                }
+            }
+            order.setSettleList(settleList);
+        }
+
         return order;
     }
 

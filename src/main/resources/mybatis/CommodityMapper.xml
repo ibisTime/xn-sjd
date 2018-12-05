@@ -34,6 +34,13 @@
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
 			</if>
+			<if test="codeList != null and codeList != '' ">
+				AND t.code in 
+                <foreach item="item" index="index" collection="codeList" open="(" separator="," close=")">
+	            	#{item}
+                </foreach> 
+			</if>
+			
 			<if test="parentCategoryCode != null and parentCategoryCode != '' ">
 				AND t.parent_category_code = #{parentCategoryCode}
 			</if>
@@ -99,6 +106,16 @@
 				t.${order}
 			</if>
 		</trim>
+	</select>
+	
+	<select id="select_distinctDeliverPlace" parameterType="commodity" resultMap="commodity_DB_Result">
+		SELECT
+		DISTINCT
+		t.shop_code
+		,t.deliver_place
+		FROM
+		tsc_commodity t
+		<include refid="where_condition" />
 	</select>
 
 	<select id="select_commodity_count" parameterType="commodity"

@@ -14,7 +14,7 @@ public class XN629720Req {
     private String applyUser;
 
     // 下单说明
-    private String applynote;
+    private String applyNote;
 
     // 配送方式
     @NotBlank
@@ -37,12 +37,12 @@ public class XN629720Req {
         this.applyUser = applyUser;
     }
 
-    public String getApplynote() {
-        return applynote;
+    public String getApplyNote() {
+        return applyNote;
     }
 
-    public void setApplynote(String applynote) {
-        this.applynote = applynote;
+    public void setApplyNote(String applyNote) {
+        this.applyNote = applyNote;
     }
 
     public String getExpressType() {

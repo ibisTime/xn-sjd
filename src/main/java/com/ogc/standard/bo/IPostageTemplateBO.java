@@ -22,7 +22,8 @@ import com.ogc.standard.domain.PostageTemplate;
 public interface IPostageTemplateBO extends IPaginableBO<PostageTemplate> {
 
     public String saveTemplate(String shopCode, String deliverPlace,
-            String receivePlace, BigDecimal price, String updater, String remark);
+            String receivePlace, BigDecimal price, String updater,
+            String remark);
 
     public void removeTemplate(String code);
 
@@ -30,6 +31,9 @@ public interface IPostageTemplateBO extends IPaginableBO<PostageTemplate> {
             String updater, String remark);
 
     public List<PostageTemplate> queryTemplateList(PostageTemplate condition);
+
+    public PostageTemplate getPostageTemplate(String shopCode,
+            String deliverPlace, String receivePlace);
 
     public PostageTemplate getPostageTemplate(String code);
 

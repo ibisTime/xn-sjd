@@ -14,7 +14,8 @@ import com.ogc.standard.domain.ShareRecord;
 public interface IShareRecordBO extends IPaginableBO<ShareRecord> {
 
     // 添加分享记录
-    public String saveShareRecord(String userId, String channel);
+    public String saveShareRecord(String userId, String channel,
+            String content);
 
     public List<ShareRecord> queryShareRecordList(ShareRecord condition);
 

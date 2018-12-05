@@ -15,6 +15,7 @@ import com.ogc.standard.bo.IAdoptOrderTreeBO;
 import com.ogc.standard.bo.IAgentUserBO;
 import com.ogc.standard.bo.IApplyBindMaintainBO;
 import com.ogc.standard.bo.ICompanyBO;
+import com.ogc.standard.bo.IDefaultPostageBO;
 import com.ogc.standard.bo.IJourBO;
 import com.ogc.standard.bo.IPresellProductBO;
 import com.ogc.standard.bo.IProductBO;
@@ -94,6 +95,9 @@ public class SYSUserAOImpl implements ISYSUserAO {
     @Autowired
     private IPresellProductBO presellProductBO;
 
+    @Autowired
+    private IDefaultPostageBO defaultPostageBO;
+
     // 新增用户（平台）
     @Override
     public String addSYSUser(String roleCode, String realName, String mobile,
@@ -126,7 +130,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
         smsOutBO.checkCaptcha(mobile, smsCaptcha, "630060");
 
         String userId = sysUserBO.doSaveSYSUser(kind, mobile, loginPwd);
-        companyBO.saveCompany(userId);
+        String companyCode = companyBO.saveCompany(userId);
 
         // 分配人民币账户
         EAccountType accountType = EAccountType.OWNER;
@@ -134,6 +138,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
             accountType = EAccountType.MAINTAIN;
         } else if (ESYSUserKind.BUSINESS.getCode().equals(kind)) {// 新增商家注册
             accountType = EAccountType.BUSINESS;
+            defaultPostageBO.saveDefaultPostage(companyCode);
         }
         accountBO.distributeAccount(userId, accountType,
             ECurrency.CNY.getCode());
@@ -169,7 +174,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
         // 落地数据
         String loginPwd = RandomUtil.generate6();
         String userId = sysUserBO.doSaveSYSuser(req, loginPwd);
-        companyBO.saveCompany(req, userId);
+        String companyCode = companyBO.saveCompany(req, userId);
 
         // 分配人民币账户
         EAccountType accountType = EAccountType.OWNER;
@@ -177,6 +182,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
             accountType = EAccountType.MAINTAIN;
         } else if (ESYSUserKind.BUSINESS.getCode().equals(req.getKind())) {
             accountType = EAccountType.BUSINESS;
+            defaultPostageBO.saveDefaultPostage(companyCode);
         }
         accountBO.distributeAccount(userId, accountType,
             ECurrency.CNY.getCode());
@@ -464,6 +470,8 @@ public class SYSUserAOImpl implements ISYSUserAO {
             data.setMaxPresellPrice(presellPriceRes.getMaxPrice());
             data.setMinPresellPrice(presellPriceRes.getMinPrice());
 
+            Company company = companyBO.getCompany(data.getCompanyCode());
+            data.setCompany(company);
         } else if (ESYSUserKind.MAINTAIN.getCode().equals(data.getKind())) {
 
             // 养护方
@@ -486,6 +494,8 @@ public class SYSUserAOImpl implements ISYSUserAO {
                 EChannelType.NBZ.getCode(), cnyAccount.getAccountNumber());
             data.setTotalIncome(totalIncome);
 
+            Company company = companyBO.getCompany(data.getCompanyCode());
+            data.setCompany(company);
         } else if (ESYSUserKind.BUSINESS.getCode().equals(data.getKind())) {
 
             // 店铺信息

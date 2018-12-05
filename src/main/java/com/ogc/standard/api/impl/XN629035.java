@@ -35,6 +35,8 @@ public class XN629035 extends AProcessor {
 
         condition.setScientificName(req.getScientificName());
         condition.setStatus(req.getStatus());
+        condition.setOriginPlace(req.getOriginPlace());
+
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
             column = ITreeAO.DEFAULT_ORDER_COLUMN;

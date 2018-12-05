@@ -151,8 +151,9 @@ public class ArticleAOImpl implements IArticleAO {
     public int editArticle(XN629341Req req) {
         Article data = articleBO.getArticle(req.getCode());
         if (!EArticleStatus.DRAFT.getCode().equals(data.getStatus())
-                && !EArticleStatus.APPROVE_NO.getCode()
-                    .equals(data.getStatus())) {
+                && !EArticleStatus.APPROVE_NO.getCode().equals(data.getStatus())
+                && !EArticleStatus.TO_PUT_ON.getCode().equals(data.getStatus())
+                && !EArticleStatus.PUT_OFF.getCode().equals(data.getStatus())) {
             throw new BizException("xn0000", "文章不是可以修改的状态");
         }
 
@@ -388,10 +389,14 @@ public class ArticleAOImpl implements IArticleAO {
         if (EProductType.NORMAL.getCode().equals(tree.getProductType())) {
             Product product = productBO.getProduct(tree.getProductCode());
             article.setProductName(product.getName());
+            article.setProductCode(product.getCode());
+            article.setProductStatus(product.getStatus());
         } else if (EProductType.YS.getCode().equals(tree.getProductType())) {
             PresellProduct presellProduct = presellProductBO
                 .getPresellProduct(tree.getProductCode());
             article.setProductName(presellProduct.getName());
+            article.setProductCode(presellProduct.getCode());
+            article.setProductStatus(presellProduct.getStatus());
         }
 
         if (StringUtils.isNotBlank(article.getAdoptTreeCode())) {

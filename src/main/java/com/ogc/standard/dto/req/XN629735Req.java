@@ -8,6 +8,8 @@
  */
 package com.ogc.standard.dto.req;
 
+import java.util.List;
+
 /** 
  * @author: taojian 
  * @since: 2018年11月7日 上午11:25:23 
@@ -27,8 +29,9 @@ public class XN629735Req extends APageReq {
 
     private String status;
 
-    // 下单人
     private String applyUser;
+
+    private List<String> statusList;
 
     public String getOrderCode() {
         return orderCode;
@@ -76,6 +79,14 @@ public class XN629735Req extends APageReq {
 
     public void setApplyUser(String applyUser) {
         this.applyUser = applyUser;
+    }
+
+    public List<String> getStatusList() {
+        return statusList;
+    }
+
+    public void setStatusList(List<String> statusList) {
+        this.statusList = statusList;
     }
 
 }

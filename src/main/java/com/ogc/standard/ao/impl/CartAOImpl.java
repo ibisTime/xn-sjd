@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.ICartAO;
+import com.ogc.standard.ao.ICommodityOrderAO;
 import com.ogc.standard.bo.ICartBO;
 import com.ogc.standard.bo.ICommodityBO;
 import com.ogc.standard.bo.ICommodityOrderBO;
@@ -30,6 +31,7 @@ import com.ogc.standard.domain.Commodity;
 import com.ogc.standard.domain.CommoditySpecs;
 import com.ogc.standard.domain.Company;
 import com.ogc.standard.dto.res.XN629712Res;
+import com.ogc.standard.dto.res.XN629801Res;
 import com.ogc.standard.enums.ECommodityStatus;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.exception.BizException;
@@ -50,6 +52,9 @@ public class CartAOImpl implements ICartAO {
 
     @Autowired
     private ICommodityOrderBO commodityOrderBO;
+
+    @Autowired
+    private ICommodityOrderAO commodityOrderAO;
 
     @Autowired
     private ICommodityBO commodityBO;
@@ -113,6 +118,7 @@ public class CartAOImpl implements ICartAO {
 
             Long quantity = 0l;
             BigDecimal amount = BigDecimal.ZERO;
+            List<String> commodityCodeList = new ArrayList<String>();
 
             // 落地商品订单
             String orderCode = commodityOrderBO.saveOrder(applyUser, applyNote,
@@ -152,8 +158,12 @@ public class CartAOImpl implements ICartAO {
                 amount = amount.add(orderAmount);
             }
 
+            XN629801Res postalFeeRes = commodityOrderAO
+                .getPostage(commodityCodeList, addressCode);
+
             // 加上数量与总价
-            commodityOrderBO.refreshAmount(quantity, amount, orderCode);
+            commodityOrderBO.refreshAmount(quantity, amount, orderCode,
+                postalFeeRes.getPostalFee());
 
         }
 

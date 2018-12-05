@@ -145,6 +145,9 @@ public class PresellProduct extends ABaseDO {
     // 产权方信息
     private SYSUser ownerInfo;
 
+    // 公司信息
+    private Company ownerCompany;
+
     public String getCode() {
         return code;
     }
@@ -487,6 +490,14 @@ public class PresellProduct extends ABaseDO {
 
     public void setMaxJfdkRate(double maxJfdkRate) {
         this.maxJfdkRate = maxJfdkRate;
+    }
+
+    public Company getOwnerCompany() {
+        return ownerCompany;
+    }
+
+    public void setOwnerCompany(Company ownerCompany) {
+        this.ownerCompany = ownerCompany;
     }
 
 }

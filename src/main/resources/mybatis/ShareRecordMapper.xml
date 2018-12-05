@@ -6,6 +6,7 @@
 		<result column="code" property="code" />
 		<result column="user_id" property="userId" />
 		<result column="channel" property="channel" />
+		<result column="content" property="content" />
 		<result column="create_datetime" property="createDatetime" />
 	</resultMap>
 	
@@ -28,6 +29,7 @@
 		t.code
 		,t.user_id
 		,t.channel
+		,t.content
 		,t.create_datetime
 		FROM
 		tsj_share_record t
@@ -51,12 +53,14 @@
 		code
 		,user_id
 		,channel
+		,content
 		,create_datetime
 		)
 		VALUES(
 		#{code}
 		,#{userId}
 		,#{channel}
+		,#{content}
 		,#{createDatetime}
 		)
 	</insert>

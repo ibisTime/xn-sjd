@@ -84,4 +84,9 @@ public class CommodityOrderDetailDAOImpl extends AMybatisTemplate
         return super.update(NAMESPACE.concat("update_afterSelled"), data);
     }
 
+    @Override
+    public int updateStatusByOrder(CommodityOrderDetail data) {
+        return super.update(NAMESPACE.concat("update_statusByOrder"), data);
+    }
+
 }

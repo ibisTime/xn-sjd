@@ -39,6 +39,9 @@ public interface ICommodityOrderDetailBO
     // 处理售后
     public void handleAfterSell(String code);
 
+    // 更新状态
+    public void refreshStatus(String orderCode, String status);
+
     public List<CommodityOrderDetail> queryDetailList(
             CommodityOrderDetail condition);
 

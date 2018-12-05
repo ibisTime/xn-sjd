@@ -112,7 +112,8 @@ public class CommodityOrderBOImpl extends PaginableBOImpl<CommodityOrder>
         data.setPayType(EPayType.YE.getCode());
         data.setCnyDeductAmount(resultRes.getCnyAmount());
         data.setJfDeductAmount(resultRes.getJfAmount());
-        data.setPayAmount(data.getAmount().subtract(resultRes.getCnyAmount()));
+        data.setPayAmount(data.getAmount().subtract(resultRes.getCnyAmount())
+            .add(data.getPostalFee()));
 
         data.setBackJfAmount(backjfAmount);
         data.setPayDatetime(new Date());
@@ -160,12 +161,14 @@ public class CommodityOrderBOImpl extends PaginableBOImpl<CommodityOrder>
     }
 
     @Override
-    public void refreshAmount(Long quantity, BigDecimal amount, String code) {
+    public void refreshAmount(Long quantity, BigDecimal amount, String code,
+            BigDecimal postalFee) {
         CommodityOrder data = new CommodityOrder();
         data.setCode(code);
         data.setQuantity(quantity);
-        data.setAmount(amount);
         data.setPayAmount(amount);
+        data.setAmount(amount.add(postalFee));
+        data.setPostalFee(postalFee);
         commodityOrderDAO.updateAmount(data);
     }
 
@@ -181,7 +184,7 @@ public class CommodityOrderBOImpl extends PaginableBOImpl<CommodityOrder>
 
         data.setDistrict(address.getDistrict());
         data.setDetailAddress(address.getDetailAddress());
-        data.setReceiver(address.getUserId());
+        data.setReceiver(address.getAddressee());
         data.setReceiverMobile(address.getMobile());
         commodityOrderDAO.updateAddress(data);
     }

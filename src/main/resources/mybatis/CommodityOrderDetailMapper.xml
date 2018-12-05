@@ -66,6 +66,14 @@
 			<if test="deliverDatetimeEnd != null and deliverDatetimeEnd != '' ">
 				<![CDATA[AND t.deliver_datetime <= #{deliverDatetimeEnd}]]>
 			</if>
+			
+			<if test="statusList != null and statusList != '' ">
+				AND t.status in 
+                <foreach item="item" index="index" collection="statusList" open="(" separator="," close=")">
+	            	#{item}
+                </foreach> 
+			</if>
+			
 		</trim>
 	</sql>
 	
@@ -191,6 +199,14 @@
 		status=#{status}
 		WHERE
 		code=#{code}
+	</update>
+		
+	<update id="update_statusByOrder" parameterType="commodityOrderDetail">
+		UPDATE tsc_commodity_order_detail
+		SET
+		status=#{status}
+		WHERE
+		order_code=#{orderCode}
 	</update>
 	
 </mapper>

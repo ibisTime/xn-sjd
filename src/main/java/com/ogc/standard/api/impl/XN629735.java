@@ -43,6 +43,7 @@ public class XN629735 extends AProcessor {
         condition.setSpecsId(StringValidater.toLong(req.getSpecsId()));
         condition.setStatus(req.getStatus());
         condition.setApplyUser(req.getApplyUser());
+        condition.setStatusList(req.getStatusList());
 
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {

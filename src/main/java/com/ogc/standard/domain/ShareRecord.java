@@ -23,6 +23,9 @@ public class ShareRecord extends ABaseDO {
     // 分享渠道(0微信/1朋友圈)
     private String channel;
 
+    // 内容
+    private String content;
+
     // 分享时间
     private Date createDatetime;
 
@@ -68,6 +71,14 @@ public class ShareRecord extends ABaseDO {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 
 }

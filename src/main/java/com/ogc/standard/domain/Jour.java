@@ -113,6 +113,9 @@ public class Jour extends ABaseDO {
     // 户名模糊查
     private String relaNameForQuery;
 
+    // 流水分组组号模糊查
+    private String refNoForQuery;
+
     public String getCode() {
         return code;
     }
@@ -378,6 +381,14 @@ public class Jour extends ABaseDO {
 
     public void setRelaNameForQuery(String relaNameForQuery) {
         this.relaNameForQuery = relaNameForQuery;
+    }
+
+    public String getRefNoForQuery() {
+        return refNoForQuery;
+    }
+
+    public void setRefNoForQuery(String refNoForQuery) {
+        this.refNoForQuery = refNoForQuery;
     }
 
 }

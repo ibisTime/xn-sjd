@@ -36,6 +36,7 @@ public class XN630505 extends AProcessor {
         condition.setLocation(req.getLocation());
         condition.setParentCode(req.getParentCode());
         condition.setIsFront(EBoolean.NO.getCode());
+        condition.setTypeList(req.getTypeList());
 
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {

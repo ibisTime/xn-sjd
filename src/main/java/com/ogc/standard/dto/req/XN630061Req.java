@@ -39,6 +39,9 @@ public class XN630061Req {
     // 简介
     private String description;
 
+    // 备注
+    private String remark;
+
     public String getUserId() {
         return userId;
     }
@@ -102,4 +105,13 @@ public class XN630061Req {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
 }

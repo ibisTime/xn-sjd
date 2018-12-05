@@ -35,6 +35,7 @@ public class XN629725 extends AProcessor {
         condition.setPayType(req.getPayType());
         condition.setStatus(req.getStatus());
         condition.setCode(req.getCode());
+        condition.setShopCode(req.getShopCode());
 
         condition.setExistsSettle(req.getExistsSettle());
         condition.setSettleStatus(req.getSettleStatus());

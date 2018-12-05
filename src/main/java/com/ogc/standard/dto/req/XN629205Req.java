@@ -36,6 +36,9 @@ public class XN629205Req extends APageReq {
     // 状态列表
     private List<String> statusList;
 
+    // 订单编号模糊查
+    private String orderCodeForQuery;
+
     public String getTreeNumber() {
         return treeNumber;
     }
@@ -106,6 +109,14 @@ public class XN629205Req extends APageReq {
 
     public void setStatusList(List<String> statusList) {
         this.statusList = statusList;
+    }
+
+    public String getOrderCodeForQuery() {
+        return orderCodeForQuery;
+    }
+
+    public void setOrderCodeForQuery(String orderCodeForQuery) {
+        this.orderCodeForQuery = orderCodeForQuery;
     }
 
 }
