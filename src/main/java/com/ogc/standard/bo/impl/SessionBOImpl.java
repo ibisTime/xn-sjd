@@ -103,4 +103,20 @@ public class SessionBOImpl extends PaginableBOImpl<Session>
         return data;
     }
 
+    @Override
+    public void clearUser1UnreadSum(String user1, String code) {
+        Session session = new Session();
+        session.setUser1(user1);
+        session.setCode(code);
+        sessionDAO.updateClearUser1UnreadSum(session);
+    }
+
+    @Override
+    public void clearUser2UnreadSum(String user2, String code) {
+        Session session = new Session();
+        session.setUser2(user2);
+        session.setCode(code);
+        sessionDAO.updateClearUser2UnreadSum(session);
+    }
+
 }

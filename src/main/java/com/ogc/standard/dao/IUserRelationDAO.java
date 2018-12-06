@@ -24,6 +24,9 @@ public interface IUserRelationDAO extends IBaseDAO<UserRelation> {
     // 更新关系表状态
     public int updateStatus(UserRelation data);
 
+    // 审核
+    public int updateApprove(UserRelation data);
+
     public long selectMyTotalCount(UserRelation condition);
 
     public List<UserRelation> selectMyList(UserRelation condition, int start,

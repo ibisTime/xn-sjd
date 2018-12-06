@@ -15,13 +15,13 @@ public interface IDeriveGroupAO {
     public void revock(String code, String claimant, String remark);
 
     // 认领定向转让
-    public String claimDirect(String code, String claimant);
+    public String claimDirect(String code, String claimant, Integer quantity);
 
     // 拒绝定向转让
     public void rejectDirect(String code, String claimant, String remark);
 
     // 认领二维码转让
-    public String claimQr(String code, String claimant);
+    public String claimQr(String code, String claimant, Integer quantity);
 
     // 认领挂单寄售
     public String claimPublic(String code, String claimant, Integer quantity);

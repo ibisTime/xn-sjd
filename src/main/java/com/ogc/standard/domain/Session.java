@@ -50,6 +50,9 @@ public class Session extends ABaseDO {
     // 昵称
     private String user1Nickname;
 
+    // 昵称
+    private String user2Nickname;
+
     private Date createDatetimeStart;
 
     private Date createDatetimeEnd;
@@ -175,6 +178,14 @@ public class Session extends ABaseDO {
 
     public void setExistsUnread(String existsUnread) {
         this.existsUnread = existsUnread;
+    }
+
+    public String getUser2Nickname() {
+        return user2Nickname;
+    }
+
+    public void setUser2Nickname(String user2Nickname) {
+        this.user2Nickname = user2Nickname;
     }
 
 }

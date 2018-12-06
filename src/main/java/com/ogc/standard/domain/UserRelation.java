@@ -30,7 +30,7 @@ public class UserRelation extends ABaseDO {
     // 关系人编号(下家，关注人)
     private String toUser;
 
-    // 状态(1 正常 0 假删除定时器删除 预留)
+    // 状态
     private String status;
 
     // 关系类型(1信任/2好友)
@@ -38,6 +38,9 @@ public class UserRelation extends ABaseDO {
 
     // 创建时间
     private Date createDatetime;
+
+    // 备注
+    private String remark;
 
     // **************DB Properties**************
 
@@ -183,6 +186,14 @@ public class UserRelation extends ABaseDO {
 
     public void setTakeableTppAmount(BigDecimal takeableTppAmount) {
         this.takeableTppAmount = takeableTppAmount;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
 }

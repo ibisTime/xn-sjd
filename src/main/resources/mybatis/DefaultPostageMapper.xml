@@ -91,7 +91,6 @@
 		price = #{price}
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
-		,remark = #{remark}
 		WHERE code = #{code}
 	</update>
 

@@ -198,26 +198,32 @@ public class SettleAOImpl implements ISettleAO {
             // 商城订单
             CommodityOrder commodityOrder = commodityOrderBO
                 .getCommodityOrder(settle.getRefCode());
-            settle.setCommodityOrder(commodityOrder);
 
             List<CommodityOrderDetail> commodityOrderDetailList = commodityOrderDetailBO
                 .queryOrderDetail(commodityOrder.getCode());
             StringBuffer productNames = new StringBuffer();
+            StringBuffer specsNames = new StringBuffer();
 
             if (CollectionUtils.isNotEmpty(commodityOrderDetailList)) {
                 int detailOrderCount = 1;
                 for (CommodityOrderDetail commodityOrderDetail : commodityOrderDetailList) {
                     productNames
                         .append(commodityOrderDetail.getCommodityName());
+                    specsNames.append(commodityOrderDetail.getSpecsName());
 
                     if (detailOrderCount++ < commodityOrderDetailList.size()) {
                         productNames.append(". ");
+                    }
+                    if (detailOrderCount++ < commodityOrderDetailList.size()) {
+                        specsNames.append(". ");
                     }
                 }
             }
             productName = productNames.toString();
             applyUser = commodityOrder.getApplyUser();
+            commodityOrder.setSpecsNames(specsNames.toString());
 
+            settle.setCommodityOrder(commodityOrder);
         } else {
 
             // 认养订单

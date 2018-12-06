@@ -56,6 +56,10 @@ public class ApplyBindMaintain extends ABaseDO {
     // 更新结束时间
     private Date updateDatetimeEnd;
 
+    private String ownerUserName; // 产权方用户
+
+    private String maintainUserName;// 养护方用户
+
     public void setCode(String code) {
         this.code = code;
     }
@@ -166,6 +170,22 @@ public class ApplyBindMaintain extends ABaseDO {
 
     public void setUpdateDatetimeEnd(Date updateDatetimeEnd) {
         this.updateDatetimeEnd = updateDatetimeEnd;
+    }
+
+    public String getOwnerUserName() {
+        return ownerUserName;
+    }
+
+    public void setOwnerUserName(String ownerUserName) {
+        this.ownerUserName = ownerUserName;
+    }
+
+    public String getMaintainUserName() {
+        return maintainUserName;
+    }
+
+    public void setMaintainUserName(String maintainUserName) {
+        this.maintainUserName = maintainUserName;
     }
 
 }

@@ -29,6 +29,8 @@ public interface ISessionAO {
 
     public XN629788Res existsUnread(String user1, String user2);
 
+    public void clearUserUnreadSum(String user1, String user2, String code);
+
     public Paginable<Session> querySessionPage(int start, int limit,
             Session condition);
 

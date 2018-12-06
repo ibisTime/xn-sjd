@@ -12,8 +12,27 @@
 		<result column="remark" property="remark" />
 	</resultMap>
 	
+	<sql id="join_condition">
+		<if test="ownerUserName != null and ownerUserName != '' ">
+			left join tsys_user ts on t.owner_id = ts.user_id
+		</if>
+		<if test="maintainUserName != null and maintainUserName != '' ">
+			left join tsys_user ts on t.maintain_id = ts.user_id
+		</if>
+	</sql>
+	
+	<sql id="nameForQuery_condition">
+		<if test="ownerUserName != null and ownerUserName != '' ">
+				AND concat_ws('-', ts.real_name, ts.mobile) like "%"#{ownerUserName}"%"
+		</if>
+		<if test="maintainUserName != null and maintainUserName != '' ">
+				AND concat_ws('-', ts.real_name, ts.mobile) like "%"#{maintainUserName}"%"
+		</if>
+	</sql>
+	
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
+				AND 1 = 1
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
 			</if>
@@ -47,7 +66,9 @@
 		,t.remark
 		FROM
 		tsys_apply_bind_maintain t
+		<include refid="join_condition" />
 		<include refid="where_condition" />
+		<include refid="nameForQuery_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
 				t.${order}
@@ -58,7 +79,9 @@
 	<select id="select_applyBindMaintain_count" parameterType="applyBindMaintain"
 		resultType="java.lang.Long">
 		SELECT count(1) FROM tsys_apply_bind_maintain t
+		<include refid="join_condition" />
 		<include refid="where_condition" />
+		<include refid="nameForQuery_condition" />
 	</select>
 
 	<insert id="insert_applyBindMaintain" parameterType="applyBindMaintain">

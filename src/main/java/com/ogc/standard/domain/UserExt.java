@@ -62,14 +62,50 @@ public class UserExt extends ABaseDO {
     // 自我介绍
     private String introduce;
 
-    // 身份证照片
+    // 身份证正面照片
     private String idPic;
+
+    // 身份证反面照片
+    private String backIdPic;
 
     // 企业名称
     private String companyName;
 
-    // 营业执照号
+    // 企业地址
+    private String companyAddress;
+
+    // 企业法人姓名
+    private String companyChargerName;
+
+    // 企业法人联系方式
+    private String companyChargerMobile;
+
+    // 企业法人身份证
+    private String companyChargerIdNo;
+
+    // 注册统一编码
     private String bussinessLicenseId;
+
+    // 企业开户行
+    private String companyBank;
+
+    // 企业开户行账号
+    private String companyBankNumber;
+
+    // 企业联系人
+    private String companyContactName;
+
+    // 企业联系人电话
+    private String companyContactMobile;
+
+    // 企业联系人地址
+    private String companyContactAddress;
+
+    // 企业法人身份证正面
+    private String companyChargerIdPic;
+
+    // 企业法人身份证反面
+    private String companyChargerBackIdPic;
 
     // 企业简介
     private String companyIntroduce;
@@ -254,6 +290,102 @@ public class UserExt extends ABaseDO {
 
     public void setAuthStatus(String authStatus) {
         this.authStatus = authStatus;
+    }
+
+    public String getBackIdPic() {
+        return backIdPic;
+    }
+
+    public void setBackIdPic(String backIdPic) {
+        this.backIdPic = backIdPic;
+    }
+
+    public String getCompanyAddress() {
+        return companyAddress;
+    }
+
+    public void setCompanyAddress(String companyAddress) {
+        this.companyAddress = companyAddress;
+    }
+
+    public String getCompanyChargerName() {
+        return companyChargerName;
+    }
+
+    public void setCompanyChargerName(String companyChargerName) {
+        this.companyChargerName = companyChargerName;
+    }
+
+    public String getCompanyChargerMobile() {
+        return companyChargerMobile;
+    }
+
+    public void setCompanyChargerMobile(String companyChargerMobile) {
+        this.companyChargerMobile = companyChargerMobile;
+    }
+
+    public String getCompanyChargerIdNo() {
+        return companyChargerIdNo;
+    }
+
+    public void setCompanyChargerIdNo(String companyChargerIdNo) {
+        this.companyChargerIdNo = companyChargerIdNo;
+    }
+
+    public String getCompanyBank() {
+        return companyBank;
+    }
+
+    public void setCompanyBank(String companyBank) {
+        this.companyBank = companyBank;
+    }
+
+    public String getCompanyBankNumber() {
+        return companyBankNumber;
+    }
+
+    public void setCompanyBankNumber(String companyBankNumber) {
+        this.companyBankNumber = companyBankNumber;
+    }
+
+    public String getCompanyContactName() {
+        return companyContactName;
+    }
+
+    public void setCompanyContactName(String companyContactName) {
+        this.companyContactName = companyContactName;
+    }
+
+    public String getCompanyContactMobile() {
+        return companyContactMobile;
+    }
+
+    public void setCompanyContactMobile(String companyContactMobile) {
+        this.companyContactMobile = companyContactMobile;
+    }
+
+    public String getCompanyContactAddress() {
+        return companyContactAddress;
+    }
+
+    public void setCompanyContactAddress(String companyContactAddress) {
+        this.companyContactAddress = companyContactAddress;
+    }
+
+    public String getCompanyChargerIdPic() {
+        return companyChargerIdPic;
+    }
+
+    public void setCompanyChargerIdPic(String companyChargerIdPic) {
+        this.companyChargerIdPic = companyChargerIdPic;
+    }
+
+    public String getCompanyChargerBackIdPic() {
+        return companyChargerBackIdPic;
+    }
+
+    public void setCompanyChargerBackIdPic(String companyChargerBackIdPic) {
+        this.companyChargerBackIdPic = companyChargerBackIdPic;
     }
 
 }

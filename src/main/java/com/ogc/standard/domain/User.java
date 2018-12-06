@@ -1,5 +1,6 @@
 package com.ogc.standard.domain;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -182,6 +183,24 @@ public class User extends ABaseDO {
     private String introduce;
 
     private UserExt userExt;
+
+    // 证书个数
+    private int certificateCount;
+
+    // 序号
+    private int rowNo;
+
+    // 碳泡泡余额
+    public BigDecimal tppAmount;
+
+    public String mySelf;
+
+    public BigDecimal weightRate1;
+
+    public BigDecimal weightRate2;
+
+    // 可收取的碳泡泡
+    public BigDecimal takeableTppAmount;
 
     public UserExt getUserExt() {
         return userExt;
@@ -652,6 +671,62 @@ public class User extends ABaseDO {
 
     public User() {
         super();
+    }
+
+    public int getCertificateCount() {
+        return certificateCount;
+    }
+
+    public void setCertificateCount(int certificateCount) {
+        this.certificateCount = certificateCount;
+    }
+
+    public int getRowNo() {
+        return rowNo;
+    }
+
+    public void setRowNo(int rowNo) {
+        this.rowNo = rowNo;
+    }
+
+    public BigDecimal getTppAmount() {
+        return tppAmount;
+    }
+
+    public void setTppAmount(BigDecimal tppAmount) {
+        this.tppAmount = tppAmount;
+    }
+
+    public String getMySelf() {
+        return mySelf;
+    }
+
+    public void setMySelf(String mySelf) {
+        this.mySelf = mySelf;
+    }
+
+    public BigDecimal getWeightRate1() {
+        return weightRate1;
+    }
+
+    public void setWeightRate1(BigDecimal weightRate1) {
+        this.weightRate1 = weightRate1;
+    }
+
+    public BigDecimal getWeightRate2() {
+        return weightRate2;
+    }
+
+    public void setWeightRate2(BigDecimal weightRate2) {
+        this.weightRate2 = weightRate2;
+    }
+
+    public BigDecimal getTakeableTppAmount() {
+        return takeableTppAmount;
+    }
+
+    public void setTakeableTppAmount(BigDecimal takeableTppAmount) {
+        this.takeableTppAmount = takeableTppAmount;
     }
 
 }

@@ -97,6 +97,18 @@ public class CommodityOrderBOImpl extends PaginableBOImpl<CommodityOrder>
     }
 
     @Override
+    public void refreshAmount(Long quantity, BigDecimal amount, String code,
+            BigDecimal postalFee) {
+        CommodityOrder data = new CommodityOrder();
+        data.setCode(code);
+        data.setQuantity(quantity);
+        data.setAmount(amount);
+        data.setPayAmount(amount.add(postalFee));
+        data.setPostalFee(postalFee);
+        commodityOrderDAO.updateAmount(data);
+    }
+
+    @Override
     public void refreshCancel(CommodityOrder data, String updater,
             String remark) {
         data.setStatus(ECommodityOrderStatus.CANCLED.getCode());
@@ -158,18 +170,6 @@ public class CommodityOrderBOImpl extends PaginableBOImpl<CommodityOrder>
         data.setUpdateDatetime(new Date());
         data.setRemark("超过支付时间平台自动取消");
         commodityOrderDAO.updateCancel(data);
-    }
-
-    @Override
-    public void refreshAmount(Long quantity, BigDecimal amount, String code,
-            BigDecimal postalFee) {
-        CommodityOrder data = new CommodityOrder();
-        data.setCode(code);
-        data.setQuantity(quantity);
-        data.setPayAmount(amount);
-        data.setAmount(amount.add(postalFee));
-        data.setPostalFee(postalFee);
-        commodityOrderDAO.updateAmount(data);
     }
 
     @Override

@@ -165,6 +165,9 @@ public class CommodityOrder extends ABaseDO {
     // 结算订单
     private List<Settle> settleList;
 
+    // 规格名称
+    private String specsNames;
+
     public List<CommodityShopOrder> getShopOrderList() {
         return shopOrderList;
     }
@@ -539,6 +542,14 @@ public class CommodityOrder extends ABaseDO {
 
     public void setPostalFee(BigDecimal postalFee) {
         this.postalFee = postalFee;
+    }
+
+    public String getSpecsNames() {
+        return specsNames;
+    }
+
+    public void setSpecsNames(String specsNames) {
+        this.specsNames = specsNames;
     }
 
 }

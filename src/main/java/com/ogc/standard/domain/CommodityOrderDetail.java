@@ -85,6 +85,9 @@ public class CommodityOrderDetail extends ABaseDO {
     // 状态
     private String status;
 
+    // 售后状态
+    private String afterSaleStatus;
+
     // 更新时间
     private Date updateDatetime;
 
@@ -379,6 +382,14 @@ public class CommodityOrderDetail extends ABaseDO {
 
     public void setStatusList(List<String> statusList) {
         this.statusList = statusList;
+    }
+
+    public String getAfterSaleStatus() {
+        return afterSaleStatus;
+    }
+
+    public void setAfterSaleStatus(String afterSaleStatus) {
+        this.afterSaleStatus = afterSaleStatus;
     }
 
 }

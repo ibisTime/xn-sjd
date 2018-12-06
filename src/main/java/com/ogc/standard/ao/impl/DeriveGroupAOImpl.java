@@ -95,7 +95,7 @@ public class DeriveGroupAOImpl implements IDeriveGroupAO {
 
     @Override
     @Transactional
-    public String claimDirect(String code, String claimant) {
+    public String claimDirect(String code, String claimant, Integer quantity) {
         DeriveGroup deriveGroup = deriveGroupBO.getDeriveGroup(code);
 
         if (!EDeriveGroupStatus.TO_CLAIM.getCode()
@@ -114,8 +114,18 @@ public class DeriveGroupAOImpl implements IDeriveGroupAO {
                 "存在待支付的订单，无法再次下单");
         }
 
+        if (quantity > deriveGroup.getQuantity()) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "认领数量大于剩余数量，不能认领");
+        }
+
         // 落地订单
-        String orderCode = groupOrderBO.saveGroupOrder(deriveGroup, claimant);
+        String orderCode = groupOrderBO.saveGroupOrder(deriveGroup, quantity,
+            claimant);
+
+        // 更新数量
+        deriveGroupBO.refreshQuantity(code,
+            deriveGroup.getQuantity() - quantity);
 
         return orderCode;
     }
@@ -164,7 +174,7 @@ public class DeriveGroupAOImpl implements IDeriveGroupAO {
 
     @Override
     @Transactional
-    public String claimQr(String code, String claimant) {
+    public String claimQr(String code, String claimant, Integer quantity) {
         DeriveGroup deriveGroup = deriveGroupBO.getDeriveGroup(code);
 
         if (!EDeriveGroupStatus.TO_CLAIM.getCode()
@@ -179,8 +189,18 @@ public class DeriveGroupAOImpl implements IDeriveGroupAO {
                 "存在待支付的订单，不能认领");
         }
 
+        if (quantity > deriveGroup.getQuantity()) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "认领数量大于剩余数量，不能认领");
+        }
+
         // 落地订单
-        String orderCode = groupOrderBO.saveGroupOrder(deriveGroup, claimant);
+        String orderCode = groupOrderBO.saveGroupOrder(deriveGroup, quantity,
+            claimant);
+
+        // 更新数量
+        deriveGroupBO.refreshQuantity(code,
+            deriveGroup.getQuantity() - quantity);
 
         return orderCode;
     }

@@ -277,6 +277,7 @@ CREATE TABLE `tsj_share_record` (
   `code` varchar(32) NOT NULL COMMENT '编号',
   `user_id` varchar(32) DEFAULT NULL COMMENT '分享人',
   `channel` varchar(4) DEFAULT NULL COMMENT '分享渠道(0微信/1朋友圈)',
+  `content` varchar(255) DEFAULT NULL COMMENT '分享内容',
   `create_datetime` datetime DEFAULT NULL COMMENT '分享时间',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -442,7 +443,7 @@ CREATE TABLE `tstd_sms` (
   `type` varchar(4) DEFAULT NULL COMMENT '消息类型（系统公告，短信内容）',
   `object` varchar(4) DEFAULT NULL COMMENT '对象类型(C:C端用户/O:产权方/M:养护方/A:代理商/P:平台方)',
   `title` varchar(255) DEFAULT NULL COMMENT '标题',
-  `content` TEXT NULL DEFAULT NULL COMMENT '内容',
+  `content` LONGTEXT NULL DEFAULT NULL COMMENT '内容',
   `publish_datetime` datetime DEFAULT NULL COMMENT '发布时间',
   `status` varchar(4) DEFAULT NULL COMMENT '状态 0-草稿 1-已发送 2-已回撤',
   `create_datetime` datetime DEFAULT NULL COMMENT '创建时间',
@@ -511,6 +512,17 @@ CREATE TABLE `tstd_user_ext` (
   `pdf` varchar(255) DEFAULT NULL COMMENT '用户资料',
   `id_pic` TEXT DEFAULT NULL COMMENT '身份证照',
   `company_name` varchar(255) DEFAULT NULL COMMENT '企业名称',
+  `company_address` varchar(255) DEFAULT NULL COMMENT '企业地址',
+  `company_charger_name` varchar(255) DEFAULT NULL COMMENT '企业法人姓名',
+  `company_charger_mobile` varchar(255) DEFAULT NULL COMMENT '企业法人联系方式',
+  `company_charger_id_no` varchar(255) DEFAULT NULL COMMENT '企业法人身份证',
+  `company_bank` varchar(255) DEFAULT NULL COMMENT '企业开户行',
+  `company_bank_number` varchar(255) DEFAULT NULL COMMENT '企业开户行账号',
+  `company_contact_name` varchar(255) DEFAULT NULL COMMENT '企业联系人',
+  `company_contact_mobile` varchar(255) DEFAULT NULL COMMENT '企业联系人电话',
+  `company_contact_address` varchar(255) DEFAULT NULL COMMENT '企业联系人地址',
+  `company_charger_id_pic` TEXT DEFAULT NULL COMMENT '企业法人身份证正面',
+  `company_charger_back_id_pic` TEXT DEFAULT NULL COMMENT '企业法人身份证反面',
   `bussiness_license_id` varchar(255) DEFAULT NULL COMMENT '营业执照号',
   `company_introduce` TEXT DEFAULT NULL COMMENT '企业简介',
   `bussiness_license` TEXT DEFAULT NULL COMMENT '营业执照',
@@ -663,7 +675,7 @@ CREATE TABLE `tsys_config` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `type` varchar(32) DEFAULT NULL COMMENT '类型',
   `ckey` varchar(255) DEFAULT NULL COMMENT 'key',
-  `cvalue` text COMMENT 'value',
+  `cvalue` LONGTEXT COMMENT 'value',
   `updater` varchar(32) DEFAULT NULL COMMENT '最近修改人',
   `update_datetime` datetime DEFAULT NULL COMMENT '最近修改人',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
@@ -970,7 +982,8 @@ CREATE TABLE `tstd_user_relation` (
   `to_user` varchar(32) DEFAULT NULL COMMENT '关系人编号',
   `type` varchar(4) DEFAULT NULL COMMENT '关系类型',
   `status` varchar(4) DEFAULT NULL COMMENT '状态',
-  `create_datetime` datetime DEFAULT NULL COMMENT '创建时间'
+  `create_datetime` datetime DEFAULT NULL COMMENT '创建时间',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `tstd_address`;
@@ -1321,6 +1334,7 @@ CREATE TABLE `tsc_commodity_order_detail` (
   `receiver_datetime` datetime DEFAULT NULL COMMENT '收货时间',
   `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
   `status` varchar(4) DEFAULT NULL COMMENT '状态（0 待发货，1 已发货待收货，2 已完成）',
+  `after_sale_status` varchar(4) DEFAULT NULL COMMENT '售后状态',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单明细';
 

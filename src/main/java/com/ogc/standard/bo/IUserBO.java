@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.ogc.standard.bo.base.IPaginableBO;
+import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.enums.EUserStatus;
 
@@ -137,4 +138,8 @@ public interface IUserBO extends IPaginableBO<User> {
     // 统计代理商下的用户总数
     public long getTotalCount(String agentId, Date createDatetimeStart,
             Date createDatetimeEnd);
+
+    public Paginable<User> queryUserRankPaginable(int start, int pageSize,
+            User condition);
+
 }

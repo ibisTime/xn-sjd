@@ -346,7 +346,7 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
         Account userCnyAccount = accountBO.getAccountByUser(data.getApplyUser(),
             ECurrency.CNY.getCode());
         BigDecimal payAmount = data.getAmount()
-            .subtract(resultRes.getCnyAmount());// 实际付款人民币金额
+            .subtract(resultRes.getCnyAmount().add(data.getPostalFee()));// 实际付款人民币金额
         if (userCnyAccount.getAmount().compareTo(payAmount) < 0) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "人民币账户余额不足");
@@ -371,8 +371,9 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
 
         // 进行分销
         BigDecimal backJfAmount = distributionOrderBO.commodityDistribution(
-            data.getCode(), data.getShopOwner(), data.getAmount(),
-            data.getApplyUser(), ESellType.COMMODITY.getCode(), resultRes);
+            data.getCode(), data.getShopOwner(),
+            data.getAmount().subtract(data.getPostalFee()), data.getApplyUser(),
+            ESellType.COMMODITY.getCode(), resultRes);
 
         // 用户升级
         userAO.upgradeUserLevel(data.getApplyUser());
@@ -414,7 +415,8 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
             XN629048Res resultRes = new XN629048Res(data.getCnyDeductAmount(),
                 data.getJfDeductAmount());
             BigDecimal backJfAmount = distributionOrderBO.commodityDistribution(
-                data.getCode(), data.getShopOwner(), data.getAmount(),
+                data.getCode(), data.getShopOwner(),
+                data.getAmount().subtract(resultRes.getCnyAmount()),
                 data.getApplyUser(), ESellType.COMMODITY.getCode(), resultRes);
 
             // 用户升级
@@ -425,8 +427,8 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
                 data.getQuantity().toString());
 
             // 业务订单更改
-            commodityOrderBO.paySuccess(data.getCode(),
-                data.getAmount().subtract(resultRes.getCnyAmount()),
+            commodityOrderBO.paySuccess(data.getCode(), data.getAmount()
+                .subtract(resultRes.getCnyAmount()).add(data.getPostalFee()),
                 backJfAmount);
 
             commodityOrderDetailBO.refreshStatus(data.getCode(),

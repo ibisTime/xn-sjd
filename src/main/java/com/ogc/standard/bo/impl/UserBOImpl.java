@@ -18,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.ogc.standard.bo.IUserBO;
+import com.ogc.standard.bo.base.Page;
+import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.common.MD5Util;
 import com.ogc.standard.common.PhoneUtil;
@@ -619,6 +621,21 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         condition.setCreateDatetimeStart(createDatetimeStart);
         condition.setCreateDatetimeEnd(createDatetimeEnd);
         return userDAO.selectTotalCount(condition);
+    }
+
+    @Override
+    public Paginable<User> queryUserRankPaginable(int start, int pageSize,
+            User condition) {
+        prepare(condition);
+        long totalCount = userDAO.selectUserRankTotalCount(condition);
+
+        Paginable<User> page = new Page<User>(start, pageSize, totalCount);
+
+        List<User> dataList = userDAO.selectUserRankList(condition,
+            page.getStart(), page.getPageSize());
+
+        page.setList(dataList);
+        return page;
     }
 
 }

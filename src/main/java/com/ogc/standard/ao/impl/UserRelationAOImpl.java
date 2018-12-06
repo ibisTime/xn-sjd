@@ -28,6 +28,7 @@ import com.ogc.standard.domain.User;
 import com.ogc.standard.domain.UserRelation;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ESysConfigType;
+import com.ogc.standard.enums.EUserRelationStatus;
 import com.ogc.standard.exception.BizException;
 
 /**
@@ -71,7 +72,8 @@ public class UserRelationAOImpl implements IUserRelationAO {
             throw new BizException("xn702001", "用户不能和自己建立关系");
         }
         // 判断两者关系是否存在
-        if (userRelationBO.isExistUserRelation(userId, toUserId, type)) {
+        if (userRelationBO.isExistUserRelation(userId, toUserId, type,
+            EUserRelationStatus.APPROVE_YES.getCode())) {
             throw new BizException("xn702001", "用户关系已建立");
         }
 
@@ -87,10 +89,28 @@ public class UserRelationAOImpl implements IUserRelationAO {
         userBO.getUser(userId);
         userBO.getUser(toUserId);
         // 判断两者关系是否存在
-        if (!userRelationBO.isExistUserRelation(userId, toUserId, type)) {
+        if (!userRelationBO.isExistUserRelation(userId, toUserId, type,
+            EUserRelationStatus.APPROVE_YES.getCode())) {
             throw new BizException("xn702001", "用户关系未建立，无法解除");
         }
         userRelationBO.removeUserRelation(userId, toUserId, type);
+    }
+
+    @Override
+    public void approveUser(String code, String userId, String approveResult,
+            String remark) {
+        UserRelation userRelation = userRelationBO.getUserRelation(code);
+        if (!EUserRelationStatus.TO_APPROVE.getCode()
+            .equals(userRelation.getStatus())) {
+            throw new BizException("xn702001", "用户关系未处于可审核状态");
+        }
+
+        String status = EUserRelationStatus.APPROVE_NO.getCode();
+        if (EBoolean.YES.getCode().equals(approveResult)) {
+            status = EUserRelationStatus.APPROVE_YES.getCode();
+        }
+
+        userRelationBO.approveUserRelation(code, status, remark);
     }
 
     @Override
@@ -162,4 +182,5 @@ public class UserRelationAOImpl implements IUserRelationAO {
         }
         return result;
     }
+
 }

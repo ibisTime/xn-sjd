@@ -38,6 +38,9 @@ public interface IUserRelationAO {
      */
     public void unfollowUser(String userId, String toUser, String type);
 
+    public void approveUser(String code, String userId, String approveResult,
+            String remark);
+
     /**
      * 用户关系
      *
@@ -47,7 +50,8 @@ public interface IUserRelationAO {
      * @create: 2017年5月11日 上午11:08:50 asus
      * @history:
      */
-    public boolean isExistUserRelation(String userId, String toUser, String type);
+    public boolean isExistUserRelation(String userId, String toUser,
+            String type);
 
     /**
      * 分页查询
@@ -62,8 +66,8 @@ public interface IUserRelationAO {
             UserRelation condition);
 
     // 分页查询我的好友排行榜
-    public Paginable<UserRelation> queryMyUserRelationPage(int start,
-            int limit, UserRelation condition);
+    public Paginable<UserRelation> queryMyUserRelationPage(int start, int limit,
+            UserRelation condition);
 
     // 查询我的排行榜
     public UserRelation getMyUserRelation(UserRelation condition);

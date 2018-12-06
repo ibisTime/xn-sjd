@@ -134,4 +134,16 @@ public class UserDAOImpl extends AMybatisTemplate implements IUserDAO {
         return super.update(NAMESPACE.concat("update_wx_info"), data);
     }
 
+    @Override
+    public long selectUserRankTotalCount(User condition) {
+        return super.selectTotalCount(NAMESPACE.concat("select_userRank_count"),
+            condition);
+    }
+
+    @Override
+    public List<User> selectUserRankList(User condition, int start, int count) {
+        return super.selectList(NAMESPACE.concat("select_userRank_list"), start,
+            count, condition, User.class);
+    }
+
 }

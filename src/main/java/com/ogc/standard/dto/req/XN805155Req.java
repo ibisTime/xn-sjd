@@ -30,6 +30,9 @@ public class XN805155Req extends APageReq {
     // 好友编号
     private String friendUserId;
 
+    // 状态
+    private String status;
+
     public String getUserId() {
         return userId;
     }
@@ -60,6 +63,14 @@ public class XN805155Req extends APageReq {
 
     public void setFriendUserId(String friendUserId) {
         this.friendUserId = friendUserId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
 }

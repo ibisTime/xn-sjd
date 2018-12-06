@@ -19,6 +19,10 @@ public class XN629605Req extends APageReq {
     // 状态（1审核/2审核不通过/3已绑定/4已解除）
     private String status;
 
+    private String ownerUserName; // 产权方用户
+
+    private String maintainUserName;// 养护方用户
+
     public String getOwnerId() {
         return ownerId;
     }
@@ -41,6 +45,22 @@ public class XN629605Req extends APageReq {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getOwnerUserName() {
+        return ownerUserName;
+    }
+
+    public void setOwnerUserName(String ownerUserName) {
+        this.ownerUserName = ownerUserName;
+    }
+
+    public String getMaintainUserName() {
+        return maintainUserName;
+    }
+
+    public void setMaintainUserName(String maintainUserName) {
+        this.maintainUserName = maintainUserName;
     }
 
 }

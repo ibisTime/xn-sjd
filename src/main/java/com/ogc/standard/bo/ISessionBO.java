@@ -26,6 +26,10 @@ public interface ISessionBO extends IPaginableBO<Session> {
 
     public void refreshUnreadSum2(Session data, Long sum);
 
+    public void clearUser1UnreadSum(String user1, String code);
+
+    public void clearUser2UnreadSum(String user2, String code);
+
     public Session getSessionExist(String type, String user1, String user2);
 
     public List<Session> queryUnread(String user1, String user2);

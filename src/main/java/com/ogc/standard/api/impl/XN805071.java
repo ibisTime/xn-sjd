@@ -24,7 +24,7 @@ public class XN805071 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         userAO.personAuth(req.getUserId(), req.getRealName(), req.getIdNo(),
-            req.getIdPic(), req.getIntroduce());
+            req.getIdPic(), req.getBackIdPic(), req.getIntroduce());
         return new BooleanRes(true);
     }
 

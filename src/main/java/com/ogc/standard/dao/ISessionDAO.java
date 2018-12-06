@@ -23,4 +23,8 @@ public interface ISessionDAO extends IBaseDAO<Session> {
 
     public int updateUnreadSum2(Session data);
 
+    public int updateClearUser1UnreadSum(Session data);
+
+    public int updateClearUser2UnreadSum(Session data);
+
 }

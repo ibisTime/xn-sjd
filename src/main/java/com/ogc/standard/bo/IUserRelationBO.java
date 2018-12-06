@@ -21,18 +21,21 @@ import com.ogc.standard.domain.UserRelation;
  * @history:
  */
 public interface IUserRelationBO extends IPaginableBO<UserRelation> {
-    public boolean isExistUserRelation(String userId, String toUser, String type);
+    public boolean isExistUserRelation(String userId, String toUser,
+            String type, String status);
 
     public String saveUserRelation(String userId, String toUser, String type);
 
     public int refreshUserRelation(String userId, String toUser, String type);
+
+    public void approveUserRelation(String code, String status, String remark);
 
     public int removeUserRelation(String userId, String toUser, String type);
 
     public List<UserRelation> queryUserRelationList(String userId,
             String toUser, String type);
 
-    // 有多少人信任我
+    // 有多少人信任
     public long getRelationCount(String toUser, String type);
 
     // userId 信任 toUser
@@ -42,5 +45,7 @@ public interface IUserRelationBO extends IPaginableBO<UserRelation> {
             UserRelation condition);
 
     public List<UserRelation> queryMyUserRelationList(UserRelation condition);
+
+    public UserRelation getUserRelation(String code);
 
 }

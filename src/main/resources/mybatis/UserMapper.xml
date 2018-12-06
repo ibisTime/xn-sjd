@@ -38,6 +38,33 @@
 		<result column="update_datetime" property="updateDatetime" />
 		<result column="remark" property="remark" />
 	</resultMap>
+	
+	<resultMap id="user_userRank_Result" type="user">
+		<result column="user_id" property="userId" />
+		<result column="login_name" property="loginName" />
+		<result column="mobile" property="mobile" />
+		<result column="kind" property="kind" />
+		
+		<result column="photo" property="photo" />
+		<result column="nickname" property="nickname" />
+		<result column="level" property="level" />		
+		<result column="user_referee_type" property="userRefereeType" />
+		
+		<result column="user_referee" property="userReferee" />
+		<result column="agent_id" property="agentId" />
+		<result column="real_name" property="realName" />
+		
+		<result column="status" property="status" />
+		<result column="union_id" property="unionId" />
+		<result column="h5_open_id" property="h5OpenId" />
+		
+		
+		<result column="row_no" property="rowNo" />
+		<result column="to_user" property="toUser" />
+		<result column="certificate_count" property="certificateCount" />
+		<result column="tpp_amount" property="tppAmount" />
+	</resultMap>
+	
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">			
 			<if test="userId != null and userId != '' ">
@@ -194,6 +221,49 @@
 		<include refid="where_condition"/>
 	</select>
 
+	<select id="select_userRank_list" parameterType="user" resultMap="user_userRank_Result">
+		select 
+        (@rowNO:= @rowNo+1) as row_no,
+		t.user_id
+		,t.login_name
+		,t.mobile
+		,t.kind
+		
+		,t.photo
+		,t.nickname
+		,t.level
+		,t.user_referee_type
+		,t.user_referee
+		
+		,t.agent_id
+		,t.real_name
+		
+		,t.status
+		,t.union_id
+		,t.h5_open_id,
+		
+		ifnull((select amount from tstd_account where user_id = t.user_id and currency='TPP') * #{weightRate1}+
+		(select sum(amount) from try_adopt_order_tree) * #{weightRate2},0) as weight,
+		(select count(*) from try_adopt_order_tree where current_holder = t.user_id) as certificate_count,
+		ifnull((select amount from tstd_account where user_id = t.user_id and currency='TPP'),0) tpp_amount
+		
+		from
+		(select * from tstd_user ) t,
+        (select @rowNO:=0) b
+        
+		order by (ifnull((select amount from tstd_account where user_id = t.user_id and currency='TPP') * #{weightRate1}+
+		(select sum(amount) from try_adopt_order_tree) * #{weightRate2},0)) desc
+	</select>
+	
+	<select id="select_userRank_count" parameterType="user"
+		resultType="java.lang.Long">
+		select count(*) from
+		(select * from tstd_user ) t,
+        (select @rowNO:=0) b
+		order by (ifnull((select amount from tstd_account where user_id = t.user_id and currency='TPP') * #{weightRate1}+
+		(select sum(amount) from try_adopt_order_tree) * #{weightRate2},0)) desc
+	</select>
+	
 	<insert id="insert_user" parameterType="user">
 		INSERT INTO tstd_user(
 		user_id

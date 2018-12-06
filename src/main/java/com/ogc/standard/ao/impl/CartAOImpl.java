@@ -132,6 +132,8 @@ public class CartAOImpl implements ICartAO {
                 Commodity commodity = commodityBO
                     .getCommodity(specs.getCommodityCode());
 
+                commodityCodeList.add(commodity.getCode());
+
                 // 库存检验
                 if (cart.getQuantity() > commoditySpecsBO
                     .getInventory(cart.getSpecsId())) {

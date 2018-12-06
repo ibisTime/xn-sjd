@@ -12,43 +12,36 @@ import com.ogc.standard.ao.IUserRelationAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.ObjValidater;
-import com.ogc.standard.core.StringValidater;
-import com.ogc.standard.domain.UserRelation;
-import com.ogc.standard.dto.req.XN805155Req;
+import com.ogc.standard.dto.req.XN805152Req;
+import com.ogc.standard.dto.res.BooleanRes;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
 
-/** 
- * 分页查询用户间关系
- * @author: taojian 
- * @since: 2018年9月14日 下午12:36:40 
+/**
+ * 审核关系
+ * @author: silver 
+ * @since: Dec 6, 2018 4:33:15 PM 
  * @history:
  */
-public class XN805155 extends AProcessor {
+public class XN805152 extends AProcessor {
 
     private IUserRelationAO userRelationAO = SpringContextHolder
         .getBean(IUserRelationAO.class);
 
-    private XN805155Req req;
+    private XN805152Req req;
 
     @Override
     public Object doBusiness() throws BizException {
-        UserRelation condition = new UserRelation();
-        condition.setUserId(req.getUserId());
-        condition.setToUser(req.getToUser());
-        condition.setType(req.getType());
-        condition.setStatus(req.getStatus());
-
-        int start = StringValidater.toInteger(req.getStart());
-        int limit = StringValidater.toInteger(req.getLimit());
-        return userRelationAO.queryUserRelationPage(start, limit, condition);
+        userRelationAO.approveUser(req.getCode(), req.getUserId(),
+            req.getApproveResult(), req.getRemark());
+        return new BooleanRes(true);
     }
 
     @Override
     public void doCheck(String inputparams, String operator)
             throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN805155Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN805152Req.class);
         ObjValidater.validateReq(req);
     }
 

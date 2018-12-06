@@ -9,6 +9,7 @@ import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.dao.IUserExtDAO;
 import com.ogc.standard.domain.UserExt;
+import com.ogc.standard.dto.req.XN805072Req;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.exception.BizException;
 
@@ -51,12 +52,14 @@ public class UserExtBOImpl extends PaginableBOImpl<UserExt>
     }
 
     @Override
-    public void personAuth(String userId, String idPic, String introduce) {
+    public void personAuth(String userId, String idPic, String backIdPic,
+            String introduce) {
         UserExt data = getUserExt(userId);
         UserExt userExt = new UserExt();
         userExt.setGender(data.getGender());
         userExt.setUserId(userId);
         userExt.setIdPic(idPic);
+        userExt.setBackIdPic(backIdPic);
         userExt.setIntroduce(introduce);
         userExt.setAuthStatus(EBoolean.YES.getCode());
         userExt.setPersonAuthStatus(EBoolean.YES.getCode());
@@ -64,17 +67,30 @@ public class UserExtBOImpl extends PaginableBOImpl<UserExt>
     }
 
     @Override
-    public void companyAuth(String userId, String companyName,
-            String companyIntroduce, String bussinessLicenseId,
-            String bussinessLicense) {
-        UserExt data = getUserExt(userId);
+    public void companyAuth(XN805072Req req) {
+        UserExt data = getUserExt(req.getUserId());
         UserExt userExt = new UserExt();
-        userExt.setUserId(userId);
+        userExt.setUserId(req.getUserId());
         userExt.setGender(data.getGender());
-        userExt.setCompanyName(companyName);
-        userExt.setCompanyIntroduce(companyIntroduce);
-        userExt.setBussinessLicenseId(bussinessLicenseId);
-        userExt.setBussinessLicense(bussinessLicense);
+        userExt.setCompanyName(req.getCompanyName());
+        userExt.setBussinessLicense(req.getBussinessLicense());
+
+        userExt.setCompanyAddress(req.getCompanyAddress());
+        userExt.setCompanyChargerName(req.getCompanyChargerName());
+        userExt.setCompanyChargerMobile(req.getCompanyChargerMobile());
+        userExt.setCompanyChargerIdNo(req.getCompanyChargerIdNo());
+        userExt.setBussinessLicenseId(req.getBussinessLicenseId());
+
+        userExt.setCompanyBank(req.getCompanyBank());
+        userExt.setCompanyBankNumber(req.getCompanyBankNumber());
+        userExt.setCompanyContactName(req.getCompanyContactName());
+        userExt.setCompanyContactMobile(req.getCompanyContactMobile());
+        userExt.setCompanyContactAddress(req.getCompanyContactAddress());
+
+        userExt.setCompanyChargerIdPic(req.getCompanyChargerIdPic());
+        userExt.setCompanyChargerBackIdPic(req.getCompanyChargerBackIdPic());
+        userExt.setCompanyIntroduce(req.getCompanyIntroduce());
+
         userExt.setAuthStatus(EBoolean.YES.getCode());
         userExt.setCompanyAuthStatus(EBoolean.YES.getCode());
         userExtDAO.updateUserExt(userExt);

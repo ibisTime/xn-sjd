@@ -56,6 +56,7 @@ import com.ogc.standard.dto.req.XN805041Req;
 import com.ogc.standard.dto.req.XN805042Req;
 import com.ogc.standard.dto.req.XN805051Req;
 import com.ogc.standard.dto.req.XN805070Req;
+import com.ogc.standard.dto.req.XN805072Req;
 import com.ogc.standard.dto.req.XN805081Req;
 import com.ogc.standard.dto.res.XN805051Res;
 import com.ogc.standard.enums.EBoolean;
@@ -1196,7 +1197,7 @@ public class UserAOImpl implements IUserAO {
 
     @Override
     public void personAuth(String userId, String realName, String idNo,
-            String idPic, String introduce) {
+            String idPic, String backIdPic, String introduce) {
         UserExt userExt = userExtBO.getUserExt(userId);
         if (EBoolean.YES.getCode().equals(userExt.getCompanyAuthStatus())) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
@@ -1207,14 +1208,12 @@ public class UserAOImpl implements IUserAO {
 
         userBO.refreshIdentity(userId, realName, null, idNo);
 
-        userExtBO.personAuth(userId, idPic, introduce);
+        userExtBO.personAuth(userId, idPic, backIdPic, introduce);
     }
 
     @Override
-    public void companyAuth(String userId, String companyName,
-            String companyIntroduce, String bussinessLicenseId,
-            String bussinessLicense) {
-        UserExt userExt = userExtBO.getUserExt(userId);
+    public void companyAuth(XN805072Req req) {
+        UserExt userExt = userExtBO.getUserExt(req.getUserId());
         if (EBoolean.YES.getCode().equals(userExt.getPersonAuthStatus())) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "用户已进行个人认证，无法再进行企业认证");
@@ -1222,8 +1221,7 @@ public class UserAOImpl implements IUserAO {
 
         assignRealName(userExt);
 
-        userExtBO.companyAuth(userId, companyName, companyIntroduce,
-            bussinessLicenseId, bussinessLicense);
+        userExtBO.companyAuth(req);
     }
 
     // 用户实名认证添加积分
@@ -1307,6 +1305,24 @@ public class UserAOImpl implements IUserAO {
         }
 
         return result;
+    }
+
+    @Override
+    public Paginable<User> queryUserRankPage(int start, int limit,
+            User condition) {
+        Map<String, String> map = sysConfigBO
+            .getConfigsMap(ESysConfigType.WEIGHT.getCode());
+        BigDecimal weightRate1 = new BigDecimal(
+            map.get(SysConstants.WEIGHT_RATE1));
+        BigDecimal weightRate2 = new BigDecimal(
+            map.get(SysConstants.WEIGHT_RATE2));
+        condition.setWeightRate1(weightRate1);
+        condition.setWeightRate2(weightRate2);
+
+        Paginable<User> page = userBO.queryUserRankPaginable(start, limit,
+            condition);
+
+        return page;
     }
 
 }

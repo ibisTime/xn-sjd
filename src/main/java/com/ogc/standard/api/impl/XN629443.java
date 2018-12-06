@@ -4,6 +4,7 @@ import com.ogc.standard.ao.IDeriveGroupAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.ObjValidater;
+import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.dto.req.XN629443Req;
 import com.ogc.standard.dto.res.PKCodeRes;
 import com.ogc.standard.exception.BizException;
@@ -24,8 +25,8 @@ public class XN629443 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return new PKCodeRes(
-            deriveGroupAO.claimQr(req.getCode(), req.getUserId()));
+        return new PKCodeRes(deriveGroupAO.claimQr(req.getCode(),
+            req.getUserId(), StringValidater.toInteger(req.getQuantity())));
     }
 
     @Override

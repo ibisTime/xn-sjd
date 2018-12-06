@@ -107,20 +107,24 @@ public class AgentUserAOImpl implements IAgentUserAO {
         // 验证手机号是否存在
         agentUserBO.isMobileExist(req.getMobile());
 
-        String level = null;
-        if (EBoolean.YES.getCode().equals(req.getIsTop())) {
-            req.setParentUserId("0");
-            level = EAgentUserLevel.FIRST.getCode();
-        } else {
-            AgentUser parentAgentUser = agentUserBO
-                .getAgentUser(req.getParentUserId());
-            checkAgent(parentAgentUser);
-            level = Integer.valueOf(parentAgentUser.getLevel()) + 1 + "";
-        }
+        // String level = null;
+        // if (EBoolean.YES.getCode().equals(req.getIsTop())) {
+        // req.setParentUserId("0");
+        // level = EAgentUserLevel.FIRST.getCode();
+        // } else {
+        //
+        // if (StringUtils.isNotBlank(req.getParentUserId())) {
+        // AgentUser parentAgentUser = agentUserBO
+        // .getAgentUser(req.getParentUserId());
+        // checkAgent(parentAgentUser);
+        // level = Integer.valueOf(parentAgentUser.getLevel()) + 1 + "";
+        // }
+        //
+        // }
 
         String loginPwd = RandomUtil.generate6();
         String userId = agentUserBO.doAddAgentUser(req.getMobile(), loginPwd,
-            level, req.getParentUserId());
+            req.getLevel(), req.getParentUserId());
         companyBO.saveCompany(req, userId);
 
         // 分配人民币账户

@@ -8,6 +8,7 @@ import com.ogc.standard.dto.req.XN805041Req;
 import com.ogc.standard.dto.req.XN805042Req;
 import com.ogc.standard.dto.req.XN805051Req;
 import com.ogc.standard.dto.req.XN805070Req;
+import com.ogc.standard.dto.req.XN805072Req;
 import com.ogc.standard.dto.req.XN805081Req;
 import com.ogc.standard.dto.res.XN805051Res;
 
@@ -121,12 +122,10 @@ public interface IUserAO {
 
     // 个人认证
     public void personAuth(String userId, String realName, String idNo,
-            String idPic, String introduce);
+            String idPic, String backIdPic, String introduce);
 
     // 企业认证
-    public void companyAuth(String userId, String companyName,
-            String companyIntroduce, String bussinessLicenseId,
-            String bussinessLicense);
+    public void companyAuth(XN805072Req req);
 
     // 更新用户等级
     public void upgradeUserLevel(String userId);
@@ -140,4 +139,6 @@ public interface IUserAO {
     public Paginable<User> querySecondRefPage(XN802400Req req, int start,
             int limit);
 
+    public Paginable<User> queryUserRankPage(int start, int limit,
+            User condition);
 }

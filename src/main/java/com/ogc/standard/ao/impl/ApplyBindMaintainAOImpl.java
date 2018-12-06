@@ -46,6 +46,9 @@ public class ApplyBindMaintainAOImpl implements IApplyBindMaintainAO {
 
     @Override
     public String applyBindMaintain(XN629600Req req) {
+        sysUserBO.getSYSUser(req.getMaintainId());
+        sysUserBO.getSYSUser(req.getOwnerId());
+
         // 判断是否已绑定养护方
         String maintainId = applyBindMaintainBO.getMaintainId(req.getOwnerId());
         if (StringUtils.isNotBlank(maintainId)) {

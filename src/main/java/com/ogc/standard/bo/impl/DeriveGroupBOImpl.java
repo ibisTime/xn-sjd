@@ -57,6 +57,7 @@ public class DeriveGroupBOImpl extends PaginableBOImpl<DeriveGroup>
         deriveGroup.setVariety(presellProduct.getVariety());
         deriveGroup.setType(EPresellType.DIRECT.getCode());
         deriveGroup.setPrice(price);
+        deriveGroup.setOriginalQuantity(quantity);
         deriveGroup.setQuantity(quantity);
 
         deriveGroup.setUnit(presellProduct.getPackUnit());
@@ -94,6 +95,7 @@ public class DeriveGroupBOImpl extends PaginableBOImpl<DeriveGroup>
         deriveGroup.setVariety(presellProduct.getVariety());
         deriveGroup.setType(EPresellType.QR.getCode());
         deriveGroup.setPrice(price);
+        deriveGroup.setOriginalQuantity(quantity);
         deriveGroup.setQuantity(quantity);
 
         deriveGroup.setUnit(presellProduct.getPackUnit());
@@ -130,6 +132,7 @@ public class DeriveGroupBOImpl extends PaginableBOImpl<DeriveGroup>
         deriveGroup.setVariety(presellProduct.getVariety());
         deriveGroup.setType(EPresellType.PUBLIC.getCode());
         deriveGroup.setPrice(price);
+        deriveGroup.setOriginalQuantity(quantity);
         deriveGroup.setQuantity(quantity);
 
         deriveGroup.setUnit(presellProduct.getPackUnit());

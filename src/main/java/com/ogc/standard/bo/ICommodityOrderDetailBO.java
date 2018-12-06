@@ -30,6 +30,9 @@ public interface ICommodityOrderDetailBO
     // 待评价
     public void toCommentByOrder(String orderCode);
 
+    // 待评价
+    public void toComment(String code);
+
     // 评价
     public void comment(String code);
 
@@ -41,6 +44,9 @@ public interface ICommodityOrderDetailBO
 
     // 更新状态
     public void refreshStatus(String orderCode, String status);
+
+    // 更新状态
+    public void refreshAfterSaleStatus(String code, String status);
 
     public List<CommodityOrderDetail> queryDetailList(
             CommodityOrderDetail condition);

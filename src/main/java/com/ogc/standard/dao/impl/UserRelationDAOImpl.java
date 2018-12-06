@@ -22,16 +22,21 @@ import com.ogc.standard.domain.UserRelation;
  * @history:
  */
 @Repository("userRelationDAOImpl")
-public class UserRelationDAOImpl extends AMybatisTemplate implements
-        IUserRelationDAO {
+public class UserRelationDAOImpl extends AMybatisTemplate
+        implements IUserRelationDAO {
 
     /** 
      * @see com.std.user.dao.IUserRelationDAO#updateStatus()
      */
     @Override
     public int updateStatus(UserRelation data) {
-        return super
-            .update(NAMESPACE.concat("update_userRelationStatus"), data);
+        return super.update(NAMESPACE.concat("update_userRelationStatus"),
+            data);
+    }
+
+    @Override
+    public int updateApprove(UserRelation data) {
+        return super.update(NAMESPACE.concat("update_approve"), data);
     }
 
     /** 

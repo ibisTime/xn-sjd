@@ -32,6 +32,8 @@ public class XN629605 extends AProcessor {
         condition.setOwnerId(req.getOwnerId());
         condition.setMaintainId(req.getMaintainId());
         condition.setStatus(req.getStatus());
+        condition.setOwnerUserName(req.getOwnerUserName());
+        condition.setMaintainUserName(req.getMaintainUserName());
 
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {

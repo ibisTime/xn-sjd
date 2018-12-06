@@ -68,4 +68,16 @@ public class SessionDAOImpl extends AMybatisTemplate implements ISessionDAO {
         return super.update(NAMESPACE.concat("update_unread_sum2"), data);
     }
 
+    @Override
+    public int updateClearUser1UnreadSum(Session data) {
+        return super.update(NAMESPACE.concat("update_clear_user1_unread_sum"),
+            data);
+    }
+
+    @Override
+    public int updateClearUser2UnreadSum(Session data) {
+        return super.update(NAMESPACE.concat("update_clear_user2_unread_sum"),
+            data);
+    }
+
 }

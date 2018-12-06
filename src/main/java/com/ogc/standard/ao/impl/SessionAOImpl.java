@@ -11,6 +11,7 @@ package com.ogc.standard.ao.impl;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -72,8 +73,17 @@ public class SessionAOImpl implements ISessionAO {
         Session session = sessionBO.getSession(code);
         // 新增消息
         sessionMessageBO.saveMessage(code, userId, content);
+
         // 未读消息加一
-        sessionBO.refreshUnreadSum1(session, session.getUser1UnreadSum() + 1);
+        if (session.getUser1().equals(userId)) {
+            sessionBO.refreshUnreadSum1(session, Long.valueOf(0));
+            sessionBO.refreshUnreadSum2(session,
+                session.getUser2UnreadSum() + 1);
+        } else if (session.getUser2().equals(userId)) {
+            sessionBO.refreshUnreadSum2(session, Long.valueOf(0));
+            sessionBO.refreshUnreadSum1(session,
+                session.getUser1UnreadSum() + 1);
+        }
 
     }
 
@@ -117,6 +127,16 @@ public class SessionAOImpl implements ISessionAO {
     }
 
     @Override
+    public void clearUserUnreadSum(String user1, String user2, String code) {
+        if (StringUtils.isNotBlank(user1)) {
+            sessionBO.clearUser1UnreadSum(user1, code);
+        }
+        if (StringUtils.isNotBlank(user2)) {
+            sessionBO.clearUser2UnreadSum(user2, code);
+        }
+    }
+
+    @Override
     public Paginable<Session> querySessionPage(int start, int limit,
             Session condition) {
         Paginable<Session> page = sessionBO.getPaginable(start, limit,
@@ -147,9 +167,12 @@ public class SessionAOImpl implements ISessionAO {
         List<SessionMessage> messages = sessionMessageBO
             .querySessionMessages(session.getCode(), null, null);
         session.setMessageList(messages);
-        User user = userBO.getUser(session.getUser1());
-        session.setUser1Nickname(user.getNickname());
-        session.setMobile(user.getMobile());
+        User user1 = userBO.getUser(session.getUser1());
+        session.setUser1Nickname(user1.getNickname());
+        session.setMobile(user1.getMobile());
+
+        // User user2 = userBO.getUser(session.getUser2());
+        // session.setUser2Nickname(user2.getNickname());
     }
 
 }

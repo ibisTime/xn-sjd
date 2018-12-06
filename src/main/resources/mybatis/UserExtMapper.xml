@@ -16,7 +16,22 @@
 		<result column="work_time" property="workTime" />
 		<result column="pdf" property="pdf" />
 		<result column="id_pic" property="idPic" />
+		<result column="back_id_pic" property="backIdPic" />
 		<result column="company_name" property="companyName" />
+		
+		<result column="company_address" property="companyAddress" />
+		<result column="company_charger_name" property="companyChargerName" />
+		<result column="company_charger_mobile" property="companyChargerMobile" />
+		<result column="company_charger_id_no" property="companyChargerIdNo" />
+		<result column="company_bank" property="companyBank" />
+		
+		<result column="company_bank_number" property="companyBankNumber" />
+		<result column="company_contact_name" property="companyContactName" />
+		<result column="company_contact_mobile" property="companyContactMobile" />
+		<result column="company_contact_address" property="companyContactAddress" />
+		<result column="company_charger_id_pic" property="companyChargerIdPic" />
+		<result column="company_charger_back_id_pic" property="companyChargerBackIdPic" />
+		
 		<result column="bussiness_license_id" property="bussinessLicenseId" />
 		<result column="company_introduce" property="companyIntroduce" />
 		<result column="bussiness_license" property="bussinessLicense" />
@@ -62,7 +77,21 @@
 		,t.work_time
 		,t.pdf
 		,t.id_pic
+		,t.back_id_pic
 		,t.company_name
+		
+		,t.company_address
+		,t.company_charger_name
+		,t.company_charger_mobile
+		,t.company_charger_id_no
+		,t.company_bank
+		,t.company_bank_number
+		,t.company_contact_name
+		,t.company_contact_mobile
+		,t.company_contact_address
+		,t.company_charger_id_pic
+		,t.company_charger_back_id_pic
+		
 		,t.bussiness_license_id
 		,t.company_introduce
 		,t.bussiness_license
@@ -122,9 +151,47 @@
 		<if test="idPic != null and idPic != '' ">
 			,id_pic=#{idPic}
 		</if>
+		<if test="backIdPic != null and backIdPic != '' ">
+			,back_id_pic=#{backIdPic}
+		</if>
 		<if test="companyName != null and companyName != '' ">
 			,company_name=#{companyName}
 		</if>
+		
+		<if test="companyAddress != null and companyAddress != '' ">
+			,company_address=#{companyAddress}
+		</if>
+		<if test="companyChargerName != null and companyChargerName != '' ">
+			,company_charger_name=#{companyChargerName}
+		</if>
+		<if test="companyChargerMobile != null and companyChargerMobile != '' ">
+			,company_charger_mobile=#{companyChargerMobile}
+		</if>
+		<if test="companyChargerIdNo != null and companyChargerIdNo != '' ">
+			,company_charger_id_no=#{companyChargerIdNo}
+		</if>
+		<if test="companyBank != null and companyBank != '' ">
+			,company_bank=#{companyBank}
+		</if>
+		<if test="companyBankNumber != null and companyBankNumber != '' ">
+			,company_bank_number=#{companyBankNumber}
+		</if>
+		<if test="companyContactName != null and companyContactName != '' ">
+			,company_contact_name=#{companyContactName}
+		</if>
+		<if test="companyContactMobile != null and companyContactMobile != '' ">
+			,company_contact_mobile=#{companyContactMobile}
+		</if>
+		<if test="companyContactAddress != null and companyContactAddress != '' ">
+			,company_contact_address=#{companyContactAddress}
+		</if>
+		<if test="companyChargerIdPic != null and companyChargerIdPic != '' ">
+			,company_charger_id_pic=#{companyChargerIdPic}
+		</if>
+		<if test="companyChargerBackIdPic != null and companyChargerBackIdPic != '' ">
+			,company_charger_back_id_pic=#{companyChargerBackIdPic}
+		</if>
+		
 		<if test="bussinessLicenseId != null and bussinessLicenseId != '' ">
 			,bussiness_license_id=#{bussinessLicenseId}
 		</if>

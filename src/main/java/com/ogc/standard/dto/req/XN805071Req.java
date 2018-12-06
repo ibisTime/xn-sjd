@@ -24,6 +24,9 @@ public class XN805071Req {
     private String idPic;
 
     @NotBlank
+    private String backIdPic;
+
+    // 自我介绍
     private String introduce;
 
     public String getUserId() {
@@ -56,6 +59,14 @@ public class XN805071Req {
 
     public void setIdPic(String idPic) {
         this.idPic = idPic;
+    }
+
+    public String getBackIdPic() {
+        return backIdPic;
+    }
+
+    public void setBackIdPic(String backIdPic) {
+        this.backIdPic = backIdPic;
     }
 
     public String getIntroduce() {

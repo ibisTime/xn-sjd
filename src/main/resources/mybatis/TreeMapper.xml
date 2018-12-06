@@ -68,7 +68,7 @@
 				AND t.cur_order_code = #{curOrderCode}
 			</if>
 			<if test="originPlace != null and originPlace != '' ">
-				AND t.origin_place like '%'#{originPlace}'%'
+				AND t.origin_place like "%"#{originPlace}"%"
 			</if>
 			
 			<if test="maxAdoptCount != null and maxAdoptCount != '' ">

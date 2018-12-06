@@ -95,6 +95,15 @@ public class CommodityOrderDetailBOImpl
     }
 
     @Override
+    public void toComment(String code) {
+        CommodityOrderDetail commodityOrderDetail = new CommodityOrderDetail();
+        commodityOrderDetail.setCode(code);
+        commodityOrderDetail
+            .setStatus(ECommodityOrderDetailStatus.TO_COMMENT.getCode());
+        commodityOrderDetailDAO.updateToComment(commodityOrderDetail);
+    }
+
+    @Override
     public void comment(String code) {
         CommodityOrderDetail commodityOrderDetail = new CommodityOrderDetail();
         commodityOrderDetail.setCode(code);
@@ -107,9 +116,9 @@ public class CommodityOrderDetailBOImpl
     public void toAfterSell(String code) {
         CommodityOrderDetail commodityOrderDetail = new CommodityOrderDetail();
         commodityOrderDetail.setCode(code);
-        commodityOrderDetail
-            .setStatus(ECommodityOrderDetailStatus.AFTER_SELL_ING.getCode());
-        commodityOrderDetailDAO.updateToAfterSell(commodityOrderDetail);
+        commodityOrderDetail.setAfterSaleStatus(
+            ECommodityOrderDetailStatus.AFTER_SELL_ING.getCode());
+        commodityOrderDetailDAO.updateAfterSaleStatus(commodityOrderDetail);
     }
 
     @Override
@@ -127,6 +136,14 @@ public class CommodityOrderDetailBOImpl
         commodityOrderDetail.setOrderCode(orderCode);
         commodityOrderDetail.setStatus(status);
         commodityOrderDetailDAO.updateStatusByOrder(commodityOrderDetail);
+    }
+
+    @Override
+    public void refreshAfterSaleStatus(String code, String status) {
+        CommodityOrderDetail commodityOrderDetail = new CommodityOrderDetail();
+        commodityOrderDetail.setCode(code);
+        commodityOrderDetail.setAfterSaleStatus(status);
+        commodityOrderDetailDAO.updateAfterSaleStatus(commodityOrderDetail);
     }
 
     @Override

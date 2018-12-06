@@ -18,6 +18,9 @@ public class XN629441Req {
     @NotBlank
     private String userId;
 
+    // 数量
+    private String quantity;
+
     public String getCode() {
         return code;
     }
@@ -32,6 +35,14 @@ public class XN629441Req {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(String quantity) {
+        this.quantity = quantity;
     }
 
 }

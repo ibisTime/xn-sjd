@@ -9,22 +9,22 @@ import com.ogc.standard.common.DateUtil;
 
 public class SCDM_IDAO {
     // 实体
-    private static String key = "barrage";
+    private static String key = "defaultPostage";
 
     // 实体名称
-    private static String keyName = "弹幕";
+    private static String keyName = "默认邮费模版";
 
     // 包路径
     private static String packge = "com.ogc.standard.";
 
     // 表名
-    private static String dbname = "tsj_barrage";
+    private static String dbname = "tsc_default_postage";
 
-    private static String[] DBwords = { "code", "content", "pic", "status",
-            "order_no", "updater", "update_datetime", "remark" };
+    private static String[] DBwords = { "code", "shop_code", "shop_name",
+            "type", "name", "price", "updater", "update_datetime", "remark" };
 
-    private static String[] DBwordsName = { "编号", "会话编号", "图片", "状态（0上架/1下架）",
-            "序号", "更新人", "更新时间", "备注" };
+    private static String[] DBwordsName = { "编号", "店铺编号", "店铺名称", "类型（0同省/1跨省）",
+            "名称", "价格", "更新人", "更新时间", "备注" };
 
     public void testname() throws Exception {
     }
@@ -37,7 +37,7 @@ public class SCDM_IDAO {
     public static void main(String[] args) {
 
         System.out.println("*********开始打印*********");
-        String path = "/Users/silver/Desktop/tmp/tsj_barrage";
+        String path = "/Users/silver/Desktop/tmp/tsc_default_postage";
 
         File DOMAINfile = new File(path, Key + ".java");
 

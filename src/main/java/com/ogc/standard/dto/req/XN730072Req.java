@@ -16,9 +16,9 @@ public class XN730072Req extends BaseReq {
     @NotBlank
     private String mobile;
 
-    // 是否顶级
+    // 等级
     @NotBlank
-    private String isTop;
+    private String level;
 
     // 上级编号
     private String parentUserId;
@@ -64,12 +64,12 @@ public class XN730072Req extends BaseReq {
     @NotBlank
     private String updater;
 
-    public String getIsTop() {
-        return isTop;
+    public String getLevel() {
+        return level;
     }
 
-    public void setIsTop(String isTop) {
-        this.isTop = isTop;
+    public void setLevel(String level) {
+        this.level = level;
     }
 
     public String getParentUserId() {

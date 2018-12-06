@@ -8,6 +8,8 @@
  */
 package com.ogc.standard.dao;
 
+import java.util.List;
+
 import com.ogc.standard.dao.base.IBaseDAO;
 import com.ogc.standard.domain.User;
 
@@ -64,5 +66,9 @@ public interface IUserDAO extends IBaseDAO<User> {
 
     // 更新微信登录信息
     public int updateWxInfo(User data);
+
+    public long selectUserRankTotalCount(User condition);
+
+    public List<User> selectUserRankList(User condition, int start, int count);
 
 }

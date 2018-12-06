@@ -9,6 +9,7 @@
 		<result column="status" property="status" />
 		<result column="type" property="type" />
 		<result column="create_datetime" property="createDatetime" />
+		<result column="remark" property="remark" />
 	</resultMap>
 	
 	<sql id="where_condition">
@@ -36,6 +37,7 @@
 		,t.status
 		,t.type
 		,t.create_datetime
+		,t.remark
 		FROM
 		tstd_user_relation t
 		<include refid="where_condition" />
@@ -108,6 +110,14 @@
 		SET
 		status= #{status}
 		WHERE user_id = #{userId} AND to_user = #{toUser} AND type = #{type}
+	</update>
+	
+	<update id="update_approve" parameterType="userRelation">
+		UPDATE tstd_user_relation
+		SET
+		status= #{status}
+		,remark=#{remark}
+		WHERE code = #{code} 
 	</update>
 	
 </mapper>

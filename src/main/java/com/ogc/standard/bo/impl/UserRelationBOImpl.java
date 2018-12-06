@@ -23,6 +23,7 @@ import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.IUserRelationDAO;
 import com.ogc.standard.domain.UserRelation;
 import com.ogc.standard.enums.EBoolean;
+import com.ogc.standard.enums.EUserRelationStatus;
 
 /**
  * 用户关系BO
@@ -31,8 +32,8 @@ import com.ogc.standard.enums.EBoolean;
  * @history:
  */
 @Component
-public class UserRelationBOImpl extends PaginableBOImpl<UserRelation> implements
-        IUserRelationBO {
+public class UserRelationBOImpl extends PaginableBOImpl<UserRelation>
+        implements IUserRelationBO {
     @Autowired
     private IUserRelationDAO userRelationDAO;
 
@@ -40,11 +41,13 @@ public class UserRelationBOImpl extends PaginableBOImpl<UserRelation> implements
      * @see com.std.user.bo.IUserRelationBO#isExistUserRelation(java.lang.String, java.lang.String)
      */
     @Override
-    public boolean isExistUserRelation(String userId, String toUser, String type) {
+    public boolean isExistUserRelation(String userId, String toUser,
+            String type, String status) {
         UserRelation condition = new UserRelation();
         condition.setUserId(userId);
         condition.setToUser(toUser);
         condition.setType(type);
+        condition.setStatus(status);
         long count = userRelationDAO.selectTotalCount(condition);
         if (count > 0) {
             return true;
@@ -65,7 +68,7 @@ public class UserRelationBOImpl extends PaginableBOImpl<UserRelation> implements
             data.setUserId(userId);
             data.setToUser(toUser);
             data.setType(type);
-            data.setStatus(EBoolean.YES.getCode());
+            data.setStatus(EUserRelationStatus.TO_APPROVE.getCode());
             data.setCreateDatetime(new Date());
             userRelationDAO.insert(data);
         }
@@ -84,6 +87,15 @@ public class UserRelationBOImpl extends PaginableBOImpl<UserRelation> implements
             count = userRelationDAO.updateStatus(data);
         }
         return count;
+    }
+
+    @Override
+    public void approveUserRelation(String code, String status, String remark) {
+        UserRelation userRelation = new UserRelation();
+        userRelation.setCode(code);
+        userRelation.setStatus(status);
+        userRelation.setRemark(remark);
+        userRelationDAO.updateApprove(userRelation);
     }
 
     @Override
@@ -147,4 +159,12 @@ public class UserRelationBOImpl extends PaginableBOImpl<UserRelation> implements
     public List<UserRelation> queryMyUserRelationList(UserRelation condition) {
         return userRelationDAO.selectMyList(condition);
     }
+
+    @Override
+    public UserRelation getUserRelation(String code) {
+        UserRelation condition = new UserRelation();
+        condition.setCode(code);
+        return userRelationDAO.select(condition);
+    }
+
 }

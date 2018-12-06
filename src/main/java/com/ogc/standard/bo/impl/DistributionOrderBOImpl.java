@@ -226,7 +226,7 @@ public class DistributionOrderBOImpl implements IDistributionOrderBO {
             BigDecimal amount, String applyUser, String type,
             XN629048Res resultRes) {
         Map<String, String> mapList = sysConfigBO.getConfigsMap();
-        BigDecimal payAmount = amount.subtract(resultRes.getCnyAmount());// 订单支付金额（抵扣积分后）
+        BigDecimal payAmount = amount;// 订单支付金额（抵扣积分后）
 
         // 平台人民币转化为积分池
         BigDecimal sysJfpoolCny = payAmount.multiply(
@@ -341,7 +341,7 @@ public class DistributionOrderBOImpl implements IDistributionOrderBO {
             BigDecimal amount, String applyUser, String type,
             XN629048Res resultRes) {
         Map<String, String> mapList = sysConfigBO.getConfigsMap();
-        BigDecimal payAmount = amount.subtract(resultRes.getCnyAmount());// 订单支付金额（抵扣积分后）
+        BigDecimal payAmount = amount;// 订单支付金额（抵扣积分后）
 
         // 平台人民币转化为积分池
         BigDecimal sysJfpoolCny = payAmount.multiply(

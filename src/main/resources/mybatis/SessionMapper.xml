@@ -105,4 +105,21 @@
 		SELECT count(1) FROM tsc_session t
 		<include refid="where_condition" />
 	</select>
+	
+	<update id="update_clear_user1_unread_sum" parameterType="session">
+		UPDATE tsc_session
+		SET
+		user1_unread_sum=0
+		WHERE
+		user1=#{user1} AND code=#{code}
+	</update>
+	
+	<update id="update_clear_user2_unread_sum" parameterType="session">
+		UPDATE tsc_session
+		SET
+		user2_unread_sum=0
+		WHERE
+		user2=#{user2} AND code=#{code}
+	</update>
+	
 </mapper>

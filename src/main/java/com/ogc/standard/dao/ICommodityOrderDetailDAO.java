@@ -23,6 +23,9 @@ public interface ICommodityOrderDetailDAO
     // 待评价
     public int updateToCommentByOrder(CommodityOrderDetail data);
 
+    // 待评价
+    public int updateToComment(CommodityOrderDetail data);
+
     // 评价
     public int updateComment(CommodityOrderDetail data);
 
@@ -33,5 +36,7 @@ public interface ICommodityOrderDetailDAO
     public int updateHandleAfterSell(CommodityOrderDetail data);
 
     public int updateStatusByOrder(CommodityOrderDetail data);
+
+    public int updateAfterSaleStatus(CommodityOrderDetail data);
 
 }

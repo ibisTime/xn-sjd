@@ -320,3 +320,33 @@ ALTER TABLE `tys_derive_group`
 ADD COLUMN `original_quantity` INT(11) NULL COMMENT '初始数量' AFTER `price`;
 
 update tys_derive_group set original_quantity = quantity;
+
+#V2.0.0 4-3 商城上线
+ALTER TABLE `tstd_sms` 
+CHANGE COLUMN `content` `content` LONGTEXT NULL DEFAULT NULL COMMENT '内容' ;
+
+ALTER TABLE `tsys_config` 
+CHANGE COLUMN `cvalue` `cvalue` LONGTEXT NULL DEFAULT NULL COMMENT 'value' ;
+
+#V2.0.0 4-4
+ALTER TABLE `tstd_user_ext` 
+ADD COLUMN `back_id_pic` TEXT NULL COMMENT '身份证反面' AFTER `id_pic`;
+
+ALTER TABLE `tstd_user_ext` 
+ADD COLUMN `company_address` VARCHAR(255) NULL COMMENT '企业地址' AFTER `company_name`,
+ADD COLUMN `company_charger_name` VARCHAR(255) NULL COMMENT '企业法人姓名' AFTER `company_address`,
+ADD COLUMN `company_charger_mobile` VARCHAR(255) NULL COMMENT '企业法人联系方式' AFTER `company_charger_name`,
+ADD COLUMN `company_charger_id_no` VARCHAR(255) NULL COMMENT '企业法人身份证' AFTER `company_charger_mobile`,
+ADD COLUMN `company_bank` VARCHAR(255) NULL COMMENT '企业开户行' AFTER `company_charger_id_no`,
+ADD COLUMN `company_bank_number` VARCHAR(255) NULL COMMENT '企业开户行账号' AFTER `company_bank`,
+ADD COLUMN `company_contact_name` VARCHAR(255) NULL COMMENT '企业联系人' AFTER `company_bank_number`,
+ADD COLUMN `company_contact_mobile` VARCHAR(255) NULL COMMENT '企业联系人电话' AFTER `company_contact_name`,
+ADD COLUMN `company_contact_address` VARCHAR(255) NULL COMMENT '企业联系人地址' AFTER `company_contact_mobile`,
+ADD COLUMN `company_charger_id_pic` TEXT NULL COMMENT '企业法人身份证正面' AFTER `company_contact_address`,
+ADD COLUMN `company_charger_back_id_pic` TEXT NULL COMMENT '企业法人身份证反面' AFTER `company_charger_id_pic`;
+
+ALTER TABLE `tstd_user_relation` 
+ADD COLUMN `remark` VARCHAR(255) NULL COMMENT '备注' AFTER `create_datetime`;
+
+ALTER TABLE `tsc_commodity_order_detail` 
+ADD COLUMN `after_sale_status` VARCHAR(4) NULL COMMENT '售后状态' AFTER `status`;

@@ -311,7 +311,12 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
             }
 
             // 认领寄售
-            deriveGroupBO.refreshClaimDirect(deriveGroup.getCode());
+            String status = EDeriveGroupStatus.TO_CLAIM.getCode();
+            if (deriveGroup.getQuantity() == 0) {
+                status = EDeriveGroupStatus.CLAIMED.getCode();
+            }
+            deriveGroupBO.refreshClaimPublic(deriveGroup.getCode(),
+                deriveGroup.getClaimant(), deriveGroup.getQuantity(), status);
 
             // 生成认养权
             PresellInventory presellInventory = presellInventoryBO
@@ -352,8 +357,12 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
             }
 
             // 认领寄售
-            deriveGroupBO.refreshClaimQr(deriveGroup.getCode(),
-                deriveGroup.getClaimant());
+            String status = EDeriveGroupStatus.TO_CLAIM.getCode();
+            if (deriveGroup.getQuantity() == 0) {
+                status = EDeriveGroupStatus.CLAIMED.getCode();
+            }
+            deriveGroupBO.refreshClaimPublic(deriveGroup.getCode(),
+                deriveGroup.getClaimant(), deriveGroup.getQuantity(), status);
 
             // 生成认养权
             PresellInventory presellInventory = presellInventoryBO

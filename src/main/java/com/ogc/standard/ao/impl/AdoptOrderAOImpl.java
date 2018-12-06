@@ -342,7 +342,8 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
                 }
             }
 
-            for (int i = 0; i < data.getQuantity(); i++) {
+            if (CollectionUtils.isEmpty(adoptOrderTreeBO.queryUserAdoptedOrder(
+                data.getApplyUser(), treeList.get(0).getTreeNumber()))) {
                 adoptOrderTreeBO.saveAdoptOrderTree(product, data,
                     treeList.get(0).getTreeNumber());
             }
@@ -414,7 +415,9 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
                     }
                 }
 
-                for (int i = 0; i < data.getQuantity(); i++) {
+                if (CollectionUtils.isEmpty(
+                    adoptOrderTreeBO.queryUserAdoptedOrder(data.getApplyUser(),
+                        treeList.get(0).getTreeNumber()))) {
                     adoptOrderTreeBO.saveAdoptOrderTree(product, data,
                         treeList.get(0).getTreeNumber());
                 }

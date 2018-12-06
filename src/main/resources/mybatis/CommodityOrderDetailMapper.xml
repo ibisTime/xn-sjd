@@ -31,6 +31,7 @@
 		<result column="receiver_datetime" property="receiverDatetime" />
 		<result column="update_datetime" property="updateDatetime" />
 		<result column="status" property="status" />
+		<result column="after_sale_status" property="afterSaleStatus" />
 	</resultMap>
 	
 	<sql id="where_condition">
@@ -52,6 +53,9 @@
 			</if>
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
+			</if>
+			<if test="afterSaleStatus != null and afterSaleStatus != '' ">
+				AND t.after_sale_status = #{afterSaleStatus}
 			</if>
 			<if test="shopCode != null and shopCode != '' ">
 				AND t.shop_code = #{shopCode}
@@ -107,6 +111,7 @@
 		
 		,t.update_datetime
 		,t.status
+		,t.after_sale_status
 		FROM
 		tsc_commodity_order_detail t
 		<include refid="where_condition" />
@@ -177,6 +182,14 @@
 		order_code=#{orderCode}
 	</update>
 	
+	<update id="update_toComment" parameterType="commodityOrderDetail">
+		UPDATE tsc_commodity_order_detail
+		SET
+		status=#{status}
+		WHERE
+		code=#{code}
+	</update>
+	
 	<update id="update_comment" parameterType="commodityOrderDetail">
 		UPDATE tsc_commodity_order_detail
 		SET
@@ -207,6 +220,14 @@
 		status=#{status}
 		WHERE
 		order_code=#{orderCode}
+	</update>
+	
+	<update id="update_atferSaleStatus" parameterType="commodityOrderDetail">
+		UPDATE tsc_commodity_order_detail
+		SET
+		after_sale_status=#{afterSaleStatus}
+		WHERE
+		code=#{code}
 	</update>
 	
 </mapper>

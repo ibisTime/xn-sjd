@@ -256,6 +256,20 @@ public class AdoptOrderTreeBOImpl extends PaginableBOImpl<AdoptOrderTree>
     }
 
     @Override
+    public List<AdoptOrderTree> queryUserAdoptedOrder(String userId,
+            String treeNumber) {
+        AdoptOrderTree condition = new AdoptOrderTree();
+        condition.setCurrentHolder(userId);
+        condition.setTreeNumber(treeNumber);
+
+        List<String> statusList = new ArrayList<String>();
+        statusList.add(EAdoptOrderTreeStatus.TO_ADOPT.getCode());
+        statusList.add(EAdoptOrderTreeStatus.ADOPT.getCode());
+        condition.setStatusList(statusList);
+        return null;
+    }
+
+    @Override
     public List<AdoptOrderTree> queryProductAdoptedOrder(
             AdoptOrderTree condition) {
         return adoptOrderTreeDAO.selectProductAdoptedOrder(condition);

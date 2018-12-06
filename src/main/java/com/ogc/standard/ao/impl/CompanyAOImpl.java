@@ -12,6 +12,7 @@ import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Company;
 import com.ogc.standard.domain.SYSUser;
 import com.ogc.standard.enums.ESYSUserKind;
+import com.ogc.standard.enums.ESYSUserStatus;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
 
@@ -37,6 +38,8 @@ public class CompanyAOImpl implements ICompanyAO {
         Company company = companyBO.getCompanyByUserId(sysUser.getUserId());
         companyBO.refreshCompanyInfo(company, bussinessLicense,
             certificateTemplate, contractTemplate);
+        sysUserBO.refreshStatus(userId, ESYSUserStatus.TO_APPROVE, userId,
+            null);
     }
 
     @Override

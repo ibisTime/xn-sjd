@@ -84,9 +84,6 @@ public class AfterSaleAOImpl implements IAfterSaleAO {
         // 更新明细状态
         commodityOrderDetailBO.toAfterSell(orderDetailCode);
 
-        // 更新订单状态
-        commodityOrderBO.refreshFinish(orderDetailCode);
-
         return codeString;
     }
 
@@ -115,9 +112,6 @@ public class AfterSaleAOImpl implements IAfterSaleAO {
         // 更新明细状态
         commodityOrderDetailBO.toAfterSell(orderDetailCode);
 
-        // 更新订单状态
-        commodityOrderBO.refreshFinish(orderDetailCode);
-
         return codeString;
     }
 
@@ -136,6 +130,12 @@ public class AfterSaleAOImpl implements IAfterSaleAO {
                 // 状态更新
                 afterSaleBO.refreshHandle(data,
                     EAfterSaleStatus.FINISH.getCode());
+
+                commodityOrderDetailBO.toComment(data.getOrderDetailCode());
+
+                commodityOrderDetailBO.refreshAfterSaleStatus(
+                    data.getOrderDetailCode(),
+                    ECommodityOrderDetailStatus.AFTER_SALEED.getCode());
             } else {
                 // 状态更新
                 afterSaleBO.refreshHandle(data,
@@ -143,9 +143,32 @@ public class AfterSaleAOImpl implements IAfterSaleAO {
             }
         } else {
             afterSaleBO.refreshHandle(data, EAfterSaleStatus.FALSE.getCode());
+
+            commodityOrderDetailBO.toComment(data.getOrderDetailCode());
+
+            commodityOrderDetailBO.refreshAfterSaleStatus(
+                data.getOrderDetailCode(),
+                ECommodityOrderDetailStatus.AFTER_SALEED.getCode());
         }
 
-        commodityOrderDetailBO.handleAfterSell(code);
+    }
+
+    @Override
+    @Transactional
+    public void doReceive(String code, String receiver) {
+        AfterSale data = afterSaleBO.getAfterSale(code);
+        if (!EAfterSaleStatus.PASS.getCode().equals(data.getStatus())) {
+            throw new BizException("xn0000", "该售后订单不处于可收货的状态");
+        }
+
+        refund(data);
+
+        afterSaleBO.refreshReceive(data, receiver);
+
+        commodityOrderDetailBO.toComment(data.getOrderDetailCode());
+
+        commodityOrderDetailBO.refreshAfterSaleStatus(data.getOrderDetailCode(),
+            ECommodityOrderDetailStatus.AFTER_SALEED.getCode());
     }
 
     private void refund(AfterSale data) {
@@ -162,19 +185,6 @@ public class AfterSaleAOImpl implements IAfterSaleAO {
             EJourBizTypeUser.AFTER_SALE.getCode(),
             EJourBizTypeBusiness.AFTER_SALE.getValue(),
             EJourBizTypeUser.AFTER_SALE.getValue(), data.getCode());
-    }
-
-    @Override
-    @Transactional
-    public void doReceive(String code, String receiver) {
-        AfterSale data = afterSaleBO.getAfterSale(code);
-        if (!EAfterSaleStatus.PASS.getCode().equals(data.getStatus())) {
-            throw new BizException("xn0000", "该售后订单不处于可收货的状态");
-        }
-        // 退款
-        refund(data);
-        // 更新状态
-        afterSaleBO.refreshReceive(data, receiver);
     }
 
     @Override
