@@ -33,6 +33,9 @@ public class Tree extends ABaseDO {
     // 树木编号
     private String treeNumber;
 
+    // 销售类型
+    private String sellType;
+
     // 树龄
     private Integer age;
 
@@ -109,9 +112,6 @@ public class Tree extends ABaseDO {
 
     // 产权方
     private String ownerName;
-
-    // 销售类型
-    private String sellType;
 
     // 当前订单
     private AdoptOrder curOrder;

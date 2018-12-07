@@ -71,9 +71,10 @@ public class PresellOrderBOImpl extends PaginableBOImpl<PresellOrder>
     }
 
     @Override
-    public void payYueSuccess(PresellOrder data, XN629048Res resultRes,
-            BigDecimal backjfAmount) {
+    public void payYueSuccess(PresellOrder data, String originalGroupCode,
+            XN629048Res resultRes, BigDecimal backjfAmount) {
         data.setPayType(EPayType.YE.getCode());
+        data.setOriginalGroupCode(originalGroupCode);
         data.setCnyDeductAmount(resultRes.getCnyAmount());
         data.setJfDeductAmount(resultRes.getJfAmount());
         data.setPayAmount(data.getAmount().subtract(resultRes.getCnyAmount()));
@@ -100,11 +101,12 @@ public class PresellOrderBOImpl extends PaginableBOImpl<PresellOrder>
     }
 
     @Override
-    public void paySuccess(String code, BigDecimal payAmount,
-            BigDecimal backJfAmount) {
+    public void paySuccess(String code, String originalGroupCode,
+            BigDecimal payAmount, BigDecimal backJfAmount) {
         if (StringUtils.isNotBlank(code)) {
             PresellOrder data = new PresellOrder();
             data.setCode(code);
+            data.setOriginalGroupCode(originalGroupCode);
             data.setPayAmount(payAmount);
             data.setBackJfAmount(backJfAmount);
             data.setStatus(EPresellOrderStatus.PAYED.getCode());

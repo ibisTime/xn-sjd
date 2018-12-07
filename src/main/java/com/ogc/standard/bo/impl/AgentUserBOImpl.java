@@ -109,6 +109,19 @@ public class AgentUserBOImpl extends PaginableBOImpl<AgentUser>
     }
 
     @Override
+    public void refreshAgentUser(String userId, String mobile, String level,
+            String parentUserId, String updater) {
+        AgentUser agentUser = new AgentUser();
+        agentUser.setUserId(userId);
+        agentUser.setMobile(mobile);
+        agentUser.setLevel(level);
+        agentUser.setParentUserId(parentUserId);
+        agentUser.setUpdater(updater);
+        agentUser.setUpdateDatetime(new Date());
+        agentUserDAO.updateEdit(agentUser);
+    }
+
+    @Override
     public void checkTradePwd(String userId, String tradePwd) {
         if (StringUtils.isNotBlank(userId)
                 && StringUtils.isNotBlank(tradePwd)) {
@@ -297,4 +310,5 @@ public class AgentUserBOImpl extends PaginableBOImpl<AgentUser>
         condition.setCreateDatetimeEnd(createDatetimeEnd);
         return agentUserDAO.selectTotalCount(condition);
     }
+
 }

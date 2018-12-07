@@ -25,6 +25,7 @@ import com.ogc.standard.domain.AgentUser;
 import com.ogc.standard.domain.Company;
 import com.ogc.standard.dto.req.XN730072Req;
 import com.ogc.standard.dto.req.XN730073Req;
+import com.ogc.standard.dto.req.XN730090Req;
 import com.ogc.standard.enums.EAccountType;
 import com.ogc.standard.enums.EAgentUserLevel;
 import com.ogc.standard.enums.EAgentUserStatus;
@@ -138,6 +139,22 @@ public class AgentUserAOImpl implements IAgentUserAO {
             ECaptchaType.AG_REG.getCode());
 
         return userId;
+    }
+
+    @Override
+    @Transactional
+    public void editAgent(XN730090Req req) {
+        AgentUser agentUser = agentUserBO.getAgentUser(req.getUserId());
+
+        if (!req.getMobile().equals(agentUser.getMobile())) {
+            // 验证手机号是否存在
+            agentUserBO.isMobileExist(req.getMobile());
+        }
+
+        agentUserBO.refreshAgentUser(req.getUserId(), req.getMobile(),
+            req.getLevel(), req.getParentUserId(), req.getUpdater());
+
+        companyBO.refreshCompany(req);
     }
 
     @Override
@@ -454,4 +471,5 @@ public class AgentUserAOImpl implements IAgentUserAO {
             }
         }
     }
+
 }

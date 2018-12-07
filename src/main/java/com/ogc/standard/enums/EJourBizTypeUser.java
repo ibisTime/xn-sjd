@@ -53,6 +53,8 @@ public enum EJourBizTypeUser {
 
     AFTER_SALE("after_sale", "售后退款"),
 
+    AFTER_SALE_JF("after_sale_jf", "售后退积分"),
+
     // 碳泡泡账户
     ADOPT_DAY_BACK("adopt_day_back", "认养消费每日收取碳泡泡"),
 

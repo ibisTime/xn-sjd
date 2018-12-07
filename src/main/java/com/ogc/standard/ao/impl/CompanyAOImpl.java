@@ -11,6 +11,7 @@ import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Company;
 import com.ogc.standard.domain.SYSUser;
+import com.ogc.standard.dto.req.XN630080Req;
 import com.ogc.standard.enums.ESYSUserKind;
 import com.ogc.standard.enums.ESYSUserStatus;
 import com.ogc.standard.exception.BizException;
@@ -38,8 +39,22 @@ public class CompanyAOImpl implements ICompanyAO {
         Company company = companyBO.getCompanyByUserId(sysUser.getUserId());
         companyBO.refreshCompanyInfo(company, bussinessLicense,
             certificateTemplate, contractTemplate);
-        sysUserBO.refreshStatus(userId, ESYSUserStatus.TO_APPROVE, userId,
-            null);
+
+    }
+
+    @Override
+    public void refreshCompanyOwner(XN630080Req req) {
+        SYSUser sysUser = sysUserBO.getSYSUser(req.getUserId());
+
+        if (!ESYSUserKind.OWNER.getCode().equals(sysUser.getKind())) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "不是产权端用户，不能操作");
+        }
+
+        companyBO.refreshCompany(req);
+
+        sysUserBO.refreshStatus(req.getUserId(), ESYSUserStatus.TO_APPROVE,
+            req.getUserId(), null);
     }
 
     @Override

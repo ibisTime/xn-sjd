@@ -45,7 +45,7 @@ INSERT INTO `tsys_role` (`code`,`name`,`type`,`updater`,`update_datetime`,`remar
 -- Query: SELECT * FROM dev_xn_sjd.tsys_menu
 LIMIT 0, 50000
 
--- Date: 2018-12-06 21:00
+-- Date: 2018-12-07 18:00
 */
 INSERT INTO `tsys_menu` (`code`,`parent_code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CD201809281332308235420','CD2018112110474868528055','产权方管理','1','#',1,'UCOIN201700000000000001','2018-11-21 10:49:38','','CD-SJD0000025');
 INSERT INTO `tsys_menu` (`code`,`parent_code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CD201809281333105776717','CD2018112110474868528055','养护方管理','1','#',4,'UCOIN201700000000000001','2018-11-21 10:52:42','','CD-SJD0000025');
@@ -201,9 +201,9 @@ INSERT INTO `tsys_menu` (`code`,`parent_code`,`name`,`type`,`url`,`order_no`,`up
 INSERT INTO `tsys_menu` (`code`,`parent_code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CD201810041807294438589','CD201810041750488569802','个人设置','1','#',3,'UCOIN201700000000000001','2018-10-06 16:09:27','','CD-SJD0000025');
 INSERT INTO `tsys_menu` (`code`,`parent_code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CD201810041810367472794','CD201810041806562513906','业务员查询','1','/proxy/salesmen.htm',1,'UCOIN201700000000000001','2018-10-06 16:09:27','','CD-SJD0000025');
 INSERT INTO `tsys_menu` (`code`,`parent_code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CD201810041915350329887','CD201810041807294438589','个人信息','1','/proxy/infos.htm',1,'UCOIN201700000000000001','2018-10-06 16:09:27','','CD-SJD0000025');
-INSERT INTO `tsys_menu` (`code`,`parent_code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CD201810041916031158607','CD201810041807294438589','公告','1','/proxy/notices.htm',2,'UCOIN201700000000000001','2018-10-06 16:09:27','','CD-SJD0000025');
-INSERT INTO `tsys_menu` (`code`,`parent_code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CD201810041916503757635','CD201810041807294438589','安全管理','1','/proxy/security.htm',3,'UCOIN201700000000000001','2018-10-06 16:09:27','','CD-SJD0000025');
-INSERT INTO `tsys_menu` (`code`,`parent_code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CD201810041917204014266','CD201810041807294438589','关于我们','1','/proxy/aboutus.htm',4,'UCOIN201700000000000001','2018-10-06 16:09:27','','CD-SJD0000025');
+INSERT INTO `tsys_menu` (`code`,`parent_code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CD201810041916031158607','CD201810041807294438589','公告','1','/proxy/notices.htm',3,'UCOIN201700000000000001','2018-12-07 13:00:38','','CD-SJD0000025');
+INSERT INTO `tsys_menu` (`code`,`parent_code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CD201810041916503757635','CD201810041807294438589','安全管理','1','/proxy/security.htm',4,'UCOIN201700000000000001','2018-12-07 13:00:43','','CD-SJD0000025');
+INSERT INTO `tsys_menu` (`code`,`parent_code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CD201810041917204014266','CD201810041807294438589','关于我们','1','/proxy/aboutus.htm',5,'UCOIN201700000000000001','2018-12-07 13:00:49','','CD-SJD0000025');
 INSERT INTO `tsys_menu` (`code`,`parent_code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CD201810041918433946610','CD201810041752035736055','业务员','1','#',1,'UCOIN201700000000000001','2018-10-06 16:09:27','','CD-SJD0000025');
 INSERT INTO `tsys_menu` (`code`,`parent_code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CD201810041920200089460','CD201810041918433946610','我的用户','1','/saleman/users.htm',2,'UCOIN201700000000000001','2018-10-06 16:09:27','','CD-SJD0000025');
 INSERT INTO `tsys_menu` (`code`,`parent_code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CD201810041920201538195','CD201810041918433946610','推荐链接','1','/saleman/infos.htm',3,'UCOIN201700000000000001','2018-10-06 16:09:27','','CD-SJD0000025');
@@ -438,6 +438,7 @@ INSERT INTO `tsys_menu` (`code`,`parent_code`,`name`,`type`,`url`,`order_no`,`up
 INSERT INTO `tsys_menu` (`code`,`parent_code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CD2018120519495484723507','CD2018120515052597794126','修改','2','/edit',1,'UCOIN201700000000000001','2018-12-05 19:49:54','商家端-默认邮费-修改','CD-SJD0000025');
 INSERT INTO `tsys_menu` (`code`,`parent_code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CD2018120519504857682553','CD2018120515052597794126','详情','2','/detail',2,'UCOIN201700000000000001','2018-12-05 19:50:48','商家端-默认邮费-详情','CD-SJD0000025');
 INSERT INTO `tsys_menu` (`code`,`parent_code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CD2018120521031819656526','CD2018110512312761319654','树木查看','2','/viewTrees',4,'UCOIN201700000000000001','2018-12-05 21:03:18','','CD-SJD0000025');
+INSERT INTO `tsys_menu` (`code`,`parent_code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('CD2018120713002616137244','CD201810041807294438589','信息修改','1','/proxy/changeInfo.htm',2,'UCOIN201700000000000001','2018-12-07 13:00:26','','CD-SJD0000025');
 INSERT INTO `tsys_menu` (`code`,`parent_code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSM201612071021105964','COINSM201700000000000000','财务管理','1','#',6,'UCOIN201700000000000001','2018-11-21 11:17:40','','CD-SJD0000025');
 INSERT INTO `tsys_menu` (`code`,`parent_code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSM201700000000000000','','根目录','1','#',1,'admin','2018-10-06 16:09:27','','CD-SJD0000025');
 INSERT INTO `tsys_menu` (`code`,`parent_code`,`name`,`type`,`url`,`order_no`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSM201700001000000001','COINSM201700000000000000','系统管理','1','#',1,'admin','2018-10-06 16:09:27','','CD-SJD0000025');
@@ -472,7 +473,7 @@ INSERT INTO `tsys_menu` (`code`,`parent_code`,`name`,`type`,`url`,`order_no`,`up
 -- Query: SELECT * FROM dev_xn_sjd.tsys_menu_role
 LIMIT 0, 50000
 
--- Date: 2018-12-06 21:00
+-- Date: 2018-12-07 18:01
 */
 INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (1,'JS201810041749297484833','COINSM201700000000000000','UCOIN201700000000000001','2018-10-06 16:10:08',NULL,'CD-SJD0000025');
 INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (2,'JS201810041749297484833','CD201810041752035736055','UCOIN201700000000000001','2018-10-06 16:10:08',NULL,'CD-SJD0000025');
@@ -480,28 +481,6 @@ INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_dat
 INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (4,'JS201810041749297484833','CD201810041920200089460','UCOIN201700000000000001','2018-10-06 16:10:08',NULL,'CD-SJD0000025');
 INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (5,'JS201810041749297484833','CD201810041920201538195','UCOIN201700000000000001','2018-10-06 16:10:08',NULL,'CD-SJD0000025');
 INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (6,'JS201810041749297484833','CD201810041922447473309','UCOIN201700000000000001','2018-10-06 16:10:08',NULL,'CD-SJD0000025');
-INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (16163,'JS201810041749178264163','CD201810041750488569802','UCOIN201700000000000001','2018-11-27 18:42:36',NULL,'CD-SJD0000025');
-INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (16164,'JS201810041749178264163','CD201810041755083494718','UCOIN201700000000000001','2018-11-27 18:42:36',NULL,'CD-SJD0000025');
-INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (16165,'JS201810041749178264163','CD201810041759249399434','UCOIN201700000000000001','2018-11-27 18:42:36',NULL,'CD-SJD0000025');
-INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (16166,'JS201810041749178264163','CD201810041810367472794','UCOIN201700000000000001','2018-11-27 18:42:36',NULL,'CD-SJD0000025');
-INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (16167,'JS201810041749178264163','CD201810041915350329887','UCOIN201700000000000001','2018-11-27 18:42:36',NULL,'CD-SJD0000025');
-INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (16168,'JS201810041749178264163','CD201810042032241394590','UCOIN201700000000000001','2018-11-27 18:42:36',NULL,'CD-SJD0000025');
-INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (16169,'JS201810041749178264163','CD201810061509181299386','UCOIN201700000000000001','2018-11-27 18:42:36',NULL,'CD-SJD0000025');
-INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (16170,'JS201810041749178264163','CD2018101112365508184203','UCOIN201700000000000001','2018-11-27 18:42:36',NULL,'CD-SJD0000025');
-INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (16171,'JS201810041749178264163','COINSM201700000000000000','UCOIN201700000000000001','2018-11-27 18:42:36',NULL,'CD-SJD0000025');
-INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (16172,'JS201810041749178264163','CD201810041803048637010','UCOIN201700000000000001','2018-11-27 18:42:36',NULL,'CD-SJD0000025');
-INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (16173,'JS201810041749178264163','CD201810041806562513906','UCOIN201700000000000001','2018-11-27 18:42:36',NULL,'CD-SJD0000025');
-INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (16174,'JS201810041749178264163','CD201810041916031158607','UCOIN201700000000000001','2018-11-27 18:42:36',NULL,'CD-SJD0000025');
-INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (16175,'JS201810041749178264163','CD201810061509332372132','UCOIN201700000000000001','2018-11-27 18:42:36',NULL,'CD-SJD0000025');
-INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (16176,'JS201810041749178264163','CD201810041804088591891','UCOIN201700000000000001','2018-11-27 18:42:36',NULL,'CD-SJD0000025');
-INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (16177,'JS201810041749178264163','CD201810041807294438589','UCOIN201700000000000001','2018-11-27 18:42:36',NULL,'CD-SJD0000025');
-INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (16178,'JS201810041749178264163','CD201810041916503757635','UCOIN201700000000000001','2018-11-27 18:42:36',NULL,'CD-SJD0000025');
-INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (16179,'JS201810041749178264163','CD201810041804504807896','UCOIN201700000000000001','2018-11-27 18:42:36',NULL,'CD-SJD0000025');
-INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (16180,'JS201810041749178264163','CD201810041917204014266','UCOIN201700000000000001','2018-11-27 18:42:36',NULL,'CD-SJD0000025');
-INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (16181,'JS201810041749178264163','CD2018100920141260198657','UCOIN201700000000000001','2018-11-27 18:42:36',NULL,'CD-SJD0000025');
-INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (16182,'JS201810041749178264163','CD201810041805299962185','UCOIN201700000000000001','2018-11-27 18:42:36',NULL,'CD-SJD0000025');
-INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (16183,'JS201810041749178264163','CD201810041805523393052','UCOIN201700000000000001','2018-11-27 18:42:36',NULL,'CD-SJD0000025');
-INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (16184,'JS201810041749178264163','CD2018112718421276029597','UCOIN201700000000000001','2018-11-27 18:42:36',NULL,'CD-SJD0000025');
 INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (16603,'JS201809301134504008291','CD201809281525176339018','UCOIN201700000000000001','2018-12-04 15:22:55',NULL,'CD-SJD0000025');
 INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (16604,'JS201809301134504008291','CD201809281544254578215','UCOIN201700000000000001','2018-12-04 15:22:55',NULL,'CD-SJD0000025');
 INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (16605,'JS201809301134504008291','CD201809281546102647104','UCOIN201700000000000001','2018-12-04 15:22:55',NULL,'CD-SJD0000025');
@@ -892,6 +871,29 @@ INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_dat
 INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (17063,'JS201809301134241553541','CD2018120416243750754303','UCOIN201700000000000001','2018-12-05 21:03:32',NULL,'CD-SJD0000025');
 INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (17064,'JS201809301134241553541','CD201809281539263402954','UCOIN201700000000000001','2018-12-05 21:03:32',NULL,'CD-SJD0000025');
 INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (17065,'JS201809301134241553541','CD2018120521031819656526','UCOIN201700000000000001','2018-12-05 21:03:32',NULL,'CD-SJD0000025');
+INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (17066,'JS201810041749178264163','CD201810041750488569802','UCOIN201700000000000001','2018-12-07 13:01:14',NULL,'CD-SJD0000025');
+INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (17067,'JS201810041749178264163','CD201810041755083494718','UCOIN201700000000000001','2018-12-07 13:01:14',NULL,'CD-SJD0000025');
+INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (17068,'JS201810041749178264163','CD201810041759249399434','UCOIN201700000000000001','2018-12-07 13:01:14',NULL,'CD-SJD0000025');
+INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (17069,'JS201810041749178264163','CD201810041810367472794','UCOIN201700000000000001','2018-12-07 13:01:14',NULL,'CD-SJD0000025');
+INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (17070,'JS201810041749178264163','CD201810041915350329887','UCOIN201700000000000001','2018-12-07 13:01:14',NULL,'CD-SJD0000025');
+INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (17071,'JS201810041749178264163','CD201810042032241394590','UCOIN201700000000000001','2018-12-07 13:01:14',NULL,'CD-SJD0000025');
+INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (17072,'JS201810041749178264163','CD201810061509181299386','UCOIN201700000000000001','2018-12-07 13:01:14',NULL,'CD-SJD0000025');
+INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (17073,'JS201810041749178264163','CD2018101112365508184203','UCOIN201700000000000001','2018-12-07 13:01:14',NULL,'CD-SJD0000025');
+INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (17074,'JS201810041749178264163','CD2018112718421276029597','UCOIN201700000000000001','2018-12-07 13:01:14',NULL,'CD-SJD0000025');
+INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (17075,'JS201810041749178264163','COINSM201700000000000000','UCOIN201700000000000001','2018-12-07 13:01:14',NULL,'CD-SJD0000025');
+INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (17076,'JS201810041749178264163','CD201810041803048637010','UCOIN201700000000000001','2018-12-07 13:01:14',NULL,'CD-SJD0000025');
+INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (17077,'JS201810041749178264163','CD201810041806562513906','UCOIN201700000000000001','2018-12-07 13:01:14',NULL,'CD-SJD0000025');
+INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (17078,'JS201810041749178264163','CD201810061509332372132','UCOIN201700000000000001','2018-12-07 13:01:14',NULL,'CD-SJD0000025');
+INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (17079,'JS201810041749178264163','CD201810041804088591891','UCOIN201700000000000001','2018-12-07 13:01:14',NULL,'CD-SJD0000025');
+INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (17080,'JS201810041749178264163','CD201810041807294438589','UCOIN201700000000000001','2018-12-07 13:01:14',NULL,'CD-SJD0000025');
+INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (17081,'JS201810041749178264163','CD201810041916031158607','UCOIN201700000000000001','2018-12-07 13:01:14',NULL,'CD-SJD0000025');
+INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (17082,'JS201810041749178264163','CD201810041804504807896','UCOIN201700000000000001','2018-12-07 13:01:14',NULL,'CD-SJD0000025');
+INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (17083,'JS201810041749178264163','CD201810041916503757635','UCOIN201700000000000001','2018-12-07 13:01:14',NULL,'CD-SJD0000025');
+INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (17084,'JS201810041749178264163','CD201810041917204014266','UCOIN201700000000000001','2018-12-07 13:01:14',NULL,'CD-SJD0000025');
+INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (17085,'JS201810041749178264163','CD2018100920141260198657','UCOIN201700000000000001','2018-12-07 13:01:14',NULL,'CD-SJD0000025');
+INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (17086,'JS201810041749178264163','CD201810041805299962185','UCOIN201700000000000001','2018-12-07 13:01:14',NULL,'CD-SJD0000025');
+INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (17087,'JS201810041749178264163','CD201810041805523393052','UCOIN201700000000000001','2018-12-07 13:01:14',NULL,'CD-SJD0000025');
+INSERT INTO `tsys_menu_role` (`id`,`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES (17088,'JS201810041749178264163','CD2018120713002616137244','UCOIN201700000000000001','2018-12-07 13:01:14',NULL,'CD-SJD0000025');
 
 /*
 -- Query: SELECT `type`,`ckey`,`cvalue`,`updater`,now() `update_datetime`,`remark` FROM tsys_config
@@ -1127,6 +1129,13 @@ INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_d
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','sys_user_status','3','程序锁定','admin',now(),NULL);
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','sys_user_status','4','人工锁定','admin',now(),NULL);
 
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('0',NULL,'search_sell_type','销售类型','admin',now(),'');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','search_sell_type','1','专属','admin',now(),'');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','search_sell_type','2','定向','admin',now(),'');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','search_sell_type','3','捐赠','admin',now(),'');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','search_sell_type','4','集体','admin',now(),'');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','search_sell_type','5','预售','admin',now(),'');
+
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('0',NULL,'ex_sell_type','销售类型','admin',now(),'');
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','ex_sell_type','1','专属','admin',now(),'');
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','ex_sell_type','2','定向','admin',now(),'');
@@ -1184,7 +1193,8 @@ INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_d
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','biz_type','consign_sell','购买寄售','admin',now(),'');
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','biz_type','commodity','购买商品','admin',now(),'');
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','biz_type','commodity_dist','购买商品分成','admin',now(),'');
-INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','biz_type','after_sale','商城售后','admin',now(),'');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','biz_type','after_sale','售后退款','admin',now(),'');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','biz_type','after_sale_jf','售后退积分','admin',now(),'');
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','biz_type','dist_user_back_jfpool','认养返积分池','admin',now(),'');
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','biz_type','presell_dist','预售分成','admin',now(),'');
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','biz_type','presell_pay_back','预售消费返利','admin',now(),'');
@@ -1422,6 +1432,11 @@ INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_d
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','user_releation_type','0','拉黑','admin',now(),'');
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','user_releation_type','1','信任','admin',now(),'');
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','user_releation_type','2','好友','admin',now(),'');
+
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('0',NULL,'user_releation_status','用户关系状态','admin',now(),'');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','user_releation_status','0','待处理','admin',now(),'');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','user_releation_status','1','已同意','admin',now(),'');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','user_releation_status','2','已拒绝','admin',now(),'');
 
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('0',NULL,'bank_type','银行卡类型','admin',now(),'');
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','bank_type','1','储蓄卡','admin',now(),'');

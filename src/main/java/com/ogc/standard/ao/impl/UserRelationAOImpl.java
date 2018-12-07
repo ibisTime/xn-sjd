@@ -57,7 +57,22 @@ public class UserRelationAOImpl implements IUserRelationAO {
     @Override
     public Paginable<UserRelation> queryUserRelationPage(int start, int limit,
             UserRelation condition) {
-        return userRelationBO.getPaginable(start, limit, condition);
+        Paginable<UserRelation> page = userRelationBO.getPaginable(start, limit,
+            condition);
+
+        if (null != page && CollectionUtils.isNotEmpty(page.getList())) {
+            for (UserRelation userRelation : page.getList()) {
+                User toUserInfo = userBO
+                    .getUserUnCheck(userRelation.getToUser());
+                userRelation.setToUserInfo(toUserInfo);
+
+                User fromUserInfo = userBO
+                    .getUserUnCheck(userRelation.getUserId());
+                userRelation.setFromUserInfo(fromUserInfo);
+            }
+        }
+
+        return page;
     }
 
     /**
@@ -117,7 +132,8 @@ public class UserRelationAOImpl implements IUserRelationAO {
     public boolean isExistUserRelation(String userId, String toUser,
             String type) {
         List<UserRelation> userRelationList = userRelationBO
-            .queryUserRelationList(userId, toUser, type);
+            .queryUserRelationList(userId, toUser, type,
+                EUserRelationStatus.APPROVE_YES.getCode());
         boolean flag = false;
         if (CollectionUtils.isNotEmpty(userRelationList)) {
             flag = true;

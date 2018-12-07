@@ -162,6 +162,17 @@
 		)
 	</insert>
 	
+	<update id="update_edit" parameterType="agentUser">
+		UPDATE tsys_agent_user
+		SET
+		mobile = #{mobile}
+		,level = #{level}
+		,parent_user_id = #{parentUserId}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		WHERE user_id = #{userId}
+	</update>
+	
 	<update id="update_toApprove" parameterType="agentUser">
 		UPDATE tsys_agent_user
 		SET

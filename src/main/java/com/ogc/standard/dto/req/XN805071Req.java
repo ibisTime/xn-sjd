@@ -20,10 +20,8 @@ public class XN805071Req {
     @NotBlank
     private String idNo;
 
-    @NotBlank
     private String idPic;
 
-    @NotBlank
     private String backIdPic;
 
     // 自我介绍

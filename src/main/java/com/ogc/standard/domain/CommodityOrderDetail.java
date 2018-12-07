@@ -55,6 +55,18 @@ public class CommodityOrderDetail extends ABaseDO {
     // 最大积分抵扣比例
     private double maxJfdkRate;
 
+    // 抵扣人民币
+    private BigDecimal cnyDeductAmount;
+
+    // 积分抵扣金额
+    private BigDecimal jfDeductAmount;
+
+    // 积分返点金额
+    private BigDecimal backJfAmount;
+
+    // 支付金额
+    private BigDecimal payAmount;
+
     // 列表图
     private String listPic;
 
@@ -390,6 +402,38 @@ public class CommodityOrderDetail extends ABaseDO {
 
     public void setAfterSaleStatus(String afterSaleStatus) {
         this.afterSaleStatus = afterSaleStatus;
+    }
+
+    public BigDecimal getCnyDeductAmount() {
+        return cnyDeductAmount;
+    }
+
+    public void setCnyDeductAmount(BigDecimal cnyDeductAmount) {
+        this.cnyDeductAmount = cnyDeductAmount;
+    }
+
+    public BigDecimal getJfDeductAmount() {
+        return jfDeductAmount;
+    }
+
+    public void setJfDeductAmount(BigDecimal jfDeductAmount) {
+        this.jfDeductAmount = jfDeductAmount;
+    }
+
+    public BigDecimal getBackJfAmount() {
+        return backJfAmount;
+    }
+
+    public void setBackJfAmount(BigDecimal backJfAmount) {
+        this.backJfAmount = backJfAmount;
+    }
+
+    public BigDecimal getPayAmount() {
+        return payAmount;
+    }
+
+    public void setPayAmount(BigDecimal payAmount) {
+        this.payAmount = payAmount;
     }
 
 }

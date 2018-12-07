@@ -18,7 +18,8 @@ public interface IPresellOrderBO extends IPaginableBO<PresellOrder> {
     public void cancelPresellOrder(String code, String remark);
 
     // 余额支付订单
-    public void payYueSuccess(PresellOrder presellOrder, XN629048Res resultRes,
+    public void payYueSuccess(PresellOrder presellOrder,
+            String originalGroupCode, XN629048Res resultRes,
             BigDecimal backjfAmount);
 
     // 三方支付预支付
@@ -26,8 +27,8 @@ public interface IPresellOrderBO extends IPaginableBO<PresellOrder> {
             XN629048Res resultRes);
 
     // 三方支付成功
-    public void paySuccess(String code, BigDecimal payAmount,
-            BigDecimal backJfAmount);
+    public void paySuccess(String code, String originalGroupCode,
+            BigDecimal payAmount, BigDecimal backJfAmount);
 
     // 结算
     public void refreshSettleStatus(PresellOrder data, String approveResult,

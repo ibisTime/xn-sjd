@@ -175,4 +175,23 @@
 		,remark = #{remark}
 		WHERE code = #{code}
 	</update>
+	
+	
+	<update id="update_ownerCompany_info" parameterType="company">
+		UPDATE tsys_company
+		SET
+		name = #{name}
+		,charger = #{charger}
+		,charge_mobile = #{chargeMobile}
+		,address = #{address}
+		,description = #{description}
+		
+		,bussiness_license = #{bussinessLicense}
+		,certificate_template = #{certificateTemplate}
+		,contract_template = #{contractTemplate}
+		,organization_code = #{organizationCode}
+		,update_datetime = #{updateDatetime}
+		
+		WHERE code = #{code}
+	</update>
 </mapper>

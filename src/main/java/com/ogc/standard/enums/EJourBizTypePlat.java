@@ -100,7 +100,9 @@ public enum EJourBizTypePlat {
 
     REAL_NAME("real_name", "实名认证"),
 
-    COMMODITY_PAY_BACK("commodity_pay_back", "商城消费返利");
+    COMMODITY_PAY_BACK("commodity_pay_back", "商城消费返利"),
+
+    AFTER_SALE_JF("after_sale_jf", "售后退积分"),;
 
     public static EJourBizTypePlat getBizType(String code) {
         Map<String, EJourBizTypePlat> map = getBizTypeMap();

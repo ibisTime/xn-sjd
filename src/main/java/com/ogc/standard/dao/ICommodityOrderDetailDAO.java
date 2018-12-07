@@ -39,4 +39,6 @@ public interface ICommodityOrderDetailDAO
 
     public int updateAfterSaleStatus(CommodityOrderDetail data);
 
+    public int updateDkAmount(CommodityOrderDetail data);
+
 }

@@ -511,6 +511,7 @@ CREATE TABLE `tstd_user_ext` (
   `work_time` varchar(4) DEFAULT NULL COMMENT '工作年限',
   `pdf` varchar(255) DEFAULT NULL COMMENT '用户资料',
   `id_pic` TEXT DEFAULT NULL COMMENT '身份证照',
+  `back_id_pic` TEXT DEFAULT NULL COMMENT '身份证反面',
   `company_name` varchar(255) DEFAULT NULL COMMENT '企业名称',
   `company_address` varchar(255) DEFAULT NULL COMMENT '企业地址',
   `company_charger_name` varchar(255) DEFAULT NULL COMMENT '企业法人姓名',
@@ -930,6 +931,7 @@ CREATE TABLE `tzb_tree` (
   `cur_order_code` varchar(32) DEFAULT NULL COMMENT '当前订单编号',
   `owner_id` varchar(32) DEFAULT NULL COMMENT '产权方编号',
   `tree_number` varchar(255) DEFAULT NULL COMMENT '树木编号',
+  `sell_type` varchar(32) DEFAULT NULL COMMENT '销售类型',
   `age` int(11) DEFAULT '0' COMMENT '树龄',
   `origin_place` varchar(255) DEFAULT NULL COMMENT '产地',
   `scientific_name` varchar(255) DEFAULT NULL COMMENT '学名',
@@ -984,6 +986,7 @@ CREATE TABLE `tstd_user_relation` (
   `status` varchar(4) DEFAULT NULL COMMENT '状态',
   `create_datetime` datetime DEFAULT NULL COMMENT '创建时间',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `tstd_address`;
@@ -1068,6 +1071,7 @@ CREATE TABLE `tys_presell_order` (
   `product_name` varchar(255) DEFAULT NULL COMMENT '产品名称',
   `specs_code` varchar(32) DEFAULT NULL COMMENT '规格编号',
   `specs_name` varchar(255) DEFAULT NULL COMMENT '规格名称',
+  `original_group_code` varchar(32) DEFAULT NULL COMMENT '资产编号',
   `pack_count` int DEFAULT 0 COMMENT '规格包装数量',
 
   `price` decimal(18,8) DEFAULT NULL COMMENT '价格',
@@ -1322,6 +1326,10 @@ CREATE TABLE `tsc_commodity_order_detail` (
   `quantity` bigint(20) DEFAULT NULL COMMENT '数量',
   `price` decimal(64,0) DEFAULT NULL COMMENT '单价',
   `amount` decimal(64,0) DEFAULT NULL COMMENT '总价',
+  `cny_deduct_amount` decimal(18,8) DEFAULT NULL COMMENT '人民币抵扣金额',
+  `jf_deduct_amount` decimal(18,8) DEFAULT NULL COMMENT '积分抵扣金额',
+  `back_jf_amount` decimal(18,8) DEFAULT NULL COMMENT '积分返点金额',
+  `pay_amount` decimal(18,8) DEFAULT NULL COMMENT '支付金额',
   `max_jfdk_rate` DOUBLE DEFAULT NULL COMMENT '最大积分抵扣比例',
   `list_pic` varchar(255) DEFAULT NULL COMMENT '列表图片',
   `logistics_company` varchar(4) DEFAULT NULL COMMENT '物流公司',
@@ -1346,7 +1354,7 @@ CREATE TABLE `tsc_after_sale` (
   `type` varchar(4) DEFAULT NULL COMMENT '类型',
   `status` varchar(4) DEFAULT NULL COMMENT '状态',
   `refund_amount` decimal(64,0) DEFAULT NULL COMMENT '退款金额',
-  `logistics_company` varchar(4) DEFAULT NULL COMMENT '物流公司',
+  `logistics_company` varchar(255) DEFAULT NULL COMMENT '物流公司',
   `logistics_number` varchar(255) DEFAULT NULL COMMENT '物流单号',
   `deliver` varchar(32) DEFAULT NULL COMMENT '发货人',
   `deliver_count` int(11) DEFAULT NULL COMMENT '发货数量',

@@ -18,6 +18,10 @@
 		<result column="price" property="price" />
 		<result column="amount" property="amount" />
 		<result column="max_jfdk_rate" property="maxJfdkRate" />
+		<result column="cny_deduct_amount" property="cnyDeductAmount" />
+		<result column="jf_deduct_amount" property="jfDeductAmount" />
+		<result column="back_jf_amount" property="backJfAmount" />
+		<result column="pay_amount" property="payAmount" />
 		
 		<result column="list_pic" property="listPic" />
 		<result column="logistics_company" property="logisticsCompany" />
@@ -98,6 +102,11 @@
 		
 		,t.amount
 		,t.max_jfdk_rate
+		,t.cny_deduct_amount
+		,t.jf_deduct_amount
+		,t.back_jf_amount
+		,t.pay_amount
+		
 		,t.list_pic
 		,t.logistics_company
 		,t.logistics_number
@@ -226,6 +235,17 @@
 		UPDATE tsc_commodity_order_detail
 		SET
 		after_sale_status=#{afterSaleStatus}
+		WHERE
+		code=#{code}
+	</update>
+	
+	<update id="update_dkAmount" parameterType="commodityOrderDetail">
+		UPDATE tsc_commodity_order_detail
+		SET
+		cny_deduct_amount = #{cnyDeductAmount}
+		,jf_deduct_amount = #{jfDeductAmount}
+		,back_jf_amount = #{backJfAmount}
+		,pay_amount = #{payAmount}
 		WHERE
 		code=#{code}
 	</update>

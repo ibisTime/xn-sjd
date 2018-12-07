@@ -18,12 +18,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ogc.standard.ao.IAfterSaleAO;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IAfterSaleBO;
-import com.ogc.standard.bo.ICommodityOrderBO;
 import com.ogc.standard.bo.ICommodityOrderDetailBO;
 import com.ogc.standard.bo.ICompanyBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.AfterSale;
-import com.ogc.standard.domain.CommodityOrder;
 import com.ogc.standard.domain.CommodityOrderDetail;
 import com.ogc.standard.domain.Company;
 import com.ogc.standard.enums.EAfterSaleStatus;
@@ -32,7 +30,9 @@ import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECommodityOrderDetailStatus;
 import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EJourBizTypeBusiness;
+import com.ogc.standard.enums.EJourBizTypePlat;
 import com.ogc.standard.enums.EJourBizTypeUser;
+import com.ogc.standard.enums.ESysUser;
 import com.ogc.standard.exception.BizException;
 
 /** 
@@ -48,9 +48,6 @@ public class AfterSaleAOImpl implements IAfterSaleAO {
 
     @Autowired
     private ICommodityOrderDetailBO commodityOrderDetailBO;
-
-    @Autowired
-    private ICommodityOrderBO commodityOrderBO;
 
     @Autowired
     private IAccountBO accountBO;
@@ -175,16 +172,26 @@ public class AfterSaleAOImpl implements IAfterSaleAO {
         BigDecimal refundAmount = data.getRefundAmount();
         CommodityOrderDetail orderDetail = commodityOrderDetailBO
             .getCommodityOrderDetail(data.getOrderDetailCode());
-        CommodityOrder order = commodityOrderBO
-            .getCommodityOrder(orderDetail.getOrderCode());
         Company company = companyBO.getCompany(orderDetail.getShopCode());
         String business = company.getUserId();
-        String applyUser = order.getApplyUser();
+        String applyUser = orderDetail.getApplyUser();
+
+        // 人民币退款
         accountBO.transAmount(business, applyUser, ECurrency.CNY.getCode(),
             refundAmount, EJourBizTypeBusiness.AFTER_SALE.getCode(),
             EJourBizTypeUser.AFTER_SALE.getCode(),
             EJourBizTypeBusiness.AFTER_SALE.getValue(),
             EJourBizTypeUser.AFTER_SALE.getValue(), data.getCode());
+
+        // 积分退款
+        accountBO.transAmount(ESysUser.SYS_USER.getCode(),
+            ECurrency.JF.getCode(), applyUser, ECurrency.JF.getCode(),
+            orderDetail.getJfDeductAmount(),
+            EJourBizTypeUser.AFTER_SALE_JF.getCode(),
+            EJourBizTypePlat.AFTER_SALE_JF.getCode(),
+            EJourBizTypeUser.AFTER_SALE_JF.getValue(),
+            EJourBizTypePlat.AFTER_SALE_JF.getValue(), data.getCode());
+
     }
 
     @Override

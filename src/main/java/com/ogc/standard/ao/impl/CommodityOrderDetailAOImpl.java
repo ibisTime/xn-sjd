@@ -8,7 +8,9 @@
  */
 package com.ogc.standard.ao.impl;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
@@ -26,7 +28,10 @@ import com.ogc.standard.bo.ICommodityOrderDetailBO;
 import com.ogc.standard.bo.ICompanyBO;
 import com.ogc.standard.bo.IJourBO;
 import com.ogc.standard.bo.IKeywordBO;
+import com.ogc.standard.bo.ISYSConfigBO;
 import com.ogc.standard.bo.base.Paginable;
+import com.ogc.standard.common.AmountUtil;
+import com.ogc.standard.common.SysConstants;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.Address;
 import com.ogc.standard.domain.Commodity;
@@ -35,12 +40,14 @@ import com.ogc.standard.domain.CommodityOrderDetail;
 import com.ogc.standard.domain.Company;
 import com.ogc.standard.domain.Jour;
 import com.ogc.standard.domain.Keyword;
+import com.ogc.standard.dto.res.XN629730Res;
 import com.ogc.standard.enums.EAccountType;
 import com.ogc.standard.enums.ECommentStatus;
 import com.ogc.standard.enums.ECommodityOrderDetailStatus;
 import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EFilterFlag;
 import com.ogc.standard.enums.EKeyWordReaction;
+import com.ogc.standard.enums.ESysConfigType;
 import com.ogc.standard.exception.BizException;
 
 /** 
@@ -81,8 +88,11 @@ public class CommodityOrderDetailAOImpl implements ICommodityOrderDetailAO {
     @Autowired
     private IKeywordBO keywordBO;
 
+    @Autowired
+    private ISYSConfigBO sysConfigBO;
+
     @Override
-    public String comment(String code, String userId, String content) {
+    public XN629730Res comment(String code, String userId, String content) {
         CommodityOrderDetail commodityOrderDetail = commodityOrderDetailBO
             .getCommodityOrderDetail(code);
 
@@ -139,7 +149,46 @@ public class CommodityOrderDetailAOImpl implements ICommodityOrderDetailAO {
         // 更新订单状态
         commodityOrderBO.refreshFinish(commodityOrderDetail.getOrderCode());
 
-        return commentCode;
+        return new XN629730Res(commentCode, filterFlag);
+    }
+
+    @Override
+    public void refreshDkAmount(String payGroup) {
+
+        Map<String, String> configMap = sysConfigBO
+            .getConfigsMap(ESysConfigType.JF_RULE.getCode());
+        Double adoptDkRate = Double
+            .valueOf(configMap.get(SysConstants.COMMODITY_DK_RATE));// 1人民币兑换多少积分
+
+        List<CommodityOrder> commodityOrderList = commodityOrderBO
+            .queryCommodityOrderByPayGroup(payGroup);
+
+        if (CollectionUtils.isNotEmpty(commodityOrderList)) {
+            for (CommodityOrder commodityOrder : commodityOrderList) {
+                List<CommodityOrderDetail> commodityOrderDetailList = commodityOrderDetailBO
+                    .queryOrderDetail(commodityOrder.getCode());
+
+                if (CollectionUtils.isNotEmpty(commodityOrderDetailList)) {
+                    BigDecimal detailCnyAmount = BigDecimal.ZERO;
+                    BigDecimal detailJfAmount = BigDecimal.ZERO;
+
+                    for (CommodityOrderDetail commodityOrderDetail : commodityOrderDetailList) {
+                        detailCnyAmount = AmountUtil.mul(
+                            commodityOrderDetail.getAmount(),
+                            commodityOrderDetail.getMaxJfdkRate() * 0.01);
+                        detailJfAmount = AmountUtil.mul(detailCnyAmount,
+                            adoptDkRate);
+
+                        commodityOrderDetailBO.refreshDkAmount(
+                            commodityOrderDetail.getCode(), detailCnyAmount,
+                            detailJfAmount, null, commodityOrderDetail
+                                .getAmount().subtract(detailCnyAmount));
+
+                    }
+                }
+
+            }
+        }
     }
 
     @Override

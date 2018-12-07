@@ -1,6 +1,7 @@
 package com.ogc.standard.bo.impl;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -208,4 +209,17 @@ public class OriginalGroupBOImpl extends PaginableBOImpl<OriginalGroup>
         return data;
     }
 
+    @Override
+    public List<OriginalGroup> queryOriginalGroup(String ownerId,
+            String specsCode) {
+        List<OriginalGroup> list = new ArrayList<OriginalGroup>();
+        if (StringUtils.isNotBlank(ownerId)) {
+
+            OriginalGroup condition = new OriginalGroup();
+            condition.setOwnerId(ownerId);
+            condition.setSpecsCode(specsCode);
+            list = originalGroupDAO.selectList(condition);
+        }
+        return list;
+    }
 }

@@ -71,6 +71,7 @@ public class TreeBOImpl extends PaginableBOImpl<Tree> implements ITreeBO {
         data.setProductCode(product.getCode());
         data.setOwnerId(product.getOwnerId());
         data.setTreeNumber(tree.getTreeNumber());
+        data.setSellType(product.getSellType());
         data.setAge(StringValidater.toInteger(tree.getAge()));
 
         data.setOriginPlace(product.getOriginPlace());
@@ -105,6 +106,7 @@ public class TreeBOImpl extends PaginableBOImpl<Tree> implements ITreeBO {
         data.setProductCode(presellProduct.getCode());
         data.setOwnerId(presellProduct.getOwnerId());
         data.setTreeNumber(tree.getTreeNumber());
+        data.setSellType(ESellType.PRESELL.getCode());
         data.setAge(StringValidater.toInteger(tree.getAge()));
 
         data.setOriginPlace(presellProduct.getOriginPlace());

@@ -196,13 +196,18 @@ public class DistributionOrderBOImpl implements IDistributionOrderBO {
                     .queryOrderDetail(commodityOrder.getCode());
 
                 if (CollectionUtils.isNotEmpty(commodityOrderDetailList)) {
-                    for (CommodityOrderDetail commodityOrderDetail : commodityOrderDetailList) {
+                    BigDecimal detailCnyAmount = BigDecimal.ZERO;
+                    BigDecimal detailJfAmount = BigDecimal.ZERO;
 
-                        cnyAmount = cnyAmount.add(
-                            AmountUtil.mul(commodityOrderDetail.getAmount(),
-                                commodityOrderDetail.getMaxJfdkRate() * 0.01));
-                        jfAmount = jfAmount
-                            .add(AmountUtil.mul(cnyAmount, adoptDkRate));
+                    for (CommodityOrderDetail commodityOrderDetail : commodityOrderDetailList) {
+                        detailCnyAmount = AmountUtil.mul(
+                            commodityOrderDetail.getAmount(),
+                            commodityOrderDetail.getMaxJfdkRate() * 0.01);
+                        detailJfAmount = AmountUtil.mul(detailCnyAmount,
+                            adoptDkRate);
+
+                        cnyAmount = cnyAmount.add(detailCnyAmount);
+                        jfAmount = jfAmount.add(detailJfAmount);
 
                     }
                 }

@@ -12,6 +12,9 @@ import com.ogc.standard.domain.AgentUser;
 public interface IAgentUserDAO extends IBaseDAO<AgentUser> {
     String NAMESPACE = IAgentUserDAO.class.getName().concat(".");
 
+    // 修改资料
+    public int updateEdit(AgentUser agentUser);
+
     // 设置支付密码
     public int updateTradePwd(AgentUser data);
 

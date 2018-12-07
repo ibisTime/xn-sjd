@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Company;
+import com.ogc.standard.dto.req.XN630080Req;
 
 public interface ICompanyAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
@@ -19,5 +20,7 @@ public interface ICompanyAO {
 
     public void completeCompanyOwner(String userId, String bussinessLicense,
             String certificateTemplate, String contractTemplate);
+
+    public void refreshCompanyOwner(XN630080Req req);
 
 }

@@ -39,6 +39,9 @@ public interface IOriginalGroupBO extends IPaginableBO<OriginalGroup> {
 
     public List<OriginalGroup> queryOriginalGroupList(OriginalGroup condition);
 
+    public List<OriginalGroup> queryOriginalGroup(String ownerId,
+            String specsCode);
+
     public OriginalGroup getOriginalGroup(String code);
 
     public OriginalGroup getOriginalGroupByOrder(String orderCode);

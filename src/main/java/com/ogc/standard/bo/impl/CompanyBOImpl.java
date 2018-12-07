@@ -17,8 +17,10 @@ import com.ogc.standard.dao.ICompanyDAO;
 import com.ogc.standard.domain.Company;
 import com.ogc.standard.dto.req.XN630061Req;
 import com.ogc.standard.dto.req.XN630063Req;
+import com.ogc.standard.dto.req.XN630080Req;
 import com.ogc.standard.dto.req.XN730072Req;
 import com.ogc.standard.dto.req.XN730073Req;
+import com.ogc.standard.dto.req.XN730090Req;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.exception.BizException;
 
@@ -141,6 +143,44 @@ public class CompanyBOImpl extends PaginableBOImpl<Company>
         data.setUpdater(req.getUpdater());
         data.setUpdateDatetime(new Date());
         companyDAO.update(data);
+    }
+
+    @Override
+    public void refreshCompany(XN730090Req req) {
+        Company data = getCompanyByUserId(req.getUserId());
+        data.setName(req.getName());
+        data.setCharger(req.getCharger());
+        data.setChargeMobile(req.getChargeMobile());
+        data.setProvince(req.getProvince());
+
+        data.setCity(req.getCity());
+        data.setArea(req.getArea());
+        data.setAddress(req.getAddress());
+        data.setDescription(req.getDescription());
+        data.setBussinessLicense(req.getBussinessLicense());
+
+        data.setOrganizationCode(req.getOrganizationCode());
+        data.setUpdater(req.getUpdater());
+        data.setUpdateDatetime(new Date());
+        companyDAO.update(data);
+    }
+
+    @Override
+    public void refreshCompany(XN630080Req req) {
+        Company data = getCompanyByUserId(req.getUserId());
+        data.setName(req.getCompanyName());
+        data.setCharger(req.getCompanyCharger());
+        data.setChargeMobile(req.getChargerMobile());
+
+        data.setAddress(req.getCompanyAddress());
+        data.setDescription(req.getDescription());
+        data.setBussinessLicense(req.getBussinessLicense());
+
+        data.setCertificateTemplate(req.getCertificateTemplate());
+        data.setContractTemplate(req.getContractTemplate());
+        data.setOrganizationCode(req.getOrganizationCode());
+        data.setUpdateDatetime(new Date());
+        companyDAO.updateOwnerCompanyInfo(data);
     }
 
     @Override

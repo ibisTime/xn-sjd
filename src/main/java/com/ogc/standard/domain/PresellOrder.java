@@ -31,6 +31,9 @@ public class PresellOrder extends ABaseDO {
     // 规格名称
     private String specsName;
 
+    // 资产编号
+    private String originalGroupCode;
+
     // 规格包装数量
     private Integer packCount;
 
@@ -387,6 +390,14 @@ public class PresellOrder extends ABaseDO {
 
     public void setSettleList(List<Settle> settleList) {
         this.settleList = settleList;
+    }
+
+    public String getOriginalGroupCode() {
+        return originalGroupCode;
+    }
+
+    public void setOriginalGroupCode(String originalGroupCode) {
+        this.originalGroupCode = originalGroupCode;
     }
 
 }

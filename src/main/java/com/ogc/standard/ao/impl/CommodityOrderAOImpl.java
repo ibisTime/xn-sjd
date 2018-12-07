@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.ICommodityOrderAO;
+import com.ogc.standard.ao.ICommodityOrderDetailAO;
 import com.ogc.standard.ao.IUserAO;
 import com.ogc.standard.ao.IWeChatAO;
 import com.ogc.standard.bo.IAccountBO;
@@ -92,6 +93,9 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
 
     @Autowired
     private ICommodityOrderDetailBO commodityOrderDetailBO;
+
+    @Autowired
+    private ICommodityOrderDetailAO commodityOrderDetailAO;
 
     @Autowired
     private ICommodityBO commodityBO;
@@ -371,9 +375,8 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
 
         // 进行分销
         BigDecimal backJfAmount = distributionOrderBO.commodityDistribution(
-            data.getCode(), data.getShopOwner(),
-            data.getAmount().subtract(data.getPostalFee()), data.getApplyUser(),
-            ESellType.COMMODITY.getCode(), resultRes);
+            data.getCode(), data.getShopOwner(), data.getAmount(),
+            data.getApplyUser(), ESellType.COMMODITY.getCode(), resultRes);
 
         // 用户升级
         userAO.upgradeUserLevel(data.getApplyUser());
@@ -384,6 +387,8 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
 
         // 业务订单更改
         commodityOrderBO.payYueSuccess(data, resultRes, backJfAmount);
+
+        commodityOrderDetailAO.refreshDkAmount(data.getPayGroup());
 
         commodityOrderDetailBO.refreshStatus(data.getCode(),
             ECommodityOrderDetailStatus.TODELIVE.getCode());
@@ -415,8 +420,7 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
             XN629048Res resultRes = new XN629048Res(data.getCnyDeductAmount(),
                 data.getJfDeductAmount());
             BigDecimal backJfAmount = distributionOrderBO.commodityDistribution(
-                data.getCode(), data.getShopOwner(),
-                data.getAmount().subtract(resultRes.getCnyAmount()),
+                data.getCode(), data.getShopOwner(), data.getAmount(),
                 data.getApplyUser(), ESellType.COMMODITY.getCode(), resultRes);
 
             // 用户升级
@@ -447,6 +451,8 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
                 }
             }
         }
+
+        commodityOrderDetailAO.refreshDkAmount(payGroup);
 
     }
 

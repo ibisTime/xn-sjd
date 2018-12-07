@@ -6,6 +6,7 @@ import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.AgentUser;
 import com.ogc.standard.dto.req.XN730072Req;
 import com.ogc.standard.dto.req.XN730073Req;
+import com.ogc.standard.dto.req.XN730090Req;
 
 public interface IAgentUserAO {
     static final String DEFAULT_ORDER_COLUMN = "user_id";
@@ -18,6 +19,9 @@ public interface IAgentUserAO {
 
     // 代注册分销商
     public String doAddAgent(XN730072Req req);
+
+    // 代注册分销商
+    public void editAgent(XN730090Req req);
 
     // 填写资料
     public void commitCompany(XN730073Req req);

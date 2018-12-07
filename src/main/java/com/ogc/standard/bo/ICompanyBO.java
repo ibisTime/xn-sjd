@@ -6,8 +6,10 @@ import com.ogc.standard.bo.base.IPaginableBO;
 import com.ogc.standard.domain.Company;
 import com.ogc.standard.dto.req.XN630061Req;
 import com.ogc.standard.dto.req.XN630063Req;
+import com.ogc.standard.dto.req.XN630080Req;
 import com.ogc.standard.dto.req.XN730072Req;
 import com.ogc.standard.dto.req.XN730073Req;
+import com.ogc.standard.dto.req.XN730090Req;
 
 public interface ICompanyBO extends IPaginableBO<Company> {
 
@@ -20,6 +22,10 @@ public interface ICompanyBO extends IPaginableBO<Company> {
     public void refreshCompany(XN630061Req req);
 
     public void refreshCompany(XN730073Req req);
+
+    public void refreshCompany(XN730090Req req);
+
+    public void refreshCompany(XN630080Req req);
 
     public int refreshCompanyInfo(Company company, String bussinessLicense,
             String certificateTemplate, String contractTemplate);

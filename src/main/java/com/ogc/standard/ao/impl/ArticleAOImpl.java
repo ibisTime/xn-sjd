@@ -19,6 +19,7 @@ import com.ogc.standard.bo.IProductBO;
 import com.ogc.standard.bo.ITreeBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
+import com.ogc.standard.common.PhoneUtil;
 import com.ogc.standard.domain.AdoptOrderTree;
 import com.ogc.standard.domain.Article;
 import com.ogc.standard.domain.GroupAdoptOrder;
@@ -372,7 +373,7 @@ public class ArticleAOImpl implements IArticleAO {
         if (EArticleType.USER.getCode().equals(article.getType())) {
             User user = userBO.getUserUnCheck(article.getPublishUserId());
             if (null != user) {
-                publishUserName = user.getMobile();
+                publishUserName = PhoneUtil.hideMobile(user.getMobile());
                 if (StringUtils.isNotBlank(user.getNickname())) {
                     publishUserName = user.getNickname();
                 }

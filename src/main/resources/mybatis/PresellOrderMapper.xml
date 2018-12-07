@@ -8,6 +8,7 @@
 		<result column="product_name" property="productName" />
 		<result column="specs_code" property="specsCode" />
 		<result column="specs_name" property="specsName" />
+		<result column="original_group_code" property="originalGroupCode" />
 		<result column="pack_count" property="packCount" />
 		
 		<result column="price" property="price" />
@@ -40,6 +41,9 @@
 			</if>
 			<if test="productCode != null and productCode != '' ">
 				AND t.product_code = #{productCode}
+			</if>
+			<if test="originalGroupCode != null and originalGroupCode != '' ">
+				AND t.original_group_code = #{originalGroupCode}
 			</if>
 			<if test="applyUser != null and applyUser != '' ">
 				AND t.apply_user = #{applyUser}
@@ -78,6 +82,7 @@
 		,t.product_name
 		,t.specs_code
 		,t.specs_name
+		,t.original_group_code
 		,t.pack_count
 		
 		,t.price
@@ -194,6 +199,7 @@
 		UPDATE tys_presell_order
 		SET
 		status = #{status}
+		,original_group_code = #{originalGroupCode}
 		,pay_type = #{payType}
 		,cny_deduct_amount = #{cnyDeductAmount}
 		,jf_deduct_amount = #{jfDeductAmount}
@@ -221,6 +227,7 @@
 		UPDATE tys_presell_order
 		SET
 		status = #{status}
+		,original_group_code = #{originalGroupCode}
 		,pay_amount = #{payAmount}
 		,pay_datetime = #{payDatetime}
 		,settle_status = #{settleStatus}

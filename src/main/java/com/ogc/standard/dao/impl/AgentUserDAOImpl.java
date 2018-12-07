@@ -9,11 +9,17 @@ import com.ogc.standard.dao.base.support.AMybatisTemplate;
 import com.ogc.standard.domain.AgentUser;
 
 @Repository("agentUserDAOImpl")
-public class AgentUserDAOImpl extends AMybatisTemplate implements IAgentUserDAO {
+public class AgentUserDAOImpl extends AMybatisTemplate
+        implements IAgentUserDAO {
 
     @Override
     public int insert(AgentUser data) {
         return super.insert(NAMESPACE.concat("insert_agentUser"), data);
+    }
+
+    @Override
+    public int updateEdit(AgentUser agentUser) {
+        return super.update(NAMESPACE.concat("update_edit"), agentUser);
     }
 
     @Override
@@ -75,12 +81,13 @@ public class AgentUserDAOImpl extends AMybatisTemplate implements IAgentUserDAO 
 
     @Override
     public List<AgentUser> selectList(AgentUser condition) {
-        return super.selectList(NAMESPACE.concat("select_agentUser"),
-            condition, AgentUser.class);
+        return super.selectList(NAMESPACE.concat("select_agentUser"), condition,
+            AgentUser.class);
     }
 
     @Override
-    public List<AgentUser> selectList(AgentUser condition, int start, int count) {
+    public List<AgentUser> selectList(AgentUser condition, int start,
+            int count) {
         return super.selectList(NAMESPACE.concat("select_agentUser"), start,
             count, condition, AgentUser.class);
     }

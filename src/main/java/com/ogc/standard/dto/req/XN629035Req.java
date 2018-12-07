@@ -31,6 +31,9 @@ public class XN629035Req extends APageReq {
     // 产地
     private String originPlace;
 
+    // 销售类型
+    private String sellType;
+
     public String getMaintainId() {
         return maintainId;
     }
@@ -85,6 +88,14 @@ public class XN629035Req extends APageReq {
 
     public void setOriginPlace(String originPlace) {
         this.originPlace = originPlace;
+    }
+
+    public String getSellType() {
+        return sellType;
+    }
+
+    public void setSellType(String sellType) {
+        this.sellType = sellType;
     }
 
 }

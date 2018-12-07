@@ -281,16 +281,29 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
             presellProduct.getName());
 
         // 添加原生组
-        String originalGroupCode = originalGroupBO.saveOriginalGroup(data);
-
-        // 分配树和预售权
+        String originalGroupCode = null;
         PresellSpecs presellSpecs = presellSpecsBO
             .getPresellSpecs(data.getSpecsCode());
+        List<OriginalGroup> existsOriginalList = originalGroupBO
+            .queryOriginalGroup(data.getApplyUser(), data.getSpecsCode());
+
+        if (CollectionUtils.isEmpty(existsOriginalList)) {
+            originalGroupCode = originalGroupBO.saveOriginalGroup(data);
+        } else {
+            OriginalGroup existsOriginal = existsOriginalList.get(0);
+            originalGroupBO.refreshQuantity(existsOriginal.getCode(),
+                existsOriginal.getQuantity()
+                        + data.getQuantity() * presellSpecs.getPackCount());
+            originalGroupCode = existsOriginal.getCode();
+        }
+
+        // 分配树和预售权
         assignPresellInventory(data, presellProduct, presellSpecs,
             presellProduct.getSingleOutput(), originalGroupCode);
 
         // 业务订单更改
-        presellOrderBO.payYueSuccess(data, deductRes, backJfAmount);
+        presellOrderBO.payYueSuccess(data, originalGroupCode, deductRes,
+            backJfAmount);
 
         return new BooleanRes(true);
     }
@@ -316,11 +329,23 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
             userAO.upgradeUserLevel(data.getApplyUser());
 
             // 添加原生组
-            String originalGroupCode = originalGroupBO.saveOriginalGroup(data);
-
-            // 分配树和预售权
+            String originalGroupCode = null;
             PresellSpecs presellSpecs = presellSpecsBO
                 .getPresellSpecs(data.getSpecsCode());
+            List<OriginalGroup> existsOriginalList = originalGroupBO
+                .queryOriginalGroup(data.getApplyUser(), data.getSpecsCode());
+
+            if (CollectionUtils.isEmpty(existsOriginalList)) {
+                originalGroupCode = originalGroupBO.saveOriginalGroup(data);
+            } else {
+                OriginalGroup existsOriginal = existsOriginalList.get(0);
+                originalGroupBO.refreshQuantity(existsOriginal.getCode(),
+                    existsOriginal.getQuantity()
+                            + data.getQuantity() * presellSpecs.getPackCount());
+                originalGroupCode = existsOriginal.getCode();
+            }
+
+            // 分配树和预售权
             assignPresellInventory(data, presellProduct, presellSpecs,
                 presellProduct.getSingleOutput(), originalGroupCode);
 
@@ -330,8 +355,8 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
                 presellProduct.getName());
 
             // 业务订单更改
-            presellOrderBO.paySuccess(data.getCode(), data.getAmount(),
-                backJfAmount);
+            presellOrderBO.paySuccess(data.getCode(), originalGroupCode,
+                data.getAmount(), backJfAmount);
         }
     }
 
@@ -586,23 +611,26 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
         if (EPresellOrderStatus.PAYED.getCode()
             .equals(presellOrder.getStatus())) {
             OriginalGroup originalGroup = originalGroupBO
-                .getOriginalGroupByOrder(presellOrder.getCode());
+                .getOriginalGroup(presellOrder.getOriginalGroupCode());
 
-            List<PresellInventory> presellInventorieList = presellInventoryBO
-                .queryTreeNumberListByGroup(originalGroup.getCode());
-            if (CollectionUtils.isNotEmpty(presellInventorieList)) {
+            if (null != originalGroup) {
+                List<PresellInventory> presellInventorieList = presellInventoryBO
+                    .queryTreeNumberListByGroup(originalGroup.getCode());
+                if (CollectionUtils.isNotEmpty(presellInventorieList)) {
 
-                int presellInventoryCount = 1;
-                for (PresellInventory presellInventory : presellInventorieList) {
-                    treeNumbers.append(
-                        presellInventory.getTreeNumber().replace("&", ""));
+                    int presellInventoryCount = 1;
+                    for (PresellInventory presellInventory : presellInventorieList) {
+                        treeNumbers.append(
+                            presellInventory.getTreeNumber().replace("&", ""));
 
-                    if (presellInventoryCount++ < presellInventorieList
-                        .size()) {
-                        treeNumbers.append(".");
+                        if (presellInventoryCount++ < presellInventorieList
+                            .size()) {
+                            treeNumbers.append(".");
+                        }
                     }
                 }
             }
+
         }
         presellOrder.setTreeNumbers(treeNumbers.toString());
 

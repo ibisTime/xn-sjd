@@ -12,6 +12,7 @@ import java.util.List;
 
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.CommodityOrderDetail;
+import com.ogc.standard.dto.res.XN629730Res;
 
 /** 
  * @author: taojian 
@@ -22,7 +23,9 @@ public interface ICommodityOrderDetailAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
     // 评价
-    public String comment(String code, String userId, String content);
+    public XN629730Res comment(String code, String userId, String content);
+
+    public void refreshDkAmount(String payGroup);
 
     public Paginable<CommodityOrderDetail> queryDetailPage(int start, int limit,
             CommodityOrderDetail condition);

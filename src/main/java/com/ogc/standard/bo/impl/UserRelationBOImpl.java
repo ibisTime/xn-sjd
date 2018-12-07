@@ -113,11 +113,12 @@ public class UserRelationBOImpl extends PaginableBOImpl<UserRelation>
 
     @Override
     public List<UserRelation> queryUserRelationList(String userId,
-            String toUser, String type) {
+            String toUser, String type, String status) {
         UserRelation condition = new UserRelation();
         condition.setUserId(userId);
         condition.setToUser(toUser);
         condition.setType(type);
+        condition.setStatus(status);
         return userRelationDAO.selectList(condition);
     }
 

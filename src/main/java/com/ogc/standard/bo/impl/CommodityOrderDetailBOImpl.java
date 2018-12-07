@@ -147,6 +147,19 @@ public class CommodityOrderDetailBOImpl
     }
 
     @Override
+    public void refreshDkAmount(String code, BigDecimal cnyDeductAmount,
+            BigDecimal jfDeductAmount, BigDecimal backJfAmount,
+            BigDecimal payAmount) {
+        CommodityOrderDetail commodityOrderDetail = new CommodityOrderDetail();
+        commodityOrderDetail.setCode(code);
+        commodityOrderDetail.setCnyDeductAmount(cnyDeductAmount);
+        commodityOrderDetail.setJfDeductAmount(jfDeductAmount);
+        commodityOrderDetail.setBackJfAmount(backJfAmount);
+        commodityOrderDetail.setPayAmount(payAmount);
+        commodityOrderDetailDAO.updateDkAmount(commodityOrderDetail);
+    }
+
+    @Override
     public List<CommodityOrderDetail> queryDetailList(
             CommodityOrderDetail condition) {
         return commodityOrderDetailDAO.selectList(condition);

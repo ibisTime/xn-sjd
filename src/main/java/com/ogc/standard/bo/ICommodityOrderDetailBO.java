@@ -48,6 +48,10 @@ public interface ICommodityOrderDetailBO
     // 更新状态
     public void refreshAfterSaleStatus(String code, String status);
 
+    public void refreshDkAmount(String code, BigDecimal cnyDeductAmount,
+            BigDecimal jfDeductAmount, BigDecimal backJfAmount,
+            BigDecimal payAmount);
+
     public List<CommodityOrderDetail> queryDetailList(
             CommodityOrderDetail condition);
 

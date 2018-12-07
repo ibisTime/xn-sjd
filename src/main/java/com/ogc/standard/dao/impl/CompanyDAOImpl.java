@@ -55,4 +55,9 @@ public class CompanyDAOImpl extends AMybatisTemplate implements ICompanyDAO {
         return super.update(NAMESPACE.concat("update_company_info"), data);
     }
 
+    @Override
+    public int updateOwnerCompanyInfo(Company data) {
+        return super.update(NAMESPACE.concat("update_ownerCompany_info"), data);
+    }
+
 }

@@ -28,6 +28,10 @@ public interface IAgentUserBO extends IPaginableBO<AgentUser> {
     public String doAddAgentUser(String mobile, String loginPwd, String level,
             String parentUserId);
 
+    // 修改
+    public void refreshAgentUser(String userId, String mobile, String level,
+            String parentUserId, String updater);
+
     // 验证支付密码:拿tradePwd进行MD5后与数据库中userId得数据库支付密码比对
     public void checkTradePwd(String userId, String tradePwd);
 

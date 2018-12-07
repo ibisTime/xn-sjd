@@ -19,7 +19,6 @@ public class XN805152Req {
     @NotBlank
     private String approveResult;
 
-    @NotBlank
     private String remark;
 
     public String getCode() {

@@ -45,6 +45,9 @@
 			<if test="ownerId != null and ownerId != '' ">
 				AND t.owner_id = #{ownerId}
 			</if>
+			<if test="specsCode != null and specsCode != '' ">
+				AND t.specs_code = #{specsCode}
+			</if>
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
 			</if>
