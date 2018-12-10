@@ -596,14 +596,20 @@ public class UserAOImpl implements IUserAO {
     @Transactional
     public void modifyPhoto(String userId, String photo) {
 
+        userBO.refreshPhoto(userId, photo);
+
+    }
+
+    @Override
+    public void doModifyNickname(String userId, String nickname) {
+
         // 添加积分
         User user = userBO.getUser(userId);
-        if (null == user.getPhoto()
-                || user.getPhoto().startsWith("http://thirdwx")) {
+        if (null == user.getNickname() && null != nickname) {
             Map<String, String> configMap = sysConfigBO
                 .getConfigsMap(ESysConfigType.JF_RULE.getCode());
             BigDecimal quantity = new BigDecimal(
-                configMap.get(SysConstants.UPLOAD_PHOTO));
+                configMap.get(SysConstants.COMPLETE_INFO));
             quantity = AmountUtil.mul(quantity, 1000L);
 
             Account userJfAccount = accountBO.getAccountByUser(userId,
@@ -617,18 +623,13 @@ public class UserAOImpl implements IUserAO {
             // }
 
             accountBO.transAmount(sysJfAccount, userJfAccount, quantity,
-                EJourBizTypeUser.UPLOAD_PHOTO.getCode(),
-                EJourBizTypePlat.UPLOAD_PHOTO.getCode(),
-                EJourBizTypeUser.UPLOAD_PHOTO.getValue(),
-                EJourBizTypePlat.UPLOAD_PHOTO.getValue(), userId);
+                EJourBizTypeUser.COMPLETE_INFO.getCode(),
+                EJourBizTypePlat.COMPLETE_INFO.getCode(),
+                EJourBizTypeUser.COMPLETE_INFO.getValue(),
+                EJourBizTypePlat.COMPLETE_INFO.getValue(), userId);
+
         }
 
-        userBO.refreshPhoto(userId, photo);
-
-    }
-
-    @Override
-    public void doModifyNickname(String userId, String nickname) {
         userBO.refreshNickname(userId, nickname);
     }
 
@@ -882,33 +883,6 @@ public class UserAOImpl implements IUserAO {
     @Override
     @Transactional
     public void doModifyUserInfo(XN805070Req req) {
-
-        // 添加积分
-        UserExt userExt = userExtBO.getUserExt(req.getUserId());
-        if (null == userExt.getAge()) {
-            Map<String, String> configMap = sysConfigBO
-                .getConfigsMap(ESysConfigType.JF_RULE.getCode());
-            BigDecimal quantity = new BigDecimal(
-                configMap.get(SysConstants.COMPLETE_INFO));
-            quantity = AmountUtil.mul(quantity, 1000L);
-
-            Account userJfAccount = accountBO.getAccountByUser(req.getUserId(),
-                ECurrency.JF.getCode());
-            Account sysJfAccount = accountBO
-                .getAccount(ESystemAccount.SYS_ACOUNT_JF_POOL.getCode());
-
-            // 积分池不足时将剩余积分转给用户
-            // if (quantity.compareTo(sysJfAccount.getAmount()) == 1) {
-            // quantity = sysJfAccount.getAmount();
-            // }
-
-            accountBO.transAmount(sysJfAccount, userJfAccount, quantity,
-                EJourBizTypeUser.COMPLETE_INFO.getCode(),
-                EJourBizTypePlat.COMPLETE_INFO.getCode(),
-                EJourBizTypeUser.COMPLETE_INFO.getValue(),
-                EJourBizTypePlat.COMPLETE_INFO.getValue(), req.getUserId());
-
-        }
 
         userBO.refreshUserInfo(req.getUserId(), req.getNickname(),
             req.getRealName(), EIDKind.IDCard.getCode(), req.getIdNo());

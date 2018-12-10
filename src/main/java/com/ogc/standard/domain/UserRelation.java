@@ -68,6 +68,8 @@ public class UserRelation extends ABaseDO {
     // 可收取的碳泡泡
     public BigDecimal takeableTppAmount;
 
+    public String isMySelf;
+
     public String getMySelf() {
         return mySelf;
     }
@@ -194,6 +196,14 @@ public class UserRelation extends ABaseDO {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getIsMySelf() {
+        return isMySelf;
+    }
+
+    public void setIsMySelf(String isMySelf) {
+        this.isMySelf = isMySelf;
     }
 
 }

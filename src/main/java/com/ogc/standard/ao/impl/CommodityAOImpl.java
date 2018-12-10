@@ -21,17 +21,21 @@ import com.ogc.standard.bo.ICategoryBO;
 import com.ogc.standard.bo.ICommodityBO;
 import com.ogc.standard.bo.ICommoditySpecsBO;
 import com.ogc.standard.bo.ICompanyBO;
+import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Category;
 import com.ogc.standard.domain.Commodity;
 import com.ogc.standard.domain.CommoditySpecs;
 import com.ogc.standard.domain.Company;
+import com.ogc.standard.domain.SYSUser;
 import com.ogc.standard.dto.req.XN629700Req;
 import com.ogc.standard.dto.req.XN629701Req;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECategoryStatus;
 import com.ogc.standard.enums.ECommodityStatus;
+import com.ogc.standard.enums.ESYSUserStatus;
 import com.ogc.standard.exception.BizException;
+import com.ogc.standard.exception.EBizErrorCode;
 
 /** 
  * @author: taojian 
@@ -51,6 +55,9 @@ public class CommodityAOImpl implements ICommodityAO {
 
     @Autowired
     private ICategoryBO categoryBO;
+
+    @Autowired
+    private ISYSUserBO sysUserBO;
 
     @Override
     @Transactional
@@ -114,6 +121,14 @@ public class CommodityAOImpl implements ICommodityAO {
                 && !ECommodityStatus.FAILED.getCode().equals(data.getStatus())
                 && !ECommodityStatus.OFF.getCode().equals(data.getStatus())) {
             throw new BizException("xn0000", "该商品处于无法提交的状态");
+        }
+
+        Company shop = companyBO.getCompany(data.getShopCode());
+        SYSUser sysUser = sysUserBO.getSYSUser(shop.getUserId());
+
+        if (!ESYSUserStatus.NORMAL.getCode().equals(sysUser.getStatus())) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "商家未通过审核，无法提交商品");
         }
 
         commodityBO.refreshStatus(code, ECommodityStatus.TOAPPROVE.getCode(),

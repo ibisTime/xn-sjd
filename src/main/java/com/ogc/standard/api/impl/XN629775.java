@@ -8,6 +8,8 @@
  */
 package com.ogc.standard.api.impl;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.ogc.standard.ao.IAfterSaleAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
@@ -42,6 +44,12 @@ public class XN629775 extends AProcessor {
         condition.setDeliver(req.getDeliver());
         condition.setReceiver(req.getReceiver());
         condition.setShopCode(req.getShopCode());
+
+        String column = req.getOrderColumn();
+        if (StringUtils.isBlank(column)) {
+            column = IAfterSaleAO.DEFAULT_ORDER_COLUMN;
+        }
+        condition.setOrder(column, req.getOrderDir());
 
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());

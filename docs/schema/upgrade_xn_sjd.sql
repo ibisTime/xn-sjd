@@ -351,7 +351,7 @@ ADD COLUMN `remark` VARCHAR(255) NULL COMMENT '备注' AFTER `create_datetime`;
 ALTER TABLE `tsc_commodity_order_detail` 
 ADD COLUMN `after_sale_status` VARCHAR(4) NULL COMMENT '售后状态' AFTER `status`;
 
-#V2.0.0 4-5
+#V2.0.0 4-5 商城上线
 ALTER TABLE `tsc_commodity_order_detail` 
 ADD COLUMN `cny_deduct_amount` DECIMAL(64,0) NULL COMMENT '抵扣人民币金额' AFTER `amount`,
 ADD COLUMN `jf_deduct_amount` DECIMAL(64,0) NULL COMMENT '抵扣积分金额' AFTER `cny_deduct_amount`,
@@ -368,3 +368,6 @@ ADD COLUMN `sell_type` VARCHAR(32) NULL COMMENT '销售类型' AFTER `tree_numbe
 
 ALTER TABLE `tys_presell_order` 
 ADD COLUMN `original_group_code` VARCHAR(32) NULL COMMENT '资产编号' AFTER `specs_name`;
+
+ALTER TABLE `tstd_user_ext` 
+CHANGE COLUMN `introduce` `introduce` TEXT NULL DEFAULT NULL COMMENT '自我介绍' ;

@@ -20,6 +20,7 @@ import com.ogc.standard.domain.AfterSale;
  * @history:
  */
 public interface IAfterSaleAO {
+    static final String DEFAULT_ORDER_COLUMN = "code";
 
     // 售后退货退款
     public String applyGoods(String orderDetailCode, String logisticsCompany,

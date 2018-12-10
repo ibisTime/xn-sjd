@@ -152,7 +152,8 @@ public class AgentUserAOImpl implements IAgentUserAO {
         }
 
         agentUserBO.refreshAgentUser(req.getUserId(), req.getMobile(),
-            req.getLevel(), req.getParentUserId(), req.getUpdater());
+            req.getLevel(), req.getParentUserId(), req.getUpdater(),
+            req.getRemark());
 
         companyBO.refreshCompany(req);
     }

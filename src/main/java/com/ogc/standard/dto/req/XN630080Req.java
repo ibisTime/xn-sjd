@@ -36,15 +36,16 @@ public class XN630080Req {
     private String bussinessLicense;
 
     // 证书模板
-    @NotBlank
     private String certificateTemplate;
 
     // 合同模板
-    @NotBlank
     private String contractTemplate;
 
     // 组织机构代码
     private String organizationCode;
+
+    // 备注
+    private String remark;
 
     public String getUserId() {
         return userId;
@@ -124,6 +125,14 @@ public class XN630080Req {
 
     public void setOrganizationCode(String organizationCode) {
         this.organizationCode = organizationCode;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
 }

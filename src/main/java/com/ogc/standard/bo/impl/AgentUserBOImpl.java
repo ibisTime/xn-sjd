@@ -110,7 +110,7 @@ public class AgentUserBOImpl extends PaginableBOImpl<AgentUser>
 
     @Override
     public void refreshAgentUser(String userId, String mobile, String level,
-            String parentUserId, String updater) {
+            String parentUserId, String updater, String remark) {
         AgentUser agentUser = new AgentUser();
         agentUser.setUserId(userId);
         agentUser.setMobile(mobile);
@@ -118,6 +118,7 @@ public class AgentUserBOImpl extends PaginableBOImpl<AgentUser>
         agentUser.setParentUserId(parentUserId);
         agentUser.setUpdater(updater);
         agentUser.setUpdateDatetime(new Date());
+        agentUser.setRemark(remark);
         agentUserDAO.updateEdit(agentUser);
     }
 

@@ -161,8 +161,8 @@ public class SYSUserAOImpl implements ISYSUserAO {
         }
 
         companyBO.refreshCompany(req);
-        sysUserBO.refreshStatus(req.getUserId(), ESYSUserStatus.TO_APPROVE,
-            req.getUserId(), null);
+        sysUserBO.refreshStatus(req.getUserId(),
+            ESYSUserStatus.TO_APPROVE.getCode(), req.getUserId(), null);
     }
 
     // 代申请
@@ -199,7 +199,9 @@ public class SYSUserAOImpl implements ISYSUserAO {
     public void approveSYSUser(String userId, String approveResult,
             String updater, String remark) {
         SYSUser data = sysUserBO.getSYSUser(userId);
-        if (!ESYSUserStatus.TO_APPROVE.getCode().equals(data.getStatus())) {
+        if (!ESYSUserStatus.TO_APPROVE.getCode().equals(data.getStatus())
+                && !ESYSUserStatus.RE_APPROVE.getCode()
+                    .equals(data.getStatus())) {
             throw new BizException("xn805050", "用户不是待审核状态");
         }
         sysUserBO.approveSYSUser(data, approveResult, updater, remark);
@@ -245,14 +247,14 @@ public class SYSUserAOImpl implements ISYSUserAO {
         }
         String mobile = user.getMobile();
         String smsContent = "";
-        ESYSUserStatus userStatus = null;
+        String userStatus = null;
         if (ESYSUserStatus.NORMAL.getCode()
             .equalsIgnoreCase(user.getStatus())) {
             smsContent = "您的账号已被管理员封禁";
-            userStatus = ESYSUserStatus.Ren_Locked;
+            userStatus = ESYSUserStatus.Ren_Locked.getCode();
         } else {
             smsContent = "您的账号已被管理员解封,请遵守平台相关规则";
-            userStatus = ESYSUserStatus.NORMAL;
+            userStatus = ESYSUserStatus.NORMAL.getCode();
         }
         sysUserBO.refreshStatus(userId, userStatus, updater, remark);
         if (PhoneUtil.isMobile(mobile)) {

@@ -29,6 +29,9 @@
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
 			</if>
+			<if test="isMySelf != null">
+				AND t.user_id != t.to_user
+			</if>
 		</trim>
 	</sql>
 	

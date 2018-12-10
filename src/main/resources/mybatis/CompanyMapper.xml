@@ -159,7 +159,6 @@
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
 		
-		,remark = #{remark}
 		WHERE code = #{code}
 	</update>
 	
@@ -191,7 +190,7 @@
 		,contract_template = #{contractTemplate}
 		,organization_code = #{organizationCode}
 		,update_datetime = #{updateDatetime}
-		
+		,remark = #{remark}
 		WHERE code = #{code}
 	</update>
 </mapper>

@@ -33,6 +33,8 @@ public class XN805155Req extends APageReq {
     // 状态
     private String status;
 
+    private String isMySelf;
+
     public String getUserId() {
         return userId;
     }
@@ -71,6 +73,14 @@ public class XN805155Req extends APageReq {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getIsMySelf() {
+        return isMySelf;
+    }
+
+    public void setIsMySelf(String isMySelf) {
+        this.isMySelf = isMySelf;
     }
 
 }

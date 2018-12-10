@@ -5,8 +5,9 @@ import java.util.Map;
 
 public enum ESYSUserStatus {
 
-    TO_FILL("-1", "待填写资料"), TO_APPROVE("0", "待审核"), APPROVE_NO("1", "审核不通过"), NORMAL(
-            "2", "审核通过/正常"), Li_Locked("3", "程序锁定"), Ren_Locked("4", "人工锁定");
+    TO_FILL("-1", "待填写资料"), TO_APPROVE("0", "待审核"), APPROVE_NO("1",
+            "审核不通过"), NORMAL("2", "审核通过/正常"), Li_Locked("3",
+                    "程序锁定"), Ren_Locked("4", "人工锁定"), RE_APPROVE("5", "待审核");
 
     ESYSUserStatus(String code, String value) {
         this.code = code;

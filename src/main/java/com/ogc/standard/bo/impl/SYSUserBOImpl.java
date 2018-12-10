@@ -345,12 +345,12 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
     }
 
     @Override
-    public void refreshStatus(String userId, ESYSUserStatus status,
-            String updater, String remark) {
+    public void refreshStatus(String userId, String status, String updater,
+            String remark) {
         if (StringUtils.isNotBlank(userId)) {
             SYSUser data = new SYSUser();
             data.setUserId(userId);
-            data.setStatus(status.getCode());
+            data.setStatus(status);
             data.setUpdater(updater);
             data.setUpdateDatetime(new Date());
             data.setRemark(remark);

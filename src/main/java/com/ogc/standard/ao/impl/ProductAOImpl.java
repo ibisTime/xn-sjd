@@ -39,6 +39,7 @@ import com.ogc.standard.enums.ECategoryStatus;
 import com.ogc.standard.enums.EDirectType;
 import com.ogc.standard.enums.EProductStatus;
 import com.ogc.standard.enums.ESYSUserKind;
+import com.ogc.standard.enums.ESYSUserStatus;
 import com.ogc.standard.enums.ESellType;
 import com.ogc.standard.enums.ETreeStatus;
 import com.ogc.standard.enums.EUserLevel;
@@ -267,12 +268,19 @@ public class ProductAOImpl implements IProductAO {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "不是产权方用户不能提交产品");
         }
+
         Company company = companyBO.getCompanyByUserId(updater);
         if (StringUtils.isBlank(company.getContractTemplate())
                 || StringUtils.isBlank(company.getCertificateTemplate())) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "请先完善合同模板和证书模板信息后方可提交产品");
         }
+
+        if (!ESYSUserStatus.NORMAL.getCode().equals(sysUser.getStatus())) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "产权方未通过审核，无法提交产品");
+        }
+
         // 验证是否绑定养护方
         applyBindMaintainBO.doCheckBindMaintain(sysUser.getUserId());
 

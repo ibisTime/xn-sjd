@@ -39,6 +39,7 @@ public class XN805155 extends AProcessor {
         condition.setToUser(req.getToUser());
         condition.setType(req.getType());
         condition.setStatus(req.getStatus());
+        condition.setIsMySelf(req.getIsMySelf());
 
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());

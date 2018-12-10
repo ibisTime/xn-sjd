@@ -68,6 +68,9 @@ public class XN730090Req extends BaseReq {
     @NotBlank
     private String updater;
 
+    // 备注
+    private String remark;
+
     public String getLevel() {
         return level;
     }
@@ -186,6 +189,14 @@ public class XN730090Req extends BaseReq {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
 }

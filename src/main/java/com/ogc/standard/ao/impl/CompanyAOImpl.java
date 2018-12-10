@@ -40,21 +40,25 @@ public class CompanyAOImpl implements ICompanyAO {
         companyBO.refreshCompanyInfo(company, bussinessLicense,
             certificateTemplate, contractTemplate);
 
+        if (ESYSUserKind.BUSINESS.getCode().equals(sysUser.getKind())) {
+            sysUserBO.refreshStatus(userId, ESYSUserStatus.TO_APPROVE.getCode(),
+                userId, null);
+        }
     }
 
     @Override
     public void refreshCompanyOwner(XN630080Req req) {
         SYSUser sysUser = sysUserBO.getSYSUser(req.getUserId());
 
-        if (!ESYSUserKind.OWNER.getCode().equals(sysUser.getKind())) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "不是产权端用户，不能操作");
-        }
+        // if (!ESYSUserKind.OWNER.getCode().equals(sysUser.getKind())) {
+        // throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+        // "不是产权端用户，不能操作");
+        // }
 
         companyBO.refreshCompany(req);
 
-        sysUserBO.refreshStatus(req.getUserId(), ESYSUserStatus.TO_APPROVE,
-            req.getUserId(), null);
+        sysUserBO.refreshStatus(req.getUserId(), sysUser.getStatus(),
+            req.getUserId(), req.getRemark());
     }
 
     @Override
