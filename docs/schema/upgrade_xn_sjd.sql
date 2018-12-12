@@ -371,3 +371,19 @@ ADD COLUMN `original_group_code` VARCHAR(32) NULL COMMENT '资产编号' AFTER `
 
 ALTER TABLE `tstd_user_ext` 
 CHANGE COLUMN `introduce` `introduce` TEXT NULL DEFAULT NULL COMMENT '自我介绍' ;
+
+#V2.0.0 5-1 修改集体已认养名单
+ALTER TABLE `try_adopt_order_tree` 
+ADD COLUMN `quantity` INT NULL COMMENT '数量' AFTER `amount`;
+
+update try_adopt_order_tree 
+set quantity = (select sum(quantity) from try_adopt_order where product_code = try_adopt_order_tree.product_code and status in(2,3,4) ) 
+where order_type in (1,2,3);
+
+update try_adopt_order_tree 
+set quantity = (select sum(quantity) from try_group_adopt_order where product_code = try_group_adopt_order.product_code and status in(2,3,4) ) 
+where order_type in (4);
+
+update try_adopt_order_tree 
+set quantity = (select sum(quantity) from tys_presell_order where product_code = tys_presell_order.product_code and status in(2,3,4) ) 
+where order_type in (5);

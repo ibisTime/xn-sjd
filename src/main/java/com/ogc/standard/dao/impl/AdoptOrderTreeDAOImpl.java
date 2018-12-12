@@ -62,6 +62,13 @@ public class AdoptOrderTreeDAOImpl extends AMybatisTemplate
     }
 
     @Override
+    public List<AdoptOrderTree> selectDistictByTreeNumber(
+            AdoptOrderTree condition) {
+        return super.selectList(NAMESPACE.concat("select_distinctByTreeNumber"),
+            condition, AdoptOrderTree.class);
+    }
+
+    @Override
     public List<AdoptOrderTree> selectList(AdoptOrderTree condition, int start,
             int count) {
         return super.selectList(NAMESPACE.concat("select_adoptOrderTree"),
@@ -76,6 +83,11 @@ public class AdoptOrderTreeDAOImpl extends AMybatisTemplate
     @Override
     public int updateInvalidAdoptByOrder(AdoptOrderTree data) {
         return super.update(NAMESPACE.concat("update_invalidByOrder"), data);
+    }
+
+    @Override
+    public int updateQuantity(AdoptOrderTree data) {
+        return super.update(NAMESPACE.concat("update_quantity"), data);
     }
 
 }

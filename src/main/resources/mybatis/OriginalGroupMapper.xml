@@ -189,6 +189,14 @@
 		WHERE code = #{code}
 	</update>
 	
+	<update id="update_quantityPrice" parameterType="originalGroup">
+		UPDATE tys_original_group
+		SET
+		quantity = #{quantity}
+		,price = #{price}
+		WHERE code = #{code}
+	</update>
+	
 	<update id="update_presellQuantity" parameterType="originalGroup">
 		UPDATE tys_original_group
 		SET

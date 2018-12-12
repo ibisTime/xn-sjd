@@ -293,7 +293,7 @@
 		UPDATE try_group_adopt_order
 		SET
 		status = #{status}
-		WHERE identify_code = #{identifyCode} and status = 2
+		WHERE identify_code = #{identifyCode} and status in ('0','2')
 	</update>
 	
 	<update id="update_unFullOrder" parameterType="groupAdoptOrder">

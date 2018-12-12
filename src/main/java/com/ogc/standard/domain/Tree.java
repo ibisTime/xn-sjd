@@ -122,6 +122,12 @@ public class Tree extends ABaseDO {
     // 预售树销售产量
     private Integer maxAdoptCount;
 
+    // 认养人
+    private String adoptUserNames;
+
+    // 最新养护记录
+    private MaintainRecord lastMaintainRecord;
+
     public String getMaintainId() {
         return maintainId;
     }
@@ -400,6 +406,22 @@ public class Tree extends ABaseDO {
 
     public void setMaxAdoptCount(Integer maxAdoptCount) {
         this.maxAdoptCount = maxAdoptCount;
+    }
+
+    public String getAdoptUserNames() {
+        return adoptUserNames;
+    }
+
+    public void setAdoptUserNames(String adoptUserNames) {
+        this.adoptUserNames = adoptUserNames;
+    }
+
+    public MaintainRecord getLastMaintainRecord() {
+        return lastMaintainRecord;
+    }
+
+    public void setLastMaintainRecord(MaintainRecord lastMaintainRecord) {
+        this.lastMaintainRecord = lastMaintainRecord;
     }
 
 }

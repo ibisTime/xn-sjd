@@ -18,6 +18,7 @@ import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.ICommoditySpecsDAO;
 import com.ogc.standard.domain.CommoditySpecs;
+import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.exception.BizException;
 
@@ -58,6 +59,16 @@ public class CommoditySpecsBOImpl extends PaginableBOImpl<CommoditySpecs>
         CommoditySpecs data = getCommoditySpecs(id);
         data.setInventory(data.getInventory() + quantity);
         commoditySpecsDAO.updateInventory(data);
+    }
+
+    @Override
+    public List<CommoditySpecs> queryUsedSpecsList(String commodityCode,
+            List<Long> notInIdList) {
+        CommoditySpecs condition = new CommoditySpecs();
+        condition.setCommodityCode(commodityCode);
+        condition.setNotInIdList(notInIdList);
+        condition.setUsed(EBoolean.YES.getCode());
+        return commoditySpecsDAO.selectList(condition);
     }
 
     @Override

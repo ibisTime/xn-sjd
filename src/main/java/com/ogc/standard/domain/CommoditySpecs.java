@@ -9,6 +9,7 @@
 package com.ogc.standard.domain;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import com.ogc.standard.dao.base.ABaseDO;
 
@@ -42,6 +43,13 @@ public class CommoditySpecs extends ABaseDO {
 
     // 备注
     private String remark;
+
+    /**********DB Properties*************/
+    // 编号
+    private List<Long> notInIdList;
+
+    // 是否被使用
+    private String used;
 
     public String getCode() {
         return code;
@@ -98,4 +106,21 @@ public class CommoditySpecs extends ABaseDO {
     public void setRemark(String remark) {
         this.remark = remark;
     }
+
+    public List<Long> getNotInIdList() {
+        return notInIdList;
+    }
+
+    public void setNotInIdList(List<Long> notInIdList) {
+        this.notInIdList = notInIdList;
+    }
+
+    public String getUsed() {
+        return used;
+    }
+
+    public void setUsed(String used) {
+        this.used = used;
+    }
+
 }

@@ -3,6 +3,7 @@ package com.ogc.standard.bo.impl;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -75,6 +76,24 @@ public class MaintainRecordBOImpl extends PaginableBOImpl<MaintainRecord>
     }
 
     @Override
+    public MaintainRecord getLastMaintainRecord(String treeNumber) {
+        MaintainRecord data = null;
+
+        if (StringUtils.isNotBlank(treeNumber)) {
+            MaintainRecord condition = new MaintainRecord();
+            condition.setTreeNumber(treeNumber);
+            condition.setOrder("update_datetime", "desc limit 0, 1 ");
+            List<MaintainRecord> maintainRecordList = queryMaintainRecordList(
+                condition);
+            if (CollectionUtils.isNotEmpty(maintainRecordList)) {
+                data = maintainRecordList.get(0);
+            }
+        }
+
+        return data;
+    }
+
+    @Override
     public MaintainRecord getMaintainRecord(String code) {
         MaintainRecord data = null;
         if (StringUtils.isNotBlank(code)) {
@@ -87,4 +106,5 @@ public class MaintainRecordBOImpl extends PaginableBOImpl<MaintainRecord>
         }
         return data;
     }
+
 }

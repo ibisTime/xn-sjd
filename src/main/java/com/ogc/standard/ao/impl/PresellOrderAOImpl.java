@@ -285,15 +285,21 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
         PresellSpecs presellSpecs = presellSpecsBO
             .getPresellSpecs(data.getSpecsCode());
         List<OriginalGroup> existsOriginalList = originalGroupBO
-            .queryOriginalGroup(data.getApplyUser(), data.getSpecsCode());
+            .queryOriginalGroup(data.getApplyUser(), data.getProductCode());
 
         if (CollectionUtils.isEmpty(existsOriginalList)) {
             originalGroupCode = originalGroupBO.saveOriginalGroup(data);
         } else {
             OriginalGroup existsOriginal = existsOriginalList.get(0);
-            originalGroupBO.refreshQuantity(existsOriginal.getCode(),
-                existsOriginal.getQuantity()
-                        + data.getQuantity() * presellSpecs.getPackCount());
+
+            Integer quantity = existsOriginal.getQuantity()
+                    + data.getQuantity() * presellSpecs.getPackCount();
+            BigDecimal price = data.getPrice().add(presellSpecs.getPrice()
+                .multiply(new BigDecimal(data.getQuantity())));
+
+            originalGroupBO.refreshQuantityPrice(existsOriginal.getCode(), quantity,
+                price);
+
             originalGroupCode = existsOriginal.getCode();
         }
 
@@ -333,15 +339,21 @@ public class PresellOrderAOImpl implements IPresellOrderAO {
             PresellSpecs presellSpecs = presellSpecsBO
                 .getPresellSpecs(data.getSpecsCode());
             List<OriginalGroup> existsOriginalList = originalGroupBO
-                .queryOriginalGroup(data.getApplyUser(), data.getSpecsCode());
+                .queryOriginalGroup(data.getApplyUser(), data.getProductCode());
 
             if (CollectionUtils.isEmpty(existsOriginalList)) {
                 originalGroupCode = originalGroupBO.saveOriginalGroup(data);
             } else {
                 OriginalGroup existsOriginal = existsOriginalList.get(0);
-                originalGroupBO.refreshQuantity(existsOriginal.getCode(),
-                    existsOriginal.getQuantity()
-                            + data.getQuantity() * presellSpecs.getPackCount());
+
+                Integer quantity = existsOriginal.getQuantity()
+                        + data.getQuantity() * presellSpecs.getPackCount();
+                BigDecimal price = data.getPrice().add(presellSpecs.getPrice()
+                    .multiply(new BigDecimal(data.getQuantity())));
+
+                originalGroupBO.refreshQuantityPrice(existsOriginal.getCode(),
+                    quantity, price);
+
                 originalGroupCode = existsOriginal.getCode();
             }
 

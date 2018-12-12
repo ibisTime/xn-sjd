@@ -50,6 +50,9 @@ public class AdoptOrderTree extends ABaseDO {
     // 认养金额
     private BigDecimal amount;
 
+    // 数量
+    private Integer quantity;
+
     // 状态(1待认养2认养中3已到期4已赠送)
     private String status;
 
@@ -300,6 +303,14 @@ public class AdoptOrderTree extends ABaseDO {
 
     public void setOrderCodeForQuery(String orderCodeForQuery) {
         this.orderCodeForQuery = orderCodeForQuery;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 
 }

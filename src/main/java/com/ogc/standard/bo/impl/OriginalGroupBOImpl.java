@@ -120,6 +120,16 @@ public class OriginalGroupBOImpl extends PaginableBOImpl<OriginalGroup>
     }
 
     @Override
+    public void refreshQuantityPrice(String code, Integer quantity,
+            BigDecimal price) {
+        OriginalGroup originalGroup = new OriginalGroup();
+        originalGroup.setCode(code);
+        originalGroup.setQuantity(quantity);
+        originalGroup.setPrice(price);
+        originalGroupDAO.updateQuantityPrice(originalGroup);
+    }
+
+    @Override
     public void refreshQuantity(String code, Integer quantity) {
         OriginalGroup originalGroup = new OriginalGroup();
         originalGroup.setCode(code);
@@ -211,15 +221,16 @@ public class OriginalGroupBOImpl extends PaginableBOImpl<OriginalGroup>
 
     @Override
     public List<OriginalGroup> queryOriginalGroup(String ownerId,
-            String specsCode) {
+            String productCode) {
         List<OriginalGroup> list = new ArrayList<OriginalGroup>();
         if (StringUtils.isNotBlank(ownerId)) {
 
             OriginalGroup condition = new OriginalGroup();
             condition.setOwnerId(ownerId);
-            condition.setSpecsCode(specsCode);
+            condition.setProductCode(productCode);
             list = originalGroupDAO.selectList(condition);
         }
         return list;
     }
+
 }

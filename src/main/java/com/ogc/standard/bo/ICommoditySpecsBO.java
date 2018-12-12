@@ -29,6 +29,9 @@ public interface ICommoditySpecsBO extends IPaginableBO<CommoditySpecs> {
 
     public Long getInventory(Long id);
 
+    public List<CommoditySpecs> queryUsedSpecsList(String commodityCode,
+            List<Long> notInIdList);
+
     public List<CommoditySpecs> querySpecsList(String commodityCode);
 
     public CommoditySpecs getCommoditySpecs(Long id);

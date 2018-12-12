@@ -38,6 +38,7 @@ import com.ogc.standard.domain.User;
 import com.ogc.standard.domain.UserExt;
 import com.ogc.standard.dto.res.XN629048Res;
 import com.ogc.standard.enums.EAgentUserLevel;
+import com.ogc.standard.enums.EAgentUserType;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.EChannelType;
 import com.ogc.standard.enums.ECurrency;
@@ -573,24 +574,29 @@ public class DistributionOrderBOImpl implements IDistributionOrderBO {
             resultRes.getCnyAmount());
 
         AgentUser agentUser = agentUserBO.getAgentUser(applyUser.getAgentId());
-        if (EAgentUserLevel.FOUR.getCode().equals(agentUser.getLevel())) {
-            agent4Back(code, amount, type, applyUser, agentUser,
-                agentTotalAmount, mapList, dkNote);
-        } else if (EAgentUserLevel.THREE.getCode()
-            .equals(agentUser.getLevel())) {
-            agent3Back(code, amount, type, applyUser, agentUser,
-                agentTotalAmount, mapList, dkNote);
-        } else if (EAgentUserLevel.SECOND.getCode()
-            .equals(agentUser.getLevel())) {
-            agent2Back(code, amount, type, applyUser, agentUser,
-                agentTotalAmount, mapList, dkNote);
-        } else if (EAgentUserLevel.FIRST.getCode()
-            .equals(agentUser.getLevel())) {
-            agent1Back(code, amount, type, applyUser, agentUser,
-                agentTotalAmount, mapList, dkNote);
-        } else {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "代理等级不存在");
+
+        if (EAgentUserType.Agent.getCode().equals(agentUser.getType())) {
+            if (EAgentUserLevel.FOUR.getCode().equals(agentUser.getLevel())) {
+                agent4Back(code, amount, type, applyUser, agentUser,
+                    agentTotalAmount, mapList, dkNote);
+            } else if (EAgentUserLevel.THREE.getCode()
+                .equals(agentUser.getLevel())) {
+                agent3Back(code, amount, type, applyUser, agentUser,
+                    agentTotalAmount, mapList, dkNote);
+            } else if (EAgentUserLevel.SECOND.getCode()
+                .equals(agentUser.getLevel())) {
+                agent2Back(code, amount, type, applyUser, agentUser,
+                    agentTotalAmount, mapList, dkNote);
+            } else if (EAgentUserLevel.FIRST.getCode()
+                .equals(agentUser.getLevel())) {
+                agent1Back(code, amount, type, applyUser, agentUser,
+                    agentTotalAmount, mapList, dkNote);
+            } else {
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                    "代理等级不存在");
+            }
         }
+
     }
 
     private void agent4Back(String code, BigDecimal amount, String type,

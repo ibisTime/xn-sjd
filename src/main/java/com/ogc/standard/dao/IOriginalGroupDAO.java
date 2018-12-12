@@ -15,6 +15,9 @@ public interface IOriginalGroupDAO extends IBaseDAO<OriginalGroup> {
     // 更新数量
     public int updateQuantity(OriginalGroup data);
 
+    // 更新数量
+    public int updateQuantityPrice(OriginalGroup data);
+
     // 更新寄售数量
     public int updatePresellQuantity(OriginalGroup data);
 

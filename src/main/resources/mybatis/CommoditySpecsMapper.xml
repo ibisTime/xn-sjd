@@ -13,6 +13,12 @@
 		<result column="remark" property="remark" />
 	</resultMap>
 	
+	<sql id="join_condition">
+		<if test="used != null and used != '' ">
+			join tsc_commodity_order_detail cod on cod.specs_id = t.id
+		</if>
+	</sql>
+	
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != '' ">
@@ -20,6 +26,12 @@
 			</if>
 			<if test="id != null and id != '' ">
 				AND t.id = #{id}
+			</if>
+			<if test="notInIdList != null and notInIdList != '' ">
+				AND t.id not in 
+                <foreach item="item" index="index" collection="notInIdList" open="(" separator="," close=")">
+	            	#{item}
+                </foreach> 
 			</if>
 			<if test="commodityCode != null and commodityCode != '' ">
 				AND t.commodity_code = #{commodityCode}
@@ -42,6 +54,7 @@
 		,t.remark
 		FROM
 		tsc_commodity_specs t
+		<include refid="join_condition" />
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -79,6 +92,15 @@
 	<delete id="delete_commodity_specs" parameterType="commoditySpecs">
 		DELETE FROM tsc_commodity_specs
 		WHERE commodity_code=#{commodityCode}
+	</delete>
+	
+	<delete id="delete_unUsedcommodity_specs" parameterType="commoditySpecs">
+		DELETE FROM tsc_commodity_specs
+		<include refid="where_condition" />
+		AND NOT EXISTS (SELECT 1 FROM tsc_commodity_order_detail WHERE specs_id in
+		 	<foreach item="item" index="index" collection="notInIdList" open="(" separator="," close=")">
+	            #{item}
+            </foreach>  )
 	</delete>
 	
 	<update id="update_specs" parameterType="commoditySpecs">

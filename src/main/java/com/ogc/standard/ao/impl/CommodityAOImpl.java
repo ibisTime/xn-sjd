@@ -9,6 +9,7 @@
 package com.ogc.standard.ao.impl;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -95,10 +96,23 @@ public class CommodityAOImpl implements ICommodityAO {
             throw new BizException("xn000000", "该商品处于无法修改的状态");
         }
 
-        // 修改数据
-        commodityBO.refreshCommodity(req);
+        // TODO 判空，判断不可删除的规格
+        List<Long> notInIdList = new ArrayList<Long>();
+        for (CommoditySpecs specs : req.getSpecsList()) {
+            if (null != specs.getId()) {
+                notInIdList.add(specs.getId());
+            }
+        }
 
-        // TODO 判断删除的规格
+        List<CommoditySpecs> usedSpecs = commoditySpecsBO
+            .queryUsedSpecsList(req.getCode(), notInIdList);
+        if (CollectionUtils.isNotEmpty(usedSpecs)) {
+            throw new BizException("xn000000",
+                "规格【" + usedSpecs.get(0).getName() + "】已被下单，无法删除");
+        }
+
+        // TODO 删除可删除的规格
+
         // 落地新规格数据
         for (CommoditySpecs specs : req.getSpecsList()) {
             if (null != specs.getId()) {
@@ -112,6 +126,10 @@ public class CommodityAOImpl implements ICommodityAO {
 
             }
         }
+
+        // 修改数据
+        commodityBO.refreshCommodity(req);
+
     }
 
     @Override
@@ -157,7 +175,8 @@ public class CommodityAOImpl implements ICommodityAO {
     public void putOn(String code, String location, Long orderNo,
             String updater, String remark) {
         Commodity data = commodityBO.getCommodity(code);
-        if (!ECommodityStatus.PASS.getCode().equals(data.getStatus())) {
+        if (!ECommodityStatus.PASS.getCode().equals(data.getStatus())
+                && !ECommodityStatus.OFF.getCode().equals(data.getStatus())) {
             throw new BizException("xn000000", "该商品处于无法上架的状态");
         }
 

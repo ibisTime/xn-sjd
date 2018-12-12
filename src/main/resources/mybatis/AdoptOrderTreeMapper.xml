@@ -15,6 +15,7 @@
 		<result column="start_datetime" property="startDatetime" />
 		<result column="end_datetime" property="endDatetime" />
 		<result column="amount" property="amount" />
+		<result column="quantity" property="quantity" />
 		
 		<result column="status" property="status" />
 		<result column="current_holder" property="currentHolder" />
@@ -97,6 +98,7 @@
 		,t.start_datetime
 		,t.end_datetime
 		,t.amount
+		,t.quantity
 		
 		,t.status
 		,t.current_holder
@@ -113,10 +115,25 @@
 		</trim>
 	</select>
 	
+	<select id="select_distinctByTreeNumber" parameterType="adoptOrderTree" resultMap="adoptOrderTree_DB_Result">
+		SELECT
+		DISTINCT
+		t.tree_number
+		,t.current_holder
+		FROM
+		try_adopt_order_tree t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+	
 	<select id="select_productAdoptedOrderTree" parameterType="adoptOrderTree" resultMap="adoptOrderTree_DB_Result">
 		SELECT
 		t.code
-		,1 as userAdoptTreeCount
+		,sum(t.quantity) as userAdoptTreeCount
 		,t.tree_number
 		,t.start_datetime
 		,t.current_holder
@@ -124,7 +141,7 @@
  		FROM
 		try_adopt_order_tree t
 		<include refid="where_condition" />
-<!-- 		group by t.current_holder having userAdoptTreeCount > 0 -->
+		group by t.current_holder having userAdoptTreeCount > 0
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
 				t.${order}
@@ -165,6 +182,7 @@
 		,start_datetime
 		,end_datetime
 		,amount
+		,quantity
 		
 		,status
 		,current_holder
@@ -185,6 +203,7 @@
 		,#{startDatetime}
 		,#{endDatetime}
 		,#{amount}
+		,#{quantity}
 		
 		,#{status}
 		,#{currentHolder}
@@ -208,5 +227,12 @@
 		status = #{status}
 		,remark = #{remark}
 		WHERE order_code = #{orderCode}
+	</update>
+	
+	<update id="update_quantity" parameterType="adoptOrderTree">
+		UPDATE try_adopt_order_tree
+		SET
+		quantity = #{quantity}
+		WHERE code = #{code}
 	</update>
 </mapper>

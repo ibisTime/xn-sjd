@@ -40,7 +40,7 @@ public class OriginalGroup extends ABaseDO {
     // 归属人
     private String ownerId;
 
-    // 单价
+    // 总价
     private BigDecimal price;
 
     // 数量

@@ -28,6 +28,8 @@ public interface IMaintainRecordBO extends IPaginableBO<MaintainRecord> {
     public List<MaintainRecord> queryMaintainRecordList(
             MaintainRecord condition);
 
+    public MaintainRecord getLastMaintainRecord(String treeNumber);
+
     public MaintainRecord getMaintainRecord(String code);
 
 }

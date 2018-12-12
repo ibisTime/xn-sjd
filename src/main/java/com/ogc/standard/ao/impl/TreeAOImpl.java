@@ -10,9 +10,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.ITreeAO;
+import com.ogc.standard.bo.IAdoptOrderTreeBO;
 import com.ogc.standard.bo.IApplyBindMaintainBO;
 import com.ogc.standard.bo.ICategoryBO;
 import com.ogc.standard.bo.IInteractBO;
+import com.ogc.standard.bo.IMaintainRecordBO;
 import com.ogc.standard.bo.IPresellProductBO;
 import com.ogc.standard.bo.IProductBO;
 import com.ogc.standard.bo.ISYSUserBO;
@@ -20,8 +22,10 @@ import com.ogc.standard.bo.ITreeBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.core.StringValidater;
+import com.ogc.standard.domain.AdoptOrderTree;
 import com.ogc.standard.domain.Category;
 import com.ogc.standard.domain.Interact;
+import com.ogc.standard.domain.MaintainRecord;
 import com.ogc.standard.domain.PresellProduct;
 import com.ogc.standard.domain.Product;
 import com.ogc.standard.domain.SYSUser;
@@ -59,6 +63,12 @@ public class TreeAOImpl implements ITreeAO {
 
     @Autowired
     private IPresellProductBO presellProductBO;
+
+    @Autowired
+    private IAdoptOrderTreeBO adoptOrderTreeBO;
+
+    @Autowired
+    private IMaintainRecordBO maintainRecordBO;
 
     @Override
     public String addTree(XN629030Req req) {
@@ -228,5 +238,39 @@ public class TreeAOImpl implements ITreeAO {
             tree.setCategory(category.getName());
         }
 
+        List<AdoptOrderTree> adoptOrderTreeList = adoptOrderTreeBO
+            .queryDistictByTreeNumber(tree.getTreeNumber());
+
+        StringBuffer adoptUserNames = new StringBuffer();
+
+        // 认养人
+        if (CollectionUtils.isNotEmpty(adoptOrderTreeList)) {
+            int adoptOrderTreeCount = 1;
+            String adoptUserName = null;
+            for (AdoptOrderTree adoptOrderTree : adoptOrderTreeList) {
+                if (null != adoptOrderTree.getUser()) {
+                    adoptUserName = adoptOrderTree.getUser().getMobile();
+                    if (null != adoptOrderTree.getUser().getRealName()) {
+                        adoptUserName = adoptOrderTree.getUser().getRealName()
+                                + adoptUserName;
+                    }
+                    adoptUserNames.append(adoptUserName);
+
+                    if (adoptOrderTreeCount < adoptOrderTreeList.size()) {
+                        adoptUserNames.append(".");
+                    }
+                }
+
+                adoptOrderTreeCount++;
+
+            }
+        }
+
+        tree.setAdoptUserNames(adoptUserNames.toString());
+
+        // 养护记录
+        MaintainRecord lastMaintainRecord = maintainRecordBO
+            .getLastMaintainRecord(tree.getTreeNumber());
+        tree.setLastMaintainRecord(lastMaintainRecord);
     }
 }

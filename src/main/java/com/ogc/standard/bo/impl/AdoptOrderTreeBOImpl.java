@@ -68,6 +68,7 @@ public class AdoptOrderTreeBOImpl extends PaginableBOImpl<AdoptOrderTree>
         data.setEndDatetime(adoptOrder.getEndDatetime());
 
         data.setAmount(adoptOrder.getPrice());
+        data.setQuantity(adoptOrder.getQuantity());
         data.setCreateDatetime(new Date());
         if (EAdoptOrderStatus.TO_ADOPT.getCode()
             .equals(adoptOrder.getStatus())) {
@@ -102,6 +103,7 @@ public class AdoptOrderTreeBOImpl extends PaginableBOImpl<AdoptOrderTree>
         data.setEndDatetime(groupAdoptOrder.getEndDatetime());
 
         data.setAmount(groupAdoptOrder.getPrice());
+        data.setQuantity(groupAdoptOrder.getQuantity());
         data.setCreateDatetime(new Date());
         if (EAdoptOrderStatus.TO_ADOPT.getCode()
             .equals(groupAdoptOrder.getStatus())) {
@@ -136,6 +138,7 @@ public class AdoptOrderTreeBOImpl extends PaginableBOImpl<AdoptOrderTree>
         data.setEndDatetime(presellProduct.getAdoptEndDatetime());
 
         data.setAmount(presellOrder.getPrice());
+        data.setQuantity(presellOrder.getQuantity());
         data.setCreateDatetime(new Date());
         if ((new Date()).before(presellProduct.getAdoptStartDatetime())) {
             data.setStatus(EAdoptOrderTreeStatus.TO_ADOPT.getCode());
@@ -170,6 +173,7 @@ public class AdoptOrderTreeBOImpl extends PaginableBOImpl<AdoptOrderTree>
         data.setEndDatetime(presellProduct.getAdoptEndDatetime());
 
         data.setAmount(groupOrder.getPrice());
+        data.setQuantity(groupOrder.getQuantity());
         data.setCreateDatetime(new Date());
         if ((new Date()).before(presellProduct.getAdoptStartDatetime())) {
             data.setStatus(EAdoptOrderTreeStatus.TO_ADOPT.getCode());
@@ -208,6 +212,7 @@ public class AdoptOrderTreeBOImpl extends PaginableBOImpl<AdoptOrderTree>
         newData.setStartDatetime(new Date());
         newData.setEndDatetime(data.getEndDatetime());
         newData.setAmount(data.getAmount());
+        newData.setQuantity(data.getQuantity());
 
         newData.setStatus(EAdoptOrderTreeStatus.ADOPT.getCode());
         newData.setCertificateTemplate(data.getCertificateTemplate());
@@ -234,6 +239,14 @@ public class AdoptOrderTreeBOImpl extends PaginableBOImpl<AdoptOrderTree>
         data.setStatus(EAdoptOrderTreeStatus.INVALID.getCode());
         data.setRemark("集体认养未满标已失效");
         adoptOrderTreeDAO.updateInvalidAdoptByOrder(data);
+    }
+
+    @Override
+    public void refreshQuantity(String code, Integer quantity) {
+        AdoptOrderTree data = new AdoptOrderTree();
+        data.setCode(code);
+        data.setQuantity(quantity);
+        adoptOrderTreeDAO.updateQuantity(data);
     }
 
     @Override
@@ -266,7 +279,7 @@ public class AdoptOrderTreeBOImpl extends PaginableBOImpl<AdoptOrderTree>
         statusList.add(EAdoptOrderTreeStatus.TO_ADOPT.getCode());
         statusList.add(EAdoptOrderTreeStatus.ADOPT.getCode());
         condition.setStatusList(statusList);
-        return null;
+        return queryAdoptOrderTreeList(condition);
     }
 
     @Override
@@ -313,6 +326,31 @@ public class AdoptOrderTreeBOImpl extends PaginableBOImpl<AdoptOrderTree>
         }
         return list;
 
+    }
+
+    @Override
+    public List<AdoptOrderTree> queryDistictByTreeNumber(String treeNumber) {
+        List<AdoptOrderTree> list = new ArrayList<AdoptOrderTree>();
+        if (StringUtils.isNotBlank(treeNumber)) {
+            AdoptOrderTree condition = new AdoptOrderTree();
+            condition.setTreeNumber(treeNumber);
+            condition.setStatus(EAdoptOrderTreeStatus.ADOPT.getCode());
+            list = adoptOrderTreeDAO.selectDistictByTreeNumber(condition);
+
+            if (CollectionUtils.isNotEmpty(list)) {
+                for (AdoptOrderTree adoptOrderTree : list) {
+
+                    // 当前持有人信息
+                    User user = userBO
+                        .getUserUnCheck(adoptOrderTree.getCurrentHolder());
+                    if (null != user) {
+                        adoptOrderTree.setUser(user);
+                    }
+
+                }
+            }
+        }
+        return list;
     }
 
     private void init(AdoptOrderTree data) {

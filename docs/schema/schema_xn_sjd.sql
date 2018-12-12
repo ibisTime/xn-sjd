@@ -117,6 +117,7 @@ CREATE TABLE `try_adopt_order_tree` (
   `start_datetime` datetime DEFAULT NULL COMMENT '认养开始时间',
   `end_datetime` datetime DEFAULT NULL COMMENT '认养结束时间',
   `amount` decimal(64,0) DEFAULT NULL COMMENT '认养金额',
+  `quantity` INT DEFAULT 0 COMMENT '数量',
   `status` varchar(4) DEFAULT NULL COMMENT '状态',
   `current_holder` varchar(32) DEFAULT NULL COMMENT '当前持有人',
   `certificate_template` varchar(255) DEFAULT NULL COMMENT '证书模板',

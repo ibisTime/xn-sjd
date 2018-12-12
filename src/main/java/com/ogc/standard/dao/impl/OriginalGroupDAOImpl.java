@@ -38,6 +38,11 @@ public class OriginalGroupDAOImpl extends AMybatisTemplate
     }
 
     @Override
+    public int updateQuantityPrice(OriginalGroup data) {
+        return super.update(NAMESPACE.concat("update_quantityPrice"), data);
+    }
+
+    @Override
     public int updatePresellQuantity(OriginalGroup data) {
         return super.update(NAMESPACE.concat("update_presellQuantity"), data);
     }

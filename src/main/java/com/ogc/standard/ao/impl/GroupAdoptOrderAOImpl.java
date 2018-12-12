@@ -319,10 +319,16 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
             }
         }
 
-        if (CollectionUtils.isEmpty(adoptOrderTreeBO.queryUserAdoptedOrder(
-            data.getApplyUser(), treeList.get(0).getTreeNumber()))) {
+        List<AdoptOrderTree> adoptOrderTreeList = adoptOrderTreeBO
+            .queryUserAdoptedOrder(data.getApplyUser(),
+                treeList.get(0).getTreeNumber());
+        if (CollectionUtils.isEmpty(adoptOrderTreeList)) {
             adoptOrderTreeBO.saveAdoptOrderTree(product, data,
                 treeList.get(0).getTreeNumber());
+        } else {
+            AdoptOrderTree adoptOrderTree = adoptOrderTreeList.get(0);
+            adoptOrderTreeBO.refreshQuantity(adoptOrderTree.getCode(),
+                data.getQuantity() + adoptOrderTree.getQuantity());
         }
 
         // 添加快报
@@ -385,11 +391,16 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
                         tree.getAdoptCount() + data.getQuantity());
                 }
             }
-
-            if (CollectionUtils.isEmpty(adoptOrderTreeBO.queryUserAdoptedOrder(
-                data.getApplyUser(), treeList.get(0).getTreeNumber()))) {
+            List<AdoptOrderTree> adoptOrderTreeList = adoptOrderTreeBO
+                .queryUserAdoptedOrder(data.getApplyUser(),
+                    treeList.get(0).getTreeNumber());
+            if (CollectionUtils.isEmpty(adoptOrderTreeList)) {
                 adoptOrderTreeBO.saveAdoptOrderTree(product, data,
                     treeList.get(0).getTreeNumber());
+            } else {
+                AdoptOrderTree adoptOrderTree = adoptOrderTreeList.get(0);
+                adoptOrderTreeBO.refreshQuantity(adoptOrderTree.getCode(),
+                    data.getQuantity() + adoptOrderTree.getQuantity());
             }
 
             // 添加快报
@@ -575,8 +586,10 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
                 // 添加快报
                 GroupAdoptOrder firstOrder = groupAdoptOrderBO
                     .getFirstPayedOrderById(product.getIdentifyCode());
-                smsBO.saveExpireGroupAdoptBulletin(firstOrder.getApplyUser(),
-                    product.getName());
+                if (null != firstOrder) {
+                    smsBO.saveExpireGroupAdoptBulletin(
+                        firstOrder.getApplyUser(), product.getName());
+                }
 
                 // 订单退款
                 List<GroupAdoptOrder> groupAdoptOrderList = groupAdoptOrderBO
