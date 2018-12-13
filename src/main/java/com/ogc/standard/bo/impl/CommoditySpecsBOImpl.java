@@ -62,6 +62,15 @@ public class CommoditySpecsBOImpl extends PaginableBOImpl<CommoditySpecs>
     }
 
     @Override
+    public void deleteUnUsedCommoditySpecs(String commodityCode,
+            List<Long> notInIdList) {
+        CommoditySpecs data = new CommoditySpecs();
+        data.setCommodityCode(commodityCode);
+        data.setNotInIdList(notInIdList);
+        commoditySpecsDAO.deleteUnUsedCommoditySpecs(data);
+    }
+
+    @Override
     public List<CommoditySpecs> queryUsedSpecsList(String commodityCode,
             List<Long> notInIdList) {
         CommoditySpecs condition = new CommoditySpecs();

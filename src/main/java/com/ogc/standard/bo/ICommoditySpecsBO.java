@@ -29,6 +29,10 @@ public interface ICommoditySpecsBO extends IPaginableBO<CommoditySpecs> {
 
     public Long getInventory(Long id);
 
+    // 删除未下单的规格
+    public void deleteUnUsedCommoditySpecs(String commodityCode,
+            List<Long> notInIdList);
+
     public List<CommoditySpecs> queryUsedSpecsList(String commodityCode,
             List<Long> notInIdList);
 

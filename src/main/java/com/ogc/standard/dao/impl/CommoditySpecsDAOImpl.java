@@ -70,4 +70,10 @@ public class CommoditySpecsDAOImpl extends AMybatisTemplate
         return super.update(NAMESPACE.concat("update_specs"), data);
     }
 
+    @Override
+    public int deleteUnUsedCommoditySpecs(CommoditySpecs data) {
+        return super.delete(NAMESPACE.concat("delete_unUsedcommodity_specs"),
+            data);
+    }
+
 }

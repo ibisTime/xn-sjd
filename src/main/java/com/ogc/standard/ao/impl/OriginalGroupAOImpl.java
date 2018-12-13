@@ -84,9 +84,12 @@ public class OriginalGroupAOImpl implements IOriginalGroupAO {
         String deriveGroupCode = deriveGroupBO.saveDirectSales(code, price,
             quantity, claimant.getUserId());
 
-        // 更新数量
-        originalGroupBO.refreshQuantity(code,
-            originalGroup.getQuantity() - quantity);
+        // 更新数量和总价
+        Integer nowQuantity = originalGroup.getQuantity() - quantity;
+        BigDecimal nowPrice = originalGroup.getPrice()
+            .subtract(price.multiply(new BigDecimal(quantity)));
+
+        originalGroupBO.refreshQuantityPrice(code, nowQuantity, nowPrice);
 
         // 更新寄售数量
         originalGroupBO.refreshPresellQuantity(code,
@@ -115,9 +118,12 @@ public class OriginalGroupAOImpl implements IOriginalGroupAO {
         String deriveGroupCode = deriveGroupBO.saveQrSales(code, price,
             quantity);
 
-        // 更新数量
-        originalGroupBO.refreshQuantity(code,
-            originalGroup.getQuantity() - quantity);
+        // 更新数量和总价
+        Integer nowQuantity = originalGroup.getQuantity() - quantity;
+        BigDecimal nowPrice = originalGroup.getPrice()
+            .subtract(price.multiply(new BigDecimal(quantity)));
+
+        originalGroupBO.refreshQuantityPrice(code, nowQuantity, nowPrice);
 
         // 更新寄售数量
         originalGroupBO.refreshPresellQuantity(code,
@@ -146,9 +152,12 @@ public class OriginalGroupAOImpl implements IOriginalGroupAO {
         String deriveGroupCode = deriveGroupBO.savePublicSales(code, price,
             quantity);
 
-        // 更新数量
-        originalGroupBO.refreshQuantity(code,
-            originalGroup.getQuantity() - quantity);
+        // 更新数量和总价
+        Integer nowQuantity = originalGroup.getQuantity() - quantity;
+        BigDecimal nowPrice = originalGroup.getPrice()
+            .subtract(price.multiply(new BigDecimal(quantity)));
+
+        originalGroupBO.refreshQuantityPrice(code, nowQuantity, nowPrice);
 
         // 更新寄售数量
         originalGroupBO.refreshPresellQuantity(code,
@@ -169,11 +178,6 @@ public class OriginalGroupAOImpl implements IOriginalGroupAO {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "资产不是可填写地址状态");
         }
-
-        // TODO 判断是否存在已发货的物流单
-
-        // 删除之前的物流单
-        presellLogisticsBO.deleteByOriginalGroup(req.getCode());
 
         // 添加物流单
         Integer totalCount = 0;

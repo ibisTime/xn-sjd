@@ -27,7 +27,7 @@
 			<if test="id != null and id != '' ">
 				AND t.id = #{id}
 			</if>
-			<if test="notInIdList != null and notInIdList != '' ">
+			<if test="notInIdList != null and notInIdList.size() > 0 ">
 				AND t.id not in 
                 <foreach item="item" index="index" collection="notInIdList" open="(" separator="," close=")">
 	            	#{item}
@@ -96,11 +96,20 @@
 	
 	<delete id="delete_unUsedcommodity_specs" parameterType="commoditySpecs">
 		DELETE FROM tsc_commodity_specs
-		<include refid="where_condition" />
-		AND NOT EXISTS (SELECT 1 FROM tsc_commodity_order_detail WHERE specs_id in
-		 	<foreach item="item" index="index" collection="notInIdList" open="(" separator="," close=")">
+		WHERE 1 = 1
+		<if test="notInIdList != null and notInIdList.size() > 0 ">
+			AND id not in 
+            <foreach item="item" index="index" collection="notInIdList" open="(" separator="," close=")">
 	            #{item}
-            </foreach>  )
+            </foreach> 
+		</if>
+		AND commodity_code = #{commodityCode}
+		<if test="notInIdList != null and notInIdList.size() > 0 ">
+			AND NOT EXISTS (SELECT 1 FROM tsc_commodity_order_detail WHERE specs_id in
+		 		<foreach item="item" index="index" collection="notInIdList" open="(" separator="," close=")">
+	            	#{item}
+            	</foreach>  )
+        </if>
 	</delete>
 	
 	<update id="update_specs" parameterType="commoditySpecs">

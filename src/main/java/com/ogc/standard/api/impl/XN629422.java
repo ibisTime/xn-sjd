@@ -5,6 +5,7 @@ import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.ObjValidater;
 import com.ogc.standard.dto.req.XN629422Req;
+import com.ogc.standard.dto.res.BooleanRes;
 import com.ogc.standard.enums.EPayType;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
@@ -27,7 +28,11 @@ public class XN629422 extends AProcessor {
         Object res = presellOrderAO.toPayPresellOrder(req.getCode(),
             req.getPayType(), req.getTradePwd(), req.getIsJfDeduct());
 
-        if (EPayType.YE.getCode().equals(req.getPayType()) && null != res) {
+        if (EPayType.YE.getCode().equals(req.getPayType())
+                && res instanceof BooleanRes) {
+
+            // 分配树和预售权
+            presellOrderAO.assignPresellInventory(req.getCode());
 
         }
 

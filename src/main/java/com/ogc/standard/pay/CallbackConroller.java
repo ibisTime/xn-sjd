@@ -155,6 +155,7 @@ public class CallbackConroller {
             groupAdoptOrderAO.toFullAdopt();
         } else if (EJourBizTypeUser.PRESELL.getCode().equals(bizType)) {
             presellOrderAO.paySuccess(bizCode);
+            presellOrderAO.assignPresellInventory(bizCode);
         } else if (EJourBizTypeUser.CONSIGN_SELL.getCode().equals(bizType)) {
             groupOrderAO.paySuccess(bizCode);
         } else if (EJourBizTypeUser.COMMODITY.getCode().equals(bizType)) {

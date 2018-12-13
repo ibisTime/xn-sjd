@@ -139,7 +139,12 @@ public class CommodityOrderBOImpl extends PaginableBOImpl<CommodityOrder>
     public void refreshPayGroup(CommodityOrder data, String payType,
             XN629048Res resultRes) {
         data.setPayType(payType);
-        data.setPayGroup(data.getCode());
+
+        if (null == data.getPayGroup()) {
+            data.setPayGroup(data.getCode());
+        } else {
+            data.setPayGroup(data.getPayGroup());
+        }
 
         data.setCnyDeductAmount(resultRes.getCnyAmount());
         data.setJfDeductAmount(resultRes.getJfAmount());

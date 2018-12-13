@@ -96,7 +96,7 @@ public class CommodityAOImpl implements ICommodityAO {
             throw new BizException("xn000000", "该商品处于无法修改的状态");
         }
 
-        // TODO 判空，判断不可删除的规格
+        // 判空，判断不可删除的规格
         List<Long> notInIdList = new ArrayList<Long>();
         for (CommoditySpecs specs : req.getSpecsList()) {
             if (null != specs.getId()) {
@@ -111,7 +111,8 @@ public class CommodityAOImpl implements ICommodityAO {
                 "规格【" + usedSpecs.get(0).getName() + "】已被下单，无法删除");
         }
 
-        // TODO 删除可删除的规格
+        // 删除可删除的规格
+        commoditySpecsBO.deleteUnUsedCommoditySpecs(req.getCode(), notInIdList);
 
         // 落地新规格数据
         for (CommoditySpecs specs : req.getSpecsList()) {

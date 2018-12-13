@@ -381,9 +381,12 @@ set quantity = (select sum(quantity) from try_adopt_order where product_code = t
 where order_type in (1,2,3);
 
 update try_adopt_order_tree 
-set quantity = (select sum(quantity) from try_group_adopt_order where product_code = try_group_adopt_order.product_code and status in(2,3,4) ) 
+set quantity = (select sum(quantity) from try_group_adopt_order where product_code = try_group_adopt_order.product_code and status in(3) ) 
 where order_type in (4);
 
 update try_adopt_order_tree 
-set quantity = (select sum(quantity) from tys_presell_order where product_code = tys_presell_order.product_code and status in(2,3,4) ) 
+set quantity = (select sum(quantity) from tys_presell_order where product_code = tys_presell_order.product_code and status in(2) ) 
 where order_type in (5);
+
+#V2.0.0 5-1 预售价格涨幅未生效
+update tys_presell_specs set now_interval = 0 where now_interval is null;

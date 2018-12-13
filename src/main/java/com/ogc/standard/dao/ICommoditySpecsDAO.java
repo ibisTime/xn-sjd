@@ -23,4 +23,6 @@ public interface ICommoditySpecsDAO extends IBaseDAO<CommoditySpecs> {
 
     public int updateCommoditySpecs(CommoditySpecs data);
 
+    // 删除未下单的规格
+    public int deleteUnUsedCommoditySpecs(CommoditySpecs data);
 }

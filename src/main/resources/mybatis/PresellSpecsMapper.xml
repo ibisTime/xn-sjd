@@ -63,7 +63,6 @@
 		,price
 		,increase
 		,interval_hours
-		,now_interval
 		)
 		VALUES(
 		#{code}
@@ -73,7 +72,6 @@
 		,#{price}
 		,#{increase}
 		,#{intervalHours}
-		,#{nowInterval}
 		)
 	</insert>
 

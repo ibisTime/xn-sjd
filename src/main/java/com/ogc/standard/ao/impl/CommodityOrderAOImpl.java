@@ -290,54 +290,105 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
 
         Object result = null;
 
-        for (CommodityOrder order : commodityOrderList) {
+        // 支付
+        if (EPayType.YE.getCode().equals(req.getPayType())) {
 
-            // 积分抵扣处理，订单只有一个商品
-            Double maxJfdkRate = 0d;
-            List<CommodityOrderDetail> commodityOrderDetailList = commodityOrderDetailBO
-                .queryOrderDetail(order.getCode());
-            if (CollectionUtils.isNotEmpty(commodityOrderDetailList)) {
-                maxJfdkRate = commodityOrderDetailList.get(0).getMaxJfdkRate();
-            }
-            XN629048Res deductRes = distributionOrderBO
-                .getCommodityOrderDeductAmount(maxJfdkRate, order.getAmount(),
-                    order.getApplyUser(), req.getIsJfDeduct());
+            for (CommodityOrder order : commodityOrderList) {
 
-            // 支付
-            if (EPayType.ALIPAY.getCode().equals(req.getPayType())) {
-
-                // 状态更新
-                commodityOrderBO.refreshPayGroup(order, req.getPayType(),
-                    deductRes);
-
-                String signOrder = alipayBO.getSignedOrder(order.getApplyUser(),
-                    ESysUser.SYS_USER.getCode(), order.getPayGroup(),
-                    EJourBizTypeUser.COMMODITY.getCode(),
-                    EJourBizTypeUser.COMMODITY.getValue(),
-                    order.getAmount().subtract(deductRes.getCnyAmount()));
-                result = new PayOrderRes(signOrder);
-
-            } else if (EPayType.YE.getCode().equals(req.getPayType())) {
+                // 积分抵扣处理，订单只有一个商品
+                Double maxJfdkRate = 0d;
+                List<CommodityOrderDetail> commodityOrderDetailList = commodityOrderDetailBO
+                    .queryOrderDetail(order.getCode());
+                if (CollectionUtils.isNotEmpty(commodityOrderDetailList)) {
+                    maxJfdkRate = commodityOrderDetailList.get(0)
+                        .getMaxJfdkRate();
+                }
+                XN629048Res deductRes = distributionOrderBO
+                    .getCommodityOrderDeductAmount(maxJfdkRate,
+                        order.getAmount(), order.getApplyUser(),
+                        req.getIsJfDeduct());
 
                 result = toPayCommodityOrderYue(order, deductRes);
 
-            } else if (EPayType.WEIXIN_H5.getCode().equals(req.getPayType())) {
+            }
+
+        } else if (EPayType.ALIPAY.getCode().equals(req.getPayType())) {
+
+            BigDecimal amount = BigDecimal.ZERO;
+            BigDecimal cnyAmount = BigDecimal.ZERO;
+            CommodityOrder commonOrder = commodityOrderList.get(0);
+
+            for (CommodityOrder order : commodityOrderList) {
+
+                // 积分抵扣处理，订单只有一个商品
+                Double maxJfdkRate = 0d;
+                List<CommodityOrderDetail> commodityOrderDetailList = commodityOrderDetailBO
+                    .queryOrderDetail(order.getCode());
+                if (CollectionUtils.isNotEmpty(commodityOrderDetailList)) {
+                    maxJfdkRate = commodityOrderDetailList.get(0)
+                        .getMaxJfdkRate();
+                }
+                XN629048Res deductRes = distributionOrderBO
+                    .getCommodityOrderDeductAmount(maxJfdkRate,
+                        order.getAmount(), order.getApplyUser(),
+                        req.getIsJfDeduct());
 
                 // 状态更新
                 commodityOrderBO.refreshPayGroup(order, req.getPayType(),
                     deductRes);
 
-                User user = userBO.getUser(order.getApplyUser());
-                result = weChatAO.getPrepayIdH5(order.getApplyUser(),
-                    user.getH5OpenId(), ESysUser.SYS_USER.getCode(),
-                    order.getCode(), order.getCode(),
-                    EJourBizTypeUser.COMMODITY.getCode(),
-                    EJourBizTypeUser.COMMODITY.getValue(),
-                    order.getAmount().subtract(deductRes.getCnyAmount()));
+                amount = amount.add(order.getAmount());
+                cnyAmount = cnyAmount.add(deductRes.getCnyAmount());
 
-            } else {
-                throw new BizException("xn0000", "不支持的支付方式");
             }
+
+            String signOrder = alipayBO.getSignedOrder(
+                commonOrder.getApplyUser(), ESysUser.SYS_USER.getCode(),
+                commonOrder.getPayGroup(), EJourBizTypeUser.COMMODITY.getCode(),
+                EJourBizTypeUser.COMMODITY.getValue(),
+                amount.subtract(cnyAmount));
+            result = new PayOrderRes(signOrder);
+
+        } else if (EPayType.WEIXIN_H5.getCode().equals(req.getPayType())) {
+
+            BigDecimal amount = BigDecimal.ZERO;
+            BigDecimal cnyAmount = BigDecimal.ZERO;
+            CommodityOrder commonOrder = commodityOrderList.get(0);
+
+            for (CommodityOrder order : commodityOrderList) {
+
+                // 积分抵扣处理，订单只有一个商品
+                Double maxJfdkRate = 0d;
+                List<CommodityOrderDetail> commodityOrderDetailList = commodityOrderDetailBO
+                    .queryOrderDetail(order.getCode());
+                if (CollectionUtils.isNotEmpty(commodityOrderDetailList)) {
+                    maxJfdkRate = commodityOrderDetailList.get(0)
+                        .getMaxJfdkRate();
+                }
+                XN629048Res deductRes = distributionOrderBO
+                    .getCommodityOrderDeductAmount(maxJfdkRate,
+                        order.getAmount(), order.getApplyUser(),
+                        req.getIsJfDeduct());
+
+                // 状态更新
+                commodityOrderBO.refreshPayGroup(order, req.getPayType(),
+                    deductRes);
+
+                amount = amount.add(order.getAmount());
+                cnyAmount = cnyAmount.add(deductRes.getCnyAmount());
+
+            }
+
+            User user = userBO.getUser(commonOrder.getApplyUser());
+            result = weChatAO.getPrepayIdH5(commonOrder.getApplyUser(),
+                user.getH5OpenId(), ESysUser.SYS_USER.getCode(),
+                commonOrder.getPayGroup(), commonOrder.getPayGroup(),
+                EJourBizTypeUser.COMMODITY.getCode(),
+                EJourBizTypeUser.COMMODITY.getValue(),
+                amount.subtract(cnyAmount));
+
+        } else {
+            throw new BizException("xn0000", "不支持的支付方式");
         }
 
         return result;

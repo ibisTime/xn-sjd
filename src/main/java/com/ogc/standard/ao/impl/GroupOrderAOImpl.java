@@ -27,6 +27,7 @@ import com.ogc.standard.bo.IJourBO;
 import com.ogc.standard.bo.IOriginalGroupBO;
 import com.ogc.standard.bo.IPresellInventoryBO;
 import com.ogc.standard.bo.IPresellProductBO;
+import com.ogc.standard.bo.IPresellSpecsBO;
 import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.ISmsBO;
 import com.ogc.standard.bo.IUserBO;
@@ -106,6 +107,9 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
 
     @Autowired
     private IAdoptOrderTreeBO adoptOrderTreeBO;
+
+    @Autowired
+    private IPresellSpecsBO presellSpecsBO;
 
     @Override
     @Transactional
@@ -290,10 +294,28 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
         // 定向
         if (EPresellType.DIRECT.getCode().equals(deriveGroup.getType())) {
 
-            // 生成新的资产
-            String originalGroupCode = originalGroupBO.saveOriginalGroup(data,
-                deriveGroup.getProductCode(), data.getApplyUser(),
-                data.getPrice(), data.getQuantity());
+            // 分配资产
+            String originalGroupCode = null;
+            List<OriginalGroup> existsOriginalList = originalGroupBO
+                .queryOriginalGroup(data.getApplyUser(), data.getProductCode());
+
+            if (CollectionUtils.isEmpty(existsOriginalList)) {
+                originalGroupCode = originalGroupBO.saveOriginalGroup(data,
+                    deriveGroup.getProductCode(), data.getApplyUser(),
+                    data.getAmount(), data.getQuantity());
+            } else {
+                OriginalGroup existsOriginal = existsOriginalList.get(0);
+
+                Integer quantity = existsOriginal.getQuantity()
+                        + data.getQuantity();
+                BigDecimal price = existsOriginal.getPrice()
+                    .add(data.getAmount());
+
+                originalGroupBO.refreshQuantityPrice(existsOriginal.getCode(),
+                    quantity, price);
+
+                originalGroupCode = existsOriginal.getCode();
+            }
 
             // 转移预售权
             int presellInventoryQuantity = 1;
@@ -335,10 +357,28 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
         // 二维码
         if (EPresellType.QR.getCode().equals(deriveGroup.getType())) {
 
-            // 生成新的资产
-            String originalGroupCode = originalGroupBO.saveOriginalGroup(data,
-                deriveGroup.getProductCode(), data.getApplyUser(),
-                data.getPrice(), data.getQuantity());
+            // 分配资产
+            String originalGroupCode = null;
+            List<OriginalGroup> existsOriginalList = originalGroupBO
+                .queryOriginalGroup(data.getApplyUser(), data.getProductCode());
+
+            if (CollectionUtils.isEmpty(existsOriginalList)) {
+                originalGroupCode = originalGroupBO.saveOriginalGroup(data,
+                    deriveGroup.getProductCode(), data.getApplyUser(),
+                    data.getAmount(), data.getQuantity());
+            } else {
+                OriginalGroup existsOriginal = existsOriginalList.get(0);
+
+                Integer quantity = existsOriginal.getQuantity()
+                        + data.getQuantity();
+                BigDecimal price = existsOriginal.getPrice()
+                    .add(data.getAmount());
+
+                originalGroupBO.refreshQuantityPrice(existsOriginal.getCode(),
+                    quantity, price);
+
+                originalGroupCode = existsOriginal.getCode();
+            }
 
             // 分配预售权
             int presellInventoryQuantity = 1;
@@ -374,17 +414,35 @@ public class GroupOrderAOImpl implements IGroupOrderAO {
 
             for (String treeNumber : treeNumberSet) {
                 adoptOrderTreeBO.saveAdoptOrderTree(presellProduct, data,
-                    treeNumber);
+                    treeNumber.replace(",", ""));
             }
         }
 
         // 挂单
         if (EPresellType.PUBLIC.getCode().equals(deriveGroup.getType())) {
 
-            // 生成新的资产
-            String originalGroupCode = originalGroupBO.saveOriginalGroup(data,
-                deriveGroup.getProductCode(), data.getApplyUser(),
-                data.getPrice(), data.getQuantity());
+            // 分配资产
+            String originalGroupCode = null;
+            List<OriginalGroup> existsOriginalList = originalGroupBO
+                .queryOriginalGroup(data.getApplyUser(), data.getProductCode());
+
+            if (CollectionUtils.isEmpty(existsOriginalList)) {
+                originalGroupCode = originalGroupBO.saveOriginalGroup(data,
+                    deriveGroup.getProductCode(), data.getApplyUser(),
+                    data.getAmount(), data.getQuantity());
+            } else {
+                OriginalGroup existsOriginal = existsOriginalList.get(0);
+
+                Integer quantity = existsOriginal.getQuantity()
+                        + data.getQuantity();
+                BigDecimal price = existsOriginal.getPrice()
+                    .add(data.getAmount());
+
+                originalGroupBO.refreshQuantityPrice(existsOriginal.getCode(),
+                    quantity, price);
+
+                originalGroupCode = existsOriginal.getCode();
+            }
 
             // 分配预售权
             int presellInventoryQuantity = 1;

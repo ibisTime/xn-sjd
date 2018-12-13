@@ -57,7 +57,7 @@ public class OriginalGroupBOImpl extends PaginableBOImpl<OriginalGroup>
         originalGroup.setSpecsCode(data.getSpecsCode());
         originalGroup.setSpecsName(data.getSpecsName());
         originalGroup.setOwnerId(data.getApplyUser());
-        originalGroup.setPrice(data.getPrice());
+        originalGroup.setPrice(data.getAmount());
         originalGroup
             .setQuantity(data.getQuantity() * presellSpecs.getPackCount());
         originalGroup.setUnit(presellProduct.getPackUnit());

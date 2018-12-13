@@ -54,6 +54,8 @@ public class PresellLogisticsAOImpl implements IPresellLogisticsAO {
     public void confirmReceive(String code) {
         PresellLogistics presellLogistics = presellLogisticsBO
             .getPresellLogistics(code);
+        OriginalGroup originalGroup = originalGroupBO
+            .getOriginalGroup(presellLogistics.getOriginalGroupCode());
 
         if (!EPresellLogisticsStatus.TO_RECEIVE.getCode()
             .equals(presellLogistics.getStatus())) {
@@ -64,15 +66,14 @@ public class PresellLogisticsAOImpl implements IPresellLogisticsAO {
         presellLogisticsBO.refreshConfirmReceive(code);
 
         // 全部收货后更新资产状态
-        if (CollectionUtils.isEmpty(presellLogisticsBO.queryUnDelivedByOriginal(
-            presellLogistics.getOriginalGroupCode()))) {
+        if (originalGroup.getQuantity() <= 0 && CollectionUtils
+            .isEmpty(presellLogisticsBO.queryUnDelivedByOriginal(
+                presellLogistics.getOriginalGroupCode()))) {
             originalGroupBO
                 .refreshReceive(presellLogistics.getOriginalGroupCode());
         }
 
         // 更新提货中数量
-        OriginalGroup originalGroup = originalGroupBO
-            .getOriginalGroup(presellLogistics.getOriginalGroupCode());
         originalGroupBO.refreshReceivingQuantity(originalGroup.getCode(),
             originalGroup.getReceivingQuantity()
                     - presellLogistics.getDeliverCount());

@@ -1,5 +1,6 @@
 package com.ogc.standard.ao.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -83,9 +84,14 @@ public class DeriveGroupAOImpl implements IDeriveGroupAO {
             }
         }
 
-        // 更新数量
-        originalGroupBO.refreshQuantity(originalGroup.getCode(),
-            originalGroup.getQuantity() + deriveGroup.getQuantity());
+        // 更新数量总价
+        Integer nowQuantity = originalGroup.getQuantity()
+                + deriveGroup.getQuantity();
+        BigDecimal nowPrice = originalGroup.getPrice().add(deriveGroup
+            .getPrice().multiply(new BigDecimal(deriveGroup.getQuantity())));
+
+        originalGroupBO.refreshQuantityPrice(originalGroup.getCode(),
+            nowQuantity, nowPrice);
 
         // 更新寄售数量
         originalGroupBO.refreshPresellQuantity(originalGroup.getCode(),
@@ -163,9 +169,14 @@ public class DeriveGroupAOImpl implements IDeriveGroupAO {
             }
         }
 
-        // 更新数量
-        originalGroupBO.refreshQuantity(originalGroup.getCode(),
-            originalGroup.getQuantity() + deriveGroup.getQuantity());
+        // 更新数量总价
+        Integer nowQuantity = originalGroup.getQuantity()
+                + deriveGroup.getQuantity();
+        BigDecimal nowPrice = originalGroup.getPrice().add(deriveGroup
+            .getPrice().multiply(new BigDecimal(deriveGroup.getQuantity())));
+
+        originalGroupBO.refreshQuantityPrice(originalGroup.getCode(),
+            nowQuantity, nowPrice);
 
         // 更新寄售数量
         originalGroupBO.refreshPresellQuantity(originalGroup.getCode(),
