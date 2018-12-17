@@ -22,6 +22,8 @@ public interface IAlipayBO {
             String payGroup, String bizType, String bizNote,
             BigDecimal transAmount);
 
-    public void doCallbackH5(String result);
+    // 支付宝退款
+    public String doRefund(String refNo, String bizType, String bizNote,
+            BigDecimal refundAmount);
 
 }

@@ -26,4 +26,8 @@ public interface IWechatBO {
     public XN002501Res getPayInfoH5(CompanyChannel companyChannel,
             String payCode, String prepayId);
 
+    // 微信退款
+    public String doRefund(String refNo, String bizType, String bizNote,
+            String refundAmount);
+
 }

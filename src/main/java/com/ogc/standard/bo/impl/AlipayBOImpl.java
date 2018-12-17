@@ -9,20 +9,20 @@
 package com.ogc.standard.bo.impl;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.domain.AlipayTradeWapPayModel;
 import com.alipay.api.domain.ExtendParams;
-import com.alipay.api.internal.util.WebUtils;
+import com.alipay.api.request.AlipayTradeRefundRequest;
 import com.alipay.api.request.AlipayTradeWapPayRequest;
+import com.alipay.api.response.AlipayTradeRefundResponse;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IAlipayBO;
 import com.ogc.standard.bo.IChargeBO;
@@ -127,28 +127,43 @@ public class AlipayBOImpl implements IAlipayBO {
     }
 
     @Override
-    public void doCallbackH5(String result) {
-        // 解析回调结果
-        logger.info("**** 支付回调结果： ****：" + result);
-        // 将异步通知中收到的待验证所有参数都存放到map中
-        Map<String, String> paramsMap = split(result);
-        // 获取支付宝配置参数
-        String passback = paramsMap.get("passback_params");
-        String[] codes = passback.split("\\|\\|");
-        String systemCode = codes[0];
-        String companyCode = codes[1];
-    }
+    public String doRefund(String refNo, String bizType, String bizNote,
+            BigDecimal refundAmount) {
+        AlipayClient alipayClient = new DefaultAlipayClient(AlipayConfig.URL,
+            AlipayConfig.APPID, AlipayConfig.RSA_PRIVATE_KEY,
+            AlipayConfig.FORMAT, AlipayConfig.CHARSET,
+            AlipayConfig.ALIPAY_PUBLIC_KEY, AlipayConfig.SIGNTYPE);
 
-    private Map<String, String> split(String urlparam) {
-        Map<String, String> map = new HashMap<String, String>();
-        String[] param = urlparam.split("&");
-        for (String keyvalue : param) {
-            String[] pair = keyvalue.split("=");
-            if (pair.length == 2) {
-                map.put(pair[0], WebUtils.decode(pair[1]));
-            }
+        AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
+
+        JSONObject contentModel = new JSONObject();
+
+        // 订单编号
+        contentModel.put("out_trade_no", refNo);
+
+        // 退款金额
+        contentModel.put("refund_amount", refundAmount);
+
+        // 退款说明
+        contentModel.put("refund_reason", bizNote);
+
+        request.setBizContent(contentModel.toJSONString());
+
+        AlipayTradeRefundResponse response = null;
+        try {
+            response = alipayClient.execute(request);
+        } catch (AlipayApiException e) {
+            e.printStackTrace();
         }
-        return map;
+
+        if (response.isSuccess()) {
+            System.out.println("支付宝退款成功");
+
+            // TODO 本地托管账户修改
+        } else {
+            System.out.println("支付宝退款失败");
+        }
+        return null;
     }
 
 }

@@ -55,6 +55,9 @@ public class PropertiesUtil {
         public static String WECHAT_H5_BACKURL = props
             .getProperty("WECHAT_H5_BACKURL");
 
+        public static String WECHAT_REFUND_URL = props
+            .getProperty("WECHAT_REFUND_URL");
+
         public static String KDNIAO_EBUSINESSID = props
             .getProperty("kdniao.EBusinessID");
 

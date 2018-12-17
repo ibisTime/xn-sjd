@@ -601,6 +601,7 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
                         if (EGroupAdoptOrderStatus.PAYED.getCode()
                             .equals(groupAdoptOrder.getStatus())) {
 
+                            // TODO 支付宝微信原路退回
                             // 人民币余额划转
                             Account sysCnyAccount = accountBO.getAccount(
                                 ESystemAccount.SYS_ACOUNT_CNY.getCode());

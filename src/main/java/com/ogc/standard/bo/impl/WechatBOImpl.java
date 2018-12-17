@@ -16,18 +16,22 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.ogc.standard.bo.ICompanyChannelBO;
 import com.ogc.standard.bo.IWechatBO;
 import com.ogc.standard.common.PropertiesUtil;
 import com.ogc.standard.domain.CompanyChannel;
 import com.ogc.standard.dto.res.XN002501Res;
+import com.ogc.standard.enums.EChannelType;
 import com.ogc.standard.enums.ESystemCode;
 import com.ogc.standard.enums.EWeChatType;
 import com.ogc.standard.util.wechat.MD5;
 import com.ogc.standard.util.wechat.MD5Util;
 import com.ogc.standard.util.wechat.OrderUtil;
 import com.ogc.standard.util.wechat.WXPrepay;
+import com.ogc.standard.util.wechat.WXRefund;
 
 /** 
  * @author: haiqingzheng 
@@ -36,6 +40,9 @@ import com.ogc.standard.util.wechat.WXPrepay;
  */
 @Component
 public class WechatBOImpl implements IWechatBO {
+
+    @Autowired
+    ICompanyChannelBO companyChannelBO;
 
     @Override
     public String getPrepayIdH5(CompanyChannel companyChannel, String openId,
@@ -86,6 +93,30 @@ public class WechatBOImpl implements IWechatBO {
         return res;
     }
 
+    @Override
+    public String doRefund(String refNo, String bizType, String bizNote,
+            String refundAmount) {
+        // 获取微信支付配置参数
+        CompanyChannel companyChannel = companyChannelBO.getCompanyChannel(
+            ESystemCode.BZ.getCode(), ESystemCode.BZ.getCode(),
+            EChannelType.WeChat_H5.getCode());
+
+        WXRefund refund = new WXRefund();
+        refund.setAppid(companyChannel.getPrivateKey2());// 微信支付分配的公众账号ID
+        refund.setMch_id(companyChannel.getChannelCompany()); // 商户号
+        String randomStr = MD5
+            .GetMD5String(String.valueOf(new Random().nextInt(10000)));
+        refund
+            .setNonce_str(MD5Util.MD5Encode(randomStr, "utf-8").toLowerCase());
+        refund.setOut_trade_no(refNo);
+        refund.setOut_refund_no(refNo);
+        refund.setRefund_fee(refundAmount);
+        refund.setTotal_fee(refundAmount);
+        refund.setPrivateKey(companyChannel.getPrivateKey1());
+
+        return refund.submitXmlRefund();
+    }
+
     /**
      * 创建md5摘要,规则是:按参数名称a-z排序,遇到空值的参数不参加签名。
      */
@@ -107,4 +138,5 @@ public class WechatBOImpl implements IWechatBO {
         String sign = MD5Util.MD5Encode(sb.toString(), "UTF-8").toUpperCase();
         return sign;
     }
+
 }
