@@ -1331,6 +1331,7 @@ CREATE TABLE `tsc_commodity_order_detail` (
   `jf_deduct_amount` decimal(18,8) DEFAULT NULL COMMENT '积分抵扣金额',
   `back_jf_amount` decimal(18,8) DEFAULT NULL COMMENT '积分返点金额',
   `pay_amount` decimal(18,8) DEFAULT NULL COMMENT '支付金额',
+  `pay_type` varchar(4) DEFAULT NULL COMMENT '支付方式',
   `max_jfdk_rate` DOUBLE DEFAULT NULL COMMENT '最大积分抵扣比例',
   `list_pic` varchar(255) DEFAULT NULL COMMENT '列表图片',
   `logistics_company` varchar(4) DEFAULT NULL COMMENT '物流公司',

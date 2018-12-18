@@ -10,6 +10,8 @@ package com.ogc.standard.bo;
 
 import java.math.BigDecimal;
 
+import com.ogc.standard.domain.Account;
+
 /** 
  * @author: haiqingzheng 
  * @since: 2017年1月11日 下午8:55:34 
@@ -23,7 +25,7 @@ public interface IAlipayBO {
             BigDecimal transAmount);
 
     // 支付宝退款
-    public String doRefund(String refNo, String bizType, String bizNote,
-            BigDecimal refundAmount);
+    public String doRefund(String refNo, Account fromAccount, String bizType,
+            String bizNote, BigDecimal refundAmount);
 
 }

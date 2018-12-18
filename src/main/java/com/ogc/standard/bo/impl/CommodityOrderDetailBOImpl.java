@@ -122,15 +122,6 @@ public class CommodityOrderDetailBOImpl
     }
 
     @Override
-    public void handleAfterSell(String code) {
-        CommodityOrderDetail commodityOrderDetail = new CommodityOrderDetail();
-        commodityOrderDetail.setCode(code);
-        commodityOrderDetail
-            .setStatus(ECommodityOrderDetailStatus.AFTER_SALEED.getCode());
-        commodityOrderDetailDAO.updateHandleAfterSell(commodityOrderDetail);
-    }
-
-    @Override
     public void refreshStatus(String orderCode, String status) {
         CommodityOrderDetail commodityOrderDetail = new CommodityOrderDetail();
         commodityOrderDetail.setOrderCode(orderCode);
@@ -149,13 +140,14 @@ public class CommodityOrderDetailBOImpl
     @Override
     public void refreshDkAmount(String code, BigDecimal cnyDeductAmount,
             BigDecimal jfDeductAmount, BigDecimal backJfAmount,
-            BigDecimal payAmount) {
+            BigDecimal payAmount, String payType) {
         CommodityOrderDetail commodityOrderDetail = new CommodityOrderDetail();
         commodityOrderDetail.setCode(code);
         commodityOrderDetail.setCnyDeductAmount(cnyDeductAmount);
         commodityOrderDetail.setJfDeductAmount(jfDeductAmount);
         commodityOrderDetail.setBackJfAmount(backJfAmount);
         commodityOrderDetail.setPayAmount(payAmount);
+        commodityOrderDetail.setPayType(payType);
         commodityOrderDetailDAO.updateDkAmount(commodityOrderDetail);
     }
 

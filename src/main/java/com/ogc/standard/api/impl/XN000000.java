@@ -52,8 +52,9 @@ public class XN000000 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        wechatBO.doRefund(req.getRefNo(), req.getBizType(), req.getBizNote(),
-            req.getRefundAmount());
+        groupAdoptOrderAO.doInvalidIdentifyCode();
+        // wechatBO.doRefund(req.getRefNo(), req.getBizType(), req.getBizNote(),
+        // req.getRefundAmount());
         return new BooleanRes(true);
     }
 

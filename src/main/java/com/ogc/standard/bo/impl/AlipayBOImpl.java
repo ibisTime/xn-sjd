@@ -127,8 +127,8 @@ public class AlipayBOImpl implements IAlipayBO {
     }
 
     @Override
-    public String doRefund(String refNo, String bizType, String bizNote,
-            BigDecimal refundAmount) {
+    public String doRefund(String refNo, Account fromAccount, String bizType,
+            String bizNote, BigDecimal refundAmount) {
         AlipayClient alipayClient = new DefaultAlipayClient(AlipayConfig.URL,
             AlipayConfig.APPID, AlipayConfig.RSA_PRIVATE_KEY,
             AlipayConfig.FORMAT, AlipayConfig.CHARSET,
@@ -157,9 +157,16 @@ public class AlipayBOImpl implements IAlipayBO {
         }
 
         if (response.isSuccess()) {
+
+            // 托管账户扣钱
+            BigDecimal amount = refundAmount.multiply(new BigDecimal(1000))
+                .negate();
+            accountBO.changeAmount(fromAccount, amount,
+                EChannelType.getEChannelType(EChannelType.Alipay.getCode()),
+                refNo, refNo, bizType, bizNote);
+
             System.out.println("支付宝退款成功");
 
-            // TODO 本地托管账户修改
         } else {
             System.out.println("支付宝退款失败");
         }

@@ -52,6 +52,10 @@ public class WXRefund {
 
     private String privateKey;
 
+    private String bizType;
+
+    private String bizNote;
+
     /**
      * 退款
      * @return 
@@ -89,16 +93,10 @@ public class WXRefund {
 
             HttpEntity resEntity = response.getEntity();
             String result = EntityUtils.toString(resEntity, "UTF-8");
-            // System.out.println(result);
+            System.out.println(result);
 
             result = result.replaceAll("<![CDATA[|]]>", "");
             return_code = Jsoup.parse(result).select("return_code").html();
-
-            if ("SUCCESS".equals(return_code)) {
-                System.out.println("微信退款成功");
-
-                // TODO
-            }
 
         } catch (Exception e1) {
             e1.printStackTrace();
@@ -227,6 +225,22 @@ public class WXRefund {
 
     public void setPrivateKey(String privateKey) {
         this.privateKey = privateKey;
+    }
+
+    public String getBizType() {
+        return bizType;
+    }
+
+    public void setBizType(String bizType) {
+        this.bizType = bizType;
+    }
+
+    public String getBizNote() {
+        return bizNote;
+    }
+
+    public void setBizNote(String bizNote) {
+        this.bizNote = bizNote;
     }
 
 }

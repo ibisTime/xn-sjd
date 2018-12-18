@@ -8,11 +8,11 @@ package com.ogc.standard.enums;
 public enum ECommodityOrderDetailStatus {
 
     TO_COMMENT("0", "待评价"), COMMENTED("1", "已评价"), AFTER_SELL_ING("2",
-            "售后中"), AFTER_SALEED("3", "售后完成"),
+            "售后中"), AFTER_SALEED_YES("3", "退款成功"),
 
     TO_PAY("4", "待支付"), TODELIVE("5", "待发货"), TORECEIVE("6", "待收货")
 
-    , CANCLED("7", "已取消");
+    , CANCLED("7", "已取消"), AFTER_SALEED_NO("8", "退款失败");
 
     ECommodityOrderDetailStatus(String code, String value) {
         this.code = code;

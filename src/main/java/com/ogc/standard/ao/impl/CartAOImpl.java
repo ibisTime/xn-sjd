@@ -137,8 +137,14 @@ public class CartAOImpl implements ICartAO {
                 // 库存检验
                 if (cart.getQuantity() > commoditySpecsBO
                     .getInventory(cart.getSpecsId())) {
-                    throw new BizException("xn0000", "产品[" + commodity.getName()
-                            + "]规格[" + specs.getName() + "]库存不足，不能下单");
+                    throw new BizException("xn0000", "产品【" + commodity.getName()
+                            + "】规格【" + specs.getName() + "【库存不足，不能下单");
+                }
+
+                if (!ECommodityStatus.ON.getCode()
+                    .equals(commodity.getStatus())) {
+                    throw new BizException("xn0000",
+                        "产品【" + commodity.getName() + "】已下架，不能下单");
                 }
 
                 // 落地订单明细

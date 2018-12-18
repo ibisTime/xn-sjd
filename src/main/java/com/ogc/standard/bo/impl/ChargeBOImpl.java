@@ -63,12 +63,13 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
     @Override
     public String applyOrderOnline(Account account, String refNo,
             String payGroup, String bizType, String bizNote,
-            BigDecimal transAmount, EChannelType channelType, String applyUser) {
+            BigDecimal transAmount, EChannelType channelType,
+            String applyUser) {
         if (transAmount.compareTo(BigDecimal.ZERO) == 0) {
             throw new BizException("xn000000", "充值金额不能为0");
         }
-        String code = OrderNoGenerater.generate(EGeneratePrefix.Charge
-            .getCode());
+        String code = OrderNoGenerater
+            .generate(EGeneratePrefix.Charge.getCode());
         Charge data = new Charge();
         data.setCode(code);
         if (EJourBizTypeUser.CHARGE.getCode().equals(bizType)) {
@@ -140,6 +141,19 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
             if (null == order) {
                 throw new BizException("xn000000", "订单号[" + code + "]不存在");
             }
+        }
+        return order;
+    }
+
+    @Override
+    public Charge getCharge(String bizNo, String channelType, String status) {
+        Charge order = null;
+        if (StringUtils.isNotBlank(bizNo)) {
+            Charge condition = new Charge();
+            condition.setBizNo(bizNo);
+            condition.setChannelType(channelType);
+            condition.setStatus(status);
+            order = chargeDAO.select(condition);
         }
         return order;
     }

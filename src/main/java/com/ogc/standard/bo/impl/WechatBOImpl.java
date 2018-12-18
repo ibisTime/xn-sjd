@@ -19,9 +19,11 @@ import java.util.TreeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.ICompanyChannelBO;
 import com.ogc.standard.bo.IWechatBO;
 import com.ogc.standard.common.PropertiesUtil;
+import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.CompanyChannel;
 import com.ogc.standard.dto.res.XN002501Res;
 import com.ogc.standard.enums.EChannelType;
@@ -43,6 +45,9 @@ public class WechatBOImpl implements IWechatBO {
 
     @Autowired
     ICompanyChannelBO companyChannelBO;
+
+    @Autowired
+    IAccountBO accountBO;
 
     @Override
     public String getPrepayIdH5(CompanyChannel companyChannel, String openId,
@@ -94,8 +99,8 @@ public class WechatBOImpl implements IWechatBO {
     }
 
     @Override
-    public String doRefund(String refNo, String bizType, String bizNote,
-            String refundAmount) {
+    public String doRefund(String refNo, Account fromAccount, String bizType,
+            String bizNote, String refundAmount) {
         // 获取微信支付配置参数
         CompanyChannel companyChannel = companyChannelBO.getCompanyChannel(
             ESystemCode.BZ.getCode(), ESystemCode.BZ.getCode(),
@@ -114,7 +119,24 @@ public class WechatBOImpl implements IWechatBO {
         refund.setTotal_fee(refundAmount);
         refund.setPrivateKey(companyChannel.getPrivateKey1());
 
-        return refund.submitXmlRefund();
+        refund.setBizType(bizType);
+        refund.setBizNote(bizNote);
+
+        String return_code = refund.submitXmlRefund();
+
+        if ("SUCCESS".equals(return_code)) {
+
+            // 托管账户扣钱
+            BigDecimal amount = new BigDecimal(refundAmount)
+                .multiply(new BigDecimal(10)).negate();
+            accountBO.changeAmount(fromAccount, amount,
+                EChannelType.getEChannelType(EChannelType.WeChat_H5.getCode()),
+                refNo, refNo, bizType, bizNote);
+
+            System.out.println("微信退款成功");
+        }
+
+        return return_code;
     }
 
     /**

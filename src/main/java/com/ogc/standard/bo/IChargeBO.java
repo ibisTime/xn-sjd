@@ -12,9 +12,9 @@ public interface IChargeBO extends IPaginableBO<Charge> {
 
     void callBackChange(Charge dbCharge, boolean booleanFlag);
 
-    String applyOrderOffline(Account account, String bizType,
-            BigDecimal amount, String payCardInfo, String payCardNo,
-            String applyUser, String applyUserType, String applyNote);
+    String applyOrderOffline(Account account, String bizType, BigDecimal amount,
+            String payCardInfo, String payCardNo, String applyUser,
+            String applyUserType, String applyNote);
 
     String applyOrderOnline(Account account, String refNo, String payGroup,
             String bizType, String bizNote, BigDecimal transAmount,
@@ -26,4 +26,6 @@ public interface IChargeBO extends IPaginableBO<Charge> {
     List<Charge> queryChargeList(Charge condition);
 
     Charge getCharge(String code);
+
+    Charge getCharge(String bizNo, String channelType, String status);
 }

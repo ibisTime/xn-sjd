@@ -10,6 +10,7 @@ package com.ogc.standard.bo;
 
 import java.math.BigDecimal;
 
+import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.CompanyChannel;
 import com.ogc.standard.dto.res.XN002501Res;
 
@@ -27,7 +28,7 @@ public interface IWechatBO {
             String payCode, String prepayId);
 
     // 微信退款
-    public String doRefund(String refNo, String bizType, String bizNote,
-            String refundAmount);
+    public String doRefund(String refNo, Account fromAccount, String bizType,
+            String bizNote, String refundAmount);
 
 }

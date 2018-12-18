@@ -182,7 +182,8 @@ public class CommodityOrderDetailAOImpl implements ICommodityOrderDetailAO {
                         commodityOrderDetailBO.refreshDkAmount(
                             commodityOrderDetail.getCode(), detailCnyAmount,
                             detailJfAmount, null, commodityOrderDetail
-                                .getAmount().subtract(detailCnyAmount));
+                                .getAmount().subtract(detailCnyAmount),
+                            commodityOrder.getPayType());
 
                     }
                 }

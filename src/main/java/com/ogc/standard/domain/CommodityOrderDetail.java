@@ -67,6 +67,9 @@ public class CommodityOrderDetail extends ABaseDO {
     // 支付金额
     private BigDecimal payAmount;
 
+    // 支付方式
+    private String payType;
+
     // 列表图
     private String listPic;
 
@@ -434,6 +437,14 @@ public class CommodityOrderDetail extends ABaseDO {
 
     public void setPayAmount(BigDecimal payAmount) {
         this.payAmount = payAmount;
+    }
+
+    public String getPayType() {
+        return payType;
+    }
+
+    public void setPayType(String payType) {
+        this.payType = payType;
     }
 
 }

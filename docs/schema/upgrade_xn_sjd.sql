@@ -390,3 +390,9 @@ where order_type in (5);
 
 #V2.0.0 5-1 预售价格涨幅未生效
 update tys_presell_specs set now_interval = 0 where now_interval is null;
+
+#V2.0.0 5-2 商城优化
+ALTER TABLE `tsc_commodity_order_detail` 
+ADD COLUMN `pay_type` VARCHAR(4) NULL COMMENT '支付方式' AFTER `pay_amount`;
+
+update tsc_commodity_order_detail set pay_type = (select pay_type from tsc_commodity_order where code = tsc_commodity_order_detail.order_code);

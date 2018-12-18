@@ -39,9 +39,6 @@ public interface ICommodityOrderDetailBO
     // 申请售后
     public void toAfterSell(String code);
 
-    // 处理售后
-    public void handleAfterSell(String code);
-
     // 更新状态
     public void refreshStatus(String orderCode, String status);
 
@@ -50,7 +47,7 @@ public interface ICommodityOrderDetailBO
 
     public void refreshDkAmount(String code, BigDecimal cnyDeductAmount,
             BigDecimal jfDeductAmount, BigDecimal backJfAmount,
-            BigDecimal payAmount);
+            BigDecimal payAmount, String payType);
 
     public List<CommodityOrderDetail> queryDetailList(
             CommodityOrderDetail condition);

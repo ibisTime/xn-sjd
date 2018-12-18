@@ -18,20 +18,28 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ogc.standard.ao.IAfterSaleAO;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IAfterSaleBO;
+import com.ogc.standard.bo.IAlipayBO;
+import com.ogc.standard.bo.IChargeBO;
 import com.ogc.standard.bo.ICommodityOrderDetailBO;
 import com.ogc.standard.bo.ICompanyBO;
+import com.ogc.standard.bo.IWechatBO;
 import com.ogc.standard.bo.base.Paginable;
+import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.AfterSale;
+import com.ogc.standard.domain.Charge;
 import com.ogc.standard.domain.CommodityOrderDetail;
 import com.ogc.standard.domain.Company;
 import com.ogc.standard.enums.EAfterSaleStatus;
 import com.ogc.standard.enums.EAfterSaleType;
 import com.ogc.standard.enums.EBoolean;
+import com.ogc.standard.enums.EChannelType;
+import com.ogc.standard.enums.EChargeStatus;
 import com.ogc.standard.enums.ECommodityOrderDetailStatus;
 import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EJourBizTypeBusiness;
 import com.ogc.standard.enums.EJourBizTypePlat;
 import com.ogc.standard.enums.EJourBizTypeUser;
+import com.ogc.standard.enums.EPayType;
 import com.ogc.standard.enums.ESysUser;
 import com.ogc.standard.exception.BizException;
 
@@ -54,6 +62,15 @@ public class AfterSaleAOImpl implements IAfterSaleAO {
 
     @Autowired
     private ICompanyBO companyBO;
+
+    @Autowired
+    private IWechatBO weChatBO;
+
+    @Autowired
+    private IChargeBO chargeBO;
+
+    @Autowired
+    private IAlipayBO alipayBO;
 
     @Override
     @Transactional
@@ -132,7 +149,7 @@ public class AfterSaleAOImpl implements IAfterSaleAO {
 
                 commodityOrderDetailBO.refreshAfterSaleStatus(
                     data.getOrderDetailCode(),
-                    ECommodityOrderDetailStatus.AFTER_SALEED.getCode());
+                    ECommodityOrderDetailStatus.AFTER_SALEED_YES.getCode());
             } else {
                 // 状态更新
                 afterSaleBO.refreshHandle(data,
@@ -145,7 +162,7 @@ public class AfterSaleAOImpl implements IAfterSaleAO {
 
             commodityOrderDetailBO.refreshAfterSaleStatus(
                 data.getOrderDetailCode(),
-                ECommodityOrderDetailStatus.AFTER_SALEED.getCode());
+                ECommodityOrderDetailStatus.AFTER_SALEED_NO.getCode());
         }
 
     }
@@ -165,7 +182,7 @@ public class AfterSaleAOImpl implements IAfterSaleAO {
         commodityOrderDetailBO.toComment(data.getOrderDetailCode());
 
         commodityOrderDetailBO.refreshAfterSaleStatus(data.getOrderDetailCode(),
-            ECommodityOrderDetailStatus.AFTER_SALEED.getCode());
+            ECommodityOrderDetailStatus.AFTER_SALEED_YES.getCode());
     }
 
     private void refund(AfterSale data) {
@@ -176,12 +193,65 @@ public class AfterSaleAOImpl implements IAfterSaleAO {
         String business = company.getUserId();
         String applyUser = orderDetail.getApplyUser();
 
+        // TODO 单订单多次退款
         // 人民币退款
-        accountBO.transAmount(business, applyUser, ECurrency.CNY.getCode(),
-            refundAmount, EJourBizTypeBusiness.AFTER_SALE.getCode(),
-            EJourBizTypeUser.AFTER_SALE.getCode(),
-            EJourBizTypeBusiness.AFTER_SALE.getValue(),
-            EJourBizTypeUser.AFTER_SALE.getValue(), data.getCode());
+        if (null != orderDetail.getPayType()) {
+
+            if (EPayType.YE.getCode().equals(orderDetail.getPayType())) {
+
+                // 人民币余额划转
+                accountBO.transAmount(business, applyUser,
+                    ECurrency.CNY.getCode(), refundAmount,
+                    EJourBizTypeBusiness.AFTER_SALE.getCode(),
+                    EJourBizTypeUser.AFTER_SALE.getCode(),
+                    EJourBizTypeBusiness.AFTER_SALE.getValue(),
+                    EJourBizTypeUser.AFTER_SALE.getValue(), data.getCode());
+
+            } else if (EPayType.ALIPAY.getCode()
+                .equals(orderDetail.getPayType())) {
+
+                // 支付宝退款
+                Charge charge = chargeBO.getCharge(orderDetail.getOrderCode(),
+                    EChannelType.Alipay.getCode(),
+                    EChargeStatus.Pay_YES.getCode());
+
+                String refNo = null;
+                if (null != charge) {
+                    refNo = charge.getCode();
+                }
+
+                Account bussinessAccount = accountBO.getAccountByUser(business,
+                    ECurrency.CNY.getCode());
+
+                alipayBO.doRefund(refNo, bussinessAccount,
+                    EJourBizTypeUser.UN_FULL_CNY.getCode(),
+                    EJourBizTypeUser.UN_FULL_CNY.getValue(),
+                    data.getRefundAmount().divide(new BigDecimal(1000)));
+
+            } else if (EPayType.WEIXIN_H5.getCode()
+                .equals(orderDetail.getPayType())) {
+
+                // 微信退款
+                Charge charge = chargeBO.getCharge(orderDetail.getOrderCode(),
+                    EChannelType.WeChat_H5.getCode(),
+                    EChargeStatus.Pay_YES.getCode());
+
+                String refNo = null;
+                if (null != charge) {
+                    refNo = charge.getCode();
+                }
+
+                Account bussinessAccount = accountBO.getAccountByUser(business,
+                    ECurrency.CNY.getCode());
+
+                weChatBO.doRefund(refNo, bussinessAccount,
+                    EJourBizTypeUser.UN_FULL_CNY.getCode(),
+                    EJourBizTypeUser.UN_FULL_CNY.getValue(),
+                    data.getRefundAmount().divide(new BigDecimal(10))
+                        .toString());
+
+            }
+        }
 
         // 积分退款
         accountBO.transAmount(ESysUser.SYS_USER.getCode(),

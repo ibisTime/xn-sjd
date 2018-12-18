@@ -21,6 +21,7 @@ import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IAdoptOrderTreeBO;
 import com.ogc.standard.bo.IAgentUserBO;
 import com.ogc.standard.bo.IAlipayBO;
+import com.ogc.standard.bo.IChargeBO;
 import com.ogc.standard.bo.IDistributionOrderBO;
 import com.ogc.standard.bo.IGroupAdoptOrderBO;
 import com.ogc.standard.bo.IProductBO;
@@ -29,11 +30,13 @@ import com.ogc.standard.bo.ISettleBO;
 import com.ogc.standard.bo.ISmsBO;
 import com.ogc.standard.bo.ITreeBO;
 import com.ogc.standard.bo.IUserBO;
+import com.ogc.standard.bo.IWechatBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.AdoptOrderTree;
 import com.ogc.standard.domain.AgentUser;
+import com.ogc.standard.domain.Charge;
 import com.ogc.standard.domain.GroupAdoptOrder;
 import com.ogc.standard.domain.Product;
 import com.ogc.standard.domain.ProductSpecs;
@@ -46,6 +49,8 @@ import com.ogc.standard.dto.res.XN629048Res;
 import com.ogc.standard.enums.EAdoptOrderStatus;
 import com.ogc.standard.enums.EAdoptOrderTreeStatus;
 import com.ogc.standard.enums.EBoolean;
+import com.ogc.standard.enums.EChannelType;
+import com.ogc.standard.enums.EChargeStatus;
 import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EGroupAdoptOrderStatus;
 import com.ogc.standard.enums.EJourBizTypePlat;
@@ -105,6 +110,12 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
 
     @Autowired
     private IWeChatAO weChatAO;
+
+    @Autowired
+    private IWechatBO weChatBO;
+
+    @Autowired
+    private IChargeBO chargeBO;
 
     @Override
     @Transactional
@@ -601,43 +612,11 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
                         if (EGroupAdoptOrderStatus.PAYED.getCode()
                             .equals(groupAdoptOrder.getStatus())) {
 
-                            // TODO 支付宝微信原路退回
-                            // 人民币余额划转
-                            Account sysCnyAccount = accountBO.getAccount(
-                                ESystemAccount.SYS_ACOUNT_CNY.getCode());
-                            Account userCnyAccount = accountBO.getAccountByUser(
-                                groupAdoptOrder.getApplyUser(),
-                                ECurrency.CNY.getCode());
-                            accountBO.transAmount(sysCnyAccount, userCnyAccount,
-                                groupAdoptOrder.getPayAmount(),
-                                EJourBizTypeUser.UN_FULL_CNY.getCode(),
-                                EJourBizTypePlat.UN_FULL_CNY.getCode(),
-                                EJourBizTypeUser.UN_FULL_CNY.getValue(),
-                                EJourBizTypePlat.UN_FULL_CNY.getValue(),
-                                groupAdoptOrder.getCode());
+                            // 人民币退款
+                            cnyRefund(groupAdoptOrder);
 
-                            // 认养抵扣积分划转
-                            Account sysJfAccount = accountBO.getAccount(
-                                ESystemAccount.SYS_ACOUNT_JF_POOL.getCode());
-                            Account userJfAccount = accountBO.getAccountByUser(
-                                groupAdoptOrder.getApplyUser(),
-                                ECurrency.JF.getCode());
-                            accountBO.transAmount(sysJfAccount, userJfAccount,
-                                groupAdoptOrder.getJfDeductAmount(),
-                                EJourBizTypeUser.UN_FULL_DEDUCTJF.getCode(),
-                                EJourBizTypePlat.UN_FULL_DEDUCTJF.getCode(),
-                                EJourBizTypeUser.UN_FULL_DEDUCTJF.getValue(),
-                                EJourBizTypePlat.UN_FULL_DEDUCTJF.getValue(),
-                                groupAdoptOrder.getCode());
-
-                            // 认养返利积分划转
-                            accountBO.transAmount(userJfAccount, sysJfAccount,
-                                groupAdoptOrder.getBackJfAmount(),
-                                EJourBizTypeUser.UN_FULL_BACKJF.getCode(),
-                                EJourBizTypePlat.UN_FULL_BACKJF.getCode(),
-                                EJourBizTypeUser.UN_FULL_BACKJF.getValue(),
-                                EJourBizTypePlat.UN_FULL_BACKJF.getValue(),
-                                groupAdoptOrder.getCode());
+                            // 积分退款
+                            jfRefund(groupAdoptOrder);
 
                             // 更新认养权状态
                             adoptOrderTreeBO.refreshInvalidAdoptByOrder(
@@ -664,6 +643,90 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
         }
 
         logger.info("***************结束扫描失效识别码***************");
+    }
+
+    private void cnyRefund(GroupAdoptOrder groupAdoptOrder) {
+        if (EPayType.YE.getCode().equals(groupAdoptOrder.getPayType())) {
+
+            // 人民币余额划转
+            Account sysCnyAccount = accountBO
+                .getAccount(ESystemAccount.SYS_ACOUNT_CNY.getCode());
+            Account userCnyAccount = accountBO.getAccountByUser(
+                groupAdoptOrder.getApplyUser(), ECurrency.CNY.getCode());
+            accountBO.transAmount(sysCnyAccount, userCnyAccount,
+                groupAdoptOrder.getPayAmount(),
+                EJourBizTypeUser.UN_FULL_CNY.getCode(),
+                EJourBizTypePlat.UN_FULL_CNY.getCode(),
+                EJourBizTypeUser.UN_FULL_CNY.getValue(),
+                EJourBizTypePlat.UN_FULL_CNY.getValue(),
+                groupAdoptOrder.getCode());
+
+        } else if (EPayType.ALIPAY.getCode()
+            .equals(groupAdoptOrder.getPayType())) {
+
+            // 支付宝退款
+            Charge charge = chargeBO.getCharge(groupAdoptOrder.getCode(),
+                EChannelType.Alipay.getCode(), EChargeStatus.Pay_YES.getCode());
+
+            String refNo = null;
+            if (null != charge) {
+                refNo = charge.getCode();
+            }
+
+            Account sysAccount = accountBO
+                .getAccount(ESystemAccount.SYS_ACOUNT_ALIPAY.getCode());
+
+            alipayBO.doRefund(refNo, sysAccount,
+                EJourBizTypeUser.UN_FULL_CNY.getCode(),
+                EJourBizTypeUser.UN_FULL_CNY.getValue(),
+                groupAdoptOrder.getPayAmount().divide(new BigDecimal(1000)));
+
+        } else if (EPayType.WEIXIN_H5.getCode()
+            .equals(groupAdoptOrder.getPayType())) {
+
+            // 微信退款
+            Charge charge = chargeBO.getCharge(groupAdoptOrder.getCode(),
+                EChannelType.WeChat_H5.getCode(),
+                EChargeStatus.Pay_YES.getCode());
+
+            String refNo = null;
+            if (null != charge) {
+                refNo = charge.getCode();
+            }
+
+            Account sysAccount = accountBO
+                .getAccount(ESystemAccount.SYS_ACOUNT_WEIXIN.getCode());
+
+            weChatBO.doRefund(refNo, sysAccount,
+                EJourBizTypeUser.UN_FULL_CNY.getCode(),
+                EJourBizTypeUser.UN_FULL_CNY.getValue(), groupAdoptOrder
+                    .getPayAmount().divide(new BigDecimal(10)).toString());
+
+        }
+    }
+
+    private void jfRefund(GroupAdoptOrder groupAdoptOrder) {
+        // 认养抵扣积分划转
+        Account sysJfAccount = accountBO
+            .getAccount(ESystemAccount.SYS_ACOUNT_JF_POOL.getCode());
+        Account userJfAccount = accountBO.getAccountByUser(
+            groupAdoptOrder.getApplyUser(), ECurrency.JF.getCode());
+        accountBO.transAmount(sysJfAccount, userJfAccount,
+            groupAdoptOrder.getJfDeductAmount(),
+            EJourBizTypeUser.UN_FULL_DEDUCTJF.getCode(),
+            EJourBizTypePlat.UN_FULL_DEDUCTJF.getCode(),
+            EJourBizTypeUser.UN_FULL_DEDUCTJF.getValue(),
+            EJourBizTypePlat.UN_FULL_DEDUCTJF.getValue(),
+            groupAdoptOrder.getCode());
+
+        // 认养返利积分划转
+        accountBO.transAmount(userJfAccount, sysJfAccount,
+            groupAdoptOrder.getBackJfAmount(),
+            EJourBizTypeUser.UN_FULL_BACKJF.getCode(),
+            EJourBizTypePlat.UN_FULL_BACKJF.getCode(),
+            EJourBizTypeUser.UN_FULL_BACKJF.getValue(),
+            EJourBizTypePlat.UN_FULL_BACKJF.getValue(),
+            groupAdoptOrder.getCode());
     }
 
     @Override
