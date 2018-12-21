@@ -69,6 +69,9 @@ public class Commodity extends ABaseDO {
     // 最大积分抵扣比例
     private double maxJfdkRate;
 
+    // 单邮费数量
+    private Integer singlePostageCount;
+
     // UI位置
     private String location;
 
@@ -310,6 +313,14 @@ public class Commodity extends ABaseDO {
 
     public void setCodeList(List<String> codeList) {
         this.codeList = codeList;
+    }
+
+    public Integer getSinglePostageCount() {
+        return singlePostageCount;
+    }
+
+    public void setSinglePostageCount(Integer singlePostageCount) {
+        this.singlePostageCount = singlePostageCount;
     }
 
 }

@@ -41,7 +41,8 @@ public class AfterSaleBOImpl extends PaginableBOImpl<AfterSale>
     @Override
     public String saveAfterSale(String shopCode, String orderDetailCode,
             String logisticsCompany, String logisticsNumber,
-            BigDecimal refundAmount, String deliver) {
+            BigDecimal refundAmount, String deliver, String refundReason,
+            String message) {
         AfterSale data = new AfterSale();
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.AfterSale.getCode());
@@ -51,6 +52,8 @@ public class AfterSaleBOImpl extends PaginableBOImpl<AfterSale>
         data.setType(EAfterSaleType.goodsMoney.getCode());
         data.setStatus(EAfterSaleStatus.TOHANDLE.getCode());
         data.setRefundAmount(refundAmount);
+        data.setRefundReason(refundReason);
+        data.setMessage(message);
         data.setLogisticsCompany(logisticsCompany);
         data.setLogisticsNumber(logisticsNumber);
         data.setDeliver(deliver);
@@ -61,7 +64,7 @@ public class AfterSaleBOImpl extends PaginableBOImpl<AfterSale>
 
     @Override
     public String AfterSaleNoGoods(String shopCode, String orderDetailCode,
-            BigDecimal refundAmount) {
+            BigDecimal refundAmount, String refundReason, String message) {
         AfterSale data = new AfterSale();
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.AfterSale.getCode());
@@ -71,6 +74,8 @@ public class AfterSaleBOImpl extends PaginableBOImpl<AfterSale>
         data.setType(EAfterSaleType.onlyMoney.getCode());
         data.setStatus(EAfterSaleStatus.TOHANDLE.getCode());
         data.setRefundAmount(refundAmount);
+        data.setRefundReason(refundReason);
+        data.setMessage(message);
         afterSaleDAO.insert(data);
         return code;
     }

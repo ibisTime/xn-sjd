@@ -37,7 +37,7 @@ public class XN629771 extends AProcessor {
 
         return new PKCodeRes(afterSaleAO.applyMoney(req.getOrderDetailCode(),
             StringValidater.toBigDecimal(req.getRefundAmount()),
-            req.getApplyUser()));
+            req.getApplyUser(), req.getRefundReason(), req.getMessage()));
     }
 
     @Override

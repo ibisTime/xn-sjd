@@ -23,10 +23,11 @@ public interface IAfterSaleBO extends IPaginableBO<AfterSale> {
 
     public String saveAfterSale(String shopCode, String orderDetailCode,
             String logisticsCompany, String logisticsNumber,
-            BigDecimal refundAmount, String deliver);
+            BigDecimal refundAmount, String deliver, String refundReason,
+            String message);
 
     public String AfterSaleNoGoods(String shopCode, String orderDetailCode,
-            BigDecimal refundAmount);
+            BigDecimal refundAmount, String refundReason, String message);
 
     public void refreshHandle(AfterSale data, String status);
 

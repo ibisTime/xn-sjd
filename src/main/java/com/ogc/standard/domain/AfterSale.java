@@ -42,6 +42,12 @@ public class AfterSale extends ABaseDO {
     // 退款金额
     private BigDecimal refundAmount;
 
+    // 退款原因
+    private String refundReason;
+
+    // 留言
+    private String message;
+
     // 物流公司
     private String logisticsCompany;
 
@@ -210,6 +216,22 @@ public class AfterSale extends ABaseDO {
 
     public void setShopCode(String shopCode) {
         this.shopCode = shopCode;
+    }
+
+    public String getRefundReason() {
+        return refundReason;
+    }
+
+    public void setRefundReason(String refundReason) {
+        this.refundReason = refundReason;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
 }

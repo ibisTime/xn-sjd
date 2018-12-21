@@ -396,3 +396,10 @@ ALTER TABLE `tsc_commodity_order_detail`
 ADD COLUMN `pay_type` VARCHAR(4) NULL COMMENT '支付方式' AFTER `pay_amount`;
 
 update tsc_commodity_order_detail set pay_type = (select pay_type from tsc_commodity_order where code = tsc_commodity_order_detail.order_code);
+
+ALTER TABLE `tsc_after_sale` 
+ADD COLUMN `refund_reason` VARCHAR(32) NULL COMMENT '退款原因' AFTER `refund_amount`,
+ADD COLUMN `message` TEXT NULL COMMENT '留言' AFTER `refund_reason`;
+
+ALTER TABLE `tsc_commodity` 
+ADD COLUMN `single_postage_count` INT NULL COMMENT '单邮费数量' AFTER `max_jfdk_rate`;

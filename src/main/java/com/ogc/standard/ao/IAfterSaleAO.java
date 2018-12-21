@@ -24,11 +24,12 @@ public interface IAfterSaleAO {
 
     // 售后退货退款
     public String applyGoods(String orderDetailCode, String logisticsCompany,
-            String logisticsNumber, BigDecimal refundAmount, String deliver);
+            String logisticsNumber, BigDecimal refundAmount, String deliver,
+            String refundReason, String message);
 
     // 售后退货
     public String applyMoney(String orderDetailCode, BigDecimal refundAmount,
-            String applyUser);
+            String applyUser, String refundReason, String message);
 
     public void handleAfterSale(String code, String handleResult);
 

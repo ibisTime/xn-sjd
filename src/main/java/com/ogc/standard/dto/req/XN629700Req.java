@@ -45,6 +45,9 @@ public class XN629700Req {
     @NotBlank
     private String maxJfdkRate;
 
+    // 单邮费数量
+    private String singlePostageCount;
+
     // 原价
     @NotBlank
     private String originalPrice;
@@ -175,6 +178,14 @@ public class XN629700Req {
 
     public void setMaxJfdkRate(String maxJfdkRate) {
         this.maxJfdkRate = maxJfdkRate;
+    }
+
+    public String getSinglePostageCount() {
+        return singlePostageCount;
+    }
+
+    public void setSinglePostageCount(String singlePostageCount) {
+        this.singlePostageCount = singlePostageCount;
     }
 
 }

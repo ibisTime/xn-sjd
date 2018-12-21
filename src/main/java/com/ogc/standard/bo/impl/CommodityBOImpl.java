@@ -66,6 +66,8 @@ public class CommodityBOImpl extends PaginableBOImpl<Commodity>
         data.setMonthSellCount(0L);
         data.setSellUserId(company.getUserId());
         data.setMaxJfdkRate(StringValidater.toDouble(req.getMaxJfdkRate()));
+        data.setSinglePostageCount(
+            StringValidater.toInteger(req.getSinglePostageCount()));
         data.setStatus(ECommodityStatus.DRAFT.getCode());
         commodityDAO.insert(data);
         return code;
@@ -91,6 +93,8 @@ public class CommodityBOImpl extends PaginableBOImpl<Commodity>
 
         data.setSellUserId(company.getUserId());
         data.setMaxJfdkRate(StringValidater.toDouble(req.getMaxJfdkRate()));
+        data.setSinglePostageCount(
+            StringValidater.toInteger(req.getSinglePostageCount()));
         data.setUpdater(req.getUpdater());
         data.setUpdateDatetime(new Date());
         data.setRemark(req.getRemark());

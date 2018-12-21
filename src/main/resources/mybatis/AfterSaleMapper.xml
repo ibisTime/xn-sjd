@@ -9,6 +9,8 @@
 		<result column="type" property="type" />
 		<result column="status" property="status" />
 		<result column="refund_amount" property="refundAmount" />
+		<result column="refund_reason" property="refundReason" />
+		<result column="message" property="message" />
 		
 		<result column="logistics_company" property="logisticsCompany" />
 		<result column="logistics_number" property="logisticsNumber" />
@@ -16,6 +18,7 @@
 		<result column="deliver_count" property="deliverCount" />
 		<result column="deliver_datetime" property="deliverDatetime" />
 		<result column="address_code" property="addressCode" />
+		
 		<result column="receiver" property="receiver" />
 		<result column="receiver_mobile" property="receiverMobile" />
 		<result column="receiver_datetime" property="receiverDatetime" />
@@ -70,6 +73,8 @@
 		,t.type
 		,t.status
 		,t.refund_amount
+		,t.refund_reason
+		,t.message
 		,t.logistics_company
 		,t.logistics_number
 		,t.deliver
@@ -104,6 +109,8 @@
 		,type
 		,status
 		,refund_amount
+		,refund_reason
+		,message
 		
 		,logistics_company
 		,logistics_number
@@ -119,6 +126,8 @@
 		,#{type}
 		,#{status}
 		,#{refundAmount}
+		,#{refundReason}
+		,#{message}
 		
 		,#{logisticsCompany}
 		,#{logisticsNumber}

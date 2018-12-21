@@ -26,6 +26,12 @@ public class XN629771Req {
     @NotBlank
     private String applyUser;
 
+    // 退款原因
+    private String refundReason;
+
+    // 留言
+    private String message;
+
     public String getOrderDetailCode() {
         return orderDetailCode;
     }
@@ -48,6 +54,22 @@ public class XN629771Req {
 
     public void setApplyUser(String applyUser) {
         this.applyUser = applyUser;
+    }
+
+    public String getRefundReason() {
+        return refundReason;
+    }
+
+    public void setRefundReason(String refundReason) {
+        this.refundReason = refundReason;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
 }

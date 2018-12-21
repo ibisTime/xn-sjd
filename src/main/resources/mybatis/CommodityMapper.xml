@@ -20,10 +20,11 @@
 		<result column="shop_code" property="shopCode" />
 		<result column="sell_user_id" property="sellUserId" />
 		<result column="max_jfdk_rate" property="maxJfdkRate" />
+		<result column="single_postage_count" property="singlePostageCount" />
+		
 		<result column="location" property="location" />
 		<result column="order_no" property="orderNo" />
 		<result column="status" property="status" />
-		
 		<result column="updater" property="updater" />
 		<result column="update_datetime" property="updateDatetime" />
 		<result column="remark" property="remark" />
@@ -91,9 +92,10 @@
 		,t.shop_code
 		,t.sell_user_id
 		,t.max_jfdk_rate
+		,t.single_postage_count
+		
 		,t.location
 		,t.order_no
-		
 		,t.status
 		,t.updater
 		,t.update_datetime
@@ -144,6 +146,7 @@
 		,shop_code
 		,sell_user_id
 		,max_jfdk_rate
+		,single_postage_count
 		,status
 		)
 		VALUES(
@@ -164,6 +167,7 @@
 		,#{shopCode}
 		,#{sellUserId}
 		,#{maxJfdkRate}
+		,#{singlePostageCount}
 		,#{status}
 		)
 	</insert>

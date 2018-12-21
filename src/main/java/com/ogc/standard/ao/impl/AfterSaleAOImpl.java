@@ -75,7 +75,8 @@ public class AfterSaleAOImpl implements IAfterSaleAO {
     @Override
     @Transactional
     public String applyGoods(String orderDetailCode, String logisticsCompany,
-            String logisticsNumber, BigDecimal refundAmount, String deliver) {
+            String logisticsNumber, BigDecimal refundAmount, String deliver,
+            String refundReason, String message) {
 
         CommodityOrderDetail orderDetail = commodityOrderDetailBO
             .getCommodityOrderDetail(orderDetailCode);
@@ -93,7 +94,7 @@ public class AfterSaleAOImpl implements IAfterSaleAO {
 
         String codeString = afterSaleBO.saveAfterSale(orderDetail.getShopCode(),
             orderDetailCode, logisticsCompany, logisticsNumber, refundAmount,
-            deliver);
+            deliver, refundReason, message);
 
         // 更新明细状态
         commodityOrderDetailBO.toAfterSell(orderDetailCode);
@@ -104,7 +105,7 @@ public class AfterSaleAOImpl implements IAfterSaleAO {
     @Override
     @Transactional
     public String applyMoney(String orderDetailCode, BigDecimal refundAmount,
-            String applyUser) {
+            String applyUser, String refundReason, String message) {
 
         CommodityOrderDetail orderDetail = commodityOrderDetailBO
             .getCommodityOrderDetail(orderDetailCode);
@@ -121,7 +122,8 @@ public class AfterSaleAOImpl implements IAfterSaleAO {
         }
 
         String codeString = afterSaleBO.AfterSaleNoGoods(
-            orderDetail.getShopCode(), orderDetailCode, refundAmount);
+            orderDetail.getShopCode(), orderDetailCode, refundAmount,
+            refundReason, message);
 
         // 更新明细状态
         commodityOrderDetailBO.toAfterSell(orderDetailCode);

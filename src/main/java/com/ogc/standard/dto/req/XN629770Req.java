@@ -32,6 +32,12 @@ public class XN629770Req {
     @NotBlank
     private String deliver;
 
+    // 退款原因
+    private String refundReason;
+
+    // 留言
+    private String message;
+
     public String getOrderDetailCode() {
         return orderDetailCode;
     }
@@ -70,6 +76,22 @@ public class XN629770Req {
 
     public void setDeliver(String deliver) {
         this.deliver = deliver;
+    }
+
+    public String getRefundReason() {
+        return refundReason;
+    }
+
+    public void setRefundReason(String refundReason) {
+        this.refundReason = refundReason;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
 }
