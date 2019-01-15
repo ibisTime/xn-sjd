@@ -145,7 +145,8 @@ public class ArticleAOImpl implements IArticleAO {
 
         return articleBO.saveArticle(req.getAdoptTreeCode(), treeNumber,
             req.getType(), openLevel, req.getTitle(), req.getContent(),
-            req.getPhoto(), status, req.getPublishUserId(), req.getUpdater());
+            req.getPhoto(), req.getIsTop(), status, req.getPublishUserId(),
+            req.getUpdater());
     }
 
     @Override
@@ -183,6 +184,7 @@ public class ArticleAOImpl implements IArticleAO {
         data.setContent(req.getContent());
 
         data.setPhoto(req.getPhoto());
+        data.setIsTop(req.getIsTop());
         data.setStatus(status.getCode());
         data.setUpdater(req.getUpdater());
         data.setUpdateDatatime(new Date());

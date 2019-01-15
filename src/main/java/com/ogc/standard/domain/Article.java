@@ -57,6 +57,9 @@ public class Article extends ABaseDO {
     // UI次序
     private String orderNo;
 
+    // 是否置顶
+    private String isTop;
+
     // 发布人
     private String publishUserId;
 
@@ -356,6 +359,14 @@ public class Article extends ABaseDO {
 
     public void setProductStatus(String productStatus) {
         this.productStatus = productStatus;
+    }
+
+    public String getIsTop() {
+        return isTop;
+    }
+
+    public void setIsTop(String isTop) {
+        this.isTop = isTop;
     }
 
 }

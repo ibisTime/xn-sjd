@@ -926,18 +926,15 @@ INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`r
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('DIST_RATE','DIST_OWENER_RATE','0.7','admin',now(),'产权方的总额');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('DIST_RATE','DIST_MAINTAIN_RATE','0.05','admin',now(),'养护方的总额');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('DIST_RATE','DIST_PLAT_RATE','0.1','admin',now(),'平台方的总额');
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('DIST_RATE','DIST_AGENT_RATE','0.1','admin',now(),'代理方的总额');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('DIST_RATE','DIST_USER_BACK_JF_RATE','0.05','admin',now(),'认养返积分池积分比例');
 
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('PRESELL_DIST_RATE','PRESELL_DIST_OWENER_RATE','0.7','admin',now(),'产权方的总额');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('PRESELL_DIST_RATE','PRESELL_DIST_MAINTAIN_RATE','0.05','admin',now(),'养护方的总额');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('PRESELL_DIST_RATE','PRESELL_DIST_PLAT_RATE','0.1','admin',now(),'平台方的总额');
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('PRESELL_DIST_RATE','PRESELL_DIST_AGENT_RATE','0.1','admin',now(),'代理方的总额');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('PRESELL_DIST_RATE','PRESELL_DIST_USER_BACK_JF_RATE','0.05','admin',now(),'预售返积分池积分比例');
 
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('COMMODITY_DIST_RATE','COMMODITY_DIST_BUSINESS_RATE','0.75','admin',now(),'商城方总额');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('COMMODITY_DIST_RATE','COMMODITY_DIST_USER_BACK_JF_RATE','0.05','admin',now(),'商城返积分池积分比例');
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('COMMODITY_DIST_RATE','COMMODITY_DIST_AGENT_RATE','0.1','admin',now(),'代理方的总额');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('COMMODITY_DIST_RATE','COMMODITY_DIST_PLAT_RATE','0.1','admin',now(),'平台方总额');
 
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('USER_DIST_RATE','ADOPT_DIRECT','0.1','admin',now(),'用户直推认养送');
@@ -964,6 +961,7 @@ INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`r
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('SYS_TXT','STRATEGY','攻略','',now(),'攻略说明');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('SYS_TXT','REGISTRATION_AGREEMENT','注册协议','',now(),'注册协议');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('SYS_TXT','INVITATION','FlzXth0GfmkXxFekh9BMEHzNQq9r','',now(),'邀请送好礼图片');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('SYS_TXT','ARTICLE_PIC','FlzXth0GfmkXxFekh9BMEHzNQq9r','',now(),'情感频道图片');
 
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('TPP_RULE','PRESENT_TPP_QUANTITY','10','',now(),'好友赠送碳泡泡数量');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('TPP_RULE','SIGN_TPP','1','',now(),'签到赠送碳泡泡数量');

@@ -39,7 +39,8 @@ public class ArticleBOImpl extends PaginableBOImpl<Article>
     @Override
     public String saveArticle(String adoptTreeCode, String treeNo, String type,
             String right, String title, String content, String photo,
-            EArticleStatus status, String publishUserId, String updater) {
+            String isTop, EArticleStatus status, String publishUserId,
+            String updater) {
         Article data = new Article();
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.ARTICLE.getCode());
@@ -52,6 +53,7 @@ public class ArticleBOImpl extends PaginableBOImpl<Article>
         data.setTitle(title);
         data.setContent(content);
         data.setPhoto(photo);
+        data.setIsTop(isTop);
         data.setStatus(status.getCode());
         data.setPublishDatetime(new Date());
 

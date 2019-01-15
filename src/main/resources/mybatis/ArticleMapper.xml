@@ -19,6 +19,7 @@
 		<result column="status" property="status" />
 		<result column="location" property="location" />
 		<result column="order_no" property="orderNo" />
+		<result column="is_top" property="isTop" />
 		<result column="publish_user_id" property="publishUserId" />
 		
 		<result column="publish_datetime" property="publishDatetime" />
@@ -60,6 +61,9 @@
 			<if test="openLevel != null and openLevel != '' ">
 				AND t.open_level = #{openLevel}
 			</if>
+			<if test="isTop != null and isTop != '' ">
+				AND t.is_top = #{isTop}
+			</if>
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
 			</if>
@@ -97,6 +101,7 @@
 		,t.status
 		,t.location
 		,t.order_no
+		,t.is_top
 		,t.publish_user_id
 		
 		,t.publish_datetime
@@ -140,6 +145,7 @@
 		,status
 		,location
 		,order_no
+		,is_top
 		,publish_user_id
 		
 		,publish_datetime
@@ -164,6 +170,7 @@
 		,#{status}
 		,#{location}
 		,#{orderNo}
+		,#{isTop}
 		,#{publishUserId}
 		
 		,#{publishDatetime}
@@ -189,6 +196,7 @@
 		,status = #{status}
 		,location = #{location}
 		,order_no = #{orderNo}
+		,is_top = #{isTop}
 		,publish_datetime = #{publishDatetime}
 		,updater = #{updater}
 		,update_datatime = #{updateDatatime}

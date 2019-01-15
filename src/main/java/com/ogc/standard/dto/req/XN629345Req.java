@@ -25,6 +25,9 @@ public class XN629345Req extends APageReq {
     // 状态（1保存、2待审核、3发布、4下架）
     private String status;
 
+    // 是否置顶
+    private String isTop;
+
     // 发布时间起
     private String publishDatetimeStart;
 
@@ -107,6 +110,14 @@ public class XN629345Req extends APageReq {
 
     public void setQueryUserId(String queryUserId) {
         this.queryUserId = queryUserId;
+    }
+
+    public String getIsTop() {
+        return isTop;
+    }
+
+    public void setIsTop(String isTop) {
+        this.isTop = isTop;
     }
 
 }

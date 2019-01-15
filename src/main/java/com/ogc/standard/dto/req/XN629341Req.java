@@ -36,6 +36,9 @@ public class XN629341Req {
     // 照片
     private String photo;
 
+    // 是否置顶
+    private String isTop;
+
     // 更新人
     @NotBlank
     private String updater;
@@ -110,6 +113,14 @@ public class XN629341Req {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getIsTop() {
+        return isTop;
+    }
+
+    public void setIsTop(String isTop) {
+        this.isTop = isTop;
     }
 
 }

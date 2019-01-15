@@ -319,7 +319,7 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
         // 用户升级
         userAO.upgradeUserLevel(data.getApplyUser());
 
-        // 分配认养权、更新树状态
+        // TODO 取消 分配认养权、更新树状态
         List<Tree> treeList = treeBO
             .queryTreeListByProduct(data.getProductCode());
         Product product = productBO.getProduct(data.getProductCode());

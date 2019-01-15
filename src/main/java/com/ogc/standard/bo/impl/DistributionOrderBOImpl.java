@@ -279,10 +279,10 @@ public class DistributionOrderBOImpl implements IDistributionOrderBO {
         }
 
         // 代理方分销
-        BigDecimal agentTotalAmount = payAmount.multiply(
-            new BigDecimal(mapList.get(SysConstants.DIST_AGENT_RATE)));// 分成总金额
-        distributionAgent(code, applyUser, amount, type, mapList,
-            agentTotalAmount, resultRes);
+        // BigDecimal agentTotalAmount = payAmount.multiply(
+        // new BigDecimal(mapList.get(SysConstants.DIST_AGENT_RATE)));// 分成总金额
+        // distributionAgent(code, applyUser, amount, type, mapList,
+        // agentTotalAmount, resultRes);
 
         // 用户同等金额积分奖励
         BigDecimal jfAwardAmount = payAmount.multiply(
@@ -394,10 +394,11 @@ public class DistributionOrderBOImpl implements IDistributionOrderBO {
         }
 
         // 代理方分销
-        BigDecimal agentTotalAmount = payAmount.multiply(
-            new BigDecimal(mapList.get(SysConstants.PRESELL_DIST_AGENT_RATE)));// 分成总金额
-        distributionAgent(code, applyUser, amount, type, mapList,
-            agentTotalAmount, resultRes);
+        // BigDecimal agentTotalAmount = payAmount.multiply(
+        // new BigDecimal(mapList.get(SysConstants.PRESELL_DIST_AGENT_RATE)));//
+        // 分成总金额
+        // distributionAgent(code, applyUser, amount, type, mapList,
+        // agentTotalAmount, resultRes);
 
         // 用户同等金额积分奖励
         BigDecimal jfAwardAmount = payAmount.multiply(
@@ -497,10 +498,10 @@ public class DistributionOrderBOImpl implements IDistributionOrderBO {
             EJourBizTypePlat.COMMODITY_DIST.getValue(), code);
 
         // 代理方分销
-        BigDecimal agentTotalAmount = payAmount.multiply(new BigDecimal(
-            mapList.get(SysConstants.COMMODITY_DIST_AGENT_RATE)));// 分成总金额
-        distributionAgent(code, applyUser, amount, type, mapList,
-            agentTotalAmount, resultRes);
+        // BigDecimal agentTotalAmount = payAmount.multiply(new BigDecimal(
+        // mapList.get(SysConstants.COMMODITY_DIST_AGENT_RATE)));// 分成总金额
+        // distributionAgent(code, applyUser, amount, type, mapList,
+        // agentTotalAmount, resultRes);
 
         // 用户同等金额积分奖励
         BigDecimal jfAwardAmount = payAmount.multiply(

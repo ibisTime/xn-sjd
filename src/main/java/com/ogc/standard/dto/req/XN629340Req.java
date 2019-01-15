@@ -36,6 +36,9 @@ public class XN629340Req {
     // 照片
     private String photo;
 
+    // 是否置顶
+    private String isTop;
+
     // 发布人
     @NotBlank
     private String publishUserId;
@@ -122,6 +125,14 @@ public class XN629340Req {
 
     public void setPublishUserId(String publishUserId) {
         this.publishUserId = publishUserId;
+    }
+
+    public String getIsTop() {
+        return isTop;
+    }
+
+    public void setIsTop(String isTop) {
+        this.isTop = isTop;
     }
 
 }
