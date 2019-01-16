@@ -45,6 +45,9 @@ public class Commodity extends ABaseDO {
     // 原价
     private String originalPrice;
 
+    // 原产地
+    private String originalPlace;
+
     // 物流方式
     private String logistics;
 
@@ -321,6 +324,14 @@ public class Commodity extends ABaseDO {
 
     public void setSinglePostageCount(Integer singlePostageCount) {
         this.singlePostageCount = singlePostageCount;
+    }
+
+    public String getOriginalPlace() {
+        return originalPlace;
+    }
+
+    public void setOriginalPlace(String originalPlace) {
+        this.originalPlace = originalPlace;
     }
 
 }

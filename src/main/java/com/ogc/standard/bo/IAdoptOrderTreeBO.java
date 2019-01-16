@@ -49,6 +49,10 @@ public interface IAdoptOrderTreeBO extends IPaginableBO<AdoptOrderTree> {
     public List<AdoptOrderTree> queryUserAdoptedOrder(String userId,
             String treeNumber);
 
+    // 用户认养权
+    public List<AdoptOrderTree> queryAdoptedOrderTreeByUser(String userId,
+            String status);
+
     // 产品已认养名单
     public List<AdoptOrderTree> queryProductAdoptedOrder(
             AdoptOrderTree condition);

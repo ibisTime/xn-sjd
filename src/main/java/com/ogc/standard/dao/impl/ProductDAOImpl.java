@@ -100,4 +100,10 @@ public class ProductDAOImpl extends AMybatisTemplate implements IProductDAO {
             count, condition, Product.class);
     }
 
+    @Override
+    public List<Product> selectDistinctArea(Product data) {
+        return super.selectList(NAMESPACE.concat("select_distinctArea"), data,
+            Product.class);
+    }
+
 }

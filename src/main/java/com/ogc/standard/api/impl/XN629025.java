@@ -41,6 +41,12 @@ public class XN629025 extends AProcessor {
         condition.setStatus(req.getStatus());
         condition.setStatusList(req.getStatusList());
 
+        condition.setProvince(req.getProvince());
+        condition.setCity(req.getCity());
+        condition.setArea(req.getArea());
+        condition.setVariety(req.getVariety());
+        condition.setIsAdopting(req.getAdoptStatus());
+
         condition.setRaiseStartStartDatetime(DateUtil.strToDate(
             req.getRaiseStartStartDatetime(), DateUtil.DB_DATE_FORMAT_STRING));
         condition.setRaiseStartEndDatetime(DateUtil.strToDate(

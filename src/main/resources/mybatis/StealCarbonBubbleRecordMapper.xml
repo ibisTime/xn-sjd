@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ogc.standard.dao.IStealCarbonBubbleRecordDAO">
+
+	<resultMap id="stealCarbonBubbleRecord_DB_Result" type="stealCarbonBubbleRecord">
+		<result column="code" property="code" />
+		<result column="steal_user_id" property="stealUserId" />
+		<result column="stealed_user_id" property="stealedUserId" />
+		<result column="adopt_tree_code" property="adoptTreeCode" />
+		<result column="carbon_bubble_order_code" property="carbonBubbleOrderCode" />
+		<result column="quantity" property="quantity" />
+		<result column="steal_datetime" property="stealDatetime" />
+	</resultMap>
+	
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="stealUserId != null and stealUserId != '' ">
+				AND t.steal_user_id = #{stealUserId}
+			</if>
+			<if test="stealedUserId != null and stealedUserId != '' ">
+				AND t.stealed_user_id = #{stealedUserId}
+			</if>
+			<if test="adoptTreeCode != null and adoptTreeCode != '' ">
+				AND t.adopt_tree_code = #{adoptTreeCode}
+			</if>
+			<if test="carbonBubbleOrderCode != null and carbonBubbleOrderCode != '' ">
+				AND t.carbon_bubble_order_code = #{carbonBubbleOrderCode}
+			</if>
+			
+			<if test="stealStartDatetime != null and stealStartDatetime != '' ">
+				<![CDATA[AND t.steal_datetime >= #{stealStartDatetime}]]>
+			</if>
+			<if test="stealEndDatetime != null and stealEndDatetime != '' ">
+				<![CDATA[AND t.steal_datetime <= #{stealEndDatetime}]]>
+			</if>
+		</trim>
+	</sql>
+	
+	<select id="select_stealCarbonBubbleRecord" parameterType="stealCarbonBubbleRecord" resultMap="stealCarbonBubbleRecord_DB_Result">
+		SELECT
+		t.code
+		,t.steal_user_id
+		,t.stealed_user_id
+		,t.adopt_tree_code
+		,t.carbon_bubble_order_code
+		,t.quantity
+		,t.steal_datetime
+		FROM
+		tsj_steal_carbon_bubble_record t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_stealCarbonBubbleRecord_count" parameterType="stealCarbonBubbleRecord"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tsj_steal_carbon_bubble_record t
+		<include refid="where_condition" />
+	</select>
+	
+	<select id="select_sumQuantity" parameterType="stealCarbonBubbleRecord"
+		resultType="java.lang.Long">
+		SELECT sum(t.quantity) FROM tsj_steal_carbon_bubble_record t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_stealCarbonBubbleRecord" parameterType="stealCarbonBubbleRecord">
+		INSERT INTO
+		tsj_steal_carbon_bubble_record(
+		code
+		,steal_user_id
+		,stealed_user_id
+		,adopt_tree_code
+		,carbon_bubble_order_code
+		,quantity
+		,steal_datetime
+		)
+		VALUES(
+		#{code}
+		,#{stealUserId}
+		,#{stealedUserId}
+		,#{adoptTreeCode}
+		,#{carbonBubbleOrderCode}
+		,#{quantity}
+		,#{stealDatetime}
+		)
+	</insert>
+
+</mapper>

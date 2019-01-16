@@ -355,6 +355,11 @@ public class ProductBOImpl extends PaginableBOImpl<Product>
     }
 
     @Override
+    public List<Product> queryDistinctArea() {
+        return productDAO.selectDistinctArea(new Product());
+    }
+
+    @Override
     public Product getProduct(String code) {
         Product data = null;
         if (StringUtils.isNotBlank(code)) {

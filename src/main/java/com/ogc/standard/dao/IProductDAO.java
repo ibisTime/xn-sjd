@@ -1,5 +1,7 @@
 package com.ogc.standard.dao;
 
+import java.util.List;
+
 import com.ogc.standard.dao.base.IBaseDAO;
 import com.ogc.standard.domain.Product;
 
@@ -44,5 +46,8 @@ public interface IProductDAO extends IBaseDAO<Product> {
 
     // 更新集体第一下单人
     public int updateCollectFirstUser(Product data);
+
+    // 查询产品区域
+    public List<Product> selectDistinctArea(Product data);
 
 }

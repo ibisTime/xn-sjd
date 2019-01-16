@@ -44,7 +44,9 @@ public enum EGeneratePrefix {
 
     PRESELL_LOGISTICS("PL", "预售物流单"), GROUP_ORDER("GO", "寄售订单"),
     
-    COMMODITY_SPECS("CS","商品规格"),DEFAULT_POSTAGE("DP","默认邮费");
+    COMMODITY_SPECS("CS","商品规格"),DEFAULT_POSTAGE("DP","默认邮费"),SEARCH_HISTORY("SH","搜索历史"),
+    
+    STEAL_CARBON_BUBBLE_RECORD("SCBR","偷取碳泡泡记录");
 
     public static Map<String, EGeneratePrefix> getMap() {
         Map<String, EGeneratePrefix> map = new HashMap<String, EGeneratePrefix>();

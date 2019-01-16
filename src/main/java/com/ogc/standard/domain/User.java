@@ -54,6 +54,9 @@ public class User extends ABaseDO {
     // 所属代理商
     private String agentId;
 
+    // 好友数量
+    private Integer friendCount;
+
     // 证件类型
     private String idKind;
 
@@ -201,6 +204,9 @@ public class User extends ABaseDO {
 
     // 可收取的碳泡泡
     public BigDecimal takeableTppAmount;
+
+    // 查询人是否为好友
+    private String querierIsFriend;
 
     public UserExt getUserExt() {
         return userExt;
@@ -727,6 +733,22 @@ public class User extends ABaseDO {
 
     public void setTakeableTppAmount(BigDecimal takeableTppAmount) {
         this.takeableTppAmount = takeableTppAmount;
+    }
+
+    public Integer getFriendCount() {
+        return friendCount;
+    }
+
+    public void setFriendCount(Integer friendCount) {
+        this.friendCount = friendCount;
+    }
+
+    public String getQuerierIsFriend() {
+        return querierIsFriend;
+    }
+
+    public void setQuerierIsFriend(String querierIsFriend) {
+        this.querierIsFriend = querierIsFriend;
     }
 
 }

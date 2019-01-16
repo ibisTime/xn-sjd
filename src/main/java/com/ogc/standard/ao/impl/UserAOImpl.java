@@ -1178,6 +1178,11 @@ public class UserAOImpl implements IUserAO {
                 "用户已进行企业认证，无法再进行个人认证");
         }
 
+        if (StringUtils.isNotBlank(introduce) && introduce.length() > 20) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "简介长度大于20字，请重新输入");
+        }
+
         assignRealName(userExt);
 
         userBO.refreshIdentity(userId, realName, null, idNo);

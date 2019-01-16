@@ -353,6 +353,20 @@ public class AdoptOrderTreeBOImpl extends PaginableBOImpl<AdoptOrderTree>
         return list;
     }
 
+    @Override
+    public List<AdoptOrderTree> queryAdoptedOrderTreeByUser(String userId,
+            String status) {
+        List<AdoptOrderTree> list = new ArrayList<AdoptOrderTree>();
+
+        AdoptOrderTree condition = new AdoptOrderTree();
+        condition.setCurrentHolder(userId);
+        condition.setStatus(status);
+
+        list = adoptOrderTreeDAO.selectList(condition);
+
+        return list;
+    }
+
     private void init(AdoptOrderTree data) {
         // 树木信息
         Tree tree = treeBO.getTreeByTreeNumber(data.getTreeNumber());

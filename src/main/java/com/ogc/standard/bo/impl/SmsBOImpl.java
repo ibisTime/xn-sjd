@@ -191,6 +191,25 @@ public class SmsBOImpl extends PaginableBOImpl<Sms> implements ISmsBO {
     }
 
     @Override
+    public void saveArticlePoint(String userId, String articleTitle,
+            String pointUserNickName) {
+        Sms sms = new Sms();
+        String code = OrderNoGenerater.generate(EGeneratePrefix.XX.getCode());
+        sms.setCode(code);
+        sms.setType(ESmsType.MESSAGE.getCode());
+        sms.setObject(EAccountType.CUSTOMER.getCode());
+        sms.setUserId(userId);
+        sms.setTitle("文章点赞");
+
+        String content = "您的" + articleTitle + "文章被" + pointUserNickName + "点赞";
+        sms.setContent(content);
+        sms.setStatus(ESmsStauts.SENDED.getCode());
+        sms.setCreateDatetime(new Date());
+
+        smsDAO.insert(sms);
+    }
+
+    @Override
     public void readBulletin(String code) {
         Sms sms = new Sms();
         sms.setCode(code);

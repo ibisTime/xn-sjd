@@ -73,7 +73,6 @@
 		<typeAlias alias="session" type="com.ogc.standard.domain.Session"/>
 		<typeAlias alias="sessionMessage" type="com.ogc.standard.domain.SessionMessage"/>
 		
-		
 		<typeAlias alias="presellProduct" type="com.ogc.standard.domain.PresellProduct"/>
 		<typeAlias alias="presellSpecs" type="com.ogc.standard.domain.PresellSpecs"/>
 		<typeAlias alias="presellOrder" type="com.ogc.standard.domain.PresellOrder"/>
@@ -87,6 +86,8 @@
 		
 		<typeAlias alias="companyChannel" type="com.ogc.standard.domain.CompanyChannel"/>
 		<typeAlias alias="defaultPostage" type="com.ogc.standard.domain.DefaultPostage"/>
+		<typeAlias alias="searchHistory" type="com.ogc.standard.domain.SearchHistory"/>
+		<typeAlias alias="stealCarbonBubbleRecord" type="com.ogc.standard.domain.StealCarbonBubbleRecord"/>
 		
 	</typeAliases>
 </configuration>

@@ -56,6 +56,9 @@ public class XN629701Req {
     @NotBlank
     private String originalPrice;
 
+    // 原产地
+    private String originalPlace;
+
     // 物流方式
     @NotBlank
     private String logistics;
@@ -221,6 +224,14 @@ public class XN629701Req {
 
     public void setSinglePostageCount(String singlePostageCount) {
         this.singlePostageCount = singlePostageCount;
+    }
+
+    public String getOriginalPlace() {
+        return originalPlace;
+    }
+
+    public void setOriginalPlace(String originalPlace) {
+        this.originalPlace = originalPlace;
     }
 
 }

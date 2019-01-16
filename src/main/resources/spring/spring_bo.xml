@@ -281,4 +281,12 @@
 		<property name="paginableDAO" ref="defaultPostageDAOImpl"/>
 	</bean>
 	
+	<bean id="searchHistoryBO" class="com.ogc.standard.bo.impl.SearchHistoryBOImpl">
+		<property name="paginableDAO" ref="searchHistoryDAOImpl"/>
+	</bean>
+	
+	<bean id="stealCarbonBubbleRecordBO" class="com.ogc.standard.bo.impl.StealCarbonBubbleRecordBOImpl">
+		<property name="paginableDAO" ref="stealCarbonBubbleRecordDAOImpl"/>
+	</bean>
+	
 </beans>

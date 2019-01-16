@@ -34,6 +34,7 @@ import com.ogc.standard.dto.req.XN629010Req;
 import com.ogc.standard.dto.req.XN629010ReqSpecs;
 import com.ogc.standard.dto.req.XN629010ReqTree;
 import com.ogc.standard.dto.req.XN629011Req;
+import com.ogc.standard.dto.res.XN629028Res;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECategoryStatus;
 import com.ogc.standard.enums.EDirectType;
@@ -380,6 +381,22 @@ public class ProductAOImpl implements IProductAO {
     }
 
     @Override
+    public List<XN629028Res> queryProductArea() {
+        List<Product> products = productBO.queryDistinctArea();
+
+        List<XN629028Res> resList = new ArrayList<XN629028Res>();
+        if (CollectionUtils.isNotEmpty(products)) {
+            for (Product product : products) {
+                XN629028Res res = new XN629028Res(product.getProvince(),
+                    product.getCity(), product.getArea());
+                resList.add(res);
+            }
+        }
+
+        return resList;
+    }
+
+    @Override
     public Product getProduct(String code) {
         Product product = productBO.getProduct(code);
         initProduct(product);
@@ -500,4 +517,5 @@ public class ProductAOImpl implements IProductAO {
         }
 
     }
+
 }

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ogc.standard.dao.ISearchHistoryDAO">
+
+	<resultMap id="searchHistory_DB_Result" type="searchHistory">
+		<result column="code" property="code" />
+		<result column="user_id" property="userId" />
+		<result column="type" property="type" />
+		<result column="content" property="content" />
+		<result column="search_datetime" property="searchDatetime" />
+	</resultMap>
+	
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="userId != null and userId != '' ">
+				AND t.user_id = #{userId}
+			</if>
+			<if test="type != null and type != '' ">
+				AND t.type = #{type}
+			</if>
+			<if test="content != null and content != '' ">
+				AND t.content = #{content}
+			</if>
+		</trim>
+	</sql>
+	
+	<select id="select_searchHistory" parameterType="searchHistory" resultMap="searchHistory_DB_Result">
+		SELECT
+		t.code
+		,t.user_id
+		,t.type
+		,t.content
+		,t.search_datetime
+		FROM
+		tstd_search_history t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_searchHistory_count" parameterType="searchHistory"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tstd_search_history t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_searchHistory" parameterType="searchHistory">
+		INSERT INTO
+		tstd_search_history(
+		code
+		,user_id
+		,type
+		,content
+		,search_datetime
+		)
+		VALUES(
+		#{code}
+		,#{userId}
+		,#{type}
+		,#{content}
+		,#{searchDatetime}
+		)
+	</insert>
+	
+	<update id="update_searchDatetime">
+		update tstd_search_history set search_datetime = #{searchDatetime} 
+		where code = #{code};
+	</update>
+
+</mapper>

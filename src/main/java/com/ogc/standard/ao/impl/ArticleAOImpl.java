@@ -16,6 +16,7 @@ import com.ogc.standard.bo.IGroupAdoptOrderBO;
 import com.ogc.standard.bo.IInteractBO;
 import com.ogc.standard.bo.IPresellProductBO;
 import com.ogc.standard.bo.IProductBO;
+import com.ogc.standard.bo.ISmsBO;
 import com.ogc.standard.bo.ITreeBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
@@ -75,6 +76,9 @@ public class ArticleAOImpl implements IArticleAO {
 
     @Autowired
     private IPresellProductBO presellProductBO;
+
+    @Autowired
+    private ISmsBO smsBO;
 
     @Override
     @Transactional
@@ -239,12 +243,14 @@ public class ArticleAOImpl implements IArticleAO {
     }
 
     @Override
+    @Transactional
     public void pointArticle(String code, String userId) {
         Interact interact = interactBO.getInteract(
             EInteractType.POINT.getCode(), EObjectType.ARTICLE.getCode(), code,
             userId);
         Article article = articleBO.getArticle(code);
         Integer pointCount = article.getPointCount();
+        User user = userBO.getUser(userId);
 
         if (null == interact) {
             interactBO.saveInteract(EInteractType.POINT.getCode(),
@@ -252,6 +258,9 @@ public class ArticleAOImpl implements IArticleAO {
 
             pointCount = pointCount + 1;
             articleBO.refreshPoint(code, pointCount);
+
+            smsBO.saveArticlePoint(article.getPublishUserId(),
+                article.getTitle(), user.getNickname());
         } else {
             interactBO.removeInteract(interact.getCode());
 

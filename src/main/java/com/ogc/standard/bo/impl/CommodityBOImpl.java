@@ -57,6 +57,7 @@ public class CommodityBOImpl extends PaginableBOImpl<Commodity>
 
         data.setWeight(req.getWeight());
         data.setOriginalPrice(req.getOriginalPrice());
+        data.setOriginalPlace(req.getOriginalPlace());
         data.setLogistics(req.getLogistics());
         data.setListPic(req.getListPic());
         data.setBannerPic(req.getBannerPic());
@@ -85,6 +86,7 @@ public class CommodityBOImpl extends PaginableBOImpl<Commodity>
         data.setWeight(req.getWeight());
 
         data.setOriginalPrice(req.getOriginalPrice());
+        data.setOriginalPlace(req.getOriginalPlace());
         data.setLogistics(req.getLogistics());
         data.setListPic(req.getListPic());
         data.setBannerPic(req.getBannerPic());
@@ -131,6 +133,11 @@ public class CommodityBOImpl extends PaginableBOImpl<Commodity>
         Commodity commodity = new Commodity();
         commodity.setCodeList(codeList);
         return commodityDAO.selectDistinctDeliverPlace(commodity);
+    }
+
+    @Override
+    public List<Commodity> queryOriginalPlaceList() {
+        return commodityDAO.selectDistinctOriginalPlace(new Commodity());
     }
 
     @Override

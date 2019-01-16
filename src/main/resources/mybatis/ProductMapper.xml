@@ -86,6 +86,19 @@
 				AND t.raise_count = t.now_count
 			</if>
 			
+			<if test="province != null and province != '' ">
+				AND t.province = #{province}
+			</if>
+			<if test="city != null and city != '' ">
+				AND t.city = #{city}
+			</if>
+			<if test="area != null and area != '' ">
+				AND t.area = #{area}
+			</if>
+			<if test="variety != null and variety != '' ">
+				AND t.variety = #{variety}
+			</if>
+			
 			<if test="statusList != null and statusList != '' ">
                 AND t.status in
                 <foreach item="item" index="index" collection="statusList" open="(" separator="," close=")">
@@ -189,6 +202,11 @@
 		</trim>
 	</select>
 
+	<select id="select_distinctArea" parameterType="product" resultMap="product_DB_Result">
+		select distinct province,city,area from tzb_product
+		order by province,city,area
+	</select>
+	
 	<select id="select_product_count" parameterType="product"
 		resultType="java.lang.Long">
 		SELECT count(1) FROM tzb_product t
@@ -281,26 +299,31 @@
 		,direct_type = #{directType}
 		,direct_object =#{directObject}
 		,parent_category_code = #{parentCategoryCode}
+		
 		,category_code = #{categoryCode}
 		,list_pic = #{listPic}
 		,banner_pic = #{bannerPic}
 		,origin_place = #{originPlace}
 		,scientific_name = #{scientificName}
+		
 		,variety = #{variety}
 		,rank = #{rank}
 		,description = #{description}
 		,province = #{province}
 		,city = #{city}
+		
 		,area = #{area}
 		,town = #{town}
 		,raise_start_datetime = #{raiseStartDatetime}
 		,raise_end_datetime = #{raiseEndDatetime}
 		,raise_count = #{raiseCount}
+		
 		,max_jfdk_rate = #{maxJfdkRate}
 		,status = #{status}
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
 		,remark = #{remark}
+		
 		WHERE code = #{code}
 	</update>
 

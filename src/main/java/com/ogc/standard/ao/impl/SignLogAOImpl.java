@@ -1,6 +1,7 @@
 package com.ogc.standard.ao.impl;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -22,6 +23,7 @@ import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.SignLog;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.dto.req.XN805140Req;
+import com.ogc.standard.dto.res.XN629906Res;
 import com.ogc.standard.dto.res.XN805140Res;
 import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EJourBizTypePlat;
@@ -201,6 +203,48 @@ public class SignLogAOImpl implements ISignLogAO {
             }
 
             return count;
+        }
+    }
+
+    @Override
+    public XN629906Res monthSignStatistics(String userId,
+            Date createStartDatetime, Date createEndDatetime) {
+        SignLog condition = new SignLog();
+        Long continueSignCount = 0L;
+        Long monthSignCount = 0L;
+
+        condition.setUserId(userId);
+        condition.setType(ESignLogType.SIGN_IN.getCode());
+        condition.setCreateStartDatetime(createStartDatetime);
+        condition.setCreateEndDatetime(createEndDatetime);
+        List<SignLog> signLogList = signLogBO.querySignLogList(condition);
+
+        // 排序
+        signLogBO.ListSort(signLogList);
+
+        // 没有签到数据返回0
+        if (signLogList.size() == 0) {
+            return new XN629906Res(continueSignCount, monthSignCount);
+        } else {
+            long count = 1;
+            long dayNum = 0;
+            for (int i = 0; i < signLogList.size() - 1; i++) {
+                // 获取连续数据的天数差（24*60*60*1000=86400000ms）
+                dayNum = signLogList.get(i).getCreateDatetime().getTime()
+                        / 86400000
+                        - signLogList.get(i + 1).getCreateDatetime().getTime()
+                                / 86400000;
+                if (dayNum == 1) {
+                    count++;
+                }
+                if (dayNum > 1) {
+                    break;
+                }
+            }
+
+            continueSignCount = count;
+            return new XN629906Res(continueSignCount,
+                (long) signLogList.size());
         }
     }
 

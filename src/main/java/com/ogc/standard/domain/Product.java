@@ -185,6 +185,9 @@ public class Product extends ABaseDO {
     // 集体第一认养人
     private String collectFirstUserName;
 
+    // 认养状态（0不可认养/1可认养）
+    private String adoptStatus;
+
     public String getDirectType() {
         return directType;
     }
@@ -631,6 +634,14 @@ public class Product extends ABaseDO {
 
     public void setCollectFirstUserName(String collectFirstUserName) {
         this.collectFirstUserName = collectFirstUserName;
+    }
+
+    public String getAdoptStatus() {
+        return adoptStatus;
+    }
+
+    public void setAdoptStatus(String adoptStatus) {
+        this.adoptStatus = adoptStatus;
     }
 
 }

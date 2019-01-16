@@ -31,6 +31,9 @@ public class Sms extends ABaseDO {
     // 消息对象(C:C端用户/O:产权方/M:养护方/A:代理商/P:平台方)
     private String object;
 
+    // 消息用户
+    private String userId;
+
     // 消息标题
     private String title;
 
@@ -153,6 +156,14 @@ public class Sms extends ABaseDO {
 
     public void setPublishDatetime(Date publishDatetime) {
         this.publishDatetime = publishDatetime;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
 }

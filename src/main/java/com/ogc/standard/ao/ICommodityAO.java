@@ -14,6 +14,7 @@ import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Commodity;
 import com.ogc.standard.dto.req.XN629700Req;
 import com.ogc.standard.dto.req.XN629701Req;
+import com.ogc.standard.dto.res.XN629709Res;
 
 /** 
  * @author: taojian 
@@ -52,4 +53,5 @@ public interface ICommodityAO {
 
     public List<Commodity> queryCommodityList(Commodity condition);
 
+    public XN629709Res queryPlaceList(String placeType);
 }

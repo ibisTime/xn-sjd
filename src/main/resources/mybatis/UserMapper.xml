@@ -17,6 +17,7 @@
 		
 		<result column="user_referee" property="userReferee" />
 		<result column="agent_id" property="agentId" />
+		<result column="friend_count" property="friendCount" />
 		<result column="id_kind" property="idKind" />
 		<result column="id_no" property="idNo" />
 		<result column="real_name" property="realName" />
@@ -186,6 +187,7 @@
 		,t.user_referee
 		
 		,t.agent_id
+		,t.friend_count
 		,t.id_kind
 		,t.id_no
 		,t.real_name
@@ -539,6 +541,14 @@
 		,h5_open_id =#{h5OpenId}
 		,nickname = #{nickname}
 		,photo = #{photo}
+		WHERE
+		user_id = #{userId}		
+	</update>
+	
+	<update id="update_friendCount" parameterType="user">
+		UPDATE tstd_user
+		SET
+		friend_count =#{friendCount}
 		WHERE
 		user_id = #{userId}		
 	</update>

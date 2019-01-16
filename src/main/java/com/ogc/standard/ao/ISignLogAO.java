@@ -1,10 +1,12 @@
 package com.ogc.standard.ao;
 
+import java.util.Date;
 import java.util.List;
 
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.SignLog;
 import com.ogc.standard.dto.req.XN805140Req;
+import com.ogc.standard.dto.res.XN629906Res;
 import com.ogc.standard.dto.res.XN805140Res;
 
 public interface ISignLogAO {
@@ -25,4 +27,7 @@ public interface ISignLogAO {
     // 连续签到天数
     public long keepCheckIn(String userId, String logType);
 
+    // 本月签到统计
+    public XN629906Res monthSignStatistics(String userId,
+            Date createStartDatetime, Date createEndDatetime);
 }

@@ -31,6 +31,7 @@ import com.ogc.standard.domain.Company;
 import com.ogc.standard.domain.SYSUser;
 import com.ogc.standard.dto.req.XN629700Req;
 import com.ogc.standard.dto.req.XN629701Req;
+import com.ogc.standard.dto.res.XN629709Res;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECategoryStatus;
 import com.ogc.standard.enums.ECommodityStatus;
@@ -45,6 +46,7 @@ import com.ogc.standard.exception.EBizErrorCode;
  */
 @Service
 public class CommodityAOImpl implements ICommodityAO {
+
     @Autowired
     private ICommodityBO commodityBO;
 
@@ -236,6 +238,27 @@ public class CommodityAOImpl implements ICommodityAO {
         }
 
         return dataList;
+    }
+
+    @Override
+    public XN629709Res queryPlaceList(String placeType) {
+        List<String> placeList = new ArrayList<String>();
+
+        // 产地
+        if ("originalPlace".equals(placeType)) {
+            List<Commodity> commodities = commodityBO.queryOriginalPlaceList();
+            if (CollectionUtils.isNotEmpty(commodities)) {
+                for (Commodity commodity : commodities) {
+                    placeList.add(commodity.getOriginalPlace());
+                }
+            }
+        }
+
+        // 发货地
+        if ("deliverPlace".equals(placeType)) {
+            // TODO
+        }
+        return null;
     }
 
     @Override

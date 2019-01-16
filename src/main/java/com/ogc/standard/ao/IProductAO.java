@@ -6,6 +6,7 @@ import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Product;
 import com.ogc.standard.dto.req.XN629010Req;
 import com.ogc.standard.dto.req.XN629011Req;
+import com.ogc.standard.dto.res.XN629028Res;
 
 /**
  * 认养产品
@@ -40,6 +41,9 @@ public interface IProductAO {
             Product condition);
 
     public List<Product> queryProductList(Product condition);
+
+    // 查询产品区域
+    public List<XN629028Res> queryProductArea();
 
     public Product getProduct(String code);
 

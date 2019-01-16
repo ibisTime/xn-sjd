@@ -31,4 +31,6 @@ public interface ICommodityDAO extends IBaseDAO<Commodity> {
 
     public List<Commodity> selectDistinctDeliverPlace(Commodity data);
 
+    public List<Commodity> selectDistinctOriginalPlace(Commodity data);
+
 }

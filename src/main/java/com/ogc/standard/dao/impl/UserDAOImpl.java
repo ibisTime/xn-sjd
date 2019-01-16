@@ -135,6 +135,11 @@ public class UserDAOImpl extends AMybatisTemplate implements IUserDAO {
     }
 
     @Override
+    public int updateFriendCount(User data) {
+        return super.update(NAMESPACE.concat("update_friendCount"), data);
+    }
+
+    @Override
     public long selectUserRankTotalCount(User condition) {
         return super.selectTotalCount(NAMESPACE.concat("select_userRank_count"),
             condition);

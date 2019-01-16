@@ -130,6 +130,9 @@ public interface IUserBO extends IPaginableBO<User> {
     public void refreshReferee(String userId, String userReferee,
             String updater);
 
+    // 更新好友数量
+    public void refreshFriendCount(String userId, Integer friendCount);
+
     public User doGetUserByOpenId(String h5OpenId);
 
     // 通过手机号和类型获取用户编号

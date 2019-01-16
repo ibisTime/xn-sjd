@@ -133,8 +133,18 @@ public class ToolOrderAOImpl implements IToolOrderAO {
 
         // 一键收取
         if (EToolType.GET_ALL.getCode().equals(tool.getType())) {
-            BigDecimal quantity = carbonBubbleOrderAO
-                .takeCarbonBubbleByAdopt(adoptTreeCode, userId);
+
+            List<AdoptOrderTree> adoptOrderTrees = adoptOrderTreeBO
+                .queryAdoptedOrderTreeByUser(userId,
+                    EAdoptOrderTreeStatus.ADOPT.getCode());// 用户下的所有认养权
+            BigDecimal quantity = BigDecimal.ZERO;
+
+            if (CollectionUtils.isNotEmpty(adoptOrderTrees)) {
+                for (AdoptOrderTree adoptOrderTree2 : adoptOrderTrees) {
+                    quantity = carbonBubbleOrderAO.takeCarbonBubbleByAdopt(
+                        adoptOrderTree2.getCode(), userId).add(quantity);
+                }
+            }
 
             bizLogBO.useGetall(adoptTreeCode, adoptOrderTree.getCurrentHolder(),
                 userId, quantity);

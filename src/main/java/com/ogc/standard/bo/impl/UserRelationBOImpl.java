@@ -137,6 +137,8 @@ public class UserRelationBOImpl extends PaginableBOImpl<UserRelation>
         condition.setUserId(userId);
         condition.setToUser(toUser);
         condition.setType(type);
+        condition.setStatus(EUserRelationStatus.APPROVE_YES.getCode());
+
         return this.userRelationDAO.selectTotalCount(condition) >= 1;
     }
 

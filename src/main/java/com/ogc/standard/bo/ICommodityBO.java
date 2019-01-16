@@ -33,6 +33,8 @@ public interface ICommodityBO extends IPaginableBO<Commodity> {
 
     public List<Commodity> queryDeliverPlaceList(List<String> codeList);
 
+    public List<Commodity> queryOriginalPlaceList();
+
     public List<Commodity> queryCommodityList(Commodity condition);
 
     public Commodity getCommodity(String code);

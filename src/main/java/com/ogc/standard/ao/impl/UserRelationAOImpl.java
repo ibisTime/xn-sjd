@@ -100,6 +100,7 @@ public class UserRelationAOImpl implements IUserRelationAO {
      * @see com.std.user.ao.IUserRelationAO#unfollowUser(java.lang.String, java.lang.String)
      */
     @Override
+    @Transactional
     public void unfollowUser(String userId, String toUserId, String type) {
         userBO.getUser(userId);
         userBO.getUser(toUserId);
@@ -108,10 +109,15 @@ public class UserRelationAOImpl implements IUserRelationAO {
             EUserRelationStatus.APPROVE_YES.getCode())) {
             throw new BizException("xn702001", "用户关系未建立，无法解除");
         }
+
+        User user = userBO.getUser(userId);
+        userBO.refreshFriendCount(userId, user.getFriendCount() - 1);
+
         userRelationBO.removeUserRelation(userId, toUserId, type);
     }
 
     @Override
+    @Transactional
     public void approveUser(String code, String userId, String approveResult,
             String remark) {
         UserRelation userRelation = userRelationBO.getUserRelation(code);
@@ -123,6 +129,9 @@ public class UserRelationAOImpl implements IUserRelationAO {
         String status = EUserRelationStatus.APPROVE_NO.getCode();
         if (EBoolean.YES.getCode().equals(approveResult)) {
             status = EUserRelationStatus.APPROVE_YES.getCode();
+
+            User user = userBO.getUser(userId);
+            userBO.refreshFriendCount(userId, user.getFriendCount() + 1);
         }
 
         userRelationBO.approveUserRelation(code, status, remark);

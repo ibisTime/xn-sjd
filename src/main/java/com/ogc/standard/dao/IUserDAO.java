@@ -67,6 +67,9 @@ public interface IUserDAO extends IBaseDAO<User> {
     // 更新微信登录信息
     public int updateWxInfo(User data);
 
+    // 更新好友数量
+    public int updateFriendCount(User data);
+
     public long selectUserRankTotalCount(User condition);
 
     public List<User> selectUserRankList(User condition, int start, int count);

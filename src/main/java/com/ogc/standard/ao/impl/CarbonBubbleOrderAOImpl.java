@@ -18,6 +18,7 @@ import com.ogc.standard.bo.IAdoptOrderTreeBO;
 import com.ogc.standard.bo.IBizLogBO;
 import com.ogc.standard.bo.ICarbonBubbleOrderBO;
 import com.ogc.standard.bo.ISYSConfigBO;
+import com.ogc.standard.bo.IStealCarbonBubbleRecordBO;
 import com.ogc.standard.bo.IToolUseRecordBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
@@ -63,6 +64,9 @@ public class CarbonBubbleOrderAOImpl implements ICarbonBubbleOrderAO {
 
     @Autowired
     private ISYSConfigBO sysConfigBO;
+
+    @Autowired
+    private IStealCarbonBubbleRecordBO stealCarbonBubbleRecordBO;
 
     public void expireCarbonBubble() {
         logger.info("***************开始扫描已过期碳泡泡***************");
@@ -116,8 +120,18 @@ public class CarbonBubbleOrderAOImpl implements ICarbonBubbleOrderAO {
             }
         }
 
-        // 每日被收取上限
+        /**
+         * 其他人偷取
+         * 1、单颗树最多收1个炭泡泡
+         * 2、一个炭泡泡自己最多收取10%（剩下部分归树的主人）
+         * 3、单日做多收总共20g
+         */
         if (!data.getAdoptUserId().equals(collector)) {
+            if (!stealCarbonBubbleRecordBO.isTodayStealed(collector,
+                data.getAdoptUserId(), data.getAdoptTreeCode())) {
+                throw new BizException("xn0000", "您已不能在从这里搬走碳泡泡啦！");
+            }
+
             BigDecimal otherTakedQuantity = carbonBubbleOrderBO
                 .otherTakedTppAmount(data.getAdoptUserId());
 

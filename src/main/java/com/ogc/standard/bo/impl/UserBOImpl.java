@@ -583,6 +583,16 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     }
 
     @Override
+    public void refreshFriendCount(String userId, Integer friendCount) {
+        if (friendCount > 0 && StringUtils.isNotBlank(userId)) {
+            User user = new User();
+            user.setUserId(userId);
+            user.setFriendCount(friendCount);
+            userDAO.updateFriendCount(user);
+        }
+    }
+
+    @Override
     public User doGetUserByOpenId(String h5OpenId) {
         User condition = new User();
         condition.setH5OpenId(h5OpenId);
