@@ -13,6 +13,7 @@
 		<result column="specs_name" property="specsName" />
 		<result column="quantity" property="quantity" />
 		<result column="amount" property="amount" />
+		<result column="status" property="status" />
 	</resultMap>
 	
 	<sql id="where_condition">
@@ -36,6 +37,9 @@
 			<if test="specsId != null and specsId != '' ">
 				AND t.specs_id = #{specsId}
 			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
 		</trim>
 	</sql>
 	
@@ -46,10 +50,12 @@
 		,t.user_id
 		,t.commodity_code
 		,t.commodity_name
+		
 		,t.specs_id
 		,t.specs_name
 		,t.quantity
 		,t.amount
+		,t.status
 		FROM
 		tsc_cart t
 		<include refid="where_condition" />
@@ -93,6 +99,7 @@
 		,specs_name
 		,quantity
 		,amount
+		,status
 		)
 		VALUES(
 		#{code}
@@ -105,6 +112,7 @@
 		,#{specsName}
 		,#{quantity}
 		,#{amount}
+		,#{status}
 		)
 	</insert>
 	
@@ -113,6 +121,12 @@
 		quantity = #{quantity}
 		,amount = #{amount}
 		WHERE code=#{code}
+	</update>
+	
+	<update id="update_statusByCommodity">
+		UPDATE tsc_cart SET 
+		status = #{status}
+		WHERE commodity_code=#{commodityCode}
 	</update>
 	
 	<delete id="delete_cart" parameterType="cart">

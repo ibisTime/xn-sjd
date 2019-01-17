@@ -8,6 +8,10 @@
  */
 package com.ogc.standard.api.impl;
 
+import java.math.BigDecimal;
+
+import org.apache.commons.lang3.StringUtils;
+
 import com.ogc.standard.ao.ICommodityAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
@@ -43,6 +47,13 @@ public class XN629708 extends AProcessor {
         condition.setShopCode(req.getShopCode());
         condition.setLocation(req.getLocation());
         condition.setStatus(req.getStatus());
+
+        if (StringUtils.isNotBlank(req.getMinSpecPrice())) {
+            condition.setMinSpecPrice(new BigDecimal(req.getMinSpecPrice()));
+        }
+        if (StringUtils.isNotBlank(req.getMaxSpecPrice())) {
+            condition.setMaxSpecPrice(new BigDecimal(req.getMaxSpecPrice()));
+        }
 
         return commodityAO.queryCommodityList(condition);
     }

@@ -29,6 +29,7 @@ import com.ogc.standard.bo.ISettleBO;
 import com.ogc.standard.bo.ISmsBO;
 import com.ogc.standard.bo.ITreeBO;
 import com.ogc.standard.bo.IUserBO;
+import com.ogc.standard.bo.IUserExtBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.domain.Account;
@@ -41,6 +42,7 @@ import com.ogc.standard.domain.ProductSpecs;
 import com.ogc.standard.domain.Settle;
 import com.ogc.standard.domain.Tree;
 import com.ogc.standard.domain.User;
+import com.ogc.standard.domain.UserExt;
 import com.ogc.standard.dto.res.BooleanRes;
 import com.ogc.standard.dto.res.PayOrderRes;
 import com.ogc.standard.dto.res.XN629048Res;
@@ -88,6 +90,9 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
     private IUserAO userAO;
 
     @Autowired
+    private IUserExtBO userExtBO;
+
+    @Autowired
     private ICompanyBO companyBO;
 
     @Autowired
@@ -115,6 +120,13 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
     @Transactional
     public String commitAdoptOrder(String userId, String specsCode,
             Integer quantity) {
+        // 实名认证检查
+        UserExt userExt = userExtBO.getUserExt(userId);
+        if (!EBoolean.YES.getCode().equals(userExt.getAuthStatus())) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "请完成实名认证后再进行认养");
+        }
+
         // 参数检查
         ProductSpecs productSpecs = productSpecsBO.getProductSpecs(specsCode);
         Product product = productBO.getProduct(productSpecs.getProductCode());

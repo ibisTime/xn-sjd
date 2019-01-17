@@ -28,13 +28,13 @@
 			    <ref bean="doDailyGroupAdoptOrderTrigger"/>
 			    <ref bean="doCancelGroupAdoptOrderTrigger"/>
 			    <ref bean="doInvalidIdentifyCodeTrigger"/>
-			    <ref bean="doCancelPresellOrderTrigger"/>
+<!-- 			    <ref bean="doCancelPresellOrderTrigger"/> -->
 			    
 			    <ref bean="doCancelCommodityOrderTrigger"/>
 			    <ref bean="doDailyOriginalGroupTrigger"/>
 			    <ref bean="doCancelGroupOrderTrigger"/>
 			    <ref bean="doRefreshPriceTrigger"/>
-			    <ref bean="clearCommoditySellCountTigger"/>
+<!-- 			    <ref bean="clearCommoditySellCountTigger"/> -->
 			    
 			    <ref bean="doCommodityReceiveTigger"/>
  			</list>

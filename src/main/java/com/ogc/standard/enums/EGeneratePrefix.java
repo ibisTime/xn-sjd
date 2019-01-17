@@ -46,7 +46,9 @@ public enum EGeneratePrefix {
     
     COMMODITY_SPECS("CS","商品规格"),DEFAULT_POSTAGE("DP","默认邮费"),SEARCH_HISTORY("SH","搜索历史"),
     
-    STEAL_CARBON_BUBBLE_RECORD("SCBR","偷取碳泡泡记录");
+    STEAL_CARBON_BUBBLE_RECORD("SCBR","偷取碳泡泡记录"),
+    
+    NOTIFY_USER("NU","审核通知人");
 
     public static Map<String, EGeneratePrefix> getMap() {
         Map<String, EGeneratePrefix> map = new HashMap<String, EGeneratePrefix>();

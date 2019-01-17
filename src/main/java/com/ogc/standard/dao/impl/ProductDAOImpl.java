@@ -27,6 +27,12 @@ public class ProductDAOImpl extends AMybatisTemplate implements IProductDAO {
     }
 
     @Override
+    public int updateProductCategory(Product data) {
+        return super.update(NAMESPACE.concat("update_editProductCategory"),
+            data);
+    }
+
+    @Override
     public int updateSubmitProduct(Product data) {
         return super.update(NAMESPACE.concat("update_submitProduct"), data);
     }

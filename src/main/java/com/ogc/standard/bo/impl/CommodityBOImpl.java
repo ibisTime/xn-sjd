@@ -129,10 +129,15 @@ public class CommodityBOImpl extends PaginableBOImpl<Commodity>
     }
 
     @Override
-    public List<Commodity> queryDeliverPlaceList(List<String> codeList) {
+    public List<Commodity> queryDeliverPlaceListByShop(List<String> codeList) {
         Commodity commodity = new Commodity();
         commodity.setCodeList(codeList);
-        return commodityDAO.selectDistinctDeliverPlace(commodity);
+        return commodityDAO.selectDistinctDeliverPlaceByShop(commodity);
+    }
+
+    @Override
+    public List<Commodity> queryDeliverPlaceList() {
+        return commodityDAO.selectDistinctDeliverPlace(new Commodity());
     }
 
     @Override

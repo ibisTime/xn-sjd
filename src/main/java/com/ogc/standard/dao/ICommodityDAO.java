@@ -29,6 +29,8 @@ public interface ICommodityDAO extends IBaseDAO<Commodity> {
 
     public int updateMonthSellCount(Commodity data);
 
+    public List<Commodity> selectDistinctDeliverPlaceByShop(Commodity data);
+
     public List<Commodity> selectDistinctDeliverPlace(Commodity data);
 
     public List<Commodity> selectDistinctOriginalPlace(Commodity data);

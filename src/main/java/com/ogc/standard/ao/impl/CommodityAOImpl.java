@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.ICommodityAO;
+import com.ogc.standard.bo.ICartBO;
 import com.ogc.standard.bo.ICategoryBO;
 import com.ogc.standard.bo.ICommodityBO;
 import com.ogc.standard.bo.ICommoditySpecsBO;
@@ -33,6 +34,7 @@ import com.ogc.standard.dto.req.XN629700Req;
 import com.ogc.standard.dto.req.XN629701Req;
 import com.ogc.standard.dto.res.XN629709Res;
 import com.ogc.standard.enums.EBoolean;
+import com.ogc.standard.enums.ECartStatus;
 import com.ogc.standard.enums.ECategoryStatus;
 import com.ogc.standard.enums.ECommodityStatus;
 import com.ogc.standard.enums.ESYSUserStatus;
@@ -61,6 +63,9 @@ public class CommodityAOImpl implements ICommodityAO {
 
     @Autowired
     private ISYSUserBO sysUserBO;
+
+    @Autowired
+    private ICartBO cartBO;
 
     @Override
     @Transactional
@@ -175,6 +180,7 @@ public class CommodityAOImpl implements ICommodityAO {
     }
 
     @Override
+    @Transactional
     public void putOn(String code, String location, Long orderNo,
             String updater, String remark) {
         Commodity data = commodityBO.getCommodity(code);
@@ -183,15 +189,20 @@ public class CommodityAOImpl implements ICommodityAO {
             throw new BizException("xn000000", "该商品处于无法上架的状态");
         }
 
+        cartBO.refreshStatusByCommodity(code, ECartStatus.VALID.getCode());
+
         commodityBO.refreshOn(code, location, orderNo, updater, remark);
     }
 
     @Override
+    @Transactional
     public void putOff(String code, String updater, String remark) {
         Commodity data = commodityBO.getCommodity(code);
         if (!ECommodityStatus.ON.getCode().equals(data.getStatus())) {
             throw new BizException("xn000000", "该商品处于无法下架的状态");
         }
+
+        cartBO.refreshStatusByCommodity(code, ECartStatus.UN_VALID.getCode());
 
         commodityBO.refreshStatus(code, ECommodityStatus.OFF.getCode(), updater,
             remark);
@@ -256,9 +267,15 @@ public class CommodityAOImpl implements ICommodityAO {
 
         // 发货地
         if ("deliverPlace".equals(placeType)) {
-            // TODO
+            List<Commodity> commodities = commodityBO.queryDeliverPlaceList();
+            if (CollectionUtils.isNotEmpty(commodities)) {
+                for (Commodity commodity : commodities) {
+                    placeList.add(commodity.getDeliverPlace());
+                }
+            }
         }
-        return null;
+
+        return new XN629709Res(placeList);
     }
 
     @Override

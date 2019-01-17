@@ -50,6 +50,9 @@ public class Cart extends ABaseDO {
     // 总额
     private BigDecimal amount;
 
+    // 状态
+    private String status;
+
     // *******DB********
     // 店铺名称
     private String shopName;
@@ -165,6 +168,14 @@ public class Cart extends ABaseDO {
 
     public void setCodeList(List<String> codeList) {
         this.codeList = codeList;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
 }

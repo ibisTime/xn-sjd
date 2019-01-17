@@ -74,6 +74,16 @@
 				AND t.name like "%"#{name}"%"
 			</if>
 			
+			<if test="minSpecPrice != null and minSpecPrice != '' and maxSpecPrice != null and maxSpecPrice != '' ">
+				<![CDATA[and t.code in (select distinct commodity_code from tsc_commodity_specs where price > #{minSpecPrice} and price < #{maxSpecPrice})]]>
+			</if>
+			<if test="minSpecPrice != null and minSpecPrice != '' and maxSpecPrice == null  ">
+				<![CDATA[and t.code in (select distinct commodity_code from tsc_commodity_specs where price > #{minSpecPrice})]]>
+			</if>
+			<if test="maxSpecPrice != null and maxSpecPrice != '' and minSpecPrice == null">
+				<![CDATA[and t.code in (select distinct commodity_code from tsc_commodity_specs where price < #{maxSpecPrice})]]>
+			</if>
+			
 		</trim>
 	</sql>
 	
@@ -120,6 +130,10 @@
 	</select>
 	
 	<select id="select_distinctDeliverPlace" parameterType="commodity" resultMap="commodity_DB_Result">
+		select distinct deliver_place from tsc_commodity
+	</select>
+	
+	<select id="select_distinctDeliverPlaceByShop" parameterType="commodity" resultMap="commodity_DB_Result">
 		SELECT
 		DISTINCT
 		t.shop_code
@@ -227,8 +241,8 @@
 		SET
 		status=#{status}
 		,location=#{location}
-		,order_no=#{orderNo}
 		,month_sell_count=#{monthSellCount}
+		,order_no=#{orderNo}
 		,updater=#{updater}
 		,update_datetime=#{updateDatetime}
 		,remark=#{remark}

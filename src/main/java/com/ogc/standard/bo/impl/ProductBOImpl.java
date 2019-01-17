@@ -172,6 +172,20 @@ public class ProductBOImpl extends PaginableBOImpl<Product>
     }
 
     @Override
+    public void refreshProductCategory(String code, String parentCategoryCode,
+            String categoryCode, String updater) {
+        Product product = new Product();
+
+        product.setCode(code);
+        product.setParentCategoryCode(parentCategoryCode);
+        product.setCategoryCode(categoryCode);
+        product.setUpdater(updater);
+        product.setUpdateDatetime(new Date());
+
+        productDAO.updateProductCategory(product);
+    }
+
+    @Override
     public void refreshSubmitProduct(String code, String updater,
             String remark) {
         Product product = new Product();

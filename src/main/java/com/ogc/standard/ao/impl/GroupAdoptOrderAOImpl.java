@@ -30,6 +30,7 @@ import com.ogc.standard.bo.ISettleBO;
 import com.ogc.standard.bo.ISmsBO;
 import com.ogc.standard.bo.ITreeBO;
 import com.ogc.standard.bo.IUserBO;
+import com.ogc.standard.bo.IUserExtBO;
 import com.ogc.standard.bo.IWechatBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.DateUtil;
@@ -43,6 +44,7 @@ import com.ogc.standard.domain.ProductSpecs;
 import com.ogc.standard.domain.Settle;
 import com.ogc.standard.domain.Tree;
 import com.ogc.standard.domain.User;
+import com.ogc.standard.domain.UserExt;
 import com.ogc.standard.dto.res.BooleanRes;
 import com.ogc.standard.dto.res.PayOrderRes;
 import com.ogc.standard.dto.res.XN629048Res;
@@ -103,6 +105,9 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
     private IUserAO userAO;
 
     @Autowired
+    private IUserExtBO userExtBO;
+
+    @Autowired
     private ISettleBO settleBO;
 
     @Autowired
@@ -121,6 +126,12 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
     @Transactional
     public String firstAddGroupAdoptOrder(String userId, String specsCode,
             Integer quantity) {
+        // 实名认证检查
+        UserExt userExt = userExtBO.getUserExt(userId);
+        if (!EBoolean.YES.getCode().equals(userExt.getAuthStatus())) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "请完成实名认证后再进行认养");
+        }
 
         // 产品状态检查
         ProductSpecs productSpecs = productSpecsBO.getProductSpecs(specsCode);
@@ -165,6 +176,13 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
     @Transactional
     public String unFirstAddGroupAdoptOrder(String identifyCode, String userId,
             Integer quantity) {
+
+        // 实名认证检查
+        UserExt userExt = userExtBO.getUserExt(userId);
+        if (!EBoolean.YES.getCode().equals(userExt.getAuthStatus())) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "请完成实名认证后再进行认养");
+        }
 
         // 识别码是否存在
         List<GroupAdoptOrder> list = groupAdoptOrderBO

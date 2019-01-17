@@ -23,6 +23,10 @@ public interface IProductAO {
     // 修改产品
     public void editProduct(XN629011Req req);
 
+    // 修改产品类型
+    public void editProductCategory(String code, String parentCategoryCode,
+            String categoryCode, String updater);
+
     // 提交产品
     public void submitProduct(String code, String updater, String remark);
 

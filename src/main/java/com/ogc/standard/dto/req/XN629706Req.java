@@ -35,6 +35,12 @@ public class XN629706Req extends APageReq {
 
     private String status;
 
+    // 产品最小价格
+    private String minSpecPrice;
+
+    // 产品最大价格
+    private String maxSpecPrice;
+
     public String getName() {
         return name;
     }
@@ -106,4 +112,21 @@ public class XN629706Req extends APageReq {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public String getMinSpecPrice() {
+        return minSpecPrice;
+    }
+
+    public void setMinSpecPrice(String minSpecPrice) {
+        this.minSpecPrice = minSpecPrice;
+    }
+
+    public String getMaxSpecPrice() {
+        return maxSpecPrice;
+    }
+
+    public void setMaxSpecPrice(String maxSpecPrice) {
+        this.maxSpecPrice = maxSpecPrice;
+    }
+
 }

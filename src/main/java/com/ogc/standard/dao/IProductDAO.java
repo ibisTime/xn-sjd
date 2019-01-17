@@ -17,6 +17,9 @@ public interface IProductDAO extends IBaseDAO<Product> {
     // 修改产品
     public int updateProduct(Product data);
 
+    // 修改产品类型
+    public int updateProductCategory(Product data);
+
     // 提交产品
     public int updateSubmitProduct(Product data);
 

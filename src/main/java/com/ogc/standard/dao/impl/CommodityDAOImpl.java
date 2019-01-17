@@ -61,6 +61,13 @@ public class CommodityDAOImpl extends AMybatisTemplate
     }
 
     @Override
+    public List<Commodity> selectDistinctDeliverPlaceByShop(Commodity data) {
+        return super.selectList(
+            NAMESPACE.concat("select_distinctDeliverPlaceByShop"), data,
+            Commodity.class);
+    }
+
+    @Override
     public List<Commodity> selectDistinctDeliverPlace(Commodity data) {
         return super.selectList(NAMESPACE.concat("select_distinctDeliverPlace"),
             data, Commodity.class);

@@ -326,6 +326,16 @@
 		
 		WHERE code = #{code}
 	</update>
+	
+	<update id="update_editProductCategory" parameterType="product">
+		UPDATE tzb_product
+		SET
+		parent_category_code = #{parentCategoryCode}
+		,category_code = #{categoryCode}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		WHERE code = #{code}
+	</update>
 
 	<update id="update_submitProduct" parameterType="product">
 		UPDATE tzb_product

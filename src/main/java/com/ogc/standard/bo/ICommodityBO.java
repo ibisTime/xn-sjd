@@ -31,7 +31,9 @@ public interface ICommodityBO extends IPaginableBO<Commodity> {
     public void refreshOn(String code, String location, Long orderNo,
             String updater, String remark);
 
-    public List<Commodity> queryDeliverPlaceList(List<String> codeList);
+    public List<Commodity> queryDeliverPlaceListByShop(List<String> codeList);
+
+    public List<Commodity> queryDeliverPlaceList();
 
     public List<Commodity> queryOriginalPlaceList();
 

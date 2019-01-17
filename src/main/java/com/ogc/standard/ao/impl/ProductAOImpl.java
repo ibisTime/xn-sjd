@@ -15,9 +15,11 @@ import com.ogc.standard.ao.IProductAO;
 import com.ogc.standard.bo.IApplyBindMaintainBO;
 import com.ogc.standard.bo.ICategoryBO;
 import com.ogc.standard.bo.ICompanyBO;
+import com.ogc.standard.bo.INotifyUserBO;
 import com.ogc.standard.bo.IProductBO;
 import com.ogc.standard.bo.IProductSpecsBO;
 import com.ogc.standard.bo.ISYSUserBO;
+import com.ogc.standard.bo.ISmsOutBO;
 import com.ogc.standard.bo.ITreeBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
@@ -25,6 +27,7 @@ import com.ogc.standard.common.PhoneUtil;
 import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.domain.Category;
 import com.ogc.standard.domain.Company;
+import com.ogc.standard.domain.NotifyUser;
 import com.ogc.standard.domain.Product;
 import com.ogc.standard.domain.ProductSpecs;
 import com.ogc.standard.domain.SYSUser;
@@ -38,6 +41,7 @@ import com.ogc.standard.dto.res.XN629028Res;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECategoryStatus;
 import com.ogc.standard.enums.EDirectType;
+import com.ogc.standard.enums.ENotifyUserType;
 import com.ogc.standard.enums.EProductStatus;
 import com.ogc.standard.enums.ESYSUserKind;
 import com.ogc.standard.enums.ESYSUserStatus;
@@ -73,6 +77,12 @@ public class ProductAOImpl implements IProductAO {
 
     @Autowired
     private IUserBO userBO;
+
+    @Autowired
+    private INotifyUserBO notifyUserBO;
+
+    @Autowired
+    private ISmsOutBO smsOutBO;
 
     @Override
     @Transactional
@@ -262,6 +272,13 @@ public class ProductAOImpl implements IProductAO {
     }
 
     @Override
+    public void editProductCategory(String code, String parentCategoryCode,
+            String categoryCode, String updater) {
+        productBO.refreshProductCategory(code, parentCategoryCode, categoryCode,
+            updater);
+    }
+
+    @Override
     public void submitProduct(String code, String updater, String remark) {
         // 检查产权方信息是否完善
         SYSUser sysUser = sysUserBO.getSYSUser(updater);
@@ -292,6 +309,18 @@ public class ProductAOImpl implements IProductAO {
                 && !EProductStatus.APPROVE_NO.getCode()
                     .equals(product.getStatus())) {
             throw new BizException("xn0000", "产品未处于可提交状态！");
+        }
+
+        // 发送短信
+        List<NotifyUser> notifyUsers = notifyUserBO
+            .queryNotifyUserListByType(ENotifyUserType.OWNER_APPROVE.getCode());
+        if (CollectionUtils.isNotEmpty(notifyUsers)) {
+            for (NotifyUser notifyUser : notifyUsers) {
+                smsOutBO.sendSmsOut(
+                    notifyUser.getMobile(), "产权方【" + sysUser.getMobile()
+                            + "】已提交产品" + product.getName() + "上架申请，请及时审核",
+                    "629012");
+            }
         }
 
         productBO.refreshSubmitProduct(code, updater, remark);
@@ -352,10 +381,10 @@ public class ProductAOImpl implements IProductAO {
         }
 
         // 存在认养中的古树时不能下架
-        // if (CollectionUtils.isNotEmpty(treeBO.queryTreeListByProduct(code,
-        // ETreeStatus.ADOPTED.getCode()))) {
-        // throw new BizException("xn0000", "产品中存在认养中的古树，无法下架！");
-        // }
+        if (CollectionUtils.isNotEmpty(treeBO.queryTreeListByProduct(code,
+            ETreeStatus.ADOPTED.getCode()))) {
+            throw new BizException("xn0000", "产品中存在认养中的树木，无法下架！");
+        }
 
         productBO.refreshPutOffProduct(code, updater);
     }

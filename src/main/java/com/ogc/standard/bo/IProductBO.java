@@ -22,6 +22,10 @@ public interface IProductBO extends IPaginableBO<Product> {
     // 修改产品
     public void refreshProduct(Product data, XN629011Req req);
 
+    // 修改产品类型
+    public void refreshProductCategory(String code, String parentCategoryCode,
+            String categoryCode, String updater);
+
     // 提交产品
     public void refreshSubmitProduct(String code, String updater,
             String remark);

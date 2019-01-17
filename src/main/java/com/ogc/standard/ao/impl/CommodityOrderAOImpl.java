@@ -665,7 +665,7 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
         BigDecimal postalFee = BigDecimal.ZERO;
 
         List<Commodity> deliverPlaceList = commodityBO
-            .queryDeliverPlaceList(commodityCodeList);
+            .queryDeliverPlaceListByShop(commodityCodeList);
         Address address = addressBO.getAddress(addressCode);
 
         for (Commodity deliverPlace : deliverPlaceList) {

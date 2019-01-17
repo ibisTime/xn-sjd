@@ -30,4 +30,7 @@ public interface ICartDAO extends IBaseDAO<Cart> {
     // 更新数量
     public int updateQuantity(Cart cart);
 
+    // 更新状态
+    public int updateStatusByCommodity(Cart cart);
+
 }

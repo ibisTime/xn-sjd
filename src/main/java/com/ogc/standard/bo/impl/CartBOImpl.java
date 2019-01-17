@@ -19,6 +19,7 @@ import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.ICartDAO;
 import com.ogc.standard.domain.Cart;
+import com.ogc.standard.enums.ECartStatus;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.exception.BizException;
 
@@ -50,6 +51,7 @@ public class CartBOImpl extends PaginableBOImpl<Cart> implements ICartBO {
         data.setSpecsName(specsName);
         data.setQuantity(quantity);
         data.setAmount(amount);
+        data.setStatus(ECartStatus.VALID.getCode());
         cartDAO.insert(data);
         return code;
     }
@@ -77,6 +79,16 @@ public class CartBOImpl extends PaginableBOImpl<Cart> implements ICartBO {
         data.setQuantity(quantity);
         data.setAmount(amount);
         cartDAO.updateQuantity(data);
+    }
+
+    @Override
+    public void refreshStatusByCommodity(String commodityCode, String status) {
+        Cart data = new Cart();
+
+        data.setCommodityCode(commodityCode);
+        data.setStatus(status);
+
+        cartDAO.updateStatusByCommodity(data);
     }
 
     @Override

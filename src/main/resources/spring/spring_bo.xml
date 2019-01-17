@@ -289,4 +289,8 @@
 		<property name="paginableDAO" ref="stealCarbonBubbleRecordDAOImpl"/>
 	</bean>
 	
+	<bean id="notifyUserBO" class="com.ogc.standard.bo.impl.NotifyUserBOImpl">
+		<property name="paginableDAO" ref="notifyUserDAOImpl"/>
+	</bean>
+	
 </beans>

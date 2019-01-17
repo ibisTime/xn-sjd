@@ -51,7 +51,7 @@ public class Commodity extends ABaseDO {
     // 物流方式
     private String logistics;
 
-    // 月销量
+    // 月销量(改为总销量)
     private Long monthSellCount;
 
     // 列表图
@@ -109,6 +109,12 @@ public class Commodity extends ABaseDO {
 
     // 编号列表
     private List<String> codeList;
+
+    // 产品最小价格
+    private BigDecimal minSpecPrice;
+
+    // 产品最大价格
+    private BigDecimal maxSpecPrice;
 
     public List<CommoditySpecs> getSpecsList() {
         return specsList;
@@ -332,6 +338,22 @@ public class Commodity extends ABaseDO {
 
     public void setOriginalPlace(String originalPlace) {
         this.originalPlace = originalPlace;
+    }
+
+    public BigDecimal getMinSpecPrice() {
+        return minSpecPrice;
+    }
+
+    public void setMinSpecPrice(BigDecimal minSpecPrice) {
+        this.minSpecPrice = minSpecPrice;
+    }
+
+    public BigDecimal getMaxSpecPrice() {
+        return maxSpecPrice;
+    }
+
+    public void setMaxSpecPrice(BigDecimal maxSpecPrice) {
+        this.maxSpecPrice = maxSpecPrice;
     }
 
 }

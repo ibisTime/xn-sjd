@@ -10,3 +10,6 @@ ADD COLUMN `user_id` VARCHAR(32) NULL COMMENT '消息用户' AFTER `object`;
 
 ALTER TABLE `tsc_commodity` 
 ADD COLUMN `original_place` VARCHAR(255) NULL COMMENT '原产地' AFTER `original_price`;
+
+ALTER TABLE `tsc_cart` 
+ADD COLUMN `status` VARCHAR(4) NULL COMMENT '状态' AFTER `amount`;

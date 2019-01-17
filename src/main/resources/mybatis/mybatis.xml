@@ -88,6 +88,7 @@
 		<typeAlias alias="defaultPostage" type="com.ogc.standard.domain.DefaultPostage"/>
 		<typeAlias alias="searchHistory" type="com.ogc.standard.domain.SearchHistory"/>
 		<typeAlias alias="stealCarbonBubbleRecord" type="com.ogc.standard.domain.StealCarbonBubbleRecord"/>
+		<typeAlias alias="notifyUser" type="com.ogc.standard.domain.NotifyUser"/>
 		
 	</typeAliases>
 </configuration>
