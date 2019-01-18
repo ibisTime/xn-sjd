@@ -67,7 +67,7 @@
 	
 	<select id="select_sumQuantity" parameterType="stealCarbonBubbleRecord"
 		resultType="java.lang.Long">
-		SELECT sum(t.quantity) FROM tsj_steal_carbon_bubble_record t
+		SELECT IFNULL(sum(t.quantity),0) FROM tsj_steal_carbon_bubble_record t
 		<include refid="where_condition" />
 	</select>
 

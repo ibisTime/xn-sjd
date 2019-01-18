@@ -210,6 +210,25 @@ public class SmsBOImpl extends PaginableBOImpl<Sms> implements ISmsBO {
     }
 
     @Override
+    public void saveAdoptOrderTreeExpire(String userId, String treeName,
+            String treeNumber) {
+        Sms sms = new Sms();
+        String code = OrderNoGenerater.generate(EGeneratePrefix.XX.getCode());
+        sms.setCode(code);
+        sms.setType(ESmsType.MESSAGE.getCode());
+        sms.setObject(EAccountType.CUSTOMER.getCode());
+        sms.setUserId(userId);
+        sms.setTitle("树木过期");
+
+        String content = "您认养的树木【" + treeName + treeNumber + "】将于7天后过期";
+        sms.setContent(content);
+        sms.setStatus(ESmsStauts.SENDED.getCode());
+        sms.setCreateDatetime(new Date());
+
+        smsDAO.insert(sms);
+    }
+
+    @Override
     public void readBulletin(String code) {
         Sms sms = new Sms();
         sms.setCode(code);

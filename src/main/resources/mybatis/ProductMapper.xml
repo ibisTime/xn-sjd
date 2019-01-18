@@ -195,7 +195,7 @@
 				 </when>
 				 <otherwise>
 					 <if test="order != null and order.indexOf('temp_column') != -1 ">
-						remain_count desc, t.order_no, t.status asc
+						remain_count, update_datetime desc, t.order_no, t.status asc
 					 </if>
 				 </otherwise>
 			</choose>

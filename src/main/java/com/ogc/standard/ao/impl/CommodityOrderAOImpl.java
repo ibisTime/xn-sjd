@@ -514,9 +514,7 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
 
         // 状态判断
         if (!ECommodityOrderStatus.TO_PAY.getCode()
-            .equals(commodityOrder.getStatus())
-                && !ECommodityOrderStatus.TODELIVE.getCode()
-                    .equals(commodityOrder.getStatus())) {
+            .equals(commodityOrder.getStatus())) {
             throw new BizException("xn0000", "该订单不处于可修改收货地址的状态");
         }
 

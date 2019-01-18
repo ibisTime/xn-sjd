@@ -223,6 +223,19 @@ public class GroupAdoptOrderBOImpl extends PaginableBOImpl<GroupAdoptOrder>
     }
 
     @Override
+    public List<GroupAdoptOrder> queryGroupAdoptOrderById(String identifyCode,
+            String status) {
+        List<GroupAdoptOrder> list = new ArrayList<GroupAdoptOrder>();
+        if (StringUtils.isNotBlank(identifyCode)) {
+            GroupAdoptOrder condition = new GroupAdoptOrder();
+            condition.setIdentifyCode(identifyCode);
+            condition.setStatus(status);
+            list = groupAdoptOrderDAO.selectList(condition);
+        }
+        return list;
+    }
+
+    @Override
     public List<GroupAdoptOrder> queryGroupAdoptOrderList(
             GroupAdoptOrder condition) {
         return groupAdoptOrderDAO.selectList(condition);

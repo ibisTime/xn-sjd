@@ -37,6 +37,12 @@ public class XN629027 extends AProcessor {
         condition.setStatus(req.getStatus());
         condition.setStatusList(req.getStatusList());
 
+        condition.setProvince(req.getProvince());
+        condition.setCity(req.getCity());
+        condition.setArea(req.getArea());
+        condition.setVariety(req.getVariety());
+        condition.setIsAdopting(req.getAdoptStatus());
+
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
             column = IProductAO.DEFAULT_ORDER_COLUMN;

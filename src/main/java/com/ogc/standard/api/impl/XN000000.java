@@ -1,5 +1,6 @@
 package com.ogc.standard.api.impl;
 
+import com.ogc.standard.ao.IAdoptOrderAO;
 import com.ogc.standard.ao.IAdoptOrderTreeAO;
 import com.ogc.standard.ao.IGroupAdoptOrderAO;
 import com.ogc.standard.ao.IOriginalGroupAO;
@@ -27,6 +28,9 @@ public class XN000000 extends AProcessor {
     private IAdoptOrderTreeAO adoptOrderTreeAO = SpringContextHolder
         .getBean(IAdoptOrderTreeAO.class);
 
+    private IAdoptOrderAO adoptOrderAO = SpringContextHolder
+        .getBean(IAdoptOrderAO.class);
+
     private IGroupAdoptOrderAO groupAdoptOrderAO = SpringContextHolder
         .getBean(IGroupAdoptOrderAO.class);
 
@@ -52,9 +56,7 @@ public class XN000000 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        groupAdoptOrderAO.doInvalidIdentifyCode();
-        // wechatBO.doRefund(req.getRefNo(), req.getBizType(), req.getBizNote(),
-        // req.getRefundAmount());
+        adoptOrderAO.doDailyAdoptOrder();
         return new BooleanRes(true);
     }
 

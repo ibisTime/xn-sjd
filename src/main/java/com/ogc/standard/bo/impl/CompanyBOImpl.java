@@ -178,6 +178,7 @@ public class CompanyBOImpl extends PaginableBOImpl<Company>
 
         data.setCertificateTemplate(req.getCertificateTemplate());
         data.setContractTemplate(req.getContractTemplate());
+        data.setCommonSeal(req.getCommonSeal());
         data.setOrganizationCode(req.getOrganizationCode());
         data.setUpdateDatetime(new Date());
         companyDAO.updateOwnerCompanyInfo(data);

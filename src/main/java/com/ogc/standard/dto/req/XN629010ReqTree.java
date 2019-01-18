@@ -27,6 +27,14 @@ public class XN629010ReqTree extends BaseReq {
     @NotBlank
     private String latitude;
 
+    // 产地
+    @NotBlank
+    private String originPlace;
+
+    // 市
+    @NotBlank
+    private String city;
+
     // 实景图
     private String pic;
 
@@ -79,6 +87,22 @@ public class XN629010ReqTree extends BaseReq {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getOriginPlace() {
+        return originPlace;
+    }
+
+    public void setOriginPlace(String originPlace) {
+        this.originPlace = originPlace;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 
 }

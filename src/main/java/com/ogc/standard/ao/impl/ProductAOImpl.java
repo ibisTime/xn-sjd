@@ -346,47 +346,110 @@ public class ProductAOImpl implements IProductAO {
     }
 
     @Override
-    public void putOnProduct(String code, String location, Integer orderNo,
-            String updater, String remark) {
-        Product product = productBO.getProduct(code);
+    public void putOnProduct(String code, List<String> codeList,
+            String location, Integer orderNo, String updater, String remark) {
+        if (StringUtils.isNotBlank(code)) {
+            Product product = productBO.getProduct(code);
 
-        if (!EProductStatus.TO_PUTON.getCode().equals(product.getStatus())
-                && !EProductStatus.PUTOFFED.getCode()
-                    .equals(product.getStatus())) {
-            throw new BizException("xn0000", "产品未处于可上架状态！");
+            if (!EProductStatus.TO_PUTON.getCode().equals(product.getStatus())
+                    && !EProductStatus.PUTOFFED.getCode()
+                        .equals(product.getStatus())) {
+                throw new BizException("xn0000", "产品未处于可上架状态！");
+            }
+
+            productBO.refreshPutOnProduct(code, location, orderNo, updater,
+                remark);
         }
 
-        productBO.refreshPutOnProduct(code, location, orderNo, updater, remark);
+        if (CollectionUtils.isNotEmpty(codeList)) {
+            for (String productCode : codeList) {
+                Product product = productBO.getProduct(productCode);
+
+                if (!EProductStatus.TO_PUTON.getCode()
+                    .equals(product.getStatus())
+                        && !EProductStatus.PUTOFFED.getCode()
+                            .equals(product.getStatus())) {
+                    throw new BizException("xn0000",
+                        "产品【" + product.getName() + "】未处于可上架状态！");
+                }
+
+                productBO.refreshPutOnProduct(productCode, location, orderNo,
+                    updater, remark);
+            }
+        }
+
     }
 
     @Override
-    public void putOffProduct(String code, String updater) {
-        Product product = productBO.getProduct(code);
+    public void putOffProduct(String code, List<String> codeList,
+            String updater) {
 
-        // 集体产品
-        if (ESellType.COLLECTIVE.getCode().equals(product.getSellType())) {
-            if (!EProductStatus.TO_ADOPT.getCode().equals(product.getStatus())
-                    && !EProductStatus.ADOPT.getCode()
+        if (StringUtils.isNotBlank(code)) {
+            Product product = productBO.getProduct(code);
+
+            // 集体产品
+            if (ESellType.COLLECTIVE.getCode().equals(product.getSellType())) {
+                if (!EProductStatus.TO_ADOPT.getCode()
+                    .equals(product.getStatus())
+                        && !EProductStatus.ADOPT.getCode()
+                            .equals(product.getStatus())) {
+                    throw new BizException("xn0000", "产品未处于可下架状态！");
+                }
+
+            } else {
+
+                // 个人、定向、捐赠
+                if (!EProductStatus.TO_ADOPT.getCode()
+                    .equals(product.getStatus())) {
+                    throw new BizException("xn0000", "产品未处于可下架状态！");
+                }
+            }
+
+            // 存在认养中的古树时不能下架
+            if (CollectionUtils.isNotEmpty(treeBO.queryTreeListByProduct(code,
+                ETreeStatus.ADOPTED.getCode()))) {
+                throw new BizException("xn0000", "产品中存在认养中的树木，无法下架！");
+            }
+
+            productBO.refreshPutOffProduct(code, updater);
+        }
+
+        if (CollectionUtils.isNotEmpty(codeList)) {
+            for (String productCode : codeList) {
+                Product product = productBO.getProduct(productCode);
+
+                // 集体产品
+                if (ESellType.COLLECTIVE.getCode()
+                    .equals(product.getSellType())) {
+                    if (!EProductStatus.TO_ADOPT.getCode()
+                        .equals(product.getStatus())
+                            && !EProductStatus.ADOPT.getCode()
+                                .equals(product.getStatus())) {
+                        throw new BizException("xn0000",
+                            "产品【" + product.getName() + "】未处于可下架状态！");
+                    }
+
+                } else {
+
+                    // 个人、定向、捐赠
+                    if (!EProductStatus.TO_ADOPT.getCode()
                         .equals(product.getStatus())) {
-                throw new BizException("xn0000", "产品未处于可下架状态！");
-            }
+                        throw new BizException("xn0000",
+                            "产品【" + product.getName() + "】未处于可下架状态！");
+                    }
+                }
 
-        } else {
+                // 存在认养中的古树时不能下架
+                if (CollectionUtils.isNotEmpty(treeBO.queryTreeListByProduct(
+                    productCode, ETreeStatus.ADOPTED.getCode()))) {
+                    throw new BizException("xn0000",
+                        "产品【" + product.getName() + "】中存在认养中的树木，无法下架！");
+                }
 
-            // 个人、定向、捐赠
-            if (!EProductStatus.TO_ADOPT.getCode()
-                .equals(product.getStatus())) {
-                throw new BizException("xn0000", "产品未处于可下架状态！");
+                productBO.refreshPutOffProduct(productCode, updater);
             }
         }
 
-        // 存在认养中的古树时不能下架
-        if (CollectionUtils.isNotEmpty(treeBO.queryTreeListByProduct(code,
-            ETreeStatus.ADOPTED.getCode()))) {
-            throw new BizException("xn0000", "产品中存在认养中的树木，无法下架！");
-        }
-
-        productBO.refreshPutOffProduct(code, updater);
     }
 
     @Override

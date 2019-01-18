@@ -19,6 +19,7 @@
 		<result column="organization_code" property="organizationCode" />
 		<result column="certificate_template" property="certificateTemplate" />
 		<result column="contract_template" property="contractTemplate" />
+		<result column="common_seal" property="commonSeal" />
 		<result column="create_datetime" property="createDatetime" />
 		
 		<result column="updater" property="updater" />
@@ -68,6 +69,7 @@
 		,t.organization_code
 		,t.certificate_template
 		,t.contract_template
+		,t.common_seal
 		,t.create_datetime
 		
 		,t.updater
@@ -108,6 +110,7 @@
 		,organization_code
 		,certificate_template
 		,contract_template
+		,common_seal
 		,create_datetime
 		
 		,updater
@@ -131,6 +134,7 @@
 		,#{organizationCode}
 		,#{certificateTemplate}
 		,#{contractTemplate}
+		,#{commonSeal}
 		,#{createDatetime}
 		
 		,#{updater}
@@ -175,7 +179,6 @@
 		WHERE code = #{code}
 	</update>
 	
-	
 	<update id="update_ownerCompany_info" parameterType="company">
 		UPDATE tsys_company
 		SET
@@ -188,6 +191,7 @@
 		,bussiness_license = #{bussinessLicense}
 		,certificate_template = #{certificateTemplate}
 		,contract_template = #{contractTemplate}
+		,common_seal = #{commonSeal}
 		,organization_code = #{organizationCode}
 		,update_datetime = #{updateDatetime}
 		,remark = #{remark}

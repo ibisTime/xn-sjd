@@ -56,6 +56,9 @@ public class Company extends ABaseDO {
     // 合同模板
     private String contractTemplate;
 
+    // 公章
+    private String commonSeal;
+
     // 创建时间
     private Date createDatetime;
 
@@ -222,4 +225,13 @@ public class Company extends ABaseDO {
     public void setArea(String area) {
         this.area = area;
     }
+
+    public String getCommonSeal() {
+        return commonSeal;
+    }
+
+    public void setCommonSeal(String commonSeal) {
+        this.commonSeal = commonSeal;
+    }
+
 }

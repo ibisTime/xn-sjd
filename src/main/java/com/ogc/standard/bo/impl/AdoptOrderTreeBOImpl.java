@@ -29,8 +29,8 @@ import com.ogc.standard.domain.Tree;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.enums.EAdoptOrderStatus;
 import com.ogc.standard.enums.EAdoptOrderTreeStatus;
+import com.ogc.standard.enums.EAdoptOrderTreeType;
 import com.ogc.standard.enums.EGeneratePrefix;
-import com.ogc.standard.enums.ESellType;
 import com.ogc.standard.exception.BizException;
 
 @Component
@@ -91,7 +91,7 @@ public class AdoptOrderTreeBOImpl extends PaginableBOImpl<AdoptOrderTree>
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.ADOPT_ORDER_TREE.getCode());
         data.setCode(code);
-        data.setOrderType(ESellType.COLLECTIVE.getCode());
+        data.setOrderType(EAdoptOrderTreeType.COLLECTIVE.getCode());
         data.setOrderCode(groupAdoptOrder.getCode());
         data.setParentCategoryCode(product.getParentCategoryCode());
         data.setCategoryCode(product.getCategoryCode());
@@ -126,7 +126,7 @@ public class AdoptOrderTreeBOImpl extends PaginableBOImpl<AdoptOrderTree>
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.ADOPT_ORDER_TREE.getCode());
         data.setCode(code);
-        data.setOrderType(ESellType.PRESELL.getCode());
+        data.setOrderType(EAdoptOrderTreeType.PRESELL.getCode());
         data.setOrderCode(presellOrder.getCode());
         data.setParentCategoryCode(presellProduct.getParentCategoryCode());
         data.setCategoryCode(presellProduct.getCategoryCode());
@@ -161,7 +161,7 @@ public class AdoptOrderTreeBOImpl extends PaginableBOImpl<AdoptOrderTree>
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.ADOPT_ORDER_TREE.getCode());
         data.setCode(code);
-        data.setOrderType(ESellType.PRESELL.getCode());
+        data.setOrderType(EAdoptOrderTreeType.CONSIGN.getCode());
         data.setOrderCode(groupOrder.getCode());
         data.setParentCategoryCode(presellProduct.getParentCategoryCode());
         data.setCategoryCode(presellProduct.getCategoryCode());
@@ -201,7 +201,7 @@ public class AdoptOrderTreeBOImpl extends PaginableBOImpl<AdoptOrderTree>
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.ADOPT_ORDER_TREE.getCode());
         newData.setCode(code);
-        newData.setOrderType(data.getOrderType());
+        newData.setOrderType(EAdoptOrderTreeType.GIVE.getCode());
         newData.setOrderCode(data.getOrderCode());
         newData.setParentCategoryCode(data.getParentCategoryCode());
         newData.setCategoryCode(data.getCategoryCode());
@@ -230,15 +230,6 @@ public class AdoptOrderTreeBOImpl extends PaginableBOImpl<AdoptOrderTree>
             data.setStatus(adoptOrderTreeStatus.getCode());
             adoptOrderTreeDAO.updateStatus(data);
         }
-    }
-
-    @Override
-    public void refreshInvalidAdoptByOrder(String groupAdoptCode) {
-        AdoptOrderTree data = new AdoptOrderTree();
-        data.setOrderCode(groupAdoptCode);
-        data.setStatus(EAdoptOrderTreeStatus.INVALID.getCode());
-        data.setRemark("集体认养未满标已失效");
-        adoptOrderTreeDAO.updateInvalidAdoptByOrder(data);
     }
 
     @Override
@@ -292,6 +283,15 @@ public class AdoptOrderTreeBOImpl extends PaginableBOImpl<AdoptOrderTree>
     public List<AdoptOrderTree> queryAdoptOrderTreeList(String orderCode) {
         AdoptOrderTree condition = new AdoptOrderTree();
         condition.setOrderCode(orderCode);
+        return adoptOrderTreeDAO.selectList(condition);
+    }
+
+    @Override
+    public List<AdoptOrderTree> queryAdoptOrderTreeList(String orderCode,
+            String status) {
+        AdoptOrderTree condition = new AdoptOrderTree();
+        condition.setOrderCode(orderCode);
+        condition.setStatus(status);
         return adoptOrderTreeDAO.selectList(condition);
     }
 

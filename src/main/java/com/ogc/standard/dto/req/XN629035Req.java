@@ -31,6 +31,9 @@ public class XN629035Req extends APageReq {
     // 产地
     private String originPlace;
 
+    // 市
+    private String city;
+
     // 销售类型
     private String sellType;
 
@@ -96,6 +99,14 @@ public class XN629035Req extends APageReq {
 
     public void setSellType(String sellType) {
         this.sellType = sellType;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 
 }

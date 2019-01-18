@@ -63,6 +63,14 @@ public class CarbonBubbleOrderBOImpl extends PaginableBOImpl<CarbonBubbleOrder>
     }
 
     @Override
+    public void refreshQuantity(String code, BigDecimal quantity) {
+        CarbonBubbleOrder condition = new CarbonBubbleOrder();
+        condition.setCode(code);
+        condition.setQuantity(quantity);
+        carbonBubbleOrderDAO.updateQuantity(condition);
+    }
+
+    @Override
     public BigDecimal takeableTppAmount(String adoptUserId) {
         CarbonBubbleOrder condition = new CarbonBubbleOrder();
         condition.setAdoptUserId(adoptUserId);

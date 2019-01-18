@@ -120,11 +120,16 @@ public class CarbonBubbleOrderAOImpl implements ICarbonBubbleOrderAO {
             }
         }
 
+        BigDecimal quantity = data.getQuantity();// 碳泡泡转账数量
+
         /**
          * 其他人偷取
-         * 1、单颗树最多收1个炭泡泡
-         * 2、一个炭泡泡自己最多收取10%（剩下部分归树的主人）
-         * 3、单日做多收总共20g
+         *  1、单颗树最多收1个炭泡泡
+         *  2、单日做多收总共20g
+         *  3、一个炭泡泡自己最多收取10%（剩下部分归树的主人）
+         *  4、更新碳泡泡订单数量
+         * 自己收取
+         *  1、直接收取
          */
         if (!data.getAdoptUserId().equals(collector)) {
             if (!stealCarbonBubbleRecordBO.isTodayStealed(collector,
@@ -132,24 +137,38 @@ public class CarbonBubbleOrderAOImpl implements ICarbonBubbleOrderAO {
                 throw new BizException("xn0000", "您已不能在从这里搬走碳泡泡啦！");
             }
 
-            BigDecimal otherTakedQuantity = carbonBubbleOrderBO
-                .otherTakedTppAmount(data.getAdoptUserId());
-
             Map<String, String> configMap = sysConfigBO
                 .getConfigsMap(ESysConfigType.TPP_RULE.getCode());
-            BigDecimal otherTakeMaxQuantity = new BigDecimal(
-                configMap.get(SysConstants.OTHER_TAKE_MAX_QUANTITY));
-            otherTakeMaxQuantity = otherTakeMaxQuantity
-                .multiply(new BigDecimal(1000));// 每天最多被偷取数量
 
-            if (otherTakedQuantity.compareTo(otherTakeMaxQuantity) != -1) {
-                throw new BizException("xn0000", "用户今天被收取碳泡泡数量已达上限，不能收取");
+            BigDecimal dailyStealCount = new BigDecimal(
+                configMap.get(SysConstants.DAILY_STEAL_TPP_COUNT));
+            dailyStealCount = dailyStealCount.multiply(new BigDecimal(1000));// 每天最多被偷取重量
+
+            BigDecimal todayStealCount = new BigDecimal(
+                stealCarbonBubbleRecordBO.getTodayStealQuantity(collector,
+                    data.getAdoptUserId()));// 今日偷取总重量
+
+            if (todayStealCount.compareTo(dailyStealCount) != -1) {
+                throw new BizException("xn0000", "您已达到今日搬走碳泡泡的上限");
             }
 
-        }
+            BigDecimal stealRate = new BigDecimal(
+                configMap.get(SysConstants.STEAL_TPP_RATE));// 一个碳泡泡最大偷取比例
+            BigDecimal stealQuantity = data.getQuantity().multiply(stealRate);
+            stealCarbonBubbleRecordBO.saveStealCarbonBubbleRecord(collector,
+                data.getAdoptUserId(), data.getAdoptTreeCode(), code,
+                stealQuantity);
 
-        // 更改碳泡泡产生订单状态
-        carbonBubbleOrderBO.takeCarbonBubble(code, collector);
+            carbonBubbleOrderBO.refreshQuantity(code,
+                data.getQuantity().subtract(stealQuantity));
+
+            quantity = stealQuantity;
+        } else {
+            // 更改碳泡泡产生订单状态
+            carbonBubbleOrderBO.takeCarbonBubble(code, collector);
+
+            quantity = data.getQuantity();
+        }
 
         // 收取人碳泡泡账户加上碳泡泡
         Account sysTppAccount = accountBO
@@ -157,7 +176,6 @@ public class CarbonBubbleOrderAOImpl implements ICarbonBubbleOrderAO {
         Account userTppAccount = accountBO.getAccountByUser(collector,
             ECurrency.TPP.getCode());
 
-        BigDecimal quantity = data.getQuantity();
         // if (quantity.compareTo(sysTppAccount.getAmount()) == 1) {
         // quantity = sysTppAccount.getAmount();
         // }

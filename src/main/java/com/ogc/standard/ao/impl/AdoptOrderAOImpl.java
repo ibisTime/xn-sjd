@@ -483,6 +483,7 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
         }
     }
 
+    @Override
     public void doDailyAdoptOrder() {
         logger.info("***************开始扫描已支付待认养订单***************");
         AdoptOrder condition = new AdoptOrder();
@@ -496,6 +497,27 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
             }
         }
         logger.info("***************结束扫描已支付待认养订单***************");
+
+        logger.info("***************开始扫描7天后过期订单***************");
+        AdoptOrder condition3 = new AdoptOrder();
+        condition3.setStatus(EAdoptOrderStatus.ADOPT.getCode());
+
+        String weekLater = DateUtil.dateToStr(
+            DateUtil.getRelativeDateOfDays(new Date(), 7),
+            DateUtil.FRONT_DATE_FORMAT_STRING);
+        Date endDatetimeStart = DateUtil.getStartDatetime(weekLater);
+        Date endDatetimeEnd = DateUtil.getEndDatetime(weekLater);
+        condition3.setEndDatetimeStart(endDatetimeStart);
+        condition3.setEndDatetimeEnd(endDatetimeEnd);
+
+        List<AdoptOrder> startAdoptOrderList2 = adoptOrderBO
+            .queryAdoptOrderList(condition3);
+        if (CollectionUtils.isNotEmpty(startAdoptOrderList2)) {
+            for (AdoptOrder adoptOrder : startAdoptOrderList2) {
+                notifyAdoptOrder(adoptOrder);
+            }
+        }
+        logger.info("***************结束扫描7天后过期订单***************");
 
         logger.info("***************开始扫描已认养订单***************");
         AdoptOrder condition2 = new AdoptOrder();
@@ -546,6 +568,22 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
             Product product = productBO.getProduct(adoptOrder.getProductCode());
             productBO.refreshNowCount(adoptOrder.getProductCode(),
                 product.getNowCount() - adoptOrder.getQuantity());
+        }
+    }
+
+    private void notifyAdoptOrder(AdoptOrder adoptOrder) {
+        List<AdoptOrderTree> list = adoptOrderTreeBO.queryAdoptOrderTreeList(
+            adoptOrder.getCode(), EAdoptOrderTreeStatus.ADOPT.getCode());
+        Tree tree = null;
+
+        if (CollectionUtils.isNotEmpty(list)) {
+            for (AdoptOrderTree adoptOrderTree : list) {
+                tree = treeBO
+                    .getTreeByTreeNumber(adoptOrderTree.getTreeNumber());
+                smsBO.saveAdoptOrderTreeExpire(
+                    adoptOrderTree.getCurrentHolder(), tree.getScientificName(),
+                    tree.getTreeNumber());
+            }
         }
     }
 

@@ -338,27 +338,28 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
         userAO.upgradeUserLevel(data.getApplyUser());
 
         // TODO 取消 分配认养权、更新树状态
-        List<Tree> treeList = treeBO
-            .queryTreeListByProduct(data.getProductCode());
-        Product product = productBO.getProduct(data.getProductCode());
-        if (CollectionUtils.isNotEmpty(treeList)) {
-            for (Tree tree : treeList) {
-                treeBO.refreshPayTree(tree,
-                    tree.getAdoptCount() + data.getQuantity());
-            }
-        }
+        // List<Tree> treeList = treeBO
+        // .queryTreeListByProduct(data.getProductCode());
+        // if (CollectionUtils.isNotEmpty(treeList)) {
+        // for (Tree tree : treeList) {
+        // treeBO.refreshPayTree(tree,
+        // tree.getAdoptCount() + data.getQuantity());
+        // }
+        // }
+        //
+        // List<AdoptOrderTree> adoptOrderTreeList = adoptOrderTreeBO
+        // .queryUserAdoptedOrder(data.getApplyUser(),
+        // treeList.get(0).getTreeNumber());
+        // if (CollectionUtils.isEmpty(adoptOrderTreeList)) {
+        // adoptOrderTreeBO.saveAdoptOrderTree(product, data,
+        // treeList.get(0).getTreeNumber());
+        // } else {
+        // AdoptOrderTree adoptOrderTree = adoptOrderTreeList.get(0);
+        // adoptOrderTreeBO.refreshQuantity(adoptOrderTree.getCode(),
+        // data.getQuantity() + adoptOrderTree.getQuantity());
+        // }
 
-        List<AdoptOrderTree> adoptOrderTreeList = adoptOrderTreeBO
-            .queryUserAdoptedOrder(data.getApplyUser(),
-                treeList.get(0).getTreeNumber());
-        if (CollectionUtils.isEmpty(adoptOrderTreeList)) {
-            adoptOrderTreeBO.saveAdoptOrderTree(product, data,
-                treeList.get(0).getTreeNumber());
-        } else {
-            AdoptOrderTree adoptOrderTree = adoptOrderTreeList.get(0);
-            adoptOrderTreeBO.refreshQuantity(adoptOrderTree.getCode(),
-                data.getQuantity() + adoptOrderTree.getQuantity());
-        }
+        Product product = productBO.getProduct(data.getProductCode());
 
         // 添加快报
         long totalPayedQuantity = groupAdoptOrderBO
@@ -411,26 +412,27 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
             userAO.upgradeUserLevel(data.getApplyUser());
 
             // 分配认养权、更新树状态
-            List<Tree> treeList = treeBO
-                .queryTreeListByProduct(data.getProductCode());
+            // List<Tree> treeList = treeBO
+            // .queryTreeListByProduct(data.getProductCode());
+            // if (CollectionUtils.isNotEmpty(treeList)) {
+            // for (Tree tree : treeList) {
+            // treeBO.refreshPayTree(tree,
+            // tree.getAdoptCount() + data.getQuantity());
+            // }
+            // }
+            // List<AdoptOrderTree> adoptOrderTreeList = adoptOrderTreeBO
+            // .queryUserAdoptedOrder(data.getApplyUser(),
+            // treeList.get(0).getTreeNumber());
+            // if (CollectionUtils.isEmpty(adoptOrderTreeList)) {
+            // adoptOrderTreeBO.saveAdoptOrderTree(product, data,
+            // treeList.get(0).getTreeNumber());
+            // } else {
+            // AdoptOrderTree adoptOrderTree = adoptOrderTreeList.get(0);
+            // adoptOrderTreeBO.refreshQuantity(adoptOrderTree.getCode(),
+            // data.getQuantity() + adoptOrderTree.getQuantity());
+            // }
+
             Product product = productBO.getProduct(data.getProductCode());
-            if (CollectionUtils.isNotEmpty(treeList)) {
-                for (Tree tree : treeList) {
-                    treeBO.refreshPayTree(tree,
-                        tree.getAdoptCount() + data.getQuantity());
-                }
-            }
-            List<AdoptOrderTree> adoptOrderTreeList = adoptOrderTreeBO
-                .queryUserAdoptedOrder(data.getApplyUser(),
-                    treeList.get(0).getTreeNumber());
-            if (CollectionUtils.isEmpty(adoptOrderTreeList)) {
-                adoptOrderTreeBO.saveAdoptOrderTree(product, data,
-                    treeList.get(0).getTreeNumber());
-            } else {
-                AdoptOrderTree adoptOrderTree = adoptOrderTreeList.get(0);
-                adoptOrderTreeBO.refreshQuantity(adoptOrderTree.getCode(),
-                    data.getQuantity() + adoptOrderTree.getQuantity());
-            }
 
             // 添加快报
             long totalPayedQuantity = groupAdoptOrderBO
@@ -475,7 +477,6 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
 
     // 更新已满标的订单
     @Override
-    @Transactional
     public void toFullAdopt() {
         // 已满标的锁定产品
         List<Product> productList = productBO
@@ -490,8 +491,44 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
                 if (totalPayedQuantity == product.getRaiseCount()) {
                     productBO.refreshAdoptProduct(product.getCode());
 
+                    List<GroupAdoptOrder> groupAdoptOrders = groupAdoptOrderBO
+                        .queryGroupAdoptOrderById(product.getIdentifyCode(),
+                            EGroupAdoptOrderStatus.PAYED.getCode());
+                    if (CollectionUtils.isNotEmpty(groupAdoptOrders)) {
+                        for (GroupAdoptOrder groupAdoptOrder : groupAdoptOrders) {
+                            // 分配认养权、更新树状态
+                            List<Tree> treeList = treeBO.queryTreeListByProduct(
+                                groupAdoptOrder.getProductCode());
+                            if (CollectionUtils.isNotEmpty(treeList)) {
+                                for (Tree tree : treeList) {
+                                    treeBO.refreshPayTree(tree,
+                                        tree.getAdoptCount() + groupAdoptOrder
+                                            .getQuantity());
+                                }
+                            }
+
+                            List<AdoptOrderTree> adoptOrderTreeList = adoptOrderTreeBO
+                                .queryUserAdoptedOrder(
+                                    groupAdoptOrder.getApplyUser(),
+                                    treeList.get(0).getTreeNumber());
+                            if (CollectionUtils.isEmpty(adoptOrderTreeList)) {
+                                adoptOrderTreeBO.saveAdoptOrderTree(product,
+                                    groupAdoptOrder,
+                                    treeList.get(0).getTreeNumber());
+                            } else {
+                                AdoptOrderTree adoptOrderTree = adoptOrderTreeList
+                                    .get(0);
+                                adoptOrderTreeBO.refreshQuantity(
+                                    adoptOrderTree.getCode(),
+                                    groupAdoptOrder.getQuantity()
+                                            + adoptOrderTree.getQuantity());
+                            }
+                        }
+                    }
+
                     groupAdoptOrderBO
                         .refreshFullOrderById(product.getIdentifyCode());
+
                 }
 
             }
@@ -636,9 +673,6 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
                             // 积分退款
                             jfRefund(groupAdoptOrder);
 
-                            // 更新认养权状态
-                            adoptOrderTreeBO.refreshInvalidAdoptByOrder(
-                                groupAdoptOrder.getCode());
                         }
                     }
 

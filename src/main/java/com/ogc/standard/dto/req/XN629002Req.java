@@ -1,5 +1,7 @@
 package com.ogc.standard.dto.req;
 
+import java.util.List;
+
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
@@ -12,8 +14,10 @@ public class XN629002Req extends BaseReq {
     private static final long serialVersionUID = -3095678471054371491L;
 
     // 编号
-    @NotBlank
     private String code;
+
+    // 编号列表
+    private List<String> codeList;
 
     // 更新人
     @NotBlank
@@ -33,6 +37,14 @@ public class XN629002Req extends BaseReq {
 
     public void setUpdater(String updater) {
         this.updater = updater;
+    }
+
+    public List<String> getCodeList() {
+        return codeList;
+    }
+
+    public void setCodeList(List<String> codeList) {
+        this.codeList = codeList;
     }
 
 }

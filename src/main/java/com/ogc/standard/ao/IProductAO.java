@@ -35,11 +35,12 @@ public interface IProductAO {
             String updater, String remark);
 
     // 上架产品
-    public void putOnProduct(String code, String location, Integer orderNo,
-            String updater, String remark);
+    public void putOnProduct(String code, List<String> codeList,
+            String location, Integer orderNo, String updater, String remark);
 
     // 下架产品
-    public void putOffProduct(String code, String updater);
+    public void putOffProduct(String code, List<String> codeList,
+            String updater);
 
     public Paginable<Product> queryProductPage(int start, int limit,
             Product condition);

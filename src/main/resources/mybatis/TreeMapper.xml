@@ -74,6 +74,9 @@
 			<if test="originPlace != null and originPlace != '' ">
 				AND t.origin_place like "%"#{originPlace}"%"
 			</if>
+			<if test="city != null and city != '' ">
+				AND t.city like "%"#{city}"%"
+			</if>
 			
 			<if test="maxAdoptCount != null and maxAdoptCount != '' ">
 				<![CDATA[AND t.adopt_count < #{maxAdoptCount}]]>

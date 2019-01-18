@@ -13,6 +13,9 @@ public interface ICarbonBubbleOrderDAO extends IBaseDAO<CarbonBubbleOrder> {
     void updateTakeCarbonBubble(CarbonBubbleOrder data);
 
     // 过期
+    public int updateQuantity(CarbonBubbleOrder data);
+
+    // 更新数量
     public int updateExpireCarbonBubble(CarbonBubbleOrder data);
 
     // 碳泡泡数量总额

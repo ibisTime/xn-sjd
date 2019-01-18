@@ -41,6 +41,9 @@ public class XN630080Req {
     // 合同模板
     private String contractTemplate;
 
+    // 公章
+    private String commonSeal;
+
     // 组织机构代码
     private String organizationCode;
 
@@ -133,6 +136,14 @@ public class XN630080Req {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getCommonSeal() {
+        return commonSeal;
+    }
+
+    public void setCommonSeal(String commonSeal) {
+        this.commonSeal = commonSeal;
     }
 
 }

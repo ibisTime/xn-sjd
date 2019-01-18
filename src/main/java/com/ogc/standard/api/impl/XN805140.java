@@ -36,8 +36,6 @@ public class XN805140 extends AProcessor {
 
         XN805140Res res = signLogAO.doAssignSignTPP(req.getUserId());
 
-        signLogAO.doAssignSignJf(req.getUserId());
-
         return res;
     }
 

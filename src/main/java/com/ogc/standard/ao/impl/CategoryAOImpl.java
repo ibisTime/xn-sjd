@@ -2,9 +2,11 @@ package com.ogc.standard.ao.impl;
 
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.ICategoryAO;
 import com.ogc.standard.bo.ICategoryBO;
@@ -102,23 +104,60 @@ public class CategoryAOImpl implements ICategoryAO {
     }
 
     @Override
-    public void putOnCategory(String code, String updater) {
-        Category category = categoryBO.getCategory(code);
-        if (ECategoryStatus.PUT_ON.getCode().equals(category.getStatus())) {
-            throw new BizException("xn0000", "产品分类已上架，无法重复上架！");
+    @Transactional
+    public void putOnCategory(String code, List<String> codeList,
+            String updater) {
+
+        if (StringUtils.isNotBlank(code)) {
+            Category category = categoryBO.getCategory(code);
+            if (ECategoryStatus.PUT_ON.getCode().equals(category.getStatus())) {
+                throw new BizException("xn0000", "产品分类已上架，无法重复上架！");
+            }
+
+            categoryBO.refreshPutOnCategory(code, updater);
         }
 
-        categoryBO.refreshPutOnCategory(code, updater);
+        if (CollectionUtils.isNotEmpty(codeList)) {
+            for (String categoryCode : codeList) {
+                Category category = categoryBO.getCategory(categoryCode);
+                if (ECategoryStatus.PUT_ON.getCode()
+                    .equals(category.getStatus())) {
+                    throw new BizException("xn0000",
+                        "产品分类【" + category.getName() + "】已上架，无法重复上架！");
+                }
+
+                categoryBO.refreshPutOnCategory(categoryCode, updater);
+            }
+        }
+
     }
 
     @Override
-    public void putOffCategory(String code, String updater) {
-        Category category = categoryBO.getCategory(code);
-        if (ECategoryStatus.PUT_OFF.getCode().equals(category.getStatus())) {
-            throw new BizException("xn0000", "产品分类已下架，无法重复下架！");
+    public void putOffCategory(String code, List<String> codeList,
+            String updater) {
+
+        if (StringUtils.isNotBlank(code)) {
+            Category category = categoryBO.getCategory(code);
+            if (ECategoryStatus.PUT_OFF.getCode()
+                .equals(category.getStatus())) {
+                throw new BizException("xn0000", "产品分类已下架，无法重复下架！");
+            }
+
+            categoryBO.refreshPutOffCategory(code, updater);
         }
 
-        categoryBO.refreshPutOffCategory(code, updater);
+        if (CollectionUtils.isNotEmpty(codeList)) {
+            for (String categoryCode : codeList) {
+                Category category = categoryBO.getCategory(categoryCode);
+                if (ECategoryStatus.PUT_OFF.getCode()
+                    .equals(category.getStatus())) {
+                    throw new BizException("xn0000",
+                        "产品分类【" + category.getName() + "】已下架，无法重复下架！");
+                }
+
+                categoryBO.refreshPutOffCategory(categoryCode, updater);
+            }
+        }
     }
 
     @Override

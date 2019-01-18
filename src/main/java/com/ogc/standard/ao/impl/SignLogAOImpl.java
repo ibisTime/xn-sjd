@@ -71,81 +71,84 @@ public class SignLogAOImpl implements ISignLogAO {
     @Override
     public XN805140Res doAssignSignTPP(String userId) {
         BigDecimal quantity = BigDecimal.ZERO;
+        String currency = null;
         long continueSignDay = 1L;
 
         if (signLogBO.isFirstCheckIn(userId, ESignLogType.SIGN_IN.getCode())) {
-            Map<String, String> configMap = sysConfigBO
-                .getConfigsMap(ESysConfigType.TPP_RULE.getCode());
-
-            quantity = new BigDecimal(configMap.get(SysConstants.SIGN_TPP));
-            quantity = AmountUtil.mul(quantity, 1000L);
 
             continueSignDay = keepCheckIn(userId,
                 ESignLogType.SIGN_IN.getCode());// 连续签到天数
 
-            // 三天的倍数
-            if (continueSignDay % 3 == 0) {
-                BigDecimal continueSignQuantity = new BigDecimal(
-                    configMap.get(SysConstants.CONTINUE_SIGN_RATE));
+            Map<String, String> tppConfigMap = sysConfigBO
+                .getConfigsMap(ESysConfigType.TPP_RULE.getCode());
+            quantity = new BigDecimal(tppConfigMap.get(SysConstants.SIGN_TPP));
 
-                BigDecimal rate = new BigDecimal(continueSignDay / 3);
+            Map<String, String> configMap = sysConfigBO
+                .getConfigsMap(ESysConfigType.SIGN_RULE.getCode());
 
-                quantity = quantity.add(rate.multiply(continueSignQuantity));
+            if (continueSignDay == 3) {
+                quantity = new BigDecimal(configMap.get(SysConstants.DAYS_3));
+                currency = ECurrency.TPP.getCode();
+            }
+            if (continueSignDay == 5) {
+                quantity = new BigDecimal(configMap.get(SysConstants.DAYS_5));
+                currency = ECurrency.TPP.getCode();
+            }
+            if (continueSignDay == 7) {
+                quantity = new BigDecimal(configMap.get(SysConstants.DAYS_7));
+                currency = ECurrency.JF.getCode();
+            }
+            if (continueSignDay == 15) {
+                quantity = new BigDecimal(configMap.get(SysConstants.DAYS_15));
+                currency = ECurrency.JF.getCode();
+            }
+            if (continueSignDay == 30) {
+                quantity = new BigDecimal(configMap.get(SysConstants.DAYS_30));
+                currency = ECurrency.JF.getCode();
+            }
+            if (continueSignDay == 90) {
+                quantity = new BigDecimal(configMap.get(SysConstants.DAYS_90));
+                currency = ECurrency.TPP.getCode();
+            }
+            if (continueSignDay == 180) {
+                quantity = new BigDecimal(configMap.get(SysConstants.DAYS_180));
+                currency = ECurrency.JF.getCode();
+            }
+            quantity = AmountUtil.mul(quantity, 1000L);
+
+            if (ECurrency.TPP.getCode().equals(currency)) {
+
+                Account userTppAccount = accountBO.getAccountByUser(userId,
+                    ECurrency.TPP.getCode());
+                Account sysTppAccount = accountBO
+                    .getAccount(ESystemAccount.SYS_ACOUNT_TPP_POOL.getCode());
+
+                String note = "获得" + AmountUtil.div(quantity, 1000L).intValue()
+                        + "碳泡泡，已连续签到" + continueSignDay + "天";
+                accountBO.transAmount(sysTppAccount, userTppAccount, quantity,
+                    EJourBizTypeUser.SIGN.getCode(),
+                    EJourBizTypePlat.SIGN.getCode(), note, note, userId);
+
             }
 
-            Account userTppAccount = accountBO.getAccountByUser(userId,
-                ECurrency.TPP.getCode());
-            Account sysTppAccount = accountBO
-                .getAccount(ESystemAccount.SYS_ACOUNT_TPP_POOL.getCode());
+            if (ECurrency.JF.getCode().equals(currency)) {
 
-            String note = "获得" + AmountUtil.div(quantity, 1000L).intValue()
-                    + "碳泡泡，已连续签到" + continueSignDay + "天";
-            accountBO.transAmount(sysTppAccount, userTppAccount, quantity,
-                EJourBizTypeUser.SIGN.getCode(),
-                EJourBizTypePlat.SIGN.getCode(), note, note, userId);
+                Account userJfAccount = accountBO.getAccountByUser(userId,
+                    ECurrency.JF.getCode());
+                Account sysJfAccount = accountBO
+                    .getAccount(ESystemAccount.SYS_ACOUNT_JF_POOL.getCode());
+
+                String note = "获得" + AmountUtil.div(quantity, 1000L).intValue()
+                        + "积分，已连续签到" + continueSignDay + "天";
+                accountBO.transAmount(sysJfAccount, userJfAccount, quantity,
+                    EJourBizTypeUser.SIGN.getCode(),
+                    EJourBizTypePlat.SIGN.getCode(), note, note, userId);
+
+            }
 
         }
 
         return new XN805140Res(quantity.intValue(), continueSignDay);
-    }
-
-    @Override
-    public void doAssignSignJf(String userId) {
-        BigDecimal quantity = BigDecimal.ZERO;
-        long continueSignDay = 1L;
-
-        if (signLogBO.isFirstCheckIn(userId, ESignLogType.SIGN_IN.getCode())) {
-            Map<String, String> configMap = sysConfigBO
-                .getConfigsMap(ESysConfigType.JF_RULE.getCode());
-
-            quantity = new BigDecimal(configMap.get(SysConstants.SIGN_JF));
-            quantity = AmountUtil.mul(quantity, 1000L);
-
-            continueSignDay = keepCheckIn(userId,
-                ESignLogType.SIGN_IN.getCode());// 连续签到天数
-
-            // 三天的倍数
-            if (continueSignDay % 3 == 0) {
-                BigDecimal continueSignQuantity = new BigDecimal(
-                    configMap.get(SysConstants.CONTINUE_LOGIN_RATE));
-
-                BigDecimal rate = new BigDecimal(continueSignDay / 3);
-
-                quantity = quantity.add(rate.multiply(continueSignQuantity));
-            }
-
-            Account userJfAccount = accountBO.getAccountByUser(userId,
-                ECurrency.JF.getCode());
-            Account sysJfAccount = accountBO
-                .getAccount(ESystemAccount.SYS_ACOUNT_JF_POOL.getCode());
-
-            String note = "获得" + AmountUtil.div(quantity, 1000L).intValue()
-                    + "积分，已连续签到" + continueSignDay + "天";
-            accountBO.transAmount(sysJfAccount, userJfAccount, quantity,
-                EJourBizTypeUser.SIGN.getCode(),
-                EJourBizTypePlat.SIGN.getCode(), note, note, userId);
-
-        }
     }
 
     @Override

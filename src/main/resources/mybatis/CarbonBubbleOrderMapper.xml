@@ -13,6 +13,7 @@
 		<result column="taker" property="taker" />
 		<result column="take_datetime" property="takeDatetime" />
 	</resultMap>
+	
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != '' ">
@@ -51,6 +52,7 @@
 			</if>
 		</trim>
 	</sql>
+	
 	<select id="select_carbonBubbleOrder" parameterType="carbonBubbleOrder" resultMap="carbonBubbleOrder_DB_Result">
 		SELECT
 		t.code
@@ -123,6 +125,13 @@
 		UPDATE tsj_carbon_bubble_order
 		SET
 		status = #{status}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_quantity" parameterType="carbonBubbleOrder">
+		UPDATE tsj_carbon_bubble_order
+		SET
+		quantity = #{quantity}
 		WHERE code = #{code}
 	</update>
 	

@@ -144,7 +144,9 @@ public class SysConstants {
 
     public static final String TPP_EXPIRE_HOUR = "TPP_EXPIRE_HOUR";// 碳泡泡过期时间
 
-    public static final String OTHER_TAKE_MAX_QUANTITY = "OTHER_TAKE_MAX_QUANTITY";// 每天最多被偷取数量
+    public static final String STEAL_TPP_RATE = "STEAL_TPP_RATE";// 一个碳泡泡帮收比例
+
+    public static final String DAILY_STEAL_TPP_COUNT = "DAILY_STEAL_TPP_COUNT";// 单日最多收取碳泡泡重量
 
     // 积分规则
     public static final String REGISTER = "REGISTER";// 注册送积分
@@ -190,4 +192,20 @@ public class SysConstants {
     public static final String ID_INVALID_HOURS = "ID_INVALID_HOURS";// 识别码失效时间
 
     // 商城
+
+    // 签到规则
+    public static final String DAYS_3 = "3DAYS";// 连续签到3天送碳泡泡数量
+
+    public static final String DAYS_5 = "5DAYS";// 连续签到5天送碳泡泡数量
+
+    public static final String DAYS_7 = "7DAYS";// 连续签到7天送积分数量
+
+    public static final String DAYS_15 = "15DAYS";// 连续签到15天送积分数量
+
+    public static final String DAYS_30 = "30DAYS";// 连续签到30天送积分数量
+
+    public static final String DAYS_90 = "90DAYS";// 连续签到90天送碳泡泡数量
+
+    public static final String DAYS_180 = "180DAYS";// 连续签到180天送积分数量
+
 }

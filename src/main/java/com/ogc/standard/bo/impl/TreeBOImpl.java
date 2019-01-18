@@ -74,13 +74,13 @@ public class TreeBOImpl extends PaginableBOImpl<Tree> implements ITreeBO {
         data.setSellType(product.getSellType());
         data.setAge(StringValidater.toInteger(tree.getAge()));
 
-        data.setOriginPlace(product.getOriginPlace());
+        data.setOriginPlace(tree.getOriginPlace());
         data.setScientificName(product.getScientificName());
         data.setVariety(product.getVariety());
         data.setRank(product.getRank());
         data.setProvince(product.getProvince());
 
-        data.setCity(product.getCity());
+        data.setCity(tree.getCity());
         data.setArea(product.getArea());
         data.setTown(product.getTown());
         data.setLongitude(tree.getLongitude());

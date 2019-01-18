@@ -59,6 +59,10 @@ public interface IGroupAdoptOrderBO extends IPaginableBO<GroupAdoptOrder> {
     // 根据识别码获取订单
     public List<GroupAdoptOrder> queryGroupAdoptOrderById(String identifyCode);
 
+    // 根据识别码获取订单
+    public List<GroupAdoptOrder> queryGroupAdoptOrderById(String identifyCode,
+            String status);
+
     public List<GroupAdoptOrder> queryGroupAdoptOrderList(
             GroupAdoptOrder condition);
 

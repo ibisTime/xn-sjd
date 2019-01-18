@@ -45,6 +45,10 @@ public interface ISmsBO extends IPaginableBO<Sms> {
     public void saveArticlePoint(String userId, String articleTitle,
             String pointUserNickName);
 
+    // 添加文章点赞消息
+    public void saveAdoptOrderTreeExpire(String userId, String treeName,
+            String treeNumber);
+
     // 阅读快报
     public void readBulletin(String code);
 

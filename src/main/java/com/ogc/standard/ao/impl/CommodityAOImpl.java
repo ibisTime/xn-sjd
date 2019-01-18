@@ -176,7 +176,7 @@ public class CommodityAOImpl implements ICommodityAO {
             status = ECommodityStatus.FAILED.getCode();
         }
 
-        commodityBO.refreshStatus(code, status, approver, approveNote);
+        commodityBO.refreshStatus(code, status, approver, data.getRemark());
     }
 
     @Override

@@ -13,3 +13,6 @@ ADD COLUMN `original_place` VARCHAR(255) NULL COMMENT '原产地' AFTER `origina
 
 ALTER TABLE `tsc_cart` 
 ADD COLUMN `status` VARCHAR(4) NULL COMMENT '状态' AFTER `amount`;
+
+ALTER TABLE `tsys_company` 
+ADD COLUMN `common_seal` TEXT NULL COMMENT '公章' AFTER `contract_template`;

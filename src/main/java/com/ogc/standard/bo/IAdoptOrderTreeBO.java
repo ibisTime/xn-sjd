@@ -34,9 +34,6 @@ public interface IAdoptOrderTreeBO extends IPaginableBO<AdoptOrderTree> {
     public void refreshAdoptOrderTree(AdoptOrderTree data,
             EAdoptOrderTreeStatus adoptOrderTreeStatus);
 
-    // 更新集体订单的失效认养权
-    public void refreshInvalidAdoptByOrder(String groupAdoptCode);
-
     // 更新数量
     public void refreshQuantity(String code, Integer quantity);
 
@@ -44,6 +41,9 @@ public interface IAdoptOrderTreeBO extends IPaginableBO<AdoptOrderTree> {
             AdoptOrderTree condition);
 
     public List<AdoptOrderTree> queryAdoptOrderTreeList(String orderCode);
+
+    public List<AdoptOrderTree> queryAdoptOrderTreeList(String orderCode,
+            String status);
 
     // 用户已认养名单
     public List<AdoptOrderTree> queryUserAdoptedOrder(String userId,

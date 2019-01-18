@@ -24,10 +24,12 @@ public interface ICategoryAO {
             String remark);
 
     // 上架
-    public void putOnCategory(String code, String updater);
+    public void putOnCategory(String code, List<String> codeList,
+            String updater);
 
     // 下架
-    public void putOffCategory(String code, String updater);
+    public void putOffCategory(String code, List<String> codeList,
+            String updater);
 
     public Paginable<Category> queryCategoryPage(int start, int limit,
             Category condition);

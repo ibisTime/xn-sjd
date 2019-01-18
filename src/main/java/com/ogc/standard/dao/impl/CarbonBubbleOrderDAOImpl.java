@@ -35,6 +35,11 @@ public class CarbonBubbleOrderDAOImpl extends AMybatisTemplate
     }
 
     @Override
+    public int updateQuantity(CarbonBubbleOrder data) {
+        return super.update(NAMESPACE.concat("update_quantity"), data);
+    }
+
+    @Override
     public CarbonBubbleOrder select(CarbonBubbleOrder condition) {
         return super.select(NAMESPACE.concat("select_carbonBubbleOrder"),
             condition, CarbonBubbleOrder.class);

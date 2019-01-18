@@ -24,7 +24,8 @@ public class XN629003 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        categoryAO.putOffCategory(req.getCode(), req.getUpdater());
+        categoryAO.putOffCategory(req.getCode(), req.getCodeList(),
+            req.getUpdater());
 
         return new BooleanRes(true);
     }
