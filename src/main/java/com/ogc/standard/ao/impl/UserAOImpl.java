@@ -891,6 +891,7 @@ public class UserAOImpl implements IUserAO {
         data.setGender(req.getGender());
         data.setAge(req.getAge());
         data.setBirthday(req.getBirthday());
+        data.setIntroduce(req.getIntroduce());
         userExtBO.refreshUserExt(data);
 
     }

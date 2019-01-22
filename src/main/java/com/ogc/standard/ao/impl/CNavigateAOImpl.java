@@ -35,6 +35,7 @@ public class CNavigateAOImpl implements ICNavigateAO {
         CNavigate navigate = cNavigateBO.getCNavigate(data.getCode());
 
         navigate.setName(data.getName());
+        navigate.setType(data.getType());
         navigate.setStatus(data.getStatus());
         navigate.setParentCode(data.getParentCode());
         navigate.setLocation(data.getLocation());

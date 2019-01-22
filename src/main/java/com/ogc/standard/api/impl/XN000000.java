@@ -56,7 +56,7 @@ public class XN000000 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        adoptOrderAO.doDailyAdoptOrder();
+        adoptOrderTreeAO.doDailyAdoptOrderTree();
         return new BooleanRes(true);
     }
 

@@ -1,6 +1,7 @@
 package com.ogc.standard.ao.impl;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,7 @@ import com.ogc.standard.bo.ISignLogBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.AmountUtil;
+import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.common.SysConstants;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.SignLog;
@@ -25,6 +27,7 @@ import com.ogc.standard.domain.User;
 import com.ogc.standard.dto.req.XN805140Req;
 import com.ogc.standard.dto.res.XN629906Res;
 import com.ogc.standard.dto.res.XN805140Res;
+import com.ogc.standard.dto.res.XN805146Res;
 import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EJourBizTypePlat;
 import com.ogc.standard.enums.EJourBizTypeUser;
@@ -171,6 +174,43 @@ public class SignLogAOImpl implements ISignLogAO {
     @Override
     public List<SignLog> querySignLogList(SignLog condition) {
         return signLogBO.querySignLogList(condition);
+    }
+
+    @Override
+    public List<XN805146Res> queryContinueSignLogList(SignLog condition) {
+        List<SignLog> signLogs = signLogBO.querySignLogList(condition);
+
+        signLogBO.ListSort(signLogs);
+
+        List<XN805146Res> resList = new ArrayList<XN805146Res>();
+
+        if (CollectionUtils.isNotEmpty(signLogs)) {
+
+            List<Date> signResList = new ArrayList<Date>();
+            signResList.add(signLogs.get(0).getCreateDatetime());
+
+            for (int i = 0; i < signLogs.size() - 1; i++) {
+
+                if (DateUtil.daysBetween(signLogs.get(i).getCreateDatetime(),
+                    signLogs.get(i + 1).getCreateDatetime()) == -1) {
+                    signResList.add(signLogs.get(i + 1).getCreateDatetime());
+                } else {
+                    resList.add(new XN805146Res(signResList));
+
+                    signResList = new ArrayList<Date>();
+                    signResList.add(signLogs.get(i + 1).getCreateDatetime());
+
+                }
+
+            }
+
+            if (CollectionUtils.isNotEmpty(signResList)) {
+                resList.add(new XN805146Res(signResList));
+            }
+
+        }
+
+        return resList;
     }
 
     @Override

@@ -144,8 +144,12 @@ public class ArticleAOImpl implements IArticleAO {
                 .getAdoptOrderTree(req.getAdoptTreeCode());
             treeNumber = adoptOrderTree.getTreeNumber();
         }
-        Tree tree = treeBO.getTreeByTreeNumber(treeNumber);
-        treeBO.refreshArticleCount(req.getTreeNo(), tree.getArticleCount() + 1);
+
+        if (null != treeNumber) {
+            Tree tree = treeBO.getTreeByTreeNumber(treeNumber);
+            treeBO.refreshArticleCount(req.getTreeNo(),
+                tree.getArticleCount() + 1);
+        }
 
         return articleBO.saveArticle(req.getAdoptTreeCode(), treeNumber,
             req.getType(), openLevel, req.getTitle(), req.getContent(),
@@ -395,20 +399,23 @@ public class ArticleAOImpl implements IArticleAO {
 
         article.setPublishUserName(publishUserName);
 
-        Tree tree = treeBO.getTreeByTreeNumber(article.getTreeNo());
-        article.setTreeName(tree.getScientificName());
+        if (StringUtils.isNotBlank(article.getTreeNo())) {
+            Tree tree = treeBO.getTreeByTreeNumber(article.getTreeNo());
+            article.setTreeName(tree.getScientificName());
 
-        if (EProductType.NORMAL.getCode().equals(tree.getProductType())) {
-            Product product = productBO.getProduct(tree.getProductCode());
-            article.setProductName(product.getName());
-            article.setProductCode(product.getCode());
-            article.setProductStatus(product.getStatus());
-        } else if (EProductType.YS.getCode().equals(tree.getProductType())) {
-            PresellProduct presellProduct = presellProductBO
-                .getPresellProduct(tree.getProductCode());
-            article.setProductName(presellProduct.getName());
-            article.setProductCode(presellProduct.getCode());
-            article.setProductStatus(presellProduct.getStatus());
+            if (EProductType.NORMAL.getCode().equals(tree.getProductType())) {
+                Product product = productBO.getProduct(tree.getProductCode());
+                article.setProductName(product.getName());
+                article.setProductCode(product.getCode());
+                article.setProductStatus(product.getStatus());
+            } else if (EProductType.YS.getCode()
+                .equals(tree.getProductType())) {
+                PresellProduct presellProduct = presellProductBO
+                    .getPresellProduct(tree.getProductCode());
+                article.setProductName(presellProduct.getName());
+                article.setProductCode(presellProduct.getCode());
+                article.setProductStatus(presellProduct.getStatus());
+            }
         }
 
         if (StringUtils.isNotBlank(article.getAdoptTreeCode())) {

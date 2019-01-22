@@ -8,6 +8,7 @@ import com.ogc.standard.domain.SignLog;
 import com.ogc.standard.dto.req.XN805140Req;
 import com.ogc.standard.dto.res.XN629906Res;
 import com.ogc.standard.dto.res.XN805140Res;
+import com.ogc.standard.dto.res.XN805146Res;
 
 public interface ISignLogAO {
 
@@ -19,6 +20,8 @@ public interface ISignLogAO {
 
     public Paginable<SignLog> querySignLogPage(int start, int limit,
             SignLog condition);
+
+    public List<XN805146Res> queryContinueSignLogList(SignLog condition);
 
     public List<SignLog> querySignLogList(SignLog condition);
 

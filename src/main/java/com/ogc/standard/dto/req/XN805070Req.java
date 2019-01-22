@@ -20,6 +20,9 @@ public class XN805070Req {
 
     private String birthday;
 
+    // 自我介绍
+    private String introduce;
+
     public String getUserId() {
         return userId;
     }
@@ -74,6 +77,14 @@ public class XN805070Req {
 
     public void setBirthday(String birthday) {
         this.birthday = birthday;
+    }
+
+    public String getIntroduce() {
+        return introduce;
+    }
+
+    public void setIntroduce(String introduce) {
+        this.introduce = introduce;
     }
 
 }
