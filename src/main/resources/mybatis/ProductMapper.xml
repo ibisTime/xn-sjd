@@ -189,22 +189,27 @@
 <!-- 				t.${order} -->
 <!-- 			</if> -->
 			
-			<choose>
-			     <when test="order != null and order.indexOf('temp_column') == -1 ">
-				 	t.${order}
-				 </when>
-				 <otherwise>
-					 <if test="order != null and order.indexOf('temp_column') != -1 ">
-						remain_count, update_datetime desc, t.order_no, t.status asc
-					 </if>
-				 </otherwise>
-			</choose>
+<!-- 			<choose> -->
+<!-- 			     <when test="order != null and order.indexOf('temp_column') == -1 "> -->
+<!-- 				 	t.${order} -->
+<!-- 				 </when> -->
+<!-- 				 <otherwise> -->
+<!-- 					 <if test="order != null and order.indexOf('temp_column') != -1 "> -->
+						remain_count desc, update_datetime desc, t.order_no desc, t.status asc
+<!-- 					 </if> -->
+<!-- 				 </otherwise> -->
+<!-- 			</choose> -->
 		</trim>
 	</select>
 
 	<select id="select_distinctArea" parameterType="product" resultMap="product_DB_Result">
 		select distinct province,city,area from tzb_product
 		order by province,city,area
+	</select>
+	
+	<select id="select_distinctVariety" parameterType="product" resultMap="product_DB_Result">
+		select distinct variety from tzb_product
+		order by variety
 	</select>
 	
 	<select id="select_product_count" parameterType="product"

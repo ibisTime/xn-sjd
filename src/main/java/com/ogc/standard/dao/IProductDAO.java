@@ -53,4 +53,7 @@ public interface IProductDAO extends IBaseDAO<Product> {
     // 查询产品区域
     public List<Product> selectDistinctArea(Product data);
 
+    // 查询产品品种
+    public List<Product> selectDistinctVariety(Product data);
+
 }

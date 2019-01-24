@@ -132,15 +132,11 @@ public class SysConstants {
 
     public static final String SIGN_TPP = "SIGN_TPP";// 签到
 
-    public static final String CONTINUE_SIGN_RATE = "CONTINUE_SIGN_RATE";// 连续3天签到
-
     public static final String SHARE = "SHARE";// 分享
 
     public static final String CREATE_TPP_RATE = "CREATE_TPP_RATE";// 碳泡泡产生比例
 
     public static final String ADOPT_CREATE_TPP_RATE = "CREATE_TPP_RATE";// 碳泡泡产生比例
-
-    public static final String PRESELL_CREATE_TPP_RATE = "CREATE_TPP_RATE";// 碳泡泡产生比例
 
     public static final String TPP_EXPIRE_HOUR = "TPP_EXPIRE_HOUR";// 碳泡泡过期时间
 
@@ -187,6 +183,13 @@ public class SysConstants {
     public static final String USER_LEVEL_4 = "USER_LEVEL_4";// 愈林诗人
 
     public static final String USER_LEVEL_5 = "USER_LEVEL_5";// 爱林天使
+
+    // 树木级别
+    public static final String FIRST = "FIRST";// 一级
+
+    public static final String SECOND = "SECOND";// 二级
+
+    public static final String THIRD = "THIRD";// 三级
 
     // 识别码
     public static final String ID_INVALID_HOURS = "ID_INVALID_HOURS";// 识别码失效时间

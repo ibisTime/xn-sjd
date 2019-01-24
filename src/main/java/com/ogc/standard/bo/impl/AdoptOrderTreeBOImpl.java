@@ -402,6 +402,11 @@ public class AdoptOrderTreeBOImpl extends PaginableBOImpl<AdoptOrderTree>
     }
 
     @Override
+    public List<AdoptOrderTree> getDistictVariety() {
+        return adoptOrderTreeDAO.selectDistictVariety(new AdoptOrderTree());
+    }
+
+    @Override
     public BigDecimal getTotalAmount(String ownerId, List<String> statusList,
             List<String> orderTypeList) {
         AdoptOrderTree condition = new AdoptOrderTree();

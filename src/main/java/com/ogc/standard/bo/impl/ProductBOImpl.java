@@ -106,7 +106,7 @@ public class ProductBOImpl extends PaginableBOImpl<Product>
             DateUtil.getEndDatetime(req.getRaiseEndDatetime()));
         data.setRaiseCount(StringValidater.toInteger(req.getRaiseCount()));
         data.setNowCount(0);
-        data.setMaxJfdkRate(StringValidater.toDouble((req.getMaxJfdkRate())));
+        data.setMaxJfdkRate(0);
         data.setStatus(EProductStatus.DRAFT.getCode());
 
         data.setUpdater(req.getUpdater());
@@ -159,7 +159,7 @@ public class ProductBOImpl extends PaginableBOImpl<Product>
         data.setRaiseEndDatetime(
             DateUtil.getEndDatetime(req.getRaiseEndDatetime()));
         data.setRaiseCount(StringValidater.toInteger(req.getRaiseCount()));
-        data.setMaxJfdkRate(StringValidater.toDouble((req.getMaxJfdkRate())));
+        data.setMaxJfdkRate(0);
 
         if (EProductStatus.APPROVE_NO.getCode().equals(data.getStatus())) {
             data.setStatus(EProductStatus.DRAFT.getCode());
@@ -371,6 +371,11 @@ public class ProductBOImpl extends PaginableBOImpl<Product>
     @Override
     public List<Product> queryDistinctArea() {
         return productDAO.selectDistinctArea(new Product());
+    }
+
+    @Override
+    public List<Product> queryDistinctVariety() {
+        return productDAO.selectDistinctVariety(new Product());
     }
 
     @Override

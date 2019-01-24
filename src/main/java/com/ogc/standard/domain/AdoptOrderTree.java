@@ -97,6 +97,27 @@ public class AdoptOrderTree extends ABaseDO {
     // 订单编号模糊查
     private String orderCodeForQuery;
 
+    // 树木级别
+    private String treeLevel;
+
+    // 品种
+    private String variety;
+
+    // 最下树龄
+    private Integer minAge;
+
+    // 最大树龄
+    private Integer maxAge;
+
+    // 省
+    private String province;
+
+    // 市
+    private String city;
+
+    // 区
+    private String area;
+
     public User getUser() {
         return user;
     }
@@ -311,6 +332,62 @@ public class AdoptOrderTree extends ABaseDO {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public String getTreeLevel() {
+        return treeLevel;
+    }
+
+    public void setTreeLevel(String treeLevel) {
+        this.treeLevel = treeLevel;
+    }
+
+    public String getVariety() {
+        return variety;
+    }
+
+    public void setVariety(String variety) {
+        this.variety = variety;
+    }
+
+    public Integer getMinAge() {
+        return minAge;
+    }
+
+    public void setMinAge(Integer minAge) {
+        this.minAge = minAge;
+    }
+
+    public Integer getMaxAge() {
+        return maxAge;
+    }
+
+    public void setMaxAge(Integer maxAge) {
+        this.maxAge = maxAge;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
     }
 
 }

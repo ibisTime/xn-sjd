@@ -7,6 +7,7 @@ import com.ogc.standard.domain.Product;
 import com.ogc.standard.dto.req.XN629010Req;
 import com.ogc.standard.dto.req.XN629011Req;
 import com.ogc.standard.dto.res.XN629028Res;
+import com.ogc.standard.dto.res.XN629029Res;
 
 /**
  * 认养产品
@@ -49,6 +50,9 @@ public interface IProductAO {
 
     // 查询产品区域
     public List<XN629028Res> queryProductArea();
+
+    // 查询产品品种
+    public List<XN629029Res> queryProductVariety();
 
     public Product getProduct(String code);
 

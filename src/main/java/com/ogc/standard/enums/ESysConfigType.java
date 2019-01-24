@@ -12,7 +12,9 @@ public enum ESysConfigType {
     CREATE_TPP("CREATE_TPP", "产生碳泡泡规则"), TPP_RULE("TPP_RULE", "碳泡泡规则"), 
     JF_RULE("JF_RULE", "积分规则"), USER_LEVEL("USER_LEVEL","用户等级"),
     
-    SIGN_RULE("SIGN_RULE","签到规则");
+    SIGN_RULE("SIGN_RULE","签到规则"),
+    
+    TREE_LEVEL("TREE_LEVEL","树木级别");
 
     ESysConfigType(String code, String value) {
         this.code = code;

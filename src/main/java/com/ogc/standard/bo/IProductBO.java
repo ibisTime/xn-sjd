@@ -71,6 +71,9 @@ public interface IProductBO extends IPaginableBO<Product> {
     // 查询产品区域
     public List<Product> queryDistinctArea();
 
+    // 查询产品品种
+    public List<Product> queryDistinctVariety();
+
     public Product getProduct(String code);
 
 }

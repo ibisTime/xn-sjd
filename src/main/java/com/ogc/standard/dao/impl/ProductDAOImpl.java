@@ -112,4 +112,9 @@ public class ProductDAOImpl extends AMybatisTemplate implements IProductDAO {
             Product.class);
     }
 
+    @Override
+    public List<Product> selectDistinctVariety(Product data) {
+        return super.selectList(NAMESPACE.concat("select_distinctVariety"),
+            data, Product.class);
+    }
 }

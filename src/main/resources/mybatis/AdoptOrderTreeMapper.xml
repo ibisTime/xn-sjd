@@ -24,6 +24,17 @@
 		<result column="remark" property="remark" />
 	</resultMap>
 	
+	<sql id="join_condition">
+		<if test="(variety != null and variety != '') or  
+				(minAge != null and minAge != '' ) or 
+				(maxAge != null and maxAge != '' ) or
+				(province != null and province != '' ) or
+				(city != null and city != '' ) or
+				(area != null and area != '' ) ">
+			join tzb_tree tt on t.tree_number = tt.tree_number
+		</if>
+	</sql>
+	
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != '' ">
@@ -75,6 +86,26 @@
 				AND t.current_holder = #{currentHolder}
 			</if>
 			
+			<if test="variety != null and variety != '' ">
+				AND tt.variety = #{variety}
+			</if>
+			<if test="minAge != null and minAge != '' ">
+				<![CDATA[AND tt.age >= #{minAge}]]>
+			</if>
+			<if test="maxAge != null and maxAge != '' ">
+				<![CDATA[AND tt.age <= #{maxAge}]]>
+			</if>
+			
+			<if test="province != null and province != '' ">
+				AND tt.province = #{province}
+			</if>
+			<if test="city != null and city != '' ">
+				AND tt.city = #{city}
+			</if>
+			<if test="area != null and area != '' ">
+				AND tt.area = #{area}
+			</if>
+			
 			<if test="createDatetimeStart != null and createDatetimeStart != '' ">
 				<![CDATA[AND t.create_datetime >= #{createDatetimeStart}]]>
 			</if>
@@ -107,6 +138,7 @@
 		,t.remark
 		FROM
 		try_adopt_order_tree t
+		<include refid="join_condition" />
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -128,6 +160,12 @@
 				t.${order}
 			</if>
 		</trim>
+	</select>
+	
+	<select id="select_distinctVariety" parameterType="adoptOrderTree" resultMap="adoptOrderTree_DB_Result">
+		SELECT DISTINCT t2.variety FROM try_adopt_order_tree t1
+		JOIN tzb_tree t2 on t1.tree_number = t2.tree_number
+		WHERE t1.status in ("1","2","3");
 	</select>
 	
 	<select id="select_productAdoptedOrderTree" parameterType="adoptOrderTree" resultMap="adoptOrderTree_DB_Result">

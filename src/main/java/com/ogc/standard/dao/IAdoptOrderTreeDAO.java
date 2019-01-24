@@ -27,6 +27,9 @@ public interface IAdoptOrderTreeDAO extends IBaseDAO<AdoptOrderTree> {
     public List<AdoptOrderTree> selectDistictByTreeNumber(
             AdoptOrderTree condition);
 
+    // 品种
+    public List<AdoptOrderTree> selectDistictVariety(AdoptOrderTree condition);
+
     // 产品已认养名单
     public List<AdoptOrderTree> selectProductAdoptedOrder(
             AdoptOrderTree condition);

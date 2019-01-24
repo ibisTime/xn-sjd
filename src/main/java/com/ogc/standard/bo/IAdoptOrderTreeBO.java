@@ -76,6 +76,9 @@ public interface IAdoptOrderTreeBO extends IPaginableBO<AdoptOrderTree> {
             Date createDatetimeStart, Date createDatetimeEnd,
             List<String> orderTypeList);
 
+    // 品种
+    public List<AdoptOrderTree> getDistictVariety();
+
     // 产权方认养总额
     public BigDecimal getTotalAmount(String ownerId, List<String> statusList,
             List<String> orderTypeList);

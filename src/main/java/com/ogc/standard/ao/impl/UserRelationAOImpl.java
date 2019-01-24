@@ -86,6 +86,13 @@ public class UserRelationAOImpl implements IUserRelationAO {
         if (userId.equals(toUserId)) {
             throw new BizException("xn702001", "用户不能和自己建立关系");
         }
+
+        // 判断两者关系是否已申请
+        if (userRelationBO.isExistUserRelation(userId, toUserId, type,
+            EUserRelationStatus.TO_APPROVE.getCode())) {
+            throw new BizException("xn702001", "好友申请已发起，请勿重复申请");
+        }
+
         // 判断两者关系是否存在
         if (userRelationBO.isExistUserRelation(userId, toUserId, type,
             EUserRelationStatus.APPROVE_YES.getCode())) {

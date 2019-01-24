@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,7 @@ import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ESellType;
 import com.ogc.standard.enums.ESysConfigType;
 import com.ogc.standard.enums.EToolType;
+import com.ogc.standard.enums.ETreeLevel;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
 
@@ -129,6 +131,27 @@ public class AdoptOrderTreeAOImpl implements IAdoptOrderTreeAO {
     @Override
     public List<AdoptOrderTree> queryAdoptOrderTreeList(
             AdoptOrderTree condition) {
+        if (StringUtils.isNotBlank(condition.getTreeLevel())) {
+            Map<String, String> configMap = sysConfigBO
+                .getConfigsMap(ESysConfigType.TREE_LEVEL.getCode());
+            Integer first = Integer.valueOf(configMap.get(SysConstants.FIRST));
+            Integer second = Integer
+                .valueOf(configMap.get(SysConstants.SECOND));
+            Integer third = Integer.valueOf(configMap.get(SysConstants.THIRD));
+
+            if (ETreeLevel.FIRST.getCode().equals(condition.getTreeLevel())) {
+                condition.setMinAge(first);
+            } else if (ETreeLevel.SECOND.getCode()
+                .equals(condition.getTreeLevel())) {
+                condition.setMinAge(second);
+                condition.setMaxAge(first);
+            } else if (ETreeLevel.THIRD.getCode()
+                .equals(condition.getTreeLevel())) {
+                condition.setMinAge(third);
+                condition.setMaxAge(second);
+            }
+        }
+
         List<AdoptOrderTree> list = adoptOrderTreeBO
             .queryAdoptOrderTreeList(condition);
 
@@ -170,6 +193,11 @@ public class AdoptOrderTreeAOImpl implements IAdoptOrderTreeAO {
         AdoptOrderTree data = adoptOrderTreeBO.getAdoptOrderTree(code);
         initAdoptOrderTree(data);
         return data;
+    }
+
+    @Override
+    public List<AdoptOrderTree> getVariety() {
+        return adoptOrderTreeBO.getDistictVariety();
     }
 
     @Override

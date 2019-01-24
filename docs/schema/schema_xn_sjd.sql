@@ -179,6 +179,7 @@ CREATE TABLE `tsj_article` (
   `status` varchar(4) DEFAULT NULL COMMENT '状态（0保存/1发布/2下架/3审核）',
   `location` varchar(32) DEFAULT NULL COMMENT 'UI位置',
   `order_no` int(11) DEFAULT NULL COMMENT 'UI次序',
+  `is_top` VARCHAR(4) DEFAULT NULL COMMENT '是否置顶',
   `publish_user_id` varchar(32) DEFAULT NULL COMMENT '发布人',
   `publish_datetime` datetime DEFAULT NULL COMMENT '发布时间',
   `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
@@ -443,6 +444,7 @@ CREATE TABLE `tstd_sms` (
   `code` varchar(32) NOT NULL COMMENT '消息编号',
   `type` varchar(4) DEFAULT NULL COMMENT '消息类型（系统公告，短信内容）',
   `object` varchar(4) DEFAULT NULL COMMENT '对象类型(C:C端用户/O:产权方/M:养护方/A:代理商/P:平台方)',
+  `user_id` VARCHAR(32) DEFAULT NULL COMMENT '消息用户',
   `title` varchar(255) DEFAULT NULL COMMENT '标题',
   `content` LONGTEXT NULL DEFAULT NULL COMMENT '内容',
   `publish_datetime` datetime DEFAULT NULL COMMENT '发布时间',
@@ -472,6 +474,7 @@ CREATE TABLE `tstd_user` (
   `user_referee_type` varchar(32) DEFAULT NULL COMMENT '推荐人类型',
   `user_referee` varchar(32) DEFAULT NULL COMMENT '推荐人',
   `agent_id` varchar(32) DEFAULT NULL COMMENT '所属代理商',
+  `friend_count` INT DEFAULT 0 COMMENT '好友数量',
   `id_kind` char(1) DEFAULT NULL COMMENT '证件类型',
   `id_no` varchar(32) DEFAULT NULL COMMENT '证件号码',
   `real_name` varchar(16) DEFAULT NULL COMMENT '真实姓名',
@@ -662,6 +665,7 @@ CREATE TABLE `tsys_company` (
   `organization_code` varchar(255) DEFAULT NULL COMMENT '组织机构代码',
   `certificate_template` text COMMENT '证书模板',
   `contract_template` LONGTEXT COMMENT '合同模板',
+  `common_seal` TEXT DEFAULT NULL COMMENT '公章',
   `create_datetime` datetime DEFAULT NULL COMMENT '创建时间',
   `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
   `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
@@ -1230,6 +1234,7 @@ CREATE TABLE `tsc_commodity` (
   `deliver_place` varchar(64) DEFAULT NULL COMMENT '发货地',
   `weight` varchar(32) DEFAULT NULL COMMENT '重量',
   `original_price` varchar(255) DEFAULT NULL COMMENT '原价',
+  `original_place` VARCHAR(255) DEFAULT NULL COMMENT '原产地',
   `logistics` varchar(32) DEFAULT NULL COMMENT '物流方式',
   `month_sell_count` bigint(20) DEFAULT 0 COMMENT '月销量',
   `list_pic` varchar(255) DEFAULT NULL COMMENT '列表图',
@@ -1271,6 +1276,7 @@ CREATE TABLE `tsc_cart` (
   `specs_name` varchar(64) NOT NULL COMMENT '规格名称',
   `quantity` bigint(20) NOT NULL COMMENT '数量',
   `amount` DECIMAL(18,8) NOT NULL COMMENT '金额',
+  `status` VARCHAR(4) DEFAULT NULL COMMENT '状态',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='购物车';
 
@@ -1484,5 +1490,39 @@ CREATE TABLE `tsc_default_postage` (
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='默认邮费模版';
+
+DROP TABLE IF EXISTS `tstd_search_history`;
+CREATE TABLE `tstd_search_history` (
+  `code` varchar(32) NOT NULL COMMENT '编号',
+  `user_id` varchar(32) DEFAULT NULL COMMENT '用户编号',
+  `type` varchar(4) DEFAULT NULL COMMENT '分类',
+  `content` varchar(255) DEFAULT NULL COMMENT '内容',
+  `search_datetime` datetime DEFAULT NULL COMMENT '搜索时间',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `tsj_steal_carbon_bubble_record`;
+CREATE TABLE `tsj_steal_carbon_bubble_record` (
+  `code` varchar(32) NOT NULL COMMENT '编号',
+  `steal_user_id` varchar(32) DEFAULT NULL COMMENT '偷取人编号',
+  `stealed_user_id` varchar(32) DEFAULT NULL COMMENT '被偷取人编号',
+  `adopt_tree_code` varchar(32) DEFAULT NULL COMMENT '认养权编号',
+  `carbon_bubble_order_code` varchar(32) DEFAULT NULL COMMENT '碳泡泡订单编号',
+  `quantity` varchar(255) DEFAULT NULL COMMENT '数量',
+  `steal_datetime` datetime DEFAULT NULL COMMENT '偷取时间',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `tsys_notify_user`;
+CREATE TABLE `tsys_notify_user` (
+  `code` varchar(32) NOT NULL COMMENT '编号',
+  `type` varchar(4) DEFAULT NULL COMMENT '类型',
+  `name` varchar(255) DEFAULT NULL COMMENT '名称',
+  `mobile` varchar(32) DEFAULT NULL COMMENT '电话',
+  `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 SET FOREIGN_KEY_CHECKS = 1;

@@ -15,6 +15,7 @@ import com.ogc.standard.core.ObjValidater;
 import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.domain.UserRelation;
 import com.ogc.standard.dto.req.XN805157Req;
+import com.ogc.standard.enums.EUserRelationStatus;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
@@ -36,6 +37,7 @@ public class XN805157 extends AProcessor {
     public Object doBusiness() throws BizException {
         UserRelation condition = new UserRelation();
         condition.setUserId(req.getUserId());
+        condition.setStatus(EUserRelationStatus.APPROVE_YES.getCode());
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
         return userRelationAO.queryMyUserRelationPage(start, limit, condition);

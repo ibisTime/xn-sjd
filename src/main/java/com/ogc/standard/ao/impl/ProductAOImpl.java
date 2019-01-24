@@ -38,6 +38,7 @@ import com.ogc.standard.dto.req.XN629010ReqSpecs;
 import com.ogc.standard.dto.req.XN629010ReqTree;
 import com.ogc.standard.dto.req.XN629011Req;
 import com.ogc.standard.dto.res.XN629028Res;
+import com.ogc.standard.dto.res.XN629029Res;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECategoryStatus;
 import com.ogc.standard.enums.EDirectType;
@@ -481,6 +482,21 @@ public class ProductAOImpl implements IProductAO {
             for (Product product : products) {
                 XN629028Res res = new XN629028Res(product.getProvince(),
                     product.getCity(), product.getArea());
+                resList.add(res);
+            }
+        }
+
+        return resList;
+    }
+
+    @Override
+    public List<XN629029Res> queryProductVariety() {
+        List<Product> products = productBO.queryDistinctVariety();
+
+        List<XN629029Res> resList = new ArrayList<XN629029Res>();
+        if (CollectionUtils.isNotEmpty(products)) {
+            for (Product product : products) {
+                XN629029Res res = new XN629029Res(product.getVariety());
                 resList.add(res);
             }
         }

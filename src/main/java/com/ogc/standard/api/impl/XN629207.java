@@ -35,6 +35,12 @@ public class XN629207 extends AProcessor {
 
         condition.setOwnerId(req.getOwnerId());
         condition.setCurrentHolder(req.getCurrentHolder());
+        condition.setTreeLevel(req.getTreeLevel());
+        condition.setVariety(req.getVariety());
+
+        condition.setProvince(req.getProvince());
+        condition.setCity(req.getCity());
+        condition.setArea(req.getArea());
 
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
