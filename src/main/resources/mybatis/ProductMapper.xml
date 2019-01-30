@@ -30,6 +30,7 @@
 		<result column="raise_end_datetime" property="raiseEndDatetime" />
 		<result column="raise_count" property="raiseCount" />
 		<result column="now_count" property="nowCount" />
+		<result column="age" property="age" />
 		<result column="max_jfdk_rate" property="maxJfdkRate" />
 		
 		<result column="identify_code" property="identifyCode" />
@@ -44,6 +45,7 @@
 		<result column="update_datetime" property="updateDatetime" />
 		<result column="remark" property="remark" />
 	</resultMap>
+	
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != '' ">
@@ -97,6 +99,13 @@
 			</if>
 			<if test="variety != null and variety != '' ">
 				AND t.variety = #{variety}
+			</if>
+			
+			<if test="minAge != null and minAge != '' ">
+				<![CDATA[AND t.age >= #{minAge}]]>
+			</if>
+			<if test="maxAge != null and maxAge != '' ">
+				<![CDATA[AND t.age <= #{maxAge}]]>
 			</if>
 			
 			<if test="statusList != null and statusList != '' ">
@@ -164,6 +173,7 @@
 		,t.raise_end_datetime
 		,t.raise_count
 		,t.now_count
+		,t.age
 		,t.max_jfdk_rate
 		,t.identify_code
 		
@@ -248,6 +258,7 @@
 		,raise_end_datetime
 		,raise_count
 		,now_count
+		,age
 		,max_jfdk_rate
 		,location
 		,order_no
@@ -285,6 +296,7 @@
 		,#{raiseEndDatetime}
 		,#{raiseCount}
 		,#{nowCount}
+		,#{age}
 		,#{maxJfdkRate}
 		,#{location}
 		,#{orderNo}
@@ -323,6 +335,7 @@
 		,raise_end_datetime = #{raiseEndDatetime}
 		,raise_count = #{raiseCount}
 		
+		,age = #{age}
 		,max_jfdk_rate = #{maxJfdkRate}
 		,status = #{status}
 		,updater = #{updater}

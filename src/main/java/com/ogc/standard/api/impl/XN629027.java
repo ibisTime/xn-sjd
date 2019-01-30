@@ -42,6 +42,7 @@ public class XN629027 extends AProcessor {
         condition.setArea(req.getArea());
         condition.setVariety(req.getVariety());
         condition.setIsAdopting(req.getAdoptStatus());
+        condition.setTreeLevel(req.getTreeLevel());
 
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {

@@ -293,4 +293,11 @@
 		<property name="paginableDAO" ref="notifyUserDAOImpl"/>
 	</bean>
 	
+	<bean id="officialSealBO" class="com.ogc.standard.bo.impl.OfficialSealBOImpl">
+		<property name="paginableDAO" ref="officialSealDAOImpl"/>
+	</bean>
+	
+	<bean id="visitorBO" class="com.ogc.standard.bo.impl.VisitorBOImpl">
+		<property name="paginableDAO" ref="visitorDAOImpl"/>
+	</bean>
 </beans>

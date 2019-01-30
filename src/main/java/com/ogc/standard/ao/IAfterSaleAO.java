@@ -33,6 +33,8 @@ public interface IAfterSaleAO {
 
     public void handleAfterSale(String code, String handleResult);
 
+    public void cancledByUser(String code);
+
     public void doReceive(String code, String receiver);
 
     public Paginable<AfterSale> queryOrderPage(int start, int limit,

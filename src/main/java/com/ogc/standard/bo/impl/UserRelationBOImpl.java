@@ -68,7 +68,13 @@ public class UserRelationBOImpl extends PaginableBOImpl<UserRelation>
             data.setUserId(userId);
             data.setToUser(toUser);
             data.setType(type);
-            data.setStatus(EUserRelationStatus.TO_APPROVE.getCode());
+
+            if (userId.equals(toUser)) {
+                data.setStatus(EUserRelationStatus.APPROVE_YES.getCode());
+            } else {
+                data.setStatus(EUserRelationStatus.TO_APPROVE.getCode());
+            }
+
             data.setCreateDatetime(new Date());
             userRelationDAO.insert(data);
         }

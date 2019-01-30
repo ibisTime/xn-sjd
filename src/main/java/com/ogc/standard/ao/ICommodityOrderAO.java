@@ -16,6 +16,7 @@ import com.ogc.standard.dto.req.XN629714Req;
 import com.ogc.standard.dto.req.XN629721Req;
 import com.ogc.standard.dto.res.XN629048Res;
 import com.ogc.standard.dto.res.XN629801Res;
+import com.ogc.standard.dto.res.XN629802Res;
 
 /** 
  * @author: taojian 
@@ -61,6 +62,9 @@ public interface ICommodityOrderAO {
     // 邮费
     public XN629801Res getPostage(List<String> commodityCodeList,
             String addressCode);
+
+    // 根据支付组号查订单明细
+    public List<XN629802Res> getInfoByPayGroup(String payGroup);
 
     public Paginable<CommodityOrder> queryOrderPage(int start, int limit,
             CommodityOrder condition);

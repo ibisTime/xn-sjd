@@ -48,7 +48,7 @@ public enum EGeneratePrefix {
     
     STEAL_CARBON_BUBBLE_RECORD("SCBR","偷取碳泡泡记录"),
     
-    NOTIFY_USER("NU","审核通知人");
+    NOTIFY_USER("NU","审核通知人"), OFFICIAL_SEAL("OS","公章");
 
     public static Map<String, EGeneratePrefix> getMap() {
         Map<String, EGeneratePrefix> map = new HashMap<String, EGeneratePrefix>();

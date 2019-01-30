@@ -22,7 +22,8 @@ import com.ogc.standard.domain.AfterSale;
  * @history:
  */
 @Repository("afterSaleDAOImpl")
-public class AfterSaleDAOImpl extends AMybatisTemplate implements IAfterSaleDAO {
+public class AfterSaleDAOImpl extends AMybatisTemplate
+        implements IAfterSaleDAO {
 
     @Override
     public int insert(AfterSale data) {
@@ -53,7 +54,8 @@ public class AfterSaleDAOImpl extends AMybatisTemplate implements IAfterSaleDAO 
     }
 
     @Override
-    public List<AfterSale> selectList(AfterSale condition, int start, int count) {
+    public List<AfterSale> selectList(AfterSale condition, int start,
+            int count) {
         return super.selectList(NAMESPACE.concat("select_after_sale"), start,
             count, condition, AfterSale.class);
     }
@@ -66,6 +68,11 @@ public class AfterSaleDAOImpl extends AMybatisTemplate implements IAfterSaleDAO 
     @Override
     public int updateReceive(AfterSale data) {
         return super.update(NAMESPACE.concat("update_receive"), data);
+    }
+
+    @Override
+    public int updateCancled(AfterSale data) {
+        return super.update(NAMESPACE.concat("update_cancled"), data);
     }
 
 }

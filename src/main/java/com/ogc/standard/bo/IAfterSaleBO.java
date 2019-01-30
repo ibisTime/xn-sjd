@@ -31,11 +31,15 @@ public interface IAfterSaleBO extends IPaginableBO<AfterSale> {
 
     public void refreshHandle(AfterSale data, String status);
 
+    public void refreshCancled(String code, String status);
+
     public void refreshReceive(AfterSale data, String receiver);
 
     public List<AfterSale> queryShList(AfterSale condition);
 
     public AfterSale getAfterSale(String code);
+
+    public AfterSale getCurrentAfterSaleByOrder(String code);
 
     public boolean isAftrSaleExist(String orderDetailCode);
 }

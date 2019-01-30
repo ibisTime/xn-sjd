@@ -62,6 +62,7 @@ import com.ogc.standard.dto.res.BooleanRes;
 import com.ogc.standard.dto.res.PayOrderRes;
 import com.ogc.standard.dto.res.XN629048Res;
 import com.ogc.standard.dto.res.XN629801Res;
+import com.ogc.standard.dto.res.XN629802Res;
 import com.ogc.standard.enums.EAccountType;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECommodityOrderDetailStatus;
@@ -701,6 +702,36 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
             }
         }
         return postalFee;
+    }
+
+    @Override
+    public List<XN629802Res> getInfoByPayGroup(String payGroup) {
+        List<CommodityOrder> commodityOrders = commodityOrderBO
+            .queryCommodityOrderByPayGroup(payGroup);
+        List<XN629802Res> resList = new ArrayList<XN629802Res>();
+
+        if (CollectionUtils.isNotEmpty(commodityOrders)) {
+            for (CommodityOrder commodityOrder : commodityOrders) {
+                Company shop = companyBO
+                    .getCompany(commodityOrder.getShopCode());
+
+                List<CommodityOrderDetail> commodityOrderDetails = commodityOrderDetailBO
+                    .queryOrderDetail(commodityOrder.getCode());
+                if (CollectionUtils.isNotEmpty(commodityOrderDetails)) {
+                    for (CommodityOrderDetail commodityOrderDetail : commodityOrderDetails) {
+                        commodityOrderDetail
+                            .setCommodity(commodityBO.getCommodity(
+                                commodityOrderDetail.getCommodityCode()));
+                    }
+                }
+
+                XN629802Res res = new XN629802Res(shop, commodityOrderDetails);
+                resList.add(res);
+            }
+
+        }
+
+        return resList;
     }
 
     @Override

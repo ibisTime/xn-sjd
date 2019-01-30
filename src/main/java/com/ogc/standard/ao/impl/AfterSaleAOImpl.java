@@ -24,22 +24,17 @@ import com.ogc.standard.bo.ICommodityOrderDetailBO;
 import com.ogc.standard.bo.ICompanyBO;
 import com.ogc.standard.bo.IWechatBO;
 import com.ogc.standard.bo.base.Paginable;
-import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.AfterSale;
-import com.ogc.standard.domain.Charge;
 import com.ogc.standard.domain.CommodityOrderDetail;
 import com.ogc.standard.domain.Company;
 import com.ogc.standard.enums.EAfterSaleStatus;
 import com.ogc.standard.enums.EAfterSaleType;
 import com.ogc.standard.enums.EBoolean;
-import com.ogc.standard.enums.EChannelType;
-import com.ogc.standard.enums.EChargeStatus;
 import com.ogc.standard.enums.ECommodityOrderDetailStatus;
 import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EJourBizTypeBusiness;
 import com.ogc.standard.enums.EJourBizTypePlat;
 import com.ogc.standard.enums.EJourBizTypeUser;
-import com.ogc.standard.enums.EPayType;
 import com.ogc.standard.enums.ESysUser;
 import com.ogc.standard.exception.BizException;
 
@@ -83,8 +78,14 @@ public class AfterSaleAOImpl implements IAfterSaleAO {
 
         // 订单状态检验
         if (!ECommodityOrderDetailStatus.TO_COMMENT.getCode()
-            .equals(orderDetail.getStatus())) {
-            throw new BizException("xn0000", "订单还未完成，无法申请售后");
+            .equals(orderDetail.getStatus())
+                && !ECommodityOrderDetailStatus.COMMENTED.getCode()
+                    .equals(orderDetail.getStatus())
+                && !ECommodityOrderDetailStatus.TODELIVE.getCode()
+                    .equals(orderDetail.getStatus())
+                && !ECommodityOrderDetailStatus.TORECEIVE.getCode()
+                    .equals(orderDetail.getStatus())) {
+            throw new BizException("xn0000", "订单未处于可申请退货状态");
         }
 
         // 检验是否存在流程中的售后订单
@@ -112,8 +113,14 @@ public class AfterSaleAOImpl implements IAfterSaleAO {
 
         // 订单状态检验
         if (!ECommodityOrderDetailStatus.TO_COMMENT.getCode()
-            .equals(orderDetail.getStatus())) {
-            throw new BizException("xn0000", "订单还未完成，无法申请售后");
+            .equals(orderDetail.getStatus())
+                && !ECommodityOrderDetailStatus.COMMENTED.getCode()
+                    .equals(orderDetail.getStatus())
+                && !ECommodityOrderDetailStatus.TODELIVE.getCode()
+                    .equals(orderDetail.getStatus())
+                && !ECommodityOrderDetailStatus.TORECEIVE.getCode()
+                    .equals(orderDetail.getStatus())) {
+            throw new BizException("xn0000", "订单未处于可申请退款状态");
         }
 
         // 检验是否存在流程中的售后订单
@@ -171,6 +178,26 @@ public class AfterSaleAOImpl implements IAfterSaleAO {
 
     @Override
     @Transactional
+    public void cancledByUser(String code) {
+
+        AfterSale data = afterSaleBO.getCurrentAfterSaleByOrder(code);
+
+        if (null == data) {
+            throw new BizException("xn0000", "该订单未发起售后");
+        }
+        if (!EAfterSaleStatus.TOHANDLE.getCode().equals(data.getStatus())) {
+            throw new BizException("xn0000", "该售后订单不处于可取消的状态");
+        }
+
+        afterSaleBO.refreshCancled(data.getCode(),
+            EAfterSaleStatus.CANCLED.getCode());
+
+        commodityOrderDetailBO.refreshAfterSaleStatus(data.getOrderDetailCode(),
+            ECommodityOrderDetailStatus.AFTER_SALEED_CANCLED.getCode());
+    }
+
+    @Override
+    @Transactional
     public void doReceive(String code, String receiver) {
         AfterSale data = afterSaleBO.getAfterSale(code);
         if (!EAfterSaleStatus.PASS.getCode().equals(data.getStatus())) {
@@ -199,60 +226,59 @@ public class AfterSaleAOImpl implements IAfterSaleAO {
         // 人民币退款
         if (null != orderDetail.getPayType()) {
 
-            if (EPayType.YE.getCode().equals(orderDetail.getPayType())) {
+            // if (EPayType.YE.getCode().equals(orderDetail.getPayType())) {
 
-                // 人民币余额划转
-                accountBO.transAmount(business, applyUser,
-                    ECurrency.CNY.getCode(), refundAmount,
-                    EJourBizTypeBusiness.AFTER_SALE.getCode(),
-                    EJourBizTypeUser.AFTER_SALE.getCode(),
-                    EJourBizTypeBusiness.AFTER_SALE.getValue(),
-                    EJourBizTypeUser.AFTER_SALE.getValue(), data.getCode());
-
-            } else if (EPayType.ALIPAY.getCode()
-                .equals(orderDetail.getPayType())) {
-
-                // 支付宝退款
-                Charge charge = chargeBO.getCharge(orderDetail.getOrderCode(),
-                    EChannelType.Alipay.getCode(),
-                    EChargeStatus.Pay_YES.getCode());
-
-                String refNo = null;
-                if (null != charge) {
-                    refNo = charge.getCode();
-                }
-
-                Account bussinessAccount = accountBO.getAccountByUser(business,
-                    ECurrency.CNY.getCode());
-
-                alipayBO.doRefund(refNo, bussinessAccount,
-                    EJourBizTypeUser.UN_FULL_CNY.getCode(),
-                    EJourBizTypeUser.UN_FULL_CNY.getValue(),
-                    data.getRefundAmount().divide(new BigDecimal(1000)));
-
-            } else if (EPayType.WEIXIN_H5.getCode()
-                .equals(orderDetail.getPayType())) {
-
-                // 微信退款
-                Charge charge = chargeBO.getCharge(orderDetail.getOrderCode(),
-                    EChannelType.WeChat_H5.getCode(),
-                    EChargeStatus.Pay_YES.getCode());
-
-                String refNo = null;
-                if (null != charge) {
-                    refNo = charge.getCode();
-                }
-
-                Account bussinessAccount = accountBO.getAccountByUser(business,
-                    ECurrency.CNY.getCode());
-
-                weChatBO.doRefund(refNo, bussinessAccount,
-                    EJourBizTypeUser.UN_FULL_CNY.getCode(),
-                    EJourBizTypeUser.UN_FULL_CNY.getValue(),
-                    data.getRefundAmount().divide(new BigDecimal(10))
-                        .toString());
-
-            }
+            // 人民币余额划转
+            accountBO.transAmount(business, applyUser, ECurrency.CNY.getCode(),
+                refundAmount, EJourBizTypeBusiness.AFTER_SALE.getCode(),
+                EJourBizTypeUser.AFTER_SALE.getCode(),
+                EJourBizTypeBusiness.AFTER_SALE.getValue(),
+                EJourBizTypeUser.AFTER_SALE.getValue(), data.getCode());
+            //
+            // } else if (EPayType.ALIPAY.getCode()
+            // .equals(orderDetail.getPayType())) {
+            //
+            // // 支付宝退款
+            // Charge charge = chargeBO.getCharge(orderDetail.getOrderCode(),
+            // EChannelType.Alipay.getCode(),
+            // EChargeStatus.Pay_YES.getCode());
+            //
+            // String refNo = null;
+            // if (null != charge) {
+            // refNo = charge.getCode();
+            // }
+            //
+            // Account bussinessAccount = accountBO.getAccountByUser(business,
+            // ECurrency.CNY.getCode());
+            //
+            // alipayBO.doRefund(refNo, bussinessAccount,
+            // EJourBizTypeUser.UN_FULL_CNY.getCode(),
+            // EJourBizTypeUser.UN_FULL_CNY.getValue(),
+            // data.getRefundAmount().divide(new BigDecimal(1000)));
+            //
+            // } else if (EPayType.WEIXIN_H5.getCode()
+            // .equals(orderDetail.getPayType())) {
+            //
+            // // 微信退款
+            // Charge charge = chargeBO.getCharge(orderDetail.getOrderCode(),
+            // EChannelType.WeChat_H5.getCode(),
+            // EChargeStatus.Pay_YES.getCode());
+            //
+            // String refNo = null;
+            // if (null != charge) {
+            // refNo = charge.getCode();
+            // }
+            //
+            // Account bussinessAccount = accountBO.getAccountByUser(business,
+            // ECurrency.CNY.getCode());
+            //
+            // weChatBO.doRefund(refNo, bussinessAccount,
+            // EJourBizTypeUser.UN_FULL_CNY.getCode(),
+            // EJourBizTypeUser.UN_FULL_CNY.getValue(),
+            // data.getRefundAmount().divide(new BigDecimal(10))
+            // .toString());
+            //
+            // }
         }
 
         // 积分退款

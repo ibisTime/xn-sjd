@@ -116,6 +116,12 @@ public class Commodity extends ABaseDO {
     // 产品最大价格
     private BigDecimal maxSpecPrice;
 
+    // 总库存
+    private Long totalInventory;
+
+    // 订单编号
+    private String orderCode;
+
     public List<CommoditySpecs> getSpecsList() {
         return specsList;
     }
@@ -354,6 +360,22 @@ public class Commodity extends ABaseDO {
 
     public void setMaxSpecPrice(BigDecimal maxSpecPrice) {
         this.maxSpecPrice = maxSpecPrice;
+    }
+
+    public Long getTotalInventory() {
+        return totalInventory;
+    }
+
+    public void setTotalInventory(Long totalInventory) {
+        this.totalInventory = totalInventory;
+    }
+
+    public String getOrderCode() {
+        return orderCode;
+    }
+
+    public void setOrderCode(String orderCode) {
+        this.orderCode = orderCode;
     }
 
 }

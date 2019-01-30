@@ -94,6 +94,9 @@ public class XN629010Req extends BaseReq {
     // 募集总数量(集体)
     private String raiseCount;
 
+    // 树龄
+    private String age;
+
     // 最大积分抵扣比例
     private String maxJfdkRate;
 
@@ -326,6 +329,14 @@ public class XN629010Req extends BaseReq {
 
     public void setMaxJfdkRate(String maxJfdkRate) {
         this.maxJfdkRate = maxJfdkRate;
+    }
+
+    public String getAge() {
+        return age;
+    }
+
+    public void setAge(String age) {
+        this.age = age;
     }
 
 }

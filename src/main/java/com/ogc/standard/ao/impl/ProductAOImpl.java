@@ -18,12 +18,14 @@ import com.ogc.standard.bo.ICompanyBO;
 import com.ogc.standard.bo.INotifyUserBO;
 import com.ogc.standard.bo.IProductBO;
 import com.ogc.standard.bo.IProductSpecsBO;
+import com.ogc.standard.bo.ISYSConfigBO;
 import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.ISmsOutBO;
 import com.ogc.standard.bo.ITreeBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.PhoneUtil;
+import com.ogc.standard.common.SysConstants;
 import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.domain.Category;
 import com.ogc.standard.domain.Company;
@@ -47,6 +49,8 @@ import com.ogc.standard.enums.EProductStatus;
 import com.ogc.standard.enums.ESYSUserKind;
 import com.ogc.standard.enums.ESYSUserStatus;
 import com.ogc.standard.enums.ESellType;
+import com.ogc.standard.enums.ESysConfigType;
+import com.ogc.standard.enums.ETreeLevel;
 import com.ogc.standard.enums.ETreeStatus;
 import com.ogc.standard.enums.EUserLevel;
 import com.ogc.standard.exception.BizException;
@@ -84,6 +88,9 @@ public class ProductAOImpl implements IProductAO {
 
     @Autowired
     private ISmsOutBO smsOutBO;
+
+    @Autowired
+    private ISYSConfigBO sysConfigBO;
 
     @Override
     @Transactional
@@ -456,6 +463,27 @@ public class ProductAOImpl implements IProductAO {
     @Override
     public Paginable<Product> queryProductPage(int start, int limit,
             Product condition) {
+        if (StringUtils.isNotBlank(condition.getTreeLevel())) {
+            Map<String, String> configMap = sysConfigBO
+                .getConfigsMap(ESysConfigType.TREE_LEVEL.getCode());
+            Integer first = Integer.valueOf(configMap.get(SysConstants.FIRST));
+            Integer second = Integer
+                .valueOf(configMap.get(SysConstants.SECOND));
+            Integer third = Integer.valueOf(configMap.get(SysConstants.THIRD));
+
+            if (ETreeLevel.FIRST.getCode().equals(condition.getTreeLevel())) {
+                condition.setMinAge(first);
+            } else if (ETreeLevel.SECOND.getCode()
+                .equals(condition.getTreeLevel())) {
+                condition.setMinAge(second);
+                condition.setMaxAge(first);
+            } else if (ETreeLevel.THIRD.getCode()
+                .equals(condition.getTreeLevel())) {
+                condition.setMinAge(third);
+                condition.setMaxAge(second);
+            }
+        }
+
         Paginable<Product> page = productBO.getPaginable(start, limit,
             condition);
         List<Product> list = page.getList();
@@ -470,6 +498,26 @@ public class ProductAOImpl implements IProductAO {
 
     @Override
     public List<Product> queryProductList(Product condition) {
+        if (StringUtils.isNotBlank(condition.getTreeLevel())) {
+            Map<String, String> configMap = sysConfigBO
+                .getConfigsMap(ESysConfigType.TREE_LEVEL.getCode());
+            Integer first = Integer.valueOf(configMap.get(SysConstants.FIRST));
+            Integer second = Integer
+                .valueOf(configMap.get(SysConstants.SECOND));
+            Integer third = Integer.valueOf(configMap.get(SysConstants.THIRD));
+
+            if (ETreeLevel.FIRST.getCode().equals(condition.getTreeLevel())) {
+                condition.setMinAge(first);
+            } else if (ETreeLevel.SECOND.getCode()
+                .equals(condition.getTreeLevel())) {
+                condition.setMinAge(second);
+                condition.setMaxAge(first);
+            } else if (ETreeLevel.THIRD.getCode()
+                .equals(condition.getTreeLevel())) {
+                condition.setMinAge(third);
+                condition.setMaxAge(second);
+            }
+        }
         return productBO.queryProductList(condition);
     }
 

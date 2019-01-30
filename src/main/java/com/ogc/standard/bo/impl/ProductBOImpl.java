@@ -106,6 +106,7 @@ public class ProductBOImpl extends PaginableBOImpl<Product>
             DateUtil.getEndDatetime(req.getRaiseEndDatetime()));
         data.setRaiseCount(StringValidater.toInteger(req.getRaiseCount()));
         data.setNowCount(0);
+        data.setAge(Integer.parseInt(req.getAge()));
         data.setMaxJfdkRate(0);
         data.setStatus(EProductStatus.DRAFT.getCode());
 
@@ -159,6 +160,7 @@ public class ProductBOImpl extends PaginableBOImpl<Product>
         data.setRaiseEndDatetime(
             DateUtil.getEndDatetime(req.getRaiseEndDatetime()));
         data.setRaiseCount(StringValidater.toInteger(req.getRaiseCount()));
+        data.setAge(Integer.parseInt(req.getAge()));
         data.setMaxJfdkRate(0);
 
         if (EProductStatus.APPROVE_NO.getCode().equals(data.getStatus())) {

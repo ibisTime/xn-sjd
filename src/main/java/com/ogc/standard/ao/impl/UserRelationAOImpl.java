@@ -139,6 +139,10 @@ public class UserRelationAOImpl implements IUserRelationAO {
 
             User user = userBO.getUser(userId);
             userBO.refreshFriendCount(userId, user.getFriendCount() + 1);
+
+            User toUser = userBO.getUser(userRelation.getToUser());
+            userBO.refreshFriendCount(userRelation.getToUser(),
+                toUser.getFriendCount() + 1);
         }
 
         userRelationBO.approveUserRelation(code, status, remark);

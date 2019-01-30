@@ -66,7 +66,7 @@ public class CommodityBOImpl extends PaginableBOImpl<Commodity>
         data.setShopCode(req.getShopCode());
         data.setMonthSellCount(0L);
         data.setSellUserId(company.getUserId());
-        data.setMaxJfdkRate(StringValidater.toDouble(req.getMaxJfdkRate()));
+        data.setMaxJfdkRate(0);
         data.setSinglePostageCount(
             StringValidater.toInteger(req.getSinglePostageCount()));
         data.setStatus(ECommodityStatus.DRAFT.getCode());
@@ -94,7 +94,7 @@ public class CommodityBOImpl extends PaginableBOImpl<Commodity>
         data.setShopCode(req.getShopCode());
 
         data.setSellUserId(company.getUserId());
-        data.setMaxJfdkRate(StringValidater.toDouble(req.getMaxJfdkRate()));
+        data.setMaxJfdkRate(0);
         data.setSinglePostageCount(
             StringValidater.toInteger(req.getSinglePostageCount()));
         data.setUpdater(req.getUpdater());
@@ -147,8 +147,14 @@ public class CommodityBOImpl extends PaginableBOImpl<Commodity>
 
     @Override
     public List<Commodity> queryCommodityList(Commodity condition) {
-
         return commodityDAO.selectList(condition);
+    }
+
+    @Override
+    public List<Commodity> queryCommodityListByOrder(String orderCode) {
+        Commodity commodity = new Commodity();
+        commodity.setOrderCode(orderCode);
+        return commodityDAO.selectList(commodity);
     }
 
     @Override

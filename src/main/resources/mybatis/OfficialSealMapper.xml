@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ogc.standard.dao.IOfficialSealDAO">
+
+	<resultMap id="officialSeal_DB_Result" type="officialSeal">
+		<result column="code" property="code" />
+		<result column="province" property="province" />
+		<result column="city" property="city" />
+		<result column="area" property="area" />
+		<result column="department" property="department" />
+		
+		<result column="pic" property="pic" />
+		<result column="updater" property="updater" />
+		<result column="update_datetime" property="updateDatetime" />
+		<result column="remark" property="remark" />
+	</resultMap>
+	
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="province != null and province != '' ">
+				AND t.province = #{province}
+			</if>
+			<if test="city != null and city != '' ">
+				AND t.city = #{city}
+			</if>
+			<if test="area != null and area != '' ">
+				AND t.area = #{area}
+			</if>
+			<if test="department != null and department != '' ">
+				AND t.department = #{department}
+			</if>
+		</trim>
+	</sql>
+	
+	<select id="select_officialSeal" parameterType="officialSeal" resultMap="officialSeal_DB_Result">
+		SELECT
+		t.code
+		,t.province
+		,t.city
+		,t.area
+		,t.department
+		
+		,t.pic
+		,t.updater
+		,t.update_datetime
+		,t.remark
+		FROM
+		tsys_official_seal t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_officialSeal_count" parameterType="officialSeal"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tsys_official_seal t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_officialSeal" parameterType="officialSeal">
+		INSERT INTO
+		tsys_official_seal(
+		code
+		,province
+		,city
+		,area
+		,department
+		
+		,pic
+		,updater
+		,update_datetime
+		,remark
+		)
+		VALUES(
+		#{code}
+		,#{province}
+		,#{city}
+		,#{area}
+		,#{department}
+		
+		,#{pic}
+		,#{updater}
+		,#{updateDatetime}
+		,#{remark}
+		)
+	</insert>
+
+	<update id="update_officialSeal" parameterType="officialSeal">
+		UPDATE tsys_official_seal
+		SET
+		province = #{province}
+		,city = #{city}
+		,area = #{area}
+		,department = #{department}
+		,pic = #{pic}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+	
+	<delete id="delete_officialSeal" parameterType="officialSeal">
+		DELETE FROM tsys_official_seal WHERE code = #{code}
+	</delete>
+
+</mapper>

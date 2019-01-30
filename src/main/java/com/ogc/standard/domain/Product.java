@@ -85,6 +85,9 @@ public class Product extends ABaseDO {
     // 已募集数量
     private Integer nowCount;
 
+    // 树龄
+    private Integer age;
+
     // 最大积分抵扣比例
     private double maxJfdkRate;
 
@@ -187,6 +190,15 @@ public class Product extends ABaseDO {
 
     // 认养状态（0不可认养/1可认养）
     private String adoptStatus;
+
+    // 最下树龄
+    private Integer minAge;
+
+    // 最大树龄
+    private Integer maxAge;
+
+    // 树级
+    private String treeLevel;
 
     public String getDirectType() {
         return directType;
@@ -642,6 +654,38 @@ public class Product extends ABaseDO {
 
     public void setAdoptStatus(String adoptStatus) {
         this.adoptStatus = adoptStatus;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
+    public Integer getMinAge() {
+        return minAge;
+    }
+
+    public void setMinAge(Integer minAge) {
+        this.minAge = minAge;
+    }
+
+    public Integer getMaxAge() {
+        return maxAge;
+    }
+
+    public void setMaxAge(Integer maxAge) {
+        this.maxAge = maxAge;
+    }
+
+    public String getTreeLevel() {
+        return treeLevel;
+    }
+
+    public void setTreeLevel(String treeLevel) {
+        this.treeLevel = treeLevel;
     }
 
 }

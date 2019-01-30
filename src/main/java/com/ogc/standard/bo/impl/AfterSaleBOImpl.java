@@ -87,6 +87,16 @@ public class AfterSaleBOImpl extends PaginableBOImpl<AfterSale>
     }
 
     @Override
+    public void refreshCancled(String code, String status) {
+        AfterSale afterSale = new AfterSale();
+
+        afterSale.setCode(code);
+        afterSale.setStatus(status);
+
+        afterSaleDAO.updateCancled(afterSale);
+    }
+
+    @Override
     public void refreshReceive(AfterSale data, String receiver) {
         data.setReceiver(receiver);
         data.setReceiverDatetime(new Date());
@@ -108,6 +118,18 @@ public class AfterSaleBOImpl extends PaginableBOImpl<AfterSale>
             throw new BizException("xn0000", "该售后订单不存在");
         }
         return data;
+    }
+
+    @Override
+    public AfterSale getCurrentAfterSaleByOrder(String code) {
+        AfterSale afterSale = new AfterSale();
+
+        afterSale.setOrderDetailCode(code);
+        List<String> statusList = new ArrayList<String>();
+        statusList.add(EAfterSaleStatus.TOHANDLE.getCode());
+        afterSale.setStatusList(statusList);
+
+        return afterSaleDAO.selectList(afterSale).get(0);
     }
 
     @Override

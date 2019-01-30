@@ -51,6 +51,9 @@ public class XN629027Req extends AListReq {
     // 认养状态（0不可认养/1可认养）
     private String adoptStatus;
 
+    // 树级
+    private String treeLevel;
+
     public String getName() {
         return name;
     }
@@ -153,6 +156,14 @@ public class XN629027Req extends AListReq {
 
     public void setAdoptStatus(String adoptStatus) {
         this.adoptStatus = adoptStatus;
+    }
+
+    public String getTreeLevel() {
+        return treeLevel;
+    }
+
+    public void setTreeLevel(String treeLevel) {
+        this.treeLevel = treeLevel;
     }
 
 }

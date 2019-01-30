@@ -29,7 +29,17 @@
 		<result column="updater" property="updater" />
 		<result column="update_datetime" property="updateDatetime" />
 		<result column="remark" property="remark" />
+		
+		<result column="min_price" property="minPrice" />
+		<result column="max_price" property="maxPrice" />
+		<result column="total_inventory" property="totalInventory" />
 	</resultMap>
+	
+	<sql id="join_condition">
+		<if test="(orderCode != null and orderCode != '') ">
+			join tsc_commodity_order_detail t1 on t.code = t1.commodity_code
+		</if>
+	</sql>
 	
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
@@ -74,6 +84,10 @@
 				AND t.name like "%"#{name}"%"
 			</if>
 			
+			<if test="orderCode != null and orderCode != '' ">
+				AND t1.order_code = #{orderCode}
+			</if>
+			
 			<if test="minSpecPrice != null and minSpecPrice != '' and maxSpecPrice != null and maxSpecPrice != '' ">
 				<![CDATA[and t.code in (select distinct commodity_code from tsc_commodity_specs where price > #{minSpecPrice} and price < #{maxSpecPrice})]]>
 			</if>
@@ -115,12 +129,17 @@
 		,t.updater
 		,t.update_datetime
 		,t.remark
+		
+		,(select min(tsc_commodity_specs.price) from tsc_commodity_specs where tsc_commodity_specs.commodity_code = t.code) as min_price
+		,(select max(tsc_commodity_specs.price) from tsc_commodity_specs where tsc_commodity_specs.commodity_code = t.code) as max_price
+		,(select sum(tsc_commodity_specs.inventory) from tsc_commodity_specs where tsc_commodity_specs.commodity_code = t.code) as total_inventory
 		FROM
 		tsc_commodity t
+		<include refid="join_condition" />
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
-				t.${order}
+				${order}
 			</if>
 		</trim>
 	</select>

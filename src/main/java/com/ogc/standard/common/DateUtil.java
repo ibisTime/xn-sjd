@@ -410,8 +410,37 @@ public class DateUtil {
     }
 
     public static void main(String[] args) {
-        System.out.println(String.format(SysConstants.DO_ADD_USER_CN,
-            PhoneUtil.hideMobile("13454146415"), "123456"));
+        // JSONObject jsonResponse = JSONObject.parseObject(
+        // "{\"rspMap\":{\"apigw_sign\":\"M0HiH+6mrthYWSqpRIdKmzqMfkvtSWkTyNHPcGaO9YNqF3PNijuhsIl0LyqfChmwRE+d9ISOTi2X\\nwjDujhEIOmZOkjux8Oz1zmKXJOU9SHm0Fs54mTd9tODU5xPERrYAnmpV3SUYI727dqmqzcxc3bvR\\n1f1V1oZdoHt6jg2QIjU\\u003d\",\"apigw_signblock\":\"{\\\"ICBC_API_RETMSG\\\":\\\"success\\\",\\\"retcode\\\":\\\"00000\\\",\\\"ICBC_API_TIMESTAMP\\\":\\\"2018-12-18
+        // 15:59:13\\\",\\\"retmsg\\\":\\\"处理成功!\\\",\\\"pub\\\":{\\\"retcode\\\":\\\"00000\\\",\\\"retmsg\\\":\\\"成功\\\"},\\\"ICBC_API_RETCODE\\\":0}\",\"apigw_certid\":\"14469277458307090800\",\"apigw_rspdata\":{\"ICBC_API_TIMESTAMP\":\"2018-12-18
+        // 15:59:13\",\"ICBC_API_RETMSG\":\"success\",\"ICBC_API_RETCODE\":0,\"pub\":{\"retmsg\":\"成功\",\"retcode\":\"00000\"},\"retmsg\":\"处理成功!\",\"retcode\":\"00000\"}},\"jsonData\":{\"ICBC_API_TIMESTAMP\":\"2018-12-18
+        // 15:59:13\",\"ICBC_API_RETMSG\":\"success\",\"ICBC_API_RETCODE\":0,\"pub\":{\"retmsg\":\"成功\",\"retcode\":\"00000\"},\"retmsg\":\"处理成功!\",\"retcode\":\"00000\"},\"signBlk\":\"{\\\"ICBC_API_RETMSG\\\":\\\"success\\\",\\\"retcode\\\":\\\"00000\\\",\\\"ICBC_API_TIMESTAMP\\\":\\\"2018-12-18
+        // 15:59:13\\\",\\\"retmsg\\\":\\\"处理成功!\\\",\\\"pub\\\":{\\\"retcode\\\":\\\"00000\\\",\\\"retmsg\\\":\\\"成功\\\"},\\\"ICBC_API_RETCODE\\\":0}\",\"certId\":\"14469277458307090800\",\"sign\":\"M0HiH+6mrthYWSqpRIdKmzqMfkvtSWkTyNHPcGaO9YNqF3PNijuhsIl0LyqfChmwRE+d9ISOTi2X\\nwjDujhEIOmZOkjux8Oz1zmKXJOU9SHm0Fs54mTd9tODU5xPERrYAnmpV3SUYI727dqmqzcxc3bvR\\n1f1V1oZdoHt6jg2QIjU\\u003d\",\"checkValid\":true}");
+        //
+        // JSONObject rspMap = jsonResponse.getJSONObject("rspMap");
+        //
+        // if (null != rspMap) {
+        // JSONObject apigw_rspdata = rspMap.getJSONObject("apigw_rspdata");
+        //
+        // if (null != apigw_rspdata) {
+        // JSONObject pub = apigw_rspdata.getJSONObject("pub");
+        //
+        // if (null != pub) {
+        // System.out.println(pub.getString("retcode"));
+        // }
+        // }
+        // }
+
+        String weekLater = DateUtil.dateToStr(
+            DateUtil.getRelativeDateOfDays(new Date(), 7),
+            DateUtil.FRONT_DATE_FORMAT_STRING);
+        Date endDatetimeStart = DateUtil.getStartDatetime(weekLater);
+        Date endDatetimeEnd = DateUtil.getEndDatetime(weekLater);
+
+        // System.out.println(endDatetimeStart);
+        System.out.println(daysBetween("2018-12-06 12:40:51",
+            "2018-12-05 12:40:51", DATA_TIME_PATTERN_1));
+
     }
 
     /**

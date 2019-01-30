@@ -90,5 +90,7 @@
 		<typeAlias alias="stealCarbonBubbleRecord" type="com.ogc.standard.domain.StealCarbonBubbleRecord"/>
 		<typeAlias alias="notifyUser" type="com.ogc.standard.domain.NotifyUser"/>
 		
+		<typeAlias alias="officialSeal" type="com.ogc.standard.domain.OfficialSeal"/>
+		
 	</typeAliases>
 </configuration>

@@ -888,7 +888,7 @@ CREATE TABLE `tzb_product` (
   `scientific_name` varchar(255) DEFAULT NULL COMMENT '学名',
   `variety` varchar(255) DEFAULT NULL COMMENT '品种',
   `rank` varchar(32) DEFAULT NULL COMMENT '级别',
-  `description` text COMMENT '产品描述',
+  `description` LONGTEXT COMMENT '产品描述',
   `province` varchar(32) DEFAULT NULL COMMENT '省',
   `city` varchar(32) DEFAULT NULL COMMENT '市',
   `area` varchar(32) DEFAULT NULL COMMENT '区',
@@ -897,6 +897,7 @@ CREATE TABLE `tzb_product` (
   `raise_end_datetime` datetime DEFAULT NULL COMMENT '募集结束时间',
   `raise_count` int(11) DEFAULT '0' COMMENT '募集总量',
   `now_count` int(11) DEFAULT '0' COMMENT '已募集数量',
+  `age` int(11) DEFAULT '0' COMMENT '树龄',
   `max_jfdk_rate` DOUBLE DEFAULT NULL COMMENT '最大积分抵扣比例',
   `identify_code` varchar(32) DEFAULT NULL COMMENT '当前识别码',
   `id_invalid_datetime` datetime DEFAULT NULL COMMENT '识别码失效时间',
@@ -1519,6 +1520,20 @@ CREATE TABLE `tsys_notify_user` (
   `type` varchar(4) DEFAULT NULL COMMENT '类型',
   `name` varchar(255) DEFAULT NULL COMMENT '名称',
   `mobile` varchar(32) DEFAULT NULL COMMENT '电话',
+  `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `tsys_official_seal`;
+CREATE TABLE `tsys_official_seal` (
+  `code` varchar(32) NOT NULL COMMENT '编号',
+  `province` varchar(255) DEFAULT NULL COMMENT '省',
+  `city` varchar(255) DEFAULT NULL COMMENT '市',
+  `area` varchar(255) DEFAULT NULL COMMENT '区',
+  `department` varchar(255) DEFAULT NULL COMMENT '部门',
+  `pic` varchar(255) DEFAULT NULL COMMENT '公章图片',
   `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
   `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',

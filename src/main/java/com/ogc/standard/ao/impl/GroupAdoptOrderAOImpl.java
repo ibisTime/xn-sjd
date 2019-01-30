@@ -37,7 +37,6 @@ import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.AdoptOrderTree;
 import com.ogc.standard.domain.AgentUser;
-import com.ogc.standard.domain.Charge;
 import com.ogc.standard.domain.GroupAdoptOrder;
 import com.ogc.standard.domain.Product;
 import com.ogc.standard.domain.ProductSpecs;
@@ -51,8 +50,6 @@ import com.ogc.standard.dto.res.XN629048Res;
 import com.ogc.standard.enums.EAdoptOrderStatus;
 import com.ogc.standard.enums.EAdoptOrderTreeStatus;
 import com.ogc.standard.enums.EBoolean;
-import com.ogc.standard.enums.EChannelType;
-import com.ogc.standard.enums.EChargeStatus;
 import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EGroupAdoptOrderStatus;
 import com.ogc.standard.enums.EJourBizTypePlat;
@@ -698,63 +695,62 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
     }
 
     private void cnyRefund(GroupAdoptOrder groupAdoptOrder) {
-        if (EPayType.YE.getCode().equals(groupAdoptOrder.getPayType())) {
+        // if (EPayType.YE.getCode().equals(groupAdoptOrder.getPayType())) {
 
-            // 人民币余额划转
-            Account sysCnyAccount = accountBO
-                .getAccount(ESystemAccount.SYS_ACOUNT_CNY.getCode());
-            Account userCnyAccount = accountBO.getAccountByUser(
-                groupAdoptOrder.getApplyUser(), ECurrency.CNY.getCode());
-            accountBO.transAmount(sysCnyAccount, userCnyAccount,
-                groupAdoptOrder.getPayAmount(),
-                EJourBizTypeUser.UN_FULL_CNY.getCode(),
-                EJourBizTypePlat.UN_FULL_CNY.getCode(),
-                EJourBizTypeUser.UN_FULL_CNY.getValue(),
-                EJourBizTypePlat.UN_FULL_CNY.getValue(),
-                groupAdoptOrder.getCode());
-
-        } else if (EPayType.ALIPAY.getCode()
-            .equals(groupAdoptOrder.getPayType())) {
-
-            // 支付宝退款
-            Charge charge = chargeBO.getCharge(groupAdoptOrder.getCode(),
-                EChannelType.Alipay.getCode(), EChargeStatus.Pay_YES.getCode());
-
-            String refNo = null;
-            if (null != charge) {
-                refNo = charge.getCode();
-            }
-
-            Account sysAccount = accountBO
-                .getAccount(ESystemAccount.SYS_ACOUNT_ALIPAY.getCode());
-
-            alipayBO.doRefund(refNo, sysAccount,
-                EJourBizTypeUser.UN_FULL_CNY.getCode(),
-                EJourBizTypeUser.UN_FULL_CNY.getValue(),
-                groupAdoptOrder.getPayAmount().divide(new BigDecimal(1000)));
-
-        } else if (EPayType.WEIXIN_H5.getCode()
-            .equals(groupAdoptOrder.getPayType())) {
-
-            // 微信退款
-            Charge charge = chargeBO.getCharge(groupAdoptOrder.getCode(),
-                EChannelType.WeChat_H5.getCode(),
-                EChargeStatus.Pay_YES.getCode());
-
-            String refNo = null;
-            if (null != charge) {
-                refNo = charge.getCode();
-            }
-
-            Account sysAccount = accountBO
-                .getAccount(ESystemAccount.SYS_ACOUNT_WEIXIN.getCode());
-
-            weChatBO.doRefund(refNo, sysAccount,
-                EJourBizTypeUser.UN_FULL_CNY.getCode(),
-                EJourBizTypeUser.UN_FULL_CNY.getValue(), groupAdoptOrder
-                    .getPayAmount().divide(new BigDecimal(10)).toString());
-
-        }
+        // 人民币余额划转
+        Account sysCnyAccount = accountBO
+            .getAccount(ESystemAccount.SYS_ACOUNT_CNY.getCode());
+        Account userCnyAccount = accountBO.getAccountByUser(
+            groupAdoptOrder.getApplyUser(), ECurrency.CNY.getCode());
+        accountBO.transAmount(sysCnyAccount, userCnyAccount,
+            groupAdoptOrder.getPayAmount(),
+            EJourBizTypeUser.UN_FULL_CNY.getCode(),
+            EJourBizTypePlat.UN_FULL_CNY.getCode(),
+            EJourBizTypeUser.UN_FULL_CNY.getValue(),
+            EJourBizTypePlat.UN_FULL_CNY.getValue(), groupAdoptOrder.getCode());
+        //
+        // } else if (EPayType.ALIPAY.getCode()
+        // .equals(groupAdoptOrder.getPayType())) {
+        //
+        // // 支付宝退款
+        // Charge charge = chargeBO.getCharge(groupAdoptOrder.getCode(),
+        // EChannelType.Alipay.getCode(), EChargeStatus.Pay_YES.getCode());
+        //
+        // String refNo = null;
+        // if (null != charge) {
+        // refNo = charge.getCode();
+        // }
+        //
+        // Account sysAccount = accountBO
+        // .getAccount(ESystemAccount.SYS_ACOUNT_ALIPAY.getCode());
+        //
+        // alipayBO.doRefund(refNo, sysAccount,
+        // EJourBizTypeUser.UN_FULL_CNY.getCode(),
+        // EJourBizTypeUser.UN_FULL_CNY.getValue(),
+        // groupAdoptOrder.getPayAmount().divide(new BigDecimal(1000)));
+        //
+        // } else if (EPayType.WEIXIN_H5.getCode()
+        // .equals(groupAdoptOrder.getPayType())) {
+        //
+        // // 微信退款
+        // Charge charge = chargeBO.getCharge(groupAdoptOrder.getCode(),
+        // EChannelType.WeChat_H5.getCode(),
+        // EChargeStatus.Pay_YES.getCode());
+        //
+        // String refNo = null;
+        // if (null != charge) {
+        // refNo = charge.getCode();
+        // }
+        //
+        // Account sysAccount = accountBO
+        // .getAccount(ESystemAccount.SYS_ACOUNT_WEIXIN.getCode());
+        //
+        // weChatBO.doRefund(refNo, sysAccount,
+        // EJourBizTypeUser.UN_FULL_CNY.getCode(),
+        // EJourBizTypeUser.UN_FULL_CNY.getValue(), groupAdoptOrder
+        // .getPayAmount().divide(new BigDecimal(10)).toString());
+        //
+        // }
     }
 
     private void jfRefund(GroupAdoptOrder groupAdoptOrder) {

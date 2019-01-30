@@ -39,6 +39,8 @@ public interface ICommodityBO extends IPaginableBO<Commodity> {
 
     public List<Commodity> queryCommodityList(Commodity condition);
 
+    public List<Commodity> queryCommodityListByOrder(String orderCode);
+
     public Commodity getCommodity(String code);
 
     public boolean isOnShelf(String code);

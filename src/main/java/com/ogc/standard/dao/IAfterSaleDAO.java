@@ -23,4 +23,6 @@ public interface IAfterSaleDAO extends IBaseDAO<AfterSale> {
     public int updateHandle(AfterSale data);
 
     public int updateReceive(AfterSale data);
+
+    int updateCancled(AfterSale data);
 }

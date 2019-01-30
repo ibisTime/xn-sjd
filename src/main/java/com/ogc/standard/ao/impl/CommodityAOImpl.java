@@ -8,7 +8,6 @@
  */
 package com.ogc.standard.ao.impl;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -294,21 +293,21 @@ public class CommodityAOImpl implements ICommodityAO {
         data.setSpecsList(specsList);
 
         // 初始化最小价格和最大价格
-        BigDecimal minPrice = BigDecimal.ZERO;
-        BigDecimal maxPrice = minPrice;
-        for (CommoditySpecs commoditySpecs : specsList) {
-            if (minPrice.compareTo(BigDecimal.ZERO) == 0) {
-                minPrice = commoditySpecs.getPrice();
-            }
-            if (commoditySpecs.getPrice().compareTo(minPrice) < 0) {
-                minPrice = commoditySpecs.getPrice();
-            }
-            if (commoditySpecs.getPrice().compareTo(maxPrice) > 0) {
-                maxPrice = commoditySpecs.getPrice();
-            }
-        }
-        data.setMinPrice(minPrice);
-        data.setMaxPrice(maxPrice);
+        // BigDecimal minPrice = BigDecimal.ZERO;
+        // BigDecimal maxPrice = minPrice;
+        // for (CommoditySpecs commoditySpecs : specsList) {
+        // if (minPrice.compareTo(BigDecimal.ZERO) == 0) {
+        // minPrice = commoditySpecs.getPrice();
+        // }
+        // if (commoditySpecs.getPrice().compareTo(minPrice) < 0) {
+        // minPrice = commoditySpecs.getPrice();
+        // }
+        // if (commoditySpecs.getPrice().compareTo(maxPrice) > 0) {
+        // maxPrice = commoditySpecs.getPrice();
+        // }
+        // }
+        // data.setMinPrice(minPrice);
+        // data.setMaxPrice(maxPrice);
 
         // 店铺名称
         Company company = companyBO.getCompany(data.getShopCode());

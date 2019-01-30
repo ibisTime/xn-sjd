@@ -46,7 +46,6 @@ public class XN629701Req {
     private String weight;
 
     // 最大积分抵扣比例
-    @NotBlank
     private String maxJfdkRate;
 
     // 单邮费数量
