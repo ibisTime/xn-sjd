@@ -70,6 +70,8 @@ public class CommodityBOImpl extends PaginableBOImpl<Commodity>
         data.setSinglePostageCount(
             StringValidater.toInteger(req.getSinglePostageCount()));
         data.setStatus(ECommodityStatus.DRAFT.getCode());
+        data.setRemark(req.getRemark());
+
         commodityDAO.insert(data);
         return code;
     }
@@ -110,7 +112,7 @@ public class CommodityBOImpl extends PaginableBOImpl<Commodity>
         data.setStatus(status);
         data.setUpdater(updater);
         data.setUpdateDatetime(new Date());
-        data.setRemark(remark);
+        data.setRemark(data.getRemark());
         commodityDAO.updateStatus(data);
     }
 

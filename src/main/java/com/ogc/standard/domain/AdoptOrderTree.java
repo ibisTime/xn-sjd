@@ -62,6 +62,9 @@ public class AdoptOrderTree extends ABaseDO {
     // 证书模板
     private String certificateTemplate;
 
+    // 协议
+    private String contract;
+
     // 创建时间
     private Date createDatetime;
 
@@ -388,6 +391,14 @@ public class AdoptOrderTree extends ABaseDO {
 
     public void setArea(String area) {
         this.area = area;
+    }
+
+    public String getContract() {
+        return contract;
+    }
+
+    public void setContract(String contract) {
+        this.contract = contract;
     }
 
 }

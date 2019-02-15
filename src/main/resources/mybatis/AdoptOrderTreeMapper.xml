@@ -20,6 +20,7 @@
 		<result column="status" property="status" />
 		<result column="current_holder" property="currentHolder" />
 		<result column="certificate_template" property="certificateTemplate" />
+		<result column="contract" property="contract" />
 		<result column="create_datetime" property="createDatetime" />
 		<result column="remark" property="remark" />
 	</resultMap>
@@ -134,6 +135,7 @@
 		,t.status
 		,t.current_holder
 		,t.certificate_template
+		,t.contract
 		,t.create_datetime
 		,t.remark
 		FROM
@@ -174,6 +176,7 @@
 		,sum(t.quantity) as userAdoptTreeCount
 		,t.tree_number
 		,t.start_datetime
+		,t.end_datetime
 		,t.current_holder
 		,t.amount
  		FROM
@@ -225,6 +228,7 @@
 		,status
 		,current_holder
 		,certificate_template
+		,contract
 		,create_datetime
 		,remark
 		)
@@ -246,6 +250,7 @@
 		,#{status}
 		,#{currentHolder}
 		,#{certificateTemplate}
+		,#{contract}
 		,#{createDatetime}
 		,#{remark}
 		)

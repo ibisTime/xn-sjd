@@ -191,6 +191,8 @@
 		,max_jfdk_rate
 		,single_postage_count
 		,status
+		
+		,remark
 		)
 		VALUES(
 		#{code}
@@ -213,6 +215,8 @@
 		,#{maxJfdkRate}
 		,#{singlePostageCount}
 		,#{status}
+		
+		,#{remark}
 		)
 	</insert>
 	

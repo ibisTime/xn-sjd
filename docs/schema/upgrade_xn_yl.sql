@@ -25,3 +25,7 @@ ADD COLUMN `age` INT NULL COMMENT '树龄' AFTER `now_count`;
 
 ALTER TABLE `tzb_product` 
 CHANGE COLUMN `description` `description` LONGTEXT NULL DEFAULT NULL COMMENT '产品描述' ;
+
+##0.0.3
+ALTER TABLE `try_adopt_order_tree` 
+ADD COLUMN `contract` LONGTEXT NULL COMMENT '协议' AFTER `certificate_template`;

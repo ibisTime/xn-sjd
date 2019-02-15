@@ -23,6 +23,8 @@ public class XN629605Req extends APageReq {
 
     private String maintainUserName;// 养护方用户
 
+    private String ownerCompanyName;
+
     public String getOwnerId() {
         return ownerId;
     }
@@ -61,6 +63,14 @@ public class XN629605Req extends APageReq {
 
     public void setMaintainUserName(String maintainUserName) {
         this.maintainUserName = maintainUserName;
+    }
+
+    public String getOwnerCompanyName() {
+        return ownerCompanyName;
+    }
+
+    public void setOwnerCompanyName(String ownerCompanyName) {
+        this.ownerCompanyName = ownerCompanyName;
     }
 
 }

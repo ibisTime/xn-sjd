@@ -41,6 +41,7 @@
 			<if test="logisticsCompany != null and logisticsCompany != '' ">
 				AND t.logistics_company = #{logisticsCompany}
 			</if>
+			
 			<choose>
 				<when test="status != null and status != '' ">
 					AND t.status = #{status}
@@ -52,12 +53,6 @@
 					</foreach>
 				</when>
 			</choose>
-			<if test="receiver != null and receiver != '' ">
-				AND t.receiver = #{receiver}
-			</if>
-			<if test="receiver != null and receiver != '' ">
-				AND t.receiver = #{receiver}
-			</if>
 			<if test="receiver != null and receiver != '' ">
 				AND t.receiver = #{receiver}
 			</if>

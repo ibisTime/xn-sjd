@@ -12,9 +12,12 @@ import org.springframework.stereotype.Component;
 
 import com.ogc.standard.bo.IAdoptOrderTreeBO;
 import com.ogc.standard.bo.ICompanyBO;
+import com.ogc.standard.bo.IOfficialSealBO;
 import com.ogc.standard.bo.ITreeBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
+import com.ogc.standard.common.AmountUtil;
+import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.IAdoptOrderTreeDAO;
 import com.ogc.standard.domain.AdoptOrder;
@@ -22,6 +25,7 @@ import com.ogc.standard.domain.AdoptOrderTree;
 import com.ogc.standard.domain.Company;
 import com.ogc.standard.domain.GroupAdoptOrder;
 import com.ogc.standard.domain.GroupOrder;
+import com.ogc.standard.domain.OfficialSeal;
 import com.ogc.standard.domain.PresellOrder;
 import com.ogc.standard.domain.PresellProduct;
 import com.ogc.standard.domain.Product;
@@ -49,6 +53,9 @@ public class AdoptOrderTreeBOImpl extends PaginableBOImpl<AdoptOrderTree>
     @Autowired
     private IUserBO userBO;
 
+    @Autowired
+    private IOfficialSealBO officialSealBO;
+
     @Override
     public String saveAdoptOrderTree(Product product, AdoptOrder adoptOrder,
             String treeNumber) {
@@ -68,7 +75,7 @@ public class AdoptOrderTreeBOImpl extends PaginableBOImpl<AdoptOrderTree>
         data.setEndDatetime(adoptOrder.getEndDatetime());
 
         data.setAmount(adoptOrder.getPrice());
-        data.setQuantity(adoptOrder.getQuantity());
+        data.setQuantity(1);
         data.setCreateDatetime(new Date());
         if (EAdoptOrderStatus.TO_ADOPT.getCode()
             .equals(adoptOrder.getStatus())) {
@@ -80,6 +87,10 @@ public class AdoptOrderTreeBOImpl extends PaginableBOImpl<AdoptOrderTree>
         Company company = companyBO.getCompanyByUserId(product.getOwnerId());
         data.setCertificateTemplate(company.getCertificateTemplate());
         data.setCurrentHolder(adoptOrder.getApplyUser());
+
+        String contract = contractGenerator(code, product, adoptOrder, company);
+
+        data.setContract(contract);
         adoptOrderTreeDAO.insert(data);
         return code;
     }
@@ -102,7 +113,7 @@ public class AdoptOrderTreeBOImpl extends PaginableBOImpl<AdoptOrderTree>
         data.setStartDatetime(groupAdoptOrder.getStartDatetime());
         data.setEndDatetime(groupAdoptOrder.getEndDatetime());
 
-        data.setAmount(groupAdoptOrder.getPrice());
+        data.setAmount(groupAdoptOrder.getAmount());
         data.setQuantity(groupAdoptOrder.getQuantity());
         data.setCreateDatetime(new Date());
         if (EAdoptOrderStatus.TO_ADOPT.getCode()
@@ -115,6 +126,11 @@ public class AdoptOrderTreeBOImpl extends PaginableBOImpl<AdoptOrderTree>
         Company company = companyBO.getCompanyByUserId(product.getOwnerId());
         data.setCertificateTemplate(company.getCertificateTemplate());
         data.setCurrentHolder(groupAdoptOrder.getApplyUser());
+
+        String contract = contractGenerator(code, product, groupAdoptOrder,
+            company);
+
+        data.setContract(contract);
         adoptOrderTreeDAO.insert(data);
         return code;
     }
@@ -138,7 +154,7 @@ public class AdoptOrderTreeBOImpl extends PaginableBOImpl<AdoptOrderTree>
         data.setEndDatetime(presellProduct.getAdoptEndDatetime());
 
         data.setAmount(presellOrder.getPrice());
-        data.setQuantity(presellOrder.getQuantity());
+        data.setQuantity(1);
         data.setCreateDatetime(new Date());
         if ((new Date()).before(presellProduct.getAdoptStartDatetime())) {
             data.setStatus(EAdoptOrderTreeStatus.TO_ADOPT.getCode());
@@ -173,7 +189,7 @@ public class AdoptOrderTreeBOImpl extends PaginableBOImpl<AdoptOrderTree>
         data.setEndDatetime(presellProduct.getAdoptEndDatetime());
 
         data.setAmount(groupOrder.getPrice());
-        data.setQuantity(groupOrder.getQuantity());
+        data.setQuantity(1);
         data.setCreateDatetime(new Date());
         if ((new Date()).before(presellProduct.getAdoptStartDatetime())) {
             data.setStatus(EAdoptOrderTreeStatus.TO_ADOPT.getCode());
@@ -221,6 +237,123 @@ public class AdoptOrderTreeBOImpl extends PaginableBOImpl<AdoptOrderTree>
         newData.setRemark(user.getMobile() + "赠送");
 
         adoptOrderTreeDAO.insert(newData);
+    }
+
+    // 生成协议
+    private String contractGenerator(String code, Product product,
+            AdoptOrder adoptOrder, Company company) {
+        String contract = company.getContractTemplate();// 合同
+        String firstName = company.getName();// 甲方名称
+        String secondName = userBO.getUser(adoptOrder.getApplyUser())
+            .getRealName();// 乙方
+
+        String thirdName = "";// 丙方
+        String thirdOfficialSeal = "";// 丙方公章
+        List<OfficialSeal> officialSeals = officialSealBO.queryOfficialSealList(
+            product.getProvince(), product.getCity(), product.getArea(), null);
+        if (CollectionUtils.isNotEmpty(officialSeals)) {
+            thirdName = officialSeals.get(0).getDepartment();
+            thirdOfficialSeal = StringUtils
+                .isBlank(officialSeals.get(0).getPic())
+                        ? null
+                        : "<img src=\"http://image.o2lin.com/"
+                                + company.getCommonSeal()
+                                + "?imageMogr2/auto-orient\">";
+        }
+
+        String startDateYear = DateUtil.dateToStr(adoptOrder.getStartDatetime(),
+            "yyyy");// 开始时间年份
+        String startDateMonth = DateUtil
+            .dateToStr(adoptOrder.getStartDatetime(), "MM");// 开始时间月份
+        String startDateDay = DateUtil.dateToStr(adoptOrder.getStartDatetime(),
+            "dd");// 开始时间日期
+
+        String endDateYear = DateUtil.dateToStr(adoptOrder.getEndDatetime(),
+            "yyyy");// 结束时间年份
+        String endDateMonth = DateUtil.dateToStr(adoptOrder.getEndDatetime(),
+            "MM");// 结束时间月份
+        String endDateDay = DateUtil.dateToStr(adoptOrder.getEndDatetime(),
+            "dd");// 结束时间日期
+
+        String price = AmountUtil.div(adoptOrder.getPrice(), 1000L).toString();
+        String signDate = DateUtil.dateToStr(new Date(),
+            DateUtil.DATA_TIME_PATTERN_9);// 签约日期
+        String firstOfficialSeal = StringUtils.isBlank(company.getCommonSeal())
+                ? null
+                : "<img src=\"http://image.o2lin.com/" + company.getCommonSeal()
+                        + "?imageMogr2/auto-orient\">";// 甲方公章
+
+        contract = contract.replace("##甲方名称##", firstName)
+            .replace("##乙方名称##", secondName).replace("##丙方名称##", thirdName)
+            .replace("##认养编号##", code).replace("##quantity##", "1")
+            .replace("##y1##", startDateYear).replace("##m1##", startDateMonth)
+            .replace("##d1##", startDateDay).replace("##y2##", endDateYear)
+            .replace("##m2##", endDateMonth).replace("##d2##", endDateDay)
+            .replace("##price##", price).replace("##date1##", signDate)
+            .replace("##date2##", signDate).replace("##date3##", signDate)
+            .replace("##cachet1##", "< img src=" + firstOfficialSeal + ">")
+            .replace("##cachet3##", "< img src=" + thirdOfficialSeal + ">");
+
+        return contract;
+    }
+
+    // 生成协议
+    private String contractGenerator(String code, Product product,
+            GroupAdoptOrder groupAdoptOrder, Company company) {
+        String contract = company.getContractTemplate();// 合同
+        String firstName = company.getName();// 甲方名称
+        String secondName = userBO.getUser(groupAdoptOrder.getApplyUser())
+            .getRealName();// 乙方
+
+        String thirdName = "";// 丙方
+        String thirdOfficialSeal = "";// 丙方公章
+        List<OfficialSeal> officialSeals = officialSealBO.queryOfficialSealList(
+            product.getProvince(), product.getCity(), product.getArea(), null);
+        if (CollectionUtils.isNotEmpty(officialSeals)) {
+            thirdName = officialSeals.get(0).getDepartment();
+            thirdOfficialSeal = StringUtils
+                .isBlank(officialSeals.get(0).getPic())
+                        ? null
+                        : "<img src=\"http://image.o2lin.com/"
+                                + company.getCommonSeal()
+                                + "?imageMogr2/auto-orient\">";
+        }
+
+        String startDateYear = DateUtil
+            .dateToStr(groupAdoptOrder.getStartDatetime(), "yyyy");// 开始时间年份
+        String startDateMonth = DateUtil
+            .dateToStr(groupAdoptOrder.getStartDatetime(), "MM");// 开始时间月份
+        String startDateDay = DateUtil
+            .dateToStr(groupAdoptOrder.getStartDatetime(), "dd");// 开始时间日期
+
+        String endDateYear = DateUtil
+            .dateToStr(groupAdoptOrder.getEndDatetime(), "yyyy");// 结束时间年份
+        String endDateMonth = DateUtil
+            .dateToStr(groupAdoptOrder.getEndDatetime(), "MM");// 结束时间月份
+        String endDateDay = DateUtil.dateToStr(groupAdoptOrder.getEndDatetime(),
+            "dd");// 结束时间日期
+
+        String price = AmountUtil.div(groupAdoptOrder.getPrice(), 1000L)
+            .toString();
+        String signDate = DateUtil.dateToStr(new Date(),
+            DateUtil.DATA_TIME_PATTERN_9);// 签约日期
+        String firstOfficialSeal = StringUtils.isBlank(company.getCommonSeal())
+                ? null
+                : "<img src=\"http://image.o2lin.com/" + company.getCommonSeal()
+                        + "?imageMogr2/auto-orient\">";// 甲方公章
+
+        contract = contract.replace("##甲方名称##", firstName)
+            .replace("##乙方名称##", secondName).replace("##丙方名称##", thirdName)
+            .replace("##认养编号##", code).replace("##quantity##", "1")
+            .replace("##y1##", startDateYear).replace("##m1##", startDateMonth)
+            .replace("##d1##", startDateDay).replace("##y2##", endDateYear)
+            .replace("##m2##", endDateMonth).replace("##d2##", endDateDay)
+            .replace("##price##", price).replace("##date1##", signDate)
+            .replace("##date2##", signDate).replace("##date3##", signDate)
+            .replace("##cachet1##", "< img src=" + firstOfficialSeal + ">")
+            .replace("##cachet3##", "< img src=" + thirdOfficialSeal + ">");
+
+        return contract;
     }
 
     @Override

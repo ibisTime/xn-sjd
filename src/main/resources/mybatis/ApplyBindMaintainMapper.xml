@@ -19,6 +19,9 @@
 		<if test="maintainUserName != null and maintainUserName != '' ">
 			left join tsys_user ts on t.maintain_id = ts.user_id
 		</if>
+		<if test="ownerCompanyName != null and ownerCompanyName != '' ">
+			left join tsys_company tc on t.owner_id = tc.user_id
+		</if>
 	</sql>
 	
 	<sql id="nameForQuery_condition">
@@ -27,6 +30,9 @@
 		</if>
 		<if test="maintainUserName != null and maintainUserName != '' ">
 				AND concat_ws('-', ts.real_name, ts.mobile) like "%"#{maintainUserName}"%"
+		</if>
+		<if test="ownerCompanyName != null and ownerCompanyName != '' ">
+				AND tc.name like "%"#{ownerCompanyName}"%"
 		</if>
 	</sql>
 	

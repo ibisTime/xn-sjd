@@ -74,6 +74,9 @@ public class XN629700Req {
     @NotBlank
     private String shopCode;
 
+    // 备注
+    private String remark;
+
     // 规格列表
     @NotEmpty
     private List<CommoditySpecs> specsList;
@@ -196,6 +199,14 @@ public class XN629700Req {
 
     public void setOriginalPlace(String originalPlace) {
         this.originalPlace = originalPlace;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
 }

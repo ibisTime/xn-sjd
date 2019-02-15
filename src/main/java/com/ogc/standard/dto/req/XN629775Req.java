@@ -19,6 +19,9 @@ public class XN629775Req extends APageReq {
 
     private String logisticsCompany;
 
+    // 订单明细编号
+    private String orderDetailCode;
+
     private String type;
 
     private String status;
@@ -85,6 +88,14 @@ public class XN629775Req extends APageReq {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getOrderDetailCode() {
+        return orderDetailCode;
+    }
+
+    public void setOrderDetailCode(String orderDetailCode) {
+        this.orderDetailCode = orderDetailCode;
     }
 
 }

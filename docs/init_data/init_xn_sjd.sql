@@ -38,8 +38,6 @@ LIMIT 0, 500
 INSERT INTO `tsys_role` (`code`,`name`,`type`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSR201700000000000000','超级管理员','P','UCOIN201700000000000001',now(),'','CD-SJD0000025');
 INSERT INTO `tsys_role` (`code`,`name`,`type`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('JS201809301134241553541','产权方','O','UCOIN201700000000000001',now(),'不能删','CD-SJD0000025');
 INSERT INTO `tsys_role` (`code`,`name`,`type`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('JS201809301134504008291','养护方','M','UCOIN201700000000000001',now(),'不能删','CD-SJD0000025');
-INSERT INTO `tsys_role` (`code`,`name`,`type`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('JS201810041749178264163','分销商','A','UCOIN201700000000000001',now(),'不能删','CD-SJD0000025');
-INSERT INTO `tsys_role` (`code`,`name`,`type`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('JS201810041749297484833','业务员','S','UCOIN201700000000000001',now(),'不能删','CD-SJD0000025');
 INSERT INTO `tsys_role` (`code`,`name`,`type`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('JS201811081749297484833','商家','B','UCOIN201700000000000001',now(),'不能删','CD-SJD0000025');
 /*
 -- Query: SELECT * FROM dev_xn_sjd.tsys_menu

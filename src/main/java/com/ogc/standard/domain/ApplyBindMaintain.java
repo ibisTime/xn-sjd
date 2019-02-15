@@ -60,6 +60,8 @@ public class ApplyBindMaintain extends ABaseDO {
 
     private String maintainUserName;// 养护方用户
 
+    private String ownerCompanyName;
+
     public void setCode(String code) {
         this.code = code;
     }
@@ -186,6 +188,14 @@ public class ApplyBindMaintain extends ABaseDO {
 
     public void setMaintainUserName(String maintainUserName) {
         this.maintainUserName = maintainUserName;
+    }
+
+    public String getOwnerCompanyName() {
+        return ownerCompanyName;
+    }
+
+    public void setOwnerCompanyName(String ownerCompanyName) {
+        this.ownerCompanyName = ownerCompanyName;
     }
 
 }

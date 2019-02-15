@@ -121,6 +121,7 @@ CREATE TABLE `try_adopt_order_tree` (
   `status` varchar(4) DEFAULT NULL COMMENT '状态',
   `current_holder` varchar(32) DEFAULT NULL COMMENT '当前持有人',
   `certificate_template` varchar(255) DEFAULT NULL COMMENT '证书模板',
+  `contract` LONGTEXT DEFAULT NULL COMMENT '协议',
   `create_datetime` datetime DEFAULT NULL COMMENT '创建时间',
   `remark` varchar(255) COMMENT '备注',
   PRIMARY KEY (`code`)
