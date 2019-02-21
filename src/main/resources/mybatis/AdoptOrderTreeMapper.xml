@@ -113,6 +113,22 @@
 			<if test="createDatetimeEnd != null and createDatetimeEnd != '' ">
 				<![CDATA[AND t.create_datetime <= #{createDatetimeEnd}]]>
 			</if>
+			
+			<choose>
+				<when test="treeLevel != null and treeLevel != '' and treeLevel == 'FIRST' ">
+					<![CDATA[AND tt.age >= 500]]>
+				</when>
+				<when test="treeLevel != null and treeLevel != '' and treeLevel == 'SECOND' ">
+					<![CDATA[AND tt.age < 500 AND tt.age >= 300]]>
+				</when>
+				<when test="treeLevel != null and treeLevel != '' and treeLevel == 'THIRD' ">
+					<![CDATA[AND tt.age < 300 AND tt.age >= 100]]>
+				</when>
+				<otherwise>  
+					AND 1 = 1
+            	</otherwise>
+			</choose>
+			
 		</trim>
 	</sql>
 	

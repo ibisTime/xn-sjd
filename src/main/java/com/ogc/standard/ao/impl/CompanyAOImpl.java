@@ -59,6 +59,8 @@ public class CompanyAOImpl implements ICompanyAO {
 
         sysUserBO.refreshStatus(req.getUserId(), sysUser.getStatus(),
             req.getUserId(), req.getRemark());
+
+        sysUserBO.refreshPhoto(sysUser, req.getPhoto());
     }
 
     @Override

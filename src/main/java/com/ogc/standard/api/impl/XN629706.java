@@ -48,6 +48,8 @@ public class XN629706 extends AProcessor {
         condition.setShopCode(req.getShopCode());
         condition.setLocation(req.getLocation());
         condition.setStatus(req.getStatus());
+        condition.setOriginalPrice(req.getOriginalPlace());
+        condition.setOriginPlace(req.getOriginPlace());
 
         if (StringUtils.isNotBlank(req.getMinSpecPrice())) {
             condition.setMinSpecPrice(new BigDecimal(req.getMinSpecPrice()));

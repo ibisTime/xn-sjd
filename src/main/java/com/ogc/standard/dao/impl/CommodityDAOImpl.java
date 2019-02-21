@@ -100,4 +100,9 @@ public class CommodityDAOImpl extends AMybatisTemplate
         return super.update(NAMESPACE.concat("update_month_sell_count"), data);
     }
 
+    @Override
+    public int updateApprove(Commodity data) {
+        return super.update(NAMESPACE.concat("update_approve"), data);
+    }
+
 }

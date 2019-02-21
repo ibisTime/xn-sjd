@@ -59,11 +59,17 @@ public enum EJourBizTypePlat {
     CONSIGN_SELL("consign_sell", "购买寄售"),
 
     // 碳泡泡账户
+    ADOPT_DAY_CREATE("adopt_day_create", "认养消费每日产生碳泡泡"),
+
     ADOPT_DAY_BACK("adopt_day_back", "认养消费每日收取碳泡泡"),
 
     SHARE("share", "分享"),
 
-    PRESENT("present", "赠送"), SIGN("sign", "签到"),
+    PRESENT("present", "赠送"),
+
+    SIGN("sign", "签到"),
+
+    PUBLISH_ARTICLE("publish_article", "发布文章"),
 
     // 积分账户
     REGIST("reg", "注册送积分"),

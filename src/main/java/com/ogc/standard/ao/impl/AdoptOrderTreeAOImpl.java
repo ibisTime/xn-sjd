@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.IAdoptOrderTreeAO;
+import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IAdoptOrderBO;
 import com.ogc.standard.bo.IAdoptOrderTreeBO;
 import com.ogc.standard.bo.IBizLogBO;
@@ -78,6 +79,9 @@ public class AdoptOrderTreeAOImpl implements IAdoptOrderTreeAO {
 
     @Autowired
     private IAdoptOrderBO adoptOrderBO;
+
+    @Autowired
+    private IAccountBO accountBO;
 
     @Override
     @Transactional
@@ -240,6 +244,7 @@ public class AdoptOrderTreeAOImpl implements IAdoptOrderTreeAO {
                 .getPaginable(start, limit, condition);
 
             if (null != page && CollectionUtils.isNotEmpty(page.getList())) {
+
                 // 按订单比例产生碳泡泡
                 for (AdoptOrderTree adoptOrderTree : page.getList()) {
                     BigDecimal quantity = AmountUtil

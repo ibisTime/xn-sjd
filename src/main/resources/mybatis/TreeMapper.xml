@@ -77,10 +77,28 @@
 			<if test="city != null and city != '' ">
 				AND t.city like "%"#{city}"%"
 			</if>
+			<if test="maintain != null and maintain != '' ">
+				AND exists(select 1 from tsys_apply_bind_maintain bm where bm.maintain_id = #{maintain} and bm.owner_id = t.owner_id)
+			</if>
 			
 			<if test="maxAdoptCount != null and maxAdoptCount != '' ">
 				<![CDATA[AND t.adopt_count < #{maxAdoptCount}]]>
 			</if>
+			
+			<choose>
+				<when test="treeLevel != null and treeLevel != '' and treeLevel == 'FIRST' ">
+					<![CDATA[AND t.age >= 500]]>
+				</when>
+				<when test="treeLevel != null and treeLevel != '' and treeLevel == 'SECOND' ">
+					<![CDATA[AND t.age < 500 AND t.age >= 300]]>
+				</when>
+				<when test="treeLevel != null and treeLevel != '' and treeLevel == 'THIRD' ">
+					<![CDATA[AND t.age < 300 AND t.age >= 100]]>
+				</when>
+				<otherwise>  
+					AND 1 = 1
+            	</otherwise>
+			</choose>
 			
 		</trim>
 	</sql>

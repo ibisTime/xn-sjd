@@ -29,6 +29,7 @@
 		<result column="updater" property="updater" />
 		<result column="update_datetime" property="updateDatetime" />
 		<result column="remark" property="remark" />
+		<result column="approve_note" property="approveNote" />
 		
 		<result column="min_price" property="minPrice" />
 		<result column="max_price" property="maxPrice" />
@@ -70,6 +71,9 @@
 			</if>
 			<if test="originalPlace != null and originalPlace != '' ">
 				AND t.original_place = #{originalPlace}
+			</if>
+			<if test="originPlace != null and originPlace != '' ">
+				AND t.original_place = #{originPlace}
 			</if>
 			<if test="sellUserId != null and sellUserId != '' ">
 				AND t.sell_user_id = #{sellUserId}
@@ -129,6 +133,7 @@
 		,t.updater
 		,t.update_datetime
 		,t.remark
+		,t.approve_note
 		
 		,(select min(tsc_commodity_specs.price) from tsc_commodity_specs where tsc_commodity_specs.commodity_code = t.code) as min_price
 		,(select max(tsc_commodity_specs.price) from tsc_commodity_specs where tsc_commodity_specs.commodity_code = t.code) as max_price
@@ -145,11 +150,11 @@
 	</select>
 	
 	<select id="select_distinctOriginalPlace" parameterType="commodity" resultMap="commodity_DB_Result">
-		select distinct original_place from tsc_commodity
+		<![CDATA[select distinct original_place from tsc_commodity where original_place <> '' and original_place is not null]]>
 	</select>
 	
 	<select id="select_distinctDeliverPlace" parameterType="commodity" resultMap="commodity_DB_Result">
-		select distinct deliver_place from tsc_commodity
+		<![CDATA[select distinct deliver_place from tsc_commodity where deliver_place <> '' and deliver_place is not null]]>
 	</select>
 	
 	<select id="select_distinctDeliverPlaceByShop" parameterType="commodity" resultMap="commodity_DB_Result">
@@ -243,7 +248,18 @@
 		,updater=#{updater}
 		,update_datetime=#{updateDatetime}
 		
-		,remark=#{remark}
+		,remark = #{remark}
+		WHERE
+		code=#{code}
+	</update>
+	
+	<update id="update_approve" parameterType="commodity">
+		UPDATE tsc_commodity
+		SET
+		status=#{status}
+		,updater=#{updater}
+		,update_datetime=#{updateDatetime}
+		,approve_note=#{approveNote}
 		WHERE
 		code=#{code}
 	</update>

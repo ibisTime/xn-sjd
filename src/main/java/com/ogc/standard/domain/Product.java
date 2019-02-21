@@ -200,6 +200,9 @@ public class Product extends ABaseDO {
     // 树级
     private String treeLevel;
 
+    // 查询人(筛选定向用户)
+    private String queryUserId;
+
     public String getDirectType() {
         return directType;
     }
@@ -686,6 +689,14 @@ public class Product extends ABaseDO {
 
     public void setTreeLevel(String treeLevel) {
         this.treeLevel = treeLevel;
+    }
+
+    public String getQueryUserId() {
+        return queryUserId;
+    }
+
+    public void setQueryUserId(String queryUserId) {
+        this.queryUserId = queryUserId;
     }
 
 }

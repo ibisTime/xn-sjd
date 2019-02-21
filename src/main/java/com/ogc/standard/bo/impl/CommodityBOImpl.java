@@ -117,6 +117,20 @@ public class CommodityBOImpl extends PaginableBOImpl<Commodity>
     }
 
     @Override
+    public void refreshApprove(String code, String status, String updater,
+            String approveNote) {
+        Commodity data = new Commodity();
+
+        data.setCode(code);
+        data.setStatus(status);
+        data.setUpdater(updater);
+        data.setUpdateDatetime(new Date());
+        data.setApproveNote(approveNote);
+
+        commodityDAO.updateApprove(data);
+    }
+
+    @Override
     public void refreshOn(String code, String location, Long orderNo,
             String updater, String remark) {
         Commodity data = getCommodity(code);
@@ -126,7 +140,7 @@ public class CommodityBOImpl extends PaginableBOImpl<Commodity>
         data.setMonthSellCount(Long.valueOf(0));
         data.setUpdater(updater);
         data.setUpdateDatetime(new Date());
-        data.setRemark(remark);
+        data.setRemark(data.getRemark());
         commodityDAO.updateOn(data);
     }
 

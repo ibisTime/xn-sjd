@@ -128,6 +128,11 @@ public class Tree extends ABaseDO {
     // 最新养护记录
     private MaintainRecord lastMaintainRecord;
 
+    // 树级
+    private String treeLevel;
+
+    private String maintain;
+
     public String getMaintainId() {
         return maintainId;
     }
@@ -422,6 +427,22 @@ public class Tree extends ABaseDO {
 
     public void setLastMaintainRecord(MaintainRecord lastMaintainRecord) {
         this.lastMaintainRecord = lastMaintainRecord;
+    }
+
+    public String getMaintain() {
+        return maintain;
+    }
+
+    public void setMaintain(String maintain) {
+        this.maintain = maintain;
+    }
+
+    public String getTreeLevel() {
+        return treeLevel;
+    }
+
+    public void setTreeLevel(String treeLevel) {
+        this.treeLevel = treeLevel;
     }
 
 }

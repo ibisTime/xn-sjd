@@ -69,6 +69,9 @@ public class XN629025Req extends APageReq {
     // 树级
     private String treeLevel;
 
+    // 查询人(筛选定向用户)
+    private String queryUserId;
+
     public String getName() {
         return name;
     }
@@ -219,6 +222,14 @@ public class XN629025Req extends APageReq {
 
     public void setTreeLevel(String treeLevel) {
         this.treeLevel = treeLevel;
+    }
+
+    public String getQueryUserId() {
+        return queryUserId;
+    }
+
+    public void setQueryUserId(String queryUserId) {
+        this.queryUserId = queryUserId;
     }
 
 }

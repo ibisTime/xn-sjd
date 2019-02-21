@@ -223,6 +223,15 @@ public class CommodityOrderBOImpl extends PaginableBOImpl<CommodityOrder>
     }
 
     @Override
+    public void refreshAftersale(String code) {
+        CommodityOrder data = new CommodityOrder();
+        data.setCode(code);
+        data.setStatus(ECommodityOrderStatus.ATFER_SALES.getCode());
+        data.setUpdateDatetime(new Date());
+        commodityOrderDAO.updateAftersale(data);
+    }
+
+    @Override
     public void refreshSettleStatus(CommodityOrder data, String approveResult,
             String updater, String remark) {
         String status = ECommodityOrderSettleStatus.NO_SETTLE.getCode();

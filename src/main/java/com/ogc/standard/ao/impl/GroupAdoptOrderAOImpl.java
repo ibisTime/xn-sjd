@@ -265,9 +265,12 @@ public class GroupAdoptOrderAOImpl implements IGroupAdoptOrderAO {
         Product product = productBO.getProduct(data.getProductCode());
 
         // 积分抵扣处理
-        XN629048Res deductRes = distributionOrderBO.getAdoptOrderDeductAmount(
-            product.getMaxJfdkRate(), data.getAmount(), data.getApplyUser(),
-            isJfDeduct);
+        XN629048Res deductRes = new XN629048Res(BigDecimal.ZERO,
+            BigDecimal.ZERO);
+        // XN629048Res deductRes =
+        // distributionOrderBO.getAdoptOrderDeductAmount(
+        // product.getMaxJfdkRate(), data.getAmount(), data.getApplyUser(),
+        // isJfDeduct);
 
         // 支付订单
         Object result = null;

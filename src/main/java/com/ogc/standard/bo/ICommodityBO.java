@@ -28,6 +28,9 @@ public interface ICommodityBO extends IPaginableBO<Commodity> {
     public void refreshStatus(String code, String status, String updater,
             String remark);
 
+    public void refreshApprove(String code, String status, String updater,
+            String approveNote);
+
     public void refreshOn(String code, String location, Long orderNo,
             String updater, String remark);
 

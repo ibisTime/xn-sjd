@@ -77,10 +77,17 @@
 			</if>
 			
 			<if test="statusList != null and statusList != '' ">
-				AND t.status in 
+				AND (t.status in 
                 <foreach item="item" index="index" collection="statusList" open="(" separator="," close=")">
 	            	#{item}
                 </foreach> 
+                
+                	or t.after_sale_status in 
+                	<foreach item="item" index="index" collection="statusList" open="(" separator="," close=")">
+	            		#{item}
+                	</foreach>
+                	)
+                
 			</if>
 			
 		</trim>
@@ -236,7 +243,8 @@
 	<update id="update_atferSaleStatus" parameterType="commodityOrderDetail">
 		UPDATE tsc_commodity_order_detail
 		SET
-		after_sale_status=#{afterSaleStatus}
+		status=#{status}
+		,after_sale_status=#{afterSaleStatus}
 		WHERE
 		code=#{code}
 	</update>

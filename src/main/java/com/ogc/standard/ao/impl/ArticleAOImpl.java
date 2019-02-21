@@ -1,7 +1,9 @@
 package com.ogc.standard.ao.impl;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -10,17 +12,22 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.IArticleAO;
+import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IAdoptOrderTreeBO;
 import com.ogc.standard.bo.IArticleBO;
 import com.ogc.standard.bo.IGroupAdoptOrderBO;
 import com.ogc.standard.bo.IInteractBO;
 import com.ogc.standard.bo.IPresellProductBO;
 import com.ogc.standard.bo.IProductBO;
+import com.ogc.standard.bo.ISYSConfigBO;
 import com.ogc.standard.bo.ISmsBO;
 import com.ogc.standard.bo.ITreeBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
+import com.ogc.standard.common.AmountUtil;
 import com.ogc.standard.common.PhoneUtil;
+import com.ogc.standard.common.SysConstants;
+import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.AdoptOrderTree;
 import com.ogc.standard.domain.Article;
 import com.ogc.standard.domain.GroupAdoptOrder;
@@ -41,12 +48,17 @@ import com.ogc.standard.enums.EArticleOpenLevel;
 import com.ogc.standard.enums.EArticleStatus;
 import com.ogc.standard.enums.EArticleType;
 import com.ogc.standard.enums.EBoolean;
+import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EDealType;
 import com.ogc.standard.enums.EGroupAdoptOrderStatus;
 import com.ogc.standard.enums.EInteractType;
+import com.ogc.standard.enums.EJourBizTypePlat;
+import com.ogc.standard.enums.EJourBizTypeUser;
 import com.ogc.standard.enums.EObjectType;
 import com.ogc.standard.enums.EProductType;
 import com.ogc.standard.enums.ESellType;
+import com.ogc.standard.enums.ESysConfigType;
+import com.ogc.standard.enums.ESystemAccount;
 import com.ogc.standard.enums.EUser;
 import com.ogc.standard.exception.BizException;
 
@@ -79,6 +91,12 @@ public class ArticleAOImpl implements IArticleAO {
 
     @Autowired
     private ISmsBO smsBO;
+
+    @Autowired
+    private ISYSConfigBO sysConfigBO;
+
+    @Autowired
+    private IAccountBO accountBO;
 
     @Override
     @Transactional
@@ -208,18 +226,40 @@ public class ArticleAOImpl implements IArticleAO {
         EArticleStatus status = null;
         if (EBoolean.YES.getCode().equals(req.getApproveResult())) {
             status = EArticleStatus.TO_PUT_ON;
+
+            // 添加碳泡泡
+            Map<String, String> tppConfigMap = sysConfigBO
+                .getConfigsMap(ESysConfigType.TPP_RULE.getCode());
+            BigDecimal quantity = new BigDecimal(
+                tppConfigMap.get(SysConstants.PUBLISH_ARTICLE));
+            quantity = AmountUtil.mul(quantity, 1000L);
+
+            Account userTppAccount = accountBO.getAccountByUser(
+                data.getPublishUserId(), ECurrency.TPP.getCode());
+            Account sysTppAccount = accountBO
+                .getAccount(ESystemAccount.SYS_ACOUNT_TPP_POOL.getCode());
+
+            accountBO.transAmount(sysTppAccount, userTppAccount, quantity,
+                EJourBizTypeUser.PUBLISH_ARTICLE.getCode(),
+                EJourBizTypePlat.PUBLISH_ARTICLE.getCode(),
+                EJourBizTypeUser.PUBLISH_ARTICLE.getValue(),
+                EJourBizTypePlat.PUBLISH_ARTICLE.getValue(), data.getCode());
+
         } else {
             status = EArticleStatus.APPROVE_NO;
         }
+
         articleBO.refreshStatus(data.getCode(), status, req.getUpdater());
     }
 
+    @Transactional
     @Override
     public void putOn(XN629343Req req) {
         Article data = articleBO.getArticle(req.getCode());
         if (!EArticleStatus.TO_PUT_ON.getCode().equals(data.getStatus())) {
             throw new BizException("xn0000", "文章不是待上架状态");
         }
+
         articleBO.putOn(req.getCode(), req.getLocation(), req.getOrderNo(),
             req.getRemark(), req.getUpdater());
     }
@@ -264,7 +304,7 @@ public class ArticleAOImpl implements IArticleAO {
             articleBO.refreshPoint(code, pointCount);
 
             smsBO.saveArticlePoint(article.getPublishUserId(),
-                article.getTitle(), user.getNickname());
+                article.getTitle(), user);
         } else {
             interactBO.removeInteract(interact.getCode());
 

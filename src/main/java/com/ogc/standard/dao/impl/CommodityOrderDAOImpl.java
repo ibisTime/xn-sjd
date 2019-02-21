@@ -106,6 +106,11 @@ public class CommodityOrderDAOImpl extends AMybatisTemplate
     }
 
     @Override
+    public int updateAftersale(CommodityOrder data) {
+        return super.update(NAMESPACE.concat("update_aftersale"), data);
+    }
+
+    @Override
     public int updateSettle(CommodityOrder data) {
         return super.update(NAMESPACE.concat("update_settle"), data);
     }

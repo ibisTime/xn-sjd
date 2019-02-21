@@ -47,6 +47,9 @@ public class XN630080Req {
     // 组织机构代码
     private String organizationCode;
 
+    // 头像
+    private String photo;
+
     // 备注
     private String remark;
 
@@ -144,6 +147,14 @@ public class XN630080Req {
 
     public void setCommonSeal(String commonSeal) {
         this.commonSeal = commonSeal;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 
 }

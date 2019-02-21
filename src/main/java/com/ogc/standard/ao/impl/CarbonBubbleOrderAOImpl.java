@@ -190,7 +190,7 @@ public class CarbonBubbleOrderAOImpl implements ICarbonBubbleOrderAO {
         AdoptOrderTree adoptOrderTree = adoptOrderTreeBO
             .getAdoptOrderTree(data.getAdoptTreeCode());
         bizLogBO.gatherCarbonBubble(adoptOrderTree.getCode(),
-            adoptOrderTree.getCurrentHolder(), data.getQuantity(), collector,
+            adoptOrderTree.getCurrentHolder(), quantity, collector,
             EBizLogType.GATHER.getCode());
 
         return new XN629350Res("0", "收取成功");

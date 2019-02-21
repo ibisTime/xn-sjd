@@ -32,6 +32,7 @@ public class XN629035 extends AProcessor {
         condition.setOwnerId(req.getOwnerId());
         condition.setMaintainId(req.getMaintainId());
         condition.setProductCode(req.getProductCode());
+        condition.setMaintain(req.getMaintain());
 
         condition.setScientificName(req.getScientificName());
         condition.setStatus(req.getStatus());

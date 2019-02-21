@@ -142,11 +142,12 @@ public class UserRelationAOImpl implements IUserRelationAO {
         if (EBoolean.YES.getCode().equals(approveResult)) {
             status = EUserRelationStatus.APPROVE_YES.getCode();
 
-            User user = userBO.getUser(userId);
-            userBO.refreshFriendCount(userId, user.getFriendCount() + 1);
+            User user = userBO.getUser(userRelation.getUserId());
+            userBO.refreshFriendCount(user.getUserId(),
+                user.getFriendCount() + 1);
 
             User toUser = userBO.getUser(userRelation.getToUser());
-            userBO.refreshFriendCount(userRelation.getToUser(),
+            userBO.refreshFriendCount(toUser.getUserId(),
                 toUser.getFriendCount() + 1);
         }
 

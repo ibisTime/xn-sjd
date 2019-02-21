@@ -192,7 +192,7 @@ public class SmsBOImpl extends PaginableBOImpl<Sms> implements ISmsBO {
 
     @Override
     public void saveArticlePoint(String userId, String articleTitle,
-            String pointUserNickName) {
+            User user) {
         Sms sms = new Sms();
         String code = OrderNoGenerater.generate(EGeneratePrefix.XX.getCode());
         sms.setCode(code);
@@ -200,6 +200,11 @@ public class SmsBOImpl extends PaginableBOImpl<Sms> implements ISmsBO {
         sms.setObject(EAccountType.CUSTOMER.getCode());
         sms.setUserId(userId);
         sms.setTitle("文章点赞");
+
+        String pointUserNickName = user.getNickname();
+        if (StringUtils.isBlank(pointUserNickName)) {
+            pointUserNickName = PhoneUtil.hideMobile(user.getMobile());
+        }
 
         String content = "您的" + articleTitle + "文章被" + pointUserNickName + "点赞";
         sms.setContent(content);

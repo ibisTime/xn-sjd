@@ -12,6 +12,7 @@ import java.util.List;
 
 import com.ogc.standard.bo.base.IPaginableBO;
 import com.ogc.standard.domain.Sms;
+import com.ogc.standard.domain.User;
 
 /** 
  * @author: dl 
@@ -42,8 +43,7 @@ public interface ISmsBO extends IPaginableBO<Sms> {
     public void saveCommodityBulletin(String userId, String count);
 
     // 添加文章点赞消息
-    public void saveArticlePoint(String userId, String articleTitle,
-            String pointUserNickName);
+    public void saveArticlePoint(String userId, String articleTitle, User user);
 
     // 添加文章点赞消息
     public void saveAdoptOrderTreeExpire(String userId, String treeName,

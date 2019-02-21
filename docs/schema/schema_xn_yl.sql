@@ -1252,6 +1252,7 @@ CREATE TABLE `tsc_commodity` (
   `updater` varchar(32) DEFAULT NULL COMMENT '更改人',
   `update_datetime` datetime DEFAULT NULL COMMENT '更改时间',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  `approve_note` varchar(255) DEFAULT NULL COMMENT '审核备注',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='商品';
 
@@ -1336,9 +1337,9 @@ CREATE TABLE `tsc_commodity_order_detail` (
   `quantity` bigint(20) DEFAULT NULL COMMENT '数量',
   `price` decimal(64,0) DEFAULT NULL COMMENT '单价',
   `amount` decimal(64,0) DEFAULT NULL COMMENT '总价',
-  `cny_deduct_amount` decimal(18,8) DEFAULT NULL COMMENT '人民币抵扣金额',
-  `jf_deduct_amount` decimal(18,8) DEFAULT NULL COMMENT '积分抵扣金额',
-  `back_jf_amount` decimal(18,8) DEFAULT NULL COMMENT '积分返点金额',
+  `cny_deduct_amount` decimal(18,8) DEFAULT 0 COMMENT '人民币抵扣金额',
+  `jf_deduct_amount` decimal(18,8) DEFAULT 0 COMMENT '积分抵扣金额',
+  `back_jf_amount` decimal(18,8) DEFAULT 0 COMMENT '积分返点金额',
   `pay_amount` decimal(18,8) DEFAULT NULL COMMENT '支付金额',
   `pay_type` varchar(4) DEFAULT NULL COMMENT '支付方式',
   `max_jfdk_rate` DOUBLE DEFAULT NULL COMMENT '最大积分抵扣比例',

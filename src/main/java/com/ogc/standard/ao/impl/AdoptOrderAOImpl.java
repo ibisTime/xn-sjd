@@ -255,9 +255,12 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
         Product product = productBO.getProduct(data.getProductCode());
 
         // 积分抵扣处理
-        XN629048Res deductRes = distributionOrderBO.getAdoptOrderDeductAmount(
-            product.getMaxJfdkRate(), data.getAmount(), data.getApplyUser(),
-            isJfDeduct);
+        XN629048Res deductRes = new XN629048Res(BigDecimal.ZERO,
+            BigDecimal.ZERO);
+        // XN629048Res deductRes =
+        // distributionOrderBO.getAdoptOrderDeductAmount(
+        // product.getMaxJfdkRate(), data.getAmount(), data.getApplyUser(),
+        // isJfDeduct);
 
         // 支付订单
         Object result = null;
@@ -522,9 +525,9 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
         logger.info("***************开始扫描已认养订单***************");
         AdoptOrder condition2 = new AdoptOrder();
         condition2.setStatus(EAdoptOrderStatus.ADOPT.getCode());
-        condition.setEndDatetimeEnd(new Date());
+        condition2.setEndDatetimeEnd(new Date());
         List<AdoptOrder> endAdoptOrderList = adoptOrderBO
-            .queryAdoptOrderList(condition);
+            .queryAdoptOrderList(condition2);
         if (CollectionUtils.isNotEmpty(endAdoptOrderList)) {
             for (AdoptOrder adoptOrder : endAdoptOrderList) {
                 endAdoptOrder(adoptOrder);

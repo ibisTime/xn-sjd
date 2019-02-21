@@ -19,7 +19,6 @@ import com.ogc.standard.bo.ISignLogBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.AmountUtil;
-import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.common.SysConstants;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.SignLog;
@@ -89,6 +88,10 @@ public class SignLogAOImpl implements ISignLogAO {
             Map<String, String> configMap = sysConfigBO
                 .getConfigsMap(ESysConfigType.SIGN_RULE.getCode());
 
+            if (continueSignDay == 1) {
+                quantity = new BigDecimal(1);
+                currency = ECurrency.TPP.getCode();
+            }
             if (continueSignDay == 3) {
                 quantity = new BigDecimal(configMap.get(SysConstants.DAYS_3));
                 currency = ECurrency.TPP.getCode();
@@ -191,8 +194,9 @@ public class SignLogAOImpl implements ISignLogAO {
 
             for (int i = 0; i < signLogs.size() - 1; i++) {
 
-                if (DateUtil.daysBetween(signLogs.get(i).getCreateDatetime(),
-                    signLogs.get(i + 1).getCreateDatetime()) == -1) {
+                if (Math.abs(
+                    (signLogs.get(i).getCreateDatetime().getDay() - signLogs
+                        .get(i + 1).getCreateDatetime().getDay())) == 1) {
                     signResList.add(signLogs.get(i + 1).getCreateDatetime());
                 } else {
                     resList.add(new XN805146Res(signResList));

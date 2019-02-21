@@ -41,6 +41,12 @@ public class XN629706Req extends APageReq {
     // 产品最大价格
     private String maxSpecPrice;
 
+    // 原产地
+    private String originalPlace;
+
+    // 原产地
+    private String originPlace;
+
     public String getName() {
         return name;
     }
@@ -127,6 +133,22 @@ public class XN629706Req extends APageReq {
 
     public void setMaxSpecPrice(String maxSpecPrice) {
         this.maxSpecPrice = maxSpecPrice;
+    }
+
+    public String getOriginalPlace() {
+        return originalPlace;
+    }
+
+    public void setOriginalPlace(String originalPlace) {
+        this.originalPlace = originalPlace;
+    }
+
+    public String getOriginPlace() {
+        return originPlace;
+    }
+
+    public void setOriginPlace(String originPlace) {
+        this.originPlace = originPlace;
     }
 
 }

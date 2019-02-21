@@ -304,10 +304,13 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
                     maxJfdkRate = commodityOrderDetailList.get(0)
                         .getMaxJfdkRate();
                 }
-                XN629048Res deductRes = distributionOrderBO
-                    .getCommodityOrderDeductAmount(maxJfdkRate,
-                        order.getAmount(), order.getApplyUser(),
-                        req.getIsJfDeduct());
+
+                XN629048Res deductRes = new XN629048Res(BigDecimal.ZERO,
+                    BigDecimal.ZERO);
+                // XN629048Res deductRes = distributionOrderBO
+                // .getCommodityOrderDeductAmount(maxJfdkRate,
+                // order.getAmount(), order.getApplyUser(),
+                // req.getIsJfDeduct());
 
                 result = toPayCommodityOrderYue(order, deductRes);
 
@@ -329,10 +332,12 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
                     maxJfdkRate = commodityOrderDetailList.get(0)
                         .getMaxJfdkRate();
                 }
-                XN629048Res deductRes = distributionOrderBO
-                    .getCommodityOrderDeductAmount(maxJfdkRate,
-                        order.getAmount(), order.getApplyUser(),
-                        req.getIsJfDeduct());
+                XN629048Res deductRes = new XN629048Res(BigDecimal.ZERO,
+                    BigDecimal.ZERO);
+                // XN629048Res deductRes = distributionOrderBO
+                // .getCommodityOrderDeductAmount(maxJfdkRate,
+                // order.getAmount(), order.getApplyUser(),
+                // req.getIsJfDeduct());
 
                 // 状态更新
                 commodityOrderBO.refreshPayGroup(order, req.getPayType(),
@@ -440,7 +445,7 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
         // 业务订单更改
         commodityOrderBO.payYueSuccess(data, resultRes, backJfAmount);
 
-        commodityOrderDetailAO.refreshDkAmount(data.getPayGroup());
+        // commodityOrderDetailAO.refreshDkAmount(data.getPayGroup());
 
         commodityOrderDetailBO.refreshStatus(data.getCode(),
             ECommodityOrderDetailStatus.TODELIVE.getCode());
@@ -504,7 +509,7 @@ public class CommodityOrderAOImpl implements ICommodityOrderAO {
             }
         }
 
-        commodityOrderDetailAO.refreshDkAmount(payGroup);
+        // commodityOrderDetailAO.refreshDkAmount(payGroup);
 
     }
 

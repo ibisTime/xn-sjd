@@ -46,6 +46,15 @@ public class XN630063Req {
     // 组织机构代码
     private String organizationCode;
 
+    // 合同模板
+    private String contractTemplate;
+
+    // 公章
+    private String commonSeal;
+
+    // 头像
+    private String photo;
+
     // 备注
     private String remark;
 
@@ -135,6 +144,30 @@ public class XN630063Req {
 
     public void setOrganizationCode(String organizationCode) {
         this.organizationCode = organizationCode;
+    }
+
+    public String getContractTemplate() {
+        return contractTemplate;
+    }
+
+    public void setContractTemplate(String contractTemplate) {
+        this.contractTemplate = contractTemplate;
+    }
+
+    public String getCommonSeal() {
+        return commonSeal;
+    }
+
+    public void setCommonSeal(String commonSeal) {
+        this.commonSeal = commonSeal;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 
 }

@@ -10,6 +10,7 @@ import com.ogc.standard.core.ObjValidater;
 import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.domain.Product;
 import com.ogc.standard.dto.req.XN629025Req;
+import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
@@ -47,6 +48,7 @@ public class XN629025 extends AProcessor {
         condition.setVariety(req.getVariety());
         condition.setIsAdopting(req.getAdoptStatus());
         condition.setTreeLevel(req.getTreeLevel());
+        condition.setQueryUserId(req.getQueryUserId());
 
         condition.setRaiseStartStartDatetime(DateUtil.strToDate(
             req.getRaiseStartStartDatetime(), DateUtil.DB_DATE_FORMAT_STRING));
@@ -64,7 +66,7 @@ public class XN629025 extends AProcessor {
         condition.setOrder(column, req.getOrderDir());
 
         if (StringUtils.isNotBlank(column) && "buyable".equals(column)) {
-            condition.setOrder("temp_column", "asc");
+            condition.setIsAdopting(EBoolean.YES.getCode());
         }
 
         int start = StringValidater.toInteger(req.getStart());

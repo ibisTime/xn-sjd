@@ -93,6 +93,9 @@ public class Commodity extends ABaseDO {
     // 备注
     private String remark;
 
+    // 审核备注
+    private String approveNote;
+
     // ******************DB********************
 
     // 规格列表
@@ -121,6 +124,9 @@ public class Commodity extends ABaseDO {
 
     // 订单编号
     private String orderCode;
+
+    // 原产地
+    private String originPlace;
 
     public List<CommoditySpecs> getSpecsList() {
         return specsList;
@@ -376,6 +382,22 @@ public class Commodity extends ABaseDO {
 
     public void setOrderCode(String orderCode) {
         this.orderCode = orderCode;
+    }
+
+    public String getOriginPlace() {
+        return originPlace;
+    }
+
+    public void setOriginPlace(String originPlace) {
+        this.originPlace = originPlace;
+    }
+
+    public String getApproveNote() {
+        return approveNote;
+    }
+
+    public void setApproveNote(String approveNote) {
+        this.approveNote = approveNote;
     }
 
 }

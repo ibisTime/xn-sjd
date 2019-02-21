@@ -235,25 +235,27 @@ public class DistributionOrderBOImpl implements IDistributionOrderBO {
         BigDecimal payAmount = amount;// 订单支付金额（抵扣积分后）
 
         // 平台人民币转化为积分池
-        BigDecimal sysJfpoolCny = payAmount.multiply(
-            new BigDecimal(mapList.get(SysConstants.DIST_USER_BACK_JF_RATE)));// 积分池分销人民币
-        Account sysCnyAccount = accountBO
-            .getAccount(ESystemAccount.SYS_ACOUNT_CNY.getCode());
-        accountBO.changeAmount(sysCnyAccount, sysJfpoolCny.negate(),
-            EChannelType.NBZ, EJourBizTypePlat.DIST_USER_BACK_JFPOOL.getCode(),
-            EJourBizTypePlat.DIST_USER_BACK_JFPOOL.getCode(),
-            EJourBizTypePlat.DIST_USER_BACK_JFPOOL.getCode(),
-            EJourBizTypePlat.DIST_USER_BACK_JFPOOL.getValue());
+        // BigDecimal sysJfpoolCny = payAmount.multiply(
+        // new BigDecimal(mapList.get(SysConstants.DIST_USER_BACK_JF_RATE)));//
+        // 积分池分销人民币
+        // Account sysCnyAccount = accountBO
+        // .getAccount(ESystemAccount.SYS_ACOUNT_CNY.getCode());
+        // accountBO.changeAmount(sysCnyAccount, sysJfpoolCny.negate(),
+        // EChannelType.NBZ, EJourBizTypePlat.DIST_USER_BACK_JFPOOL.getCode(),
+        // EJourBizTypePlat.DIST_USER_BACK_JFPOOL.getCode(),
+        // EJourBizTypePlat.DIST_USER_BACK_JFPOOL.getCode(),
+        // EJourBizTypePlat.DIST_USER_BACK_JFPOOL.getValue());
 
-        BigDecimal sysJfpoolJf = sysJfpoolCny.multiply(
-            new BigDecimal(mapList.get(SysConstants.BACK_JFPOOL_RATE)));// 积分池分销积分
-        Account sysJfAccount = accountBO
-            .getAccount(ESystemAccount.SYS_ACOUNT_JF_POOL.getCode());
-        accountBO.changeAmount(sysJfAccount, sysJfpoolJf, EChannelType.NBZ,
-            EJourBizTypePlat.DIST_USER_BACK_JFPOOL.getCode(),
-            EJourBizTypePlat.DIST_USER_BACK_JFPOOL.getCode(),
-            EJourBizTypePlat.DIST_USER_BACK_JFPOOL.getCode(),
-            EJourBizTypePlat.DIST_USER_BACK_JFPOOL.getValue());
+        // BigDecimal sysJfpoolJf = sysJfpoolCny.multiply(
+        // new BigDecimal(mapList.get(SysConstants.BACK_JFPOOL_RATE)));//
+        // 积分池分销积分
+        // Account sysJfAccount = accountBO
+        // .getAccount(ESystemAccount.SYS_ACOUNT_JF_POOL.getCode());
+        // accountBO.changeAmount(sysJfAccount, sysJfpoolJf, EChannelType.NBZ,
+        // EJourBizTypePlat.DIST_USER_BACK_JFPOOL.getCode(),
+        // EJourBizTypePlat.DIST_USER_BACK_JFPOOL.getCode(),
+        // EJourBizTypePlat.DIST_USER_BACK_JFPOOL.getCode(),
+        // EJourBizTypePlat.DIST_USER_BACK_JFPOOL.getValue());
 
         // 产权方分销
         BigDecimal ownerDeductAmount = payAmount.multiply(
@@ -285,24 +287,26 @@ public class DistributionOrderBOImpl implements IDistributionOrderBO {
         // agentTotalAmount, resultRes);
 
         // 用户同等金额积分奖励
-        BigDecimal jfAwardAmount = payAmount.multiply(
-            new BigDecimal(mapList.get(SysConstants.ADOPT_CREATE_RATE)));// 认养返积分比例
-
-        // 生日购买双倍积分
-        UserExt userExt = userExtBO.getUserExt(applyUser);
-        if (null != userExt.getBirthday()) {
-            if (DateUtil.isToday(userExt.getBirthday())) {
-                jfAwardAmount = jfAwardAmount.multiply(new BigDecimal(2));
-            }
-        }
-
-        // C端用户返积分
-        accountBO.transAmount(ESysUser.SYS_USER.getCode(),
-            ECurrency.JF.getCode(), applyUser, ECurrency.JF.getCode(),
-            jfAwardAmount, EJourBizTypeUser.ADOPT_PAY_BACK.getCode(),
-            EJourBizTypePlat.ADOPT_PAY_BACK.getCode(),
-            EJourBizTypeUser.ADOPT_PAY_BACK.getValue(),
-            EJourBizTypePlat.ADOPT_PAY_BACK.getValue(), code);
+        BigDecimal jfAwardAmount = BigDecimal.ZERO;
+        // BigDecimal jfAwardAmount = payAmount.multiply(
+        // new BigDecimal(mapList.get(SysConstants.ADOPT_CREATE_RATE)));//
+        // 认养返积分比例
+        //
+        // // 生日购买双倍积分
+        // UserExt userExt = userExtBO.getUserExt(applyUser);
+        // if (null != userExt.getBirthday()) {
+        // if (DateUtil.isToday(userExt.getBirthday())) {
+        // jfAwardAmount = jfAwardAmount.multiply(new BigDecimal(2));
+        // }
+        // }
+        //
+        // // C端用户返积分
+        // accountBO.transAmount(ESysUser.SYS_USER.getCode(),
+        // ECurrency.JF.getCode(), applyUser, ECurrency.JF.getCode(),
+        // jfAwardAmount, EJourBizTypeUser.ADOPT_PAY_BACK.getCode(),
+        // EJourBizTypePlat.ADOPT_PAY_BACK.getCode(),
+        // EJourBizTypeUser.ADOPT_PAY_BACK.getValue(),
+        // EJourBizTypePlat.ADOPT_PAY_BACK.getValue(), code);
 
         // 直推用户分销
         User user = userBO.getUser(applyUser);
@@ -465,27 +469,29 @@ public class DistributionOrderBOImpl implements IDistributionOrderBO {
         Map<String, String> mapList = sysConfigBO.getConfigsMap();
         BigDecimal payAmount = amount.subtract(resultRes.getCnyAmount());// 订单支付金额（抵扣积分后）
 
-        // 平台人民币转化为积分池
-        BigDecimal sysJfpoolCny = payAmount.multiply(new BigDecimal(
-            mapList.get(SysConstants.COMMODITY_DIST_USER_BACK_JF_RATE)));// 积分池分销人民币
-        Account sysCnyAccount = accountBO
-            .getAccount(ESystemAccount.SYS_ACOUNT_CNY.getCode());
-        accountBO.changeAmount(sysCnyAccount, sysJfpoolCny.negate(),
-            EChannelType.NBZ,
-            EJourBizTypePlat.COMMODITY_USER_BACK_JFPOOL.getCode(),
-            EJourBizTypePlat.COMMODITY_USER_BACK_JFPOOL.getCode(),
-            EJourBizTypePlat.COMMODITY_USER_BACK_JFPOOL.getCode(),
-            EJourBizTypePlat.COMMODITY_USER_BACK_JFPOOL.getValue());
-
-        BigDecimal sysJfpoolJf = sysJfpoolCny.multiply(
-            new BigDecimal(mapList.get(SysConstants.BACK_JFPOOL_RATE)));// 积分池分销积分
-        Account sysJfAccount = accountBO
-            .getAccount(ESystemAccount.SYS_ACOUNT_JF_POOL.getCode());
-        accountBO.changeAmount(sysJfAccount, sysJfpoolJf, EChannelType.NBZ,
-            EJourBizTypePlat.COMMODITY_USER_BACK_JFPOOL.getCode(),
-            EJourBizTypePlat.COMMODITY_USER_BACK_JFPOOL.getCode(),
-            EJourBizTypePlat.COMMODITY_USER_BACK_JFPOOL.getCode(),
-            EJourBizTypePlat.COMMODITY_USER_BACK_JFPOOL.getValue());
+        // // 平台人民币转化为积分池
+        // BigDecimal sysJfpoolCny = payAmount.multiply(new BigDecimal(
+        // mapList.get(SysConstants.COMMODITY_DIST_USER_BACK_JF_RATE)));//
+        // 积分池分销人民币
+        // Account sysCnyAccount = accountBO
+        // .getAccount(ESystemAccount.SYS_ACOUNT_CNY.getCode());
+        // accountBO.changeAmount(sysCnyAccount, sysJfpoolCny.negate(),
+        // EChannelType.NBZ,
+        // EJourBizTypePlat.COMMODITY_USER_BACK_JFPOOL.getCode(),
+        // EJourBizTypePlat.COMMODITY_USER_BACK_JFPOOL.getCode(),
+        // EJourBizTypePlat.COMMODITY_USER_BACK_JFPOOL.getCode(),
+        // EJourBizTypePlat.COMMODITY_USER_BACK_JFPOOL.getValue());
+        //
+        // BigDecimal sysJfpoolJf = sysJfpoolCny.multiply(
+        // new BigDecimal(mapList.get(SysConstants.BACK_JFPOOL_RATE)));//
+        // 积分池分销积分
+        // Account sysJfAccount = accountBO
+        // .getAccount(ESystemAccount.SYS_ACOUNT_JF_POOL.getCode());
+        // accountBO.changeAmount(sysJfAccount, sysJfpoolJf, EChannelType.NBZ,
+        // EJourBizTypePlat.COMMODITY_USER_BACK_JFPOOL.getCode(),
+        // EJourBizTypePlat.COMMODITY_USER_BACK_JFPOOL.getCode(),
+        // EJourBizTypePlat.COMMODITY_USER_BACK_JFPOOL.getCode(),
+        // EJourBizTypePlat.COMMODITY_USER_BACK_JFPOOL.getValue());
 
         // 商家分销
         BigDecimal bussinessAmount = payAmount.multiply(new BigDecimal(
@@ -504,24 +510,26 @@ public class DistributionOrderBOImpl implements IDistributionOrderBO {
         // agentTotalAmount, resultRes);
 
         // 用户同等金额积分奖励
-        BigDecimal jfAwardAmount = payAmount.multiply(
-            new BigDecimal(mapList.get(SysConstants.COMMODITY_CREATE_RATE)));// 预售返积分比例
-
-        // 生日购买双倍积分
-        UserExt userExt = userExtBO.getUserExt(applyUser);
-        if (null != userExt.getBirthday()) {
-            if (DateUtil.isToday(userExt.getBirthday())) {
-                jfAwardAmount = jfAwardAmount.multiply(new BigDecimal(2));
-            }
-        }
-
-        // C端用户返积分
-        accountBO.transAmount(ESysUser.SYS_USER.getCode(),
-            ECurrency.JF.getCode(), applyUser, ECurrency.JF.getCode(),
-            jfAwardAmount, EJourBizTypeUser.COMMODITY_PAY_BACK.getCode(),
-            EJourBizTypePlat.COMMODITY_PAY_BACK.getCode(),
-            EJourBizTypeUser.COMMODITY_PAY_BACK.getValue(),
-            EJourBizTypePlat.COMMODITY_PAY_BACK.getValue(), code);
+        BigDecimal jfAwardAmount = BigDecimal.ZERO;
+        // BigDecimal jfAwardAmount = payAmount.multiply(
+        // new BigDecimal(mapList.get(SysConstants.COMMODITY_CREATE_RATE)));//
+        // 预售返积分比例
+        //
+        // // 生日购买双倍积分
+        // UserExt userExt = userExtBO.getUserExt(applyUser);
+        // if (null != userExt.getBirthday()) {
+        // if (DateUtil.isToday(userExt.getBirthday())) {
+        // jfAwardAmount = jfAwardAmount.multiply(new BigDecimal(2));
+        // }
+        // }
+        //
+        // // C端用户返积分
+        // accountBO.transAmount(ESysUser.SYS_USER.getCode(),
+        // ECurrency.JF.getCode(), applyUser, ECurrency.JF.getCode(),
+        // jfAwardAmount, EJourBizTypeUser.COMMODITY_PAY_BACK.getCode(),
+        // EJourBizTypePlat.COMMODITY_PAY_BACK.getCode(),
+        // EJourBizTypeUser.COMMODITY_PAY_BACK.getValue(),
+        // EJourBizTypePlat.COMMODITY_PAY_BACK.getValue(), code);
 
         // 直推用户分销
         User user = userBO.getUser(applyUser);

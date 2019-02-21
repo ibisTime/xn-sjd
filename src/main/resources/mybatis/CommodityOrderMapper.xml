@@ -336,6 +336,16 @@
 		AND NOT EXISTS (SELECT 1 from tsc_commodity_order_detail WHERE order_code = tsc_commodity_order.code and tsc_commodity_order_detail.status = 0)
 	</update>
 	
+	<update id="update_aftersale" parameterType="commodityOrder">
+		<![CDATA[UPDATE tsc_commodity_order
+		SET
+		status=#{status}
+		,update_datetime=#{updateDatetime}
+		WHERE
+		code=#{code}
+		AND NOT EXISTS (SELECT 1 from tsc_commodity_order_detail WHERE order_code = tsc_commodity_order.code and tsc_commodity_order_detail.after_sale_status <> 3)]]>
+	</update>
+	
 	<update id="update_settle" parameterType="commodityOrder">
 		UPDATE tsc_commodity_order
 		SET

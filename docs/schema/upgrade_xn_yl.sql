@@ -29,3 +29,13 @@ CHANGE COLUMN `description` `description` LONGTEXT NULL DEFAULT NULL COMMENT '�
 ##0.0.3
 ALTER TABLE `try_adopt_order_tree` 
 ADD COLUMN `contract` LONGTEXT NULL COMMENT '协议' AFTER `certificate_template`;
+
+##0.0.4
+ALTER TABLE `tsc_commodity_order_detail` 
+CHANGE COLUMN `cny_deduct_amount` `cny_deduct_amount` DECIMAL(64,0) NULL DEFAULT 0 COMMENT '抵扣人民币金额' ,
+CHANGE COLUMN `jf_deduct_amount` `jf_deduct_amount` DECIMAL(64,0) NULL DEFAULT 0 COMMENT '抵扣积分金额' ,
+CHANGE COLUMN `back_jf_amount` `back_jf_amount` DECIMAL(64,0) NULL DEFAULT 0 COMMENT '返积分金额' ;
+
+##0.0.5
+ALTER TABLE `tsc_commodity` 
+ADD COLUMN `approve_note` VARCHAR(255) NULL COMMENT '审核备注' AFTER `remark`;

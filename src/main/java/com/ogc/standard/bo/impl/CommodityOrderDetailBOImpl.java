@@ -114,10 +114,12 @@ public class CommodityOrderDetailBOImpl
 
     @Override
     public void toAfterSell(String code) {
-        CommodityOrderDetail commodityOrderDetail = new CommodityOrderDetail();
-        commodityOrderDetail.setCode(code);
+        CommodityOrderDetail commodityOrderDetail = getCommodityOrderDetail(
+            code);
+
         commodityOrderDetail.setAfterSaleStatus(
             ECommodityOrderDetailStatus.AFTER_SELL_ING.getCode());
+
         commodityOrderDetailDAO.updateAfterSaleStatus(commodityOrderDetail);
     }
 
@@ -133,6 +135,7 @@ public class CommodityOrderDetailBOImpl
     public void refreshAfterSaleStatus(String code, String status) {
         CommodityOrderDetail commodityOrderDetail = new CommodityOrderDetail();
         commodityOrderDetail.setCode(code);
+        commodityOrderDetail.setStatus(status);
         commodityOrderDetail.setAfterSaleStatus(status);
         commodityOrderDetailDAO.updateAfterSaleStatus(commodityOrderDetail);
     }

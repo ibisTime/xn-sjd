@@ -132,6 +132,8 @@ public class SysConstants {
 
     public static final String SIGN_TPP = "SIGN_TPP";// 签到
 
+    public static final String PUBLISH_ARTICLE = "PUBLISH_ARTICLE";// 发布文章
+
     public static final String SHARE = "SHARE";// 分享
 
     public static final String CREATE_TPP_RATE = "CREATE_TPP_RATE";// 碳泡泡产生比例

@@ -74,15 +74,20 @@ public class CompanyBOImpl extends PaginableBOImpl<Company>
         data.setName(req.getCompanyName());
         data.setCharger(req.getCompanyCharger());
         data.setChargeMobile(req.getChargerMobile());
+
         data.setAddress(req.getCompanyAddress());
         data.setDescription(req.getDescription());
         data.setBussinessLicense(req.getBussinessLicense());
         data.setOrganizationCode(req.getOrganizationCode());
         data.setCertificateTemplate(req.getCertificateTemplate());
+
+        data.setCommonSeal(req.getCommonSeal());
+        data.setContractTemplate(req.getContractTemplate());
         Date date = new Date();
         data.setCreateDatetime(date);
         data.setUpdater(userId);
         data.setUpdateDatetime(date);
+
         companyDAO.insert(data);
 
         // 更新用户公司

@@ -20,6 +20,7 @@ import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IAfterSaleBO;
 import com.ogc.standard.bo.IAlipayBO;
 import com.ogc.standard.bo.IChargeBO;
+import com.ogc.standard.bo.ICommodityOrderBO;
 import com.ogc.standard.bo.ICommodityOrderDetailBO;
 import com.ogc.standard.bo.ICompanyBO;
 import com.ogc.standard.bo.IWechatBO;
@@ -66,6 +67,9 @@ public class AfterSaleAOImpl implements IAfterSaleAO {
 
     @Autowired
     private IAlipayBO alipayBO;
+
+    @Autowired
+    private ICommodityOrderBO commodityOrderBO;
 
     @Override
     @Transactional
@@ -139,7 +143,6 @@ public class AfterSaleAOImpl implements IAfterSaleAO {
     }
 
     @Override
-    @Transactional
     public void handleAfterSale(String code, String handleResult) {
         AfterSale data = afterSaleBO.getAfterSale(code);
         if (!EAfterSaleStatus.TOHANDLE.getCode().equals(data.getStatus())) {
@@ -150,15 +153,22 @@ public class AfterSaleAOImpl implements IAfterSaleAO {
             if (EAfterSaleType.onlyMoney.getCode().equals(data.getType())) {
                 // 退款
                 refund(data);
+
                 // 状态更新
                 afterSaleBO.refreshHandle(data,
                     EAfterSaleStatus.FINISH.getCode());
 
-                commodityOrderDetailBO.toComment(data.getOrderDetailCode());
+                // commodityOrderDetailBO.toComment(data.getOrderDetailCode());
 
                 commodityOrderDetailBO.refreshAfterSaleStatus(
                     data.getOrderDetailCode(),
                     ECommodityOrderDetailStatus.AFTER_SALEED_YES.getCode());
+
+                // 更新订单状态
+                CommodityOrderDetail commodityOrderDetail = commodityOrderDetailBO
+                    .getCommodityOrderDetail(data.getOrderDetailCode());
+                commodityOrderBO
+                    .refreshAftersale(commodityOrderDetail.getOrderCode());
             } else {
                 // 状态更新
                 afterSaleBO.refreshHandle(data,
@@ -167,7 +177,7 @@ public class AfterSaleAOImpl implements IAfterSaleAO {
         } else {
             afterSaleBO.refreshHandle(data, EAfterSaleStatus.FALSE.getCode());
 
-            commodityOrderDetailBO.toComment(data.getOrderDetailCode());
+            // commodityOrderDetailBO.toComment(data.getOrderDetailCode());
 
             commodityOrderDetailBO.refreshAfterSaleStatus(
                 data.getOrderDetailCode(),
@@ -208,7 +218,7 @@ public class AfterSaleAOImpl implements IAfterSaleAO {
 
         afterSaleBO.refreshReceive(data, receiver);
 
-        commodityOrderDetailBO.toComment(data.getOrderDetailCode());
+        // commodityOrderDetailBO.toComment(data.getOrderDetailCode());
 
         commodityOrderDetailBO.refreshAfterSaleStatus(data.getOrderDetailCode(),
             ECommodityOrderDetailStatus.AFTER_SALEED_YES.getCode());
@@ -224,62 +234,62 @@ public class AfterSaleAOImpl implements IAfterSaleAO {
 
         // TODO 单订单多次退款
         // 人民币退款
-        if (null != orderDetail.getPayType()) {
+        // if (null != orderDetail.getPayType()) {
 
-            // if (EPayType.YE.getCode().equals(orderDetail.getPayType())) {
+        // if (EPayType.YE.getCode().equals(orderDetail.getPayType())) {
 
-            // 人民币余额划转
-            accountBO.transAmount(business, applyUser, ECurrency.CNY.getCode(),
-                refundAmount, EJourBizTypeBusiness.AFTER_SALE.getCode(),
-                EJourBizTypeUser.AFTER_SALE.getCode(),
-                EJourBizTypeBusiness.AFTER_SALE.getValue(),
-                EJourBizTypeUser.AFTER_SALE.getValue(), data.getCode());
-            //
-            // } else if (EPayType.ALIPAY.getCode()
-            // .equals(orderDetail.getPayType())) {
-            //
-            // // 支付宝退款
-            // Charge charge = chargeBO.getCharge(orderDetail.getOrderCode(),
-            // EChannelType.Alipay.getCode(),
-            // EChargeStatus.Pay_YES.getCode());
-            //
-            // String refNo = null;
-            // if (null != charge) {
-            // refNo = charge.getCode();
-            // }
-            //
-            // Account bussinessAccount = accountBO.getAccountByUser(business,
-            // ECurrency.CNY.getCode());
-            //
-            // alipayBO.doRefund(refNo, bussinessAccount,
-            // EJourBizTypeUser.UN_FULL_CNY.getCode(),
-            // EJourBizTypeUser.UN_FULL_CNY.getValue(),
-            // data.getRefundAmount().divide(new BigDecimal(1000)));
-            //
-            // } else if (EPayType.WEIXIN_H5.getCode()
-            // .equals(orderDetail.getPayType())) {
-            //
-            // // 微信退款
-            // Charge charge = chargeBO.getCharge(orderDetail.getOrderCode(),
-            // EChannelType.WeChat_H5.getCode(),
-            // EChargeStatus.Pay_YES.getCode());
-            //
-            // String refNo = null;
-            // if (null != charge) {
-            // refNo = charge.getCode();
-            // }
-            //
-            // Account bussinessAccount = accountBO.getAccountByUser(business,
-            // ECurrency.CNY.getCode());
-            //
-            // weChatBO.doRefund(refNo, bussinessAccount,
-            // EJourBizTypeUser.UN_FULL_CNY.getCode(),
-            // EJourBizTypeUser.UN_FULL_CNY.getValue(),
-            // data.getRefundAmount().divide(new BigDecimal(10))
-            // .toString());
-            //
-            // }
-        }
+        // 人民币余额划转
+        accountBO.transAmount(business, applyUser, ECurrency.CNY.getCode(),
+            refundAmount, EJourBizTypeBusiness.AFTER_SALE.getCode(),
+            EJourBizTypeUser.AFTER_SALE.getCode(),
+            EJourBizTypeBusiness.AFTER_SALE.getValue(),
+            EJourBizTypeUser.AFTER_SALE.getValue(), data.getCode());
+        //
+        // } else if (EPayType.ALIPAY.getCode()
+        // .equals(orderDetail.getPayType())) {
+        //
+        // // 支付宝退款
+        // Charge charge = chargeBO.getCharge(orderDetail.getOrderCode(),
+        // EChannelType.Alipay.getCode(),
+        // EChargeStatus.Pay_YES.getCode());
+        //
+        // String refNo = null;
+        // if (null != charge) {
+        // refNo = charge.getCode();
+        // }
+        //
+        // Account bussinessAccount = accountBO.getAccountByUser(business,
+        // ECurrency.CNY.getCode());
+        //
+        // alipayBO.doRefund(refNo, bussinessAccount,
+        // EJourBizTypeUser.UN_FULL_CNY.getCode(),
+        // EJourBizTypeUser.UN_FULL_CNY.getValue(),
+        // data.getRefundAmount().divide(new BigDecimal(1000)));
+        //
+        // } else if (EPayType.WEIXIN_H5.getCode()
+        // .equals(orderDetail.getPayType())) {
+        //
+        // // 微信退款
+        // Charge charge = chargeBO.getCharge(orderDetail.getOrderCode(),
+        // EChannelType.WeChat_H5.getCode(),
+        // EChargeStatus.Pay_YES.getCode());
+        //
+        // String refNo = null;
+        // if (null != charge) {
+        // refNo = charge.getCode();
+        // }
+        //
+        // Account bussinessAccount = accountBO.getAccountByUser(business,
+        // ECurrency.CNY.getCode());
+        //
+        // weChatBO.doRefund(refNo, bussinessAccount,
+        // EJourBizTypeUser.UN_FULL_CNY.getCode(),
+        // EJourBizTypeUser.UN_FULL_CNY.getValue(),
+        // data.getRefundAmount().divide(new BigDecimal(10))
+        // .toString());
+        //
+        // }
+        // }
 
         // 积分退款
         accountBO.transAmount(ESysUser.SYS_USER.getCode(),

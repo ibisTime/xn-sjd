@@ -61,6 +61,7 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
         data.setUserId(userId);
         data.setKind(req.getKind());
         // data.setRealName(req.getRealName());
+        data.setPhoto(req.getPhoto());
         data.setMobile(req.getMobile());
         data.setLoginName(req.getMobile());
         if (ESYSUserKind.OWNER.getCode().equals(req.getKind())) {

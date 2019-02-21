@@ -64,6 +64,8 @@ public enum EJourBizTypeUser {
 
     SIGN("sign", "签到"),
 
+    PUBLISH_ARTICLE("publish_article", "发布文章"),
+
     // 积分账户
     REGIST("reg", "注册送积分"),
 

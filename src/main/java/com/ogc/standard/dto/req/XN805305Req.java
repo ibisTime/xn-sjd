@@ -32,6 +32,9 @@ public class XN805305Req extends APageReq {
     // 对象类型
     private String object;
 
+    // 消息用户
+    private String userId;
+
     public String getStatus() {
         return status;
     }
@@ -70,6 +73,14 @@ public class XN805305Req extends APageReq {
 
     public void setObject(String object) {
         this.object = object;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
 }

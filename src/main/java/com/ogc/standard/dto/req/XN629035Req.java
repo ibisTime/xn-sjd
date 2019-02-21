@@ -37,6 +37,8 @@ public class XN629035Req extends APageReq {
     // 销售类型
     private String sellType;
 
+    private String maintain;
+
     public String getMaintainId() {
         return maintainId;
     }
@@ -107,6 +109,14 @@ public class XN629035Req extends APageReq {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public String getMaintain() {
+        return maintain;
+    }
+
+    public void setMaintain(String maintain) {
+        this.maintain = maintain;
     }
 
 }

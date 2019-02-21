@@ -81,11 +81,18 @@
 			<if test="location != null and location != '' ">
 				AND t.location = #{location}
 			</if>
+			
 			<if test="isAdopting != null and isAdopting == 1 ">
-				<![CDATA[AND t.raise_count <> t.now_count]]>
+				<![CDATA[AND t.raise_count <> t.now_count and now() <= ifnull(t.raise_end_datetime, now())]]>
+				<if test="queryUserId != null and queryUserId != '' ">
+					<![CDATA[AND (case 1 when t.sell_type = 2 then direct_object else #{queryUserId} end ) = #{queryUserId}]]>
+				</if>
 			</if>
 			<if test="isAdopting != null and isAdopting == 0 ">
-				AND t.raise_count = t.now_count
+				<![CDATA[AND (case 1 when t.sell_type = 3 and now() >= ifnull(t.raise_end_datetime, now()) then 0 else t.raise_count - t.now_count end) = 0 and now() >= ifnull(t.raise_end_datetime, now())]]>
+				<if test="queryUserId != null and queryUserId != '' ">
+					<![CDATA[AND (case 1 when t.sell_type = 2 then direct_object else 'user_id' end ) <> #{queryUserId}]]>
+				</if>
 			</if>
 			
 			<if test="province != null and province != '' ">
@@ -141,6 +148,21 @@
 				<![CDATA[AND t.id_invalid_datetime <= #{idInvalidDatetimeEnd}]]>
 			</if>
 			
+			<choose>
+				<when test="treeLevel != null and treeLevel != '' and treeLevel == 'FIRST' ">
+					<![CDATA[AND t.age >= 500]]>
+				</when>
+				<when test="treeLevel != null and treeLevel != '' and treeLevel == 'SECOND' ">
+					<![CDATA[AND t.age < 500 AND t.age >= 300]]>
+				</when>
+				<when test="treeLevel != null and treeLevel != '' and treeLevel == 'THIRD' ">
+					<![CDATA[AND t.age < 300 AND t.age >= 100]]>
+				</when>
+				<otherwise>  
+					AND 1 = 1
+            	</otherwise>
+			</choose>
+			
 		</trim>
 	</sql>
 	
@@ -188,27 +210,22 @@
 		,t.update_datetime
 		,t.remark
 		
-		,(case sell_type when 3 then (select max(`raise_count` - `now_count`) from tzb_product)
+		,(case sell_type when 3 then case 1 when now() > ifnull(raise_end_datetime,now()) then 0 else (select max(`raise_count` - `now_count`) from tzb_product) end
 			else `raise_count` - `now_count` end ) as remain_count  
+			
 		,1 as temp_column
 		FROM
 		tzb_product t
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
-<!-- 			<if test="order != null and order != '' "> -->
-<!-- 				t.${order} -->
-<!-- 			</if> -->
-			
-<!-- 			<choose> -->
-<!-- 			     <when test="order != null and order.indexOf('temp_column') == -1 "> -->
-<!-- 				 	t.${order} -->
-<!-- 				 </when> -->
-<!-- 				 <otherwise> -->
-<!-- 					 <if test="order != null and order.indexOf('temp_column') != -1 "> -->
-						remain_count desc, update_datetime desc, t.order_no desc, t.status asc
-<!-- 					 </if> -->
-<!-- 				 </otherwise> -->
-<!-- 			</choose> -->
+			<choose>
+				 <when test="order != null and order != '' and order.indexOf('age') == 1 ">
+				 	t.${order}
+				 </when>
+				 <otherwise>
+					remain_count desc, update_datetime desc, t.order_no desc, t.status asc
+				 </otherwise>
+			</choose>
 		</trim>
 	</select>
 
