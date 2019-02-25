@@ -88,10 +88,7 @@ public class SignLogAOImpl implements ISignLogAO {
             Map<String, String> configMap = sysConfigBO
                 .getConfigsMap(ESysConfigType.SIGN_RULE.getCode());
 
-            if (continueSignDay == 1) {
-                quantity = new BigDecimal(1);
-                currency = ECurrency.TPP.getCode();
-            }
+            currency = ECurrency.TPP.getCode();
             if (continueSignDay == 3) {
                 quantity = new BigDecimal(configMap.get(SysConstants.DAYS_3));
                 currency = ECurrency.TPP.getCode();

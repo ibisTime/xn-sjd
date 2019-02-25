@@ -14,7 +14,9 @@ public enum ESysConfigType {
     
     SIGN_RULE("SIGN_RULE","签到规则"),
     
-    TREE_LEVEL("TREE_LEVEL","树木级别");
+    TREE_LEVEL("TREE_LEVEL","树木级别"),
+    
+    WEIXIN_IOS("wx_ios", "微信ios");
 
     ESysConfigType(String code, String value) {
         this.code = code;

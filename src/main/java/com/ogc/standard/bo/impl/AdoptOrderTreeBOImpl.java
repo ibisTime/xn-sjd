@@ -15,6 +15,7 @@ import com.ogc.standard.bo.ICompanyBO;
 import com.ogc.standard.bo.IOfficialSealBO;
 import com.ogc.standard.bo.ITreeBO;
 import com.ogc.standard.bo.IUserBO;
+import com.ogc.standard.bo.IUserExtBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.common.AmountUtil;
 import com.ogc.standard.common.DateUtil;
@@ -31,6 +32,7 @@ import com.ogc.standard.domain.PresellProduct;
 import com.ogc.standard.domain.Product;
 import com.ogc.standard.domain.Tree;
 import com.ogc.standard.domain.User;
+import com.ogc.standard.domain.UserExt;
 import com.ogc.standard.enums.EAdoptOrderStatus;
 import com.ogc.standard.enums.EAdoptOrderTreeStatus;
 import com.ogc.standard.enums.EAdoptOrderTreeType;
@@ -55,6 +57,9 @@ public class AdoptOrderTreeBOImpl extends PaginableBOImpl<AdoptOrderTree>
 
     @Autowired
     private IOfficialSealBO officialSealBO;
+
+    @Autowired
+    private IUserExtBO userExtBO;
 
     @Override
     public String saveAdoptOrderTree(Product product, AdoptOrder adoptOrder,
@@ -246,6 +251,12 @@ public class AdoptOrderTreeBOImpl extends PaginableBOImpl<AdoptOrderTree>
         String firstName = company.getName();// 甲方名称
         String secondName = userBO.getUser(adoptOrder.getApplyUser())
             .getRealName();// 乙方
+        if (StringUtils.isBlank(secondName)) {
+            UserExt userExt = userExtBO.getUserExt(adoptOrder.getApplyUser());
+            if (null != userExt) {
+                secondName = userExt.getCompanyName();
+            }
+        }
 
         String thirdName = "";// 丙方
         String thirdOfficialSeal = "";// 丙方公章

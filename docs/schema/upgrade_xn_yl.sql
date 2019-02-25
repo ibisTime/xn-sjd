@@ -38,4 +38,60 @@ CHANGE COLUMN `back_jf_amount` `back_jf_amount` DECIMAL(64,0) NULL DEFAULT 0 COM
 
 ##0.0.5
 ALTER TABLE `tsc_commodity` 
-ADD COLUMN `approve_note` VARCHAR(255) NULL COMMENT '审核备注' AFTER `remark`;
+ADD COLUMN `approve_note` VARCHAR(255) NULL COMMENT '审核备注' AFTER `remark`,
+ADD COLUMN `single_postage_count` INT DEFAULT NULL COMMENT '单邮费数量';
+
+ALTER TABLE `tsc_after_sale` 
+ADD COLUMN `refund_reason` varchar(32) DEFAULT NULL COMMENT '退款原因',
+ADD COLUMN `message` TEXT DEFAULT NULL COMMENT '留言';
+
+ALTER TABLE `tsc_commodity_order_detail` 
+ADD COLUMN `pay_type` varchar(4) DEFAULT NULL COMMENT '支付方式';
+
+DROP TABLE IF EXISTS `tstd_search_history`;
+CREATE TABLE `tstd_search_history` (
+  `code` varchar(32) NOT NULL COMMENT '编号',
+  `user_id` varchar(32) DEFAULT NULL COMMENT '用户编号',
+  `type` varchar(4) DEFAULT NULL COMMENT '分类',
+  `content` varchar(255) DEFAULT NULL COMMENT '内容',
+  `search_datetime` datetime DEFAULT NULL COMMENT '搜索时间',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `tsj_steal_carbon_bubble_record`;
+CREATE TABLE `tsj_steal_carbon_bubble_record` (
+  `code` varchar(32) NOT NULL COMMENT '编号',
+  `steal_user_id` varchar(32) DEFAULT NULL COMMENT '偷取人编号',
+  `stealed_user_id` varchar(32) DEFAULT NULL COMMENT '被偷取人编号',
+  `adopt_tree_code` varchar(32) DEFAULT NULL COMMENT '认养权编号',
+  `carbon_bubble_order_code` varchar(32) DEFAULT NULL COMMENT '碳泡泡订单编号',
+  `quantity` varchar(255) DEFAULT NULL COMMENT '数量',
+  `steal_datetime` datetime DEFAULT NULL COMMENT '偷取时间',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `tsys_notify_user`;
+CREATE TABLE `tsys_notify_user` (
+  `code` varchar(32) NOT NULL COMMENT '编号',
+  `type` varchar(4) DEFAULT NULL COMMENT '类型',
+  `name` varchar(255) DEFAULT NULL COMMENT '名称',
+  `mobile` varchar(32) DEFAULT NULL COMMENT '电话',
+  `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `tsys_official_seal`;
+CREATE TABLE `tsys_official_seal` (
+  `code` varchar(32) NOT NULL COMMENT '编号',
+  `province` varchar(255) DEFAULT NULL COMMENT '省',
+  `city` varchar(255) DEFAULT NULL COMMENT '市',
+  `area` varchar(255) DEFAULT NULL COMMENT '区',
+  `department` varchar(255) DEFAULT NULL COMMENT '部门',
+  `pic` varchar(255) DEFAULT NULL COMMENT '公章图片',
+  `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

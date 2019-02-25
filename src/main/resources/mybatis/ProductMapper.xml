@@ -83,16 +83,22 @@
 			</if>
 			
 			<if test="isAdopting != null and isAdopting == 1 ">
-				<![CDATA[AND t.raise_count <> t.now_count and now() <= ifnull(t.raise_end_datetime, now())]]>
-				<if test="queryUserId != null and queryUserId != '' ">
-					<![CDATA[AND (case 1 when t.sell_type = 2 then direct_object else #{queryUserId} end ) = #{queryUserId}]]>
-				</if>
+				<![CDATA[AND (case when t.sell_type = 1 then t.raise_count - t.now_count > 0 
+										and exists (select 1 from tzb_product_specs where product_code = t.code and now() between start_datetime and end_datetime )
+								when t.sell_type = 2 then (case when t.direct_type = 1 then t.raise_count - t.now_count > 0 and t.direct_object = (select level from tstd_user where user_id = #{queryUserId})
+										when t.direct_type = 2 then t.raise_count - t.now_count > 0 and t.direct_object = #{queryUserId} end)
+        						when t.sell_type = 3 then now() between t.raise_start_datetime and t.raise_end_datetime
+        						when t.sell_type = 4 then t.raise_count - t.now_count > 0  and now() between t.raise_start_datetime and t.raise_end_datetime
+							else 0 end ) = 1]]>
 			</if>
 			<if test="isAdopting != null and isAdopting == 0 ">
-				<![CDATA[AND (case 1 when t.sell_type = 3 and now() >= ifnull(t.raise_end_datetime, now()) then 0 else t.raise_count - t.now_count end) = 0 and now() >= ifnull(t.raise_end_datetime, now())]]>
-				<if test="queryUserId != null and queryUserId != '' ">
-					<![CDATA[AND (case 1 when t.sell_type = 2 then direct_object else 'user_id' end ) <> #{queryUserId}]]>
-				</if>
+				<![CDATA[AND (case when t.sell_type = 1 then t.raise_count - t.now_count = 0 
+										or not exists (select 1 from tzb_product_specs where product_code = t.code and now() between start_datetime and end_datetime )
+									when t.sell_type = 2 then (case when t.direct_type = 1 then t.raise_count - t.now_count = 0 or t.direct_object <> (select level from tstd_user where user_id = #{queryUserId})
+										when t.direct_type = 2 then t.raise_count - t.now_count = 0 or t.direct_object <> #{queryUserId} end)
+       								when t.sell_type = 3 then now() not between t.raise_start_datetime and t.raise_end_datetime
+        							when t.sell_type = 4 then t.raise_count - t.now_count = 0  and now() not between t.raise_start_datetime and t.raise_end_datetime
+							else 0 end ) = 1]]>
 			</if>
 			
 			<if test="province != null and province != '' ">
@@ -219,7 +225,7 @@
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<choose>
-				 <when test="order != null and order != '' and order.indexOf('age') == 1 ">
+				 <when test="order != null and order != '' and order.contains('age') == true ">
 				 	t.${order}
 				 </when>
 				 <otherwise>

@@ -33,7 +33,7 @@
 			    <ref bean="doCancelCommodityOrderTrigger"/>
 			    <ref bean="doDailyOriginalGroupTrigger"/>
 			    <ref bean="doCancelGroupOrderTrigger"/>
-			    <ref bean="doRefreshPriceTrigger"/>
+<!-- 			    <ref bean="doRefreshPriceTrigger"/> -->
 <!-- 			    <ref bean="clearCommoditySellCountTigger"/> -->
 			    
 			    <ref bean="doCommodityReceiveTigger"/>

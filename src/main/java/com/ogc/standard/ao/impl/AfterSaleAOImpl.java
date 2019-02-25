@@ -177,11 +177,12 @@ public class AfterSaleAOImpl implements IAfterSaleAO {
         } else {
             afterSaleBO.refreshHandle(data, EAfterSaleStatus.FALSE.getCode());
 
-            // commodityOrderDetailBO.toComment(data.getOrderDetailCode());
-
             commodityOrderDetailBO.refreshAfterSaleStatus(
                 data.getOrderDetailCode(),
                 ECommodityOrderDetailStatus.AFTER_SALEED_NO.getCode());
+
+            commodityOrderDetailBO.toComment(data.getOrderDetailCode());
+
         }
 
     }

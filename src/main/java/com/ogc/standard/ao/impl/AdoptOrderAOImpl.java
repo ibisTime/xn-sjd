@@ -673,16 +673,12 @@ public class AdoptOrderAOImpl implements IAdoptOrderAO {
         // }
         //
         // // 捐赠产品只查询一棵树
-        // if (ESellType.DONATE.getCode().equals(data.getType())) {
-        // if (CollectionUtils.isNotEmpty(adoptOrderTreeList)) {
-        // Tree tree = treeBO.getTreeByTreeNumber(
-        // adoptOrderTreeList.get(0).getTreeNumber());
-        // treeList.add(tree);
-        //
-        // treeNumbers.append(adoptOrderTreeList.get(0).getTreeNumber())
-        // .append(". ");
-        // }
-        // }
+        if (ESellType.DONATE.getCode().equals(data.getType())) {
+            List<Tree> trees = treeBO
+                .queryTreeListByProduct(data.getProductCode());
+            adoptOrderTreeList = adoptOrderTreeBO.queryUserAdoptedOrder(
+                data.getApplyUser(), trees.get(0).getTreeNumber());
+        }
 
         int treeCount = 1;
         for (AdoptOrderTree adoptOrderTree : adoptOrderTreeList) {

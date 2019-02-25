@@ -900,14 +900,21 @@ public class UserAOImpl implements IUserAO {
     @Override
     public XN805051Res doLoginWeChat(XN805051Req req) {
         // Step1：获取密码参数信息
-        Map<String, String> configMap = sysConfigBO
-            .getConfigsMap(ESysConfigType.WEIXIN_H5.getCode());
 
         String appId = null;
         String appSecret = null;
         if (ESysConfigType.WEIXIN_H5.getCode().equals(req.getType())) {
+            Map<String, String> configMap = sysConfigBO
+                .getConfigsMap(ESysConfigType.WEIXIN_H5.getCode());
+
             appId = configMap.get(SysConstants.WX_H5_ACCESS_KEY);
             appSecret = configMap.get(SysConstants.WX_H5_SECRET_KEY);
+        } else if (ESysConfigType.WEIXIN_IOS.getCode().equals(req.getType())) {
+            Map<String, String> configMap = sysConfigBO
+                .getConfigsMap(ESysConfigType.WEIXIN_IOS.getCode());
+
+            appId = configMap.get(SysConstants.WX_IOS_ACCESS_KEY);
+            appSecret = configMap.get(SysConstants.WX_IOS_SECRET_KEY);
         } else {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(), "登录类型不支持");
         }
@@ -923,7 +930,9 @@ public class UserAOImpl implements IUserAO {
 
         // Step2：通过Authorization Code获取Access Token
         String accessToken = "";
+
         Map<String, String> res = new HashMap<>();
+
         Properties fromProperties = new Properties();
         fromProperties.put("grant_type", "authorization_code");
         fromProperties.put("appid", appId);
@@ -931,6 +940,7 @@ public class UserAOImpl implements IUserAO {
         fromProperties.put("code", req.getCode());
         logger.info("appId:" + appId + ",appSecret:" + appSecret + ",code:"
                 + req.getCode());
+
         XN805051Res result = null;
 
         try {
@@ -990,7 +1000,9 @@ public class UserAOImpl implements IUserAO {
                 result = doWxLoginRegMobile(req, unionId, h5OpenId, nickname,
                     photo, gender);
             }
-        } catch (Exception e) {
+        } catch (
+
+        Exception e) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 e.getMessage());
         }

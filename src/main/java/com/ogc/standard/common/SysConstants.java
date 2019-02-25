@@ -18,6 +18,10 @@ public class SysConstants {
 
     public static String WX_H5_SECRET_KEY = "wx_h5_secret_key";
 
+    public static String WX_IOS_ACCESS_KEY = "wx_ios_access_key";
+
+    public static String WX_IOS_SECRET_KEY = "wx_ios_secret_key";
+
     // 取现规则配置
     public static String USERQXBS = "USERQXBS"; // C端用户取现倍数
 

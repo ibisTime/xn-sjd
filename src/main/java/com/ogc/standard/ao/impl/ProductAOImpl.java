@@ -2,6 +2,7 @@ package com.ogc.standard.ao.impl;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -586,6 +587,8 @@ public class ProductAOImpl implements IProductAO {
         // 初始化最小价格和最大价格
         BigDecimal minPrice = BigDecimal.ZERO;
         BigDecimal maxPrice = minPrice;
+        Date startDatetime = specsList.get(0).getStartDatetime();
+        Date endDatetime = startDatetime;
         for (ProductSpecs productSpecs : specsList) {
             if (minPrice.compareTo(BigDecimal.ZERO) == 0) {
                 minPrice = productSpecs.getPrice();
@@ -596,9 +599,22 @@ public class ProductAOImpl implements IProductAO {
             if (productSpecs.getPrice().compareTo(maxPrice) > 0) {
                 maxPrice = productSpecs.getPrice();
             }
+
+            if (startDatetime.after(productSpecs.getStartDatetime())) {
+                startDatetime = productSpecs.getStartDatetime();
+            }
+            if (endDatetime.before(productSpecs.getEndDatetime())) {
+                endDatetime = productSpecs.getEndDatetime();
+            }
         }
         product.setMinPrice(minPrice);
         product.setMaxPrice(maxPrice);
+
+        if (ESellType.PERSON.getCode().equals(product.getSellType())
+                || ESellType.DIRECT.getCode().equals(product.getSellType())) {
+            product.setRaiseStartDatetime(startDatetime);
+            product.setRaiseEndDatetime(endDatetime);
+        }
 
         // 古树列表
         List<Tree> treeList = treeBO.queryTreeListByProduct(product.getCode());
